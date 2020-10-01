@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\AnforderungControlItem;
+use App\ControlEquipment;
+use App\ControlInterval;
 use App\Equipment;
+use App\EquipmentHistory;
 use App\EquipmentParam;
 use App\Produkt;
+use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,6 +23,7 @@ use Illuminate\View\View;
 
 class EquipmentController extends Controller
 {
+    use SoftDeletes;
 
     public function __construct()
     {
@@ -56,10 +63,47 @@ class EquipmentController extends Controller
 
 
 
+        $lastDate = $request->qe_control_date_last;
+
+        $prod = Produkt::find($request->produkt_id);
         $equipment = Equipment::create($this->validateNewEquipment());
+        $eh = new EquipmentHistory();
+
+        $eh->eqh_eintrag_kurz = 'Gerät angelegt';
+        $eh->eqh_eintrag_text = 'Das Gerät mit der Inventar-Nr'.request('eq_inventar_nr').' wurde angelegt';
+        $eh->equipment_id = $equipment->id;
+        $eh->save();
+
+        foreach($prod->ProduktAnforderung as $prodAnforderung)
+        {
+
+            foreach (AnforderungControlItem::where('anforderung_id',$prodAnforderung->anforderung_id)->get()  as $aci ){
+                $conEquip = new ControlEquipment();
+                $interval = $prodAnforderung->Anforderung->an_control_interval;
+                $conInt = $prodAnforderung->Anforderung->control_interval_id;
+                $zeit = ControlInterval::find($conInt);
+
+                $dueDate = date('Y-m-d', strtotime("+".$interval. $zeit->ci_delta, strtotime($lastDate)));
+
+                $conEquip->qe_control_date_last = $lastDate;
+                $conEquip->qe_control_date_due = $dueDate;
+                $conEquip->anforderung_control_item_id = $aci->id;
+            $conEquip->equipment_id = $equipment->id ;
+                $conEquip->save();
+
+                $eh = new EquipmentHistory();
+
+                $eh->eqh_eintrag_kurz = 'Vorgang angelegt';
+                $eh->eqh_eintrag_text = 'Für das Geräte wurde ein Vorgang '.$aci->aci_name_kurz.' angelegt, der am '.$dueDate.' zum ersten Mal füllig wird.';
+                $eh->equipment_id = $equipment->id;
+                $eh->save();
+
+            }
 
 
 
+
+        }
 
         if (isset($request->pp_id)&& count($request->pp_id)>0) {
 
@@ -76,6 +120,8 @@ class EquipmentController extends Controller
             }
 
         }
+
+
 
         $request->session()->flash('status', 'Das Gerät <strong>' . request('setNewEquipmentFromProdukt') . '</strong> wurde angelegt!');
 
@@ -135,7 +181,7 @@ class EquipmentController extends Controller
     public function validateNewEquipment(): array
     {
         return request()->validate([
-            'eq_inventar_nr' => 'bail|unique:equipments,eq_inventar_nr|max:100|required',
+            'eq_inventar_nr' => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
             'eq_serien_nr' => 'max:100',
             'eq_qrcode' => '',
             'eq_text' => '',

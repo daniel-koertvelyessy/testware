@@ -16,7 +16,9 @@ class CreateAnforderungControlItemsTable extends Migration
         Schema::create('anforderung_control_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('aci_name', 20)->unique();
+            $table->softDeletes();
+            $table->string('aci_name_kurz', 20)->unique();
+            $table->string('aci_name_lang', 150);
             $table->text('aci_task')->nullable();
             $table->string('aci_value_si',10)->nullable(); // SI Einheit [°C] [A] [V]
             $table->decimal('aci_vaule_soll')->nullable();

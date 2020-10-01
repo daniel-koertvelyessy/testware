@@ -123,11 +123,6 @@ return (isset($request->frmOrigin)) ? redirect('building/'.$request->building_id
 
         $rm = Room::find($request->id)->standort_id;
 
-
-
-
-
-
         $rname = request('r_name_kurz');
         if ( Room::destroy($request->id) ){
 

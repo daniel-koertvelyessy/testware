@@ -34,11 +34,15 @@
                                          value="{{ App\Produkt::find(request('produkt_id'))->prod_name_kurz  }}"
                             />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <x-rtextfield id="eq_inventar_nr" label="Inventar - Nr" max="100"/>
                         </div>
+
                         <div class="col-md-2">
                             <x-datepicker id="eq_ibm" label="Inbetriebname" value="{{ date('Y-m-d') }}" />
+                        </div>
+                        <div class="col-md-2">
+                            <x-datepicker id="qe_control_date_last" label="Letzte Prüfung" value="{{ date('Y-m-d') }}" />
                         </div>
                     </div>
                     <div class="row">

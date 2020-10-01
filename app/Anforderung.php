@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Anforderung extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     public function ProduktAnforderung()
@@ -24,6 +27,10 @@ class Anforderung extends Model
     }
 
     public function ControlInterval() {
-        return $this->hasMany(ControlInterval::class);
+        return $this->belongsTo(ControlInterval::class);
+    }
+
+    public function AnforderungType() {
+        return $this->hasMany(AnforderungType::class);
     }
 }

@@ -223,7 +223,7 @@
                         <a class="nav-link active" id="prodStammdaten-tab" data-toggle="tab" href="#prodStammdaten" role="tab" aria-controls="prodStammdaten" aria-selected="true">Stammdaten</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="prodPruefungen-tab" data-toggle="tab" href="#prodPruefungen" role="tab" aria-controls="prodPruefungen" aria-selected="false">Prüfungen <span class="badge badge-primary">{{ \App\ProduktAnforderung::where('produkt_id',$produkt->id)->count() }}</span></a>
+                        <a class="nav-link" id="prodAnfordrungen-tab" data-toggle="tab" href="#prodAnfordrungen" role="tab" aria-controls="prodAnfordrungen" aria-selected="false">Anforderungen <span class="badge badge-primary">{{ \App\ProduktAnforderung::where('produkt_id',$produkt->id)->count() }}</span></a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="prodFirmen-tab" data-toggle="tab" href="#prodFirmen" role="tab" aria-controls="prodFirmen" aria-selected="false">Firmen <span class="badge badge-primary">{{ \App\FirmaProdukt::where('produkt_id',$produkt->id)->count() }}</span></a>
@@ -296,32 +296,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-2" id="prodPruefungen" role="tabpanel" aria-labelledby="prodPruefungen-tab">
+                    <div class="tab-pane fade p-2" id="prodAnfordrungen" role="tabpanel" aria-labelledby="prodAnfordrungen-tab">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <h2 class="h5">Verordnung auswählen</h2>
-                                <div class="input-group">
-                                    <label for="setProduktVerordnung"></label>
-                                    <select name="setProduktVerordnung" id="setProduktVerordnung" class="custom-select">
-                                        @foreach (App\Verordnung::all() as $verordnung)
-                                            <option value="{{ $verordnung->id }}">{{ $verordnung->vo_name_kurz }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button class="btn btn-outline-primary ml-2" id="btnGetAnforderungsListe">Anforderung laden</button>
-                                </div>
-                                <form action="{{ route('addProduktAnforderung') }}#prodPruefungen" method="post">
+                            <div class="col-md-4 mb-3">
+                                <h2 class="h5">Anforderung auswählen</h2>
+                                <form action="{{ route('addProduktAnforderung') }}#prodAnfordrungen" method="post">
                                     @csrf
-                                    <div class="form-group">
-                                        <input type="hidden" name="produkt_id" id="produkt_id_anforderung" value="{{ $produkt->id }}">
-                                        <label for="anforderung_id"></label>
-                                        <select name="anforderung_id" id="anforderung_id" class="custom-select">
-                                            <option value="0">bitte Verordnung auswählen</option>
-                                        </select>
-                                    </div>
-                                    <div class="card p-2 my-2" id="produktAnforderungText">
-                                        <span class="text-muted small">Details zu Anforderung</span>
-                                    </div>
+                                    <input type="hidden" name="produkt_id" id="produkt_id_anforderung" value="{{ $produkt->id }}">
+                                    <x-selectfield id="anforderung_id" label="Anforderung wählen">
+                                        @foreach (App\Anforderung::all() as $anforderung)
+                                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                        @endforeach
+                                    </x-selectfield>
                                     <button class="btn btn-primary btn-block mt-1">Anforderung zuordnen</button>
+                                    <div class="card p-2 my-2" id="produktAnforderungText">
+                                        <x-notifyer>Details zu Anforderung</x-notifyer>
+                                    </div>
                                 </form>
                                 @error('anforderung_id')
                                 <div class="alert alert-dismissible fade show alert-info mt-5" role="alert">
@@ -332,7 +322,7 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <h2 class="h5">Anforderungen</h2>
                                 @php
                                     $Anforderung = App\Anforderung::all();
@@ -353,19 +343,31 @@
                                                 <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
                                             </dl>
                                             <dl class="row">
-                                                <dt class="col-sm-4">Prüfung</dt>
-                                                <dd class="col-sm-8">{!! ($Anforderung->find($produktAnforderung->anforderung_id)->an_test_has === 1) ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-muted"></span>' !!}</dd>
-                                            </dl>
-                                            <dl class="row">
                                                 <dt class="col-sm-4">Intervall</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_test_interval }} Monate</dd>
+                                                <dd class="col-sm-8">
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                </dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">Beschreibung</dt>
                                                 <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
                                             </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">
+                                                    {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? 'Vorgänge' : 'Vorgang' }}
+                                                </dt>
+                                                <dd class="col-sm-8">
+                                                    <ul class="list-group">
+
+                                                    @foreach (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
+                                                            <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
+                                                    @endforeach
+                                                    </ul>
+                                                </dd>
+                                            </dl>
                                             <nav class="border-top mt-2 pt-2 d-flex justify-content-end">
-                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodPruefungen" method="post">
+                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen" method="post">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="an_name_kurz" id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}">
@@ -377,7 +379,7 @@
                                         </div>
                                     @endif
                                 @empty
-                                    <p class="text-muted small">Bislang sind keine Anforderungen verknüpft!</p>
+                                    <x-notifyer>Bislang sind keine Anforderungen verknüpft!</x-notifyer>
                                 @endforelse
                             </div>
                         </div>
@@ -749,7 +751,10 @@
                                                 <td style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
                                                 <td>{{ $produktDoc->created_at }}</td>
                                                 <td>
-                                                    <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
+                                                    <x-deletebutton action="{{ route('produktDoku.destroy',$produktDoc->id) }}" id="{{ $produktDoc->id }}" />
+
+
+                                                 {{--   <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
                                                         @csrf
                                                         @method('delete')
                                                         <input type="hidden"
@@ -763,7 +768,7 @@
                                                         class="btn btn-sm btn-outline-secondary"
                                                         onclick="event.preventDefault(); document.getElementById('deleteProdDoku_{{ $produktDoc->id }}').submit();">
                                                         <span class="far fa-trash-alt"></span>
-                                                    </button>
+                                                    </button>--}}
                                                 </td>
                                                 <td>
                                                     <form action="{{ route('downloadProduktDokuFile') }}#prodDoku" method="get" id="downloadProdDoku_{{ $produktDoc->id }}">
@@ -817,7 +822,7 @@
                 type: "get",
                 dataType: 'json',
                 url: "{{ route('getAnforderungByVerordnungListe') }}",
-                data: {id:$('#setProduktVerordnung :selected').val()},
+                data: {id:$('#setAnforderung :selected').val()},
                 success: function(res)  {
                     $('#anforderung_id').html(res.html);
                 }
@@ -832,13 +837,13 @@
                 url: "{{ route('getAnforderungData') }}",
                 data: {id:$('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const ver = $('#setProduktVerordnung option:selected').text();
-                    const intervall = (res.an_test_interval>0)? res.an_test_interval :'-';
+                    const ver = $('#setAnforderung option:selected').text();
+                    const intervall = (res.an_control_interval>0)? res.an_control_interval :'-';
                     const icon = (res.an_test_has) ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-muted"></span>';
                     $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
-                            <dd class="col-sm-8">${ver}</dd>
+                            <dd class="col-sm-8">${res.verordnung.vo_name_kurz}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Anfoderung</dt>
@@ -854,7 +859,7 @@
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Intervall</dt>
-                            <dd class="col-sm-8">${intervall} Monate</dd>
+                            <dd class="col-sm-8">${res.an_control_interval} Monate</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Beschreibung</dt>

@@ -16,8 +16,21 @@ class CreateControlsTable extends Migration
         Schema::create('controls', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
+
             $table->string('control_name_kurzel',20);
-//            $table->foreignId('euqipment_id')
+            $table->date('control_date');
+            $table->boolean('control_pass')->default(false);
+            $table->text('control_signature_controller');
+            $table->text('control_signature_superviser')->nullable();
+
+//            $table->foreignId('control_equipment_id')
+//                ->references('id')
+//                ->on('control_equipment')
+//                ->onUpdate('cascade')
+//                ->onDelete('set null');
+//
+//            $table->foreignId('equipment_id')
 //                ->nullable()
 //                ->constrained()
 //                ->onUpdate('cascade')

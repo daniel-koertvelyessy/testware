@@ -59,10 +59,7 @@
                             <p class="small text-primary">maximal 150 Zeichen</p>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="closeModalAddDatenFeld" data-dismiss="modal">Abbruch</button>
-                        <button class="btn btn-primary">Datenfeld anlegen</button>
-                    </div>
+
                 </div>
             </form>
         </div>
@@ -71,7 +68,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Neue Prüfung anlegen</h5>
+                    <h5 class="modal-title">Neuen Vorgang anlegen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -82,6 +79,81 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalEditAnforderungControlItem" tabindex="-1" aria-labelledby="modalEditAnforderungControlItemLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('updateAnforderungControlItem') }}#systemProdukte" method="post">
+                    @csrf
+                    @method('put')
+                    <input type="hidden"
+                           name="id"
+                           id="aci_id"
+                    >
+                <div class="modal-header">
+                    <h5 class="modal-title">Vorgang bearbeiten</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <x-selectfield id="updt_anforderung_id" name="anforderung_id" label="Anforderung">
+                        @foreach (App\Anforderung::all() as $anforderung)
+                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_lang }}</option>
+                        @endforeach
+                    </x-selectfield>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <x-rtextfield name="aci_name_kurz" id="updt_aci_name_kurz" label="Kürzel" />
+                        </div>
+                        <div class="col-md-8">
+                            <x-rtextfield name="aci_name_lang" id="updt_aci_name_lang" label="Name" max="150" />
+                        </div>
+                    </div>
+
+                    <x-textarea name="aci_task" id="updt_aci_task" label="Aufgabe" />
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <x-textfield name="aci_value_si" id="updt_aci_value_si" label="SI-Einheit [kg, °C, V usw]" max="10" />
+                        </div>
+                        <div class="col-md-4">
+                            <x-textfield name="aci_vaule_soll" id="updt_aci_vaule_soll" label="Sollwert" />
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="custom-control custom-radio custom-control-inline mb-3">
+                                    <input type="radio" id="updt_aci_internal" name="aci_exinternal" class="custom-control-input" value="internal" checked>
+                                    <label class="custom-control-label" for="updt_aci_internal">Interne Durchführung</label>
+                                </div>
+                                <x-selectfield name="aci_contact_id" id="updt_aci_contact_id" label="Mitarbeiter">
+                                    @foreach (App\Profile::all() as $profile)
+                                        <option value="{{ $profile->id }}">{{ substr($profile->ma_vorname,0,1)}}. {{ $profile->ma_name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="custom-control custom-radio custom-control-inline mb-3">
+                                    <input type="radio" id="updt_aci_external" name="aci_exinternal" class="custom-control-input" value="external">
+                                    <label class="custom-control-label" for="updt_aci_external">Externe Durchführung</label>
+                                </div>
+                                <x-selectfield id="updt_firma_id" label="Firma">
+                                    @foreach (App\Firma::all() as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbruch</button>
+                        <button class="btn btn-primary">Vorgang speichern</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -89,8 +161,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">system einstellungen</h1>
+                <h1 class="h3">System Einstellungen</h1>
             </div>
+            {{ $errors }}
         </div>
         <div class="row">
             <div class="col">
@@ -453,6 +526,11 @@
                                     <a class="nav-link" id="verordnungen-tab"
                                        data-helpertext="Verordnungen regeln die Einteilung der Produkte->Geräte in Risikogruppen und bestimmen den Umfang der Prüfungen"
                                        data-toggle="pill" href="#verordnungen" role="tab" aria-controls="verordnungen" aria-selected="false">Verordnungen</a>
+
+                                    <a class="nav-link" id="anforderungTyp-tab"
+                                       data-toggle="pill"
+                                       data-helpertext="Anforderungen können verschiedene Aufgaben umfassen. Mit Hilfe von Anforderungstypen können Sie diese gruppieren."
+                                       href="#anforderungTyp" role="tab" aria-controls="anforderungTyp" aria-selected="false">Anforderung-Typen</a>
                                     <a class="nav-link" id="anforderungen-tab"
                                        data-toggle="pill"
                                        data-helpertext="Anforderungen können Prüfungen oder Handhabungen sein. Diese können sich auf eine ausgewählte Verordnung beziehen. Anforderungen können als Beispiel die besondere Handhabung oder Lagerung des Produkte sein. In der Regel müssen die Anforderungen überprüft werden."
@@ -460,7 +538,7 @@
                                     <a class="nav-link" id="produktControls-tab"
                                        data-toggle="pill"
                                        data-helpertext="Aus Anforderungen entstehen unter Umständen Prüfungen, die regelmäßig erfolgen müssen."
-                                       href="#produktControls" role="tab" aria-controls="produktControls" aria-selected="false">Prüfungen</a>
+                                       href="#produktControls" role="tab" aria-controls="produktControls" aria-selected="false">Vorgänge</a>
                                     <a class="nav-link" id="doctypes-tab"
                                        data-helpertext="Erstellen Sie Dokument-Typen wie zum Beispiel Bedienungs-anleitungen, Zeichnugen oder Kataloge."
                                        data-toggle="pill" href="#doctypes" role="tab" aria-controls="doctypes" aria-selected="false">Dokument</a>
@@ -501,7 +579,7 @@
                                                                     <option value="{{ $ad->id }}">{{ $ad->pk_name_kurz }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <button class="btn btn-outline-primary" type="button" id="loadProdKategorieItem">Kategorie laden</button>
+                                                            <button class="btn btn-outline-primary ml-2" type="button" id="loadProdKategorieItem">Kategorie laden</button>
                                                         </div>
                                                         <div class="dropdown-divider my-3"></div>
 
@@ -599,7 +677,7 @@
                                                                     <option value="{{ $ad->id }}">{{ $ad->vo_name_kurz }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <button class="btn btn-outline-primary" type="button" id="loadVerordnungItem">Verordnung laden</button>
+                                                            <button class="btn btn-outline-primary ml-2" type="button" id="loadVerordnungItem">Verordnung laden</button>
                                                         </div>
 
                                                         <x-rtextfield id="updt_vo_name_kurz" name="vo_name_kurz" label="Name - Kürzel" />
@@ -645,17 +723,94 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade" id="anforderungTyp" role="tabpanel" aria-labelledby="anforderungTyp-tab">
+                                        <form action="{{ route('addNewAnforderungType') }}"
+                                              method="post" id="frmAddNewAnforderungsType"
+                                        >
+                                            @csrf
+                                            <x-rtextfield id="at_name_kurz"
+                                                          label="Kürzel"
+                                            />
+                                            <x-textfield id="at_name_lang"
+                                                         label="Name"
+                                            />
+                                            <x-textarea id="at_name_text"
+                                                        label="Beschreibung"
+                                            />
+                                            <button class="btn btn-primary btn-block">Anforderungstyp anlegen</button>
+                                        </form>
+                                        <div class="dropdown-divider my-3"></div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form action="{{ route('updateAnforderungType') }}"
+                                                      method="post" id="frmAnforderungsTypEdit"
+                                                >
+                                                    @csrf
+                                                    @method('put')
+                                                    <x-selectgroup id="loadAnforderungTypeId" name="id" label="Anwendung-Typ wählen" btnT="getAnforderungTypData">
+                                                        @foreach(App\AnforderungType::all() as $anforderungType)
+                                                            <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name_kurz }}</option>
+                                                        @endforeach
+                                                    </x-selectgroup>
+                                                    <x-rtextfield id="updt_at_name_kurz" name="at_name_kurz" label="Kürzel" />
+                                                    <x-textfield id="updt_at_name_lang" name="at_name_lang" label="Name" />
+                                                    <x-textarea id="updt_at_name_text" name="at_name_text" label="Beschreibung" />
+                                                    <button class="btn btn-outline-primary btn-block">Anforderungstyp speichern</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                                @if (count(App\AnforderungType::all())>0 )
+                                                    <div class="border border-danger p-3">
+                                                        <h2 class="h5">Anforderung-Typ löschen</h2>
+                                                        <form action="{{ route('deleteAnforderungType') }}" id="frmDeleteAnforderungTyp" name="frmDeleteAnforderungTyp" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <div class="input-group mb-3">
+                                                                <label for="frmDeleteAnforderungTypeId" class="sr-only">Typ auswählen</label>
+                                                                <select name="id" id="frmDeleteAnforderungTypeId" class="custom-select">
+                                                                    @foreach (App\AnforderungType::all() as $ad)
+                                                                        <option value="{{ $ad->id }}">{{ $ad->at_name_kurz }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <button class="btn btn-outline-danger">Anforderung-typ löschen <i class="fas fa-trash-alt"></i></button>
+                                                            </div>
+                                                            <p class="text-danger lead">Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!</p>
+                                                        </form>
+                                                        <div class="input-group mb-3 showUsedAnforderungProdukteResult">
+                                                            <button type="button" class="btn btn-outline-secondary showUsedAnforderungProdukte">Betroffene Produkte anzeigen</button>
+                                                        </div>
+                                                        <ul class="list-group mt-3" id="usedAnforderungProdukteListe">
+                                                        </ul>
+
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="tab-pane fade" id="anforderungen" role="tabpanel" aria-labelledby="anforderungen-tab">
-                                        <form action="{{ route('createAnforderung') }}#systemProdukte" method="POST" class="needs-validation" id="frmAddNewAnforderung" name="frmAddNewAnforderung">
+                                        <form action="{{ route('createAnforderung') }}#systemProdukte" method="POST" class="needs-validation"
+                                              id="frmAddNewAnforderung" name="frmAddNewAnforderung"
+                                        >
                                             @csrf
                                             <x-selectfield name="verordnung_id" id="verordnung_id" label="Gehört zu Verordnung">
-                                                <option value="void">Keine Zuordnung</option>
+                                                <option value="">Keine Zuordnung</option>
                                                 @foreach (App\Verordnung::all() as $ad)
                                                     <option value="{{ $ad->id }}">{{ $ad->vo_name_kurz }}</option>
                                                 @endforeach
                                             </x-selectfield>
 
-                                            <x-rtextfield id="an_name_kurz" label="Kürzel" />
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-rtextfield id="an_name_kurz" label="Kürzel" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-selectfield id="anforderung_type_id" label="Anforderung Typ" >
+                                                        @foreach(App\AnforderungType::all() as $anforderungType)
+                                                            <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name_lang }}</option>
+                                                        @endforeach
+                                                    </x-selectfield>
+                                                </div>
+                                            </div>
 
                                             <x-textfield id="an_name_lang" label="Name" />
 
@@ -696,7 +851,11 @@
                                                         <x-rtextfield id="updt_an_name_kurz" name="an_name_kurz" label="Kürzel" />
 
                                                         <x-textfield  id="updt_an_name_lang" name="an_name_lang" label="Bezeichnung" />
-
+                                                        <x-selectfield id="updt_anforderung_type_id" name="anforderung_type_id" label="Typ der Anforderung">
+                                                            @foreach(App\AnforderungType::all() as $anforderungType)
+                                                                <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name_lang }}</option>
+                                                            @endforeach
+                                                        </x-selectfield>
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <x-rnumberfield id="updt_an_control_interval" name="an_control_interval" label="Interval Dauer" />
@@ -747,25 +906,25 @@
 
                                     </div>
                                     <div class="tab-pane fade" id="produktControls" role="tabpanel" aria-labelledby="produktControls-tab">
-                                        <button class="btn btn-primary mb-3" id="openNewAnforderungControlItemModal">Neue Prüfung anlegen</button>
+                                        <button class="btn btn-primary mb-3" id="openNewAnforderungControlItemModal">Neuen Vorgang anlegen</button>
                                         <table class="table table-sm">
                                             <thead>
                                             <tr>
                                                 <th>Anforderung</th>
-                                                <th>Prüfung</th>
-                                                <th>Interval</th>
+                                                <th>Vorgang</th>
+                                                <th>Intervall</th>
                                                 <th>intern/extern</th>
+                                                <th></th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
-
                                             @forelse(App\Anforderung::all() as $anforderung)
                                                 @foreach(App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->get() as $aci)
                                                     <tr>
                                                         <td>{{ $anforderung->an_name_kurz }}</td>
-                                                        <td>{{ $aci->aci_name }}</td>
-                                                        <td>{{ $anforderung->an_control_interval }} {{ App\ControlInterval::find($anforderung->control_interval_id)->ci_name }}</td>
+                                                        <td>{{ $aci->aci_name_lang }}</td>
+                                                        <td>{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_name }} </td>
                                                         <td>
                                                             @if ($aci->firma_id === 1)
                                                                 Intern - {{ App\Profile::find($aci->aci_contact_id)->ma_name }}
@@ -774,7 +933,10 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            <button class="btn btn-sm btn-outline-secondary">
+                                                            <x-deletebutton action="{{ route('deleteAnforderungControlItem',$aci->id) }}" id="{{ $aci->id }}" />
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-secondary btnEditACI" data-aciid="{{ $aci->id }}">
                                                                 <span class="fas fa-edit"></span>
                                                             </button>
                                                         </td>
@@ -976,16 +1138,16 @@
             </div>
         </div>
     </div>
+
+@endsection
+
+
+@section('scripts')
     @error('aci_name')
     <script>
         $('#modalAddNewAnforderungControlItem').modal('show');
     </script>
     @enderror
-@endsection
-
-
-@section('scripts')
-
 
     <script>
         $('.nav-link').click(function () {
@@ -1085,6 +1247,23 @@
             });
 
         });
+        $('#getAnforderungTypData').click(function () {
+            const frm = $('#frmAnforderungsTypEdit');
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "{{ route('getAnforderungTypData') }}",
+                data: {
+                    id: $('#loadAnforderungTypeId :selected').val(),
+                    _token: $('input[name="_token"]').val()
+                }
+            }).done(function (jsn) {
+                frm.find('#updt_at_name_kurz').val(jsn.at_name_kurz);
+                frm.find('#updt_at_name_lang').val(jsn.at_name_lang);
+                frm.find('#updt_at_name_text').val(jsn.at_name_text);
+            });
+
+        });
 
         $('#loadVerordnungItem').click(function () {
             const frm = $('#frmEditVerordnungen');
@@ -1118,6 +1297,7 @@
                 }
             }).done(function (jsn) {
                 frm.find('#updt_an_name_kurz').val(jsn.an_name_kurz);
+                frm.find('#updt_anforderung_type_id').val(jsn.anforderung_type_id);
                 frm.find('#updt_an_name_lang').val(jsn.an_name_lang);
                 frm.find('#updt_an_name_text').val(jsn.an_name_text);
                 frm.find('#updt_an_control_interval').val(jsn.an_control_interval);
@@ -1396,6 +1576,36 @@
 
         });
 
+        $('.btnEditACI').click(function () {
+            const aciid = $(this).data('aciid');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getAnforderungControlItemData') }}",
+                data: {id:aciid},
+                success: function(res)  {
+                    $('#aci_id').val(res.id);
+                    $('#updt_anforderung_id').val(res.anforderung_id);
+                    $('#updt_aci_name_kurz').val(res.aci_name_kurz);
+                    $('#updt_aci_name_lang').val(res.aci_name_lang);
+                    $('#updt_aci_task').val(res.aci_task);
+                    $('#updt_aci_value_si').val(res.aci_value_si);
+                    $('#updt_aci_vaule_soll').val(res.aci_vaule_soll);
+                    if (res.firma_id === '1'){
+                        $('#updt_firma_id').val(res.firma_id);
+                        $('#updt_aci_internal').prop('checked',true);
+                    } else {
+                        $('#updt_aci_contact_id').val(res.aci_contact_id);
+                    }
+
+                    $('#updt_firma_id').val(res.aci);
+                    $('#modalEditAnforderungControlItem').modal('show');
+               }
+            });
+
+
+        })
+
         $('#makePkParam').click(function () {
             const nd = $('#getProduktKategorieParams :selected');
             $('#frmAddProduktKategorieParam #produkt_kategorie_id').val(
@@ -1411,7 +1621,6 @@
             );
             $('#modalAddNewAnforderungControlItem').modal('show');
         });
-        // getProduktKategorieParams
 
     </script>
 

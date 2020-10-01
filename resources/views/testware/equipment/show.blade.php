@@ -139,28 +139,42 @@
                             @if ($produktAnforderung->anforderung_id!=0)
                                 <div class="card p-2 mb-2">
                                     <dl class="row lead">
-                                        <dt class="col-sm-4">Verordnung</dt>
-                                        <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                        <dt class="col-md-3">Verordnung</dt>
+                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-4">Anforderung</dt>
-                                        <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
+                                        <dt class="col-md-3">Anforderung</dt>
+                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-4">Bezeichnung</dt>
-                                        <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                        <dt class="col-md-3">Bezeichnung</dt>
+                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-4">Prüfung</dt>
-                                        <dd class="col-sm-8">{!! ($Anforderung->find($produktAnforderung->anforderung_id)->an_test_has === 1) ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-muted"></span>' !!}</dd>
+                                        <dt class="col-md-3">Intervall</dt>
+                                        <dd class="col-md-9">
+                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
+                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                        </dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-4">Intervall</dt>
-                                        <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_test_interval }} Monate</dd>
+                                        <dt class="col-md-3">Beschreibung</dt>
+                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-4">Beschreibung</dt>
-                                        <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
+                                        <dt class="col-md-3">
+                                            {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? 'Vorgänge' : 'Vorgang' }}
+                                        </dt>
+                                        <dd class="col-md-9">
+                                            <ul class="list-group">
+                                                @foreach (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        {{ $aci->aci_name_lang }}
+                                                        <a href="#" class="btn-outline-primary btn btn-sm">jetzt prüfen</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </dd>
                                     </dl>
                                 </div>
                             @endif

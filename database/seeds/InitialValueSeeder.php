@@ -238,51 +238,94 @@ class InitialValueSeeder extends Seeder
             ],
 
         ]);
+
+        DB::table('anforderung_types')->insert([
+            [
+                'at_name_kurz' => 'prf',
+                'at_name_lang' => 'Prüfung',
+                'at_name_text' => 'Überprüfung eines Gerätes entsprechend den Vorgaben. Beispiel eine Aufnahme eines Kontrollwertes oder eine visuelle Prüfung',
+            ],
+            [
+                'at_name_kurz' => 'wrt',
+                'at_name_lang' => 'Wartung',
+                'at_name_text' => 'Die regelmäßige Wartung von Geräten ermöglicht deren sicheren Gebrauch.',
+            ],
+
+
+        ]);
+
         DB::table('anforderungs')->insert([
             [
                 'an_name_kurz' => 'VDE Klasse 1',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 1',
                 'verordnung_id' => 1,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'VDE Klasse 2',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 2',
                 'verordnung_id' => 1,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'VDE Klasse 3',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 3',
                 'verordnung_id' => 1,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'VDE Leitungen',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse Leitungen',
                 'verordnung_id' => 1,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'MedProdUnkr',
                 'an_name_lang' => 'Unkritischen Medizinprodukt',
                 'verordnung_id' => 2,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'MedProdSK-A',
                 'an_name_lang' => 'Semikritisches Medizinprodukt Typ A',
                 'verordnung_id' => 2,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'MedProdSK-B',
                 'an_name_lang' => 'Semikritisches Medizinprodukt Typ B',
                 'verordnung_id' => 2,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'MedProdKR-A',
                 'an_name_lang' => 'Kritisches Medizinprodukt Typ A',
                 'verordnung_id' => 2,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
             [
                 'an_name_kurz' => 'MedProdKR-B',
                 'an_name_lang' => 'Kritisches Medizinprodukt Typ B',
                 'verordnung_id' => 2,
+                'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
             ],
         ]);
 

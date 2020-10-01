@@ -7,6 +7,7 @@ use App\AddressType;
 use App\Admin;
 use App\Anforderung;
 use App\AnforderungControlItem;
+use App\AnforderungType;
 use App\Building;
 //use App\BuildingType;
 use App\BuildingTypes;
@@ -20,6 +21,9 @@ use App\Stellplatz;
 use App\StellplatzTyp;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -557,23 +561,23 @@ class AdminController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * *
+     *
      * @param Request $id
-     * @return Response
+     * @return Builder|Builder[]|Collection|Model|Response
      */
     public function getAnforderungData(Request $id)
     {
-        return Anforderung::findOrFail($id->id);
+        return Anforderung::with('verordnung')->findOrFail($id->id);
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * *
-     * @param Request $id
-     * @return string
-     */
+    @* param Request $id
+    @* return string
+
     public function getAnforderungByVerordnungListe(Request $request)
     {
         $data['id'] = $request->id;
@@ -588,6 +592,8 @@ class AdminController extends Controller
         }
         return $data;
     }
+*/
+
 
     /**
      * @param Request $request
@@ -617,9 +623,62 @@ class AdminController extends Controller
 
         AnforderungControlItem::create($this->validateNewAnforderungControlItem());
 
-        $request->session()->flash('status', 'Die Prüfung <strong>' . request('aci_name') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_kurz') . '</strong> wurde angelegt!');
         return redirect(route('systems'));
     }
+
+    public function updateAnforderungControlItem(Request $request) {
+
+//        dd($request->id);
+        $data = AnforderungControlItem::findOrFail($request->id);
+        $data->update($this->validateAnforderungControlItem());
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_lang') . '</strong> wurde aktualisiert!');
+        return redirect(route('systems'));
+    }
+
+    public function getAnforderungControlItemData(Request $request) {
+        return AnforderungControlItem::findorFail($request->id);
+    }
+
+    public function deleteAnforderungControlItem(Request $request)
+    {
+
+        AnforderungControlItem::destroy($request->id);
+        $request->session()->flash('status', 'Der Vorgang wurde gelöscht!');
+        return redirect(route('systems'));
+
+    }
+
+    public function addNewAnforderungType(Request $request) {
+        AnforderungType::create($this->validateNewAnforderungType());
+        $request->session()->flash('status', 'Der Prüfungstyp <strong>' . request('at_name_kurz') . '</strong> wurde angelegt!');
+        return redirect(route('systems'));
+    }
+    public function updateAnforderungType(Request $request) {
+        $data = AnforderungType::findOrFail($request->id);
+        $data->update($this->validateAnforderungType());
+        $request->session()->flash('status', 'Der Anforderung-Typ <strong>' . request('at_name_lang') . '</strong> wurde aktualisiert!');
+        return redirect(route('systems'));
+    }
+
+    public function getAnforderungTypData(Request $request) {
+        return AnforderungType::findOrFail($request->id);
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function deleteAnforderungType(Request $request )
+    {
+        Anforderung::destroy($request->id);
+        $request->session()->flash('status', 'Der Anforderung-Typ wurde gelöscht!');
+        return redirect(route('systems'));
+
+    }
+
+
+
 
 
     /*
@@ -850,10 +909,34 @@ class AdminController extends Controller
             'an_name_text' => '',
             'an_control_interval' => 'integer',
             'control_interval_id' => '',
-            'verordnung_id' => 'integer',
+            'verordnung_id' => '',
+            'anforderung_type_id' => 'bail|required|integer',
         ]);
     }
 
+    /**
+     * @return array
+     */
+    public function validateNewAnforderungType(): array
+    {
+        return request()->validate([
+            'at_name_kurz' => 'bail|required|unique:anforderung_types,at_name_kurz|max:20',
+            'at_name_lang' => 'bail|max:100',
+            'at_name_text' => '',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateAnforderungType(): array
+    {
+        return request()->validate([
+            'at_name_kurz' => 'bail|required|max:20',
+            'at_name_lang' => 'bail|max:100',
+            'at_name_text' => '',
+        ]);
+    }
     /**
      * @return array
      */
@@ -888,10 +971,11 @@ class AdminController extends Controller
     public function validateNewAnforderungControlItem(): array
     {
         return request()->validate([
-            'aci_name' => 'bail|alpha_dash|unique:anforderung_control_items,aci_name|required|max:20',
+            'aci_name_kurz' => 'bail|alpha_dash|unique:anforderung_control_items,aci_name_kurz|required|max:20',
+            'aci_name_lang' => 'required',
             'aci_task' => '',
             'aci_value_si' => 'max:10',
-            'aci_vaule_soll' => 'numeric',
+            'aci_vaule_soll' => '',
             'firma_id' => '',
             'aci_contact_id' => 'required',
             'anforderung_id' => 'required',
@@ -904,7 +988,8 @@ class AdminController extends Controller
     public function validateAnforderungControlItem(): array
     {
         return request()->validate([
-            'aci_name' => 'bail|alpha_dash|required|max:20',
+            'aci_name_kurz' => 'bail|alpha_dash|required|max:20',
+            'aci_name_lang' => 'max:150',
             'aci_task' => '',
             'aci_value_si' => 'max:10',
             'aci_vaule_soll' => '',

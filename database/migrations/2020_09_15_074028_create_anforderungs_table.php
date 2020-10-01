@@ -29,6 +29,12 @@ class CreateAnforderungsTable extends Migration
                 ->onDelete('set null')
                 ->onUpdate('cascade');
 
+            $table->foreignId('anforderung_type_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
             $table->foreignId('verordnung_id')
                 ->nullable()
                 ->constrained()

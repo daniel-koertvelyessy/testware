@@ -7,12 +7,12 @@
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-link active" id="nav-cianforderung-tab" data-toggle="tab" href="#nav-cianforderung" role="tab" aria-controls="nav-cianforderung" aria-selected="true">Anforderung</a>
-                <a class="nav-link disabled" id="nav-cicontrol-tab" data-toggle="tab" href="#nav-cicontrol" role="tab" aria-controls="nav-cicontrol" aria-selected="false">Prüfumfang</a>
+                <a class="nav-link disabled" id="nav-cicontrol-tab" data-toggle="tab" href="#nav-cicontrol" role="tab" aria-controls="nav-cicontrol" aria-selected="false">Umfang</a>
                 <a class="nav-link disabled" id="nav-cicontact-tab" data-toggle="tab" href="#nav-cicontact" role="tab" aria-controls="nav-cicontact" aria-selected="false">Ausführung</a>
             </div>
         </nav>
         <div class="tab-pane fade show active" id="nav-cianforderung" role="tabpanel" aria-labelledby="nav-cianforderung-tab">
-            <p class="lead text-primary">Wählen Sie als erstes die Anforderung aus, zu der die Prüfung angelegt werden sol.</p>
+            <p class="lead text-primary">Wählen Sie als erstes die Anforderung aus, welche zum Vorgang zugeordnet werden soll.</p>
 
             <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
                 @foreach (App\Anforderung::all() as $anforderung)
@@ -25,12 +25,19 @@
             >weiter</button>
         </div>
         <div class="tab-pane fade" id="nav-cicontrol" role="tabpanel" aria-labelledby="nav-cicontrol-tab">
-            <p class="lead text-primary">Legen Sie nun den Prüfumfang fest.</p>
-            <x-textarea id="aci_task" label="Prüfaufgabe" />
+            <p class="lead text-primary">Vergeben Sie Namen und Kürzel für den neuen Vorgang.</p>
             <div class="row">
                 <div class="col-md-4">
-                    <x-rtextfield id="aci_name" label="Kürzel" />
+                    <x-rtextfield id="aci_name_kurz" label="Kürzel" />
                 </div>
+                <div class="col-md-8">
+                    <x-rtextfield id="aci_name_lang" label="Name" max="150" />
+                </div>
+            </div>
+            <p class="lead text-primary my-3">Legen Sie nun den Umfang des Vorgangs fest.</p>
+            <x-textarea id="aci_task" label="Aufgabe" />
+
+            <div class="row">
                 <div class="col-md-4">
                     <x-textfield id="aci_value_si" label="SI-Einheit [kg, °C, V usw]" max="10" />
                 </div>
@@ -39,8 +46,8 @@
                 </div>
             </div>
             <div class="card p-3 my-4">
-                <p>Wenn Sie die Felder <kbd>Sollwert</kbd> <kbd>SI-Einheit</kbd> leer lassen wir ein einfacher Entscheidungsschalter generiert, welcher das Erreichen der Prüfaufgabe mit <span class="badge badge-success">JA</span> oder <span class="badge badge-warning">Nein</span> beantworten lässt.</p>
-                <p>Sollen Werte abgelesen werden sin die Angaben <kbd>Sollwert</kbd> und <kbd>SI-Einheit</kbd> zwingend erforderlich!</p>
+                <p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p>
+                <p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>
             </div>
 
 
@@ -53,7 +60,7 @@
             >weiter</button>
         </div>
         <div class="tab-pane fade" id="nav-cicontact" role="tabpanel" aria-labelledby="nav-cicontact-tab">
-            <p class="lead text-primary">Legen Sie zum Abschluss fest, wer die Prüfung durchführen wird.</p>
+            <p class="lead text-primary">Legen Sie zum Abschluss fest, wer den Vorgang ausführen wird.</p>
 
             <div class="row">
                 <div class="col-md-6">
@@ -79,7 +86,7 @@
                     </x-selectfield>
                 </div>
             </div>
-            <button class="btn btn-primary btn-block">Prüfung anlegen</button>
+            <button class="btn btn-primary btn-block">Vorgang anlegen</button>
         </div>
 
     </div>
