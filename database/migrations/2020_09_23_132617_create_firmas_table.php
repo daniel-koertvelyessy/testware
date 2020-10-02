@@ -19,11 +19,11 @@ class CreateFirmasTable extends Migration
             $table->softDeletes();
             $table->string('fa_name_kurz', 20)->index();
             $table->string('fa_name_lang', 100)->index()->nullable();
-            $table->text('fa_name_text', 100)->nullable();
+            $table->text('fa_name_text')->nullable();
             $table->string('fa_kreditor_nr', 100)->index()->nullable();
             $table->string('fa_debitor_nr', 100)->index()->nullable();
             $table->string('fa_vat', 30)->nullable();
-            $table->foreignId('adress_id')->nullable();
+            $table->foreignId('address_id')->nullable();
         });
     }
 

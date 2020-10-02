@@ -31,6 +31,24 @@ Route::get('admin/systems', 'AdminController@systems')->name('systems');
  *
  *
  *
+ *   Stellplätze
+ *
+ *
+ */
+
+Route::post('stellplatz.store', 'StellplatzController@store')->name('stellplatz.store');
+Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAjax')->name('destroyStellplatzAjax');
+Route::put('updateStellPlatzType', 'AdminController@updateStellPlatzType')->name('updateStellPlatzType');
+Route::post('createStellPlatzType', 'AdminController@createStellPlatzType')->name('createStellPlatzType');
+Route::post('getStellPlatzTypeData', 'AdminController@getStellPlatzTypeData')->name('getStellPlatzTypeData');
+Route::delete('deleteStellPlatzType', 'AdminController@deleteStellPlatzType')->name('deleteStellPlatzType');
+Route::get('getUsedObjByStellPlatzType', 'AdminController@getUsedObjByStellPlatzType')->name('getUsedObjByStellPlatzType');
+Route::get('getUsedStellplatzByType', 'AdminController@getUsedStellplatzByType')->name('getUsedStellplatzByType');
+
+/**
+ *
+ *
+ *
  *   Räume
  *
  *
@@ -59,7 +77,7 @@ Route::post('createBuildingType', 'AdminController@createBuildingType')->name('c
 Route::post('getBuildingTypeData', 'AdminController@getBuildingTypeData')->name('getBuildingTypeData');
 Route::put('updateBuildingType', 'AdminController@updateBuildingType')->name('updateBuildingType');
 Route::get('getUsedBuildingsByBuildingType', 'AdminController@getUsedBuildingsByBuildingType')->name('getUsedBuildingsByBuildingType');
-Route::delete('deleteTypeBuilding', 'AdminController@deleteTypeBuilding')->name('deleteTypeBuilding');
+Route::delete('deleteBuildingType', 'AdminController@deleteBuildingType')->name('deleteBuildingType');
 Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->name('room.getBuildingList');
 
 
@@ -112,11 +130,6 @@ Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderung
 
 
 
-
-
-
-
-
 /**
  *
  *
@@ -130,10 +143,14 @@ Route::put('updateUserTheme', 'AdminController@updateUserTheme')->name('updateUs
 
 
 
-
-
-
-
+/**
+ *
+ *
+ *
+ *   Produkt Kategorien
+ *
+ *
+ */
 
 Route::put('updateProdKat', 'AdminController@updateProdKat')->name('updateProdKat');
 Route::post('createProdKat', 'AdminController@createProdKat')->name('createProdKat');
@@ -143,11 +160,29 @@ Route::get('getUsedProderialsByProdKat', 'AdminController@getUsedProderialsByPro
 
 
 
-Route::post('addNewAnforderungType', 'AdminController@addNewAnforderungType')->name('addNewAnforderungType');
+/**
+ *
+ *
+ *
+ *   Anforderung Typ
+ *
+ *
+ */
 
+Route::post('addNewAnforderungType', 'AdminController@addNewAnforderungType')->name('addNewAnforderungType');
 Route::get('getAnforderungTypData', 'AdminController@getAnforderungTypData')->name('getAnforderungTypData');
 Route::put('updateAnforderungType', 'AdminController@updateAnforderungType')->name('updateAnforderungType');
 Route::delete('deleteAnforderungType', 'AdminController@deleteAnforderungType')->name('deleteAnforderungType');
+
+
+/**
+ *
+ *
+ *
+ *   Anforderungen
+ *
+ *
+ */
 
 Route::put('updateAnforderung', 'AdminController@updateAnforderung')->name('updateAnforderung');
 Route::get('getAnforderungData', 'AdminController@getAnforderungData')->name('getAnforderungData');
@@ -156,6 +191,14 @@ Route::get('getUsedEquipmentByProdAnforderung', 'AdminController@getUsedEquipmen
 
 
 
+/**
+ *
+ *
+ *
+ *   Verordnungen
+ *
+ *
+ */
 
 Route::post('createVerordnung', 'AdminController@createVerordnung')->name('createVerordnung');
 Route::put('updateVerordnung', 'AdminController@updateVerordnung')->name('updateVerordnung');
@@ -163,7 +206,18 @@ Route::post('getVerordnungData', 'AdminController@getVerordnungData')->name('get
 Route::delete('deleteVerordnung', 'AdminController@deleteVerordnung')->name('deleteVerordnung');
 Route::get('getAnforderungByVerordnungListe', 'AdminController@getAnforderungByVerordnungListe')->name('getAnforderungByVerordnungListe');
 Route::get('getUsedEquipmentByProdVerordnung', 'AdminController@getUsedEquipmentByProdVerordnung')->name('getUsedEquipmentByProdVerordnung');
+Route::get('getUsedAnforderungByVerordnung', 'AdminController@getUsedAnforderungByVerordnung')->name('getUsedAnforderungByVerordnung');
 
+
+
+/**
+ *
+ *
+ *
+ *   Dokument Typen
+ *
+ *
+ */
 
 Route::post('createDokumentType', 'AdminController@createDokumentType')->name('createDokumentType');
 Route::put('updateDokumentType', 'AdminController@updateDokumentType')->name('updateDokumentType');
@@ -171,13 +225,8 @@ Route::post('getDokumentTypeData', 'AdminController@getDokumentTypeData')->name(
 Route::delete('deleteDokumentType', 'AdminController@deleteDokumentType')->name('deleteDokumentType');
 Route::get('getUsedDokumentType', 'AdminController@getUsedDokumentType')->name('getUsedDokumentType');
 
-Route::post('stellplatz.store', 'StellplatzController@store')->name('stellplatz.store');
-Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAjax')->name('destroyStellplatzAjax');
-Route::put('updateStellPlatzType', 'AdminController@updateStellPlatzType')->name('updateStellPlatzType');
-Route::post('createStellPlatzType', 'AdminController@createStellPlatzType')->name('createStellPlatzType');
-Route::post('getStellPlatzTypeData', 'AdminController@getStellPlatzTypeData')->name('getStellPlatzTypeData');
-Route::delete('deleteStellPlatzType', 'AdminController@deleteStellPlatzType')->name('deleteStellPlatzType');
-Route::get('getUsedObjByStellPlatzType', 'AdminController@getUsedObjByStellPlatzType')->name('getUsedObjByStellPlatzType');
+
+
 
 
 Route::delete('deleteTypeLager', 'AdminController@deleteTypeLager')->name('deleteTypeLager');

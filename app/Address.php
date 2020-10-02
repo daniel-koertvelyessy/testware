@@ -25,4 +25,8 @@ class Address extends Model
     {
         return $this->belongsTo(AddressType::class);
     }
+
+    public function firma() {
+        return $this->hasMany(Firma::class);
+    }
 }

@@ -12,6 +12,7 @@ use App\Building;
 //use App\BuildingType;
 use App\BuildingTypes;
 use App\DocumentType;
+use App\Equipment;
 use App\Verordnung;
 use App\ProduktKategorie;
 use App\Produkt;
@@ -105,7 +106,7 @@ class AdminController extends Controller
     {
         AddressType::create($this->validateAdressTypes());
 
-        $request->session()->flash('status', 'Der Adresstyp ' . request('adt_name') . ' wurde angelegt!');
+        $request->session()->flash('status', 'Der Adresstyp <strong>' . request('adt_name') . '</strong> wurde angelegt!');
         return redirect(route('systems'));
     }
 
@@ -194,6 +195,20 @@ class AdminController extends Controller
         $data->update($this->validateBuldingTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde aktualisiert!');
+        return redirect(route('systems'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param BuildingTypes $adt
+     * @return Application|RedirectResponse|Response|Redirector
+     */
+    public function deleteBuildingType(Request $request, BuildingTypes $adt)
+    {
+        $data = BuildingTypes::destroy($request->id);
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde gelöscht!');
         return redirect(route('systems'));
     }
 
@@ -1034,14 +1049,19 @@ class AdminController extends Controller
         return $produkt->where('produkt_kategorie_id',$btid->id)->get();
     }
 
-    public function getUsedObjByStellPlatzType(Produkt $room, Request $btid)
+    public function getUsedStellplatzByType(Equipment $equipment, Request $request)
     {
-        return false;
+        return $equipment->with('produkt')->where('standort_id',$request->id)->get();
     }
 
     public function getUsedEquipmentByProdAnforderung(Produkt $room, Request $btid)
     {
         return false;
+    }
+
+    public function getUsedAnforderungByVerordnung(Anforderung $anforderung, Request $request)
+    {
+        return $anforderung->where('verordnung_id',$request->id)->get();
     }
 
     public function getUsedDokuTypeProderial(Produkt $materialStamm, Request $btid)

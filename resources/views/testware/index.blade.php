@@ -15,62 +15,25 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Prüfung</th>
                         <th>Gerät</th>
+                        <th>Vorgang</th>
                         <th>Fällig</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-danger"></span> 22.09.2020</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-success"></span> 22.03.2021</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-success"></span> 22.09.2021</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-success"></span> 22.09.2021</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-warning"></span> 22.09.2020</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>VDE 1</td>
-                        <td>M-22123</td>
-                        <td><span class="fas fa-circle text-warning"></span> 22.09.2020</td>
-                        <td>
-                            <a href="#">prüfen</a>
-                        </td>
-                    </tr>
-
-
+                    @foreach(\App\ControlEquipment::all() as $controlEquipment)
+                        <tr>
+                            <td>
+                                <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
+                                <br>
+                                <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
+                            </td>
+                            <td>{{ $controlEquipment->AnforderungControlItem->aci_name_lang }}</td>
+                            <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
+                            <td></td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </x-dashborarditem>

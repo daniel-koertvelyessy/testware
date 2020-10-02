@@ -223,13 +223,13 @@
                         <a class="nav-link active" id="prodStammdaten-tab" data-toggle="tab" href="#prodStammdaten" role="tab" aria-controls="prodStammdaten" aria-selected="true">Stammdaten</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="prodAnfordrungen-tab" data-toggle="tab" href="#prodAnfordrungen" role="tab" aria-controls="prodAnfordrungen" aria-selected="false">Anforderungen <span class="badge badge-primary">{{ \App\ProduktAnforderung::where('produkt_id',$produkt->id)->count() }}</span></a>
+                        <a class="nav-link" id="prodAnfordrungen-tab" data-toggle="tab" href="#prodAnfordrungen" role="tab" aria-controls="prodAnfordrungen" aria-selected="false">Anforderungen <span class="badge badge-primary">{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="prodFirmen-tab" data-toggle="tab" href="#prodFirmen" role="tab" aria-controls="prodFirmen" aria-selected="false">Firmen <span class="badge badge-primary">{{ \App\FirmaProdukt::where('produkt_id',$produkt->id)->count() }}</span></a>
+                        <a class="nav-link" id="prodFirmen-tab" data-toggle="tab" href="#prodFirmen" role="tab" aria-controls="prodFirmen" aria-selected="false">Firmen <span class="badge badge-primary">{{  $produkt->firma->count() }}</span></a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="prodDoku-tab" data-toggle="tab" href="#prodDoku" role="tab" aria-controls="prodDoku" aria-selected="false">Dokumente <span class="badge badge-primary">{{ \App\ProduktDoc::where('produkt_id',$produkt->id)->count() }}</span></a>
+                        <a class="nav-link" id="prodDoku-tab" data-toggle="tab" href="#prodDoku" role="tab" aria-controls="prodDoku" aria-selected="false">Dokumente <span class="badge badge-primary">{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -267,21 +267,21 @@
                                     </div>
                                     <div class="row">
                                         <div class="col" aria-label="Felderliste">
-                                            @forelse (DB::table('produkt_params')->where('produkt_id',$produkt->id)->orderBy('pp_name', 'asc')->get() as $param)
+                                            @forelse ($produkt->ProduktParam as $param)
                                                 <x-textfield id="{{ $param->pp_label }}"
                                                              label="{{ $param->pp_name }}"
                                                              value="{{ $param->pp_value }}" max="150"
                                                 />
                                                 <input type="hidden" name="pp_id[]" id="pp_id_{{ $param->id }}" value="{{ $param->id }}">
                                             @empty
-                                               {{-- @forelse (DB::table('produkt_kategorie_params')->where('produkt_kategorie_id',$produkt->ProduktKategorie->id)->orderBy('pkp_name', 'asc')->get() as $pkParam)
+                                                @forelse ($produkt->ProduktKategorie->ProduktKategorieParam as $pkParam)
                                                     <input type="hidden" name="pp_id[]" id="pp_id_{{ $pkParam->id }}" value="{{ $pkParam->id }}">
                                                     <x-textfield id="{{ $pkParam->pkp_label }}" name="pp_label[]"
                                                                  label="{{ $pkParam->pkp_name }}"
                                                                  value="{{ $pkParam->pkp_value }}" max="150"/>
                                                 @empty
-                                                    <p class="text-muted text-center">Es wurden bislang keine Felder angelegt.</p>
-                                                @endforelse--}}
+                                                    <x-notifyer>Es wurden bislang keine Datenfelder angelegt.</x-notifyer>
+                                                @endforelse
                                             @endforelse
                                         </div>
                                     </div>
@@ -327,7 +327,7 @@
                                 @php
                                     $Anforderung = App\Anforderung::all();
                                 @endphp
-                                @forelse (\App\ProduktAnforderung::where('produkt_id',$produkt->id)->get() as $produktAnforderung)
+                                @forelse ($produkt->ProduktAnforderung as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)
                                         <div class="card p-2 mb-2">
                                             <dl class="row lead">
@@ -355,12 +355,12 @@
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">
-                                                    {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? 'Vorgänge' : 'Vorgang' }}
+                                                    {{ ($produktAnforderung->Anforderung->AnforderungControlItem->count()>1) ? 'Vorgänge' : 'Vorgang' }}
                                                 </dt>
                                                 <dd class="col-sm-8">
                                                     <ul class="list-group">
 
-                                                    @foreach (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
+                                                    @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
                                                             <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
                                                     @endforeach
                                                     </ul>
@@ -409,17 +409,8 @@
                                         </button>
                                         <button class="btn btn-primary ml-1">Zuordnen <span class="fas fa-angle-right"></span></button>
                                     </div>
-                                    @if ($errors->any())
-                                        <div class="card border-warning">
-                                            {{ $errors }}
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                    <div class="collapse @if ($errors->any()) show @endif " id="sectionFirmaDetails">
+
+                                    <div class="collapse @if (count($errors)>0) show @endif " id="sectionFirmaDetails">
                                         <div class="card p-3 mb-2">
                                             <h3 class="h5">Firmen-Daten</h3>
                                             <input type="hidden" name="adress_id" id="adress_id">
@@ -673,7 +664,7 @@
                                     @foreach ($produkt->firma as $firma)
                                         <x-addresslabel
                                             firma="{!!  $firma->fa_name_lang !!}"
-                                            address="{{ App\Address::find($firma->adress_id)->ad_anschrift_strasse }} - {{ App\Address::find($firma->adress_id)->ad_anschrift_ort }}"
+                                            address="{{ $firma->Address->ad_anschrift_strasse }} - {{ $firma->Address->ad_anschrift_ort }}"
                                             firmaid="{{ $firma->id }}"
                                             produktid="{{ $produkt->id }}"></x-addresslabel>
                                     @endforeach
@@ -733,7 +724,7 @@
                                 </form>
                             </div>
                             <div class="col-md-6">
-                                @if (\App\ProduktDoc::where('produkt_id',$produkt->id)->count()>0)
+                                @if ($produkt->ProduktDoc->count()>0)
                                     <table class="table table-striped table-sm">
                                         <thead>
                                         <th>Datei</th>
@@ -744,7 +735,7 @@
                                         <th></th>
                                         </thead>
                                         <tbody>
-                                        @foreach (\App\ProduktDoc::where('produkt_id',$produkt->id)->get() as $produktDoc)
+                                        @foreach ($produkt->ProduktDoc as $produktDoc)
                                             <tr>
                                                 <td>{{ $produktDoc->proddoc_name_lang }}</td>
                                                 <td>{{ $produktDoc->DocumentType->doctyp_name_kurz }}</td>
@@ -837,8 +828,6 @@
                 url: "{{ route('getAnforderungData') }}",
                 data: {id:$('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const ver = $('#setAnforderung option:selected').text();
-                    const intervall = (res.an_control_interval>0)? res.an_control_interval :'-';
                     const icon = (res.an_test_has) ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-muted"></span>';
                     $('#produktAnforderungText').html(`
                          <dl class="row">

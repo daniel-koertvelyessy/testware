@@ -1,5 +1,5 @@
 @extends('layout.layout-login')
-
+@section('pagetitle','Bitte anmelden!')
 @section('content')
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center" style="height: 90vh;">
@@ -38,21 +38,16 @@
                                 @enderror
 
                             </div>
-                            <div class="form-group mt-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Angemeldet bleiben') }}
-                                    </label>
+                            <div class="form-group my-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input"  type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    <label class="custom-control-label" for="remember">{{ __('Angemeldet bleiben') }}</label>
                                 </div>
                             </div>
-                            <div class="form-group mt-2">
-                                <button type="submit" class="btn btn-primary">
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="fas fa-sign-in-alt"></i> {{ __('Anmelden') }}
                                 </button>
-
-
                             </div>
 
                         </form>

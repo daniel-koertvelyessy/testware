@@ -347,13 +347,6 @@ class InitialValueSeeder extends Seeder
         ]);
 
 
-
-
-
-
-
-
-
         DB::table('document_types')->insert([
             [
                 'doctyp_name_kurz' => 'Anleitung',
@@ -375,6 +368,16 @@ class InitialValueSeeder extends Seeder
                 'doctyp_name_lang' => 'Bericht über den Verlauf einer Geräteprüfung',
                 'doctyp_mandatory' => '1',
             ],
+        ]);
+
+        DB::table('produkt_docs')->insert([
+            [
+                'proddoc_name_lang'=>'MED_288_ULTIMATE.pdf',
+                'proddoc_name_pfad'=>'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
+                'produkt_id'=>'31',
+                'document_type_id'=>'1',
+                'proddoc_name_kurz'=>'Anleitung',
+            ]
         ]);
 
 

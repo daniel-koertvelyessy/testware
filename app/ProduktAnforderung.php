@@ -21,4 +21,8 @@ class ProduktAnforderung extends Model
         return $this->belongsTo(Anforderung::class);
     }
 
+    public function AnforderungControlItem() {
+        return $this->hasMany(AnforderungControlItem::class);
+    }
+
 }

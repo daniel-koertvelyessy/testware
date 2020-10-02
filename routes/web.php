@@ -14,6 +14,8 @@ Route::get('docs', function () {
     return view('docs.index');
 });
 
+Route::get('user.resetPassword','UserController@resetPassword')->name('user.resetPassword');
+
 
 
 Route::resources([
@@ -28,6 +30,7 @@ Route::resources([
     'testware' => 'TestwareController',
     'equipment' => 'EquipmentController',
     'control' => 'ControlController',
+    'user' => 'UserController',
 
 ]);
 

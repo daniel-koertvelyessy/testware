@@ -134,7 +134,7 @@ class FirmaController extends Controller
            'fa_kreditor_nr',
            'fa_debitor_nr'
                 )
-            ->join('addresses', 'addresses.id', '=', 'firmas.adress_id')
+            ->join('addresses', 'addresses.id', '=', 'firmas.address_id')
             ->where('fa_name_kurz','like', '%'.$request->term . '%')
             ->orWhere('fa_name_lang','like', '%'.$request->term . '%')
             ->orWhere('fa_name_text','like', '%'.$request->term . '%')
@@ -150,7 +150,7 @@ class FirmaController extends Controller
     }
 
     public function getFirmaData(Request $request) {
-        dd($request);
+//        dd($request);
         return Firma::find($request->id);
     }
 
@@ -159,7 +159,7 @@ class FirmaController extends Controller
     {
         $firma = Firma::find($request->id);
 
-        $adresses = Address::find($firma->adress_id);
+        $adresses = Address::find($firma->address_id);
 
         $contact = Contact::where('firma_id',$request->id)->first();
 

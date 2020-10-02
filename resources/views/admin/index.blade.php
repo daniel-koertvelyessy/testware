@@ -46,7 +46,7 @@
                             <td>{{ $user->username }}</td>
                             <td><span class="text-truncate" >{{ $user->created_at }}</span></td>
                             <td><span>{{ $user->role_id }}</span></td>
-                            <td><a href="#">bearbeiten</a></td>
+                            <td><a href="/user/{{ $user->id }}">bearbeiten</a></td>
                         </tr>
                     @endforeach
                     </tbody>

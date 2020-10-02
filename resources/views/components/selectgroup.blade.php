@@ -7,8 +7,6 @@
             class="custom-select">
         {{ $slot }}
     </select>
-    <button type="button" class="btn btn-outline-primary ml-2" id="{{ $btnT }}">
-        {{ $btnL??'laden' }}
-    </button>
+    <x-btnLoad id="{{ $btnT }}" block>{{ $btnL??$label }}</x-btnLoad>
 </div>
 

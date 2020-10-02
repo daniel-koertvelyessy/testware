@@ -13,6 +13,8 @@ Route::get('getProduktKategorieParams','ProduktController@getProduktKategoriePar
 Route::post('addProduktKategorieParam','ProduktController@addProduktKategorieParam')->name('addProduktKategorieParam');
 Route::get('getUsedProduktsByPK','ProduktController@getUsedProduktsByPK')->name('getUsedProduktsByPK');
 
+
+
 Route::post('addProduktFirma','ProduktController@addProduktFirma')->name('addProduktFirma');
 Route::delete('removeFirmaFromProdukt','ProduktController@removeFirmaFromProdukt')->name('removeFirmaFromProdukt');
 

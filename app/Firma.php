@@ -17,9 +17,9 @@ class Firma extends Model
     }
 
 
-    public function Addres()
+    public function Address()
     {
-        return $this->hasMany(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function contact()

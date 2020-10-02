@@ -381,20 +381,32 @@ class ProduktController extends Controller
         return view('admin.systems');
     }
 
-
     /**
-     * Fügt neue Kategorie für Produktstamm hinzu
+     *  Löscht den Param von der Produk-Kategorie
      *
      * @param Request $request
      * @return Application|Response
      */
+    public function deleteProduktKategorieParam(Request $request)
+    {
+
+        ProduktKategorieParam::find($request->id)->delete();
+
+        $request->session()->flash('status', 'Das Datenfeld  <strong>' . request('pkp_label') . '</strong> wurde gelöscht!');
+
+        return redirect(route('systems'));
+    }/**
+ * Fügt neue Kategorie für Produktstamm hinzu
+ *
+ * @param Request $request
+ * @return Application|Response
+ */
     public function addProduktKategorie(Request $request)
     {
         $produkt = ProduktKategorie::create($this->validateNewProduktKategorie());
         $request->session()->flash('status', 'Die Produktkategorie  <strong>' . request('prod_nummer') . '</strong> wurde angelegt!');
         return view('admin.produkt.show', ['produkt' => $produkt]);
     }
-
     /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *

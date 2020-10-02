@@ -8,6 +8,8 @@ class AnforderungControlItem extends Model
 {
     protected $guarded = [];
 
-
+    public function Anforderung() {
+        return $this->belongsTo(Anforderung::class);
+}
 
 }

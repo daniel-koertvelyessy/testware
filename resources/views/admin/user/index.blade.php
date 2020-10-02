@@ -25,13 +25,42 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Übersicht Systemverwaltung</h1>
+                <h1 class="h3">Übersicht Benutzer</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4"></div>
-            <div class="col-4"></div>
+            <div class="col">
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Benutzername</th>
+                        <th>Status</th>
+                        <th>Erstellt</th>
+                        <th>Rolle</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @forelse (App\User::all() as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->username }}</td>
+                            <td>{{ $user->created_at }}</td>
+                            <td>{{ $user->created_at }}</td>
+                            <td>{{ $user->role_id }}</td>
+                            <td><a href="{{ route('user.show',$user->id) }}">bearbeiten</a></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td>
+                                <x-notifyer>Keine Benutzer erstellt! Wer hat sich denn dann angemeledet?????</x-notifyer>
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 
