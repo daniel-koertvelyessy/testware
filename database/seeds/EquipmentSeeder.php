@@ -41,8 +41,19 @@ class EquipmentSeeder extends Seeder
                 'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
                 'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
                 'proddoc_name_text' => NULL,
+                'produkt_id'=>'31',
+                'document_type_id'=>'1',
             ]
         ]);
+
+        //        DB::table('produkt_docs')->insert([
+//            [
+//                'proddoc_name_lang'=>'MED_288_ULTIMATE.pdf',
+//                'proddoc_name_pfad'=>'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
+
+//                'proddoc_name_kurz'=>'Anleitung',
+//            ]
+//        ]);
 
         DB::table('firma_produkt')->insert([
             [
@@ -58,18 +69,18 @@ class EquipmentSeeder extends Seeder
 
         DB::table('equipment')->insert([
             [
-                	'id' => '4',
-                	'deleted_at' => NULL,
-                	'created_at' => '2020-09-28 19:50:07',
-                	'updated_at' => '2020-09-28 19:50:07',
-                	'eq_inventar_nr' => '323134',
-                	'eq_serien_nr' => '654367',
-                	'eq_qrcode' => NULL,
-                	'eq_ibm' => '2020-09-24',
-                	'eq_text' => NULL,
-                	'equipment_state_id' => '1',
-                	'produkt_id' => '31',
-                	'standort_id' => '4',
+                'id' => '4',
+                'deleted_at' => NULL,
+                'created_at' => '2020-09-28 19:50:07',
+                'updated_at' => '2020-09-28 19:50:07',
+                'eq_inventar_nr' => '323134',
+                'eq_serien_nr' => '654367',
+                'eq_qrcode' => NULL,
+                'eq_ibm' => '2020-09-24',
+                'eq_text' => NULL,
+                'equipment_state_id' => '1',
+                'produkt_id' => '31',
+                'standort_id' => '4',
             ]
         ]);
 

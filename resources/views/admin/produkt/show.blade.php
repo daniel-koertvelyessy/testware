@@ -729,8 +729,8 @@
                                         <thead>
                                         <th>Datei</th>
                                         <th>Typ</th>
-                                        <th style="text-align: right;">Größe kB</th>
-                                        <th>Hochgeladen</th>
+                                        <th class="d-none d-lg-table-cell" style="text-align: right;">Größe kB</th>
+                                        <th class="d-none d-lg-table-cell">Hochgeladen</th>
                                         <th></th>
                                         <th></th>
                                         </thead>
@@ -739,8 +739,8 @@
                                             <tr>
                                                 <td>{{ $produktDoc->proddoc_name_lang }}</td>
                                                 <td>{{ $produktDoc->DocumentType->doctyp_name_kurz }}</td>
-                                                <td style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
-                                                <td>{{ $produktDoc->created_at }}</td>
+                                                <td class="d-none d-lg-table-cell" style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
+                                                <td class="d-none d-lg-table-cell">{{ $produktDoc->created_at }}</td>
                                                 <td>
                                                     <x-deletebutton action="{{ route('produktDoku.destroy',$produktDoc->id) }}" id="{{ $produktDoc->id }}" />
 

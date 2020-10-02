@@ -22,7 +22,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach(\App\ControlEquipment::all() as $controlEquipment)
+                    @forelse(\App\ControlEquipment::all() as $controlEquipment)
                         <tr>
                             <td>
                                 <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
@@ -33,7 +33,13 @@
                             <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                             <td></td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="4">
+                                <x-notifyer>Keine Vorgänge verfügbar!</x-notifyer>
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </x-dashborarditem>
