@@ -10,21 +10,6 @@ Route::get('support', function () {
     return view('support');
 });
 
-Route::get('organisationMain', function () {
-    return view('admin.organisation.index');
-})->name('organisationMain');
-
-Route::get('standorteMain', function () {
-    return view('admin.standorte.index');
-})->name('standorteMain');
-
-Route::get('produktMain', function () {
-    return view('admin.produkt.main');
-})->name('produktMain');
-
-Route::get('getKategorieProducts', function () {
-    return view('admin.produkt.kategorie.index');
-})->name('getKategorieProducts');
 
 Route::get('docs', function () {
     return view('docs.index');
@@ -87,7 +72,21 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
+Route::get('organisationMain', function () {
+    return view('admin.organisation.index');
+})->name('organisationMain')->middleware('auth');
 
+Route::get('standorteMain', function () {
+    return view('admin.standorte.index');
+})->name('standorteMain')->middleware('auth');
+
+Route::get('produktMain', function () {
+    return view('admin.produkt.main');
+})->name('produktMain')->middleware('auth');
+
+Route::get('getKategorieProducts', function () {
+    return view('admin.produkt.kategorie.index');
+})->name('getKategorieProducts')->middleware('auth');
 
 
 /*
