@@ -664,7 +664,7 @@
                                     @foreach ($produkt->firma as $firma)
                                         <x-addresslabel
                                             firma="{!!  $firma->fa_name_lang !!}"
-                                            address="{{ $firma->Address->ad_anschrift_strasse }} - {{ $firma->Address->ad_anschrift_ort }}"
+                                            address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
                                             firmaid="{{ $firma->id }}"
                                             produktid="{{ $produkt->id }}"></x-addresslabel>
                                     @endforeach
