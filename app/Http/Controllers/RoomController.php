@@ -26,7 +26,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return view('admin.room.index');
+        return view('admin.standorte.room.index');
     }
 
     /**
@@ -36,7 +36,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('admin.room.create');
+        return view('admin.standorte.room.create');
     }
 
     /**
@@ -63,7 +63,7 @@ return (isset($request->frmOrigin)) ? redirect('building/'.$request->building_id
      */
     public function show(Room $room)
     {
-        return view('admin.room.show',['room'=>$room]);
+        return view('admin.standorte.room.show',['room'=>$room]);
     }
 
     /**
@@ -74,7 +74,7 @@ return (isset($request->frmOrigin)) ? redirect('building/'.$request->building_id
      */
     public function edit(Room $room)
     {
-        return view('admin.room.edit',compact('room'));
+        return view('admin.standorte.room.edit',compact('room'));
     }
 
     /**

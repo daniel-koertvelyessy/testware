@@ -19,6 +19,11 @@
         <h1 class="h3">Neues Gebäude anlegen</h1>
         <form action="{{ route('building.store') }}" method="post" class=" needs-validation">
             @csrf
+            <input type="hidden"
+                   name="standort_id"
+                   id="standort_id"
+                   value="{{ Str::uuid() }}"
+            >
             <div class="row">
                 <div class="col-lg-6">
                     <h2 class="h5">Standort</h2>

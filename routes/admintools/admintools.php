@@ -36,7 +36,7 @@ Route::get('admin/systems', 'AdminController@systems')->name('systems');
  *
  */
 
-Route::post('stellplatz.store', 'StellplatzController@store')->name('stellplatz.store');
+
 Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAjax')->name('destroyStellplatzAjax');
 Route::put('updateStellPlatzType', 'AdminController@updateStellPlatzType')->name('updateStellPlatzType');
 Route::post('createStellPlatzType', 'AdminController@createStellPlatzType')->name('createStellPlatzType');

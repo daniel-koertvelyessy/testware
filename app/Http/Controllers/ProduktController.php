@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
+use App\Adresse;
 use App\Contact;
 use App\Firma;
 use App\FirmaProdukt;
@@ -38,8 +38,8 @@ class ProduktController extends Controller
      */
     public function index()
     {
-
-        return view('admin.produkt.index');
+        $produktList = Produkt::with('ProduktKategorie','ProduktState')->paginate(15);
+        return view('admin.produkt.index',['produktList'=>$produktList]);
     }
 
     /**
@@ -121,6 +121,7 @@ class ProduktController extends Controller
     public function store(Request $request)
     {
         $produkt = Produkt::create($this->validateNewProdukt());
+
         if (isset($request->pp_label) && count($request->pp_label) > 0) {
             for ($i = 0; $i < count($request->pp_label); $i++) {
                 $param = new ProduktParam;
@@ -160,7 +161,7 @@ class ProduktController extends Controller
         $st['request'] = $request;
 
         if (isset($request->ckAddNewAddress)){
-            $addresse =  Address::create($this->validateAdresse());
+            $addresse =  Adresse::create($this->validateAdresse());
             $address_id = $addresse->id;
             $st['add'][] = 'Neue Adresse anlegen';
 //            $address_id = 12;
@@ -315,7 +316,10 @@ class ProduktController extends Controller
     {
         $data = [];
         //        DB::connection()->enableQueryLog();
-        $produkts = Produkt::with('ProduktKategorie', 'ProduktState')->where('produkt_kategorie_id', $request->id)->get();
+        $prduktCache = \Cache::remember('produkt-liste-kat-'.$request->id,now()->addSeconds(2), function () use($request){
+            return Produkt::with('ProduktKategorie', 'ProduktState')->where('produkt_kategorie_id', $request->id)->get();
+        });
+        $produkts = $prduktCache;
         foreach ($produkts as $produkt) {
             $icon = ($produkt->prod_active === 1) ? '<i class="fas fa-check text-success"  data-toggle="tooltip" data-placement="top" ></i>' : '<i class="fas fa-times text-danger"  data-toggle="tooltip" data-placement="top"></i>';
             $data[] =
@@ -483,7 +487,7 @@ class ProduktController extends Controller
             'prod_name_kurz' => 'bail|unique:produkts,prod_name_kurz|min:2|max:20|required',
             'prod_name_lang' => 'max:100',
             'prod_name_text' => '',
-            'prod_nummer' => 'bail|unique:produkts,prod_nummer|alpha_num|max:100',
+            'prod_nummer' => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
             'prod_active' => '',
             'produkt_kategorie_id' => '',
             'produkt_state_id' => 'required'

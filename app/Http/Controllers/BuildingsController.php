@@ -27,7 +27,7 @@ class BuildingsController extends Controller
      */
     public function index()
     {
-        return view('admin.building.index');
+        return view('admin.standorte.building.index');
     }
 
     /**
@@ -37,7 +37,7 @@ class BuildingsController extends Controller
      */
     public function create()
     {
-        return view('admin.building.create');
+        return view('admin.standorte.building.create');
     }
 
     /**
@@ -48,23 +48,11 @@ class BuildingsController extends Controller
      */
     public function store(Request $request)
     {
-        $checked = $request->has('b_we_has') ? 1 : 0;
-        $c =$this->validateNewBuilding();
+        $request->b_we_has = $request->has('b_we_has') ? 1 : 0;
 
-        $building=  new Building();
+        $building =  Building::create($this->validateNewBuilding());
 
-        $building->b_name_kurz = $request->b_name_kurz;
-        $building->b_name_ort = $request->b_name_ort;
-        $building->b_name_lang = $request->b_name_lang;
-        $building->b_name_text = $request->b_name_text;
-        $building->b_we_has = (isset($request->b_we_has))?1:0;
-        $building->b_we_name = $request->b_we_name;
-        $building->location_id = $request->location_id;
-        $building->building_type_id = $request->building_type_id;
-        $building->standort_id = Str::uuid();
-
-        $building->save();
-        $std = (new \App\Standort)->add($building->standort_id, $building->b_name_kurz,'buildings');
+        $std = (new \App\Standort)->add($request->standort_id, $request->b_name_kurz,'buildings');
 
         $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde angelegt!');
         return (isset($request->frmOrigin) && $request->frmOrigin==='location') ?redirect('location/'.$request->location_id.'#locGebauede') : redirect('building/'.$building->id);
@@ -84,7 +72,7 @@ class BuildingsController extends Controller
      */
     public function show(Building $building)
     {
-        return view('admin.building.show',['building'=>$building]);
+        return view('admin.standorte.building.show',['building'=>$building]);
     }
 
     /**
@@ -94,7 +82,7 @@ class BuildingsController extends Controller
      */
     public function edit(building $building)
     {
-        return view('admin.building.edit',compact('building'));
+        return view('admin.standorte.building.edit',compact('building'));
     }
 
     /**

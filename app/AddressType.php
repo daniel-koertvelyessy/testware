@@ -8,8 +8,8 @@ class AddressType extends Model
 {
     protected $guarded = [];
 
-    public function address()
+    public function Adresse()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasMany(Adresse::class);
     }
 }

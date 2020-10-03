@@ -10,6 +10,22 @@ Route::get('support', function () {
     return view('support');
 });
 
+Route::get('organisationMain', function () {
+    return view('admin.organisation.index');
+})->name('organisationMain');
+
+Route::get('standorteMain', function () {
+    return view('admin.standorte.index');
+})->name('standorteMain');
+
+Route::get('produktMain', function () {
+    return view('admin.produkt.main');
+})->name('produktMain');
+
+Route::get('getKategorieProducts', function () {
+    return view('admin.produkt.kategorie.index');
+})->name('getKategorieProducts');
+
 Route::get('docs', function () {
     return view('docs.index');
 });
@@ -26,11 +42,12 @@ Route::resources([
     'produkt' => 'ProduktController',
     'produktDoku' => 'ProduktDocController',
     'firma' => 'FirmaController',
-    'address' => 'AddressController',
+    'adresse' => 'AdresseController',
     'testware' => 'TestwareController',
     'equipment' => 'EquipmentController',
     'control' => 'ControlController',
     'user' => 'UserController',
+    'stellplatz' => 'StellplatzController',
 
 ]);
 
@@ -49,8 +66,8 @@ require base_path().'/routes/produkttools/produkttools.php';
 Route::get('getFirmenAjaxListe','FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
 Route::get('getFirmenDaten','FirmaController@getFirmenDaten')->name('getFirmenDaten');
 
-Route::get('getAddressenAjaxListe','AddressController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
-Route::get('getAddressDaten','AddressController@getAddressDaten')->name('getAddressDaten');
+Route::get('getAddressenAjaxListe','AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
+Route::get('getAddressDaten','AdresseController@getAddressDaten')->name('getAddressDaten');
 
 
 /*

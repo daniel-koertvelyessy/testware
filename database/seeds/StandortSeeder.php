@@ -11,7 +11,7 @@ class StandortSeeder extends Seeder
      */
     public function run()
     {
-        $location = factory(App\Location::class, 6)->create();
+        $location = factory(App\Location::class, 2)->create();
 
         foreach ($location as $loc)
             factory(App\Standort::class)->create([

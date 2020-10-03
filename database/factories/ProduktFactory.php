@@ -13,6 +13,6 @@ $factory->define(Produkt::class, function (Faker $faker) {
         'produkt_kategorie_id' => random_int(1,3),
         'produkt_state_id' => random_int(1,2),
         'prod_active' => random_int(1,2),
-        'prod_nummer' => '9200'.random_int(1000,9000),
+        'prod_nummer' => '920'.random_int(100000,999000),
     ];
 });

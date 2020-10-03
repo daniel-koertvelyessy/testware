@@ -17,7 +17,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (App\Location::find($loc->id)->showBuildings as $building)
+                @foreach (App\Location::find($loc->id)->Building as $building)
                     <tr>
                         <td style="border-top: 1px solid #7c7c7c;" width="20%">
                             {{$building->b_name_kurz}}
@@ -26,7 +26,7 @@
                             {{$building->b_raum_lang}}
                         </td>
                         <td style="border-top: 1px solid #7c7c7c;" width="10%">
-                            {{ $building->BuildingTypes->btname }}
+                            {{ $building->BuildingType->btname }}
                         </td>
                         <td style="border-top: 1px solid #7c7c7c;" width="10%">
                             {{ App\Building::find($loc->id)->getRooms($building->id) }}

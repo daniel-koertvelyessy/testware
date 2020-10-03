@@ -24,15 +24,15 @@
                         <div id="sectionAdminApps" class="collapse" aria-labelledby="headingTwo" data-parent="#portalAuswahl">
                             <section class="card-body text-dark">
                                 <nav class="tiles-grid justify-content-center">
-                                    <a href="/location" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
-                                        <span class="icon"><i class="fas fa-industry"></i></span>
+                                    <a href="{{ route('standorteMain') }}" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
+                                        <span class="icon"><i class="fas fa-boxes"></i></span>
                                         <span class="branding-bar text-center">Standorte</span>
                                     </a>
-                                    <a href="/organisation/" class="tile-medium rounded" data-role="tile">
+                                    <a href="{{ route('organisationMain') }}" class="tile-medium rounded" data-role="tile">
                                         <span class="icon"><i class="fas fa-users"></i></span>
                                         <span class="branding-bar text-center">Organisation</span>
                                     </a>
-                                    <a href="{{ route('produkt.index') }}" class="tile-medium rounded" data-role="tile">
+                                    <a href="{{ route('produktMain') }}" class="tile-medium rounded" data-role="tile">
                                         <span class="icon"><i class="fas fa-boxes"></i></span>
                                         <span class="branding-bar text-center">Produkte</span>
                                     </a>

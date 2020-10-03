@@ -18,6 +18,6 @@ class AdressFirma extends Model
 
     public function Address()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasMany(Adresse::class);
     }
 }

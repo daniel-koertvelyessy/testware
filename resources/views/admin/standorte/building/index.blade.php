@@ -74,26 +74,23 @@
             <div class="row">
                 <div class="col-6">
                     <div class="card" >
-                        <form action="/bulding" method="post" class=" needs-validation">
+                        <form action="{{ route('building.store') }}" method="post" class=" needs-validation">
                             @csrf
+                            <input type="hidden"
+                                   name="standort_id"
+                                   id="standort_id"
+                                   value="{{ Str::uuid() }}"
+                            >
                             <div class="card-body">
                                 <h5 class="card-title">Schnellstart</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Erstellen Sie den ersten Standort</h6>
-                                <div class="form-group">
-                                    <label for="b_name_kurz">Kurzbezeichnung (erforderlich, max 10 Zeichen)</label>
-                                    <input type="text" name="b_name_kurz" id="b_name_kurz" class="form-control @error('b_name_kurz') ' is-invalid ' @enderror()" value="{{ old('b_name_kurz','') }}">
-                                    @error('b_name_kurz')
-                                    <span class="text-danger small">Die Kurzbezeichung ist zwingend notwendig!</span>
-                                    @enderror()
-                                </div>
-                                <div class="form-group">
-                                    <label for="b_name_lang">Bezeichnung (max 100 Zeichen)</label>
-                                    <input type="text" name="b_name_lang" id="b_name_lang" class="form-control" maxlength="100"  value="{{ old('b_name_lang','') }}">
-                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted">Erstellen Sie das erste Gebäude</h6>
+                                <x-rtextfield id="b_name_kurz" label="Kurzbezeichnung" />
+                              <x-textfield id="b_name_lang" label="Bezeichnung" />
+
                                 <p class="card-text">Sie können später weitere Informationen hinzufügen</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary btn-block"><i class="far fa-save"></i> Raum anlegen</button>
+                                <x-btnMain>Raum anlegen</x-btnMain>
                             </div>
                         </form>
                     </div>
@@ -112,13 +109,13 @@
 
 
 @section('actionMenuItems')
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>
-        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item" href="#">Drucke Übersicht</a>
-            <a class="dropdown-item" href="#">Standortbericht</a>
-            <a class="dropdown-item" href="#">Formularhilfe</a>
-        </ul>
-    </li>
+{{--    <li class="nav-item dropdown">--}}
+{{--        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>--}}
+{{--        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">--}}
+{{--            <a class="dropdown-item" href="#">Drucke Übersicht</a>--}}
+{{--            <a class="dropdown-item" href="#">Standortbericht</a>--}}
+{{--            <a class="dropdown-item" href="#">Formularhilfe</a>--}}
+{{--        </ul>--}}
+{{--    </li>--}}
 @endsection()
 

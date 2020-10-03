@@ -1,11 +1,12 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 
-use App\Address;
+use App\Adresse;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(Address::class, function (Faker $faker) {
+$factory->define(Adresse::class, function (Faker $faker) {
     return [
         'address_type_id' => 1,
         'ad_name_kurz' => substr(substr($faker->companySuffix, 0, 3) . $faker->randomNumber(3) .  $faker->postcode, 0, 10),

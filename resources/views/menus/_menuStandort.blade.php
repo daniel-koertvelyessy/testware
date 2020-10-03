@@ -1,4 +1,14 @@
- <li class="nav-item dropdown {{ (strpos(Request::path(), 'location')!==false) ? ' active ' : '' }}">
+
+
+<li class="nav-item {{ Request::routeIs('standorteMain')  ? ' active ' : '' }}">
+    <a class="nav-link " href="{{ route('standorteMain') }}">
+        <i class="fas fa-desktop"></i> Start
+    </a>
+</li>
+
+
+
+<li class="nav-item dropdown {{ (strpos(Request::path(), 'location')!==false) ? ' active ' : '' }}">
         <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-industry"></i> Standorte </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuLocations">
             <li><a class="dropdown-item" href="/location/">Übersicht</a></li>

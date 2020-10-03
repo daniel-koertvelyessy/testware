@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
+use App\Adresse;
 use App\Contact;
 use App\Firma;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class FirmaController extends Controller
 {
@@ -20,21 +24,22 @@ class FirmaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function index()
     {
-        //
+        $firmaList = Firma::with('Adresse')->paginate(15);
+        return view('admin.organisation.firma.index',['firmaList'=>$firmaList]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        //
+        return view('admin.organisation.firma.create');
     }
 
 
@@ -42,31 +47,32 @@ class FirmaController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function store(Request $request)
     {
-        //
+       $firma = Firma::create($this->validateNewFirma());
+        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_name_kurz . '</strong> wurde angelegt!');
+        return view('admin.organisation.firma.show',['firma'=>$firma]);
     }
-
 
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Firma  $firma
-     * @return \Illuminate\Http\Response
+     * @param  Firma $firma
+     * @return Application
      */
     public function show(Firma $firma)
     {
-        //
+        return view('admin.organisation.firma.show',['firma'=>$firma]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Firma  $firma
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Firma $firma)
     {
@@ -78,18 +84,20 @@ class FirmaController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Firma  $firma
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Firma $firma)
     {
-        //
+        $firma->update($this->validateFirma());
+        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_name_kurz . '</strong> wurde aktualisiert!');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Firma  $firma
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Firma $firma)
     {
@@ -113,6 +121,21 @@ class FirmaController extends Controller
         ]);
     }
 
+    /**
+     * @return array
+     */
+    public function validateFirma(): array
+    {
+        return request()->validate([
+            'fa_name_kurz' => 'bail|max:20|required',
+            'fa_name_lang' => 'bail|string|max:100',
+            'fa_name_text' => '',
+            'fa_kreditor_nr' => 'bail|max:100',
+            'fa_debitor_nr' => 'max:100',
+            'fa_vat' => 'max:30',
+            'adress_id' => '',
+        ]);
+    }
 /*
  *
  *
@@ -159,7 +182,7 @@ class FirmaController extends Controller
     {
         $firma = Firma::find($request->id);
 
-        $adresses = Address::find($firma->address_id);
+        $adresses = Adresse::find($firma->address_id);
 
         $contact = Contact::where('firma_id',$request->id)->first();
 

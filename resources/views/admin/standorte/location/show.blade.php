@@ -68,10 +68,10 @@
         <div class="row">
             <div class="col d-flex justify-content-between">
                 <h1 class="h3"><span class="d-none d-md-inline">Übersicht Standort </span>{{ $location->l_name_kurz }}</h1>
-                <div class="visible-print text-center">
+{{--                <div class="visible-print text-center">
                     {!! QrCode::size(65)->generate($location->standort_id); !!}
                     <p class="text-muted small">Standort-ID</p>
-                </div>
+                </div>--}}
             </div>
         </div>
         <div class="row">
@@ -81,7 +81,7 @@
                         <a class="nav-link active" id="locStammDaten-tab" data-toggle="tab" href="#locStammDaten" role="tab" aria-controls="locStammDaten" aria-selected="true">Stammdaten</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="locGebauede-tab" data-toggle="tab" href="#locGebauede" role="tab" aria-controls="locGebauede" aria-selected="false">Gebäude <span class="badge badge-info">{{ $location->buildings->count() }}</span></a>
+                        <a class="nav-link" id="locGebauede-tab" data-toggle="tab" href="#locGebauede" role="tab" aria-controls="locGebauede" aria-selected="false">Gebäude <span class="badge badge-info">{{ $location->Building->count() }}</span></a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -112,43 +112,43 @@
                                 <div class="col-lg-4">
                                     <h2 class="h5">Anschrift</h2>
                                     <div class="form-group">
-                                        @if ($location->addresses_id===NULL)
-                                            <label for="addresses_id" class="sr-only">Adresse auswähen und zuordnen</label>
-                                            <select name="addresses_id" id="addresses_id" class="custom-select">
+                                        @if ($location->adresse_id===NULL)
+                                            <label for="adresse_id" class="sr-only">Adresse auswähen und zuordnen</label>
+                                            <select name="adresse_id" id="adresse_id" class="custom-select">
                                                 <option value="void">Bitte Adresse zuordnen</option>
-                                                @foreach (App\Address::all() as $adresse)
+                                                @foreach (App\Adresse::all() as $adresse)
                                                     <option value="{{ $adresse->id }}">{{ $adresse->ad_name_lang }}</option>
                                                 @endforeach
                                             </select>
-                                            <a href="#" class="btn btn-outline-primary btn-block">neue Adresse anlegen</a>
+                                            <a href="{{ route('adresse.create') }}" class="btn btn-outline-primary btn-block">neue Adresse anlegen</a>
                                         @else
-                                            <label for="addresses_id" class="sr-only">Die Adresse des Standortes festlegen</label>
-                                            <select class="custom-select" aria-label="Default select example" name="addresses_id" id="addresses_id">
-                                                @foreach (App\Address::all() as $addItem)
-                                                    <option value="{{$addItem->id}}" @if ($addItem->id == $location->addresses_id)
+                                            <label for="adresse_id" class="sr-only">Die Adresse des Standortes festlegen</label>
+                                            <select class="custom-select" aria-label="Default select example" name="adresse_id" id="adresse_id">
+                                                @foreach (App\Adresse::all() as $addItem)
+                                                    <option value="{{$addItem->id}}" @if ($addItem->id == $location->adresse_id)
                                                     selected
                                                         @endif>{{ $addItem->ad_anschrift_ort }},  {{ $addItem->ad_anschrift_strasse }} - {{ $addItem->ad_anschrift_hausnummer }}</option>
                                                 @endforeach
                                             </select>
-                                            <?php $adres = App\Address::find($location->addresses_id); ?>
+
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Kürzel: {{ $adres->ad_name_kurz }}</h5>
+                                                    <h5 class="card-title">Kürzel: {{ $location->Adresse->ad_name_kurz }}</h5>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Postal:</dt>
-                                                        <dd class="col-sm-9">{{ $adres->ad_name_lang }}</dd>
+                                                        <dd class="col-sm-9">{{ $location->Adresse->ad_name_lang }}</dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Straße, Nr</dt>
-                                                        <dd class="col-sm-9">{{ $adres->ad_anschrift_strasse }}, {{ $adres->ad_anschrift_hausnummer }}</dd>
+                                                        <dd class="col-sm-9">{{ $location->Adresse->ad_anschrift_strasse }}, {{ $location->Adresse->ad_anschrift_hausnummer }}</dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Plz</dt>
-                                                        <dd class="col-sm-9">{{ $adres->ad_anschrift_plz }}</dd>
+                                                        <dd class="col-sm-9">{{ $location->Adresse->ad_anschrift_plz }}</dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Ort</dt>
-                                                        <dd class="col-sm-9">{{ $adres->ad_anschrift_ort }}</dd>
+                                                        <dd class="col-sm-9">{{ $location->Adresse->ad_anschrift_ort }}</dd>
                                                     </dl>
                                                 </div>
                                             </div>
@@ -162,7 +162,7 @@
                                         @if ($location->profile_id === NULL)
                                             <label for="profile_id">Keine Mitarbeiter gefunden!</label>
                                             <input type="hidden" name="profile_id" id="profile_id">
-                                            <a href="#" class="btn btn-outline-primary btn-block">neuen Mitarbeiter anlegen</a>
+                                            <a href="{{ route('profile.create') }}" class="btn btn-outline-primary btn-block">neuen Mitarbeiter anlegen</a>
                                         @else
                                             <label for="profile_id" class="sr-only">Leitung des Standortes hat</label>
                                             <select class="custom-select" aria-label="Default select example" name="profile_id" id="profile_id">
@@ -204,12 +204,18 @@
                     <div class="tab-pane fade" id="locGebauede" role="tabpanel" aria-labelledby="locGebauede-tab">
                         <div class="row">
                             <div class="col">
-                                <form class="row gy-2 gx-3  my-3" action="{{ route('building.store') }}" method="post" name="frmAddNewBuilding" id="frmAddNewBuilding">
+                                <form class="row gy-2 gx-3  my-3"
+                                      action="{{ route('building.store') }}#locGebauede" method="post" name="frmAddNewBuilding" id="frmAddNewBuilding">
                                     @csrf
+                                    <input type="hidden"
+                                           name="standort_id"
+                                           id="standort_id"
+                                           value="{{ Str::uuid() }}"
+                                    >
                                     <input type="hidden" name="location_id" id="location_id" value="{{ $location->id }}">
                                     <input type="hidden" name="frmOrigin" id="frmOriginAddNewBuilding" value="location">
                                     <div class="col-auto">
-                                        <label class="sr-only" for="b_name_kurz">Gebäudename kurz</label>
+                                        <label class="sr-only" for=""></label>
                                         <input type="text" class="form-control" id="b_name_kurz" name="b_name_kurz" required placeholder="Gebäudename kurz" value="{{ old('b_name_kurz')??'' }}">
                                         @if ($errors->has('b_name_kurz'))
                                             <span class="text-danger small">{{ $errors->first('b_name_kurz') }}</span>
@@ -242,7 +248,7 @@
                                         <button type="submit" class="btn btn-primary">Neues Gebäude anlegen</button>
                                     </div>
                                 </form>
-                                @if ($location->buildings->count()>0)
+                                @if ($location->Building->count()>0)
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
@@ -255,7 +261,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ( $location->buildings as $building)
+                                        @foreach ( $location->Building as $building)
                                             <tr>
                                                 <td>
                                                     {{$building->b_name_kurz}}
@@ -277,7 +283,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="/building/{{$building->id}}" class="btn-outline-secondary btn btn-sm" title="Gebäudedaten ansehen"><i class="fas fa-chevron-right"></i></a>
+                                                    <a href="{{ route('building.show',$building) }}" class="btn-outline-secondary btn btn-sm" title="Gebäudedaten ansehen"><i class="fas fa-chevron-right"></i></a>
                                                     @if ($building->rooms()->count()===0)
                                                         <button type="button" class="btn btn-outline-dark btn-sm btnDeleteBuildig" data-id="{{ $building->id }}" title="Gebäude löschen"><i class="far fa-trash-alt"></i></button>
                                                         <form action="{{ route('building.destroy',$building->id) }}" id="frmDeleteBuildig_{{ $building->id }}" target="_blank">

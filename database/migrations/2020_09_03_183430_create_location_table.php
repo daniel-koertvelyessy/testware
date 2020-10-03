@@ -21,9 +21,12 @@ class CreateLocationTable extends Migration
             $table->string('l_name_kurz', 20);
             $table->string('l_name_lang', 100)->nullable();
             $table->text('l_beschreibung')->nullable();
-            $table->unsignedBigInteger('addresses_id')->nullable();
             $table->unsignedBigInteger('profile_id')->nullable();
-            $table->foreign('addresses_id')->references('id')->on('addresses')->onDelete('set null');
+            $table->foreignId('adresse_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('set null')
+                ->onUpdate('cascade');
             $table->uuid('standort_id')->nullable();
         });
     }

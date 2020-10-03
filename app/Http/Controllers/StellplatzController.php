@@ -38,15 +38,15 @@ class StellplatzController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Application|Factory|Response|View
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
 //        dd($request->room_id);
         $sp =  Stellplatz::create($this->validateNeuStellPlatz());
-
+        (new \App\Standort)->add($request->standort_id, $request->sp_name_kurz,'stellplatzs');
         $request->session()->flash('status', 'Der Stellplatzt <strong>' . request('sp_name_kurz') . '</strong> wurde angelegt!');
-        return redirect('/room/'.$request->room_id.'#roomStellPlatze');
+        return redirect()->back();
     }
 
     /**

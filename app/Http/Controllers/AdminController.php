@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
+use App\Adresse;
 use App\AddressType;
 use App\Admin;
 use App\Anforderung;
@@ -1029,7 +1029,7 @@ class AdminController extends Controller
 
 
 
-    public function getUsedAdressesByAdressType(Address $adress, Request $adt_id)
+    public function getUsedAdressesByAdressType(Adresse $adress, Request $adt_id)
     {
         return $adress->where('address_type_id',$adt_id->id)->get();
     }

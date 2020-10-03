@@ -17,19 +17,19 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Portal</a></li>
             <li class="breadcrumb-item">
-                <a href="/location">Standort </a>
+                <a href="{{ route('location.index') }}">Standort </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/location/{{ $room->building->location->id }}"> {{ $room->building->location->l_name_kurz }}</a>
+                <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_name_kurz }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/building">Gebäude</a>
+                <a href="{{ route('building.index') }}">Gebäude</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/building/{{ $room->building->id }}"> {{ $room->building->b_name_kurz }}</a>
+                <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_name_kurz }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/room/">Räume <i class="fas fa-angle-right"></i></a>
+                <a href="{{ route('room.index') }}">Räume <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 Raum {{  $room->r_name_kurz  }}
@@ -96,10 +96,10 @@
         <div class="row">
             <div class="col d-flex justify-content-between">
                 <h1 class="h3"><span class="d-none d-md-inline">Übersicht Raum </span>{{ $room->r_name_kurz }}</h1>
-                <div class="visible-print text-center">
+          {{--      <div class="visible-print text-center">
                     {!! QrCode::size(65)->generate($room->standort_id); !!}
                     <p class="text-muted small">Standort-ID</p>
-                </div>
+                </div>--}}
             </div>
         </div>
         <div class="row">
@@ -151,7 +151,12 @@
                     <div class="tab-pane fade" id="roomStellPlatze" role="tabpanel" aria-labelledby="roomStellPlatze-tab">
                         <div class="row">
                             <div class="col">
-                                <form class="row gy-2 gx-3  my-3" action="{{ route('stellplatz.store') }}" method="post" name="frmAddNewStellPlatz" id="frmAddNewStellPlatz">
+                                <form class="row gy-2 gx-3  my-3" action="{{ route('stellplatz.store') }}#roomStellPlatze" method="post" name="frmAddNewStellPlatz" id="frmAddNewStellPlatz">
+                                    <input type="hidden"
+                                           name="standort_id"
+                                           id="standort_id"
+                                           value="{{ \Illuminate\Support\Str::uuid() }}"
+                                    >
                                     @csrf
                                     <input type="hidden" name="room_id" id="room_id_{{ $room->id }}" value="{{ $room->id }}">
                                     <input type="hidden" name="frmOrigin" id="frmOriginAddNewStellPlatz" value="room">

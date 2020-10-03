@@ -15,8 +15,11 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Portal</a></li>
-            <li class="breadcrumb-item"><a href="/building">Gebäude</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">Portal</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('location.index') }}">Standorte</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_name_kurz }}</a></li>
+
+            <li class="breadcrumb-item"><a href="{{ route('building.index') }}">Gebäude</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{  $building->b_name_kurz  }}</li>
         </ol>
     </nav>
@@ -114,10 +117,10 @@
         <div class="row">
             <div class="col d-flex justify-content-between">
                 <h1 class="h3"><span class="d-none d-md-inline">Übersicht Gebäude </span>{{ $building->b_name_kurz }}</h1>
-                <div class="visible-print text-center">
+{{--                <div class="visible-print text-center">
                     {!! QrCode::size(65)->generate($building->standort_id); !!}
                     <p class="text-muted small">Standort-ID</p>
-                </div>
+                </div>--}}
             </div>
         </div>
         <div class="row">
@@ -132,7 +135,9 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active p-2" id="gebStammDaten" role="tabpanel" aria-labelledby="gebStammDaten-tab">
-                        <form action="{{ route('building.update',['building'=>$building->id]) }}" method="post">
+                        <form action="{{ route('building.update',$building) }}" method="post">
+                            @method('PUT')
+                            @csrf
                             <div class="row">
                                 <div class="col-lg-6">
                                     <h2 class="h5">Standort</h2>
@@ -145,10 +150,6 @@
                                         </select>
                                     </div>
                                     <h2 class="h5">Bezeichner</h2>
-
-                                    @method('PUT')
-                                    @csrf
-
                                     <div class="form-group">
                                         <label for="b_name_kurz">Kurzbezeichnung (max 10 Zeichen)</label>
                                         <input type="text" name="b_name_kurz" id="b_name_kurz" class="form-control {{ $errors->has('b_name_kurz') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $building->b_name_kurz }}">
@@ -203,8 +204,15 @@
                     <div class="tab-pane fade" id="gebRooms" role="tabpanel" aria-labelledby="gebRooms-tab">
                         <div class="row">
                             <div class="col">
-                                <form class="row gy-2 gx-3  my-3" action="{{ route('room.store') }}" method="post" name="frmAddNewRoom" id="frmAddNewRoom">
+                                <form class="row gy-2 gx-3  my-3" action="{{ route('room.store') }}#gebRooms" method="post"
+                                      name="frmAddNewRoom" id="frmAddNewRoom"
+                                >
                                     @csrf
+                                    <input type="hidden"
+                                           name="standort_id"
+                                           id="standort_id"
+                                           value="{{ Str::uuid() }}"
+                                    >
                                     <input type="hidden" name="building_id" id="building_id" value="{{ $building->id }}">
                                     <input type="hidden" name="frmOrigin" id="frmOrigin" value="building">
                                     <div class="col-auto">

@@ -23,7 +23,9 @@ class CreateFirmasTable extends Migration
             $table->string('fa_kreditor_nr', 100)->index()->nullable();
             $table->string('fa_debitor_nr', 100)->index()->nullable();
             $table->string('fa_vat', 30)->nullable();
-            $table->foreignId('address_id')->nullable();
+            $table->foreignId('adresse_id')
+                ->nullable()
+            ->constrained();
         });
     }
 

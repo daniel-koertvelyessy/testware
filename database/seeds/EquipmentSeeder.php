@@ -30,21 +30,21 @@ class EquipmentSeeder extends Seeder
             ]
         ]);
 
-
-        DB::table('produkt_docs')->insert([
-            [
-                'id' => '1',
-                'created_at' => '2020-09-28 13:17:41',
-                'updated_at' => '2020-09-28 13:17:41',
-                'deleted_at' => NULL,
-                'proddoc_name_kurz' => 'Anleitung',
-                'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
-                'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
-                'proddoc_name_text' => NULL,
-                'produkt_id'=>'31',
-                'document_type_id'=>'1',
-            ]
-        ]);
+//
+//        DB::table('produkt_docs')->insert([
+//            [
+//                'id' => '1',
+//                'created_at' => '2020-09-28 13:17:41',
+//                'updated_at' => '2020-09-28 13:17:41',
+//                'deleted_at' => NULL,
+//                'proddoc_name_kurz' => 'Anleitung',
+//                'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
+//                'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
+//                'proddoc_name_text' => NULL,
+//                'produkt_id'=>'31',
+//                'document_type_id'=>'1',
+//            ]
+//        ]);
 
         //        DB::table('produkt_docs')->insert([
 //            [

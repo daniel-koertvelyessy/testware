@@ -59,12 +59,12 @@ class Location extends Model
         return $this->hasOne(Profile::class);
     }
 
-    public function fetchAddress()
+    public function Adresse()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Adresse::class);
     }
 
-    public function buildings()
+    public function Building()
     {
         return $this->hasMany(Building::class);
     }

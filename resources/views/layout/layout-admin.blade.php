@@ -22,11 +22,16 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <a class="navbar-brand" href="/">
-            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px" >
+       <div class="navbar-brand">
+        <button id="NavToggler" type="button" class="btn btn-sm border mr-2">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="/">
+            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
             @yield('mainSection')
             <i class="fas fa-angle-right d-none d-md-inline"></i>
         </a>
+       </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,6 +44,40 @@
             <form class="d-flex ml-2" id="frmSrchInAdminBereich">
                 <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="Suche" aria-label="Suche" autocomplete="off">
             </form>
+            @auth
+                <ul class="navbar-nav">
+                    <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarUserAccount" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarUserAccount">
+                            <li>
+                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lockUserView"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
+                            </li>
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
+                            </li>
+                        </ul>
+
+
+                    </li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            @endauth
         </div>
     </nav>
     @if (session()->has('status'))
@@ -59,6 +98,36 @@
     @endif
     @yield('breadcrumbs')
 </header>
+<aside class="col-2 position-absolute border bg-primary p-3" style="border-top-right-radius: 1rem; border-bottom-right-radius: 0.6rem ;z-index: 3000; height: 90vh;" id="sideNav" aria-expanded="false">
+    <p class="h3  text-white">Menü</p>
+   <div class="flex-column">
+    <a href="#collapseExample" class="lead text-white "data-toggle="collapse"  role="button" aria-expanded="true" aria-controls="collapseExample">Standorte</a>
+    <div class="collapse show" id="collapseExample">
+    <nav class="nav">
+        <a class="nav-link ml-4 border-left" href="#">Standorte</a>
+        <a class="nav-link ml-4 border-left" href="#">Übersicht</a>
+        <a class="nav-link ml-4 border-left" href="#">neu</a>
+        <a class="nav-link ml-4 border-left" href="#">Gebäude</a>
+        <a class="nav-link ml-4 border-left" href="#">Räume</a>
+        <a class="nav-link ml-4 border-left" href="#">Stellplätze</a>
+    </nav>
+    </div>
+   </div>
+    <div class="flex-column">
+    <a href="#Organisation" class="lead text-white "data-toggle="collapse"  role="button" aria-expanded="false" aria-controls="Organisation">Organisation</a>
+    <div class="collapse" id="Organisation">
+        <nav class="nav">
+            <a class="nav-link ml-4 border-left" href="#">Standorte</a>
+            <a class="nav-link ml-4 border-left" href="#">Übersicht</a>
+            <a class="nav-link ml-4 border-left" href="#">neu</a>
+            <a class="nav-link ml-4 border-left" href="#">Gebäude</a>
+            <a class="nav-link ml-4 border-left" href="#">Räume</a>
+            <a class="nav-link ml-4 border-left" href="#">Stellplätze</a>
+        </nav>
+    </div>
+    </div>
+
+</aside>
 <main id="app" class="mt-3">
     @yield('content')
 </main>
@@ -86,62 +155,16 @@
 </div>
 @yield('modals')
 <!-- MODALS ENDE -->
-@auth
-    <footer class="page-footer fixed-bottom bg-light px-1 border-top">
-        <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">
-                <span class="d-none d-md-inline" >© 2020 Copyright:</span>
-                <a href="https://bitpack.io" target="_blank"> bitpack.io GmbH</a>
-                <span class="text-muted d-none d-md-inline">layout-login V1.8</span>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group dropup">
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}
-                    </button>
-                    <div class="dropdown-menu">
-                        <ul class="list-unstyled">
-                            <li>
-                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lockUserView"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
-                            </li>
-                            <li>
-                                <a
-                                    class="dropdown-item"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
-                            </li>
-                        </ul>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                </div>
-            </div>
+<footer class="page-footer fixed-bottom bg-light px-1">
+    <div class="row align-items-center">
+        <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
+            <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
         </div>
-    </footer>
-@elseauth()
-    <footer class="page-footer fixed-bottom bg-light px-1">
-        <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
-                <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
-            </div>
-            <div class="col-auto">
-                <span class="text-muted small">layout-login V1.8</span>
-            </div>
+        <div class="col-auto">
+            <span class="text-muted small">layout-login V1.9</span>
         </div>
-    </footer>
-@endauth
+    </div>
+</footer>
 @yield('autoloadscripts')
 
 {{--<script type="text/javascript"  src="{{ asset('plugins/typehead/dist/jquery.typeahead.min.js') }}"></script>--}}
@@ -159,7 +182,12 @@
 @endif
 
 @yield('scripts')
-
+<script>
+    $('#sideNav').hide();
+    $('#NavToggler').click(function () {
+        $('#sideNav').animate({width:'toggle'},350);
+    });
+</script>
 
 
 </body>

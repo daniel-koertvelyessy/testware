@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Profile;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -15,76 +19,119 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function index()
     {
-        view('admin.organisation.index');
+        $profileList = Profile::with('user')->paginate(15);
+        return view('admin.organisation.profile.index',['profileList'=>$profileList]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
-        //
+       return view('admin.organisation.profile.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Application|Factory|Response|View
      */
     public function store(Request $request)
     {
-        //
+        $profile = Profile::create($this->validateNewProfile());
+        $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt!');
+        return view('admin.organisation.profile.show',['profile'=>$profile]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
+     * @param  Profile $profile
+     * @return Application|Factory|Response|View
      */
     public function show(Profile $profile)
     {
-        //
+       return view('admin.organisation.profile.show',['profile'=>$profile]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Profile $profile)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  Profile $profile
+     * @return Application|Factory|Response|View
      */
     public function update(Request $request, Profile $profile)
     {
-        //
+        $profile->update($this->validateProfile());
+        $request->session()->flash('status', 'Der Mitarbeiter wurde aktualisiert!');
+        return view('admin.organisation.profile.show',['profile'=>$profile]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
+     * @param  Profile $profile
+     * @return Response
      */
     public function destroy(Profile $profile)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNewProfile(): array {
+
+        return request()->validate([
+            'ma_name'         => 'required|unique:profiles,ma_name|max:20',
+            'ad_name_lang'    => 'max:100',
+            'ma_nummer'       => 'max:100',
+            'ma_name_2'       => '',
+            'ma_vorname'      => '',
+            'ma_geburtsdatum' => '',
+            'ma_eingetreten'  => '',
+            'ma_ausgetreten'  => '',
+            'ma_telefon'      => '',
+            'ma_mobil'        => '',
+            'ma_fax'          => '',
+            'ma_com_1'        => '',
+            'ma_com_2'        => '',
+            'group_id'        => '',
+            'user_id'         => ''
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProfile(): array {
+
+        return request()->validate([
+            'ma_name'         => 'required|max:20',
+            'ad_name_lang'    => 'max:100',
+            'ma_nummer'       => 'max:100',
+            'ma_name_2'       => '',
+            'ma_vorname'      => '',
+            'ma_geburtsdatum' => '',
+            'ma_eingetreten'  => '',
+            'ma_ausgetreten'  => '',
+            'ma_telefon'      => '',
+            'ma_mobil'        => '',
+            'ma_fax'          => '',
+            'ma_com_1'        => '',
+            'ma_com_2'        => '',
+            'group_id'        => '',
+            'user_id'         => ''
+        ]);
     }
 }

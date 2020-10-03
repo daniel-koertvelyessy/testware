@@ -26,11 +26,11 @@ class LocationsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function index()
     {
-        return view('admin.location.index');
+        return view('admin.standorte.location.index');
     }
 
 
@@ -54,11 +54,11 @@ class LocationsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
-        return view('admin.location.create');
+        return view('admin.standorte.location.create');
     }
 
     /**
@@ -69,28 +69,14 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-//        $v = $this->validateNewLocation();
+//        dd($request);
+        $v = $this->validateNewLocation();
 
-        $location = new Location();
-        $location->l_benutzt = request('l_benutzt');
-        $location->l_name_kurz = request('l_name_kurz');
-        $location->l_name_lang = request('l_name_lang');
-        $location->l_beschreibung = request('l_beschreibung');
-        $location->standort_id = Str::uuid();
-        $location->addresses_id = request('addresses_id');
-        $location->profile_id = request('profile_id');
-
-        $std = (new \App\Standort)->add($location->standort_id, $location->l_name_kurz,'locations');
-
-//        dd($location->standort_id);
-
-$location->save();
-
-
+        $location = Location::create($this->validateNewLocation());
 
 
         $request->session()->flash('status', 'Der Standort <strong>' . request('l_name_kurz') . '</strong> wurde angelegt!');
-        return view('admin.location.show', ['location' => $location]);
+        return view('admin.standorte.location.show', ['location' => $location]);
     }
 
     /**
@@ -101,20 +87,20 @@ $location->save();
      */
     public function show(Location $location)
     {
-        return view('admin.location.show', ['location' => $location]);
+        return view('admin.standorte.location.show', ['location' => $location]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-
+     * @param  Location $location
+     * @return Application|Factory|View
      */
     public function edit(location $location)
     {
 
-        return view('admin.location.edit', compact('location'));
-        //        return view('location.edit',['location'=>$location]);
-        //        return view('location.edit',['location'=>$location]);
+        return view('admin.standorte.location.edit', compact('location'));
+
     }
 
     /**
@@ -157,11 +143,11 @@ $location->save();
     public function validateLocation(): array
     {
         return request()->validate([
-            'l_benutzt' => '',
+            'standort_id' => '',
             'l_name_kurz' => 'bail|min:2|max:20|required',
             'l_name_lang' => '',
             'l_beschreibung' => '',
-            'addresses_id' => 'required',
+            'adresse_id' => 'required',
             'profile_id' => 'required'
         ]);
     }
@@ -172,12 +158,11 @@ $location->save();
     public function validateNewLocation(): array
     {
         return request()->validate([
-            'l_benutzt' => '',
             'l_name_kurz' => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
             'l_name_lang' => '',
             'l_beschreibung' => '',
             'standort_id' => 'unique:locations,standort_id',
-            'addresses_id' => 'required',
+            'adresse_id' => 'required',
             'profile_id' => 'required'
         ]);
     }

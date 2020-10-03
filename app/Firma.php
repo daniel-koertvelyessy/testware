@@ -17,9 +17,9 @@ class Firma extends Model
     }
 
 
-    public function Address()
+    public function Adresse()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Adresse::class);
     }
 
     public function contact()
@@ -33,7 +33,7 @@ class Firma extends Model
     }
 
     public function getFirmaAdressData($aid) {
-        return Address::find($aid)->first();
+        return Adresse::find($aid)->first();
     }
 
 }

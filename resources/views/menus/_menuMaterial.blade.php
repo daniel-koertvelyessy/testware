@@ -1,4 +1,9 @@
 <ul class="navbar-nav mr-auto">
+    <li class="nav-item {{ Request::routeIs('produktMain')  ? ' active ' : '' }}">
+        <a class="nav-link " href="{{ route('produktMain') }}">
+            <i class="fas fa-desktop"></i> Start
+        </a>
+    </li>
     <li class="nav-item {{ Request::routeIs('produkt.index') ? ' active ' : ' ' }}">
         <a class="nav-link " href="{{ route('produkt.index') }}"><i class="fas fa-boxes"></i> Übersicht
         </a>
