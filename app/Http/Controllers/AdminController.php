@@ -583,11 +583,11 @@ class AdminController extends Controller
      */
     public function getAnforderungData(Request $id)
     {
-        return Anforderung::with('verordnung')->findOrFail($id->id);
+        return Anforderung::with('verordnung','ControlInterval')->findOrFail($id->id);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource. control_interval_id
      *
      * *
     @* param Request $id

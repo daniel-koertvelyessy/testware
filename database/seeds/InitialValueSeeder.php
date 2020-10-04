@@ -73,54 +73,54 @@ class InitialValueSeeder extends Seeder
         ]);
 
         DB::table('control_intervals')->insert([  // SELECT INTERVAL 1 DAY + '2008-12-31';    SELECT DATE_ADD('2010-12-31 23:59:59', INTERVAL 1 DAY);
-                                                  [
-                                                      'ci_name' => 'Sekunde',
-                                                      'ci_name_lang' => 'Sekunden',
-                                                      'ci_si' => 's',
-                                                      'ci_delta' => 'SECOND',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Minute',
-                                                      'ci_name_lang' => 'Minuten',
-                                                      'ci_si' => 'min',
-                                                      'ci_delta' => 'MINUTE',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Stunde',
-                                                      'ci_name_lang' => 'Stunden',
-                                                      'ci_si' => 'h',
-                                                      'ci_delta' => 'HOUR',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Tag',
-                                                      'ci_name_lang' => 'Tage',
-                                                      'ci_si' => 'd',
-                                                      'ci_delta' => 'DAY',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Woche',
-                                                      'ci_name_lang' => 'Wochen',
-                                                      'ci_si' => 'w',
-                                                      'ci_delta' => 'WEEK',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Monat',
-                                                      'ci_name_lang' => 'Monate',
-                                                      'ci_si' => 'm',
-                                                      'ci_delta' => 'MONTH',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Quartal',
-                                                      'ci_name_lang' => 'Quartale',
-                                                      'ci_si' => '4m',
-                                                      'ci_delta' => 'QUARTER',
-                                                  ],
-                                                  [
-                                                      'ci_name' => 'Jahr',
-                                                      'ci_name_lang' => 'Jahre',
-                                                      'ci_si' => 'Y',
-                                                      'ci_delta' => 'YEAR',
-                                                  ],
+            [
+              'ci_name' => 'Sekunde',
+              'ci_name_lang' => 'Sekunden',
+              'ci_si' => 's',
+              'ci_delta' => 'SECOND',
+            ],
+            [
+              'ci_name' => 'Minute',
+              'ci_name_lang' => 'Minuten',
+              'ci_si' => 'min',
+              'ci_delta' => 'MINUTE',
+            ],
+            [
+              'ci_name' => 'Stunde',
+              'ci_name_lang' => 'Stunden',
+              'ci_si' => 'h',
+              'ci_delta' => 'HOUR',
+            ],
+            [
+              'ci_name' => 'Tag',
+              'ci_name_lang' => 'Tage',
+              'ci_si' => 'd',
+              'ci_delta' => 'DAY',
+            ],
+            [
+              'ci_name' => 'Woche',
+              'ci_name_lang' => 'Wochen',
+              'ci_si' => 'w',
+              'ci_delta' => 'WEEK',
+            ],
+            [
+              'ci_name' => 'Monat',
+              'ci_name_lang' => 'Monate',
+              'ci_si' => 'm',
+              'ci_delta' => 'MONTH',
+            ],
+            [
+              'ci_name' => 'Quartal',
+              'ci_name_lang' => 'Quartale',
+              'ci_si' => '4m',
+              'ci_delta' => 'QUARTER',
+            ],
+            [
+              'ci_name' => 'Jahr',
+              'ci_name_lang' => 'Jahre',
+              'ci_si' => 'Y',
+              'ci_delta' => 'YEAR',
+            ],
         ]);
 
         DB::table('building_types')->insert([

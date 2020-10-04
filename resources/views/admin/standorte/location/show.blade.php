@@ -16,7 +16,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Portal</a></li>
-            <li class="breadcrumb-item"><a href="/location">Standorte</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('location.index') }}">Standorte</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{  $location->l_name_kurz  }}</li>
         </ol>
     </nav>
@@ -68,10 +68,10 @@
         <div class="row">
             <div class="col d-flex justify-content-between">
                 <h1 class="h3"><span class="d-none d-md-inline">Übersicht Standort </span>{{ $location->l_name_kurz }}</h1>
-{{--                <div class="visible-print text-center">
-                    {!! QrCode::size(65)->generate($location->standort_id); !!}
-                    <p class="text-muted small">Standort-ID</p>
-                </div>--}}
+                {{--                <div class="visible-print text-center">
+                                    {!! QrCode::size(65)->generate($location->standort_id); !!}
+                                    <p class="text-muted small">Standort-ID</p>
+                                </div>--}}
             </div>
         </div>
         <div class="row">
@@ -133,7 +133,11 @@
 
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Kürzel: {{ $location->Adresse->ad_name_kurz }}</h5>
+                                                    <div class="d-flex justify-content-md-between">
+                                                        <h5 class="card-title">Kürzel: {{ $location->Adresse->ad_name_kurz }}</h5>
+                                                        <a href="{{ route('adresse.show',$location->Adresse) }}">Details</a>
+                                                    </div>
+
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Postal:</dt>
                                                         <dd class="col-sm-9">{{ $location->Adresse->ad_name_lang }}</dd>
@@ -150,6 +154,7 @@
                                                         <dt class="col-sm-3">Ort</dt>
                                                         <dd class="col-sm-9">{{ $location->Adresse->ad_anschrift_ort }}</dd>
                                                     </dl>
+
                                                 </div>
                                             </div>
 
@@ -172,26 +177,30 @@
                                                         @endif>{{ $profileItem->ma_vorname }} {{ $profileItem->ma_name }}</option>
                                                 @endforeach
                                             </select>
-                                            <?php $profile = App\Profile::find( $location->profile_id ); $user= App\User::find($profile->user_id);  ?>
+                                            <?php // $profile = App\Profile::find( $location->profile_id ); $user= App\User::find($profile->user_id);  ?>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Kontaktdaten</h5>
+                                                    <div class="d-flex justify-content-md-between">
+                                                        <h5 class="card-title">Kontaktdaten</h5>
+                                                        <a href="{{ route('profile.show',$location->Profile) }}">Details</a>
+                                                    </div>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Name</dt>
-                                                        <dd class="col-sm-9">{{ $profile->ma_vorname }} {{ $profile->ma_name }} </dd>
+                                                        <dd class="col-sm-9">{{ $location->Profile->ma_vorname }} {{ $location->Profile->ma_name }} </dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3"><span class="text-truncate">Telefon</span></dt>
-                                                        <dd class="col-sm-9">{{ $profile->ma_telefon }}</dd>
+                                                        <dd class="col-sm-9">{{ $location->Profile->ma_telefon }}</dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Mobil</dt>
-                                                        <dd class="col-sm-9"><a href="tel:{{ $profile->ma_mobil }}">{{ $profile->ma_mobil }}</a></dd>
+                                                        <dd class="col-sm-9"><a href="tel:{{ $location->Profile->ma_mobil }}">{{ $location->Profile->ma_mobil }}</a></dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">E-Mail</dt>
-                                                        <dd class="col-sm-9"><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></dd>
+                                                        <dd class="col-sm-9">@if ($location->Profile->User) <a href="mailto:{{ $location->Profile->User->email }}">{{ $location->Profile->User->email }}</a> @else - @endif</dd>
                                                     </dl>
+
                                                 </div>
                                             </div>
                                         @endif

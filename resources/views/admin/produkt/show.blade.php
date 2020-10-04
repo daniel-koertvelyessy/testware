@@ -304,6 +304,7 @@
                                     @csrf
                                     <input type="hidden" name="produkt_id" id="produkt_id_anforderung" value="{{ $produkt->id }}">
                                     <x-selectfield id="anforderung_id" label="Anforderung wählen">
+                                        <option value="">bitte wählen</option>
                                         @foreach (App\Anforderung::all() as $anforderung)
                                             <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
                                         @endforeach
@@ -360,9 +361,9 @@
                                                 <dd class="col-sm-8">
                                                     <ul class="list-group">
 
-                                                    @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
+                                                        @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
                                                             <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
-                                                    @endforeach
+                                                        @endforeach
                                                     </ul>
                                                 </dd>
                                             </dl>
@@ -409,10 +410,16 @@
                                         </button>
                                         <button class="btn btn-primary ml-1">Zuordnen <span class="fas fa-angle-right"></span></button>
                                     </div>
-
+                                    {{ $errors }}
                                     <div class="collapse @if (count($errors)>0) show @endif " id="sectionFirmaDetails">
                                         <div class="card p-3 mb-2">
-                                            <h3 class="h5">Firmen-Daten</h3>
+                                            <div class="d-flex justify-content-md-between">
+                                                <h3 class="h5">Firmen-Daten</h3>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="ckAddNewFirma" name="ckAddNewFirma" value="1">
+                                                    <label class="custom-control-label" for="ckAddNewFirma">Firma neu anlegen</label>
+                                                </div>
+                                            </div>
                                             <input type="hidden" name="adress_id" id="adress_id">
                                             <input type="hidden" name="id" id="firma_id">
                                             <input type="hidden" name="firma_id" id="firma_id_tabfp">
@@ -476,13 +483,17 @@
                                                     <span class="small text-primary">max 30 Zeichen</span>
                                                 </div>
                                             </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="ckAddNewFirma" name="ckAddNewFirma" value="1">
-                                                <label class="custom-control-label" for="ckAddNewFirma">Firma neu anlegen</label>
-                                            </div>
+
                                         </div> <!-- Firma Details -->
                                         <div class="card p-3 mb-2">
-                                            <h3 class="h5">Adress-Daten</h3>
+                                            <div class="d-flex justify-content-md-between">
+                                                <h3 class="h5">Adress-Daten</h3>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="ckAddNewAddress" name="ckAddNewAddress" value="1">
+                                                    <label class="custom-control-label" for="ckAddNewAddress">Adresse neu anlegen</label>
+                                                </div>
+                                            </div>
+
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
                                                     <label for="ad_name_kurz">Kürzel</label>
@@ -574,13 +585,16 @@
                                                     <span class="small text-primary @error('ad_anschrift_plz') d-none @enderror">max 100 Zeichen</span>
                                                 </div>
                                             </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="ckAddNewAddress" name="ckAddNewAddress" value="1">
-                                                <label class="custom-control-label" for="ckAddNewAddress">Adresse neu anlegen</label>
-                                            </div>
+
                                         </div><!-- Adress Details -->
                                         <div class="card p-3 mb-2">
-                                            <h3 class="h5">Kontakt-Daten</h3>
+                                            <div class="d-flex justify-content-md-between">
+                                                <h3 class="h5">Kontakt-Daten</h3>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="ckAddNewContact" name="ckAddNewContact" value="1">
+                                                    <label class="custom-control-label" for="ckAddNewContact">Kontakt neu anlegen</label>
+                                                </div>
+                                            </div>
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
                                                     <label for="con_name_kurz">Kürzel</label>
@@ -593,7 +607,9 @@
                                                     @error('con_name_kurz')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
-                                                    <span class="small text-primary @error('con_name_kurz') d-none @enderror ">erforderliches Feld, max 20 Zeichen</span>
+                                                    <span class="small text-primary @error('con_name_kurz') d-none @enderror ">
+                                                        erforderliches Feld, max 20 Zeichen
+                                                    </span>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <label for="anrede_id">Anrede</label>
@@ -650,10 +666,7 @@
                                                     <x-emailfield id="con_email" name="con_email" label="E-Mail Adresse" />
                                                 </div>
                                             </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="ckAddNewContact" name="ckAddNewContact" value="1">
-                                                <label class="custom-control-label" for="ckAddNewContact">Kontakt neu anlegen</label>
-                                            </div>
+
                                         </div><!-- Kontakt Details -->
                                     </div>
                                 </form>
@@ -745,21 +758,21 @@
                                                     <x-deletebutton action="{{ route('produktDoku.destroy',$produktDoc->id) }}" id="{{ $produktDoc->id }}" />
 
 
-                                                 {{--   <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <input type="hidden"
-                                                               name="id"
-                                                               id="delete_produktdoc_id_{{ $produktDoc->id }}"
-                                                               value="{{ $produktDoc->id }}"
-                                                        >
+                                                    {{--   <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
+                                                           @csrf
+                                                           @method('delete')
+                                                           <input type="hidden"
+                                                                  name="id"
+                                                                  id="delete_produktdoc_id_{{ $produktDoc->id }}"
+                                                                  value="{{ $produktDoc->id }}"
+                                                           >
 
-                                                    </form>
-                                                    <button
-                                                        class="btn btn-sm btn-outline-secondary"
-                                                        onclick="event.preventDefault(); document.getElementById('deleteProdDoku_{{ $produktDoc->id }}').submit();">
-                                                        <span class="far fa-trash-alt"></span>
-                                                    </button>--}}
+                                                       </form>
+                                                       <button
+                                                           class="btn btn-sm btn-outline-secondary"
+                                                           onclick="event.preventDefault(); document.getElementById('deleteProdDoku_{{ $produktDoc->id }}').submit();">
+                                                           <span class="far fa-trash-alt"></span>
+                                                       </button>--}}
                                                 </td>
                                                 <td>
                                                     <form action="{{ route('downloadProduktDokuFile') }}#prodDoku" method="get" id="downloadProdDoku_{{ $produktDoc->id }}">
@@ -777,7 +790,7 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                            @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 @else
@@ -828,7 +841,7 @@
                 url: "{{ route('getAnforderungData') }}",
                 data: {id:$('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const icon = (res.an_test_has) ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-muted"></span>';
+                    const text = (res.an_name_text===null) ? '-' : res.an_name_text;
                     $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
@@ -843,16 +856,12 @@
                             <dd class="col-sm-8">${res.an_name_lang}</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-4">Prüfung</dt>
-                            <dd class="col-sm-8">${icon}</dd>
-                        </dl>
-                        <dl class="row">
                             <dt class="col-sm-4">Intervall</dt>
-                            <dd class="col-sm-8">${res.an_control_interval} Monate</dd>
+                            <dd class="col-sm-8">${res.an_control_interval}  ${res.control_interval.ci_name }</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Beschreibung</dt>
-                            <dd class="col-sm-8">${res.an_name_text}</dd>
+                            <dd class="col-sm-8">${text}</dd>
                         </dl>
             `);
                 }

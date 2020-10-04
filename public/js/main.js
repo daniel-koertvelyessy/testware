@@ -83,45 +83,11 @@ console.log("main.js loaded");
 })(jQuery);
 $(".mainNavTab").stickyTabs();
 $('[data-toggle="tooltip"]').tooltip();
-$(document).on("click", "#btnAddkdStammDatenBetreuerListe", function() {
-    var kdBetreuer = $("#slectkdStammDatenBetreuerListe :selected");
-    var betreuerName = kdBetreuer.text();
-    var betreuerID = kdBetreuer.val();
-    $("#slectkdStammDatenBetreuerListe")
-        .find('[value ="' + betreuerID + '"]')
-        .prop("disabled", true)
-        .addClass("text-muted");
-    var html = '\n    <div class="input-group mb-3" id="kdStammDatenBetreuer-'
-        .concat(
-            betreuerID,
-            '">\n        <input type="text" class="form-control" placeholder="Recipient\'s username" aria-label="Recipient\'s username" aria-describedby="button-addon2" value="'
-        )
-        .concat(
-            betreuerName,
-            '">\n        <div class="input-group-append">\n            <button class="btn btn-outline-secondary text-warning btnDeletekdStammDatenBetreuer" type="button" data-target="#kdStammDatenBetreuer-'
-        )
-        .concat(betreuerID, '" data-betreuerid="')
-        .concat(
-            betreuerID,
-            '"><i class="far fa-trash-alt"></i></button>\n        </div>\n    </div>\n    '
-        );
-    if ($(".kdStammDatenBetreuerListStart").length > 0)
-        $(".kdStammDatenBetreuerListStart").remove();
-    if (betreuerID !== "void") $("#kdStammDatenBetreuerListe").append(html);
-});
 
-$(document).on("click", ".btnDeletekdStammDatenBetreuer", function() {
-    var id = $(this).data("target");
-    var betreuerid = $(this).data("betreuerid");
-    $(id).remove();
-    if ($(".btnDeletekdStammDatenBetreuer").length < 1)
-        $("#kdStammDatenBetreuerListe").append(
-            '<p class="text-info kdStammDatenBetreuerListStart">Bitte einen Betreuer auswählen!</p>'
-        );
-    $("#slectkdStammDatenBetreuerListe")
-        .find('[value ="' + betreuerid + '"]')
-        .prop("disabled", false)
-        .removeClass("text-muted");
+$('#btnLockScreen').click(function () {
+    // data-toggle="modal" data-target="#lockUserView"
+    $('#lockscreen').fadeIn('fast');
+    $("#lockUserView").modal("show");
 });
 
 $("#userSeinPIN").on("keyup", function(e) {
@@ -132,6 +98,7 @@ $("#userSeinPIN").on("keyup", function(e) {
             pin.val("");
             $("#lockUserView").modal("hide");
             $(".modal-backdrop").remove();
+            $('#lockscreen').hide();
         }
     }
 });

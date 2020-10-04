@@ -17,7 +17,9 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Portal</a></li>
                 <li class="breadcrumb-item"><a href="/produkt">Produkte</a></li>
+                @if ($pk)
                 <li class="breadcrumb-item"><a href="/produkt/kategorie/{{ $pk }}">{{ App\ProduktKategorie::find($pk)->pk_name_kurz }}</a></li>
+                @endif
                 <li class="breadcrumb-item active" aria-current="page">Neu anlegen</li>
             </ol>
         </nav>
@@ -31,7 +33,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h4">Neues {{ App\ProduktKategorie::find($pk)->pk_name_kurz}}-Produkt anlegen</h1>
+                <h1 class="h4">Neues @if ($pk) {{ App\ProduktKategorie::find($pk)->pk_name_kurz}} @endif Produkt anlegen</h1>
             </div>
         </div>
         <div class="row">
@@ -43,16 +45,12 @@
                             <x-textfield id="prod_name_lang" label="Bezeichnung"/>
                         </div>
                         <div class="col-md-6">
-                            <label for="produkt_kategorie_id">Produkt Kategorie</label>
-                            <div class="input-group">
-                                <select name="produkt_kategorie_id" id="produkt_kategorie_id" class="custom-select">
-                                    @foreach (App\ProduktKategorie::all() as $produktKategorie)
-                                        <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
-                                    @endforeach
+                            <x-selectfield id="produkt_kategorie_id" label="Produkt Kategorie">
+                                @foreach (App\ProduktKategorie::all() as $produktKategorie)
+                                    <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
+                                @endforeach
+                            </x-selectfield>
 
-                                </select>
-                                <button class="btn btn-outline-primary ml-2">ändern</button>
-                            </div>
 
                         </div>
                     </div>

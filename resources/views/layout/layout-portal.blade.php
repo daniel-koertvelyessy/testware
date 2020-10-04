@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +10,13 @@
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
     <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="css/styles.css">
     @auth
         <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
     @else
-        <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/minty/bootstrap.min.css') }}">
+        <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/yeti/bootstrap.min.css') }}">
     @endauth
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
     <title>@yield('pagetitle')</title>
 </head>
 <body>
@@ -30,6 +31,40 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             @yield('navigation')
+            @auth
+                <ul class="navbar-nav">
+                    <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
+                        <a class="nav-link " href="#" id="navbarUserAccount" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarUserAccount">
+                            <li>
+                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="btnLockScreen"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
+                            </li>
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
+                            </li>
+                        </ul>
+
+
+                    </li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            @endauth
         </div>
     </nav>
     @yield('breadcrumbs')
@@ -52,66 +87,20 @@
 </header>
 
 <main id="app">
+{{--    <x-sidebar/>--}}
     @yield('content')
 </main>
-
-@auth
-    <footer class="page-footer fixed-bottom bg-light px-1 border-top">
-        <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">
-                <span class="d-none d-md-inline" >© 2020 Copyright:</span>
-                <a href="https://bitpack.io" target="_blank"> bitpack.io GmbH</a>
-                <span class="text-muted d-none d-md-inline">layout-login V1.4</span>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group dropup">
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}
-                    </button>
-                    <div class="dropdown-menu">
-                        <ul class="list-unstyled">
-                            <li>
-                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lockUserView"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
-                            </li>
-                            <li>
-                                <a
-                                    class="dropdown-item"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
-                            </li>
-                        </ul>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-@else
     <footer class="page-footer fixed-bottom bg-light px-1">
         <div class="row align-items-center">
             <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
                 <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
             </div>
             <div class="col-auto">
-                <span class="text-muted small">layout-login V1.4</span>
+                <span class="text-muted small">layout-login V1.9</span>
             </div>
         </div>
     </footer>
-@endauth
+
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>

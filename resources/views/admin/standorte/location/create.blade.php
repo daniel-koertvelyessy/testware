@@ -34,7 +34,7 @@
                             <label for="adresse_id">Die Adresse des Standortes festlegen</label>
                             <select class="custom-select" aria-label="Default select example" name="adresse_id" id="adresse_id">
                                 @foreach (App\Adresse::all() as $addItem)
-                                    <option value="{{$addItem->id}}">{{ $addItem->ad_name_lang }}</option>
+                                    <option value="{{$addItem->id}}">{{ $addItem->ad_name_kurz  }} - {{ $addItem->ad_anschrift_strasse }}</option>
                                 @endforeach
                             </select>
                         @endif

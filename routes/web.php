@@ -84,6 +84,15 @@ Route::get('produktMain', function () {
     return view('admin.produkt.main');
 })->name('produktMain')->middleware('auth');
 
+Route::get('equipMain', function () {
+    return view('testware.equipment.main');
+})->name('equipMain')->middleware('auth');
+
+Route::get('equipMaker', function () {
+    return view('testware.equipment.maker');
+})->name('equipMaker')->middleware('auth');
+
+
 Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');

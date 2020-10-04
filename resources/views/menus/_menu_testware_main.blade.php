@@ -3,8 +3,8 @@
         <a class="nav-link " href="{{ route('testware.index') }}"><i class="fas fa-desktop"></i> Dashboard </a>
     </li>
 
-    <li class="nav-item {{ Request::routeIs('equipment.index') ? ' active ' : ' ' }}">
-        <a class="nav-link " href="{{ route('equipment.index') }}"><i class="fas fa-box"></i> Geräte</a>
+    <li class="nav-item {{ Request::routeIs('equipMain') || Request::routeIs('equipment.*') ? ' active ' : ' ' }}">
+        <a class="nav-link " href="{{ route('equipMain') }}"><i class="fas fa-box"></i> Geräte</a>
     </li>
 
 

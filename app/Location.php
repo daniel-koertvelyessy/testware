@@ -54,9 +54,9 @@ class Location extends Model
         // mit $equipmenttype kann die Art der Geräte gefiltert werden
     }
 
-    public function profile()
+    public function Profile()
     {
-        return $this->hasOne(Profile::class);
+        return $this->belongsTo(Profile::class);
     }
 
     public function Adresse()

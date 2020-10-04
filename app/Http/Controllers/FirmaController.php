@@ -7,6 +7,7 @@ use App\Contact;
 use App\Firma;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class FirmaController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {
@@ -46,7 +47,7 @@ class FirmaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
      * @return Application|Factory|Response|View
      */
     public function store(Request $request)
@@ -71,7 +72,7 @@ class FirmaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Firma  $firma
+     * @param  Firma $firma
      * @return Response
      */
     public function edit(Firma $firma)
@@ -82,9 +83,9 @@ class FirmaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Firma  $firma
-     * @return Response
+     * @param  Request $request
+     * @param  Firma   $firma
+     * @return RedirectResponse
      */
     public function update(Request $request, Firma $firma)
     {
@@ -96,7 +97,7 @@ class FirmaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Firma  $firma
+     * @param  Firma $firma
      * @return Response
      */
     public function destroy(Firma $firma)
@@ -157,7 +158,7 @@ class FirmaController extends Controller
            'fa_kreditor_nr',
            'fa_debitor_nr'
                 )
-            ->join('addresses', 'addresses.id', '=', 'firmas.address_id')
+            ->join('adresses', 'adresses.id', '=', 'firmas.adresse_id')
             ->where('fa_name_kurz','like', '%'.$request->term . '%')
             ->orWhere('fa_name_lang','like', '%'.$request->term . '%')
             ->orWhere('fa_name_text','like', '%'.$request->term . '%')

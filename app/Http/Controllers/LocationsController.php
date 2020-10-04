@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\AddressType;
+use App\Adresse;
 use App\Location;
 use App\Building;
+use App\Profile;
 use App\Standort;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -30,7 +33,10 @@ class LocationsController extends Controller
      */
     public function index()
     {
+
         return view('admin.standorte.location.index');
+
+
     }
 
 
@@ -69,14 +75,47 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
-        $v = $this->validateNewLocation();
+//dd($request);
+        if ($request->adresse_id === NULL){
 
-        $location = Location::create($this->validateNewLocation());
+            $a = $this->validateInitialAdresse();
+            $adresse = new Adresse();
+            $adresse->ad_name_kurz = $request->ad_name_kurz;
+            $adresse->ad_anschrift_strasse = $request->ad_anschrift_strasse;
+            $adresse->ad_anschrift_plz = $request->ad_anschrift_plz;
+            $adresse->ad_anschrift_ort = $request->ad_anschrift_ort;
+            $adresse->save();
+            $request->adresse_id = $adresse->id;
+        }
+
+        if ($request->profile_id === NULL){
+            $p = $this->validateInitialProfile();
+            $profile = new Profile();
+            $profile->ma_name = $request->ma_name;
+            $profile->ma_vorname = $request->ma_vorname;
+            $profile->user_id = $request->user_id;
+            $profile->save();
+            $request->profile_id = $profile->id;
+        }
+
+
+
+        $location = new Location();
+        $location->l_benutzt = $request->l_benutzt;
+        $location->l_name_kurz = $request->l_name_kurz;
+        $location->l_name_lang = $request->l_name_lang;
+        $location->l_beschreibung = $request->l_beschreibung;
+        $location->profile_id = $request->profile_id;
+        $location->adresse_id = $request->adresse_id;
+        $location->standort_id = $request->standort_id;
+        $location->save();
+
+
+//        Location::create($this->validateNewLocation());
 
 
         $request->session()->flash('status', 'Der Standort <strong>' . request('l_name_kurz') . '</strong> wurde angelegt!');
-        return view('admin.standorte.location.show', ['location' => $location]);
+        return redirect(route('location.show', ['location' => $location]));
     }
 
     /**
@@ -151,6 +190,34 @@ class LocationsController extends Controller
             'profile_id' => 'required'
         ]);
     }
+
+    /**
+     * @return array
+     */
+    public function validateInitialAdresse(): array
+    {
+        return request()->validate([
+            'ad_name_kurz' => 'bail|max:20|required|unique:adresses,ad_name_kurz',
+            'ad_anschrift_strasse' => 'required',
+            'ad_anschrift_plz' => 'required',
+            'ad_anschrift_ort' => 'required'
+        ]);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function validateInitialProfile(): array
+    {
+        return request()->validate([
+            'ma_name' => 'bail|max:20|required|unique:profiles,ma_name',
+            'ma_vorname' => 'max:100',
+            'user_id' => '',
+        ]);
+    }
+
+
 
     /**
      * @return array

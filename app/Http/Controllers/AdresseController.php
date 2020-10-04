@@ -171,7 +171,7 @@ class AdresseController extends Controller
     {
 
         return request()->validate([
-            'ad_name_kurz' => 'required|unique:adresses,ad_name_kurz|max:20',
+            'ad_name_kurz' => 'required|max:20',
             'ad_name_lang' => 'max:100',
             'ad_name_firma' => 'max:100',
             'ad_name_firma_2' => 'max:100',

@@ -179,7 +179,7 @@ class ProduktController extends Controller
                 $fa->fa_kreditor_nr = $request->fa_kreditor_nr;
                 $fa->fa_debitor_nr = $request->fa_debitor_nr;
                 $fa->fa_vat = $request->fa_vat;
-                $fa->adress_id = $address_id;
+                $fa->adresse_id = $address_id;
                 $fa->save();
                 $firma_id = $fa->id;
 
@@ -250,7 +250,7 @@ class ProduktController extends Controller
 
     public function validateAdresse() {
         return request()->validate([
-            'ad_name_kurz' => 'bail|max:20|required|unique:addresses,ad_name_kurz',
+            'ad_name_kurz' => 'bail|max:20|required|unique:adresses,ad_name_kurz',
             'ad_anschrift_strasse' => 'bail|required|max:100',
             'ad_anschrift_plz' => 'bail|required|max:100',
             'ad_anschrift_ort' => 'bail|required|max:100',
@@ -282,10 +282,11 @@ class ProduktController extends Controller
     }
 
 
-    public function getKategorieProducts(Request $id)
+    public function getKategorieProducts(Request $request)
     {
-        $prodList = Produkt::where('produkt_kategorie_id',$id->id)->paginate(20);
-        return view('admin.produkt.kategorie.index',['prodList'=>$prodList,'id'=>$id]);
+        dd($request);
+        $prodList = Produkt::where('produkt_kategorie_id',$request->pk)->paginate(20);
+        return view('admin.produkt.kategorie.index',['prodList'=>$prodList,'id'=>$request]);
     }
 
 

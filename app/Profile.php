@@ -30,14 +30,14 @@ class Profile extends Model
         'user_id'
     ];
 
-    public function user()
+    public function User()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function location()
+    public function Location()
     {
-        return $this->belongsTo(Location::class);
+        return $this->hasMany(Location::class);
     }
 
     public function building()

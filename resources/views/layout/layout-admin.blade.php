@@ -20,17 +20,19 @@
     <title>@yield('pagetitle')</title>
 </head>
 <body>
+<a href="#app" class="sr-only">Überspringe gesamte Navigation</a>
+<div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;" id="lockscreen" aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
        <div class="navbar-brand">
-        <button id="NavToggler" type="button" class="btn btn-sm border mr-2">
-            <i class="fas fa-bars"></i>
-        </button>
-        <a href="/">
+{{--        <button id="NavToggler" type="button" class="btn m-0 ">--}}
+{{--            <i class="fas fa-bars"></i>--}}
+{{--        </button>--}}
+        <a href="/" class="ml-5">
             <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
-            @yield('mainSection')
-            <i class="fas fa-angle-right d-none d-md-inline"></i>
         </a>
+           @yield('mainSection')
+           <i class="fas fa-angle-right d-none d-md-inline"></i>
        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,14 +42,13 @@
                 @yield('menu')
                 @yield('actionMenuItems')
             </ul>
-
             <form class="d-flex ml-2" id="frmSrchInAdminBereich">
                 <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="Suche" aria-label="Suche" autocomplete="off">
             </form>
             @auth
                 <ul class="navbar-nav">
                     <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarUserAccount" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}</a>
+                        <a class="nav-link " href="#" id="navbarUserAccount" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarUserAccount">
                             <li>
                                 <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
@@ -60,7 +61,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lockUserView"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
+                                <a class="dropdown-item" href="#" id="btnLockScreen"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
                             </li>
                             <li>
                                 <a
@@ -98,42 +99,15 @@
     @endif
     @yield('breadcrumbs')
 </header>
-<aside class="col-2 position-absolute border bg-primary p-3" style="border-top-right-radius: 1rem; border-bottom-right-radius: 0.6rem ;z-index: 3000; height: 90vh;" id="sideNav" aria-expanded="false">
-    <p class="h3  text-white">Menü</p>
-   <div class="flex-column">
-    <a href="#collapseExample" class="lead text-white "data-toggle="collapse"  role="button" aria-expanded="true" aria-controls="collapseExample">Standorte</a>
-    <div class="collapse show" id="collapseExample">
-    <nav class="nav">
-        <a class="nav-link ml-4 border-left" href="#">Standorte</a>
-        <a class="nav-link ml-4 border-left" href="#">Übersicht</a>
-        <a class="nav-link ml-4 border-left" href="#">neu</a>
-        <a class="nav-link ml-4 border-left" href="#">Gebäude</a>
-        <a class="nav-link ml-4 border-left" href="#">Räume</a>
-        <a class="nav-link ml-4 border-left" href="#">Stellplätze</a>
-    </nav>
-    </div>
-   </div>
-    <div class="flex-column">
-    <a href="#Organisation" class="lead text-white "data-toggle="collapse"  role="button" aria-expanded="false" aria-controls="Organisation">Organisation</a>
-    <div class="collapse" id="Organisation">
-        <nav class="nav">
-            <a class="nav-link ml-4 border-left" href="#">Standorte</a>
-            <a class="nav-link ml-4 border-left" href="#">Übersicht</a>
-            <a class="nav-link ml-4 border-left" href="#">neu</a>
-            <a class="nav-link ml-4 border-left" href="#">Gebäude</a>
-            <a class="nav-link ml-4 border-left" href="#">Räume</a>
-            <a class="nav-link ml-4 border-left" href="#">Stellplätze</a>
-        </nav>
-    </div>
-    </div>
 
-</aside>
-<main id="app" class="mt-3">
+<main id="app" class="mt-3 ">
+    <a href="#app" class="sr-only">Überspringe Seiten-Navigation</a>
+    <x-sidebar/>
     @yield('content')
 </main>
 @yield('autocomplete')
 <!-- MODALS   -->
-<div class="modal fade" id="lockUserView"  data-keyboard="false" tabindex="-1" aria-labelledby="lockUserViewLabel" aria-hidden="true">
+<div class="modal fade" id="lockUserView" style="z-index: 3000;" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="lockUserViewLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -158,9 +132,9 @@
 <footer class="page-footer fixed-bottom bg-light px-1">
     <div class="row align-items-center">
         <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
-            <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
+            <a href="https://bitpack.io" target="_blank"> bitpack.io GmbH</a>
         </div>
-        <div class="col-auto">
+        <div class="col-auto pr-3">
             <span class="text-muted small">layout-login V1.9</span>
         </div>
     </div>
@@ -183,10 +157,11 @@
 
 @yield('scripts')
 <script>
-    $('#sideNav').hide();
-    $('#NavToggler').click(function () {
-        $('#sideNav').animate({width:'toggle'},350);
-    });
+    // $('#lockscreen').hide();
+    // $('#sideNav').hide();
+    // $('#NavToggler').click(function () {
+    //     $('#sideNav').animate({width:'toggle'},350);
+    // });
 </script>
 
 
