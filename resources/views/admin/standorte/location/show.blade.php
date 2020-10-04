@@ -26,7 +26,7 @@
     <div class="modal" id="modalAddBuildingType" tabindex="-1" aria-labelledby="modalAddBuildingTypeLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('createBuildingType') }}" method="POST" class="needs-validation" id="frmCreateBuildingType" name="frmCreateBuildingType">
+                <form action="{{ route('createBuildingType') }}#locGebauede" method="POST" class="needs-validation" id="frmCreateBuildingType" name="frmCreateBuildingType">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalAddBuildingTypeLabel">Neuen Gebäudetyp erstellen</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

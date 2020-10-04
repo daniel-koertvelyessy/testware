@@ -41,7 +41,7 @@
                             <td>{{ $firma->fa_name_lang }}</td>
                             <td>{{ $firma->ad_name_firma }}</td>
                             <td>{{ $firma->fa_kreditor_nr }}</td>
-                            <td>{{ $firma->Adresse->ad_anschrift_plz }} - {{ $firma->Adresse->ad_anschrift_ort }} </td>
+                            <td>@if ($firma->Adresse) {{ $firma->Adresse->ad_anschrift_plz }} - {{ $firma->Adresse->ad_anschrift_ort }} @endif</td>
                             <td><a href="{{ route('firma.show',['firma'=>$firma]) }}">öffnen</a></td>
                         </tr>
                     @empty

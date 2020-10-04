@@ -134,7 +134,7 @@ class FirmaController extends Controller
             'fa_kreditor_nr' => 'bail|max:100',
             'fa_debitor_nr' => 'max:100',
             'fa_vat' => 'max:30',
-            'adress_id' => '',
+            'adresse_id' => '',
         ]);
     }
 /*

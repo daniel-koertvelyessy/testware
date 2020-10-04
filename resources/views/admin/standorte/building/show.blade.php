@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="rt_name_text">Beschreibung des Gebäudetyps</label>
+                            <label for="rt_name_text">Beschreibung des Raumtyps</label>
                             <textarea id="rt_name_text" name="rt_name_text" class="form-control">{{ old('rt_name_text') ?? '' }}</textarea>
                         </div>
 
@@ -216,8 +216,8 @@
                                     <input type="hidden" name="building_id" id="building_id" value="{{ $building->id }}">
                                     <input type="hidden" name="frmOrigin" id="frmOrigin" value="building">
                                     <div class="col-auto">
-                                        <label class="sr-only" for="r_name_kurz">Raum Name kurz</label>
-                                        <input type="text" class="form-control" id="r_name_kurz" name="r_name_kurz" required placeholder="Raumname kurz" value="{{ old('r_name_kurz')??'' }}">
+                                        <label class="sr-only" for="r_name_kurz">Raum Nummer</label>
+                                        <input type="text" class="form-control" id="r_name_kurz" name="r_name_kurz" required placeholder="Raum Nummer" value="{{ old('r_name_kurz')??'' }}">
                                         @if ($errors->has('r_name_kurz'))
                                             <span class="text-danger small">{{ $errors->first('r_name_kurz') }}</span>
                                         @else
@@ -225,8 +225,8 @@
                                         @endif
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only" for="r_name_lang">Raum Name kurz, maximal 100 Zeichen</label>
-                                        <input type="text" class="form-control" id="r_name_lang" name="r_name_lang" placeholder="Raumname lang" value="{{ old('r_name_lang')??'' }}">
+                                        <label class="sr-only" for="r_name_lang">Raum Bezeichnung, maximal 100 Zeichen</label>
+                                        <input type="text" class="form-control" id="r_name_lang" name="r_name_lang" placeholder="Raum Bezeichnung" value="{{ old('r_name_lang')??'' }}">
                                         @if ($errors->has('r_name_lang'))
                                             <span class="text-danger small">{{ $errors->first('r_name_lang') }}</span>
                                         @else
@@ -241,7 +241,7 @@
                                                     <option value="{{ $roomType->id }}">{{ $roomType->rt_name_kurz  }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddRoomType"><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary ml-2" data-toggle="modal" data-target="#modalAddRoomType"><i class="fas fa-plus"></i></button>
                                         </div>
 
 
@@ -254,8 +254,8 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th>Raum</th>
                                             <th>Nummer</th>
+                                            <th>Bezeichnung</th>
                                             <th>Typ</th>
                                             <th>Stellplätze</th>
                                             <th></th>
@@ -296,14 +296,14 @@
 
 
 @section('actionMenuItems')
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle disabled" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>
-        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item" href="#">Drucke Übersicht</a>
-            <a class="dropdown-item" href="#">Standortbericht</a>
-            <a class="dropdown-item" href="#">Formularhilfe</a>
-        </ul>
-    </li>
+{{--    <li class="nav-item dropdown">--}}
+{{--        <a class="nav-link dropdown-toggle disabled" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>--}}
+{{--        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">--}}
+{{--            <a class="dropdown-item" href="#">Drucke Übersicht</a>--}}
+{{--            <a class="dropdown-item" href="#">Standortbericht</a>--}}
+{{--            <a class="dropdown-item" href="#">Formularhilfe</a>--}}
+{{--        </ul>--}}
+{{--    </li>--}}
 @endsection()
 
 @section('scripts')

@@ -54,31 +54,9 @@
                         <input type="hidden" name="frmOrigin" id="frmOriginCreateStellPlatzType" value="room">
                         <input type="hidden" name="room_id" id="room_id" value="{{ $room->id }}">
                         @csrf
-                        <div class="form-group">
-                            <label for="spt_name_kurz">Name</label>
-                            <input type="text" name="spt_name_kurz" id="spt_name_kurz" class="form-control {{ $errors->has('spt_name_kurz') ? ' is-invalid ': '' }}" value="{{ old('spt_name_kurz') ?? '' }}" required>
-                            @if ($errors->has('spt_name_kurz'))
-                                <span class="text-danger small">{{ $errors->first('spt_name_kurz') }}</span>
-                            @else
-                                <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <label for="spt_name_lang">Beschreibung kurz</label>
-                            <input type="text" name="spt_name_lang" id="spt_name_lang" class="form-control {{ $errors->has('spt_name_lang') ? ' is-invalid ': '' }}" value="{{ old('spt_name_lang') ?? '' }}">
-                            @if ($errors->has('spt_name_lang'))
-                                <span class="text-danger small">{{ $errors->first('spt_name_lang') }}</span>
-                            @else
-                                <span class="small text-primary">maximal 100 Zeichen</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <label for="spt_name_text">Beschreibung des Gebäudetyps</label>
-                            <textarea id="spt_name_text" name="spt_name_text" class="form-control">{{ old('spt_name_text') ?? '' }}</textarea>
-                        </div>
-
+                        <x-rtextfield id="spt_name_kurz" label="Kürzel" />
+                        <x-textfield id="spt_name_lang" label="Beschreibung" />
+                        <x-textarea id="spt_name_text" label="Beschreibung des Typs" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -140,9 +118,9 @@
 
                                         </div>
                                     </div>
-                                    <x-rtextfield id="r_name_kurz" label="Kurzbezeichnung"/>
-                                    <x-textfield id="r_name_lang" label="Bezeichnung"/>
-                                    <x-textarea id="r_name_text" label="Beschreibung"/>
+                                    <x-rtextfield id="r_name_kurz" label="Kurzbezeichnung" value="{{ $room->r_name_kurz }}"/>
+                                    <x-textfield id="r_name_lang" label="Bezeichnung" value="{{ $room->r_name_lang }}"/>
+                                    <x-textarea id="r_name_text" label="Beschreibung" value="{{ $room->r_name_text }}"/>
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> Stammdaten speichern</button>

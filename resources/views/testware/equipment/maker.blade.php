@@ -68,7 +68,7 @@
                                 {{ $produkt->prod_name_lang }}
                             </td>
                             <td>
-                                <a href="{{ route('produkt.create') }}" data-produktid="{{ $produkt->id }}" class="setProduktAsTemplate">verwenden</a>
+                                <a href="#" data-produktid="{{ $produkt->id }}" class="setProduktAsTemplate">verwenden</a>
                             </td>
                         </tr>
                     @empty

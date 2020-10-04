@@ -177,7 +177,7 @@ class AdminController extends Controller
         BuildingTypes::create($this->validateNewBuldingTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde angelegt!');
-        return (isset($request->frmOrigin) && $request->frmOrigin === 'location') ?  redirect('location/'.$request->location_id.'#locGebauede') :  redirect(route('systems'));
+        return redirect()->back();
     }
 
 
@@ -244,11 +244,7 @@ class AdminController extends Controller
        $rt =  RoomType::create($this->validateNewRoomTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('rt_name_kurz') . '</strong> wurde angelegt!');
-        return (isset($request->frmOrigin) && $request->frmOrigin === 'building')
-            ?
-            redirect(route('building.show',$request->location_id))
-            :
-            redirect(route('systems'));
+        return redirect()->back();
     }
 
     /**

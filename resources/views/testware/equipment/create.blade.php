@@ -17,6 +17,7 @@
         </div>
         <div class="row">
             <div class="col">
+                {{ request('produkt_id') }}
                 <form action="{{ route('equipment.store') }}" method="post" class="needs-validation">
                     @csrf
                     <input type="hidden"
@@ -31,7 +32,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <x-textfield id="setNewEquipmentFromProdukt" label="Import aus Produkt"
-                                         value="{{ App\Produkt::find(request('produkt_id'))->prod_name_kurz  }}"
+                                         value="{{ App\Produkt::find(request('produkt_id'))  }}"
                             />
                         </div>
                         <div class="col-md-4">

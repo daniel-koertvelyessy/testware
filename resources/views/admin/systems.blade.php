@@ -874,8 +874,8 @@
                                                         <td>
                                                             @if ($aci->firma_id === 1)
                                                                 Intern - {{ App\Profile::find($aci->aci_contact_id)->ma_name }}
-                                                            @else
-                                                                Extern - {{ App\Firma::find($aci->firma_id)->fa_name_lang }}
+                                                            @else{{$aci->firma_id}}
+                                                            {{--                                                               Extern - {{ App\Firma::find($aci->firma_id)->fa_name_lang }}--}}
                                                             @endif
                                                         </td>
                                                         <td>

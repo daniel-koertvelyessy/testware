@@ -345,6 +345,31 @@ class InitialValueSeeder extends Seeder
             ],
         ]);
 
+        DB::table('anforderung_control_items')->insert([
+            [
+                'aci_name_kurz' => 'conL',
+                'aci_name_lang' => 'Prüfung auf Durchgängigkeit',
+                'aci_task' => 'Die Prüfung der Durchgängigkeit der Leiter und die Verbindung zu Körpern, falls zutreffend, muss dabei laut Unterabschnitt 6.4.3.2 durch eine Widerstandsmessung erfolgen. Dazu zählen:
+                - Schutzleiter (einschließlich der Schutzpotenzialausgleichsleiter)
+                - Körper
+                - aktive Leiter ringförmiger Endstromkreise.',
+                'aci_value_si' => '',
+                'aci_vaule_soll' => '',
+                'aci_contact_id' => 1,
+                'firma_id' => 1,
+                'anforderung_id' => 1,
+            ],
+            [
+                'aci_name_kurz' => 'Riso',
+                'aci_name_lang' => 'Messung des Isolationswiderstand',
+                'aci_task' => 'Isolationswiderstand zwischen a) aktiven Leitern und b) aktiven Leitern und dem mit der Erdungsanlage verbundenen Schutzleiter gemessen werden muss.Prüfung des Isolationswiderstand bei 500V. Dieser darf nicht unter 0,5MOhm betragen.',
+                'aci_value_si' => 'MOhm',
+                'aci_vaule_soll' => 0.5,
+                'aci_contact_id' => 1,
+                'firma_id' => 1,
+                'anforderung_id' => 1,
+            ],
+        ]);
 
 
         DB::table('stellplatz_typs')->insert([

@@ -72,17 +72,7 @@
                 <div class="col-lg-6">
                     <h2 class="h5">Eigenschaften</h2>
                     <div class="form-group">
-                        <label for="building_type_id">Gebäudetyp festlegen </label> <a data-toggle="collapse" href="#addNewGebtype" role="button" aria-expanded="false" aria-controls="addNewGebtype">neu anlegen</a>
-                        <div class="collapse" id="addNewGebtype">
-                            <div class=" align-items-center">
-                                <div class="input-group">
-                                    <label for="newBtname" class="sr-only">Name für neuen Gebäudetyp </label>
-                                    <input type="text" name="newBtname" id="newBtname" class="form-control">
-                                    <button type="button" class="btn btn-sm btn-secondary" id="btnaddNewGebtype">anlegen</button>
-                                </div>
-                            </div>
-                        </div>
-
+                        <label for="building_type_id">Gebäudetyp festlegen </label>
                         <select name="building_type_id" id="building_type_id" class="custom-select">
                             @foreach (App\BuildingTypes::all() as $bty)
                                 <option value="{{ $bty->id }}">{{ $bty->btname }}</option>

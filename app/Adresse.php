@@ -36,7 +36,7 @@ use SoftDeletes;
         return $this->belongsTo(Location::class);
     }
 
-    public function location()
+    public function Location()
     {
         return $this->hasMany(Location::class);
     }
@@ -46,7 +46,7 @@ use SoftDeletes;
         return $this->belongsTo(AddressType::class);
     }
 
-    public function firma() {
-        return $this->hasMany(Firma::class);
+    public function Firma() {
+        return $this->hasOne(Firma::class);
     }
 }
