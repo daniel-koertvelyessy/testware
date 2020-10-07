@@ -10,7 +10,7 @@
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
     <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/flatly/bootstrap.min.css') }}">
+    <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/flatly/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
     <title>@yield('pagetitle')</title>

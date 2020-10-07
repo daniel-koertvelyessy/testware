@@ -26,6 +26,7 @@ Route::resources([
     'profile' => 'ProfileController',
     'produkt' => 'ProduktController',
     'produktDoku' => 'ProduktDocController',
+    'equipDoku' => 'EquipmentDocController',
     'firma' => 'FirmaController',
     'adresse' => 'AdresseController',
     'testware' => 'TestwareController',
@@ -33,6 +34,7 @@ Route::resources([
     'control' => 'ControlController',
     'user' => 'UserController',
     'stellplatz' => 'StellplatzController',
+    'anforderung' => 'AnforderungsController',
 
 ]);
 
@@ -53,6 +55,8 @@ Route::get('getFirmenDaten','FirmaController@getFirmenDaten')->name('getFirmenDa
 
 Route::get('getAddressenAjaxListe','AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
 Route::get('getAddressDaten','AdresseController@getAddressDaten')->name('getAddressDaten');
+
+
 
 
 /*

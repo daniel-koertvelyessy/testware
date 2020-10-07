@@ -86,6 +86,7 @@
                     <li class="nav-item " role="presentation">
                         <a class="nav-link active" id="roomStammDaten-tab" data-toggle="tab" href="#roomStammDaten" role="tab" aria-controls="roomStammDaten" aria-selected="true">Stammdaten</a>
                     </li>
+
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="roomStellPlatze-tab" data-toggle="tab" href="#roomStellPlatze" role="tab" aria-controls="roomStellPlatze" aria-selected="false">Stellplätze <span class="badge {{ ($room->stellplatzs()->count()>0)? ' badge-info ' : '' }} ">{{ $room->stellplatzs()->count() }}</span></a>
                     </li>
@@ -169,7 +170,7 @@
                                         <span class="small text-primary">Stellplatztyp</span>
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">Neuen Stellplatz anlegen</button>
+                                        <button {{--@if (!env('app.makeobjekte') ) disabled @endif --}} type="submit" class="btn btn-primary">Neuen Stellplatz anlegen</button>
                                     </div>
                                 </form>
                                 @if ($room->stellplatzs()->count()>0)

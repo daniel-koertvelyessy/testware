@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RoomController extends Controller
 {
@@ -50,9 +52,63 @@ class RoomController extends Controller
         $set = Room::create($this->validateNewRoom());
 
         (new \App\Standort)->add($request->standort_id, $request->r_name_kurz,'rooms');
+
         $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde angelegt!');
 
-return (isset($request->frmOrigin)) ? redirect('building/'.$request->building_id.'#gebRooms') : redirect()->back();
+return  redirect()->back();
+    }
+
+    public function copyRoom(Request $request) {
+
+        if ($request->id){
+
+            $bul = Room::find($request->id);
+            $neuroom = '';
+            switch (true)
+            {
+                case strlen($bul->r_name_kurz) <= 20 && strlen($bul->r_name_kurz) > 14:
+                    $neuroom = substr($bul->r_name_kurz,0,13).'_1';
+                    break;
+                case strlen($bul->b_name_kurz) <= 14:
+                    $neuroom = $bul->r_name_kurz.'_1';
+                    break;
+            }
+
+            $bul->r_name_kurz = $neuroom;
+            $copy = new Room();
+            $copy->r_name_kurz = $neuroom;
+            $copy->r_name_text = $bul->r_name_text;
+            $copy->r_name_lang = $bul->r_name_lang;
+            $copy->building_id = $bul->building_id;
+            $copy->room_type_id = $bul->room_type_id;
+            $copy->standort_id = Str::uuid();
+//            $copy->
+            $validator = Validator::make([
+                $copy->r_name_kurz,
+                $copy->r_name_text,
+                $copy->r_name_lang,
+                $copy->building_id,
+                $copy->room_type_id,
+                $copy->standort_id,
+            ], [
+                'r_name_kurz' => 'bail|required|unique:rooms,r_name_kurz|max:20',
+                'r_name_text' =>'',
+                'r_name_lang' =>'',
+                'building_id' =>'',
+                'room_type_id' =>'',
+                'standort_id' =>'',
+
+            ]);
+            $copy->save();
+
+            $std = (new \App\Standort)->add($copy->standort_id, $neuroom,'rooms');
+
+            $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde kopiert!');
+            return $copy->id;
+        } else {
+            return 0;
+        }
+
     }
 
     /**

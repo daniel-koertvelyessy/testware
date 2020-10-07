@@ -80,13 +80,15 @@ class ProduktDocController extends Controller
 
     public function downloadProduktDokuFile(Request $request)
     {
+
         $doc = ProduktDoc::find($request->id);
+
         return response(Storage::disk('local')->get($doc->proddoc_name_pfad), 200)
             ->header('Cache-Control', 'public')
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', Storage::mimeType($doc->proddoc_name_pfad))
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=".$doc->proddoc_name_lang)
+            ->header('Content-disposition', "attachment; filename=".str_replace(',','_',$doc->proddoc_name_lang))
             ;
     }
 
@@ -127,9 +129,8 @@ class ProduktDocController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  ProduktDoc $produktDoc
+     * @param  Request $request
      * @return RedirectResponse
-     * @throws Exception
      */
     public function destroy(Request $request)
     {

@@ -12,6 +12,11 @@
 
 /********************************************************/
 
+.page-footer{
+    background: #fff;
+    border-top: 1px solid black;
+}
+
 
 body {
     /*background-color: #ffffff;*/
@@ -30,14 +35,43 @@ a.subnav {
     grid-gap: 10px;
 }
 
-.tiles-grid .tile-medium {
+.tile-medium-disabled,
+.tile-small-disabled,
+.tiles-grid .tile-medium,
+.tiles-grid .tile-small {
     grid-column: span 2;
     grid-row: span 2;
 }
 
+.tile-small-disabled,
+.tile-small {
+    width: 80px;
+    height: 80px;
+}
+.tile-medium-disabled,
 .tile-medium {
     width: 150px;
     height: 150px;
+}
+
+.tile-small-disabled,
+.tile-medium-disabled{
+    border:1px solid #c8c7c7;
+    display: block;
+    background-color: #fcfcfc;
+    color: #c4c4c4;
+    /*width: 150px;*/
+    /*height: 150px;*/
+    -webkit-box-shadow: inset 0 0 1px #a0a006;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
 }
 
 .tile-app,
@@ -48,8 +82,8 @@ a.subnav {
     display: block;
     background-color: #a0a1a0;
     color: #fff;
-    width: 150px;
-    height: 150px;
+    /*width: 150px;*/
+    /*height: 150px;*/
     -webkit-box-shadow: inset 0 0 1px #ffc;
     box-shadow: inset 0 0 1px #ffc;
     cursor: pointer;
@@ -73,11 +107,12 @@ a.subnav {
     box-shadow: inset 0 0 3px #ffc;
 }
 
+
 .tile-app .branding-bar,
 .tile-large .branding-bar,
 .tile-medium .branding-bar,
-.tile-small .branding-bar,
-.tile-wide .branding-bar {
+.tile-wide .branding-bar,
+.tile-medium-disabled .branding-bar {
     height: 32px;
     line-height: 32px;
     position: absolute;
@@ -94,10 +129,42 @@ a.subnav {
     z-index: 2;
 }
 
+.tile-small-disabled .branding-bar,
+.tile-small .branding-bar {
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0 10px 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    z-index: 2;
+}
+
+.tile-small-disabled .icon,
+.tile-small .icon {
+    max-width: 60%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    -ms-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    font-size: 30px;
+    line-height: 30px;
+}
+
+
 .tile-app .icon,
 .tile-large .icon,
 .tile-medium .icon,
-.tile-small .icon,
 .tile-wide .icon {
     max-width: 60%;
     height: 50%;
@@ -189,7 +256,8 @@ a.subnav {
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .nav-link.active {
     color: rgba(0,0,0,0.9);
-    border-bottom: 2px solid #dbe802  !important;
+    border-bottom: 2px solid #c7d301  !important;
+    /*border-bottom: 2px solid #dbe802  !important;*/
 }
 
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
@@ -236,7 +304,7 @@ input[data-function*='swipe'] {
     color: #263249;
 }
 input[data-function*='swipe']:checked ~ .sideIcon[data-function*='swipe'] {
-    transform: translate3d(250px, -15px, 0);
+    transform: translate3d(220px, -15px, 0);
     color:#fff;
     z-index: 4000;
     display: block;
@@ -252,7 +320,7 @@ input[data-function*='swipe']:checked ~ .sideIcon[data-function*='swipe'] {
 }
 input[data-function*='swipe']:checked ~ .sideIcon:nth-child(1){
     display: block;
-    transform: translate3d(300px, 0px, 0px);
+    transform: translate3d(270px, 0px, 0px);
 }
 
 
@@ -269,9 +337,9 @@ input[data-function*='swipe']:checked ~ .sidebar {
 /*    width: 100%;*/
 /*}*/
 .sidebar {
-    transform: translate3d(-300px, 0px, 0px);
+    transform: translate3d(-270px, 0px, 0px);
     position: absolute;
-    width: 300px;
+    width: 270px;
     background: #263249;
     color: #eee;
     left: 0;

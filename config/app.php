@@ -235,4 +235,7 @@ return [
 
     ],
 
+    'maxobjekte' => env('MAX_OBJEKT',10),
+    'makeobjekte' => env('MAKE_OBJEKT',false),
+
 ];

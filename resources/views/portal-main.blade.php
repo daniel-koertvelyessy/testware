@@ -13,19 +13,18 @@
         <div class="row justify-content-md-center">
             <div class="col-md-8 mt-5">
                 <div class="accordion card active" id="portalAuswahl">
-
-                        <div id="headingTwo" class="border-bottom bg-primary text-light">
+                        <div id="headVerwaltung" class="border-bottom bg-primary text-light">
                             <h2 class="mb-0">
                                 <button class="btn btn-primary btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sectionAdminApps" aria-expanded="false" aria-controls="sectionAdminApps">
                                     Verwaltung
                                 </button>
                             </h2>
                         </div>
-                        <div id="sectionAdminApps" class="collapse" aria-labelledby="headingTwo" data-parent="#portalAuswahl">
+                        <div id="sectionAdminApps" class="collapse" aria-labelledby="headVerwaltung" data-parent="#portalAuswahl">
                             <section class="card-body text-dark">
                                 <nav class="tiles-grid justify-content-center">
                                     <a href="{{ route('standorteMain') }}" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
-                                        <span class="icon"><i class="fas fa-boxes"></i></span>
+                                        <span class="icon"><i class="fa fa-boxes"></i></span>
                                         <span class="branding-bar text-center">Standorte</span>
                                     </a>
                                     <a href="{{ route('organisationMain') }}" class="tile-medium rounded" data-role="tile">
@@ -54,7 +53,7 @@
                         </div>
                         <div id="sectionUserApps" class="collapse show" aria-labelledby="headingOne" data-parent="#portalAuswahl">
                             <div class="card-body">
-                                <div class="tiles-grid">
+                                <div class="tiles-grid justify-content-center">
                                     <div class="tile-medium rounded" data-role="tile">
                                         <a href="{{ route('testware.index') }}">
                                             <img src="{{ url('img/icon/icon_testWare_35.svg') }}" alt="Logo" class="img-fluid p-1" style="max-height: 250px;">
@@ -69,14 +68,14 @@
                             </div>
                         </div>
 
-                        <div class="border-top  bg-primary text-light" id="headingThree">
+                        <div class="border-top  bg-primary text-light" id="headApps">
                             <h2 class="mb-0">
                                 <button class="btn btn-primary btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                     Externe Apps
                                 </button>
                             </h2>
                         </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#portalAuswahl">
+                        <div id="collapseThree" class="collapse" aria-labelledby="headApps" data-parent="#portalAuswahl">
                             <div class="card-body">
                                 <div class="tiles-grid">
                                     <a href="https://mail02.thermo-control.com/webapp/" class="tile-medium rounded" data-role="tile">

@@ -26,7 +26,36 @@
 @endsection
 
 @section('modals')
+    <div class="modal fade" id="modalAddProduktKategorie" tabindex="-1" aria-labelledby="modalAddProduktKategorieLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
+                <div class="modal-header">
+                    <h5 class="modal-title">Neue Produkt Kategorie anlegen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('createProdKat') }}"
+                          method="POST" class="needs-validation"
+                          id="frmAddNewProduktKategorie" name="frmAddNewProduktKategorie"
+                    >
+                        @csrf
+                        <x-rtextfield id="pk_name_kurz" label="Name - Kürzel" />
+
+                        <x-textfield id="pk_name_lang" label="Name" />
+
+                        <x-textarea id="pk_name_text" label="Beschreibung" />
+
+                        <x-btnMain>Neue Kategorie anlegen <span class="fas fa-download"></span></x-btnMain>
+
+                </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -45,13 +74,20 @@
                             <x-textfield id="prod_name_lang" label="Bezeichnung"/>
                         </div>
                         <div class="col-md-6">
-                            <x-selectfield id="produkt_kategorie_id" label="Produkt Kategorie">
-                                @foreach (App\ProduktKategorie::all() as $produktKategorie)
-                                    <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
-                                @endforeach
-                            </x-selectfield>
-
-
+                            <label for="produkt_kategorie_id">Produkt Kategorie</label>
+                            <div class="input-group">
+                                <select name="produkt_kategorie_id"
+                                        id="produkt_kategorie_id"
+                                        class="custom-select"
+                                >
+                                    @foreach (App\ProduktKategorie::all() as $produktKategorie)
+                                        <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modalAddProduktKategorie">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -78,7 +114,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-textfield id="prod_nummer" label="Nummer"/>
+                            <x-textfield id="prod_nummer" label="Artikel Nummer"/>
 
                             @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
                                 <div class="form-group">
@@ -112,8 +148,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <button class="btn btn-primary btn-block">Produkt anlegen</button>
+                    <button @if (!env('app.makeobjekte') ) disabled @endif  class="btn btn-primary btn-block">Produkt anlegen</button>
                 </form>
             </div>
         </div>
@@ -121,7 +156,11 @@
 @endsection
 
 @section('scripts')
-
+    <script>
+        $('#produkt_kategorie_id').change(function () {
+            location.href = "{{ route('produkt.create') }}?pk=" + $('#produkt_kategorie_id :selected').val();
+        })
+    </script>
 @endsection
 
 

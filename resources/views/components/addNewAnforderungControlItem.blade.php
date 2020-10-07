@@ -1,6 +1,6 @@
 
 
-<form action="{{ route('addNewAnforderungControlItem') }}#systemProdukte" method="POST" name="frmAddNewAnforderungControlItem" id="frmAddNewAnforderungControlItem">
+<form action="{{ route('addNewAnforderungControlItem') }}#Produkte" method="POST" name="frmAddNewAnforderungControlItem" id="frmAddNewAnforderungControlItem">
     @csrf
     <input type="hidden" name="anforderung_id" id="anforderung_id">
     <div class="tab-content" id="nav-tabContent">

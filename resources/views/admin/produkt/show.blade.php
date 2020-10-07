@@ -28,7 +28,7 @@
     <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Produkt </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAddParameter"><i class="fas fa-table"></i> Daten-Feld hinzufügen</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAddParameter"><i class="fas fa-table"></i> Datenfeld hinzufügen</a>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalDeleteProdukt"><i class="far fa-trash-alt"></i> Produkt löschen</a>
         </ul>
     </li>
@@ -120,7 +120,7 @@
                     @csrf
                     <input type="hidden" name="produkt_id" id="produkt_id_param" value="{{ $produkt->id }}">
                     <div class="modal-header">
-                        <h5 class="modal-title">Neues Stammdaten-Feld anlegen</h5>
+                        <h5 class="modal-title">Neues Feld für Stammdaten anlegen</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -250,7 +250,7 @@
                                             <x-rtextfield id="prod_name_kurz" label="Kurzbezeichnung / Spezifikation" value="{{ $produkt->prod_name_kurz }}"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <x-selectfield id="produkt_state_id" label="Material Status">
+                                            <x-selectfield id="produkt_state_id" label="Produkt Status">
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_name_kurz }}</option>
                                                 @endforeach
@@ -374,7 +374,7 @@
                                                     <input type="hidden" name="an_name_kurz" id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}">
                                                     <input type="hidden" name="id" id="id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produktAnforderung->id }}">
                                                     <input type="hidden" name="produkt_id" id="produkt_id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produkt->id }}">
-                                                    <button class="btn btn-sm btn-outline-primary deleteAnforderungFromProdukt" data-aid="{{ $produktAnforderung->id }}">löschen</button>
+                                                    <button class="btn btn-sm btn-outline-primary">löschen</button>
                                                 </form>
                                             </nav>
                                         </div>
@@ -733,7 +733,7 @@
                                             <label class="custom-file-label" for="prodDokumentFile">Datei wählen</label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Material anhängen </button>
+                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Produkt anhängen </button>
                                 </form>
                             </div>
                             <div class="col-md-6">
@@ -796,7 +796,6 @@
                                 @else
                                     <p class="small text-muted">Keine Dateien zum Produkt gefunden!</p>
                                 @endif
-
                             </div>
                         </div>
                     </div>

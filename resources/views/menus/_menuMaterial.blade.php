@@ -20,7 +20,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-plus"></i> Neu</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownAddProdukt">
             @foreach (\App\ProduktKategorie::all() as $produktKategorie)
-                <li><a class="dropdown-item" href="{{ route('produkt.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
+                <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}" href="{{ route('produkt.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
             @endforeach
 
         </ul>

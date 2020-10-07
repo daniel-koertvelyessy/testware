@@ -16,30 +16,99 @@
             <i class="fas fa-bars"></i> Gerät </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
             <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('equipment.edit',['equipment'=>$equipment]) }}">
-                Gerät bearbeitem <i class="ml-2 far fa-edit"></i>
+                Gerät bearbeiten <i class="ml-2 far fa-edit"></i>
+            </a>
+            <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" data-toggle="modal" data-target="#modalAddEquipDoc">
+                Datei hinzufügen <i class="ml-2 fas fa-upload"></i>
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" data-toggle="modal" data-target="#modalAddParameter">
-                Daten-Blatt Drucken <i class="ml-2 fas fa-print"></i>
+                Datenblatt Drucken <i class="ml-2 fas fa-print"></i>
             </a>
             <a class="dropdown-item d-flex justify-content-between align-items-center" href="#">
                 QR-Code Drucken <i class="ml-2 fas fa-qrcode"></i>
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('produkt.show',['produkt'=>$equipment->produkt]) }}">
-                Produkt bearbeitem <i class="ml-2 far fa-edit"></i>
+                Produkt bearbeiten <i class="ml-2 far fa-edit"></i>
             </a>
 
         </ul>
     </li>
 @endsection
 
+@section('modals')
+    <div class="modal fade" id="modalAddEquipDoc" tabindex="-1" aria-labelledby="modalAddEquipDocLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('equipDoku.store') }}#dokumente" method="POST" enctype="multipart/form-data">
+                    @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAddEquipDocLabel">Dokument an Gerät anhängen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <input type="hidden" name="equipment_id" id="equipment_id_doku" value="{{ $equipment->id }}">
+                        <div class="form-group">
+                            <label for="document_type_id">Dokument Typ</label>
+                            <div class="input-group">
+                                <select name="document_type_id" id="document_type_id" class="custom-select">
+                                    @foreach (App\DocumentType::all() as $ad)
+                                        <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="btn-outline-primary btn ml-2"  data-toggle="modal" data-target="#modalAddDokumentType">
+                                    <span class="fas fa-plus"></span> neuen Typ anlegen
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="eqdoc_name_kurz">Bezeichnung</label>
+                            <input type="text" name="eqdoc_name_kurz" id="eqdoc_name_kurz"
+                                   class="form-control @error('eqdoc_name_kurz') is-invalid @enderror "
+                                   value="{{ old('eqdoc_name_kurz') ?? '' }}" required
+                            >
+                            @error('eqdoc_name_kurz')
+                            <span class="text-danger small">Error {{ $message }}</span>
+                            @enderror
+                            <span class="small text-primary @error('eqdoc_name_kurz') d-none @enderror">max 20 Zeichen, erforderlichen Feld</span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="eqdoc_name_text">Datei Informationen</label>
+                            <textarea name="eqdoc_name_text" id="eqdoc_name_text" class="form-control">{{ old('eqdoc_name_text') ?? '' }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" id="equipDokumentFile" name="equipDokumentFile"
+                                       data-browse="Datei"
+                                       class="custom-file-input"
+                                       accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
+                                       required
+                                >
+                                <label class="custom-file-label" for="equipDokumentFile">Datei wählen</label>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbruch</button>
+                    <button class="btn btn-primary">Dokuemnt hochladen</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+@endsection
+
 @section('content')
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-2">
             <div class="col">
-                <h1 class="h4">Gerät <span class="badge badge-primary"></span> bearbeiten</h1>
+                <h1 class="h3">Geräteübersicht</h1>
             </div>
         </div>
         <div class="row">
@@ -95,7 +164,19 @@
                                             {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)/1028,1) }}kB
                                         </div>
                                         <div>
-                                            <button class="btn btn-outline-primary"><span class="fas fa-download"></span></button>
+                                            <form action="{{ route('downloadProduktDokuFile') }}#prodDoku" method="get" id="downloadBDA">
+                                                @csrf
+                                                <input type="hidden"
+                                                       name="id"
+                                                       id="bda"
+                                                       value="{{ $bda->id }}"
+                                                >
+                                            </form>
+                                            <button
+                                                class="btn btn-lg btn-outline-primary"
+                                                onclick="event.preventDefault(); document.getElementById('downloadBDA').submit();">
+                                                <span class="fas fa-download"></span>
+                                            </button>
                                         </div>
 
                                     </div>
@@ -114,13 +195,24 @@
                                             {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)/1028,1) }}kB
                                         </div>
                                         <div>
-                                            <button class="btn btn-outline-primary"><span class="fas fa-download"></span></button>
+                                            <form action="{{ route('downloadProduktDokuFile') }}#prodDoku" method="get" id="downloadBDA_{{ $bda->id }}">
+                                                @csrf
+                                                <input type="hidden"
+                                                       name="id"
+                                                       id="bda_{{ $bda->id }}"
+                                                       value="{{ $bda->id }}"
+                                                >
+                                            </form>
+                                            <button
+                                                class="btn btn-lg btn-outline-primary"
+                                                onclick="event.preventDefault(); document.getElementById('downloadBDA').submit();">
+                                                <span class="fas fa-download"></span>
+                                            </button>
                                         </div>
 
                                     </div>
-
                                 @empty
-                                    <span class="text-muted text-center small">keine Prüfberichte hinterlegt</span>
+                                    <x-notifyer>keine Prüfberichte hinterlegt</x-notifyer>
                                 @endforelse
                             </div>
                         </div>
@@ -144,7 +236,10 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-3">Anforderung</dt>
-                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
+                                        <dd class="col-md-9 d-flex justify-content-between align-items-center">
+                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}
+                                            <a href="#" class="btn-primary btn btn-sm">jetzt prüfen</a>
+                                        </dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-3">Bezeichnung</dt>
@@ -170,7 +265,7 @@
                                                 @foreach (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
                                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                                         {{ $aci->aci_name_lang }}
-                                                        <a href="#" class="btn-outline-primary btn btn-sm">jetzt prüfen</a>
+
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -188,11 +283,50 @@
                     </div>
 
                     <div class="tab-pane fade p-2" id="dokumente" role="tabpanel" aria-labelledby="dokumente-tab">
-
-
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 class="h4">Geräte-Dokumente</h3>
+                                @if (\App\EquipmentDoc::where('equipment_id',$equipment->id)->count()>0)
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                        <th>Datei</th>
+                                        <th>Typ</th>
+                                        <th style="text-align: right;">Größe kB</th>
+                                        <th></th>
+                                        <th></th>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
+                                            <tr>
+                                                <td>{{ $equipDoc->eqdoc_name_lang }}</td>
+                                                <td>{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
+                                                <td>
+                                                    <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
+                                                          method="get" id="downloadProdDoku_{{ $equipDoc->id }}">
+                                                        @csrf
+                                                        <input type="hidden"
+                                                               name="id"
+                                                               id="download_produktdoc_id_{{ $equipDoc->id }}"
+                                                               value="{{ $equipDoc->id }}"
+                                                        >
+                                                    </form>
+                                                    <button
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $equipDoc->id }}').submit();">
+                                                        <span class="fas fa-download"></span>
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}#dokumente" id="{{ $equipDoc->id }}" />
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <x-notifyer>Keine Dateien zum Gerät gefunden!</x-notifyer>
+                                @endif
 
                             </div>
                             <div class="col-md-6">

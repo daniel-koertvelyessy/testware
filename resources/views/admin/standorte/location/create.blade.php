@@ -67,8 +67,11 @@
 
                 </div>
             </div>
-
-            <x-btnMain>Standort anlegen <span class="fas fa-download"></span></x-btnMain>
+            @if (!env('app.makeobjekte') )
+                <x-btnMain>Standort anlegen <span class="fas fa-download"></span></x-btnMain>
+            @else
+                <x-btnMainDisabled>Standort anlegen <span class="fas fa-download"></span></x-btnMainDisabled>
+            @endif
         </form>
     </div>
 

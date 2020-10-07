@@ -8,13 +8,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
-    <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    @auth
-        <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
-    @else
-        <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/yeti/bootstrap.min.css') }}">
-    @endauth
+    <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
     <title>@yield('pagetitle')</title>
@@ -24,16 +19,11 @@
 <div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;" id="lockscreen" aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
-       <div class="navbar-brand">
-{{--        <button id="NavToggler" type="button" class="btn m-0 ">--}}
-{{--            <i class="fas fa-bars"></i>--}}
-{{--        </button>--}}
-        <a href="/" class="ml-5">
+        <a href="/" class="ml-5 navbar-brand">
             <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
+            @yield('mainSection')
+            <i class="fas fa-angle-right d-none d-md-inline"></i>
         </a>
-           @yield('mainSection')
-           <i class="fas fa-angle-right d-none d-md-inline"></i>
-       </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -101,8 +91,9 @@
 </header>
 
 <main id="app" class="mt-3 ">
-    <a href="#app" class="sr-only">Überspringe Seiten-Navigation</a>
+    <a href="#content" class="sr-only">Überspringe Seiten-Navigation</a>
     <x-sidebar/>
+    <a id="content"></a>
     @yield('content')
 </main>
 @yield('autocomplete')
@@ -129,18 +120,27 @@
 </div>
 @yield('modals')
 <!-- MODALS ENDE -->
-<footer class="page-footer fixed-bottom bg-light px-1">
+{{--@if (\App\Lizenz::checkNumObjectsOverflow())
+    <div class="alert alert-info fixed-bottom  alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Wichiger Hinweis!</h4>
+        <p>Sie haben die maximale Anzahl von <strong>{{ env('MAX_OBJEKT') }}</strong> Objekten erreicht, welche mit Ihrem Lizenzpaket angelegt werden können. Sie können das Programm weiter nutzen, aber keine weiteren Objekte anlegen.</p>
+        <p>Bitte wenden Sie sich vertrauensvoll an Ihren Ansprechpartner, um Ihre Lizenz zu erweitern.</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif--}}
+<footer class="page-footer fixed-bottom px-1">
     <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
-            <a href="https://bitpack.io" target="_blank"> bitpack.io GmbH</a>
-        </div>
-        <div class="col-auto pr-3">
-            <span class="text-muted small">layout-login V1.9</span>
+        <div class="col-auto small mr-auto pl-3">© 2020 :
+            <a href="https://bitpack.io/" title="bitpack.io">
+                <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
+            </a>
+            GmbH
         </div>
     </div>
 </footer>
 @yield('autoloadscripts')
-
 {{--<script type="text/javascript"  src="{{ asset('plugins/typehead/dist/jquery.typeahead.min.js') }}"></script>--}}
 {{--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>--}}
 {{--<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>--}}

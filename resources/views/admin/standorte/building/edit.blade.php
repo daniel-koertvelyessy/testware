@@ -34,7 +34,12 @@
                         <label for="l_beschreibung">Beschreibung</label>
                         <textarea name="l_beschreibung" id="l_beschreibung" class="form-control" rows="3">{{ $location->l_beschreibung ?? '' }}</textarea>
                     </div>
-                    <button class="btn btn-primary btn-block"><i class="far fa-save"></i> Standort speichern</button>
+                    @if (env('app.makeobjekte') )
+                        <x-btnMain>Gebäude speichern <span class="fas fa-download"></span></x-btnMain>
+                    @else
+                        <x-btnMainDisabled>Gebäude speichern <span class="fas fa-download"></span></x-btnMainDisabled>
+                    @endif
+
                 </form>
             </div>
         </div>

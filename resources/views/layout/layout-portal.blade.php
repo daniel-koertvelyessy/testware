@@ -8,12 +8,11 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
-    <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @auth
         <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
     @else
-        <link id="themeId" rel="stylesheet" href="{{ url('https://bootswatch.com/4/yeti/bootstrap.min.css') }}">
+        <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
     @endauth
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
@@ -90,14 +89,12 @@
 {{--    <x-sidebar/>--}}
     @yield('content')
 </main>
-    <footer class="page-footer fixed-bottom bg-light px-1">
+    <footer class="page-footer fixed-bottom px-1">
         <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
-                <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
+            <div class="col-auto small mr-auto pl-3">© 2020 :
+                <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
             </div>
-            <div class="col-auto">
-                <span class="text-muted small">layout-login V1.9</span>
-            </div>
+
         </div>
     </footer>
 

@@ -18,7 +18,6 @@
             <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">Portal</a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.index') }}">Standorte</a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_name_kurz }}</a></li>
-
             <li class="breadcrumb-item"><a href="{{ route('building.index') }}">Gebäude</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{  $building->b_name_kurz  }}</li>
         </ol>
@@ -129,6 +128,7 @@
                     <li class="nav-item " role="presentation">
                         <a class="nav-link active" id="gebStammDaten-tab" data-toggle="tab" href="#gebStammDaten" role="tab" aria-controls="gebStammDaten" aria-selected="true">Stammdaten</a>
                     </li>
+
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="gebRooms-tab" data-toggle="tab" href="#gebRooms" role="tab" aria-controls="gebRooms" aria-selected="false">Räume <span class="badge {{ ($building->rooms->count()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $building->rooms->count() }}</span></a>
                     </li>
@@ -247,7 +247,7 @@
 
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">Neuen Raum anlegen</button>
+                                        <button type="submit" {{-- @if (!env('app.makeobjekte') ) disabled @endif --}} class="btn btn-primary">Neuen Raum anlegen</button>
                                     </div>
                                 </form>
                                 @if ($building->rooms->count()>0)
@@ -269,15 +269,43 @@
                                                 <td>{{ \App\RoomType::find($room->room_type_id)->rt_name_kurz }}</td>
                                                 <td>{{ $room->stellplatzs()->count() }}</td>
                                                 <td>
-                                                    <a class="btn btn-outline-dark btn-sm" href="/room/{{ $room->id }}"><i class="fas fa-chevron-right"></i></a>
-                                                    <button type="button" class="btn btn-outline-dark btn-sm btnDeleteRoom" data-id="{{ $room->id }}"><i class="far fa-trash-alt"></i></button>
-                                                    <form action="{{ route('room.destroy',$room->id) }}" id="frmDeleteRoom_{{ $room->id }}" target="_blank">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <input type="hidden" name="id" id="id_{{ $room->id }}" value="{{ $room->id }}">
-                                                        <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $room->id }}" value="building">
-                                                        <input type="hidden" name="r_name_kurz" id="r_name_kurz_{{ $room->id }}" value="{{ $room->r_name_kurz }}">
-                                                    </form>
+                                                    <div class="btn-group dropleft">
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                                id="editObjekt{{ $room->id }}"
+                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="editObjekt{{ $room->id }}">
+                                                            <a href="{{ route('room.show',$room) }}"
+                                                               class="dropdown-item d-flex justify-content-between align-items-center"
+                                                               title="Raum ansehen"
+                                                            >
+                                                                Öffnen <i class="fas fa-angle-right"></i>
+                                                            </a>
+                                                            <a href="#" class="btnDeleteRoom dropdown-item d-flex justify-content-between align-items-center"
+                                                               data-id="{{ $room->id }}"
+                                                            >
+                                                                Löschen
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </a>
+
+                                                            <a href="#"
+                                                               class="dropdown-item d-flex justify-content-between align-items-center copyRoom {{-- @if (!env('app.makeobjekte') ) disabled @endif --}} "
+                                                               data-objid="{{ $room->id }}"
+                                                            >Kopieren
+                                                                <i class="fas fa-copy"></i>
+                                                            </a>
+                                                            <form action="{{ route('room.destroy',$room->id) }}" id="frmDeleteRoom_{{ $room->id }}" target="_blank">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <input type="hidden" name="id" id="id_{{ $room->id }}" value="{{ $room->id }}">
+                                                                <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $room->id }}" value="building">
+                                                                <input type="hidden" name="r_name_kurz" id="r_name_kurz_{{ $room->id }}" value="{{ $room->r_name_kurz }}">
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -328,6 +356,19 @@
                 data: $('#frmDeleteRoom_'+rommId).serialize(),
                 success: function (res) {
                     if(res) location.reload();
+                }
+            });
+        });
+        $('.copyRoom').click(function () {
+            const id = $(this).data('objid');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('copyRoom') }}",
+                data: {id},
+                success: (res) => {
+                    if (res>0) location.reload();
+
                 }
             });
         });

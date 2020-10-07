@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -55,8 +56,69 @@ class BuildingsController extends Controller
         $std = (new \App\Standort)->add($request->standort_id, $request->b_name_kurz,'buildings');
 
         $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde angelegt!');
-        return (isset($request->frmOrigin) && $request->frmOrigin==='location') ?redirect('location/'.$request->location_id.'#locGebauede') : redirect('building/'.$building->id);
+        return redirect()->back();
 
+    }
+
+    public function copyBuilding(Request $request) {
+        if ($request->id){
+
+            $bul = Building::find($request->id);
+            $neuname = '';
+            switch (true)
+            {
+                case strlen($bul->b_name_kurz) <= 20 && strlen($bul->b_name_kurz) > 14:
+                    $neuname = substr($bul->b_name_kurz,0,13).'_1';
+                    break;
+                case strlen($bul->b_name_kurz) <= 14:
+                    $neuname = $bul->b_name_kurz.'_1';
+                    break;
+            }
+
+
+
+            $bul->b_name_kurz = $neuname;
+            $copy = new Building();
+            $copy->b_name_kurz = $neuname;
+            $copy->b_name_ort = $bul->b_name_ort;
+            $copy->b_name_lang = $bul->b_name_lang;
+            $copy->b_name_text = $bul->b_name_text;
+            $copy->b_we_has = $bul->b_we_has;
+            $copy->b_we_name = $bul->b_we_name;
+            $copy->location_id = $bul->location_id;
+            $copy->building_type_id = $bul->building_type_id;
+            $copy->standort_id = Str::uuid();
+//            $copy->
+            $validator = Validator::make([
+                $copy->b_name_kurz,
+                $copy->b_name_ort,
+                $copy->b_name_lang,
+                $copy->b_name_text,
+                $copy->b_we_has,
+                $copy->b_we_name,
+                $copy->location_id,
+                $copy->building_type_id,
+                $copy->standort_id,
+
+            ], [
+                'b_name_kurz' => 'bail|required|unique:buildings,b_name_kurz|min:2|max:10',
+                'b_name_ort' =>'',
+                'b_name_lang' =>'',
+                'b_name_text' =>'',
+                'b_we_has' =>'',
+                'b_we_name' =>'required_if:b_we_has,1',
+                'location_id' =>'required',
+                'building_type_id' =>'required',
+            ]);
+            $copy->save();
+
+            $std = (new \App\Standort)->add($copy->standort_id, $neuname,'buildings');
+
+            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde kopiert!');
+            return $copy->id;
+        } else {
+            return 0;
+        }
     }
 
     public function getBuildingList($id)

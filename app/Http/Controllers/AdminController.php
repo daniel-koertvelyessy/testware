@@ -13,6 +13,7 @@ use App\Building;
 use App\BuildingTypes;
 use App\DocumentType;
 use App\Equipment;
+use App\Location;
 use App\Verordnung;
 use App\ProduktKategorie;
 use App\Produkt;
@@ -76,6 +77,32 @@ class AdminController extends Controller
         return view('admin.registerphone');
     }
 
+
+    public function checkStandortValid(Request $request) {
+        //
+        $bul = DB::table('buildings')->select('id')
+        ->where('b_name_kurz','like','%'.$request->name.'%')
+        ->orWhere('b_name_ort','like','%'.$request->name.'%')
+        ->orWhere('b_name_lang','like','%'.$request->name.'%')
+        ->orWhere('b_name_text','like','%'.$request->name.'%')
+        ->orWhere('b_we_name','like','%'.$request->name.'%')
+            ->get();
+
+        $rom = DB::table('rooms')->select('id')
+            ->where('r_name_kurz','like','%'.$request->name.'%')
+            ->orWhere('r_name_lang','like','%'.$request->name.'%')
+            ->orWhere('r_name_text','like','%'.$request->name.'%')
+                ->get();
+
+        $spl = DB::table('stellplatzs')->select('id')
+            ->where('sp_name_kurz','like','%'.$request->name.'%')
+            ->orWhere('sp_name_lang','like','%'.$request->name.'%')
+            ->orWhere('sp_name_text','like','%'.$request->name.'%')
+            ->get();
+
+        return ($bul->count()>0||$rom->count()>0||$spl->count()>0)?1:0;
+    }
+
     /**
      *  Aktualisiert die CSS-Datei zur Darstellung von Farben und Schriften
      *
@@ -94,6 +121,11 @@ class AdminController extends Controller
         return redirect(route('systems'));
     }
 
+    public function addObjektAnforderung(Request $request) {
+
+
+
+    }
 
     /**
      * Speichert einen neuen Adresstyp
@@ -402,7 +434,7 @@ class AdminController extends Controller
         ProduktKategorie::create($this->validateProduktKategorie());
 
         $request->session()->flash('status', 'Die Prdukt-Kategorie <strong>' . request('pk_name_kurz') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
+        return redirect()->back();
     }
 
     /**

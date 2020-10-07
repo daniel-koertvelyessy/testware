@@ -60,6 +60,7 @@ Route::post('createRoomType', 'AdminController@createRoomType')->name('createRoo
 Route::post('getRoomTypeData', 'AdminController@getRoomTypeData')->name('getRoomTypeData');
 Route::delete('deleteRoomType', 'AdminController@deleteRoomType')->name('deleteRoomType');
 Route::get('getUsedRoomsByRoomType', 'AdminController@getUsedRoomsByRoomType')->name('getUsedRoomsByRoomType');
+Route::get('copyRoom', 'RoomController@copyRoom')->name('copyRoom');
 
 
 /**
@@ -79,6 +80,7 @@ Route::put('updateBuildingType', 'AdminController@updateBuildingType')->name('up
 Route::get('getUsedBuildingsByBuildingType', 'AdminController@getUsedBuildingsByBuildingType')->name('getUsedBuildingsByBuildingType');
 Route::delete('deleteBuildingType', 'AdminController@deleteBuildingType')->name('deleteBuildingType');
 Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->name('room.getBuildingList');
+Route::get('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuilding');
 
 
 
@@ -91,9 +93,14 @@ Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->na
  *
  */
 
+Route::post('addLocationAnforderung', 'LocationsController@addLocationAnforderung')->name('addLocationAnforderung');
+Route::delete('deleteLocationAnforderung', 'LocationsController@deleteLocationAnforderung')->name('deleteLocationAnforderung');
 Route::delete('location.destroyLocationAjax', 'LocationsController@destroyLocationAjax')->name('location.destroyLocationAjax');
+
+
 Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name('getStandortIdListAll');
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
+
 
 
 
@@ -224,6 +231,10 @@ Route::put('updateDokumentType', 'AdminController@updateDokumentType')->name('up
 Route::post('getDokumentTypeData', 'AdminController@getDokumentTypeData')->name('getDokumentTypeData');
 Route::delete('deleteDokumentType', 'AdminController@deleteDokumentType')->name('deleteDokumentType');
 Route::get('getUsedDokumentType', 'AdminController@getUsedDokumentType')->name('getUsedDokumentType');
+
+
+
+Route::get('checkStandortValid', 'AdminController@checkStandortValid')->name('checkStandortValid');
 
 
 

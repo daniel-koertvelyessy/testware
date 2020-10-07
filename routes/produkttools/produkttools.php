@@ -1,5 +1,7 @@
 <?php
 
+Route::get('/downloadEquipmentDokuFile','EquipmentDocController@downloadEquipmentDokuFile')->name('downloadEquipmentDokuFile');
+
 
 Route::get('/downloadProduktDokuFile','ProduktDocController@downloadProduktDokuFile')->name('downloadProduktDokuFile');
 Route::get('getProduktListe','ProduktController@getProduktListe')->name('getProduktListe');
@@ -26,3 +28,5 @@ Route::post('addProderialKategorie','ProduktController@addProderialKategorie')->
 Route::post('addAnforderung','ProduktController@addAnforderung')->name('addAnforderung');
 Route::post('addProduktAnforderung','ProduktController@addProduktAnforderung')->name('addProduktAnforderung');
 Route::delete('deleteProduktAnfordrung','ProduktController@deleteProduktAnfordrung')->name('deleteProduktAnfordrung');
+
+

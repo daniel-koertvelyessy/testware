@@ -100,7 +100,11 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary btn-block">Gebäude anlegen</button>
+            @if (env('app.makeobjekte') )
+                <x-btnMain>Gebäude anlegen <span class="fas fa-download"></span></x-btnMain>
+            @else
+                <x-btnMainDisabled>Gebäude anlegen <span class="fas fa-download"></span></x-btnMainDisabled>
+            @endif
         </form>
     </div>
 @endsection

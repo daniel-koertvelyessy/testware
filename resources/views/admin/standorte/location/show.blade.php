@@ -78,14 +78,17 @@
             <div class="col">
                 <ul class="nav nav-tabs mainNavTab" id="myTab" role="tablist">
                     <li class="nav-item " role="presentation">
-                        <a class="nav-link active" id="locStammDaten-tab" data-toggle="tab" href="#locStammDaten" role="tab" aria-controls="locStammDaten" aria-selected="true">Stammdaten</a>
+                        <a class="nav-link active" id="Stammdaten-tab" data-toggle="tab" href="#Stammdaten" role="tab" aria-controls="Stammdaten" aria-selected="true">Stammdaten</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="Anforderungen-tab" data-toggle="tab" href="#Anforderungen" role="tab" aria-controls="Anforderungen" aria-selected="false">Anforderungen</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="locGebauede-tab" data-toggle="tab" href="#locGebauede" role="tab" aria-controls="locGebauede" aria-selected="false">Gebäude <span class="badge badge-info">{{ $location->Building->count() }}</span></a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active p-2 " id="locStammDaten" role="tabpanel" aria-labelledby="locStammDaten-tab">
+                    <div class="tab-pane fade show active p-2 " id="Stammdaten" role="tabpanel" aria-labelledby="Stammdaten-tab">
                         <form action="{{ route('location.update',['location'=>$location->id]) }}" method="post">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -106,8 +109,6 @@
                                         <label for="l_beschreibung">Beschreibung</label>
                                         <textarea name="l_beschreibung" id="l_beschreibung" class="form-control" rows="3">{{ $location->l_beschreibung ?? '' }}</textarea>
                                     </div>
-
-
                                 </div>
                                 <div class="col-lg-4">
                                     <h2 class="h5">Anschrift</h2>
@@ -210,6 +211,104 @@
                             <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> Stammdaten speichern</button>
                         </form>
                     </div>
+                    <div class="tab-pane fade p-2" id="Anforderungen" role="tabpanel" aria-labelledby="Anforderungen-tab">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <h2 class="h5">Anforderung auswählen</h2>
+                                <form action="{{ route('addLocationAnforderung') }}#Anforderungen" method="post">
+                                    @csrf
+                                    <input type="hidden" name="location_id" id="id_location_anforderung" value="{{ $location->id }}">
+                                    <input type="hidden" name="an_name_kurz" id="name_anforderung">
+                                    <x-selectfield id="anforderung_id" label="Anforderung wählen">
+                                        <option value="">bitte wählen</option>
+                                        @foreach (App\Anforderung::all() as $anforderung)
+                                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                    <button class="btn btn-primary btn-block mt-1">Anforderung zuordnen</button>
+                                    <div class="card p-2 my-2" id="produktAnforderungText">
+                                        <x-notifyer>Details zu Anforderung</x-notifyer>
+                                    </div>
+                                </form>
+                                @error('anforderung_id')
+                                <div class="alert alert-dismissible fade show alert-info mt-5" role="alert">
+                                    Bitte eine Anforderung auswählen!
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-8">
+                                <h2 class="h5">Anforderungen</h2>
+                                @php
+                                    $Anforderung = App\Anforderung::all();
+                                @endphp
+
+                                @forelse (App\LocationAnforderung::where('location_id',$location->id)->get() as $produktAnforderung)
+                                    @if ($produktAnforderung->anforderung_id!=0)
+                                        <div class="card p-2 mb-2">
+                                            <dl class="row lead">
+                                                <dt class="col-sm-4">Verordnung</dt>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Anforderung</dt>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Bezeichnung</dt>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Intervall</dt>
+                                                <dd class="col-sm-8">
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                </dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Beschreibung</dt>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-sm-4">
+                                                    {{ ($produktAnforderung->Anforderung->AnforderungControlItem->count()>1) ? 'Vorgänge' : 'Vorgang' }}
+                                                </dt>
+                                                <dd class="col-sm-8">
+                                                    <ul class="list-group">
+
+                                                        @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
+                                                            <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                            <nav class="border-top mt-2 pt-2 d-flex justify-content-end">
+                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="an_name_kurz" id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}">
+                                                    <input type="hidden" name="id" id="id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produktAnforderung->id }}">
+                                                    <input type="hidden" name="location_id" id="location_id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $location->id }}">
+                                                    <button class="btn btn-sm btn-outline-primary">löschen</button>
+                                                </form>
+                                            </nav>
+                                        </div>
+                                    @endif
+                                @empty
+                                    <x-notifyer>Bislang sind keine Anforderungen verknüpft!</x-notifyer>
+                                @endforelse
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
                     <div class="tab-pane fade" id="locGebauede" role="tabpanel" aria-labelledby="locGebauede-tab">
                         <div class="row">
                             <div class="col">
@@ -254,7 +353,7 @@
                                         <span class="small text-primary">Gebäudetyp</span>
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">Neues Gebäude anlegen</button>
+                                        <button type="submit" class="btn btn-primary" >Neues Gebäude anlegen</button>
                                     </div>
                                 </form>
                                 @if ($location->Building->count()>0)
@@ -292,17 +391,44 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('building.show',$building) }}" class="btn-outline-secondary btn btn-sm" title="Gebäudedaten ansehen"><i class="fas fa-chevron-right"></i></a>
-                                                    @if ($building->rooms()->count()===0)
-                                                        <button type="button" class="btn btn-outline-dark btn-sm btnDeleteBuildig" data-id="{{ $building->id }}" title="Gebäude löschen"><i class="far fa-trash-alt"></i></button>
-                                                        <form action="{{ route('building.destroy',$building->id) }}" id="frmDeleteBuildig_{{ $building->id }}" target="_blank">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <input type="hidden" name="id" id="id_{{ $building->id }}" value="{{ $building->id }}">
-                                                            <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $building->id }}" value="locaion">
-                                                            <input type="hidden" name="b_name_kurz" id="b_name_kurz{{ $building->b_name_kurz }}" value="{{ $building->r_name_kurz }}">
-                                                        </form>
-                                                    @endif
+                                                    <div class="btn-group dropleft">
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                                id="editObjekt{{ $building->id }}"
+                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                        >
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="editObjekt{{ $building->id }}">
+                                                            <a href="{{ route('building.show',$building) }}"
+                                                               class="dropdown-item d-flex justify-content-between align-items-center"
+                                                               title="Gebäudedaten ansehen"
+                                                            >
+                                                                Öffnen <i class="fas fa-angle-right"></i>
+                                                            </a>
+                                                            <a href="#" class="btnDeleteBuildig dropdown-item d-flex justify-content-between align-items-center"
+                                                               data-id="{{ $building->id }}"
+                                                            >
+                                                                Löschen
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </a>
+                                                            <a href="#"
+                                                               class="dropdown-item d-flex justify-content-between align-items-center copyBuilding {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
+                                                               data-objid="{{ $building->id }}"
+                                                            >Kopieren
+                                                                <i class="fas fa-copy"></i>
+                                                            </a>
+                                                            @if ($building->rooms()->count()===0)
+                                                                <form action="{{ route('building.destroy',$building->id) }}#locGebauede" id="frmDeleteBuildig_{{ $building->id }}" target="_blank">
+                                                                    @csrf
+                                                                    @method('delete')
+                                                                    <input type="hidden" name="id" id="id_{{ $building->id }}" value="{{ $building->id }}">
+                                                                    <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $building->id }}" value="locaion">
+                                                                    <input type="hidden" name="b_name_kurz" id="b_name_kurz{{ $building->b_name_kurz }}" value="{{ $building->r_name_kurz }}">
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -346,6 +472,43 @@
         </script>
     @endif
     <script>
+
+        $('#anforderung_id').change( () => {
+
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getAnforderungData') }}",
+                data: {id:$('#anforderung_id :selected').val()},
+                success: (res) => {
+                    const text = (res.an_name_text===null) ? '-' : res.an_name_text;
+                    $('#name_anforderung').val(res.an_name_kurz);
+                    $('#produktAnforderungText').html(`
+                         <dl class="row">
+                            <dt class="col-sm-4">Verordnung</dt>
+                            <dd class="col-sm-8">${res.verordnung.vo_name_kurz}</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-4">Anfoderung</dt>
+                            <dd class="col-sm-8">${res.an_name_kurz}</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-4">Bezeichnung</dt>
+                            <dd class="col-sm-8">${res.an_name_lang}</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-4">Intervall</dt>
+                            <dd class="col-sm-8">${res.an_control_interval}  ${res.control_interval.ci_name }</dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-4">Beschreibung</dt>
+                            <dd class="col-sm-8">${text}</dd>
+                        </dl>
+            `);
+                }
+            });
+        });
+
         $('.btnDeleteBuildig').click(function () {
             const buildingId = $(this).data('id');
             $.ajax({
@@ -355,6 +518,20 @@
                 data: $('#frmDeleteBuildig_'+buildingId).serialize(),
                 success: function (res) {
                     if(res) location.reload();
+
+                }
+            });
+        });
+
+        $('.copyBuilding').click(function () {
+            const id = $(this).data('objid');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('copyBuilding') }}",
+                data: {id},
+                success: (res) => {
+                    if (res>0) location.reload();
 
                 }
             });

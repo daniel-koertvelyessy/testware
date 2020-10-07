@@ -61,14 +61,17 @@
                     <tbody>
                     @forelse (App\Produkt::all() as $produkt)
                         <tr>
-                            <td>
+                            <td style="vertical-align: middle">
                                 {{ $produkt->prod_nummer }}
                             </td>
-                            <td>
+                            <td style="vertical-align: middle">
                                 {{ $produkt->prod_name_lang }}
                             </td>
                             <td>
-                                <a href="#" data-produktid="{{ $produkt->id }}" class="setProduktAsTemplate">verwenden</a>
+                                <button
+                                    data-produktid="{{ $produkt->id }}"
+                                    data-produktname="{{ $produkt->prod_name_lang }}"
+                                    class="btn btn-sm btn-outline-primary setProduktAsTemplate">verwenden</button>
                             </td>
                         </tr>
                     @empty
@@ -135,6 +138,7 @@
 
         $('.setProduktAsTemplate').click(function () {
             $('#produkt_id').val($(this).data('produktid'));
+            $('#setNewEquipmentFromProdukt').val($(this).data('produktname'));
             document.getElementById('createEquipmentFromProdukt').submit()
         });
 

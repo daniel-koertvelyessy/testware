@@ -68,7 +68,11 @@
                             <x-textfield id="ma_com_1" label="Com 1" />
                         </div>
                     </div>
-                    <x-btnMain>Mitarbeiter anlegen <span class="fas fa-download"></span></x-btnMain>
+                    @if (env('app.makeobjekte') )
+                        <x-btnMain>Mitarbeiter anlegen <span class="fas fa-download"></span></x-btnMain>
+                    @else
+                        <x-btnMainDisabled>Mitarbeiter anlegen <span class="fas fa-download"></span></x-btnMainDisabled>
+                    @endif
                 </form>
             </div>
         </div>

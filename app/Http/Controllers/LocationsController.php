@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\AddressType;
 use App\Adresse;
+use App\AnforderungControlItem;
 use App\Location;
 use App\Building;
+use App\LocationAnforderung;
 use App\Profile;
 use App\Standort;
 use Illuminate\Contracts\Foundation\Application;
@@ -75,7 +77,7 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-//dd($request);
+
         if ($request->adresse_id === NULL){
 
             $a = $this->validateInitialAdresse();
@@ -161,8 +163,8 @@ class LocationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Location $location
-     * @return Response
+     * @param  Request $request
+     * @return bool
      */
     public function destroyLocationAjax(Request $request)
     {
@@ -174,6 +176,47 @@ class LocationsController extends Controller
         } else {
             return false;
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Request  $request
+     * @param  Location $location
+     * @return RedirectResponse
+     */
+    public function addLocationAnforderung(Request $request,location $location)
+    {
+
+
+        LocationAnforderung::create($this->validateLocationAnforderung());
+
+//
+//        if (AnforderungsController::getACI($request->anforderung_id)>0){
+//
+//        }
+
+
+        $request->session()->flash('status', 'Die Anforderung <strong>' . $request->an_name_kurz . '</strong> wurde dem Standort angefügt!');
+
+
+
+
+        return redirect()->back();
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Location $location
+     * @return Application|Factory|View
+     */
+    public function deleteLocationAnforderung(Request $request,location $location)
+    {
+
+
+
     }
 
     /**
@@ -203,7 +246,16 @@ class LocationsController extends Controller
             'ad_anschrift_ort' => 'required'
         ]);
     }
-
+    /**
+     * @return array
+     */
+    public function validateLocationAnforderung(): array
+    {
+        return request()->validate([
+            'anforderung_id' => 'required',
+            'location_id' => 'required',
+        ]);
+    }
 
     /**
      * @return array

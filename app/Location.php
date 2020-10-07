@@ -69,6 +69,11 @@ class Location extends Model
         return $this->hasMany(Building::class);
     }
 
+    public function LocationAnforderung()
+    {
+        return $this->hasMany(LocationAnforderung::class);
+    }
+
     static function checkStatus()
     {
         if (rand(1,3) === 1)

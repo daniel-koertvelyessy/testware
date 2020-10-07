@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-
     <div class="container-fluid">
         <div class="row">
             <x-dashborarditem>
@@ -66,6 +65,7 @@
                         if ($per <=90 && $per >= 80 ) $class = 'bg-warning text-light';
                         if ($per < 80 ) $class = 'bg-danger text-light';
                         ?>
+
                         <div class="small bm-2 p-2">Standort: {{ $location->l_name_kurz }}
                             <div class="progress" style="height: 12px;">
                                 <div class="progress-bar {{ $class }}" style="width: {{ $per }}%;" role="progressbar" aria-valuenow="{{ $per }}" aria-valuemin="0" aria-valuemax="100">{{ $per }}%</div>
