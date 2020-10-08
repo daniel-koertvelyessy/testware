@@ -32,52 +32,52 @@
                             <span class="icon"><i class="fas fa-industry"></i></span>
                             <span class="branding-bar text-center">Standorte</span>
                         </a>
-                        @if (\App\Lizenz::checkNumObjectsOverflow() )
+                      {{--  @if (\App\Lizenz::checkNumObjectsOverflow() )
                             <span class="tile-small-disabled rounded" data-role="tile" data-toggle="tooltip" data-placement="top">
                                 <span class="icon"><i class="far fa-plus-square"></i></span>
                                 <span class="branding-bar text-center">Neu</span>
                             </span>
-                        @else
+                        @else--}}
                             <a class="tile-small rounded" data-role="tile">
                                 <span class="icon"><i class="far fa-plus-square"></i></span>
                                 <span class="branding-bar text-center">Neu</span>
                             </a>
-                        @endif
+{{--                        @endif--}}
 
                         <a href="{{ route('building.index') }}" class="tile-small rounded" data-role="tile" aria-label="Standorte">
                             <span class="icon"><i class="far fa-building"></i></span>
                             <span class="branding-bar text-center">Gebäude</span>
                         </a>
 
-                        @if (\App\Lizenz::checkNumObjectsOverflow() )
+                     {{--   @if (\App\Lizenz::checkNumObjectsOverflow() )
                             <span class="tile-small-disabled rounded" data-role="tile" data-toggle="tooltip" data-placement="top">
                                 <span class="icon"><i class="far fa-plus-square"></i></span>
                                 <span class="branding-bar text-center">Neu</span>
                             </span>
-                        @else
+                        @else--}}
                             <a href="{{ route('building.create') }}" class="tile-small rounded" data-role="tile">
                                 <span class="icon"><i class="far fa-plus-square"></i></span>
                                 <span class="branding-bar text-center">Neu</span>
                             </a>
-                        @endif
+{{--                        @endif--}}
                         <a href="{{ route('room.index') }}" class="tile-small rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-door-open"></i></span>
                             <span class="branding-bar text-center">Räume</span>
                         </a>
 
 
-                        @if (\App\Lizenz::checkNumObjectsOverflow() )
+{{--                        @if (\App\Lizenz::checkNumObjectsOverflow() )--}}
 
-                            <span class="tile-small-disabled rounded" data-role="tile" data-toggle="tooltip" data-placement="top">
-                                <span class="icon"><i class="far fa-plus-square"></i></span>
-                                <span class="branding-bar text-center">Neu</span>
-                            </span>
-                        @else
+{{--                            <span class="tile-small-disabled rounded" data-role="tile" data-toggle="tooltip" data-placement="top">--}}
+{{--                                <span class="icon"><i class="far fa-plus-square"></i></span>--}}
+{{--                                <span class="branding-bar text-center">Neu</span>--}}
+{{--                            </span>--}}
+{{--                        @else--}}
                             <a href="{{ route('room.create') }}" class="tile-small rounded" data-role="tile">
                                 <span class="icon"><i class="far fa-plus-square"></i></span>
                                 <span class="branding-bar text-center">Neu</span>
                             </a>
-                        @endif
+{{--                        @endif--}}
                     </nav>
                 </section>
             </div>

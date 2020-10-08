@@ -1,0 +1,152 @@
+{
+    "Willkommen": "Welcome",
+    "Seite": "Page",
+    "Mein Konto": "My account",
+    "Überspringe Navigationsbereich": "Jump to main content",
+
+
+    "Systemnachricht": "System message",
+    "Nachrichten": "Inbox",
+    "Bildschrim sperren": "Lock screen",
+    "Abmelden": "Logout now",
+    "Bitte anmelden": "Please login",
+    "erforderliches Feld": "Required field",
+    "Datum" : "Date",
+
+
+    "max :max Zeichen": "max :max characters",
+    ":user führte folgende Änderungen durch": "Following changes were made by :user",
+    "Feld :fld geändert": "Field :lfd changed",
+    "Feld :fld von :old in :new geändert": "Field :fld changed from :old into :new",
+    "Es wurden keine Änderungen festgestellt.": "No changes occurred.",
+    "Das Gerät <strong>:equipName</strong> wurde aktualisiert!": "Equipment <strong>:equipName</strong> was updated!",
+
+
+    "Geräteübersicht": "Equipment overview",
+    "Stammdaten": "Head data",
+    "Anforderungen": "Requiremens",
+    "Dokumente": "Documents",
+    "Logs": "Logs",
+    "Übersicht / Stammdaten": "Overview head data",
+    "QR Code": "QR Code",
+
+
+    "Hersteller": "Manufaturer",
+    "Prüfung/Wartung erfassen": "Initiate control",
+    "Gerätestatus": "Equipment status",
+    "Datenblatt": "Datasheet",
+    "Anleitungen": "Manuals",
+    "Anleitung": "Manual",
+    "keine Anleitungen hinterlegt": "no manuals found",
+
+    "Standort": "Location",
+    "Gebäude": "Building",
+    "Raum": "Room",
+    "Räume": "Rooms",
+    "Stellplatz": "Place",
+
+
+    "Inventarnummer": "Inventory number",
+    "Inbetriebnahme am": "Commissioned on",
+    "Letzte Prüfung": "Last control on",
+    "Seriennummer": "Serial number",
+    "Aufstellplatz / Standort": "Location / place",
+    "Geräte Status": "Equipment status",
+    "keine Prüfberichte hinterlegt": "No control reports found",
+
+    "Verordnung": "Regulation",
+    "Anforderung": "Requirement",
+    "Intervall": "Interval",
+    "Wochen": "Weeks",
+    "Woche": "Week",
+    "Monat": "Month",
+    "Monate": "Months",
+    "letzte": "Last",
+    "fällig": "Due",
+    "Vorlaufzeit": "Lead time",
+
+    "Beschreibung": "Description",
+    "Bislang sind keine Anforderungen verknüpft": "No requirements associated",
+    "Datei": "File",
+    "Typ": "Type",
+    "Größe": "Size",
+
+    "Vorgänge": "Control event",
+    "Vorgang": "Control event",
+
+    "Keine Dateien zum Produkt gefunden": "No files found for this product",
+    "Keine Dateien zum Gerät gefunden": "No files found for this equipment",
+    "Keine Daten zum Gerät gefunden": "No data found for this equipment",
+    "Zeit": "Time",
+    "Ist": "Actual value",
+    "Soll": "Target value",
+    "pass": "Pass",
+    "Produkt": "Product",
+    "Historie": "History",
+
+
+    "Überspringe Seiten-Navigation": "Jump to main section",
+    "Bildschirm gesperrt": "Screen is locked",
+    "Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren": "Please enter your PIN to unlock the screen!",
+
+    "Suche": "Search",
+    "Portal": "Portal",
+
+
+    "Verwaltung": "Administration",
+    "Organisation": "Organization",
+    "Produkte": "Products",
+    "Admin": "Admin",
+    "Berichte": "Reports",
+    "Anwendungen": "Applications",
+    "App": "Apps",
+    "Externe Apps": "External Apps",
+
+
+    "Standortbericht": "Location report",
+    "Datenblatt - Gerät": "Datasheet - Equipment",
+    "Druckdatum": "Printed at",
+    "Lizenz-Nr": "License-No",
+    "Dokument-Nr": "Document-No",
+
+
+
+
+    "Standorte": "Locations",
+    "Dashboard": "Dashboard",
+    "Prüfungen": "Controling",
+
+    "Gerät": "Equipment",
+    "Geräte": "Equipment",
+    "Gerät :equip bearbeiten": "Edit :equip",
+    "Gerät speichern": "Store equipment data",
+
+    "Gerät bearbeiten": "Edit equipment",
+
+
+    "Datei hinzufügen": "Upload file",
+    "Datenblatt Drucken": "Print datasheet",
+    "QR-Code Drucken": "print QR-Code",
+    "Produkt bearbeiten": "Edit related product",
+
+    "Dokument an Gerät anhängen": "Add document to equipment",
+    "Dokument Typ": "Document type",
+    "Bezeichnung": "Description",
+    "Datei Informationen": "File information",
+    "Datei wählen": "Browse",
+    "Abbruch": "Canel",
+    "Dokument hochladen": "Upload Document",
+
+
+    "App aktivieren": "Activate app",
+    "Dokumentation": "Documentation",
+    "Hilfe anfordern": "Request support",
+
+
+
+    "Jetzt anmelden": "Login now",
+    "Angemeldet bleiben": "Remember me",
+    "Anmeldung": "Login",
+    "Passwort": "Password",
+    "E-Mail Adresse": "E-Mail Address"
+}

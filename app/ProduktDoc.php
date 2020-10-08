@@ -35,5 +35,9 @@ class ProduktDoc extends Model
     public function url($pfad) {
         return Storage::url($pfad);
     }
+
+    public function getProdDokNum($produkt_id) {
+        $ty = ProduktDoc::where('produkt_id',$produkt_id)->andWhere('document_type_id',1)->get();
+    }
 }
 

@@ -1,4 +1,4 @@
-@extends('layout.layout-main')
+@extends('layout.layout-admin')
 
 @section('mainSection', 'testWare')
 

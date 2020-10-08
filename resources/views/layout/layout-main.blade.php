@@ -32,7 +32,7 @@
                     @yield('menu')
                     @yield('actionMenuItems')
                 </ul>
-
+                <x-accountNav/>
             </div>
         </div>
     </nav>
@@ -80,70 +80,34 @@
     </div>
 </div>
 @yield('modals')
-@auth
-    <footer class="page-footer fixed-bottom bg-light px-1 border-top">
-        <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">
-                <span class="d-none d-md-inline" >© 2020 Copyright:</span>
-                <a href="https://bitpack.io" target="_blank"> bitpack.io GmbH</a>
-                <span class="text-muted d-none d-md-inline">layout-login V1.4</span>
-            </div>
-            <div class="col-auto">
-                <div class="btn-group dropup">
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}
-                    </button>
-                    <div class="dropdown-menu">
-                        <ul class="list-unstyled">
-                            <li>
-                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#lockUserView"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
-                            </li>
-                            <li>
-                                <a
-                                    class="dropdown-item"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
-                            </li>
-                        </ul>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                </div>
-            </div>
+@if ($errors->any())
+    <div class="alert alert-danger fixed-bottom ">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<footer class="page-footer fixed-bottom px-1">
+    <div class="row align-items-center">
+        <div class="col-auto small mr-auto pl-3">© 2020 :
+            <a href="https://bitpack.io/" title="bitpack.io">
+                <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
+            </a>
+            GmbH
         </div>
-    </footer>
-@else
-    <footer class="page-footer fixed-bottom px-1">
-        <div class="row align-items-center">
-            <div class="col-auto small mr-auto pl-3">© 2020 :
-                <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span> GmbH
-            </div>
-        </div>
-    </footer>
-@endauth
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    </div>
+</footer>
+@yield('autoloadscripts')
+{{--<script type="text/javascript"  src="{{ asset('plugins/typehead/dist/jquery.typeahead.min.js') }}"></script>--}}
+{{--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>--}}
+{{--<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>--}}
 <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
-{{-- <script type="text/javascript" src="js/autocomplete.js"></script> --}}
-
-<script type="text/javascript" src="{{ url('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
-<script type="text/javascript" src="{{asset('js/main.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.de.min.js" integrity="sha512-3V4cUR2MLZNeqi+4bPuXnotN7VESQC2ynlNH/fUljXZiQk1BGowTqO5O2gElABNMIXzzpYg5d8DxNoXKlM210w==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+
 @if (session()->has('status'))
     <script>
         jQuery('.toast').toast('show');

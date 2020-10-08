@@ -118,7 +118,7 @@ class AdminController extends Controller
         // $data->update($request->systemTheme);
 
         $request->session()->flash('status', 'Das Theme wurde aktualisiert!');
-        return redirect(route('systems'));
+        return redirect()->back();
     }
 
     public function addObjektAnforderung(Request $request) {

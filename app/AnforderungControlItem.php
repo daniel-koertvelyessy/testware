@@ -11,5 +11,8 @@ class AnforderungControlItem extends Model
     public function Anforderung() {
         return $this->belongsTo(Anforderung::class);
 }
+    public function ControlEquipment() {
+        return $this->belongsTo(ControlEquipment::class);
+    }
 
 }

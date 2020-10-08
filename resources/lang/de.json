@@ -1,0 +1,161 @@
+{
+
+    "Überspringe Navigationsbereich": "Überspringe Navigationsbereich",
+    "Willkommen": "Willkommen",
+    "Mein Konto": "Mein Konto",
+    "Systemnachricht": "Systemnachricht",
+    "Nachrichten": "Nachrichten",
+    "Bildschrim sperren": "Bildschrim sperren",
+    "Abmelden": "Abmelden",
+    "Seite": "Seite",
+    "Datum": "Datum",
+    "Bitte anmelden": "Bitte anmelden",
+    "erforderliches Feld": "erforderliches Feld",
+    "Es wurden keine Änderungen festgestellt.": "Es wurden keine Änderungen festgestellt.",
+    "Das Gerät <strong>:equipName</strong> wurde aktualisiert!": "Das Gerät <strong>:equipName</strong> wurde aktualisiert!",
+
+
+    "max :max Zeichen": "max :max Zeichen",
+    ":user führte folgende Änderungen durch": ":user führte folgende Änderungen durch",
+    "Feld :fld geändert": "Feld :fld geändert",
+    "Feld :fld von :old in :new geändert": "Feld :fld von :old in :new geändert",
+
+    "Geräteübersicht": "Geräteübersicht",
+    "Stammdaten": "Stammdaten",
+    "Anforderungen": "Anforderungen",
+    "Dokumente": "Dokumente",
+    "Logs": "Logs",
+    "Übersicht / Stammdaten": "Übersicht / Stammdaten",
+
+
+    "Hersteller": "Hersteller",
+    "Prüfung/Wartung erfassen": "Prüfung/Wartung erfassen",
+    "Gerätestatus": "Gerätestatus",
+    "Anleitungen": "Anleitungen",
+    "Anleitung": "Anleitung",
+    "keine Anleitungen hinterlegt": "keine Anleitungen hinterlegt",
+
+
+    "Standort": "Standort",
+    "Gebäude": "Gebäude",
+    "Raum": "Raum",
+    "Räume": "Räume",
+    "Stellplatz": "Stellplatz",
+
+
+
+    "Inventarnummer": "Inventarnummer",
+    "Inbetriebnahme am": "Inbetriebnahme am",
+    "Seriennummer": "Seriennummer",
+    "Aufstellplatz / Standort": "Aufstellplatz / Standort",
+    "Geräte Status": "Geräte Status",
+    "Letzte Prüfung": "Letzte Prüfung",
+
+    "keine Prüfberichte hinterlegt": "keine Prüfberichte hinterlegt",
+
+    "Verordnung": "Verordnung",
+    "Anforderung": "Anforderung",
+    "Intervall": "Intervall",
+    "Wochen": "Wochen",
+    "Woche": "Woche",
+    "Monat": "Monat",
+    "Monate": "Monate",
+    "letzte": "Letzte",
+    "fällig": "Fällig",
+    "Vorlaufzeit": "Vorlaufzeit",
+
+
+    "Beschreibung": "Beschreibung",
+    "Bislang sind keine Anforderungen verknüpft": "Bislang sind keine Anforderungen verknüpft",
+    "Datei": "Datei",
+    "Typ": "Typ",
+    "Größe": "Größe",
+    "QR Code": "QR Code",
+    "Keine Dateien zum Produkt gefunden": "Keine Dateien zum Produkt gefunden",
+    "Keine Dateien zum Gerät gefunden": "Keine Dateien zum Gerät gefunden",
+    "Keine Daten zum Gerät gefunden": "Keine Daten zum Gerät gefunden",
+    "Produkt": "Produkt",
+    "Historie": "Historie",
+
+
+    "Zeit": "Zeit",
+    "Ist": "Ist",
+    "Soll": "Soll",
+    "pass": "pass",
+
+    "Vorgänge": "Kontrollvorgänge",
+    "Vorgang": "Kontrollvorgang",
+
+
+
+
+
+    "Überspringe Seiten-Navigation": "Überspringe Seiten-Navigation",
+    "Bildschirm gesperrt": "Bildschirm gesperrt",
+    "Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren": "Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren",
+
+
+
+    "Suche": "Suche",
+    "Portal": "Portal",
+    "Organisation": "Organisation",
+    "Produkte": "Produkte",
+    "Admin": "Admin",
+    "Berichte": "Berichte",
+    "Anwendungen": "Anwendungen",
+    "App": "App",
+    "Externe Apps": "Externe Apps",
+
+
+    "Standortbericht": "Standortbericht",
+    "Standorte": "Standorte",
+    "Verwaltung": "Verwaltung",
+    "Dashboard": "Dashboard",
+    "Prüfungen": "Prüfungen",
+
+
+    "Gerät": "Gerät",
+    "Geräte": "Geräte",
+
+    "Gerät bearbeiten": "Gerät bearbeiten",
+    "Gerät geändert": "Gerät geändert",
+    "Gerät speichern": "Gerät speichern",
+    "Gerät :equip bearbeiten": "Gerät :equip bearbeiten",
+
+
+    "Datei hinzufügen": "Datei hinzufügen",
+    "Datenblatt Drucken": "Datenblatt Drucken",
+    "QR-Code Drucken": "QR-Code Drucken",
+    "Produkt bearbeiten": "Produkt bearbeiten",
+    "Druckdatum": "Druckdatum",
+    "Lizenz-Nr": "Lizenz-Nr",
+    "Dokument-Nr": "Dokument-Nr",
+    "Datenblatt": "Datenblatt",
+
+
+    "Dokument an Gerät anhängen": "Dokument an Gerät anhängen",
+    "Dokument Typ": "Dokument Typ",
+    "Bezeichnung": "Bezeichnung",
+    "Datei Informationen": "Datei Informationen",
+    "Datei wählen": "Datei wählen",
+    "Abbruch": "Abbruch",
+    "Dokument hochladen": "Dokument hochladen",
+
+
+
+
+
+
+    "App aktivieren": "App aktivieren",
+    "Hilfe anfordern": "Hilfe anfordern",
+    "Dokumentation": "Dokumentation",
+
+
+
+
+    "Jetzt anmelden": "Jetzt anmelden",
+    "Angemeldet bleiben": "Angemeldet bleiben",
+    "Anmeldung": "Anmeldung",
+    "Passwort": "Passwort",
+    "E-Mail Adresse": "E-Mail Adresse"
+}

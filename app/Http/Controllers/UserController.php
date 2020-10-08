@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -73,7 +74,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+
+        $request->session()->put('locale',$request->userlocale);
         $user->update($this->validateUser());
+        $request->session()->flash('status', 'Dein Konto wurde aktualisiert!');
         return redirect()->back();
     }
 
@@ -94,10 +98,24 @@ class UserController extends Controller
     public function validateUser(): array
     {
         return request()->validate([
+            'email' => 'bail|email|required',
+            'username' => '',
+            'name' => 'required',
+//            'password' => 'required',
+
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNewUser(): array
+    {
+        return request()->validate([
             'email' => 'bail|email|unique:users,email|required',
             'username' => 'bail|unique:users,username',
             'name' => 'required',
-//            'password' => 'required',
+            //            'password' => 'required',
 
         ]);
     }

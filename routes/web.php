@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+App::setLocale(
+    session()->pull('locale', 'de')
+);
 Route::get('/', function () {
     return view('portal-main');
 });
@@ -70,6 +73,13 @@ Route::get('/makePDF/{view}/{title}', function ($view, $title) {
     return App\Http\Controllers\PdfGenerator::makePDF($view, $title);
 })->name('makePDF');
 
+Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
+    return App\Http\Controllers\PdfGenerator::makePDFEquipmentLabel($equipment);
+})->name('makePDFEquipmentLabel');
+
+Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
+    return App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
+})->name('makePDFEquipmentDataSheet');
 
 Auth::routes();
 

@@ -43,7 +43,7 @@ class EquipmentDocController extends Controller
             $file = $request->file('equipDokumentFile');
 
             $validation = $request->validate([
-                'equipDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg' // size:2048 => 2048kB
+                'equipDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240' // size:2048 => 2048kB
             ]);
 
 //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());

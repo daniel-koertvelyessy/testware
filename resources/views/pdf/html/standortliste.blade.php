@@ -3,9 +3,9 @@
 @section('content')
     @foreach (App\Location::all() as $loc)
         <div nobr="true" >
-            <h2>Standort : {{ $loc->l_name_kurz }}</h2>
+            <h2>{{__('Standort')}} : {{ $loc->l_name_kurz }}</h2>
             <p style="font-size: 11pt">{{ $loc->l_name_lang }}</p>
-            <p><strong style="font-size: 9pt">Beschreibung:</strong><br>{{ $loc->l_beschreibung }}</p>
+            <p><strong style="font-size: 9pt">{{__('Beschreibung')}}:</strong><br>{{ $loc->l_beschreibung }}</p>
             <table  cellspacing="0" cellpadding="2" border="0">
                 <thead>
                 <tr style="font-size: 9pt; font-weight: bold;">

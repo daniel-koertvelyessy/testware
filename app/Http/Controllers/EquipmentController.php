@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EquipmentController extends Controller
@@ -145,11 +146,11 @@ class EquipmentController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Equipment $equipment
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function edit(Equipment $equipment)
     {
-        //
+        return view('testware.equipment.edit',['equipment' => $equipment]);
     }
 
     /**
@@ -157,11 +158,109 @@ class EquipmentController extends Controller
      *
      * @param  Request   $request
      * @param  Equipment $equipment
-     * @return Response
+     * @return RedirectResponse
      */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+
+        $feld='';
+        $flag = false;
+        $upd = Equipment::find($request->id);
+
+
+
+        if(!isset($request->setFieldReadWrite) && $upd->eq_inventar_nr === $request->eq_inventar_nr){
+            $equipment->update($this->validateEquipment());
+        } else if(isset($request->setFieldReadWrite) && $upd->eq_inventar_nr === $request->eq_inventar_nr) {
+            $equipment->update($this->validateEquipment());
+        } else {
+            $equipment->update($this->validateNewEquipment());
+        }
+
+        $feld .= __(':user führte folgende Änderungen durch',['user'=>Auth::user()->username]). ' => ';
+        if ($upd->eq_serien_nr != $request->eq_serien_nr) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Seriennummer'),
+                'old' => $upd->eq_serien_nr,
+                'new' => $request->eq_serien_nr,
+                    ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->eq_qrcode != $request->eq_qrcode) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('QR Code'),
+                'old' => $upd->eq_qrcode,
+                'new' => $request->eq_qrcode,
+                    ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->eq_ibm != $request->eq_ibm) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Inbetriebnahme am'),
+                'old' => $upd->eq_ibm,
+                'new' => $request->eq_ibm,
+                    ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->eq_text != $request->eq_text) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Beschreibung'),
+                'old' => $upd->eq_text,
+                'new' => $request->eq_text,
+                    ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->equipment_state_id != $request->equipment_state_id) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Geräte Status'),
+                'old' => $upd->equipment_state_id ,
+                'new' => $request->equipment_state_id,
+                    ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->standort_id != $request->standort_id) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Aufstellplatz / Standort'),
+                'old' => $upd->standort_id,
+                'new' => $request->standort_id,
+                ]) . ' | ';
+            $flag = true;
+        }
+        if ($upd->produkt_id != $request->produkt_id) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                'fld' => __('Produkt'),
+                'old' => $upd->produkt_id,
+                'new' => $request->produkt_id,
+                    ]) . ' | ';
+            $flag = true;
+        }
+
+        if ($flag){
+
+            $eh = new EquipmentHistory();
+
+            $eh->eqh_eintrag_kurz = __('Gerät geändert');
+            $eh->eqh_eintrag_text = $feld;
+            $eh->equipment_id = $equipment->id;
+            $eh->save();
+            $request->session()->flash('status', __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!',['equipName'=>request('eq_inventar_nr') ]));
+
+
+
+            return redirect()->back();
+        } else {
+
+            $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
+            return redirect()->back();
+        }
+
+
+
+
+
+
+
+
     }
 
     /**
@@ -182,6 +281,23 @@ class EquipmentController extends Controller
     {
         return request()->validate([
             'eq_inventar_nr' => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
+            'eq_serien_nr' => 'max:100',
+            'eq_qrcode' => '',
+            'eq_text' => '',
+            'eq_ibm' => 'date',
+            'produkt_id' => '',
+            'standort_id' => 'required',
+            'equipment_state_id' => 'required'
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateEquipment(): array
+    {
+        return request()->validate([
+            'eq_inventar_nr' => '',
             'eq_serien_nr' => 'max:100',
             'eq_qrcode' => '',
             'eq_text' => '',

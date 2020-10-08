@@ -1042,44 +1042,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-2" id="Belege" role="tabpanel" aria-labelledby="Belege-tab"></div>
-                    <div class="tab-pane fade p-2" id="Anzeige" role="tabpanel" aria-labelledby="Anzeige-tab">
-                        <form action="{{ route('updateUserTheme') }}" id="frmChangeUserTheme" name="frmChangeUserTheme" method="POST">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h2 class="h4">Darstellung Farben</h2>
 
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="id" id="frmChangeUserTheme-id" value="{{ Auth::user()->id }}">
-                                    <div class="form-group">
-                                        <label for="systemTheme">Farbschema auswählen</label>
-                                        <select name="systemTheme" id="systemTheme" class="custom-select">
-                                            <option value="https://bootswatch.com/4/yeti/bootstrap.min.css">Yeti</option>
-                                            <option value="https://bootswatch.com/4/minty/bootstrap.min.css">Mint</option>
-                                            <option value="https://bootswatch.com/4/flatly/bootstrap.min.css">Dunkel blau</option>
-                                            <option value="https://bootswatch.com/4/superhero/bootstrap.min.css">Hero blau</option>
-                                            {{--                                            <option value="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">TBS v5</option>--}}
-                                        </select>
-                                    </div>
-                                    <button type="button" class="btn btn-secondary btn-block" id="btnChangeDisplayTheme">Vorschau</button>
-
-                                </div>
-                                <div class="col-md-4">
-                                    <h2 class="h4">Darstellung Eingabemasken</h2>
-                                    <div class="custom-control custom-switch ml-3">
-                                        <input class="custom-control-input" type="checkbox" id="setUserDisplaySimpleView" name="setUserDisplaySimpleView">
-                                        <label class="custom-control-label" for="setUserDisplaySimpleView">Vereinfachte Anzeige von Formularen</label>
-                                    </div>
-
-                                    <div class="custom-control custom-switch ml-3">
-                                        <input class="custom-control-input" type="checkbox" id="setUserDisplayHelperText" name="setUserDisplayHelperText">
-                                        <label class="custom-control-label" for="setUserDisplayHelperText">Hilfetexte anzeigen</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary mt-5">Einstellungen für Benutzer speichern</button>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1100,12 +1063,7 @@
             $('.navTextHelper').html($(this).data('helpertext'));
         });
 
-        $('#btnChangeDisplayTheme').click(function () {
-            const theme = $('#systemTheme :selected').val();
-            console.log(theme);
-            $('#themeId').attr('href',theme);
 
-        });
 
         $('#loadAdressTypeItem').click(function () {
             $.ajax({

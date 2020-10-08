@@ -10,5 +10,5 @@
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror
-    <span class="small text-primary @error( $name??$id) d-none @enderror ">erforderliches Feld, max {{ $max??'20' }} Zeichen</span>
+    <span class="small text-primary @error( $name??$id) d-none @enderror ">{{__('erforderliches Feld')}}, {{ __('max :max Zeichen',['max'=>$max??'20']) }}</span>
 </div>

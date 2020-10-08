@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ session('locale') }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
     <title>@yield('pagetitle')</title>
 </head>
 <body>
-<a href="#app" class="sr-only">Überspringe gesamte Navigation</a>
+<a href="#app" class="sr-only">{{__('Überspringe gesamte Navigation')}}</a>
 <div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;" id="lockscreen" aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
@@ -33,49 +33,16 @@
                 @yield('actionMenuItems')
             </ul>
             <form class="d-flex ml-2" id="frmSrchInAdminBereich">
-                <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="Suche" aria-label="Suche" autocomplete="off">
+                <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off">
             </form>
-            @auth
-                <ul class="navbar-nav">
-                    <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
-                        <a class="nav-link " href="#" id="navbarUserAccount" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarUserAccount">
-                            <li>
-                                <a class="dropdown-item" href="/support"><i class="fas fa-phone-square"></i> Hilfe anfordern</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item " href="/"><i class="fas fa-desktop"></i> Portal</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="fas fa-inbox"></i> Nachrichten <span class="badge badge-light ">0</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" id="btnLockScreen"><i class="fas fa-user-lock"></i> Bildschrim sperren</a>
-                            </li>
-                            <li>
-                                <a
-                                    class="dropdown-item"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                ><i class="fas fa-sign-out-alt"></i> Abmelden </a>
-                            </li>
-                        </ul>
-
-
-                    </li>
-                </ul>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            @endauth
+           <x-accountNav/>
         </div>
     </nav>
     @if (session()->has('status'))
         <div class="toast fixed-top bg-light" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <img src="{{ url('img/icon/testWareLogo_FAV_Grey.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
-                <strong class="mr-auto">Systemnachricht</strong>
+                <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -91,7 +58,7 @@
 </header>
 
 <main id="app" class="mt-3 ">
-    <a href="#content" class="sr-only">Überspringe Seiten-Navigation</a>
+    <a href="#content" class="sr-only">{{__('Überspringe Seiten-Navigation')}}</a>
     <x-sidebar/>
     <a id="content"></a>
     @yield('content')
@@ -102,12 +69,12 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="lockUserViewLabel">Bildschirm gesperrt</h5>
+                <h5 class="modal-title" id="lockUserViewLabel">{{__('Bildschirm gesperrt')}}</h5>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-8">
-                        Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren
+                        {{__('Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren')}}
                     </div>
                     <div class="form-group col-md-4">
                         <label for="userSeinPIN" class="sr-only">PIN</label>
@@ -130,6 +97,15 @@
         </button>
     </div>
 @endif--}}
+@if ($errors->any())
+    <div class="alert alert-danger fixed-bottom ">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <footer class="page-footer fixed-bottom px-1">
     <div class="row align-items-center">
         <div class="col-auto small mr-auto pl-3">© 2020 :

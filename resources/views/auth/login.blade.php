@@ -1,5 +1,7 @@
 @extends('layout.layout-login')
-@section('pagetitle','Bitte anmelden!')
+@section('pagetitle')
+    {{ __('Bitte anmelden') }}!
+@endsection
 @section('content')
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center" style="height: 90vh;">
@@ -16,7 +18,7 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-group">
-                                <label for="email">{{ __('E-Mail Addresse') }}</label>
+                                <label for="email">{{ __('E-Mail Adresse') }}</label>
 
                                 <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
                                 @error('email')
@@ -46,13 +48,13 @@
                             </div>
                             <div class="form-group mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-sign-in-alt"></i> {{ __('Anmelden') }}
+                                    <i class="fas fa-sign-in-alt"></i> {{ __('Jetzt anmelden') }}
                                 </button>
                             </div>
 
                         </form>
                     </div>
-                    <div class="card-footer">
+{{--                    <div class="card-footer">
                         <a class="btn btn-sm btn-link" href="{{ route('register') }}">
                             <i class="fas fa-pen-alt"></i>  {{ __('Jetzt registrieren!') }}
                         </a>
@@ -61,7 +63,7 @@
                                 <i class="fas fa-question"></i>  {{ __('Passwort vergessen?') }}
                             </a>
                         @endif
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </div>

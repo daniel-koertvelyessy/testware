@@ -8,5 +8,5 @@
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror
-    <span class="small text-primary @error( $name??$id) d-none @enderror ">Datum JJJJ-MM-DD </span>
+    <span class="small text-primary @error( $name??$id) d-none @enderror ">{{__('Datum')}} JJJJ-MM-DD </span>
 </div>

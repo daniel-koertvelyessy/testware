@@ -51,7 +51,7 @@ class ProduktDocController extends Controller
             $file = $request->file('prodDokumentFile');
 
             $validation = $request->validate([
-                'prodDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg' // size:2048 => 2048kB
+                'prodDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240' // size:2048 => 2048kB
             ]);
 
 //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());

@@ -19,16 +19,15 @@
 <main id="app">
     @yield('content')
 </main>
-<footer class="page-footer fixed-bottom bg-light px-1">
+<footer class="page-footer fixed-bottom px-1">
     <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020 Copyright:
-            <a href="https://bitpack.io" target="_blank"> bitpack GmbH</a>
+        <div class="col-auto small mr-auto pl-3">© 2020
+            <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
         </div>
-        <div class="col-auto">
-            <span class="text-muted small">layout-login V1.8</span>
-        </div>
+
     </div>
 </footer>
+
 
 <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
