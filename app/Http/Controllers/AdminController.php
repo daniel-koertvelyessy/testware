@@ -754,11 +754,9 @@ class AdminController extends Controller
     {
         DocumentType::create($this->validateNewDokumentType());
         $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde angelegt!');
-        if (isset($request->origin)){
-                if ($request->origin === 'produkt') return redirect('/produkt/'.$request->produkt_id.'#matDoku');
-        } else {
-            return redirect(route('systems'));
-        }
+
+        return redirect()->back();
+
 
 
     }
@@ -775,7 +773,7 @@ class AdminController extends Controller
         $data = DocumentType::findOrFail($request->id);
         $data->update($this->validateDokumentType());
         $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return redirect()->back();
     }
 
     /**

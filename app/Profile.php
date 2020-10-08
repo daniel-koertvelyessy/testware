@@ -9,7 +9,7 @@ class Profile extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
+    protected array $fillable = [
         'id',
         'created_at',
         'updated_at',

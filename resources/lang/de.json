@@ -3,6 +3,38 @@
     "Überspringe Navigationsbereich": "Überspringe Navigationsbereich",
     "Willkommen": "Willkommen",
     "Mein Konto": "Mein Konto",
+    "Übersicht Benutzer": "Übersicht Benutzer",
+
+    "Übersicht": "Übersicht",
+    "Einstellungen": "Einstellungen",
+    "Benutzer": "Benutzer",
+    "Benutzername": "Benutzername",
+    "Übersicht Benutzer": "Übersicht Benutzer",
+    "Anmeldename": "Anmeldename",
+    "Erstellt": "Erstellt",
+    "Aktualisiert": "Aktualisiert",
+    "Gelöscht": "Gelöscht",
+    "Sprache einstellen": "Sprache einstellen",
+    "Nutzerdaten aktualisieren": "Nutzerdaten aktualisieren",
+    "Darstellung Farben": "Darstellung Farben",
+    "Farbschema auswählen" : "Farbschema auswählen",
+    "Vorschau" : "Vorschau",
+    "Darstellung Eingabemasken" :  "Darstellung Eingabemasken",
+    "Vereinfachte Anzeige von Formularen" : "Vereinfachte Anzeige von Formularen",
+    "Hilfetexte anzeigen" :  "Hilfetexte anzeigen",
+    "Einstellungen für Benutzer speichern" : "Einstellungen für Benutzer speichern",
+    "Passwort zurücksetzen" :  "Passwort zurücksetzen",
+    "Neues Passwort" : "Neues Passwort",
+    "Passwort setzen" :  "Passwort setzen",
+
+
+
+
+    "++++++++++++++++++++++++++" : "+++++++++++++++++++++++++++++++",
+
+
+    "Neu anlegen": "Neu anlegen",
+
     "Systemnachricht": "Systemnachricht",
     "Nachrichten": "Nachrichten",
     "Bildschrim sperren": "Bildschrim sperren",
@@ -88,13 +120,9 @@
 
 
 
-
-
     "Überspringe Seiten-Navigation": "Überspringe Seiten-Navigation",
     "Bildschirm gesperrt": "Bildschirm gesperrt",
     "Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren": "Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren",
-
-
 
     "Suche": "Suche",
     "Portal": "Portal",
@@ -105,7 +133,6 @@
     "Anwendungen": "Anwendungen",
     "App": "App",
     "Externe Apps": "Externe Apps",
-
 
     "Standortbericht": "Standortbericht",
     "Standorte": "Standorte",

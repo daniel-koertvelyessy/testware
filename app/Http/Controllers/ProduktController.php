@@ -151,6 +151,19 @@ class ProduktController extends Controller
         return redirect(route('produkt.index'));
     }
 
+    public function exportProduktToJson() {
+        return response(Produkt::with('ProduktKategorie',
+            'ProduktState',
+            'ProduktParam',
+            'ProduktAnforderung')->get() , 200)
+            ->header('Cache-Control', 'public')
+            ->header('Content-Description', 'File Transfer')
+            ->header('Content-Type',' application/json')
+            ->header('Content-Transfer-Encoding', 'binary')
+            ->header('Content-disposition', "attachment; filename="."testware_produkte_".time().".json");
+
+    }
+
     public function addProduktFirma(Request $request) {
 
         $address_id = false;

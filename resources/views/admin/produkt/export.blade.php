@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Produkt importieren &triangleright; Produkte @ bitpack GmbH
+    Produkt exportieren &triangleright; Produkte @ bitpack GmbH
 @endsection
 
 @section('mainSection')
@@ -17,14 +17,14 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Portal</a></li>
             <li class="breadcrumb-item"><a href="{{ route('produkt.index') }}">Produkte</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Import</li>
+            <li class="breadcrumb-item active" aria-current="page">Export</li>
         </ol>
 
     </nav>
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col">
                 <h1 class="h3">Produkte exportieren</h1>
@@ -32,9 +32,11 @@
         </div>
         <div class="row">
             <div class="col">
-                <form action="#" method="GET" name="frmExportProdukte">
+                <h2 class="h5">Als JSON Datei exportieren</h2>
 
-                </form>
+                <p class="lead">Komplett mit Produkt-Kategorie, Anforderungen und Parameterlisten</p>
+                <a href="{{ route('exportProduktToJson') }}" class="btn btn-outline-primary my-4">Komplett starten <i class="far fa-file-code"></i></a>
+
             </div>
         </div>
     </div>

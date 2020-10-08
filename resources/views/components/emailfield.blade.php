@@ -6,4 +6,4 @@
 @error($name??$id)
 <span class="text-danger small">{{ $message }}</span>
 @enderror
-<span class="small text-primary @error( $name??$id) d-none @enderror ">max 100 Zeichen</span>
+<span class="small text-primary @error( $name??$id) d-none @enderror ">{{__('max :max Zeichen',['max'=>$max??100])}}</span>

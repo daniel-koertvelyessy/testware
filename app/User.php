@@ -12,13 +12,18 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
 
+    public const LOCALES = [
+        'de' => 'Deutsch',
+        'en' => 'English'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'username'
+    protected array $fillable = [
+        'name', 'email', 'password', 'username', 'locale'
     ];
 
     /**
@@ -26,7 +31,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
+    protected array $hidden = [
         'password', 'remember_token',
     ];
 
@@ -35,7 +40,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $casts = [
+    protected array $casts = [
         'email_verified_at' => 'datetime',
     ];
 

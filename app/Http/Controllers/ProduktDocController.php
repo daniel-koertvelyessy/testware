@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Produkt;
 use App\ProduktDoc;
 use Exception;
 use Illuminate\Http\RedirectResponse;

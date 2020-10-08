@@ -410,7 +410,6 @@
                                         </button>
                                         <button class="btn btn-primary ml-1">Zuordnen <span class="fas fa-angle-right"></span></button>
                                     </div>
-                                    {{ $errors }}
                                     <div class="collapse @if (count($errors)>0) show @endif " id="sectionFirmaDetails">
                                         <div class="card p-3 mb-2">
                                             <div class="d-flex justify-content-md-between">

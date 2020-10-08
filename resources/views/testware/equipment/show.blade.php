@@ -380,5 +380,17 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+@endsection
+
+@section('scripts')
+    @error('eqdoc_name_kurz')
+    <script>
+        $('#modalAddEquipDoc').modal('show');
+    </script>
+    @enderror
 @endsection
