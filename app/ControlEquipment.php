@@ -12,15 +12,15 @@ class ControlEquipment extends Model
         return $this->belongsTo(Equipment::class);
     }
 
-    public function AnforderungControlItem() {
-        return $this->belongsTo(AnforderungControlItem::class);
+    public function Anforderung() {
+        return $this->belongsTo(Anforderung::class);
     }
 
 
 
     public function checkDueDate($qeitem) {
 
-        if(date('Y-m-d',time()+ (60*60*24*7)*$qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due)
+        if(now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due)
         {
             return '<span class="fas fa-circle text-success"></span> '. $qeitem->qe_control_date_due ;
         } elseif ( date('Y-m-d',time()+ (60*60*24*7)*$qeitem->qe_control_date_warn) == $qeitem->qe_control_date_due )

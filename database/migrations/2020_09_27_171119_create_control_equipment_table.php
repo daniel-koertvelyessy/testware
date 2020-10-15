@@ -21,7 +21,7 @@ class CreateControlEquipmentTable extends Migration
             $table->date('qe_control_date_due')->nullable();
             $table->json('qe_control_date_warn')->nullable()->default(4);
 
-            $table->foreignId('anforderung_control_item_id')
+            $table->foreignId('anforderung_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
@@ -31,7 +31,7 @@ class CreateControlEquipmentTable extends Migration
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('set null');
+                ->onDelete('cascade');
         });
     }
 

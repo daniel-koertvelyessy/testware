@@ -36,7 +36,12 @@ class LocationsController extends Controller
     public function index()
     {
 
-        return view('admin.standorte.location.index');
+        if(Location::all()->count()>15){
+            $locationList = Location::all()->paginate(15);
+            return view('admin.standorte.location.index',['locationList'=>$locationList]);
+        } else {
+            return view('admin.standorte.location.index');
+        }
 
 
     }
@@ -177,6 +182,72 @@ class LocationsController extends Controller
             return false;
         }
     }
+
+
+    public function getLocationListeAsTable() {
+        $html = '
+<table class="table table-sm table-striped">
+    <thead>
+    <tr>
+    <th>Standort</th>
+    <th>Name</th>
+    <th>Gebäude</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+        ';
+
+        foreach (Location::all() as $location)
+        {
+            $html.='
+            <tr>
+            <td><a href="/location/'. $location->id  .'">'. $location->l_name_kurz  .'</a></td>
+            <td>'. $location->l_name_lang .'</td>
+            <td>'. $location->Building->count() .'</td>
+            <td>
+                <a href="'.$location->path().'">
+                    <i class="fas fa-chalkboard"></i>
+                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
+                </a>
+            </td>
+            </tr>';
+        }
+        $html .='</tbody>
+</table>';
+
+//        echo $html;
+        return ['html'=> $html];
+
+    }
+
+    public function getLocationListeAsKachel() {
+        $html = '';
+        foreach (Location::all() as $location)
+        {
+            $html.=' <div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 " id="loc_id_'.$location->id.'">
+                    <div class="card" style="height:20em;">
+                        <div class="card-body">
+                            <h5 class="card-title">'. $location->l_name_kurz .'</h5>
+                            <h6 class="card-subtitletext-muted">'. $location->l_name_lang .'</h6>
+                            <p class="card-text mt-1 mb-0"><small><strong>Gebäude:</strong> '. $location->Building->count() .'</small></p>
+                            <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
+                            <p class="mt-0" style="height:6em;overflow-y: scroll">'. $location->l_beschreibung .'</p>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <a href="'.$location->path().'" class="btn btn-link btn-sm mr-auto"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                        </div>
+                    </div>
+                    </div>';
+        }
+//echo $html;
+        return ['html'=> $html];
+
+    }
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.

@@ -15,7 +15,7 @@
                     <thead>
                     <tr>
                         <th>Gerät</th>
-                        <th>Vorgang</th>
+                        <th>Anforderung</th>
                         <th>Fällig</th>
                         <th></th>
                     </tr>
@@ -28,7 +28,7 @@
                                 <br>
                                 <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
                             </td>
-                            <td>{{ $controlEquipment->AnforderungControlItem->aci_name_lang }}</td>
+                            <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                             <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                             <td></td>
                         </tr>

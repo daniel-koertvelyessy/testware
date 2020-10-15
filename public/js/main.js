@@ -155,6 +155,19 @@ $(document).on("blur", ".checkLabel", function() {
     $(this).val(label.replace(rex, "_"));
 });
 
+$('.btnShowDataStyle').click(function () {
+    const src = $(this).data('src');
+    const targetid = $(this).data('targetid');
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: src,
+        success: (res) => {
+            $(targetid).html(res.html);
+        }
+    });
+});
+
 
 
 /*        $('#btnUpdateBuildingType').click(function () {

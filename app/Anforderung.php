@@ -21,6 +21,10 @@ class Anforderung extends Model
         return $this->hasMany(LocationAnforderung::class);
     }
 
+    public function Equipment()
+    {
+        return $this->hasMany(Equipment::class);
+    }
 
 
 

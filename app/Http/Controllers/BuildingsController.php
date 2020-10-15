@@ -28,7 +28,13 @@ class BuildingsController extends Controller
      */
     public function index()
     {
-        return view('admin.standorte.building.index');
+
+        if(Building::all()->count()>15){
+            $buildingList = Building::with('BuildingType')->paginate(15);
+            return view('admin.standorte.building.index',['buildingList'=>$buildingList]);
+        } else {
+            return view('admin.standorte.building.index');
+        }
     }
 
     /**
@@ -192,6 +198,89 @@ class BuildingsController extends Controller
             return false;
         }
     }
+
+    public function getBuildingListeAsTable() {
+        $html = '<div class="col">
+<table class="table table-sm table-striped">
+    <thead>
+    <tr>
+    <th>Standort</th>
+    <th>Nummer</th>
+    <th>Name</th>
+    <th>Gebäudetyp</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+        ';
+
+        foreach (Building::with('BuildingType')->get() as $building)
+        {
+            $html.='
+            <tr>
+            <td><a href="/location/'. $building->location->id  .'">'. $building->location->l_name_kurz  .'</a></td>
+            <td>'. $building->b_name_kurz .'</td>
+            <td>'. $building->b_name_lang .'</td>
+            <td>'. $building->BuildingType->btname .'</td>
+            <td>
+                <a href="'.$building->path().'">
+                    <i class="fas fa-chalkboard"></i>
+                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
+                </a>
+            </td>
+            </tr>';
+        }
+        $html .='</tbody></table></div>';
+
+        return ['html'=> $html];
+
+    }
+
+    public function getBuildingListeAsKachel() {
+        $html = '';
+        foreach (Building::with('BuildingType')->get() as $building)
+        {
+            $html.='<div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 " id="geb_id_{{$building->id}}">
+                        <div class="card">
+                            <div class="card-header">
+                                Befindet sich in <i class="fas fa-angle-right text-muted"></i>
+                                <a href="/location/'.$building->location->id.'">'. $building->location->l_name_kurz  .'</a>
+                            </div>
+                                <div class="card-body" style="height:18em;">
+                                    <h5 class="card-title">'. $building->BuildingType->btname .': '. $building->b_name_kurz .'</h5>
+                                    <h6 class="card-subtitletext-muted">'. $building->b_name_lang .'</h6>
+                                    <p class="card-text mt-1 mb-0">
+                                        <span class="small">
+                                            <strong>Ort:</strong><span class="ml-2" >'. $building->b_name_ort .'</span>
+                                        </span>
+                                    </p>
+                                    <p class="card-text mt-1 mb-0">
+                                        <span class="small">
+                                            <strong>Räume:</strong><span class="ml-2" >'. $building->rooms()->count() .'</span>
+                                        </span>
+                                    </p>
+                                    <p class="card-text mt-1 mb-0">
+                                        <span class="small">
+                                            <strong>Stellplätze:</strong><span class="ml-2" >'. $building->countStellPlatzs($building) .'</span>
+                                        </span>
+                                    </p>
+                                    <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
+                                    <p class="mt-0" style="height:6em;">
+                                        '. str_limit($building->b_name_text,100) .'
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="'.$building->path().'" class="card-link mr-auto"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                                </div>
+                        </div>
+                    </div>';
+        }
+//echo $html;
+        return ['html'=> $html];
+
+    }
+
+
 
 
     /**

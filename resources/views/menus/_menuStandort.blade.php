@@ -48,3 +48,8 @@
              @endif
         </ul>
     </li>
+<li class="nav-item {{ Request::routeIs('standortDataPort')  ? ' active ' : '' }}">
+    <a class="nav-link " href="{{ route('standortDataPort') }}">
+        <i class="fas fa-file-import"></i> Export / Import
+    </a>
+</li>

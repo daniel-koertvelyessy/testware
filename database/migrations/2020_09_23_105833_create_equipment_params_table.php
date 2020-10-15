@@ -20,7 +20,12 @@ class CreateEquipmentParamsTable extends Migration
             $table->string('ep_label',20);
             $table->string('ep_name',150)->nullable();
             $table->string('ep_value',150)->nullable();
-            $table->foreignId('equipment_id')->nullable();
+            $table->foreignId('equipment_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
         });
     }
 

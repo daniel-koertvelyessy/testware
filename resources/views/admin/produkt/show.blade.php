@@ -373,7 +373,16 @@
                                                     @method('DELETE')
                                                     <input type="hidden" name="an_name_kurz" id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}">
                                                     <input type="hidden" name="id" id="id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produktAnforderung->id }}">
-                                                    <input type="hidden" name="produkt_id" id="produkt_id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produkt->id }}">
+                                                    <input type="hidden"
+                                                           name="produkt_id"
+                                                           id="produkt_id_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $produkt->id }}"
+                                                    >
+                                                    <input type="hidden"
+                                                             name="anforderung_id"
+                                                             id="anforderung_id"
+                                                           value="{{ $produktAnforderung->anforderung_id }}"
+                                                    >
                                                     <button class="btn btn-sm btn-outline-primary">löschen</button>
                                                 </form>
                                             </nav>

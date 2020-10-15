@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
-@section('mainSection')
-    Standorte
+@section('pagetitle')
+{{ __('Raum')}} {{  $room->r_name_kurz  }} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
 @endsection
 
-@section('pagetitle')
-    Raum {{  $room->r_name_kurz  }} &triangleright;   Raumverwaltung &triangleright; Portal @ bitpack GmbH
+@section('mainSection')
+    {{__('Standorte')}}
 @endsection
 
 @section('menu')

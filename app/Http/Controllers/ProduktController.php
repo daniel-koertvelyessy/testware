@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Adresse;
+use App\Anforderung;
 use App\Contact;
+use App\ControlEquipment;
+use App\Equipment;
+use App\EquipmentHistory;
 use App\Firma;
 use App\FirmaProdukt;
 use App\ProduktAnforderung;
@@ -151,18 +155,7 @@ class ProduktController extends Controller
         return redirect(route('produkt.index'));
     }
 
-    public function exportProduktToJson() {
-        return response(Produkt::with('ProduktKategorie',
-            'ProduktState',
-            'ProduktParam',
-            'ProduktAnforderung')->get() , 200)
-            ->header('Cache-Control', 'public')
-            ->header('Content-Description', 'File Transfer')
-            ->header('Content-Type',' application/json')
-            ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename="."testware_produkte_".time().".json");
 
-    }
 
     public function addProduktFirma(Request $request) {
 
@@ -297,7 +290,7 @@ class ProduktController extends Controller
 
     public function getKategorieProducts(Request $request)
     {
-        dd($request);
+
         $prodList = Produkt::where('produkt_kategorie_id',$request->pk)->paginate(20);
         return view('admin.produkt.kategorie.index',['prodList'=>$prodList,'id'=>$request]);
     }
@@ -447,16 +440,81 @@ class ProduktController extends Controller
     public function deleteProduktAnfordrung(Request $request)
     {
 
+        $anforderung = Anforderung::find($request->anforderung_id);
+        $euipUdate = '';
+
+        foreach (Equipment::where('produkt_id',ProduktAnforderung::find($request->id)->produkt_id)->get() as $equipment) {
+
+            if (ControlEquipment::where('anforderung_id', $request->anforderung_id)
+                    ->where('equipment_id', $equipment->id)->count() > 0) {
+                ControlEquipment::where('anforderung_id', $request->anforderung_id)
+                    ->where('equipment_id', $equipment->id)->delete();
+
+                $equipHistory = new EquipmentHistory();
+                $equipHistory->eqh_eintrag_kurz = 'Anforderung gelöscht';
+                $equipHistory->eqh_eintrag_text = 'Die Anforderung ' . $anforderung->an_name_lang . ' wurde dem Produkt entfernt. Die Prüfungstabelle der abhängigen Geräten wurde aktualisiert.';
+                $equipHistory->equipment_id = $equipment->id;
+                $equipHistory->save();
+                $updEquip = Equipment::where('produkt_id', request('produkt_id'))->count();
+
+                if ($updEquip > 1) {
+                    $euipUdate = '<br>' . $updEquip . ' Geräte wurden aktualisiert';
+                } elseif ($updEquip == 1) {
+                    $euipUdate = '<br>' . $updEquip . ' Gerät wurde aktualisiert';
+                }
+            }
+        }
+
+
         ProduktAnforderung::find($request->id)->delete();
 
-        $request->session()->flash('status', 'Das Anforderung  <strong>' . request('an_name_kurz') . '</strong> wurde vom Produkt entfernt!');
+        $request->session()->flash('status', 'Das Anforderung  <strong>' . request('an_name_kurz') . '</strong> wurde vom Produkt entfernt!'.$euipUdate);
         return redirect(route('produkt.show', ['produkt' => request('produkt_id')]));
     }
 
     public function addProduktAnforderung(Request $request)
     {
+
         ProduktAnforderung::create($this->validateNewProduktAnforderung());
-        $request->session()->flash('status', 'Die Anforderung wurde erfolgreich  <strong>' . request('an_name_kurz') . '</strong> verknüpft!');
+
+        $anforderung = Anforderung::find($request->anforderung_id);
+        $euipUdate = '';
+
+        $interval =$anforderung->an_control_interval;
+        $dateSting = $anforderung->ControlInterval->ci_delta;
+
+        foreach (Equipment::where('produkt_id',request('produkt_id'))->get() as $equipment){
+
+            if (ControlEquipment::where('anforderung_id',$request->anforderung_id)
+                ->where('equipment_id',$equipment->id)->count() === 0){
+                $equipControlItem = new ControlEquipment();
+                $equipControlItem->qe_control_date_last = now();
+                $equipControlItem->qe_control_date_due =now()->add('P'.$interval.$dateSting[0]);
+                $equipControlItem->qe_control_date_warn = 4;
+                $equipControlItem->anforderung_id = $request->anforderung_id;
+                $equipControlItem->equipment_id = $equipment->id;
+                $equipControlItem->save();
+
+
+                $equipHistory = new EquipmentHistory();
+                $equipHistory->eqh_eintrag_kurz = 'Neue Anforderung erhalten';
+                $equipHistory->eqh_eintrag_text = 'Die Anforderung '. $anforderung->an_name_lang . ' wurde dem Produkt angefügt. Die Prüfungstabelle der abhängigen Geräten wurde aktualisiert.';
+                $equipHistory->equipment_id = $equipment->id;
+                $equipHistory->save();
+                $updEquip = Equipment::where('produkt_id',request('produkt_id'))->count();
+
+                if ($updEquip > 1) {
+                    $euipUdate = '<br>'.$updEquip.' Geräte wurden aktualisiert';
+                } elseif ($updEquip == 1){
+                    $euipUdate = '<br>'.$updEquip.' Gerät wurde aktualisiert';
+                }
+            }
+
+
+
+
+        }
+        $request->session()->flash('status', 'Die Anforderung wurde erfolgreich  <strong>' . request('an_name_kurz') . '</strong> verknüpft!'.$euipUdate);
         return redirect(route('produkt.show', ['produkt' => request('produkt_id')]));
     }
     /**

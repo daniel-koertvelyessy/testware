@@ -257,12 +257,12 @@ class InitialValueSeeder extends Seeder
 
         DB::table('anforderung_types')->insert([
             [
-                'at_name_kurz' => 'prf',
+                'at_name_kurz' => 'control',
                 'at_name_lang' => 'Prüfung',
                 'at_name_text' => 'Überprüfung eines Gerätes entsprechend den Vorgaben. Beispiel eine Aufnahme eines Kontrollwertes oder eine visuelle Prüfung',
             ],
             [
-                'at_name_kurz' => 'wrt',
+                'at_name_kurz' => 'wartung',
                 'at_name_lang' => 'Wartung',
                 'at_name_text' => 'Die regelmäßige Wartung von Geräten ermöglicht deren sicheren Gebrauch.',
             ],
@@ -345,7 +345,7 @@ class InitialValueSeeder extends Seeder
             ],
         ]);
 
-        DB::table('anforderung_control_items')->insert([
+     /*   DB::table('anforderung_control_items')->insert([
             [
                 'aci_name_kurz' => 'conL',
                 'aci_name_lang' => 'Prüfung auf Durchgängigkeit',
@@ -354,7 +354,7 @@ class InitialValueSeeder extends Seeder
                 - Körper
                 - aktive Leiter ringförmiger Endstromkreise.',
                 'aci_value_si' => '',
-                'aci_vaule_soll' => '',
+                'aci_vaule_soll' => 0,
                 'aci_contact_id' => 1,
                 'firma_id' => 1,
                 'anforderung_id' => 1,
@@ -364,12 +364,12 @@ class InitialValueSeeder extends Seeder
                 'aci_name_lang' => 'Messung des Isolationswiderstand',
                 'aci_task' => 'Isolationswiderstand zwischen a) aktiven Leitern und b) aktiven Leitern und dem mit der Erdungsanlage verbundenen Schutzleiter gemessen werden muss.Prüfung des Isolationswiderstand bei 500V. Dieser darf nicht unter 0,5MOhm betragen.',
                 'aci_value_si' => 'MOhm',
-                'aci_vaule_soll' => 0.5,
+                'aci_vaule_soll' => 0,
                 'aci_contact_id' => 1,
                 'firma_id' => 1,
                 'anforderung_id' => 1,
             ],
-        ]);
+        ]);*/
 
 
         DB::table('stellplatz_typs')->insert([

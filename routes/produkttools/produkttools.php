@@ -14,7 +14,8 @@ Route::delete('deleteProduktKategorieParam','ProduktController@deleteProduktKate
 Route::get('getProduktKategorieParams','ProduktController@getProduktKategorieParams')->name('getProduktKategorieParams');
 Route::post('addProduktKategorieParam','ProduktController@addProduktKategorieParam')->name('addProduktKategorieParam');
 Route::get('getUsedProduktsByPK','ProduktController@getUsedProduktsByPK')->name('getUsedProduktsByPK');
-Route::get('exportProduktToJson','ProduktController@exportProduktToJson')->name('exportProduktToJson');
+
+Route::get('exportProduktToJson','DataportController@exportProduktToJson')->name('exportProduktToJson');
 
 
 

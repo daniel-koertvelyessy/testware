@@ -19,11 +19,13 @@ Route::get('organisation', function () {
     return view('admin.organisation.index');
 });
 
+
 Route::get('admin', 'AdminController@index')->name('admin.index');
 Route::get('admin/user', 'AdminController@indexUser')->name('user.index');
 Route::get('admin/reports', 'AdminController@indexReports');
 Route::get('admin/reports/template', 'AdminController@indexReportsTemplate')->name('report.tempate');
 Route::get('admin/systems', 'AdminController@systems')->name('systems');
+Route::get('standortDataPort', 'AdminController@standortDataPort')->name('standortDataPort');
 //    Route::get('registerphone', 'AdminController@systems')->name('registerphone');
 
 
@@ -45,6 +47,10 @@ Route::delete('deleteStellPlatzType', 'AdminController@deleteStellPlatzType')->n
 Route::get('getUsedObjByStellPlatzType', 'AdminController@getUsedObjByStellPlatzType')->name('getUsedObjByStellPlatzType');
 Route::get('getUsedStellplatzByType', 'AdminController@getUsedStellplatzByType')->name('getUsedStellplatzByType');
 
+Route::get('exportStellplatzJSON','DataportController@exportStellplatzJSON')->name('exportStellplatzJSON');
+Route::post('importStellplatzJSON','DataportController@importStellplatzJSON')->name('importStellplatzJSON');
+
+
 /**
  *
  *
@@ -61,6 +67,12 @@ Route::post('getRoomTypeData', 'AdminController@getRoomTypeData')->name('getRoom
 Route::delete('deleteRoomType', 'AdminController@deleteRoomType')->name('deleteRoomType');
 Route::get('getUsedRoomsByRoomType', 'AdminController@getUsedRoomsByRoomType')->name('getUsedRoomsByRoomType');
 Route::get('copyRoom', 'RoomController@copyRoom')->name('copyRoom');
+Route::get('getRoomListeAsKachel', 'RoomController@getRoomListeAsKachel')->name('getRoomListeAsKachel');
+Route::get('getRoomListeAsTable', 'RoomController@getRoomListeAsTable')->name('getRoomListeAsTable');
+
+Route::get('exportRoomJSON','DataportController@exportRoomJSON')->name('exportRoomJSON');
+Route::post('importRoomJSON','DataportController@importRoomJSON')->name('importRoomJSON');
+
 
 
 /**
@@ -81,8 +93,11 @@ Route::get('getUsedBuildingsByBuildingType', 'AdminController@getUsedBuildingsBy
 Route::delete('deleteBuildingType', 'AdminController@deleteBuildingType')->name('deleteBuildingType');
 Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->name('room.getBuildingList');
 Route::get('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuilding');
+Route::get('getBuildingListeAsTable', 'BuildingsController@getBuildingListeAsTable')->name('getBuildingListeAsTable');
+Route::get('getBuildingListeAsKachel', 'BuildingsController@getBuildingListeAsKachel')->name('getBuildingListeAsKachel');
 
-
+Route::get('exportBuildingJSON','DataportController@exportBuildingJSON')->name('exportBuildingJSON');
+Route::post('importBuildingJSON','DataportController@importBuildingJSON')->name('importBuildingJSON');
 
 /**
  *
@@ -101,7 +116,10 @@ Route::delete('location.destroyLocationAjax', 'LocationsController@destroyLocati
 Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name('getStandortIdListAll');
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
 
-
+Route::get('getLocationListeAsTable', 'LocationsController@getLocationListeAsTable')->name('getLocationListeAsTable');
+Route::get('getLocationListeAsKachel', 'LocationsController@getLocationListeAsKachel')->name('getLocationListeAsKachel');
+Route::get('exportLocationJSON', 'DataportController@exportLocationJSON')->name('exportLocationJSON');
+Route::post('importLocationJSON', 'DataportController@importLocationJSON')->name('importLocationJSON');
 
 
 /**

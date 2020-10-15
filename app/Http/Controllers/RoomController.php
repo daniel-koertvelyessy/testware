@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Room;
 use App\Standort;
+use App\Stellplatz;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +29,13 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return view('admin.standorte.room.index');
+        if(Room::all()->count()>15){
+            $roomList = Room::with('RoomType')->paginate(15);
+            return view('admin.standorte.room.index',['roomList'=>$roomList]);
+        } else {
+            return view('admin.standorte.room.index');
+        }
+
     }
 
     /**
@@ -188,6 +195,74 @@ return  redirect()->back();
             return false;
         }
     }
+    public function getRoomListeAsTable() {
+        $html = '<div class="col">
+<table class="table table-sm table-striped">
+    <thead>
+    <tr>
+    <th>Standort</th>
+    <th>Gebäude</th>
+    <th>Nummer</th>
+    <th>Name</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+        ';
+
+        foreach (Room::all() as $room)
+        {
+            $html.='
+            <tr>
+            <td><a href="/location/'. $room->building->location->id  .'">'. $room->building->location->l_name_kurz  .'</a></td>
+            <td><a href="/building/'. $room->building->id  .'">'. $room->building->b_name_kurz  .'</a></td>
+            <td>'. $room->r_name_kurz .'</td>
+            <td>'. $room->r_name_lang .'</td>
+            <td>
+                <a href="'.$room->path().'">
+                    <i class="fas fa-chalkboard"></i>
+                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
+                </a>
+            </td>
+            </tr>';
+        }
+        $html .='</tbody></table></div>';
+
+        return ['html'=> $html];
+
+    }
+
+    public function getRoomListeAsKachel() {
+        $html = '';
+        foreach (Room::all() as $room)
+        {
+            $html.='<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_'.$room->id.'">
+                        <div class="card" style="height:20em;">
+                            <div class="card-header">
+                                 Befindet sich in <i class="fas fa-angle-right text-muted"></i>
+                                <a href="/location/'. $room->building->location->id  .'">'. $room->building->location->l_name_kurz  .'</a>
+                                <i class="fas fa-angle-right"></i>
+                                <a href="/building/'. $room->building->id  .'">'. $room->building->b_name_kurz  .'</a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">'. $room->r_name_kurz .'</h5>
+                                <h6 class="card-subtitletext-muted">'. $room->r_name_lang .'</h6>
+                                <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
+                                <p class="mt-0" style="height:6em;">'. str_limit($room->r_name_text,100) .'</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="'.$room->path().'" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                            </div>
+                        </div>
+                    </div>';
+        }
+
+        return ['html'=> $html];
+
+    }
+
+
+
 
     /**
      * @return array

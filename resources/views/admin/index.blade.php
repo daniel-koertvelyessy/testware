@@ -29,101 +29,59 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
-                <h2 class="h4">Benutzer</h2>
-                <table class="table table-responsive">
-                    <thead>
-                    <tr>
-                        <th>Benutername</th>
-                        <th>Erstellt am</th>
-                        <th>Rolle</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (App\User::all() as $user)
-                        <tr>
-                            <td>{{ $user->username }}</td>
-                            <td><span class="text-truncate" >{{ $user->created_at }}</span></td>
-                            <td><span>{{ $user->role_id }}</span></td>
-                            <td><a href="/user/{{ $user->id }}">bearbeiten</a></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-
-
+            <div class="col-md-6">
             </div>
-            <div class="col-lg-6">
-                <h2 class="h4">Objekt Typen</h2>
-                <h3 class="h5">Adressen</h3>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Kurzname</th>
-                        <th>Erstellt am</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (App\AddressType::all() as $aditem)
-                        <tr>
-                            <td>{{ $aditem->adt_name  }}</td>
-                            <td><span class="text-truncate" >{{ $aditem->created_at }}</span></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <h3 class="h5">Gebäude</h3>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Kurzname</th>
-                        <th>Erstellt am</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (App\BuildingTypes::all() as $aditem)
-                        <tr>
-                            <td>{{ $aditem->btname  }}</td>
-                            <td><span class="text-truncate" >{{ $aditem->created_at }}</span></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <h3 class="h5">Räume</h3>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Kurzname</th>
-                        <th>Erstellt am</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (App\RoomType::all() as $aditem)
-                        <tr>
-                            <td>{{ $aditem->rt_name_kurz  }}</td>
-                            <td><span class="text-truncate" >{{ $aditem->created_at }}</span></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <h3 class="h5">Stellplätze</h3>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Kurzname</th>
-                        <th>Erstellt am</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (App\StellplatzTyp::all() as $aditem)
-                        <tr>
-                            <td>{{ $aditem->lot_name_kurz  }}</td>
-                            <td><span class="text-truncate" >{{ $aditem->created_at }}</span></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+            <div class="col-md-6">
+                <h2 class="h4">Lizenzdaten</h2>
+                <ul class="list-unstyled">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Lizenznehmer</span>
+                        <span class="text-info">thermo-control Körtvélyessy GmbH</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Lizenznummer</span>
+                        <span class="text-info">{{ \Illuminate\Support\Str::uuid() }}</span>
+                    </li>
+                </ul>
+                <h3 class="h5">Objektliste</h3>
+                <ul class="list-unstyled">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Standorte</span>
+                        <span>{{$countLocation =  \App\Location::all()->count() }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Gebäude</span>
+                        <span>{{$countBuilding =  \App\Building::all()->count() }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Räume</span>
+                        <span>{{ $countRoom = \App\Room::all()->count() }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Stellplätze</span>
+                        <span>{{$countStelplatz =  \App\Stellplatz::all()->count() }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Geräte</span>
+                        <span>{{$countEquipment =  \App\Equipment::all()->count() }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="lead">Gesamt</span>
+                        <span class="lead text-info">{{ $countLocation+$countBuilding+$countRoom+$countStelplatz+$countEquipment }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Kontingent</span>
+                        <span>1000</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-success">
+                        <span class="lead">Verfügbar</span>
+                        <span class="lead">{{ 1000-($countLocation+$countBuilding+$countRoom+$countStelplatz+$countEquipment) }}</span>
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-primary">100 Objekte kaufen <i class="fas fa-shopping-cart"></i></button>
+                    <button class="btn btn-sm btn-outline-primary">1000 Objekte kaufen <i class="fas fa-shopping-cart"></i></button>
+                </div>
             </div>
         </div>
 

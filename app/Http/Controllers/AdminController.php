@@ -77,6 +77,10 @@ class AdminController extends Controller
         return view('admin.registerphone');
     }
 
+    public function standortDataPort()
+    {
+        return view('admin.standorte.dataport');
+    }
 
     public function checkStandortValid(Request $request) {
         //

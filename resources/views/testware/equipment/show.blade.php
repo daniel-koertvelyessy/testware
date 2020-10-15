@@ -130,9 +130,13 @@
 
                             </div>
                             <div class="col-md-5 pl-3 mb-3">
-                                <h2 class="h4">{{__('Gerätestatus')}}</h2>
+                                <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
 
-                                <span class=" fas mb-3   fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
+                                </div>
+
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)
 

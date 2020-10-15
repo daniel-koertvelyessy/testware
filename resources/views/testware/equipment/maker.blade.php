@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Start &triangleright; Geräte @ bitpack GmbH
+{{{__('Start')}}} &triangleright; {{__('Geräte')}} @ bitpack GmbH
 @endsection
 
 @section('mainSection')
-    Geräte
+{{__('Geräte')}}
 @endsection
 
 @section('menu')
@@ -17,23 +17,23 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h4">Neues Gerät anlegen</h1>
+                <h1 class="h4">{{__('Neues Gerät anlegen')}}</h1>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-6 mb-2">
                 @if(App\Produkt::all()->count() >0)
-                    <label for="setNewEquipmentFromProdukt">Neues Gerät aus Produkt-Vorlage erstellen</label>
+                    <label for="setNewEquipmentFromProdukt">{{__('Neues Gerät aus Produkt-Vorlage erstellen')}}</label>
                     <div class="input-group">
                         <input type="text" name="setNewEquipmentFromProdukt" id="setNewEquipmentFromProdukt"
-                               placeholder="Bitte Produktnummer oder -name eingeben"
+                               placeholder="{{__('Bitte Produktnummer oder -name eingeben')}}"
                                class="form-control getProduktListe"
                                value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
                         >
                         <button
                             class="btn btn-primary ml-2"
                             onclick="frmSubmitNewEquipment()">
-                            <span class="d-none d-md-inline">Gerät jetzt </span>anlegen
+                            <span class="d-none d-md-inline">{{__('Gerät jetzt')}} </span>{{__('anlegen')}}
                         </button>
                     </div>
                     <form action="{{ route('equipment.create') }}" method="GET" id="createEquipmentFromProdukt">
@@ -44,17 +44,17 @@
                         >
                     </form>
                 @else
-                    <h2 class="h5">Es sind noch keine Produkte angelegt worden!</h2>
-                    <a href="{{ route('produkt.create') }}" class="btn btn-lg btn-primary">Neues Produkt anlegen</a>
+                    <h2 class="h5">{{__('Es sind noch keine Produkte angelegt worden')}}!</h2>
+                    <a href="{{ route('produkt.create') }}" class="btn btn-lg btn-primary">{{__('Neues Produkt anlegen')}}</a>
                 @endif
             </div>
             <div class="col-md-6 mb-2">
-                <h2 class="h4">Verfügbare Produkte</h2>
+                <h2 class="h4">V{{__('erfügbare Produkte')}}</h2>
                 <table class="table table-sm">
                     <thead>
                     <tr>
-                        <th>Nummer</th>
-                        <th>Bezeichnung</th>
+                        <th>{{__('Produkt-Nummer')}}</th>
+                        <th>{{__('Bezeichnung')}}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -71,13 +71,13 @@
                                 <button
                                     data-produktid="{{ $produkt->id }}"
                                     data-produktname="{{ $produkt->prod_name_lang }}"
-                                    class="btn btn-sm btn-outline-primary setProduktAsTemplate">verwenden</button>
+                                    class="btn btn-sm btn-outline-primary setProduktAsTemplate">{{__('verwenden')}}</button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="3">
-                                <x-notifyer>Keine Proukte angelegt</x-notifyer>
+                                <x-notifyer>{{__('Keine Proukte angelegt')}}</x-notifyer>
                             </td>
                         </tr>
                     @endforelse

@@ -14,7 +14,7 @@
 
 
 @section('content')
-    {{-- `user_id``adress_id``l_beschreibung``l_name_lang``l_name_kurz``l_benutzt`--}}
+
     <div class="container mt-2">
         <h1 class="h3">Standort Stammdaten bearbeiten</h1>
         <div class="row">

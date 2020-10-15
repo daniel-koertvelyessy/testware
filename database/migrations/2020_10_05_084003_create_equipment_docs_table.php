@@ -4,15 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEquipmentDocsTable extends Migration
-{
+class CreateEquipmentDocsTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('equipment_docs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
@@ -26,7 +24,7 @@ class CreateEquipmentDocsTable extends Migration
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('set null');
+                ->onDelete('cascade');
 
             $table->foreignId('document_type_id')
                 ->nullable()
@@ -41,8 +39,7 @@ class CreateEquipmentDocsTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('equipment_docs');
     }
 }

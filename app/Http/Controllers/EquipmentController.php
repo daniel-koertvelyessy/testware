@@ -6,6 +6,7 @@ use App\AnforderungControlItem;
 use App\ControlEquipment;
 use App\ControlInterval;
 use App\Equipment;
+use App\EquipmentDoc;
 use App\EquipmentHistory;
 use App\EquipmentParam;
 use App\Produkt;
@@ -20,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class EquipmentController extends Controller
@@ -62,8 +64,6 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {
 
-
-
         $lastDate = $request->qe_control_date_last;
 
         $prod = Produkt::find($request->produkt_id);
@@ -89,7 +89,7 @@ class EquipmentController extends Controller
                 $conEquip->qe_control_date_last = $lastDate;
                 $conEquip->qe_control_date_due = $dueDate;
                 $conEquip->anforderung_control_item_id = $aci->id;
-            $conEquip->equipment_id = $equipment->id ;
+                $conEquip->equipment_id = $equipment->id ;
                 $conEquip->save();
 
                 $eh = new EquipmentHistory();
@@ -158,7 +158,7 @@ class EquipmentController extends Controller
      *
      * @param  Request   $request
      * @param  Equipment $equipment
-     * @return RedirectResponse
+     * @return Application|Factory|RedirectResponse|View
      */
     public function update(Request $request, Equipment $equipment)
     {
@@ -180,58 +180,58 @@ class EquipmentController extends Controller
         $feld .= __(':user führte folgende Änderungen durch',['user'=>Auth::user()->username]). ' => ';
         if ($upd->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Seriennummer'),
-                'old' => $upd->eq_serien_nr,
-                'new' => $request->eq_serien_nr,
-                    ]) . ' | ';
+                    'fld' => __('Seriennummer'),
+                    'old' => $upd->eq_serien_nr,
+                    'new' => $request->eq_serien_nr,
+                ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_qrcode != $request->eq_qrcode) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('QR Code'),
-                'old' => $upd->eq_qrcode,
-                'new' => $request->eq_qrcode,
-                    ]) . ' | ';
+                    'fld' => __('QR Code'),
+                    'old' => $upd->eq_qrcode,
+                    'new' => $request->eq_qrcode,
+                ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_ibm != $request->eq_ibm) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Inbetriebnahme am'),
-                'old' => $upd->eq_ibm,
-                'new' => $request->eq_ibm,
-                    ]) . ' | ';
+                    'fld' => __('Inbetriebnahme am'),
+                    'old' => $upd->eq_ibm,
+                    'new' => $request->eq_ibm,
+                ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_text != $request->eq_text) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Beschreibung'),
-                'old' => $upd->eq_text,
-                'new' => $request->eq_text,
-                    ]) . ' | ';
+                    'fld' => __('Beschreibung'),
+                    'old' => $upd->eq_text,
+                    'new' => $request->eq_text,
+                ]) . ' | ';
             $flag = true;
         }
         if ($upd->equipment_state_id != $request->equipment_state_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Geräte Status'),
-                'old' => $upd->equipment_state_id ,
-                'new' => $request->equipment_state_id,
-                    ]) . ' | ';
+                    'fld' => __('Geräte Status'),
+                    'old' => $upd->equipment_state_id ,
+                    'new' => $request->equipment_state_id,
+                ]) . ' | ';
             $flag = true;
         }
         if ($upd->standort_id != $request->standort_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Aufstellplatz / Standort'),
-                'old' => $upd->standort_id,
-                'new' => $request->standort_id,
+                    'fld' => __('Aufstellplatz / Standort'),
+                    'old' => $upd->standort_id,
+                    'new' => $request->standort_id,
                 ]) . ' | ';
             $flag = true;
         }
         if ($upd->produkt_id != $request->produkt_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Produkt'),
-                'old' => $upd->produkt_id,
-                'new' => $request->produkt_id,
-                    ]) . ' | ';
+                    'fld' => __('Produkt'),
+                    'old' => $upd->produkt_id,
+                    'new' => $request->produkt_id,
+                ]) . ' | ';
             $flag = true;
         }
 
@@ -247,11 +247,11 @@ class EquipmentController extends Controller
 
 
 
-            return redirect()->back();
+            return view('testware.equipment.show',['equipment'=>$equipment]);
         } else {
 
             $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
-            return redirect()->back();
+            return view('testware.equipment.show',['equipment'=>$equipment]);
         }
 
 
@@ -271,7 +271,24 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment)
     {
-        //
+
+
+
+        foreach (EquipmentDoc::where('equipment_id',$equipment->id)->get() as $prodDoku){
+            EquipmentDoc::find($prodDoku->id);
+            $file = $prodDoku->proddoc_name_lang;
+            Storage::delete($prodDoku->proddoc_name_pfad);
+            $prodDoku->delete();
+
+        }
+
+        $equipment->delete();
+
+
+
+
+        return view('testware.equipment.index');
+
     }
 
     /**

@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-App::setLocale(
-    session()->pull('locale', 'de')
-);
+
 Route::get('/', function () {
     return view('portal-main');
 });
@@ -111,6 +109,9 @@ Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
 
+Route::get('/codosy', function () {
+    return view('codosy.index');
+})->name('codosy')->middleware('auth');
 
 /*
 

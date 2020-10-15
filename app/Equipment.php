@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,6 +13,7 @@ class Equipment extends Model
 //    protected $table = 'equipments';
 
     use SoftDeletes;
+
 
     public function produkt()
     {
@@ -39,5 +41,9 @@ class Equipment extends Model
 
     public function control() {
         return $this->hasMany(Control::class);
+    }
+
+    public function ControlEquipment() {
+        return $this->hasMany(ControlEquipment::class);
     }
 }

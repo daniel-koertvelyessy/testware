@@ -23,7 +23,7 @@ class CreateEquipmentHistoriesTable extends Migration
             $table->foreign('equipment_id')
                 ->references('id')
                 ->on('equipment')
-                ->onDelete('set null')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
     }

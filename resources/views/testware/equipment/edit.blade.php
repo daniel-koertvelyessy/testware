@@ -10,6 +10,36 @@
     @include('menus._menu_testware_main')
 @endsection
 
+@section('modals')
+    <div class="modal" id="modalDeleteEquipment" tabindex="-1" aria-labelledby="modalDeleteEquipmentLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalDeleteEquipmentLabel">{{__('Gerät löschen')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Bitte beachten Sie, dass <strong>alle</strong> Daten und Vorgänge zu diesem Gerät gelöscht werden. Das schließt hochgeladene oder generierte Dokumente ein.</p>
+                    <p>Das Produkt bleibt davon unberührt.</p>
+                    <p class="mx-3 text-danger lead">Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.</p>
+    <form action="{{ route('equipment.destroy',$equipment) }}"
+          method="post"
+    >
+        @csrf
+        @method('delete')
+        <input type="hidden"
+               name="id"
+               id="id"
+        >
+        <button class="btn btn-outline-danger">Gerät löschen <span class="ml-2 fas fa-times"></span></button>
+    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
 @section('content')
 
@@ -19,7 +49,7 @@
                 <h1 class="h3">{{__('Gerät bearbeiten')}}</h1>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col">
                 <form action="{{ route('equipment.update',$equipment) }}" method="post" class="needs-validation">
                     @csrf
@@ -85,6 +115,18 @@
                     </div>
                     <x-btnMain>{{__('Gerät speichern')}} <span class="fas fa-download"></span></x-btnMain>
                 </form>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    data-toggle="modal" data-target="#modalDeleteEquipment"
+                >
+                    Gerät löschen
+                    <span class="ml-2 fas fa-times"></span>
+                </button>
             </div>
         </div>
     </div>
