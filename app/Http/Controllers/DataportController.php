@@ -259,7 +259,7 @@ class DataportController extends Controller {
     }
 
     public function exportRoomJSON() {
-        return response(Room::all(), 200)
+        return response(Room::with('RoomType')->get(), 200)
             ->header('Cache-Control', 'public')
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
@@ -358,7 +358,7 @@ class DataportController extends Controller {
         if ($request->hasFile('importDataPortFile')) {
             $file = $request->file('importDataPortFile');
             $request->validate([
-                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048' // size:2048 => 2048kB
+                'importDataPortFile' => 'required|file|mimes:json|max:2048' // size:2048 => 2048kB
             ]);
 
             $json = file_get_contents($file->getPath() . '\\' . $file->getFilename(), true);

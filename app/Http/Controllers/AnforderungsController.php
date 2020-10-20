@@ -5,83 +5,118 @@ namespace App\Http\Controllers;
 use App\Anforderung;
 use App\AnforderungControlItem;
 use App\AnforderungObjekt;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 
-class AnforderungsController extends Controller
-{
-    public function __construct()
-    {
+class AnforderungsController extends Controller {
+    use SoftDeletes;
+
+    public function __construct() {
         $this->middleware('auth');
+    }
+
+    static function getACI($anforderung_id) {
+        return AnforderungControlItem::where('anforderung_id', $anforderung_id) - get();
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
-    public function index()
-    {
-        //
+    public function index() {
+        return view('admin.verordnung.anforderung.index');
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('admin.verordnung.anforderung.create');
+    }
+
+    /**
+     *  Speichere neue Anforderung
+     *
+     * @param  Request $request
+     * @return Application|RedirectResponse|Response|Redirector
+     */
+    public function store(Request $request) {
+        Anforderung::create($this->validateAnforderung());
+
+        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde angelegt!');
+        return back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateAnforderung()
+    : array {
+        return request()->validate([
+            'an_name_kurz'        => 'bail|required|max:20',
+            'an_name_lang'        => 'bail|max:100',
+            'an_name_text'        => '',
+            'an_control_interval' => 'integer',
+            'control_interval_id' => '',
+            'verordnung_id'       => '',
+            'anforderung_type_id' => 'bail|required|integer',
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @param  Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
-    {
+    public function storeAnObjekt(Request $request) {
         AnforderungObjekt::create($this->validateObjektAnforderung());
 
         $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde zugewiesen!');
-        return redirect()->back();
+        return back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateObjektAnforderung()
+    : array {
+        return request()->validate([
+            'std_id'         => 'required',
+            'anforderung_id' => 'required',
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  Anforderung $anforderung
-     * @return Response
+     * @return Application|Factory|Response|View
      */
-    public function show(Anforderung $anforderung)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Anforderung $anforderung
-     * @return Response
-     */
-    public function edit(Anforderung $anforderung)
-    {
-        //
+    public function show(Anforderung $anforderung) {
+        return view('admin.verordnung.anforderung.show', ['anforderung' => $anforderung]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  Anforderung              $anforderung
-     * @return Response
+     * @param  Request     $request
+     * @param  Anforderung $anforderung
+     * @return RedirectResponse
      */
-    public function update(Request $request, Anforderung $anforderung)
-    {
-        //
+    public function update(Request $request, Anforderung $anforderung) {
+        $anforderung->update($this->validateAnforderung());
+        return back();
     }
 
     /**
@@ -89,28 +124,12 @@ class AnforderungsController extends Controller
      *
      * @param  Anforderung $anforderung
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Request $request,Anforderung $anforderung)
-    {
-        $prodDoku = AnforderungObjekt::find($request->id);
-//        dd($prodDoku->proddoc_name_pfad);
-        $prodDoku->delete();
+    public function destroy(Anforderung $anforderung) {
+
+        $anforderung->delete();
         session()->flash('status', 'Die Anforderung wurde gelöscht!');
         return redirect()->back();
-    }
-
-    static function getACI($anforderung_id) {
-        return AnforderungControlItem::where('anforderung_id',$anforderung_id)-get();
-    }
-
-    /**
-     * @return array
-     */
-    public function validateObjektAnforderung(): array
-    {
-        return request()->validate([
-            'std_id' => 'required',
-            'anforderung_id' => 'required',
-        ]);
     }
 }

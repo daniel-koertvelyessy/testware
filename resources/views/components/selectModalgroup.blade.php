@@ -2,7 +2,7 @@
 
 
 <label for="{{ $id }}">{{ $label }}</label>
-<div class="input-group">
+<div class="input-group mb-3">
     <select name="{{ $name??$id }}" id="{{ $id }}"
             class="custom-select">
         {{ $slot }}

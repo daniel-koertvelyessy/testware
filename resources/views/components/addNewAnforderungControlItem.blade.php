@@ -6,13 +6,13 @@
     <div class="tab-content" id="nav-tabContent">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-link active" id="nav-cianforderung-tab" data-toggle="tab" href="#nav-cianforderung" role="tab" aria-controls="nav-cianforderung" aria-selected="true">Anforderung</a>
-                <a class="nav-link disabled" id="nav-cicontrol-tab" data-toggle="tab" href="#nav-cicontrol" role="tab" aria-controls="nav-cicontrol" aria-selected="false">Umfang</a>
-                <a class="nav-link disabled" id="nav-cicontact-tab" data-toggle="tab" href="#nav-cicontact" role="tab" aria-controls="nav-cicontact" aria-selected="false">Ausführung</a>
+                <a class="nav-link active" id="nav-cianforderung-tab" data-toggle="tab" href="#nav-cianforderung" role="tab" aria-controls="nav-cianforderung" aria-selected="true">{{__('Anforderung')}}</a>
+                <a class="nav-link disabled" id="nav-cicontrol-tab" data-toggle="tab" href="#nav-cicontrol" role="tab" aria-controls="nav-cicontrol" aria-selected="false">{{__('Umfang')}}</a>
+                <a class="nav-link disabled" id="nav-cicontact-tab" data-toggle="tab" href="#nav-cicontact" role="tab" aria-controls="nav-cicontact" aria-selected="false">{{__('Ausführung')}}</a>
             </div>
         </nav>
         <div class="tab-pane fade show active" id="nav-cianforderung" role="tabpanel" aria-labelledby="nav-cianforderung-tab">
-            <p class="lead text-primary">Wählen Sie als erstes die Anforderung aus, welche zum Vorgang zugeordnet werden soll.</p>
+            <p class="lead text-primary">{{__('Wählen Sie als erstes die Anforderung aus, welche zum Vorgang zugeordnet werden soll.')}}</p>
 
             <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
                 @foreach (App\Anforderung::all() as $anforderung)
@@ -22,10 +22,10 @@
 
             <button type="button" class="btn btn-sm btn-primary bentNextTab mt-5"
                     data-showtab="#nav-cicontrol-tab"
-            >weiter</button>
+            >{{__('weiter')}}</button>
         </div>
         <div class="tab-pane fade" id="nav-cicontrol" role="tabpanel" aria-labelledby="nav-cicontrol-tab">
-            <p class="lead text-primary">Vergeben Sie Namen und Kürzel für den neuen Vorgang.</p>
+            <p class="lead text-primary">{{__('Vergeben Sie Namen und Kürzel für den neuen Vorgang.')}}</p>
             <div class="row">
                 <div class="col-md-4">
                     <x-rtextfield id="aci_name_kurz" label="Kürzel" />
@@ -34,7 +34,7 @@
                     <x-rtextfield id="aci_name_lang" label="Name" max="150" />
                 </div>
             </div>
-            <p class="lead text-primary my-3">Legen Sie nun den Umfang des Vorgangs fest.</p>
+            <p class="lead text-primary my-3">{{__('Legen Sie nun den Umfang des Vorgangs fest.')}}</p>
             <x-textarea id="aci_task" label="Aufgabe" />
 
             <div class="row">
@@ -54,30 +54,30 @@
 
             <button type="button" class="btn btn-sm btn-outline-secondary bentBackTab"
                     data-showtab="#nav-cianforderung-tab"
-            >zurück</button>
+            >{{__('zurück')}}</button>
             <button type="button" class="btn btn-sm btn-primary bentNextTab"
                     data-showtab="#nav-cicontact-tab"
-            >weiter</button>
+            >{{__('weiter')}}</button>
         </div>
         <div class="tab-pane fade" id="nav-cicontact" role="tabpanel" aria-labelledby="nav-cicontact-tab">
-            <p class="lead text-primary">Legen Sie zum Abschluss fest, wer den Vorgang ausführen wird.</p>
+            <p class="lead text-primary">{{__('Legen Sie zum Abschluss fest, wer den Vorgang ausführen wird.')}}</p>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="custom-control custom-radio custom-control-inline mb-3">
                         <input type="radio" id="aci_internal" name="aci_exinternal" class="custom-control-input" value="internal" checked>
-                        <label class="custom-control-label" for="aci_internal">Interne Durchführung</label>
+                        <label class="custom-control-label" for="aci_internal">{{__('Interne Durchführung')}}</label>
                     </div>
-                    <x-selectfield id="aci_contact_id" label="Mitarbeiter">
-                        @foreach (App\Profile::all() as $profile)
-                            <option value="{{ $profile->id }}">{{ substr($profile->ma_vorname,0,1)}}. {{ $profile->ma_name }}</option>
+                    <x-selectfield id="aci_contact_id" label="{{__('Eingewiesener Mitarbeiter')}}">
+                        @foreach (App\User::with('Profile')->get() as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </x-selectfield>
                 </div>
                 <div class="col-md-6">
                     <div class="custom-control custom-radio custom-control-inline mb-3">
                         <input type="radio" id="aci_external" name="aci_exinternal" class="custom-control-input" value="external">
-                        <label class="custom-control-label" for="aci_external">Externe Durchführung</label>
+                        <label class="custom-control-label" for="aci_external">{{__('Externe Durchführung')}}</label>
                     </div>
                     <x-selectfield id="firma_id" label="Firma">
                         @foreach (App\Firma::all() as $firma)
@@ -86,7 +86,7 @@
                     </x-selectfield>
                 </div>
             </div>
-            <button class="btn btn-primary btn-block">Vorgang anlegen</button>
+            <button class="btn btn-primary btn-block">{{__('Vorgang anlegen')}}</button>
         </div>
 
     </div>

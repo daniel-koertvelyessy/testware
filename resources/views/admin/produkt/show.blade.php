@@ -256,11 +256,28 @@
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
-                                        <div class="col-md-4 d-flex align-self-center">
+                                        <div class="col-md-2 d-flex align-self-center">
                                             <div class="form-check">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" name="prod_active" id="prod_active" value="1" {{ ($produkt->prod_active===1)? ' checked ' : ''  }}>
+                                                    <input type="checkbox"
+                                                           class="custom-control-input"
+                                                           name="prod_active" id="prod_active"
+                                                           value="1"
+                                                            {{ ($produkt->prod_active===1)? ' checked ' : ''  }}
+                                                    >
                                                     <label class="custom-control-label" for="prod_active">Produkt aktiv</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-self-center">
+                                            <div class="form-check">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="control_product" name="control_product"
+                                                           value="1"
+                                                            {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
+                                                    >
+                                                    <label class="custom-control-label" for="control_product">{{__('Ist Prüfmittel')}}</label>
                                                 </div>
                                             </div>
                                         </div>

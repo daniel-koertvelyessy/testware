@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Control;
+use App\ControlEquipment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -31,11 +32,14 @@ class ControlController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  Request          $request
+     * @param  ControlEquipment $controlEquipment
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $controlItem = ControlEquipment::find($request->controlItem);
+        return view('testware.control.create',['controlItem'=>$controlItem]);
     }
 
     /**

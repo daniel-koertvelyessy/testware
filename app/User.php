@@ -51,4 +51,10 @@ class User extends Authenticatable
         // gibt die Profile Daten zurück
         return $this->hasOne(Profile::class);
     }
+
+    public function AnforderungControlItem()
+    {
+        // gibt die Profile Daten zurück
+        return $this->hasOne(AnforderungControlItem::class);
+    }
 }

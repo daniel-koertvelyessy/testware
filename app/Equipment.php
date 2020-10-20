@@ -46,4 +46,15 @@ class Equipment extends Model
     public function ControlEquipment() {
         return $this->hasMany(ControlEquipment::class);
     }
+
+    static function getControlEquipmentList()
+    {
+        return \DB::table('equipment')->select('equipment.eq_inventar_nr','equipment.id',
+            'control_equipment.qe_control_date_due',
+            'produkts.prod_name_kurz')
+            ->join('control_produkts','equipment.produkt_id','=','control_produkts.produkt_id')
+            ->join('control_equipment','control_equipment.equipment_id','=','equipment.id')
+            ->join('produkts','equipment.produkt_id','=','produkts.id')
+            ->get();
+    }
 }

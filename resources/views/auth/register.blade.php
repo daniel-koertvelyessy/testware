@@ -1,11 +1,18 @@
 @extends('layout.layout-login')
-
+@section('pagetitle')
+    {{ __('Registrierung als Benutzer') }}!
+@endsection
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row d-flex align-items-center justify-content-center" style="height: 90vh;">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="d-flex justify-content-between px-3 py-2">
+                    <h1 class="h5 mb-3">
+                        <i class="fas fa-user"></i> {{ __('Registrierung als neue Benutzer') }}
+                    </h1>
+                    <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" height="30" alt="">
+                </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">

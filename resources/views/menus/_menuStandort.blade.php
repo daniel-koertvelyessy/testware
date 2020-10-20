@@ -12,8 +12,10 @@
             <li><a class="dropdown-item" href="{{ route('location.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('location.create') }}">Neu anlegen</a></li>
             <li><hr class="dropdown-divider"></li>
-            @php $locations = App\Location::all(); @endphp
+            @php $locations = App\Location::take(5)->latest()->get(); @endphp
+
             @if(count($locations)>0)
+                <h6 class="dropdown-header">Zuletzt angelegt</h6>
             @foreach( $locations as $locItem)
                 <li><a class="dropdown-item @if ( isset($location) && $locItem->id === $location->id) active @endif" href="{{ route('location.show',$locItem)  }}">{{  $locItem->l_name_kurz  }}</a></li>
             @endforeach()
@@ -26,8 +28,9 @@
             <li><a class="dropdown-item" href="{{ route('building.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('building.create') }}">Neu anlegen</a></li>
             <li><hr class="dropdown-divider"></li>
-            @php $buldings = App\Building::all(); @endphp
+            @php $buldings = App\Building::take(5)->latest()->get(); @endphp
             @if(count($buldings)>0)
+                <h6 class="dropdown-header">Zuletzt angelegt</h6>
             @foreach( $buldings as $gebItem)
                 <li><a class="dropdown-item @if (isset($building) && $gebItem->id === $building->id) active @endif" href="{{ route('building.show',$gebItem) }}">{{  $gebItem->b_name_kurz  }}</a></li>
             @endforeach()
@@ -40,8 +43,9 @@
             <li><a class="dropdown-item" href="{{ route('room.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}" href="{{ route('room.create') }}">Neu anlegen</a></li>
             <li><hr class="dropdown-divider"></li>
-            @php $rooms = App\Room::all(); @endphp
+            @php $rooms = App\Room::take(5)->latest()->get(); @endphp
              @if(count($rooms)>0)
+                <h6 class="dropdown-header">Zuletzt angelegt</h6>
             @foreach( $rooms as $roomItem)
                  <li><a class="dropdown-item @if (isset($Room) && $roomItem->id === $building->id) active @endif" href="{{ route('room.show',$roomItem) }}">{{  $roomItem->r_name_kurz  }}</a></li>
              @endforeach()

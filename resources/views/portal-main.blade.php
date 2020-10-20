@@ -35,6 +35,10 @@
                                     <span class="icon"><i class="fas fa-boxes"></i></span>
                                     <span class="branding-bar text-center">{{__('Produkte')}}</span>
                                 </a>
+                                <a href="{{ route('verordnung.main') }}" class="tile-medium rounded" data-role="tile">
+                                    <span class="icon"><i class="fas fa-scroll"></i></span>
+                                    <span class="branding-bar text-center">{{__('Vorschriften')}}</span>
+                                </a>
                                 <a href="/admin/" class="tile-medium rounded" data-role="tile">
                                     <span class="icon"><i class="fas fa-user-cog"></i></span>
                                     <span class="branding-bar text-center">{{__('Admin')}}</span>

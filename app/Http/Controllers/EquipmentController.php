@@ -78,8 +78,8 @@ class EquipmentController extends Controller
         foreach($prod->ProduktAnforderung as $prodAnforderung)
         {
 
-            foreach (AnforderungControlItem::where('anforderung_id',$prodAnforderung->anforderung_id)->get()  as $aci ){
-                $conEquip = new ControlEquipment();
+
+            $conEquip = new ControlEquipment();
                 $interval = $prodAnforderung->Anforderung->an_control_interval;
                 $conInt = $prodAnforderung->Anforderung->control_interval_id;
                 $zeit = ControlInterval::find($conInt);
@@ -88,21 +88,16 @@ class EquipmentController extends Controller
 
                 $conEquip->qe_control_date_last = $lastDate;
                 $conEquip->qe_control_date_due = $dueDate;
-                $conEquip->anforderung_control_item_id = $aci->id;
+                $conEquip->anforderung_id = $prodAnforderung->anforderung_id;
                 $conEquip->equipment_id = $equipment->id ;
-                $conEquip->save();
+               $conEquip->save();
 
                 $eh = new EquipmentHistory();
 
-                $eh->eqh_eintrag_kurz = 'Vorgang angelegt';
-                $eh->eqh_eintrag_text = 'Für das Geräte wurde ein Vorgang '.$aci->aci_name_kurz.' angelegt, der am '.$dueDate.' zum ersten Mal füllig wird.';
+                $eh->eqh_eintrag_kurz = 'Anforderung angelegt';
+                $eh->eqh_eintrag_text = 'Für das Geräte wurde die Anforderung '.$prodAnforderung->Anforderung->an_name_lang.' angelegt, welche am '.$dueDate.' zum ersten Mal füllig wird.';
                 $eh->equipment_id = $equipment->id;
                 $eh->save();
-
-            }
-
-
-
 
         }
 

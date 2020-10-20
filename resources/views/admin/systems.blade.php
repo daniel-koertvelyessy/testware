@@ -133,8 +133,8 @@
                                     <label class="custom-control-label" for="updt_aci_internal">Interne Durchführung</label>
                                 </div>
                                 <x-selectfield name="aci_contact_id" id="updt_aci_contact_id" label="Mitarbeiter">
-                                    @foreach (App\Profile::all() as $profile)
-                                        <option value="{{ $profile->id }}">{{ substr($profile->ma_vorname,0,1)}}. {{ $profile->ma_name }}</option>
+                                    @foreach (App\User::with('profile')->get() as $user)
+                                        <option value="{{ $user->id }}">{{ substr($user->profile->ma_vorname,0,1)}}. {{ $user->profile->ma_name }}</option>
                                     @endforeach
                                 </x-selectfield>
                             </div>
@@ -873,7 +873,7 @@
                                                         <td>{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_name }} </td>
                                                         <td>
                                                             @if ($aci->firma_id === 1)
-                                                                Intern - {{ App\Profile::find($aci->aci_contact_id)->ma_name }}
+                                                                Intern - {{ App\User::find($aci->aci_contact_id)->name }}
                                                             @else{{$aci->firma_id}}
                                                             {{--                                                               Extern - {{ App\Firma::find($aci->firma_id)->fa_name_lang }}--}}
                                                             @endif

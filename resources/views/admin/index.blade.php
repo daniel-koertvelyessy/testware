@@ -71,11 +71,11 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>Kontingent</span>
-                        <span>1000</span>
+                        <span>{{ config('app.maxobjekte') }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center text-success">
                         <span class="lead">Verfügbar</span>
-                        <span class="lead">{{ 1000-($countLocation+$countBuilding+$countRoom+$countStelplatz+$countEquipment) }}</span>
+                        <span class="lead">{{ config('app.maxobjekte') -($countLocation+$countBuilding+$countRoom+$countStelplatz+$countEquipment) }}</span>
                     </li>
                 </ul>
                 <div class="d-flex justify-content-end">

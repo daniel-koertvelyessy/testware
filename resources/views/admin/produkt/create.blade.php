@@ -80,11 +80,15 @@
                                         id="produkt_kategorie_id"
                                         class="custom-select"
                                 >
+                                    <option value="0">keine Zuordnung</option>
                                     @foreach (App\ProduktKategorie::all() as $produktKategorie)
                                         <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modalAddProduktKategorie">
+                                <button type="button"
+                                        class="btn btn-outline-primary ml-2"
+                                        data-toggle="modal" data-target="#modalAddProduktKategorie"
+                                >
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -102,7 +106,7 @@
                             </x-selectfield>
 
                         </div>
-                        <div class="col-md-4 d-flex align-self-center">
+                        <div class="col-md-2 d-flex align-self-center">
                             <div class="form-check">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="prod_active" name="prod_active" checked value="1">
@@ -110,7 +114,14 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-md-2 d-flex align-self-center">
+                            <div class="form-check">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="control_product" name="control_product" value="1">
+                                    <label class="custom-control-label" for="control_product">{{__('Ist Prüfmittel')}}</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col">
@@ -148,7 +159,7 @@
                             </div>
                         </div>
                     </div>
-                    <button @if (!env('app.makeobjekte') ) disabled @endif  class="btn btn-primary btn-block">Produkt anlegen</button>
+                    <button @if (!config('app.makeobjekte') ) disabled @endif  class="btn btn-primary btn-block">Produkt anlegen</button>
                 </form>
             </div>
         </div>

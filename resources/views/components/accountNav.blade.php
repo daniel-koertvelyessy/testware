@@ -12,22 +12,22 @@
                 </li>
                 <li>
                     <a class="dropdown-item d-flex  justify-content-md-between align-items-center" href="/">
-                        {{__('Portal')}} <i class="fas fa-desktop"></i>
+                        {{__('Portal')}} <i class="fas fa-desktop ml-2"></i>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item d-flex justify-content-md-between align-items-center" href="#">
-                        <span><span class="badge badge-light ">0</span> {{__('Nachrichten')}}</span> <i class="fas fa-inbox"></i>
+                        <span><span class="badge badge-light ">0</span> {{__('Nachrichten')}}</span> <i class="fas fa-inbox ml-2"></i>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item d-flex justify-content-md-between align-items-center" href="#" id="btnLockScreen">
-                        {{__('Bildschrim sperren')}} <i class="fas fa-user-lock"></i>
+                        {{__('Bildschrim sperren')}} <i class="fas fa-user-lock ml-2"></i>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item d-flex justify-content-md-between align-items-center" href="{{ route('user.show',Auth::user()) }}" id="btnLockScreen">
-                        {{__('Mein Konto')}} <i class="fas fa-user"></i>
+                        {{__('Mein Konto')}} <i class="fas fa-user ml-2"></i>
                     </a>
                 </li>
                 <li>
@@ -35,7 +35,7 @@
                         class="dropdown-item d-flex justify-content-md-between align-items-center"
                         href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                    > {{__('Abmelden')}} <i class="fas fa-sign-out-alt"></i></a>
+                    > {{__('Abmelden')}} <i class="fas fa-sign-out-alt ml-2"></i></a>
                 </li>
             </ul>
 

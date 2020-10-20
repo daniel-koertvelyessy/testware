@@ -9,8 +9,8 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css')}}">
         <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css')}}">
 
     <title>@yield('pagetitle')</title>
 </head>
@@ -113,6 +113,6 @@
         jQuery('.toast').toast('show');
     </script>
 @endif
-
+@yield('scripts')
 </body>
 </html>

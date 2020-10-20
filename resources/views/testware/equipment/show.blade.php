@@ -84,6 +84,50 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalStartControl" tabindex="-1" aria-labelledby="modalStartControlLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalStartControlLabel">{{__('Prüfung/Wartung starten')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesegen. Bitte wählen Sie das entspechende aus.') }}</p>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Prüfung</th>
+                            <th>Fällig</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @forelse (App\ControlEquipment::where('equipment_id',$equipment->id)->orderBy('qe_control_date_due')->get() as $controlItem)
+                          <tr>
+                              <td>{{ $controlItem->Anforderung->an_name_lang }}</td>
+                              <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
+                              <td><a href="{{ route('control.create',['controlItem' => $controlItem]) }}" class="btn btn-sm btn-outline-primary">
+                                      Prüfung starten</a></td>
+                          </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">
+                                    <x-notifyer>Keine Prüfungen hinterlegt.</x-notifyer>
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('content')
@@ -126,16 +170,26 @@
                                 <label for="firma">{{__('Hersteller')}}:</label>
                                 <input type="text" id="firma" class="form-control-plaintext"
                                        value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach">
-                                <button class="btn btn-primary btn-lg mt-3">{{__('Prüfung/Wartung erfassen')}}</button>
+                                <button
+                                    class="btn btn-primary btn-lg mt-3"
+                                    data-toggle="modal" data-target="#modalStartControl"
+                                >{{__('Prüfung/Wartung erfassen')}}</button>
 
                             </div>
                             <div class="col-md-5 pl-3 mb-3">
-                                <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
+                                @if ($equipment->produkt->ControlProdukt)
+                                    <h2 class="h4 mb-2">{{__('Prüfmittel - Gerätestatus')}}</h2>
+                                @else
+                                    <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
+                                @endif
+
 
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
                                     <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
                                 </div>
+
+
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)

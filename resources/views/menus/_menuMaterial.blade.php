@@ -25,12 +25,12 @@
 
         </ul>
     </li>
-    <li class="nav-item {{ Request::routeIs('importProdukt')  ? ' active ' : '' }}">
-        <a class="nav-link " href="{{ route('importProdukt') }}"><i class="fas fa-file-import"></i> Import</a>
-    </li>
-    <li class="nav-item {{ Request::routeIs('exportProdukt')   ? ' active ' : '' }}">
-        <a class="nav-link " href="{{ route('exportProdukt') }}"><i class="fas fa-file-export"></i> Export</a>
-    </li>
+{{--    <li class="nav-item {{ Request::routeIs('importProdukt')  ? ' active ' : '' }}">--}}
+{{--        <a class="nav-link " href="{{ route('importProdukt') }}"><i class="fas fa-file-import"></i> Import</a>--}}
+{{--    </li>--}}
+{{--    <li class="nav-item {{ Request::routeIs('exportProdukt')   ? ' active ' : '' }}">--}}
+{{--        <a class="nav-link " href="{{ route('exportProdukt') }}"><i class="fas fa-file-export"></i> Export</a>--}}
+{{--    </li>--}}
 </ul>
 
 

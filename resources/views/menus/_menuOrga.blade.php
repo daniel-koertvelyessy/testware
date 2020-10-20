@@ -12,9 +12,11 @@
             <li><a class="dropdown-item" href="{{ route('firma.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item" href="{{ route('firma.create') }}">Neu anlegen</a></li>
             <li class="dropdown-divider"></li>
-            @foreach (\App\Firma::all() as $firma)
+            <h6 class="dropdown-header">Zuletzt angelegt</h6>
+            @foreach (\App\Firma::take(5)->latest()->get() as $firma)
                 <li><a class="dropdown-item" href="{{ route('firma.show',['firma' => $firma]) }}">{{ $firma->fa_name_kurz }}</a></li>
             @endforeach
+
 
         </ul>
     </li>
@@ -25,7 +27,8 @@
             <li><a class="dropdown-item" href="{{ route('adresse.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item" href="{{ route('adresse.create') }}">Neu anlegen</a></li>
             <li class="dropdown-divider"></li>
-            @foreach (\App\Adresse::all() as $adresse)
+            <h6 class="dropdown-header">Zuletzt angelegt</h6>
+            @foreach (\App\Adresse::take(5)->latest()->get() as $adresse)
                 <li><a class="dropdown-item" href="{{ route('adresse.show',['adresse' => $adresse]) }}">{{ $adresse->ad_name_kurz }}</a></li>
             @endforeach
 
@@ -38,7 +41,8 @@
             <li><a class="dropdown-item" href="{{ route('profile.index') }}">Übersicht</a></li>
             <li><a class="dropdown-item" href="{{ route('profile.create') }}">Neu anlegen</a></li>
             <li class="dropdown-divider"></li>
-            @foreach (\App\Profile::all() as $profile)
+            <h6 class="dropdown-header">Zuletzt angelegt</h6>
+            @foreach (\App\Profile::take(5)->latest()->get() as $profile)
                 <li><a class="dropdown-item" href="{{ route('profile.show',['profile' => $profile]) }}">{{ $profile->ma_name }}</a></li>
             @endforeach
 

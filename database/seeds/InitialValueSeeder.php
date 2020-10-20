@@ -17,7 +17,7 @@ class InitialValueSeeder extends Seeder
                 'name' => 'Daniel Körtvélyessy',
                 'email' => 'daniel.koertvelyessy@gmail.com',
                 'email_verified_at' => now(),
-                'username' => 'dkoerti',
+                'username' => 'daniel',
                 'password' => '$2y$10$QTYenoYuRpR6Kp5e2UjidOZ8xRDlxnQjtdxFed/ecvfSzE3UVezna',
             ],
             [
@@ -33,6 +33,42 @@ class InitialValueSeeder extends Seeder
                 'email_verified_at' => now(),
                 'username' => 'matthias',
                 'password' => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
+            ],
+        ]);
+
+        DB::table('profiles')->insert([
+            [
+                'user_id' => 3,
+                'ma_nummer' => random_int(1000, 2000),
+                'ma_name' => 'Roethig',
+                'ma_name_2' => '',
+                'ma_vorname' => 'Matthias',
+                'ma_geburtsdatum' => now()->addYears(-38),
+                'ma_eingetreten' => now()->addYears(-5),
+                'ma_telefon' => '',
+                'ma_mobil' => '',
+            ],
+            [
+                'user_id' => 2,
+                'ma_nummer' => random_int(1000, 2000),
+                'ma_name' => 'Schubert',
+                'ma_name_2' => '',
+                'ma_vorname' => 'Martin',
+                'ma_geburtsdatum' => now()->addYears(-42),
+                'ma_eingetreten' => now()->addYears(-13),
+                'ma_telefon' => '',
+                'ma_mobil' => '',
+            ],
+            [
+                'user_id' => 1,
+                'ma_nummer' => random_int(1000, 2000),
+                'ma_name' => 'Körtvélyessy',
+                'ma_name_2' => '',
+                'ma_vorname' => 'Daniel',
+                'ma_geburtsdatum' => now()->addYears(-46),
+                'ma_eingetreten' => now()->addYears(-15),
+                'ma_telefon' => '03040586940',
+                'ma_mobil' => '',
             ],
         ]);
 
@@ -214,19 +250,9 @@ class InitialValueSeeder extends Seeder
 
         DB::table('produkt_kategories')->insert([
             [
-                'pk_name_kurz' => 'Kühlschrank',
-                'pk_name_nummer' => 'BMKS-',
-                'pk_name_lang' => 'Sammlung aller Kühlschränke'
-            ],
-            [
-                'pk_name_kurz' => 'EDV',
-                'pk_name_nummer' => 'BMED-',
-                'pk_name_lang' => 'EDV Geräte wie Computer, Drucker oder Server'
-            ],
-            [
-                'pk_name_kurz' => 'Schrauber',
-                'pk_name_nummer' => 'MP-',
-                'pk_name_lang' => 'Akku- und kabelgebundene Schraubmaschienen'
+                'pk_name_kurz' => 'ohne',
+                'pk_name_nummer' => '-',
+                'pk_name_lang' => 'Keine Zuordnung'
             ],
 
         ]);

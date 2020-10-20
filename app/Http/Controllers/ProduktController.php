@@ -6,6 +6,7 @@ use App\Adresse;
 use App\Anforderung;
 use App\Contact;
 use App\ControlEquipment;
+use App\ControlProdukt;
 use App\Equipment;
 use App\EquipmentHistory;
 use App\Firma;
@@ -137,6 +138,13 @@ class ProduktController extends Controller
                 $param->save();
             }
         }
+
+        if (request()->has('control_product')){
+            $controlProduct = new ControlProdukt();
+            $controlProduct->produkt_id = $produkt->id;
+            $controlProduct->save();
+        }
+
         $request->session()->flash('status', 'Das Produkt <strong>' . request('prod_nummer') . '</strong> wurde angelegt!');
         return redirect($produkt->path());
     }
@@ -561,7 +569,7 @@ class ProduktController extends Controller
             'prod_name_text' => '',
             'prod_nummer' => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
             'prod_active' => '',
-            'produkt_kategorie_id' => '',
+            'produkt_kategorie_id' => 'nullable',
             'produkt_state_id' => 'required'
         ]);
     }

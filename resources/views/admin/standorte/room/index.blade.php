@@ -65,8 +65,8 @@
                @foreach ($roomList as $room)
                         <tr>
                             <td class="d-none d-md-table-cell">
-                                <a href="/location/{{ $room->building->location->id  }}">
-                                    {{ $room->building->location->l_name_kurz  }}
+                                <a href="/location/{{ $room->building->location->id??''  }}">
+                                    {{ $room->building->location->l_name_kurz??''  }}
                                 </a>
                             </td>
                             <td><a href="/building/{{ $room->building->id  }}">{{ $room->building->b_name_kurz  }}</a></td>
@@ -114,7 +114,7 @@
                             <div class="card" style="height:20em;">
                                 <div class="card-header">
                                     Befindet sich in <i class="fas fa-angle-right text-muted"></i>
-                                    <a href="/location/{{ $room->building->location->id  }}">{{ $room->building->location->l_name_kurz  }}</a>
+                                    <a href="/location/{{ $room->building->location->id??''  }}">{{ $room->building->location->l_name_kurz  }}</a>
                                     <i class="fas fa-angle-right"></i>
                                     <a href="/building/{{ $room->building->id  }}">{{ $room->building->b_name_kurz  }}</a>
                                 </div>

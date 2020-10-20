@@ -83,8 +83,8 @@
                             <label class="custom-control-label" for="appendDoubleData">{{__('Identische Daten mit dem Vermerk _I1 als neue Datensätze anhängen')}}</label>
                         </div>
 
-                        <button type="button" class="btn btn-outline-primary btn-block mt-2 d-flex justify-content-between align-items-center importObjectData">
-                            {{__('Objekte')}} {{__('importieren')}} <i class="fas fa-file-import"></i>
+                        <button type="button" disabled class="btn  btn-outline-primary btn-block mt-2 d-flex justify-content-between align-items-center importObjectData">
+                            {{__('Objekte')}} {{__('importieren')}} [deaktiviert] <i class="fas fa-file-import"></i>
                         </button>
                     </form>
                     <div class="dropdown-divider my-3"></div>

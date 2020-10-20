@@ -143,7 +143,7 @@ class AdminController extends Controller
         AddressType::create($this->validateAdressTypes());
 
         $request->session()->flash('status', 'Der Adresstyp <strong>' . request('adt_name') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
+        return back();
     }
 
 
@@ -159,7 +159,7 @@ class AdminController extends Controller
         $data = AddressType::find($request->id);
         $data->update($this->validateAdressTypes());
         $request->session()->flash('status', 'Der Adresstyp <strong>' . $data->adt_name . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -186,7 +186,7 @@ class AdminController extends Controller
 
         AddressType::destroy($request->id);
         $request->session()->flash('status', 'Der Adresstyp wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -231,7 +231,7 @@ class AdminController extends Controller
         $data->update($this->validateBuldingTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -245,7 +245,7 @@ class AdminController extends Controller
     {
         $data = BuildingTypes::destroy($request->id);
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -295,7 +295,7 @@ class AdminController extends Controller
         $data = RoomType::findOrFail($request->id);
         $data->update($this->validateRoomTypes());
         $request->session()->flash('status', 'Der Raumtyp <strong>' . request('rt_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -320,7 +320,7 @@ class AdminController extends Controller
     {
         RoomType::destroy($request->id);
         $request->session()->flash('status', 'Der Raumtyp wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -362,7 +362,7 @@ class AdminController extends Controller
             ?
             redirect(route('room.show',$request->room_id))
             :
-            redirect(route('systems'));
+            back();
 
     }
 
@@ -378,7 +378,7 @@ class AdminController extends Controller
         $data = StellplatzTyp::findOrFail($request->id);
         $data->update($this->validateStellPlatzTypes());
         $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -401,7 +401,7 @@ class AdminController extends Controller
     {
         StellplatzTyp::destroy($request->id);
         $request->session()->flash('status', 'Der Stellplatztyp wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -446,14 +446,14 @@ class AdminController extends Controller
      *
      * @param Request $request
      * @param ProduktKategorie $produktKategorie
-     * @return Response
+     * @return RedirectResponse
      */
     public function updateProdKat(Request $request, ProduktKategorie $produktKategorie)
     {
         $data = ProduktKategorie::findOrFail($request->id);
         $data->update($this->validateProduktKategorie());
         $request->session()->flash('status', 'Die Produkt-Kategorie <strong>' . request('pk_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -476,7 +476,7 @@ class AdminController extends Controller
     {
         ProduktKategorie::destroy($request->id);
         $request->session()->flash('status', 'Die Produkt-Kategorie wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -499,35 +499,9 @@ class AdminController extends Controller
         */
 
 
-    /**
-     *  Speichere neue Anforderung
-     *
-     *
-     * @param Request $request
-     * @return Application|RedirectResponse|Response|Redirector
-     */
-    public function createVerordnung(Request $request)
-    {
-        Verordnung::create($this->validateNewVerordnug());
 
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_name_kurz') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
-    }
 
-    /**
-     * Aktualisiere die gegebene Verordnung
-     *
-     * @param Request $request
-     * @param Verordnung $anforderung
-     * @return Application|RedirectResponse|Response|Redirector
-     */
-    public function updateVerordnung(Request $request, Verordnung $anforderung)
-    {
-        $data = Verordnung::findOrFail($request->id);
-        $data->update($this->validateVerordnug());
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -541,17 +515,7 @@ class AdminController extends Controller
         return Verordnung::findOrFail($id->id);
     }
 
-    /**
-     * @param Request $request
-     * @return Application|RedirectResponse|Redirector
-     */
-    public function deleteVerordnung(Request $request )
-    {
-        Verordnung::destroy($request->id);
-        $request->session()->flash('status', 'Die Die Verordnung wurde gelöscht!');
-        return redirect(route('systems'));
 
-    }
 
 
 
@@ -576,20 +540,7 @@ class AdminController extends Controller
         */
 
 
-    /**
-     *  Speichere neue Anforderung
-     *
-     *
-     * @param Request $request
-     * @return Application|RedirectResponse|Response|Redirector
-     */
-    public function createAnforderung(Request $request)
-    {
-        Anforderung::create($this->validateAnforderung());
 
-        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
-    }
 
     /**
      * Aktualisiere die gegebene Anforderung
@@ -603,7 +554,7 @@ class AdminController extends Controller
         $data = Anforderung::findOrFail($request->id);
         $data->update($this->validateAnforderung());
         $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     /**
@@ -650,7 +601,7 @@ class AdminController extends Controller
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Die Die Anforderung wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -671,7 +622,7 @@ class AdminController extends Controller
         AnforderungControlItem::create($this->validateNewAnforderungControlItem());
 
         $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_kurz') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
+        return back();
     }
 
     public function updateAnforderungControlItem(Request $request) {
@@ -680,7 +631,7 @@ class AdminController extends Controller
         $data = AnforderungControlItem::findOrFail($request->id);
         $data->update($this->validateAnforderungControlItem());
         $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_lang') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     public function getAnforderungControlItemData(Request $request) {
@@ -692,20 +643,20 @@ class AdminController extends Controller
 
         AnforderungControlItem::destroy($request->id);
         $request->session()->flash('status', 'Der Vorgang wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
     public function addNewAnforderungType(Request $request) {
         AnforderungType::create($this->validateNewAnforderungType());
         $request->session()->flash('status', 'Der Prüfungstyp <strong>' . request('at_name_kurz') . '</strong> wurde angelegt!');
-        return redirect(route('systems'));
+        return back();
     }
     public function updateAnforderungType(Request $request) {
         $data = AnforderungType::findOrFail($request->id);
         $data->update($this->validateAnforderungType());
         $request->session()->flash('status', 'Der Anforderung-Typ <strong>' . request('at_name_lang') . '</strong> wurde aktualisiert!');
-        return redirect(route('systems'));
+        return back();
     }
 
     public function getAnforderungTypData(Request $request) {
@@ -720,7 +671,7 @@ class AdminController extends Controller
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Der Anforderung-Typ wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -800,7 +751,7 @@ class AdminController extends Controller
     {
         DocumentType::destroy($request->id);
         $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde gelöscht!');
-        return redirect(route('systems'));
+        return back();
 
     }
 
@@ -943,21 +894,6 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * @return array
-     */
-    public function validateAnforderung(): array
-    {
-        return request()->validate([
-            'an_name_kurz' => 'bail|required|max:20',
-            'an_name_lang' => 'bail|max:100',
-            'an_name_text' => '',
-            'an_control_interval' => 'integer',
-            'control_interval_id' => '',
-            'verordnung_id' => '',
-            'anforderung_type_id' => 'bail|required|integer',
-        ]);
-    }
 
     /**
      * @return array
@@ -982,33 +918,7 @@ class AdminController extends Controller
             'at_name_text' => '',
         ]);
     }
-    /**
-     * @return array
-     */
-    public function validateVerordnug(): array
-    {
-        return request()->validate([
-            'vo_name_kurz' => 'bail|required|min:1|max:20',
-            'vo_name_lang' => 'bail|min:1|max:100',
-            'vo_nummer' => 'bail|min:1|max:100',
-            'vo_stand' => 'bail|min:1|max:100',
-            'vo_name_text' => '',
-        ]);
-    }
 
-    /**
-     * @return array
-     */
-    public function validateNewVerordnug(): array
-    {
-        return request()->validate([
-            'vo_name_kurz' => 'bail|unique:verordnungs,vo_name_kurz|required|min:1|max:20',
-            'vo_name_lang' => 'bail|min:1|max:100',
-            'vo_nummer' => 'bail|min:1|max:100',
-            'vo_stand' => 'bail|min:1|max:100',
-            'vo_name_text' => '',
-        ]);
-    }
 
     /**
      * @return array

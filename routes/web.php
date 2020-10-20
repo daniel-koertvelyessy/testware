@@ -36,6 +36,8 @@ Route::resources([
     'user' => 'UserController',
     'stellplatz' => 'StellplatzController',
     'anforderung' => 'AnforderungsController',
+    'verordnung' => 'VerordnungController',
+    'anforderungcontrolitem' => 'AnforderungControlItemController',
 
 ]);
 
@@ -104,14 +106,13 @@ Route::get('equipMaker', function () {
     return view('testware.equipment.maker');
 })->name('equipMaker')->middleware('auth');
 
+Route::get('verordnung.main', function () {
+    return view('admin.verordnung.main');
+})->name('verordnung.main')->middleware('auth');
 
 Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
-
-Route::get('/codosy', function () {
-    return view('codosy.index');
-})->name('codosy')->middleware('auth');
 
 /*
 

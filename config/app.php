@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'CET',
+    'timezone' => 'Europe/Berlin',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'de',
 
     /*
     |--------------------------------------------------------------------------
@@ -235,7 +235,7 @@ return [
 
     ],
 
-    'maxobjekte' => env('MAX_OBJEKT',10),
-    'makeobjekte' => env('MAKE_OBJEKT',false),
+    'maxobjekte' => 1000,
+    'makeobjekte' => true,
 
 ];
