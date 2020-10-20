@@ -273,8 +273,8 @@
                             </div>
                             <div class="col-md-6">
                                 <x-datepicker id="controlNextDue" label="Fällig bis" value="{{ now()->add(
-    $aci->Anforderung->an_control_interval.
-    $aci->Anforderung->ControlInterval->ci_si
+    $controlItem->Anforderung->an_control_interval.
+    $controlItem->Anforderung->ControlInterval->ci_si
     )->toDateString() }}" />
                             </div>
                         </div>
