@@ -26,6 +26,7 @@ class CreateAnforderungControlItemsTable extends Migration
             $table->decimal('aci_value_tol')->nullable();
             $table->string('aci_value_tol_mod',3)->nullable();
             $table->boolean('aci_execution')->nullable();
+            $table->boolean('aci_control_equipment_required')->nullable();
             $table->foreignId('aci_contact_id')->nullable();
 
             $table->foreignId('firma_id')
