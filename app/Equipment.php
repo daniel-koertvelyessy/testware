@@ -40,7 +40,7 @@ class Equipment extends Model
     }
 
     public function control() {
-        return $this->hasMany(Control::class);
+        return $this->hasMany(ControlEvent::class);
     }
 
     public function ControlEquipment() {

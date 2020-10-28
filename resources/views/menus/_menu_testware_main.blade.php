@@ -8,8 +8,8 @@
     </li>
 
 
-    <li class="nav-item {{ Request::routeIs('control.*') ? ' active ' : ' ' }}">
-        <a class="nav-link " href="{{ route('control.index') }}"><i class="fas fa-stethoscope"></i> {{__('Prüfungen')}}</a>
+    <li class="nav-item {{ Request::routeIs('controlevent.*') ? ' active ' : ' ' }}">
+        <a class="nav-link " href="{{ route('controlevent.index') }}"><i class="fas fa-stethoscope"></i> {{__('Prüfungen')}}</a>
     </li>
 
 </ul>

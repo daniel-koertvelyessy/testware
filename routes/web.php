@@ -32,7 +32,7 @@ Route::resources([
     'adresse' => 'AdresseController',
     'testware' => 'TestwareController',
     'equipment' => 'EquipmentController',
-    'control' => 'ControlController',
+    'controlevent' => 'ControlEventController',
     'user' => 'UserController',
     'stellplatz' => 'StellplatzController',
     'anforderung' => 'AnforderungsController',
@@ -80,6 +80,13 @@ Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
 Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
     return App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
 })->name('makePDFEquipmentDataSheet');
+
+Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEvent) {
+    return App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(
+
+        App\ControlEvent::find($controlEvent)
+    );
+})->name('makePDFEquipmentControlReport');
 
 Auth::routes();
 

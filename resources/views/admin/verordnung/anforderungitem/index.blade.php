@@ -42,9 +42,9 @@
                         <td style="vertical-align: middle;" class="text-center d-none d-md-table-cell">
                             {{ $aci->User->name ?? $aci->firma->fa_name_kurz }}
                         </td>
-                        <td style="vertical-align: middle;"><a href="{{ route('anforderungitem.show',$aci) }}">Bearbeiten</a></td>
+                        <td style="vertical-align: middle;"><a href="{{ route('anforderungcontrolitem.show',$aci) }}">Bearbeiten</a></td>
                         <td style="vertical-align: middle;">
-                            <form action="{{ route('anforderungitem.destroy',$aci) }}" method="post">
+                            <form action="{{ route('anforderungcontrolitem.destroy',$aci) }}" method="post">
                                 @csrf
                                 @method('delete')
 

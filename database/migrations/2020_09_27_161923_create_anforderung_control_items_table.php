@@ -22,7 +22,10 @@ class CreateAnforderungControlItemsTable extends Migration
             $table->text('aci_task')->nullable();
             $table->string('aci_value_si',10)->nullable(); // SI Einheit [°C] [A] [V]
             $table->decimal('aci_vaule_soll')->nullable();
-
+            $table->string('aci_value_target_mode',3)->nullable();
+            $table->decimal('aci_value_tol')->nullable();
+            $table->string('aci_value_tol_mod',3)->nullable();
+            $table->boolean('aci_execution')->nullable();
             $table->foreignId('aci_contact_id')->nullable();
 
             $table->foreignId('firma_id')

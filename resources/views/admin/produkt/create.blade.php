@@ -80,7 +80,6 @@
                                         id="produkt_kategorie_id"
                                         class="custom-select"
                                 >
-                                    <option value="0">keine Zuordnung</option>
                                     @foreach (App\ProduktKategorie::all() as $produktKategorie)
                                         <option value="{{ $produktKategorie->id }}" {{ ($pk==$produktKategorie->id)? ' selected ': '' }}>{{ $produktKategorie->pk_name_kurz }}</option>
                                     @endforeach

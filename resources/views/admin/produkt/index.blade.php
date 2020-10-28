@@ -55,7 +55,7 @@
                         <td>{{ $produkt->prod_name_kurz }}</td>
                         <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_name_kurz }}</td>
                         <td class="d-none d-md-table-cell">{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
-                        <td class="d-none d-md-table-cell">{{ $produkt->ControlProdukt ?? '-' }}</td>
+                        <td class="d-none d-md-table-cell">{!! $produkt->ControlProdukt ? '<i class="far fa-check-circle text-success"></i>' : '' !!}</td>
                         <td>{{ $produkt->ProduktState->ps_name_kurz }} </td>
                         <td><a href="{{ route('produkt.show',$produkt) }}">öffnen</a></td>
                     </tr>

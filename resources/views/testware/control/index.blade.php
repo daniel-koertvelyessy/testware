@@ -2,6 +2,10 @@
 
 @section('mainSection', 'testWare')
 
+@section('pagetitle')
+    {{__('Dashboard')}} @ bitpack.io GmbH
+@endsection
+
 @section('menu')
     @include('menus._menu_testware_main')
 @endsection
@@ -42,7 +46,7 @@
                                 {!! $controlItem->checkDueDate($controlItem) !!}
                             </td>
                             <td>
-                                <a href="">{{__('jetzt prüfen')}}</a>
+                                <a href="{{ route('controlevent.create',['controlItem' => $controlItem]) }}">{{__('jetzt prüfen')}}</a>
                             </td>
                         </tr>
                     @empty

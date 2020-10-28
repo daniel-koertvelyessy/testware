@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\AnforderungControlItem;
+use Exception;
 use http\Client\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
 class AnforderungControlItemController extends Controller {
@@ -40,10 +43,15 @@ class AnforderungControlItemController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function store(Request $request) {
-        //
+        $request->firma_id = ($request->aci_exinternal === 'internal') ? 1 : $request->firma_id;
+
+        AnforderungControlItem::create($this->validateNewAnforderungControlItem());
+
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_kurz') . '</strong> wurde angelegt!');
+        return back();
     }
 
     /**
@@ -62,19 +70,82 @@ class AnforderungControlItemController extends Controller {
      *
      * @param  Request                $request
      * @param  AnforderungControlItem $anforderungcontrolitem
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(Request $request, AnforderungControlItem $anforderungcontrolitem) {
-        //
+
+//        dd(request()->has('aci_control_equipment_required') );
+//        $data = AnforderungControlItem::find($request->id);
+        $anforderungcontrolitem->aci_control_equipment_required = request()->has('aci_control_equipment_required') ? 1:0;
+//        $data->update($this->validateAnforderungControlItem());
+
+//        dd($request->aci_control_equipment_required );
+        $anforderungcontrolitem->update($this->validateAnforderungControlItem());
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_lang') . '</strong> wurde aktualisiert!');
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  AnforderungControlItem $anforderungcontrolitem
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy(AnforderungControlItem $anforderungcontrolitem) {
-        //
+        $anforderungcontrolitem->delete();
+        \request()->session()->flash('status', 'Der Vorgang wurde gelöscht!');
+        return back();
+    }
+
+
+
+    public function getAnforderungControlItemData(Request $request) {
+        return AnforderungControlItem::findorFail($request->id);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNewAnforderungControlItem(): array
+    {
+        return request()->validate([
+            'aci_name_kurz' => 'bail|alpha_dash|unique:anforderung_control_items,aci_name_kurz|required|max:20',
+            'aci_name_lang' => 'required',
+            'aci_task' => '',
+            'aci_value_si' => 'max:10',
+            'aci_vaule_soll' => '',
+            'aci_value_target_mode' => '',
+            'aci_value_tol' => '',
+            'aci_value_tol_mod' => '',
+            'aci_execution' => '',
+            'aci_control_equipment_required' => '',
+            'firma_id' => '',
+            'aci_contact_id' => 'required',
+            'anforderung_id' => 'required',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateAnforderungControlItem(): array
+    {
+        return request()->validate([
+            'aci_name_kurz' => 'bail|alpha_dash|required|max:20',
+            'aci_name_lang' => 'max:150',
+            'aci_task' => '',
+            'aci_value_si' => 'max:10',
+            'aci_vaule_soll' => '',
+            'aci_value_target_mode' => '',
+            'aci_value_tol' => '',
+            'aci_value_tol_mod' => '',
+            'aci_control_equipment_required' => '',
+            'id' => '',
+            'aci_execution' => '',
+            'firma_id' => '',
+            'aci_contact_id' => 'required',
+            'anforderung_id' => 'required',
+        ]);
     }
 }

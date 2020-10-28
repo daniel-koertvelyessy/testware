@@ -586,6 +586,7 @@ class ProduktController extends Controller
             'prod_name_text' => '',
             'prod_nummer' => 'bail|required|min:2|max:100',
             'prod_active' => '',
+            'produkt_kategorie_id' => '',
             'produkt_state_id' => 'required'
         ]);
     }

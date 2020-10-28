@@ -145,11 +145,11 @@ Route::get('getUsedAdressesByAdressType', 'AdminController@getUsedAdressesByAdre
  *
  *
  */
-Route::post('createAnforderung', 'AdminController@createAnforderung')->name('createAnforderung');
-Route::post('addNewAnforderungControlItem', 'AdminController@addNewAnforderungControlItem')->name('addNewAnforderungControlItem');
-Route::get('getAnforderungControlItemData', 'AdminController@getAnforderungControlItemData')->name('getAnforderungControlItemData');
-Route::put('updateAnforderungControlItem', 'AdminController@updateAnforderungControlItem')->name('updateAnforderungControlItem');
-Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderungControlItem')->name('deleteAnforderungControlItem');
+//Route::post('createAnforderung', 'AdminController@createAnforderung')->name('createAnforderung');
+//Route::post('addNewAnforderungControlItem', 'AdminController@addNewAnforderungControlItem')->name('addNewAnforderungControlItem');
+Route::get('getAnforderungControlItemData', 'AnforderungControlItemController@getAnforderungControlItemData')->name('getAnforderungControlItemData');
+//Route::put('updateAnforderungControlItem', 'AdminController@updateAnforderungControlItem')->name('updateAnforderungControlItem');
+//Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderungControlItem')->name('deleteAnforderungControlItem');
 
 
 

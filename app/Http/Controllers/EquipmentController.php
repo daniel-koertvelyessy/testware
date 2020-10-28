@@ -293,7 +293,7 @@ class EquipmentController extends Controller
     {
         return request()->validate([
             'eq_inventar_nr' => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
-            'eq_serien_nr' => 'max:100',
+            'eq_serien_nr' => 'bail|unique:equipment,eq_serien_nr|max:100',
             'eq_qrcode' => '',
             'eq_text' => '',
             'eq_ibm' => 'date',

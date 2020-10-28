@@ -12,71 +12,117 @@
 
 @section('actionMenuItems')
     <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-bars"></i> {{__('Gerät')}} </a>
-        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('equipment.edit',['equipment'=>$equipment]) }}">
-                {{__('Gerät bearbeiten')}} <i class="ml-2 far fa-edit"></i>
-            </a>
-            <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" data-toggle="modal" data-target="#modalAddEquipDoc">
-                {{__('Datei hinzufügen')}} <i class="ml-2 fas fa-upload"></i>
-            </a>
+        <a class="nav-link dropdown-toggle"
+           href="#"
+           id="navTargetAppAktionItems"
+           role="button"
+           data-toggle="dropdown"
+           aria-expanded="false"
+        ><i class="fas fa-bars"></i> {{__('Gerät')}} </a>
+        <ul class="dropdown-menu"
+            aria-labelledby="navTargetAppAktionItems"
+        >
+            <a class="dropdown-item d-flex justify-content-between align-items-center"
+               href="{{ route('equipment.edit',['equipment'=>$equipment]) }}"
+            >
+                {{__('Gerät bearbeiten')}} <i class="ml-2 far fa-edit"></i></a>
+            <a class="dropdown-item d-flex justify-content-between align-items-center"
+               href="#"
+               data-toggle="modal"
+               data-target="#modalAddEquipDoc"
+            >
+                {{__('Datei hinzufügen')}} <i class="ml-2 fas fa-upload"></i></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('makePDFEquipmentDataSheet',$equipment) }}" download>
-                {{__('Datenblatt Drucken')}} <i class="ml-2 fas fa-print"></i>
-            </a>
-            <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('makePDFEquipmentLabel',$equipment) }}" download>
-                {{__('QR-Code Drucken')}} <i class="ml-2 fas fa-qrcode"></i>
-            </a>
+            <a class="dropdown-item d-flex justify-content-between align-items-center"
+               href="{{ route('makePDFEquipmentDataSheet',$equipment) }}"
+               download
+            >
+                {{__('Datenblatt Drucken')}} <i class="ml-2 fas fa-print"></i></a>
+            <a class="dropdown-item d-flex justify-content-between align-items-center"
+               href="{{ route('makePDFEquipmentLabel',$equipment) }}"
+               download
+            >
+                {{__('QR-Code Drucken')}} <i class="ml-2 fas fa-qrcode"></i></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ route('produkt.show',['produkt'=>$equipment->produkt]) }}">
-                {{__('Produkt bearbeiten')}} <i class="ml-2 far fa-edit"></i>
-            </a>
+            <a class="dropdown-item d-flex justify-content-between align-items-center"
+               href="{{ route('produkt.show',['produkt'=>$equipment->produkt]) }}"
+            >
+                {{__('Produkt bearbeiten')}} <i class="ml-2 far fa-edit"></i></a>
 
         </ul>
     </li>
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="modalAddEquipDoc" tabindex="-1" aria-labelledby="modalAddEquipDocLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="modalAddEquipDoc"
+         tabindex="-1"
+         aria-labelledby="modalAddEquipDocLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('equipDoku.store') }}#dokumente" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('equipDoku.store') }}#dokumente"
+                      method="POST"
+                      enctype="multipart/form-data"
+                >
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalAddEquipDocLabel">{{__('Dokument an Gerät anhängen')}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title"
+                            id="modalAddEquipDocLabel"
+                        >{{__('Dokument an Gerät anhängen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="equipment_id" id="equipment_id_doku" value="{{ $equipment->id }}">
+                        <input type="hidden"
+                               name="equipment_id"
+                               id="equipment_id_doku"
+                               value="{{ $equipment->id }}"
+                        >
 
-                        <x-selectfield id="document_type_id" label="{{__('Dokument Typ')}}">
+                        <x-selectfield id="document_type_id"
+                                       label="{{__('Dokument Typ')}}"
+                        >
                             @foreach (App\DocumentType::all() as $ad)
                                 <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
                             @endforeach
                         </x-selectfield>
 
-                        <x-textfield id="eqdoc_name_kurz" label="{{__('Bezeichnung')}}" />
+                        <x-textfield id="eqdoc_name_kurz"
+                                     label="{{__('Bezeichnung')}}"
+                        />
 
-                        <x-textarea id="eqdoc_name_text" label="{{__('Datei Informationen')}}" />
+                        <x-textarea id="eqdoc_name_text"
+                                    label="{{__('Datei Informationen')}}"
+                        />
 
 
                         <div class="form-group">
                             <div class="custom-file">
-                                <input type="file" id="equipDokumentFile" name="equipDokumentFile"
+                                <input type="file"
+                                       id="equipDokumentFile"
+                                       name="equipDokumentFile"
                                        data-browse="Datei"
                                        class="custom-file-input"
                                        accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
                                        required
-                                >
-                                <label class="custom-file-label" for="equipDokumentFile">{{__('Datei wählen')}}</label>
+                                > <label class="custom-file-label"
+                                         for="equipDokumentFile"
+                                >{{__('Datei wählen')}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{__('Abbruch')}}</button>
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-dismiss="modal"
+                        >{{__('Abbruch')}}</button>
                         <button class="btn btn-primary">{{__('Dokument hochladen')}}</button>
                     </div>
                 </form>
@@ -84,13 +130,24 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalStartControl" tabindex="-1" aria-labelledby="modalStartControlLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="modalStartControl"
+         tabindex="-1"
+         aria-labelledby="modalStartControlLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalStartControlLabel">{{__('Prüfung/Wartung starten')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title"
+                        id="modalStartControlLabel"
+                    >{{__('Prüfung/Wartung starten')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -107,12 +164,16 @@
                         </thead>
                         <tbody>
                         @forelse (App\ControlEquipment::where('equipment_id',$equipment->id)->orderBy('qe_control_date_due')->get() as $controlItem)
-                          <tr>
-                              <td>{{ $controlItem->Anforderung->an_name_lang }}</td>
-                              <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
-                              <td><a href="{{ route('control.create',['controlItem' => $controlItem]) }}" class="btn btn-sm btn-outline-primary">
-                                      Prüfung starten</a></td>
-                          </tr>
+                            <tr>
+                                <td>{{ $controlItem->Anforderung->an_name_lang }}</td>
+                                <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
+                                <td>
+                                    <a href="{{ route('controlevent.create',['controlItem' => $controlItem]) }}"
+                                       class="btn btn-sm btn-outline-primary"
+                                    > Prüfung starten
+                                    </a>
+                                </td>
+                            </tr>
                         @empty
                             <tr>
                                 <td colspan="3">
@@ -140,39 +201,102 @@
         </div>
         <div class="row">
             <div class="col">
-                <ul class="nav nav-tabs mainNavTab" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="stammdaten-tab" data-toggle="tab" href="#stammdaten" role="tab" aria-controls="stammdaten" aria-selected="true"> {{ __('Stammdaten')}}
+                <ul class="nav nav-tabs mainNavTab"
+                    id="myTab"
+                    role="tablist"
+                >
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link active"
+                           id="stammdaten-tab"
+                           data-toggle="tab"
+                           href="#stammdaten"
+                           role="tab"
+                           aria-controls="stammdaten"
+                           aria-selected="true"
+                        > {{ __('Stammdaten')}}
                         </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="anforderungen-tab" data-toggle="tab" href="#anforderungen" role="tab" aria-controls="anforderungen" aria-selected="false"> {{ __('Anforderungen')}} </a>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="anforderungen-tab"
+                           data-toggle="tab"
+                           href="#anforderungen"
+                           role="tab"
+                           aria-controls="anforderungen"
+                           aria-selected="false"
+                        > {{ __('Anforderungen')}} </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="dokumente-tab" data-toggle="tab" href="#dokumente" role="tab" aria-controls="dokumente" aria-selected="false"> {{ __('Dokumente')}}
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="dokumente-tab"
+                           data-toggle="tab"
+                           href="#dokumente"
+                           role="tab"
+                           aria-controls="dokumente"
+                           aria-selected="false"
+                        > {{ __('Dokumente')}}
                         </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="logs-tab" data-toggle="tab" href="#logs" role="tab" aria-controls="logs" aria-selected="false"> {{ __('Logs')}}
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="logs-tab"
+                           data-toggle="tab"
+                           href="#logs"
+                           role="tab"
+                           aria-controls="logs"
+                           aria-selected="false"
+                        > {{ __('Logs')}}
                         </a>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active p-2" id="stammdaten" role="tabpanel" aria-labelledby="stammdaten-tab">
+                <div class="tab-content"
+                     id="myTabContent"
+                >
+                    <div class="tab-pane fade show active p-2"
+                         id="stammdaten"
+                         role="tabpanel"
+                         aria-labelledby="stammdaten-tab"
+                    >
                         <div class="row">
                             <div class="col-md-7 mb-3">
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
-                                <x-staticfield id="Bezeichnung" label="{{__('Bezeichnung')}}:" value="{{ $equipment->produkt->prod_name_lang }}"/>
-                                <x-staticfield id="Standort" label="{{__('Standort')}}:" value="{{ App\Standort::find($equipment->standort_id)->std_kurzel }}"/>
-                                <x-staticfield id="eq_inventar_nr" label="{{__('Inventarnummer')}}:" value="{{ $equipment->eq_inventar_nr }}"/>
-                                <x-staticfield id="eq_ibm" label="{{__('Inbetriebnahme am')}}:" value="{{ $equipment->eq_ibm }}"/>
-                                <x-staticfield id="eq_serien_nr" label="{{__('Seriennummer')}}:" value="{{ $equipment->eq_serien_nr ?? '-' }}"/>
-                                <label for="firma">{{__('Hersteller')}}:</label>
-                                <input type="text" id="firma" class="form-control-plaintext"
-                                       value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach">
+                                <x-staticfield id="Bezeichnung"
+                                               label="{{__('Bezeichnung')}}:"
+                                               value="{{ $equipment->produkt->prod_name_lang }}"
+                                />
+                                <x-staticfield id="Standort"
+                                               label="{{__('Standort')}}:"
+                                               value="{{ App\Standort::find($equipment->standort_id)->std_kurzel }}"
+                                />
+                                <x-staticfield id="eq_inventar_nr"
+                                               label="{{__('Inventarnummer')}}:"
+                                               value="{{ $equipment->eq_inventar_nr }}"
+                                />
+                                <x-staticfield id="eq_ibm"
+                                               label="{{__('Inbetriebnahme am')}}:"
+                                               value="{{ $equipment->eq_ibm }}"
+                                />
+                                <x-staticfield id="eq_serien_nr"
+                                               label="{{__('Seriennummer')}}:"
+                                               value="{{ $equipment->eq_serien_nr ?? '-' }}"
+                                />
+                                <label for="firma">{{__('Hersteller')}}:</label> <input type="text"
+                                                                                        id="firma"
+                                                                                        class="form-control-plaintext"
+                                                                                        value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach"
+                                >
                                 <button
                                     class="btn btn-primary btn-lg mt-3"
-                                    data-toggle="modal" data-target="#modalStartControl"
+                                    data-toggle="modal"
+                                    data-target="#modalStartControl"
                                 >{{__('Prüfung/Wartung erfassen')}}</button>
 
                             </div>
@@ -185,10 +309,8 @@
 
 
                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
-                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
+                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
                                 </div>
-
 
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
@@ -196,12 +318,14 @@
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br>
-                                            <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
+                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br> <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
                                             {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)/1028,1) }}kB
                                         </div>
                                         <div>
-                                            <form action="{{ route('downloadProduktDokuFile') }}#dokumente" method="get" id="downloadBDA_{{ $bda->id }}">
+                                            <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
+                                                  method="get"
+                                                  id="downloadBDA_{{ $bda->id }}"
+                                            >
                                                 @csrf
                                                 <input type="hidden"
                                                        name="id"
@@ -211,7 +335,8 @@
                                             </form>
                                             <button
                                                 class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();">
+                                                onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
+                                            >
                                                 <span class="fas fa-download"></span>
                                             </button>
                                         </div>
@@ -223,44 +348,40 @@
                                 @endforelse
 
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
-                                @forelse(App\ControlDoc::all() as $bda)
+                                @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(10)->latest()->onlyTrashed()->get() as $bda)
 
-                                    <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br>
-                                            <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
-                                            {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)/1028,1) }}kB
-                                        </div>
-                                        <div>
-                                            <form action="{{ route('downloadProduktDokuFile') }}#prodDoku" method="get" id="downloadBDA_{{ $bda->id }}">
-                                                @csrf
-                                                <input type="hidden"
-                                                       name="id"
-                                                       id="bda_{{ $bda->id }}"
-                                                       value="{{ $bda->id }}"
-                                                >
-                                            </form>
-                                            <button
-                                                class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadBDA').submit();">
-                                                <span class="fas fa-download"></span>
-                                            </button>
-                                        </div>
 
+
+                                    <div class="border rounded p-1 d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-column">
+                                            <span class="small text-muted pl-2">
+                                                {{$bda->deleted_at->diffForHumans()}}
+                                            </span> <span class="p-2">
+                                                {{ $bda->Anforderung->an_name_lang }}
+                                            </span>
+                                        </div>
+                                        <div class="pr-2">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary"
+                                            ><i class="far fa-folder-open"></i></button>
+                                            <a href="{{ route('makePDFEquipmentControlReport',$bda->ControlEvent[0]->id ) }}"
+                                               class="btn btn-sm btn-outline-primary"
+                                               target="_blank"
+                                            ><i class="far fa-file-pdf"></i></a>
+                                        </div>
                                     </div>
+
                                 @empty
                                     <x-notifyer>{{__('keine Prüfberichte hinterlegt')}}</x-notifyer>
                                 @endforelse
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-10"></div>
-                        </div>
                     </div>
-
-                    <div class="tab-pane fade p-2" id="anforderungen" role="tabpanel" aria-labelledby="anforderungen-tab">
-
+                    <div class="tab-pane fade p-2"
+                         id="anforderungen"
+                         role="tabpanel"
+                         aria-labelledby="anforderungen-tab"
+                    >
                         @php
                             $Anforderung = App\Anforderung::all();
                         @endphp
@@ -275,7 +396,6 @@
                                         <dt class="col-md-3">{{__('Anforderung')}}</dt>
                                         <dd class="col-md-9 d-flex justify-content-between align-items-center">
                                             {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}
-                                            <a href="#" class="btn-primary btn btn-sm">jetzt prüfen</a>
                                         </dd>
                                     </dl>
                                     <dl class="row">
@@ -315,11 +435,11 @@
                         @endforelse
 
                     </div>
-
-                    <div class="tab-pane fade p-2" id="anforderungen" role="tabpanel" aria-labelledby="prodPruefungen-tab">
-                    </div>
-
-                    <div class="tab-pane fade p-2" id="dokumente" role="tabpanel" aria-labelledby="dokumente-tab">
+                    <div class="tab-pane fade p-2"
+                         id="dokumente"
+                         role="tabpanel"
+                         aria-labelledby="dokumente-tab"
+                    >
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 class="h4">{{__('Geräte')}}</h3>
@@ -340,7 +460,9 @@
                                                 <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
                                                 <td>
                                                     <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
-                                                          method="get" id="downloadProdDoku_{{ $equipDoc->id }}">
+                                                          method="get"
+                                                          id="downloadProdDoku_{{ $equipDoc->id }}"
+                                                    >
                                                         @csrf
                                                         <input type="hidden"
                                                                name="id"
@@ -350,12 +472,15 @@
                                                     </form>
                                                     <button
                                                         class="btn btn-sm btn-outline-secondary"
-                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $equipDoc->id }}').submit();">
+                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $equipDoc->id }}').submit();"
+                                                    >
                                                         <span class="fas fa-download"></span>
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}#dokumente" id="{{ $equipDoc->id }}" />
+                                                    <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}#dokumente"
+                                                                    id="{{ $equipDoc->id }}"
+                                                    />
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -384,7 +509,9 @@
                                                 <td style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
                                                 <td>
                                                     <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
-                                                          method="get" id="downloadProdDoku_{{ $produktDoc->id }}">
+                                                          method="get"
+                                                          id="downloadProdDoku_{{ $produktDoc->id }}"
+                                                    >
                                                         @csrf
                                                         <input type="hidden"
                                                                name="id"
@@ -394,7 +521,8 @@
                                                     </form>
                                                     <button
                                                         class="btn btn-sm btn-outline-secondary"
-                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();">
+                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                    >
                                                         <span class="fas fa-download"></span>
                                                     </button>
                                                 </td>
@@ -408,8 +536,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="tab-pane fade p-2" id="logs" role="tabpanel" aria-labelledby="logs-tab">
+                    <div class="tab-pane fade p-2"
+                         id="logs"
+                         role="tabpanel"
+                         aria-labelledby="logs-tab"
+                    >
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Historie')}}</h3>
@@ -422,17 +553,47 @@
                             </div>
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Logs')}}</h3>
+
                                 <table class="table">
                                     <thead>
                                     <tr>
                                         <th>{{__('Zeit')}}</th>
+                                        <th colspan="2"
+                                            style="text-align: center;"
+                                        >{{__('Soll')}}</th>
                                         <th style="text-align: right;">{{__('Ist')}}</th>
-                                        <th style="text-align: right;">{{__('Soll')}}</th>
                                         <th style="text-align: center;">{{__('pass')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @forelse (\App\ControlEventItem::with('AnforderungControlItem')->where('equipment_id',$equipment->id)->get() as $controlItem)
+                                        <tr>
+                                            <td>
+                                                {{ $controlItem->created_at->diffForHumans() }}
+                                            </td>
+                                            <td style="text-align: right;">
 
+                                                {{$controlItem->AnforderungControlItem[0]->aci_vaule_soll}}
+
+                                            </td>
+                                            <td>
+                                                {{$controlItem->AnforderungControlItem[0]->aci_value_si}}
+                                            </td>
+                                            <td style="text-align: right; "
+                                                @if ($controlItem->AnforderungControlItem[0]->aci_vaule_soll)
+                                                class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
+                                                @endif
+
+                                            >
+                                                {{ $controlItem->control_item_read }}
+                                            </td>
+                                            <td style="text-align: center; ">
+                                                {!! $controlItem->control_item_pass ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-danger"></span>' !!}
+                                            </td>
+                                        </tr>
+                                    @empty
+
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>

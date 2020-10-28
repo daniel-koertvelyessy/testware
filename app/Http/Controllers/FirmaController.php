@@ -183,7 +183,9 @@ class FirmaController extends Controller
     {
         $firma = Firma::find($request->id);
 
-        $adresses = Adresse::find($firma->address_id);
+//        dd($firma->adresse_id);
+
+        $adresses = Adresse::find($firma->adresse_id);
 
         $contact = Contact::where('firma_id',$request->id)->first();
 

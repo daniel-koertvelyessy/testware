@@ -254,6 +254,11 @@ class InitialValueSeeder extends Seeder
                 'pk_name_nummer' => '-',
                 'pk_name_lang' => 'Keine Zuordnung'
             ],
+            [
+                'pk_name_kurz' => 'kühlerMed',
+                'pk_name_nummer' => 'mk-',
+                'pk_name_lang' => 'Medizinische Kühlschänke'
+            ],
 
         ]);
         DB::table('verordnungs')->insert([
@@ -278,6 +283,14 @@ class InitialValueSeeder extends Seeder
                 'vo_name_lang' => 'Medizinprodukte-Sicherheitsplanverordnung',
                 'vo_name_text' => 'Verordnung über die Erfassung, Bewertung und Abwehr von Risiken bei Medizinprodukten',
             ],
+            [
+                'vo_name_kurz' => 'iso9001',
+                'vo_nummer' => '9001:2015',
+                'vo_stand' => '2015',
+                'vo_name_lang' => 'Qualitätsmanagementsysteme –Anforderungen',
+                'vo_name_text' => 'Die Einführung eines Qualitätsmanagementsystems ist eine strategische Entscheidung einer Organisation, die helfen kann, ihre Gesamtleistung zu steigern und eine gute Basis für nachhaltige
+Entwicklungsinitiativen bereitstellt.',
+            ],
 
         ]);
 
@@ -291,6 +304,11 @@ class InitialValueSeeder extends Seeder
                 'at_name_kurz' => 'wartung',
                 'at_name_lang' => 'Wartung',
                 'at_name_text' => 'Die regelmäßige Wartung von Geräten ermöglicht deren sicheren Gebrauch.',
+            ],
+            [
+                'at_name_kurz' => 'kalibrierung',
+                'at_name_lang' => 'Kalibrierung',
+                'at_name_text' => 'Die regelmäßige Kalibrierung von Geräten ermöglicht eine genaue Bewertung der Messergebnisse.',
             ],
 
 
@@ -366,6 +384,14 @@ class InitialValueSeeder extends Seeder
                 'an_name_lang' => 'Kritisches Medizinprodukt Typ B',
                 'verordnung_id' => 2,
                 'anforderung_type_id' => 1,
+                'an_control_interval' => 1,
+                'control_interval_id' => 8,
+            ],
+            [
+                'an_name_kurz' => '9001-Cal',
+                'an_name_lang' => 'Kalibrierung Prüfmittel',
+                'verordnung_id' => 4,
+                'anforderung_type_id' => 3,
                 'an_control_interval' => 1,
                 'control_interval_id' => 8,
             ],

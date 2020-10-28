@@ -168,6 +168,45 @@ $('.btnShowDataStyle').click(function () {
     });
 });
 
+$(document).on('blur', '.decimal',function() {
+    $(this).val($(this).val().replace(/,/, "."));
+});
+$(document).on('keyup', '.decimal', function() {
+    $(this).val($(this).val().replace(/,/, "."));
+});
+
+$('.bentBackTab').click(function () {
+    $($(this).data('showtab')).removeClass('disabled').tab('show');
+});
+$('.bentNextTab').click(function () {
+    if($(this).data('showtab')==='#nav-cicontact-tab'){
+        const aci_task = $('#aci_task');
+        const aci_name = $('#aci_name');
+        let flag = false;
+        if (aci_task.val()===''|| aci_name.val()==='') {
+            (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
+            (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+            flag = false;
+        } else {
+            (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
+            (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+            flag = true;
+        }
+
+        (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+        if (flag)
+            $($(this).data('showtab')).removeClass('disabled').tab('show');
+    } else {
+        $($(this).data('showtab')).removeClass('disabled').tab('show');
+    }
+});
+
+// $('.decimal').droppable({
+//     drop: function(event, ui) {
+//         $(this).val($(this).val().replace(/,/, "."));
+//     }
+// });
+
 
 
 /*        $('#btnUpdateBuildingType').click(function () {

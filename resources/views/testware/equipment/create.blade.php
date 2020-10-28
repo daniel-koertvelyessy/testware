@@ -27,6 +27,7 @@
                     <input type="hidden"
                            name="standort_id"
                            id="standort_id"
+                           value="{{ old('standort_id')??'' }}"
                     >
                     <div class="row">
                         <div class="col-md-4">
@@ -47,7 +48,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-
                             <div class="form-group">
                                 <label for="setStandOrtId">Aufstellplatz / Standort</label>
                                 <input type="text" name="setStandOrtId" id="setStandOrtId"

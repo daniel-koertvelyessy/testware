@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Control;
+use App\ControlEvent;
 use Faker\Generator as Faker;
 
-$factory->define(Control::class, function (Faker $faker) {
+$factory->define(ControlEvent::class, function (Faker $faker) {
     return [
         //
     ];

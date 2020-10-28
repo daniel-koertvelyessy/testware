@@ -1,6 +1,6 @@
 
 
-<form action="{{ route('addNewAnforderungControlItem') }}#Produkte" method="POST" name="frmAddNewAnforderungControlItem" id="frmAddNewAnforderungControlItem">
+<form action="{{ route('anforderungcontrolitem.store') }}" method="POST" name="frmAddNewAnforderungControlItem" id="frmAddNewAnforderungControlItem">
     @csrf
     <input type="hidden" name="anforderung_id" id="anforderung_id">
     <div class="tab-content" id="nav-tabContent">
@@ -38,20 +38,51 @@
             <x-textarea id="aci_task" label="Aufgabe" />
 
             <div class="row">
-                <div class="col-md-4">
-                    <x-textfield id="aci_value_si" label="SI-Einheit [kg, °C, V usw]" max="10" />
+                <div class="col-md-2">
+                    <x-textfield  id="aci_value_si" label="SI-Einheit [kg, °C, V usw]" max="10"/>
                 </div>
-                <div class="col-md-4">
-                    <x-textfield id="aci_vaule_soll" label="Sollwert" />
+                <div class="col-md-3">
+                    <x-textfield id="aci_vaule_soll" label="Sollwert" class="decimal"/>
+                </div>
+                <div class="col-md-3">
+                    <label for="aci_value_target_mode">Zielwert i.O.</label>
+                    <select name="aci_value_target_mode"
+                            id="aci_value_target_mode"
+                            class="custom-select"
+                    >
+                        <option @if(old('aci_value_target_mode') ==='lt') selected @endif value="lt">Kleiner als Soll</option>
+                        <option @if(old('aci_value_target_mode') ==='eq') selected @endif value="eq">Gleich ± Toleranz</option>
+                        <option @if(old('aci_value_target_mode') ==='gt') selected @endif value="gt">Größer als Soll</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <x-textfield id="aci_value_tol" label="± Toleranz" class="decimal"  />
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio"
+                               id="aci_value_tol_mod_abs" name="aci_value_tol_mod"
+                               class="custom-control-input"
+                               value="abs"
+                            {{ old('aci_value_tol_mod') === 'abs'? ' checked ' :'' }}
+                        >
+                        <label class="custom-control-label" for="aci_value_tol_mod_abs">abs</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio"
+                               id="aci_value_tol_mod_pro" name="aci_value_tol_mod"
+                               class="custom-control-input"
+                               value="pro"
+                            {{ old('aci_value_tol_mod') === 'pro'? ' checked ' :'' }}
+                        >
+                        <label class="custom-control-label" for="aci_value_tol_mod_pro">%</label>
+                    </div>
                 </div>
             </div>
             <div class="card p-3 my-4">
                 <p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p>
                 <p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>
             </div>
-
-
-
             <button type="button" class="btn btn-sm btn-outline-secondary bentBackTab"
                     data-showtab="#nav-cianforderung-tab"
             >{{__('zurück')}}</button>
@@ -93,28 +124,7 @@
 </form>
 
 <script>
-    $('.bentNextTab').click(function () {
-        if($(this).data('showtab')==='#nav-cicontact-tab'){
-            const aci_task = $('#aci_task');
-            const aci_name = $('#aci_name');
-            let flag = false;
-            if (aci_task.val()===''|| aci_name.val()==='') {
-                (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
-                (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
-                flag = false;
-            } else {
-                (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
-                (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
-                flag = true;
-            }
 
-            (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
-            if (flag)
-                $($(this).data('showtab')).removeClass('disabled').tab('show');
-        } else {
-            $($(this).data('showtab')).removeClass('disabled').tab('show');
-        }
-    });
 
     $('#firma_id').change(function () {
         $('#aci_external').prop('checked',true);
@@ -124,8 +134,5 @@
         $('#aci_internal').prop('checked',true);
     })
 
-    $('.bentBackTab').click(function () {
-        $($(this).data('showtab')).removeClass('disabled').tab('show');
-    });
 
 </script>

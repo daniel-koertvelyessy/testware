@@ -241,8 +241,21 @@
                                     @method('PUT')
                                     <input type="hidden" name="id" id="id" value="{{ $produkt->id }}">
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-md-9">
                                             <x-textfield id="prod_name_lang" label="Bezeichnung" value="{{ $produkt->prod_name_lang }}"/>
+                                        </div>
+                                        <div class="col md-3">
+                                            <x-selectfield id="produkt_kategorie_id" label="Kategorie">
+                                                @foreach (App\ProduktKategorie::all() as $produktKategorie)
+                                                    <option value="{{ $produktKategorie->id }}"
+                                                            @if($produktKategorie->id === $produkt->produkt_kategorie_id)
+                                                                selected
+                                                            @endif
+                                                    >
+                                                        {{ $produktKategorie->pk_name_kurz }}
+                                                    </option>
+                                                @endforeach
+                                            </x-selectfield>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -308,7 +321,7 @@
                                             <x-textarea id="prod_name_text" label="Beschreibung" value="{{ $produkt->prod_name_text }}"/>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block">Produkt speichern</button>
+                                    <x-btnMain>Produkt speichern <span class="fas fa-download ml-3"></span></x-btnMain>
                                 </form>
                             </div>
                         </div>
@@ -397,7 +410,7 @@
                                                     >
                                                     <input type="hidden"
                                                              name="anforderung_id"
-                                                             id="anforderung_id"
+                                                             id="anforderung_id_delete_anforderung_{{ $produktAnforderung->anforderung_id }}"
                                                            value="{{ $produktAnforderung->anforderung_id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">löschen</button>

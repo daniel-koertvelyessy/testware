@@ -2,7 +2,7 @@
 <div class="form-group">
     <label for="{{ $id }}">{{ $label }}</label>
     <input type="text" name="{{ $name??$id }}" id="{{ $id }}"
-           class="form-control @error($name??$id) is-invalid @enderror"
+           class="form-control {{ $class??'' }} @error($name??$id) is-invalid @enderror"
            value="{{ $value ?? old( $name??$id )  }}"
            @if(isset($required)) required @endif
     >

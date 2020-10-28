@@ -63,7 +63,12 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-info text-center">Keine Geräte angelegt!</td>
+                            <td colspan="5">
+                                <p>
+                                    <x-notifyer>Keine Geräte gefunden</x-notifyer>
+                                </p>
+                                <a href="{{ route('equipMaker') }}" class="btn mt-2 btn-outline-primary">{{__('neues Gerät anlegen')}}</a>
+                            </td>
                         </tr>
                     @endforelse
                     </tbody>

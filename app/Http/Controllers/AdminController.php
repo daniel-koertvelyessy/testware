@@ -606,46 +606,7 @@ class AdminController extends Controller
     }
 
 
-    /**
-     *  Speichere neue Anforderung
-     *
-     *
-     * @param Request $request
-     * @return Application|RedirectResponse|Response|Redirector
-     */
-    public function addNewAnforderungControlItem(Request $request)
-    {
 
-        $request->firma_id = ($request->aci_exinternal === 'internal') ? 1 : $request->firma_id;
-
-
-        AnforderungControlItem::create($this->validateNewAnforderungControlItem());
-
-        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_kurz') . '</strong> wurde angelegt!');
-        return back();
-    }
-
-    public function updateAnforderungControlItem(Request $request) {
-
-//        dd($request->id);
-        $data = AnforderungControlItem::findOrFail($request->id);
-        $data->update($this->validateAnforderungControlItem());
-        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_lang') . '</strong> wurde aktualisiert!');
-        return back();
-    }
-
-    public function getAnforderungControlItemData(Request $request) {
-        return AnforderungControlItem::findorFail($request->id);
-    }
-
-    public function deleteAnforderungControlItem(Request $request)
-    {
-
-        AnforderungControlItem::destroy($request->id);
-        $request->session()->flash('status', 'Der Vorgang wurde gelöscht!');
-        return back();
-
-    }
 
     public function addNewAnforderungType(Request $request) {
         AnforderungType::create($this->validateNewAnforderungType());
@@ -920,39 +881,7 @@ class AdminController extends Controller
     }
 
 
-    /**
-     * @return array
-     */
-    public function validateNewAnforderungControlItem(): array
-    {
-        return request()->validate([
-            'aci_name_kurz' => 'bail|alpha_dash|unique:anforderung_control_items,aci_name_kurz|required|max:20',
-            'aci_name_lang' => 'required',
-            'aci_task' => '',
-            'aci_value_si' => 'max:10',
-            'aci_vaule_soll' => '',
-            'firma_id' => '',
-            'aci_contact_id' => 'required',
-            'anforderung_id' => 'required',
-        ]);
-    }
 
-    /**
-     * @return array
-     */
-    public function validateAnforderungControlItem(): array
-    {
-        return request()->validate([
-            'aci_name_kurz' => 'bail|alpha_dash|required|max:20',
-            'aci_name_lang' => 'max:150',
-            'aci_task' => '',
-            'aci_value_si' => 'max:10',
-            'aci_vaule_soll' => '',
-            'firma_id' => '',
-            'aci_contact_id' => 'required',
-            'anforderung_id' => 'required',
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.

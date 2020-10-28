@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateControlDocsTable extends Migration
+class CreateControlEventItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,24 @@ class CreateControlDocsTable extends Migration
      */
     public function up()
     {
-        Schema::create('control_docs', function (Blueprint $table) {
+        Schema::create('control_event_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('control_event_doc_name_kurz', 150)->unique();
-            $table->string('control_event_doc_name_lang', 150)->nullable();
-            $table->string('control_event_doc_name_pfad', 150)->nullable();
-
+            $table->foreignId('control_item_aci');
+            $table->decimal('control_item_read')->nullable();
+            $table->boolean('control_item_pass');
+            $table->foreignId('equipment_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('control_event_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
         });
     }
 
@@ -36,6 +41,6 @@ class CreateControlDocsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('control_docs');
+        Schema::dropIfExists('control_event_items');
     }
 }

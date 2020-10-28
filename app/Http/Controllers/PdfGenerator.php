@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ControlEquipment;
+use App\ControlEvent;
 use App\Equipment;
 use Illuminate\Http\Request;
 use PDF;
@@ -58,8 +60,61 @@ class PdfGenerator extends Controller
 
     }
 
+    static function makePDFEquipmentControlReport(ControlEvent $controlEvent)
+    {
 
+        $controlEquipment = ControlEquipment::withTrashed()->find($controlEvent->control_equipment_id);
 
+  //   dd($controlEquipment->equipment_id);
+
+        $html = view('pdf.html.control_event_report',['controlEvent'=>$controlEvent])->render();
+        PDF::SetLineWidth( 1 );
+
+        PDF::setHeaderCallback(function ($pdf) use ($controlEquipment,$controlEvent) {
+            $inv = Equipment::find($controlEquipment->equipment_id)->eq_inventar_nr;
+            $std_id= Equipment::find($controlEquipment->equipment_id)->standort->std_id;
+            $val = $std_id . '||' . $inv;
+            $style = array(
+                'border' => 0,
+                'vpadding' => 'auto',
+                'hpadding' => 'auto',
+                'fgcolor' => array(0,0,0),
+                'bgcolor' => false, //array(255,255,255)
+                'module_width' => 1, // width of a single module in points
+                'module_height' => 1 // height of a single module in points
+            );
+            $pdf->SetY(5);
+            $pdf->SetFont('Helvetica', '', 8);
+            $pdf->Cell(0, 5, __('Druckdatum') .': '. date('d.m.Y') . ' | '.__('Lizenz-Nr').':  | '.__('Dokument-Nr').'. PR'.str_pad($controlEvent->id,5,'0',STR_PAD_LEFT), 0, 1);
+//            $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 15, 15,  $style, 'N');
+            $pdf->ImageSVG($file = '/img/icon/testWareLogo_greenYellow.svg', $x = 180, $y = 5, $w = '', $h = 10, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
+
+        });
+        PDF::setFooterCallback(function ($pdf) use($controlEvent){
+            $pdf->SetY(-15);
+            $pdf->SetFont('Helvetica', '', 8);
+            //Page number
+            $pdf->Cell(0, 5, '(c)' . date('Y') . ' bitpack GmbH - testWare', 0, 0, 'L');
+            $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
+
+        });
+
+        PDF::startPageGroup();
+        PDF::SetTitle('Prüfbericht');
+        PDF::SetAutoPageBreak(true, 50);
+        PDF::SetMargins(20, 25, 10);
+        PDF::AddPage();
+        PDF::writeHTML($html, true, false, true, false, '');
+        $y1 = PDF::GetY() ;
+
+        $img_base64_encoded = explode('data:image/png;base64,',$controlEvent->control_event_controller_signature );
+
+        PDF::Image('@'.base64_decode($img_base64_encoded[1]),10,$y1,90,40);
+//
+//        $pdf->SetAbsXY($pdf->GetX(),$y1+40);
+//        $pdf->Cell(90, 5, $sig->sigName, 0, 0, 'L');
+        PDF::Output('QRCODE_'.date('Y-m-d').'.pdf');
+    }
 
     static function makePDFEquipmentLabel($euqipment_id)
     {
@@ -99,8 +154,6 @@ class PdfGenerator extends Controller
     }
 
 
-
-
     static function makePDF($view,$title)
     {
 //        dd($view,$title);
@@ -121,7 +174,7 @@ class PdfGenerator extends Controller
             $pdf->SetY(-15);
             $pdf->SetFont('Helvetica', '', 8);
             //Page number
-            $pdf->Cell(0, 5, '(c)' . date('Y') . ' bitpack GmbH - testWare', 0, 0, 'L');
+            $pdf->Cell(0, 5, '(c)' . date('Y') . ' bitpack.io GmbH - testWare', 0, 0, 'L');
             $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
         });
         PDF::startPageGroup();
