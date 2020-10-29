@@ -271,11 +271,11 @@
                                                 <td>
                                                     <div class="btn-group dropleft">
                                                         <button type="button"
-                                                                class="btn btn-sm btn-outline-primary dropdown-toggle"
+                                                                class="btn btn-sm btn-outline-primary"
                                                                 id="editObjekt{{ $room->id }}"
                                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                                         >
-                                                            <i class="fas fa-edit"></i>
+                                                            <i class="fas fa-ellipsis-v"></i>
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="editObjekt{{ $room->id }}">
                                                             <a href="{{ route('room.show',$room) }}"

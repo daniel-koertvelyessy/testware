@@ -23,4 +23,15 @@ class ControlEvent extends Model
     public function ControlEventItem() {
         return $this->hasMany(ControlEventItem::class);
     }
+
+    public static function makeControlEventReport($id) {
+//      echo  view('pdf.html.control_event_report',['controlEvent'=>ControlEvent::find($id)]);
+
+        $data['html'] = view('pdf.html.control_event_report',['controlEvent'=>ControlEvent::find($id)])->render();
+        $data['id'] = $id;
+        return $data;
+
+
+    }
+
 }

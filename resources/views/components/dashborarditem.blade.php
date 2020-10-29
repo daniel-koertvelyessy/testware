@@ -1,5 +1,5 @@
 
-<div class="col-md-6  overflow-hidden">
+<div class="col-lg-6  overflow-hidden">
     {{ $slot }}
 </div>
 

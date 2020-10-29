@@ -11,6 +11,7 @@
                 <a class="nav-link disabled" id="nav-cicontact-tab" data-toggle="tab" href="#nav-cicontact" role="tab" aria-controls="nav-cicontact" aria-selected="false">{{__('Ausführung')}}</a>
             </div>
         </nav>
+        <div class="tab-content pt-3" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-cianforderung" role="tabpanel" aria-labelledby="nav-cianforderung-tab">
             <p class="lead text-primary">{{__('Wählen Sie als erstes die Anforderung aus, welche zum Vorgang zugeordnet werden soll.')}}</p>
 
@@ -30,8 +31,21 @@
                 <div class="col-md-4">
                     <x-rtextfield id="aci_name_kurz" label="Kürzel" />
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <x-rtextfield id="aci_name_lang" label="Name" max="150" />
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               name="aci_control_equipment_required"
+                               id="aci_control_equipment_required"
+                               value="1"
+                        >
+                        <label class="custom-control-label"
+                               for="aci_control_equipment_required"
+                        >{{__('Prüfmittel benötigt')}}</label>
+                    </div>
                 </div>
             </div>
             <p class="lead text-primary my-3">{{__('Legen Sie nun den Umfang des Vorgangs fest.')}}</p>
@@ -39,20 +53,20 @@
 
             <div class="row">
                 <div class="col-md-2">
-                    <x-textfield  id="aci_value_si" label="SI-Einheit [kg, °C, V usw]" max="10"/>
+                    <x-textfield  id="aci_value_si" label="{{__('SI-Einheit')}}" max="10"/>
                 </div>
                 <div class="col-md-3">
-                    <x-textfield id="aci_vaule_soll" label="Sollwert" class="decimal"/>
+                    <x-textfield id="aci_vaule_soll" label="{{__('Sollwert')}}" class="decimal"/>
                 </div>
                 <div class="col-md-3">
-                    <label for="aci_value_target_mode">Zielwert i.O.</label>
+                    <label for="aci_value_target_mode">{{__('Zielwert i.O.')}}</label>
                     <select name="aci_value_target_mode"
                             id="aci_value_target_mode"
                             class="custom-select"
                     >
-                        <option @if(old('aci_value_target_mode') ==='lt') selected @endif value="lt">Kleiner als Soll</option>
-                        <option @if(old('aci_value_target_mode') ==='eq') selected @endif value="eq">Gleich ± Toleranz</option>
-                        <option @if(old('aci_value_target_mode') ==='gt') selected @endif value="gt">Größer als Soll</option>
+                        <option @if(old('aci_value_target_mode') ==='lt') selected @endif value="lt">{{__('Kleiner als Soll')}}</option>
+                        <option @if(old('aci_value_target_mode') ==='eq') selected @endif value="eq">{{__('Gleich ± Toleranz')}}</option>
+                        <option @if(old('aci_value_target_mode') ==='gt') selected @endif value="gt">{{__('Größer als Soll')}}</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -96,7 +110,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="custom-control custom-radio custom-control-inline mb-3">
-                        <input type="radio" id="aci_internal" name="aci_exinternal" class="custom-control-input" value="internal" checked>
+                        <input type="radio" id="aci_internal" name="aci_execution" class="custom-control-input" value="0" checked>
                         <label class="custom-control-label" for="aci_internal">{{__('Interne Durchführung')}}</label>
                     </div>
                     <x-selectfield id="aci_contact_id" label="{{__('Eingewiesener Mitarbeiter')}}">
@@ -107,7 +121,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="custom-control custom-radio custom-control-inline mb-3">
-                        <input type="radio" id="aci_external" name="aci_exinternal" class="custom-control-input" value="external">
+                        <input type="radio" id="aci_external" name="aci_execution" class="custom-control-input" value="1">
                         <label class="custom-control-label" for="aci_external">{{__('Externe Durchführung')}}</label>
                     </div>
                     <x-selectfield id="firma_id" label="Firma">
@@ -119,7 +133,7 @@
             </div>
             <button class="btn btn-primary btn-block">{{__('Vorgang anlegen')}}</button>
         </div>
-
+        </div>
     </div>
 </form>
 

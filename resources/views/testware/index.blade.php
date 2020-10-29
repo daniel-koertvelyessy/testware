@@ -23,7 +23,7 @@
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center" style="height: 8em;" >
                         <div style="display: flex; flex-direction: column;">
                             <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span>
-                            <span class="lead mt-2">{{ $equipmentState->estat_name_lang }}</span>
+                            <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,50) }}</span>
                         </div>
                         <span style="font-size: 3rem;" class="ml-2 text-{{ ($equipmentState->id !== 1 && $equipments->count()>1) ?$equipmentState->color : 'success' }}">{{$equipments->count()}}</span>
                     </div>
@@ -33,7 +33,8 @@
         </div>
         <div class="row mt-4">
             <x-dashborarditem>
-                <h2 class="h5">{{__('Anstehende Prüfungen')}}</h2>
+                <h2 class="h5">{{__('Anstehende')}}
+                    <a href="{{ route('controlevent.index') }}">{{ __('Prüfungen') }}</a></h2>
 
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">

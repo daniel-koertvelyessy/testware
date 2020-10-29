@@ -58,7 +58,7 @@ class EquipmentDocController extends Controller
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
             // $file->storeAs($pfad, $Dateiname->guessExtention() ); => Storage::disk('local')->putFileAs($pfad, $file, $Dateiname->guessExtention());
-            // $file->store($pfad) => Storage::disk('local')->puFile($pfad, $file);
+            // $file->store($pfad) => Storage::disk('local')->putFile($pfad, $file);
             // 'local' oder 'public' oder default, wenn nicht angegeben
 
         } else {
@@ -69,7 +69,7 @@ class EquipmentDocController extends Controller
         return redirect()->back();
     }
 
-    public function downloadProduktDokuFile(Request $request)
+    public function downloadEquipmentDokuFile(Request $request)
     {
         $doc = EquipmentDoc::find($request->id);
         return response(Storage::disk('local')->get($doc->eqdoc_name_pfad), 200)
@@ -125,12 +125,13 @@ class EquipmentDocController extends Controller
     {
         $prodDoku = EquipmentDoc::find($request->id);
 //        dd($prodDoku->proddoc_name_pfad);
-        $file = $prodDoku->proddoc_name_lang;
-        Storage::delete($prodDoku->proddoc_name_pfad);
+        $file = $prodDoku->eqdoc_name_lang;
+        Storage::delete($prodDoku->eqdoc_name_pfad);
         $prodDoku->delete();
         session()->flash('status', 'Das Dokument <strong>' . $file . '</strong> wurde gelöscht!');
         return redirect()->back();
     }
+
 
     public function equipDoku() {
 

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('portal-main');
-});
+})->name('portal-main');
 
 Route::get('support', function () {
     return view('support');
@@ -58,6 +58,7 @@ Route::get('getFirmenDaten','FirmaController@getFirmenDaten')->name('getFirmenDa
 
 Route::get('getAddressenAjaxListe','AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
 Route::get('getAddressDaten','AdresseController@getAddressDaten')->name('getAddressDaten');
+Route::get('getControlEventDataSheet','ControlEventController@getControlEventDataSheet')->name('getControlEventDataSheet');
 
 
 

@@ -28,7 +28,6 @@
                     <th class="d-none d-md-table-cell">Intervall</th>
                     <th class="text-center d-none d-md-table-cell">Vorgänge</th>
                     <th></th>
-                    <th class="d-none d-md-table-cell"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -36,18 +35,54 @@
                 @forelse (App\Anforderung::latest()->get() as $anforderung)
                     <tr>
                         <td style="vertical-align: middle;">{{ $anforderung->an_name_lang }}</td>
-                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $anforderung->an_name_kurz }}</td>
-                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $anforderung->updated_at??'-' }}</td>
-                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_name }}  </td>
-                        <td style="vertical-align: middle;" class="text-center d-none d-md-table-cell">{{ $anforderung->AnforderungControlItem->count() }}</td>
-                        <td style="vertical-align: middle;"><a href="{{ route('anforderung.show',$anforderung) }}">Bearbeiten</a></td>
-                        <td class="d-none d-md-table-cell" style="vertical-align: middle;">
-                            <form action="{{ route('anforderung.destroy',$anforderung) }}" method="post">
-                                @csrf
-                                @method('delete')
+                        <td style="vertical-align: middle;"
+                            class="d-none d-md-table-cell"
+                        >{{ $anforderung->an_name_kurz }}</td>
+                        <td style="vertical-align: middle;"
+                            class="d-none d-md-table-cell"
+                        >
+                            {{ ($anforderung->updated_at!==NULL)? $anforderung->updated_at->diffForHumans() :'-' }}
+                        </td>
+                        <td style="vertical-align: middle;"
+                            class="d-none d-md-table-cell"
+                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_name }}  </td>
+                        <td style="vertical-align: middle;"
+                            class="text-center d-none d-md-table-cell"
+                        >{{ $anforderung->AnforderungControlItem->count() }}</td>
+                        <td style="vertical-align: middle; text-align: right;">
+                            <div class="btn-group dropleft">
+                                <button type="button"
+                                        class="btn  m-0 "
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('anforderung.show',$anforderung) }}"
+                                       class="dropdown-item d-flex justify-content-between align-items-center"
+                                    >
+                                        Bearbeiten <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href=""
+                                       onclick="event.preventDefault(); document.getElementById('frmDeleteAnforderung{{ $anforderung->id }}').submit();"
+                                       class="dropdown-item d-flex justify-content-between align-items-center"
+                                    >
+                                        Löschen <i class="fas fa-trash-alt"></i>
+                                    </a>
 
-                                <button class="btn btn-link">löschen</button>
-                            </form>
+                                </div>
+                                <form action="{{ route('anforderung.destroy',$anforderung) }}"
+                                      id="frmDeleteAnforderung{{ $anforderung->id }}"
+                                      method="post"
+                                >
+                                    @csrf
+                                    @method('delete')
+
+
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

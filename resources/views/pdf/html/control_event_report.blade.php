@@ -28,10 +28,14 @@
         <dt>{{ __('Seriennummer')}}</dt>
         <dd style="font-size: 14px;">{{ $equipment->eq_serien_nr }}</dd>
     </dl>
+
+{{--    {{ $ControlEquipment[0]->Anforderung->id }}--}}
+
+    @if (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->count()>0)
+
+
     <h2>Prüfmittel</h2>
     <p>Folgende Prüfmittel wurden verwendet:</p>
-
-
     <table>
         <thead>
         <tr>
@@ -55,6 +59,8 @@
         @endforeach
         </tbody>
     </table>
+
+    @endif
     <h2 style="page-break-before:always; margin:0;">Pürfschritte</h2>
     @foreach (App\AnforderungControlItem::where('anforderung_id',$ControlEquipment[0]->anforderung_id)->get() as $aci)
         @php($ceitem =  App\ControlEventItem::withTrashed()->where([['control_item_aci',$aci->id],['control_event_id',$controlEvent->id]])->get())
@@ -75,7 +81,7 @@
                         {!!  nl2br($aci->aci_task) !!}
                     </p>
 
-                    <table>
+                    <table cellpadding="4">
                         <tr>
                             <td style="font-size: 11px; font-weight: bold;">Soll</td>
                             <td style="font-size: 11px; font-weight: bold;">Ist</td>
@@ -90,10 +96,12 @@
                                 {{ $ceitem[0]->control_item_read??'-' }}
                             </td>
                             <td>
-                                @if ($aci->aci_value_target_mode)
-                                    {!! 'Ist &'. $aci->aci_value_target_mode.'; Soll' !!}
+                                @if ($aci->aci_value_target_mode ==='eq')
+                                    Soll = Ist ± Toleranz
+                                @elseif ($aci->aci_value_target_mode ==='lt')
+                                    Soll < Ist
                                 @else
-                                    -
+                                    Soll > Ist
                                 @endif
                             </td>
                             <td>
@@ -119,9 +127,31 @@
     <p>Die nächste Prüfung wurde auf den <strong>{{ $controlEvent->control_event_next_due_date }}</strong> gesetzt.</p>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <p>Prüfer<br>{{ $controlEvent->control_event_controller_name }}</p>
+   <table>
+       <tr>
+           <td style="width: 50%">
+               <img src="{{$controlEvent->control_event_controller_signature}}"
+                    width="30%"
+                    alt="Unterschrift Prüfer {{ $controlEvent->control_event_controller_name }}"
+               >
+               <br>
+               <br>
+               <p>Prüfer<br>{{ $controlEvent->control_event_controller_name }}</p>
+           </td>
+           <td>
+               @if ($controlEvent->control_event_supervisor_signature)
+                   <img src="{{$controlEvent->control_event_supervisor_signature}}"
+                        width="30%"
+                        alt="Unterschrift Leitung {{ $controlEvent->control_event_supervisor_name }}"
+                   >
+
+
+               <br>
+               <br>
+               <p>Leitung<br>{{ $controlEvent->control_event_supervisor_name }}</p>
+               @endif
+           </td>
+       </tr>
+   </table>
 
 @endsection

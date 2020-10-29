@@ -24,10 +24,10 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Bezeichnung</th>
-                    <th class="d-none d-md-table-cell">Anforderung</th>
-                    <th class="d-none d-md-table-cell">Aufgabe</th>
-                    <th class="text-center d-none d-md-table-cell">Ausführung</th>
+                    <th>{{__('Bezeichnung')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Anforderung')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Geändert')}}</th>
+                    <th class="text-center d-none d-md-table-cell">{{__('Ausführung')}}</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -38,17 +38,17 @@
                     <tr>
                         <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->Anforderung->an_name_kurz }}</td>
                         <td style="vertical-align: middle;">{{ $aci->aci_name_lang }}</td>
-                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->updated_at??'-' }}</td>
+                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->updated_at->diffForHumans() ??'-' }}</td>
                         <td style="vertical-align: middle;" class="text-center d-none d-md-table-cell">
-                            {{ $aci->User->name ?? $aci->firma->fa_name_kurz }}
+                            {{ $aci->aci_execution=== 1 ? 'extern' : 'intern'  }}
                         </td>
-                        <td style="vertical-align: middle;"><a href="{{ route('anforderungcontrolitem.show',$aci) }}">Bearbeiten</a></td>
+                        <td style="vertical-align: middle;"><a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{__('Bearbeiten')}}</a></td>
                         <td style="vertical-align: middle;">
                             <form action="{{ route('anforderungcontrolitem.destroy',$aci) }}" method="post">
                                 @csrf
                                 @method('delete')
 
-                                <button class="btn btn-link">löschen</button>
+                                <button class="btn btn-link">{{__('löschen')}}</button>
                             </form>
                         </td>
                     </tr>

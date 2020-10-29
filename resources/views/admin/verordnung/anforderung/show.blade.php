@@ -129,6 +129,7 @@
                                 {{ $aci->aci_name_lang }}
                             </td>
                             <td>
+                                <a href="{{ route('anforderungcontrolitem.show',$aci) }}">Öffnen</a>
                                 {{ $aci->id }}
                             </td>
                         </tr>

@@ -181,24 +181,34 @@ $('.bentBackTab').click(function () {
 $('.bentNextTab').click(function () {
     if($(this).data('showtab')==='#nav-cicontact-tab'){
         const aci_task = $('#aci_task');
-        const aci_name = $('#aci_name');
+        const aci_name_kurz = $('#aci_name_kurz');
+        const aci_name_lang = $('#aci_name_lang');
         let flag = false;
-        if (aci_task.val()===''|| aci_name.val()==='') {
+
+        if (aci_task.val()===''|| aci_name_kurz.val()==='' || aci_name_lang.val()==='') {
             (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
-            (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+            (aci_name_kurz.val()==='') ? aci_name_kurz.addClass('is-invalid') : aci_name_kurz.removeClass('is-invalid');
+            (aci_name_lang.val()==='') ? aci_name_lang.addClass('is-invalid') : aci_name_lang.removeClass('is-invalid');
             flag = false;
         } else {
             (aci_task.val()==='') ? aci_task.addClass('is-invalid') : aci_task.removeClass('is-invalid');
-            (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+            (aci_name_kurz.val()==='') ? aci_name_kurz.addClass('is-invalid') : aci_name_kurz.removeClass('is-invalid');
+            (aci_name_lang.val()==='') ? aci_name_lang.addClass('is-invalid') : aci_name_lang.removeClass('is-invalid');
             flag = true;
         }
 
-        (aci_name.val()==='') ? aci_name.addClass('is-invalid') : aci_name.removeClass('is-invalid');
+        (aci_name_kurz.val()==='') ? aci_name_kurz.addClass('is-invalid') : aci_name_kurz.removeClass('is-invalid');
+        (aci_name_lang.val()==='') ? aci_name_lang.addClass('is-invalid') : aci_name_lang.removeClass('is-invalid');
+
         if (flag)
             $($(this).data('showtab')).removeClass('disabled').tab('show');
     } else {
         $($(this).data('showtab')).removeClass('disabled').tab('show');
     }
+});
+
+$(document).on('blur','input.is-invalid',function () {
+    if ($(this).val()!=='') $(this).removeClass('is-invalid');
 });
 
 // $('.decimal').droppable({

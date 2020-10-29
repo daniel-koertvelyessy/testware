@@ -112,8 +112,9 @@
                                        class="custom-file-input"
                                        accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
                                        required
-                                > <label class="custom-file-label"
-                                         for="equipDokumentFile"
+                                >
+                                <label class="custom-file-label"
+                                       for="equipDokumentFile"
                                 >{{__('Datei wählen')}}</label>
                             </div>
                         </div>
@@ -184,6 +185,25 @@
                         </tbody>
                     </table>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="controlEventModal" tabindex="-1" aria-labelledby="controlEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="controlEventModalLabel">{{__('Prüfung')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="controlEventModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Schließen') }}</button>
+{{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
                 </div>
             </div>
         </div>
@@ -288,10 +308,11 @@
                                                label="{{__('Seriennummer')}}:"
                                                value="{{ $equipment->eq_serien_nr ?? '-' }}"
                                 />
-                                <label for="firma">{{__('Hersteller')}}:</label> <input type="text"
-                                                                                        id="firma"
-                                                                                        class="form-control-plaintext"
-                                                                                        value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach"
+                                <label for="firma">{{__('Hersteller')}}:</label>
+                                <input type="text"
+                                       id="firma"
+                                       class="form-control-plaintext"
+                                       value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach"
                                 >
                                 <button
                                     class="btn btn-primary btn-lg mt-3"
@@ -350,8 +371,6 @@
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
                                 @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(10)->latest()->onlyTrashed()->get() as $bda)
 
-
-
                                     <div class="border rounded p-1 d-flex justify-content-between align-items-center">
                                         <div class="d-flex flex-column">
                                             <span class="small text-muted pl-2">
@@ -362,7 +381,8 @@
                                         </div>
                                         <div class="pr-2">
                                             <button type="button"
-                                                    class="btn btn-sm btn-outline-primary"
+                                                    class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
+                                                    data-control-event-id="{{ $bda->ControlEvent[0]->id  }}"
                                             ><i class="far fa-folder-open"></i></button>
                                             <a href="{{ route('makePDFEquipmentControlReport',$bda->ControlEvent[0]->id ) }}"
                                                class="btn btn-sm btn-outline-primary"
@@ -459,7 +479,7 @@
                                                 <td>{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
                                                 <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
                                                 <td>
-                                                    <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
+                                                    <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                           method="get"
                                                           id="downloadProdDoku_{{ $equipDoc->id }}"
                                                     >
@@ -612,4 +632,21 @@
         $('#modalAddEquipDoc').modal('show');
     </script>
     @enderror
+
+    <script>
+        $('.btnOpenControlEventModal').click(function () {
+            const id = $(this).data('control-event-id');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getControlEventDataSheet') }}",
+                data: {id},
+                success: function (res) {
+                    $('#controlEventModalBody').html(res.html);
+                    $('#controlEventModal').modal('show');
+
+               }
+            });
+        });
+    </script>
 @endsection

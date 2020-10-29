@@ -16,6 +16,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
 class AnforderungsController extends Controller {
+
     use SoftDeletes;
 
     public function __construct() {
@@ -23,7 +24,7 @@ class AnforderungsController extends Controller {
     }
 
     static function getACI($anforderung_id) {
-        return AnforderungControlItem::where('anforderung_id', $anforderung_id) - get();
+        return AnforderungControlItem::where('anforderung_id', $anforderung_id)->get();
     }
 
     /**

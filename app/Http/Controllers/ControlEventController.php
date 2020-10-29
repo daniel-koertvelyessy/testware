@@ -15,13 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class ControlEventController extends Controller
-{
+class ControlEventController extends Controller {
 
     use SoftDeletes;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -31,8 +29,7 @@ class ControlEventController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function index()
-    {
+    public function index() {
         return view('testware.control.index');
     }
 
@@ -42,10 +39,9 @@ class ControlEventController extends Controller
      * @param  Request $request
      * @return Application|Factory|Response|View
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $controlItem = ControlEquipment::find($request->controlItem);
-        return view('testware.control.create',['controlItem'=>$controlItem]);
+        return view('testware.control.create', ['controlItem' => $controlItem]);
     }
 
     /**
@@ -54,13 +50,12 @@ class ControlEventController extends Controller
      * @param  Request $request
      * @return Application|Factory|Response|View
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 
 
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
 
-        $request->control_event_pass = request()->has('control_event_pass') ? 1:0;
+        $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
 
         $setNewControlEquipment = new ControlEquipment();
         $setNewControlEquipment->qe_control_date_last = $request->control_event_date;
@@ -92,7 +87,7 @@ class ControlEventController extends Controller
             }
         }
 
-        if(isset($request->control_event_equipment)){
+        if (isset($request->control_event_equipment)) {
             for ($i = 0; $i < count($request->control_event_equipment); $i++) {
                 if ($request->control_event_equipment[$i] !== '00') {
                     $setControlEventEquipment = new ControlEventEquipment();
@@ -105,38 +100,38 @@ class ControlEventController extends Controller
 
         $eh = new EquipmentHistory();
 
-        $eh->eqh_eintrag_kurz = 'Prüfung am '.$request->control_event_date.' ausgeführt ';
+        $eh->eqh_eintrag_kurz = 'Prüfung am ' . $request->control_event_date . ' ausgeführt ';
 
-        $text= 'Das Geräte wurde am '.$request->control_event_date.' geprüft. ';
-        $text.= $itempassed . ' von '. count($request->evenItem) . ' Prüfungen wurden bestanden.';
-        $text.=' Die nächste Prüfung wurde auf den '. $request->control_event_next_due_date .' gesetzt.';
+        $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
+        $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
+        $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
 
         $eh->eqh_eintrag_text = $text;
         $eh->equipment_id = $request->equipment_id;
         $eh->save();
 
 
-        return redirect(view('testware.equipment.show',['equipment'=>Equipment::find($request->equipment_id)->first()]));
+        return redirect(view('testware.equipment.show', ['equipment' => Equipment::find($request->equipment_id)->first()]));
 
     }
 
     /**
      * @return array
      */
-    public function validateNewControlEvent(): array
-    {
+    public function validateNewControlEvent()
+    : array {
         return request()->validate([
-            'control_event_next_due_date' => 'date|required',
-            'control_event_pass' => 'required',
-            'control_event_date' => 'date|required',
+            'control_event_next_due_date'        => 'date|required',
+            'control_event_pass'                 => 'required',
+            'control_event_date'                 => 'date|required',
             'control_event_controller_signature' => '',
-            'control_event_controller_name' => 'required',
+            'control_event_controller_name'      => 'required',
             'control_event_supervisor_signature' => '',
-            'control_event_supervisor_name' => '',
-            'user_id' => '',
-            'control_event_text' => '',
-            'controlDokumentFile' => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
-            'control_equipment_id' => 'required'
+            'control_event_supervisor_name'      => '',
+            'user_id'                            => '',
+            'control_event_text'                 => '',
+            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
+            'control_equipment_id'               => 'required'
         ]);
     }
 
@@ -146,9 +141,14 @@ class ControlEventController extends Controller
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function show(ControlEvent $control)
-    {
+    public function show(ControlEvent $control) {
         //
+    }
+
+    public function getControlEventDataSheet(Request $request) {
+
+        return ControlEvent::makeControlEventReport($request->id);
+
     }
 
     /**
@@ -157,8 +157,7 @@ class ControlEventController extends Controller
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function edit(ControlEvent $control)
-    {
+    public function edit(ControlEvent $control) {
         //
     }
 
@@ -169,8 +168,7 @@ class ControlEventController extends Controller
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function update(Request $request, ControlEvent $control)
-    {
+    public function update(Request $request, ControlEvent $control) {
         //
     }
 
@@ -180,8 +178,7 @@ class ControlEventController extends Controller
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function destroy(ControlEvent $control)
-    {
+    public function destroy(ControlEvent $control) {
         //
     }
 }

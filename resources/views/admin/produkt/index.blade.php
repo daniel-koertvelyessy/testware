@@ -36,28 +36,26 @@
     </div>
     <div class="row">
         <div class="col">
-            <table class="table table-sm table-striped">
+            <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th class="d-none d-md-table-cell">{{__('Produkt Nummer')}}</th>
                     <th>{{__('Bezeichung')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Produkt Nummer')}}</th>
                     <th class="d-none d-md-table-cell">{{__('Kategorie')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Aktiv')}}</th>
+                    <th>{{__('Aktiv')}}</th>
                     <th class="d-none d-md-table-cell">{{__('Prüfmittel')}}</th>
-                    <th>{{__('Status')}}</th>
-                    <th></th>
+                    <th class="d-none d-md-table-cell">{{__('Status')}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 @forelse ($produktList as $produkt)
                     <tr>
+                        <td><a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name_kurz }}</a></td>
                         <td class="d-none d-md-table-cell">{{ $produkt->prod_nummer }}</td>
-                        <td>{{ $produkt->prod_name_kurz }}</td>
                         <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_name_kurz }}</td>
-                        <td class="d-none d-md-table-cell">{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
+                        <td>{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
                         <td class="d-none d-md-table-cell">{!! $produkt->ControlProdukt ? '<i class="far fa-check-circle text-success"></i>' : '' !!}</td>
-                        <td>{{ $produkt->ProduktState->ps_name_kurz }} </td>
-                        <td><a href="{{ route('produkt.show',$produkt) }}">öffnen</a></td>
+                        <td class="d-none d-md-table-cell">{{ $produkt->ProduktState->ps_name_kurz }} </td>
                     </tr>
                 @empty
                     <tr>
