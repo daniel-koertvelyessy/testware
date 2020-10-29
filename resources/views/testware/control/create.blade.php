@@ -203,7 +203,7 @@
                         @else
                             <button type="button"
                                     class="btn btn-sm btn-primary bentNextTab"
-                                    data-showtab="#controlEquipment-tab"
+                                    data-showtab="#controlDone-tab"
                             >{{__('weiter')}}</button>
 
                         @endif
@@ -212,213 +212,215 @@
                     </div>
 
                 </div>
-                @if($aci_execution[0]->aci_control_equipment_required===1)
+                @if ($aci_execution[0]->aci_execution===0)
+                    @if($aci_execution[0]->aci_control_equipment_required===1)
+                        <div class="tab-pane fade"
+                             id="controlEquipment"
+                             role="tabpanel"
+                             aria-labelledby="controlEquipment-tab"
+                        >
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2 class="h5">Verwendete Prüfmittel</h2>
+                                    <x-selectgroup
+                                        id="set_control_equipment"
+                                        label="Prüfmittel wählen"
+                                        btnL="hinzufügen"
+                                        class="btnAddControlEquipmentToList"
+                                    >
+
+                                        @forelse (App\Equipment::getControlEquipmentList() as $controlProdukt)
+                                            @if($controlProdukt->qe_control_date_due > now())
+                                                <option value="{{ $controlProdukt->id }}">{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }}</option>
+                                            @else
+                                                <option value="{{ $controlProdukt->id }}"
+                                                        disabled
+                                                >{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }} Prüfung überfällig!
+                                                </option>
+                                            @endif
+                                        @empty
+                                            <option value="void"
+                                                    selected
+                                                    disabled
+                                            >Keine Prüfmittel gefunden
+                                            </option>
+                                        @endforelse
+                                    </x-selectgroup>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-group"
+                                        id="ControlEquipmentToList"
+                                    >
+                                        <li class="controlEquipmentListInitialItem list-group-item list-group-item-warning d-flex justify-content-between align-items-center"
+                                            id="control_equipment_item_${equip_id}"
+                                        >
+                                            <span>Keine Prüfmittel ausgewählt</span> <span class="fas fa-exclamation"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-5 border-top pt-2">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-secondary bentBackTab"
+                                        data-showtab="#controlHead-tab"
+                                >{{__('zurück')}}</button>
+                                <button type="button"
+                                        class="btn btn-sm btn-primary bentNextTab btnCheckPMList"
+                                        data-showtab="#controlSteps-tab"
+                                >{{__('weiter')}}</button>
+                            </div>
+                        </div>
+                    @endif
                     <div class="tab-pane fade"
-                         id="controlEquipment"
+                         id="controlSteps"
                          role="tabpanel"
-                         aria-labelledby="controlEquipment-tab"
+                         aria-labelledby="controlSteps-tab"
                     >
                         <div class="row">
-                            <div class="col-md-6">
-                                <h2 class="h5">Verwendete Prüfmittel</h2>
-                                <x-selectgroup
-                                    id="set_control_equipment"
-                                    label="Prüfmittel wählen"
-                                    btnL="hinzufügen"
-                                    class="btnAddControlEquipmentToList"
-                                >
+                            <div class="col">
+                                <table class="table table-borderless">
 
-                                    @forelse (App\Equipment::getControlEquipmentList() as $controlProdukt)
-                                        @if($controlProdukt->qe_control_date_due > now())
-                                            <option value="{{ $controlProdukt->id }}">{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }}</option>
+                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$controlItem->anforderung_id)->get() as $aci)
+                                        @if($aci->aci_contact_id === auth()->user()->id)
+                                            <tr>
+                                                <td colspan="4"
+                                                    class="m-0 p-0"
+                                                >
+                                                    <input type="hidden"
+                                                           name="evenItem[]"
+                                                           id="evenItem_{{ $aci->id }}"
+                                                           value="{{ $aci->id }}"
+                                                    >
+                                                    <input type="hidden"
+                                                           name="control_item_aci[{{ $aci->id }}][]"
+                                                           id="control_item_aci_{{ $aci->id }}"
+                                                           value="{{ $aci->id }}"
+                                                    >
+                                                    <span class="text-muted small">{{ __('Aufgabe / Ziel') }}:</span><br><span class="lead"> {{ $aci->aci_name_lang }}</span>
+                                                    <div class="dropdown d-md-none">
+                                                        <button class="btn btn-sm btn-outline-primary"
+                                                                data-toggle="collapse"
+                                                                data-target="#taskDetails_{{ $aci->id }}"
+                                                                role="button"
+                                                                aria-expanded="false"
+                                                                aria-controls="taskDetails_{{ $aci->id }}"
+                                                        >
+                                                            {{__('Details')}}
+                                                        </button>
+
+                                                        <div class="collapse"
+                                                             id="taskDetails_{{ $aci->id }}"
+                                                        >
+                                                            {{ $aci->aci_task }}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"
+                                                    class="d-none d-md-table-cell"
+                                                >{{__('Beschreibung der Prüfung')}}
+                                                </th>
+                                                <th scope="col"
+                                                    style="min-width: 95px;"
+                                                >{{__('Soll')}}
+                                                </th>
+                                                <th scope="col">{{__('Ist')}}</th>
+                                                <th scope="col">{{__('Bestanden')}}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="d-none d-md-table-cell">{{ $aci->aci_task }}</td>
+                                                <td style="vertical-align: middle;">
+                                                    @if($aci->aci_vaule_soll !== null)
+                                                        <strong>{{ $aci->aci_vaule_soll }}</strong> {{ $aci->aci_value_si }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td style="min-width: 95px;">
+                                                    @if($aci->aci_vaule_soll !== null)
+                                                        <label for="control_item_read_{{ $aci->id }}"
+                                                               class="sr-only"
+                                                        >Ist-Wert</label>
+                                                        <input type="text"
+                                                               placeholder="Wert"
+                                                               class="form-control decimal checkSollValue"
+                                                               id="control_item_read_{{ $aci->id }}"
+                                                               name="control_item_read[{{ $aci->id }}][]"
+                                                               data-aci_id="{{ $aci->id }}"
+                                                               data-aci_vaule_soll="{{ $aci->aci_vaule_soll }}"
+                                                               data-aci_value_target_mode="{{ $aci->aci_value_target_mode??'' }}"
+                                                               data-aci_value_tol="{{ $aci->aci_value_tol??'' }}"
+                                                               data-aci_value_tol_mod="{{ $aci->aci_value_tol_mod??'' }}"
+                                                               required
+                                                        >
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-toggle"
+                                                         data-toggle="buttons"
+                                                    >
+                                                        <label class="btn btn-outline-success">
+                                                            <input type="radio"
+                                                                   id="aci_Passed_{{ $aci->id }}"
+                                                                   name="control_item_pass[{{ $aci->id }}][]"
+                                                                   value="1"
+
+                                                            >
+                                                            JA </label> <label class="btn btn-outline-danger">
+                                                            <input type="radio"
+                                                                   id="aci_notPassed_{{ $aci->id }}"
+                                                                   name="control_item_pass[{{ $aci->id }}][]"
+                                                                   value="0"
+
+                                                            >
+                                                            NEIN </label>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            @if (!$loop->last)
+                                                <tr>
+                                                    <td colspan="4"
+                                                        class="m-0 p-0"
+                                                    >
+                                                        <div class="dropdown-divider"></div>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @else
-                                            <option value="{{ $controlProdukt->id }}"
-                                                    disabled
-                                            >{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }} Prüfung überfällig!
-                                            </option>
+                                            <tr>
+                                                <td>
+                                                    <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name_lang }}</span> fehlt Ihnen die benötige Berechtigung!</p>
+                                                    <p>Brechtigt sind: {{ App\User::with('profile')->find($aci->aci_contact_id)->name }}</p>
+                                                </td>
+                                            </tr>
                                         @endif
                                     @empty
-                                        <option value="void"
-                                                selected
-                                                disabled
-                                        >Keine Prüfmittel gefunden
-                                        </option>
+                                        <tr>
+                                            <td>
+                                                <x-notifyer>Es sind keine Vorgänge zu diesem Gerät gefunden worden!</x-notifyer>
+                                            </td>
+                                        </tr>
                                     @endforelse
-                                </x-selectgroup>
-
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group"
-                                    id="ControlEquipmentToList"
-                                >
-                                    <li class="controlEquipmentListInitialItem list-group-item list-group-item-warning d-flex justify-content-between align-items-center"
-                                        id="control_equipment_item_${equip_id}"
-                                    >
-                                        <span>Keine Prüfmittel ausgewählt</span> <span class="fas fa-exclamation"></span>
-                                    </li>
-                                </ul>
+                                </table>
                             </div>
                         </div>
                         <div class="mt-5 border-top pt-2">
                             <button type="button"
                                     class="btn btn-sm btn-outline-secondary bentBackTab"
-                                    data-showtab="#controlHead-tab"
+                                    data-showtab="#controlEquipment-tab"
                             >{{__('zurück')}}</button>
                             <button type="button"
-                                    class="btn btn-sm btn-primary bentNextTab btnCheckPMList"
-                                    data-showtab="#controlSteps-tab"
+                                    class="btn btn-sm btn-primary bentNextTab"
+                                    data-showtab="#controlDone-tab"
                             >{{__('weiter')}}</button>
                         </div>
                     </div>
                 @endif
-                <div class="tab-pane fade"
-                     id="controlSteps"
-                     role="tabpanel"
-                     aria-labelledby="controlSteps-tab"
-                >
-                    <div class="row">
-                        <div class="col">
-                            <table class="table table-borderless">
-
-                                @forelse (App\AnforderungControlItem::where('anforderung_id',$controlItem->anforderung_id)->get() as $aci)
-                                    @if($aci->aci_contact_id === auth()->user()->id)
-                                        <tr>
-                                            <td colspan="4"
-                                                class="m-0 p-0"
-                                            >
-                                                <input type="hidden"
-                                                       name="evenItem[]"
-                                                       id="evenItem_{{ $aci->id }}"
-                                                       value="{{ $aci->id }}"
-                                                >
-                                                <input type="hidden"
-                                                       name="control_item_aci[{{ $aci->id }}][]"
-                                                       id="control_item_aci_{{ $aci->id }}"
-                                                       value="{{ $aci->id }}"
-                                                >
-                                                <span class="text-muted small">{{ __('Aufgabe / Ziel') }}:</span><br><span class="lead"> {{ $aci->aci_name_lang }}</span>
-                                                <div class="dropdown d-md-none">
-                                                    <button class="btn btn-sm btn-outline-primary"
-                                                            data-toggle="collapse"
-                                                            data-target="#taskDetails_{{ $aci->id }}"
-                                                            role="button"
-                                                            aria-expanded="false"
-                                                            aria-controls="taskDetails_{{ $aci->id }}"
-                                                    >
-                                                        {{__('Details')}}
-                                                    </button>
-
-                                                    <div class="collapse"
-                                                         id="taskDetails_{{ $aci->id }}"
-                                                    >
-                                                        {{ $aci->aci_task }}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col"
-                                                class="d-none d-md-table-cell"
-                                            >{{__('Beschreibung der Prüfung')}}
-                                            </th>
-                                            <th scope="col"
-                                                style="min-width: 95px;"
-                                            >{{__('Soll')}}
-                                            </th>
-                                            <th scope="col">{{__('Ist')}}</th>
-                                            <th scope="col">{{__('Bestanden')}}</th>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-none d-md-table-cell">{{ $aci->aci_task }}</td>
-                                            <td style="vertical-align: middle;">
-                                                @if($aci->aci_vaule_soll !== null)
-                                                    <strong>{{ $aci->aci_vaule_soll }}</strong> {{ $aci->aci_value_si }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td style="min-width: 95px;">
-                                                @if($aci->aci_vaule_soll !== null)
-                                                    <label for="control_item_read_{{ $aci->id }}"
-                                                           class="sr-only"
-                                                    >Ist-Wert</label>
-                                                    <input type="text"
-                                                           placeholder="Wert"
-                                                           class="form-control decimal checkSollValue"
-                                                           id="control_item_read_{{ $aci->id }}"
-                                                           name="control_item_read[{{ $aci->id }}][]"
-                                                           data-aci_id="{{ $aci->id }}"
-                                                           data-aci_vaule_soll="{{ $aci->aci_vaule_soll }}"
-                                                           data-aci_value_target_mode="{{ $aci->aci_value_target_mode??'' }}"
-                                                           data-aci_value_tol="{{ $aci->aci_value_tol??'' }}"
-                                                           data-aci_value_tol_mod="{{ $aci->aci_value_tol_mod??'' }}"
-                                                           required
-                                                    >
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="btn-group btn-group-toggle"
-                                                     data-toggle="buttons"
-                                                >
-                                                    <label class="btn btn-outline-success">
-                                                        <input type="radio"
-                                                               id="aci_Passed_{{ $aci->id }}"
-                                                               name="control_item_pass[{{ $aci->id }}][]"
-                                                               value="1"
-
-                                                        >
-                                                        JA </label> <label class="btn btn-outline-danger">
-                                                        <input type="radio"
-                                                               id="aci_notPassed_{{ $aci->id }}"
-                                                               name="control_item_pass[{{ $aci->id }}][]"
-                                                               value="0"
-
-                                                        >
-                                                        NEIN </label>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                        @if (!$loop->last)
-                                            <tr>
-                                                <td colspan="4"
-                                                    class="m-0 p-0"
-                                                >
-                                                    <div class="dropdown-divider"></div>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @else
-                                        <tr>
-                                            <td>
-                                                <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name_lang }}</span> fehlt Ihnen die benötige Berechtigung!</p>
-                                                <p>Brechtigt sind: {{ App\User::with('profile')->find($aci->aci_contact_id)->name }}</p>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @empty
-                                    <tr>
-                                        <td>
-                                            <x-notifyer>Es sind keine Vorgänge zu diesem Gerät gefunden worden!</x-notifyer>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </table>
-                        </div>
-                    </div>
-                    <div class="mt-5 border-top pt-2">
-                        <button type="button"
-                                class="btn btn-sm btn-outline-secondary bentBackTab"
-                                data-showtab="#controlEquipment-tab"
-                        >{{__('zurück')}}</button>
-                        <button type="button"
-                                class="btn btn-sm btn-primary bentNextTab"
-                                data-showtab="#controlDone-tab"
-                        >{{__('weiter')}}</button>
-                    </div>
-                </div>
                 <div class="tab-pane fade"
                      id="controlDone"
                      role="tabpanel"
@@ -427,7 +429,25 @@
                     <div class="row">
                         <div class="col">
                             <h2 class="h4">{{__('Dateien')}}</h2>
-                            <p>Fügen Sie Dateien zur Prüfung an.</p>
+                            <p>Fügen Sie eine Datei zur Prüfung an.</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <x-textfield id="eqdoc_name_kurz"
+                                                 label="Kürzel"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <x-selectfield id="document_type_id"
+                                                   label="{{__('Dokument Typ')}}"
+                                    >
+                                        @foreach (App\DocumentType::all() as $ad)
+                                            <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                </div>
+                            </div>
+
                             <div class="custom-file mb-2">
                                 <input type="file"
                                        id="controlDokumentFile"
@@ -443,6 +463,8 @@
                                        for="prodDokumentFile"
                                 >{{__('Datei wählen')}}</label>
                             </div>
+
+
                             @if ($aci_execution[0]->aci_execution===0)
 
 

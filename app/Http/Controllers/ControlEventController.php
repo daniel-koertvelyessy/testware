@@ -7,6 +7,7 @@ use App\ControlEquipment;
 use App\ControlEventEquipment;
 use App\ControlEventItem;
 use App\Equipment;
+use App\EquipmentDoc;
 use App\EquipmentHistory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -70,6 +71,8 @@ class ControlEventController extends Controller {
         $controlevent = ControlEvent::create($this->validateNewControlEvent());
         $itempassed = 0;
         $itemfailed = 0;
+        $eventHasDoku = false;
+        $filename = '';
         $control_event_id = $controlevent->id;
 
         if (isset($request->evenItem)) {
@@ -98,20 +101,49 @@ class ControlEventController extends Controller {
             }
         }
 
+        if ($request->hasFile('controlDokumentFile')) {
+
+            $proDocFile = new EquipmentDoc();
+            $file = $request->file('controlDokumentFile');
+
+            $validation = $request->validate([
+                'controlDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
+                'eqdoc_name_kurz' => 'required|unique:equipment_docs,eqdoc_name_kurz'
+            ]);
+
+            $eventHasDoku=true;
+//dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
+
+            $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
+            $proDocFile->eqdoc_name_pfad= $file->store('equipment_docu/'.\request('equipment_id'));
+            $proDocFile->document_type_id = request('document_type_id');
+            $proDocFile->equipment_id = request('equipment_id');
+            $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
+            $proDocFile->eqdoc_name_kurz = request('eqdoc_name_kurz');
+            $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
+            $proDocFile->save();
+            $filename = $file->getClientOriginalName();
+
+        }
+
         $eh = new EquipmentHistory();
 
         $eh->eqh_eintrag_kurz = 'Prüfung am ' . $request->control_event_date . ' ausgeführt ';
 
         $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
-        $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
+        if(isset($request->evenItem))
+            $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
         $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
+        if($eventHasDoku) {
+            $text .= ' Das Dokument ' . $filename . ' wurde erfolgreich angefügt.';
+        }
 
         $eh->eqh_eintrag_text = $text;
         $eh->equipment_id = $request->equipment_id;
         $eh->save();
 
 
-        return redirect(view('testware.equipment.show', ['equipment' => Equipment::find($request->equipment_id)->first()]));
+        return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
 
     }
 
@@ -130,7 +162,7 @@ class ControlEventController extends Controller {
             'control_event_supervisor_name'      => '',
             'user_id'                            => '',
             'control_event_text'                 => '',
-            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
+//            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
             'control_equipment_id'               => 'required'
         ]);
     }

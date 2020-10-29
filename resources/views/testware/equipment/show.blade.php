@@ -203,7 +203,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Schließen') }}</button>
-{{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
+                    {{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
                 </div>
             </div>
         </div>
@@ -371,25 +371,29 @@
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
                                 @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(10)->latest()->onlyTrashed()->get() as $bda)
 
-                                    <div class="border rounded p-1 d-flex justify-content-between align-items-center">
-                                        <div class="d-flex flex-column">
+                                    @if (\App\ControlEvent::where('control_equipment_id',$bda->id)->count()>0)
+                                        <div class="border rounded p-1 mb-1 d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column">
                                             <span class="small text-muted pl-2">
                                                 {{$bda->deleted_at->diffForHumans()}}
                                             </span> <span class="p-2">
                                                 {{ $bda->Anforderung->an_name_lang }}
                                             </span>
+                                            </div>
+                                            <div class="pr-2">
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
+                                                        data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$bda->id)->get()[0]->id  }}"
+                                                ><i class="far fa-folder-open"></i></button>
+                                                <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$bda->id)->get()[0]->id ) }}"
+                                                   download
+                                                   class="btn btn-sm btn-outline-primary"
+                                                   target="_blank"
+                                                ><i class="far fa-file-pdf"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="pr-2">
-                                            <button type="button"
-                                                    class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
-                                                    data-control-event-id="{{ $bda->ControlEvent[0]->id  }}"
-                                            ><i class="far fa-folder-open"></i></button>
-                                            <a href="{{ route('makePDFEquipmentControlReport',$bda->ControlEvent[0]->id ) }}"
-                                               class="btn btn-sm btn-outline-primary"
-                                               target="_blank"
-                                            ><i class="far fa-file-pdf"></i></a>
-                                        </div>
-                                    </div>
+                                    @endif
+
 
                                 @empty
                                     <x-notifyer>{{__('keine Prüfberichte hinterlegt')}}</x-notifyer>
@@ -467,7 +471,7 @@
                                     <table class="table table-striped table-sm">
                                         <thead>
                                         <th>{{ __('Datei')}}</th>
-                                        <th>{{ __('Typ')}}</th>
+                                        <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
                                         <th style="text-align: right;">{{ __('Größe')}} kB</th>
                                         <th></th>
                                         <th></th>
@@ -476,7 +480,7 @@
                                         @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
                                             <tr>
                                                 <td>{{ $equipDoc->eqdoc_name_lang }}</td>
-                                                <td>{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
                                                 <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
                                                 <td>
                                                     <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
@@ -645,7 +649,7 @@
                     $('#controlEventModalBody').html(res.html);
                     $('#controlEventModal').modal('show');
 
-               }
+                }
             });
         });
     </script>

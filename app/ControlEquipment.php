@@ -18,9 +18,6 @@ class ControlEquipment extends Model {
         return $this->belongsTo(Anforderung::class);
     }
 
-    public function ControlEvent() {
-        return $this->hasMany(ControlEvent::class);
-    }
 
 
     public function checkDueDate(ControlEquipment $qeitem) {

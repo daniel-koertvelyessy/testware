@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-{{__('Geräte')}}
+    {{__('Geräte')}}
 @endsection
 
 @section('menu')
@@ -17,29 +17,87 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>{{__('Geräte-Verwaltung')}}</h1>
+                <h1 class="h3">{{__('Geräte-Verwaltung')}}</h1>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
             </div>
         </div>
         <div class="row">
-            <div class="col">
-
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
+            <div class="col-md-2">
                 <section class="card-body text-dark">
-                    <nav class="tiles-grid justify-content-around">
+                    <nav class="d-felx justify-content-around">
 
-                        <a href="{{ route('equipment.index') }}" class="tile-medium rounded" data-role="tile">
-                            <span class="icon"><i class="fas fa-boxes"></i></span>
-                            <span class="branding-bar text-center">{{__('Übersicht')}}</span>
+                        <a href="{{ route('equipMaker') }}"
+                           class="tile-small rounded m-lg-3"
+                           data-role="tile"
+                        >
+                            <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
-
-                        <a href="{{ route('equipMaker') }}" class="tile-medium rounded" data-role="tile">
-                            <span class="icon"><i class="fas fa-box"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
-                        </a>
-
                     </nav>
                 </section>
-
+            </div>
+            <div class="col-md-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Bezeichnung</th>
+                        <th class="d-none d-md-table-cell">Inventar-Nr</th>
+                        <th class="d-none d-md-table-cell">Stellplatz</th>
+                        <th class="d-none d-lg-table-cell">Status</th>
+                        <th>Prüfung fällig</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @forelse(App\Equipment::take(5)->latest()->get() as $equipment)
+                        <tr>
+                            <td>
+                                <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
+                                    {{ $equipment->produkt->prod_name_lang }}
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
+                            <td class="d-none d-md-table-cell">{{ $equipment->standort->std_kurzel }}</td>
+                            <td class="d-none d-lg-table-cell"
+                                style="vertical-align: middle;"
+                            >
+                                @if ($equipment->equipment_state_id >1)
+                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                @else
+                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                @forelse ($equipment->ControlEquipment as $controlItem)
+                                    <span
+                                        class="p-1
+                                        @if ($controlItem->qe_control_date_due <  now())
+                                            bg-danger text-white
+                                        @else
+                                        {{ ($controlItem->qe_control_date_due <  now()->addWeeks($controlItem->qe_control_date_warn)) ? 'bg-warning text-white' : '' }}
+                                        @endif
+                                            "
+                                    >
+                                        {{ $controlItem->qe_control_date_due }}
+                                    </span>
+                                    @if (!$loop->last) <br> @endif
+                                @empty
+                                    -
+                                @endforelse
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5">
+                                <p>
+                                    <x-notifyer>Keine Geräte gefunden</x-notifyer>
+                                </p>
+                                <a href="{{ route('equipMaker') }}"
+                                   class="btn mt-2 btn-outline-primary"
+                                >{{__('neues Gerät anlegen')}}</a>
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
