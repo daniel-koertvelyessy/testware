@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Adressen &triangleright; Organnisation @ bitpack GmbH
+{{__('Adressen')}} &triangleright; {{__('Organisation')}} @ bitpack GmbH
 @endsection
 
 @section('mainSection')
-    Organisation
+{{__('Organisation')}}
 @endsection
 
 @section('menu')
@@ -17,32 +17,30 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col">
-                <h1>Adressen</h1>
-                <span class="badge badge-light">Gesamt: {{ $adresseList->total() }}</span>
+                <h1 class="h3">{{__('Adressen')}}</h1>
+                <span class="badge badge-light">{{__('Gesamt')}}: {{ $adresseList->total() }}</span>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-sm table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Kürzel</th>
-                        <th>Typ</th>
-                        <th>Firma</th>
-                        <th>Straße / Nr</th>
-                        <th>PLZ / Ort</th>
-                        <th></th>
+                        <th>{{__('Firma')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Kürzel')}}</th>
+                        <th class="d-none d-lg-table-cell">{{__('Typ')}}</th>
+                        <th>{{__('Straße / Nr')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('PLZ / Ort')}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($adresseList as $adddress)
                         <tr>
-                            <td>{{ $adddress->ad_name_kurz }}</td>
-                            <td>{{ $adddress->AddressType->adt_name }}</td>
-                            <td>{{ $adddress->ad_name_firma }}</td>
+                            <td><a href="{{ route('adresse.show',['adresse'=>$adddress]) }}">{{ $adddress->ad_name_firma }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $adddress->ad_name_kurz }}</td>
+                            <td class="d-none d-lg-table-cell">{{ $adddress->AddressType->adt_name }}</td>
                             <td>{{ $adddress->ad_anschrift_strasse }} / {{ $adddress->ad_anschrift_hausnummer }}</td>
-                            <td>{{ $adddress->ad_anschrift_plz }} - {{ $adddress->ad_anschrift_ort }} </td>
-                            <td><a href="{{ route('adresse.show',['adresse'=>$adddress]) }}">öffnen</a></td>
+                            <td class="d-none d-md-table-cell">{{ $adddress->ad_anschrift_plz }} - {{ $adddress->ad_anschrift_ort }} </td>
                         </tr>
                     @empty
 

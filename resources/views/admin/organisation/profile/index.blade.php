@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Firmen &triangleright; Organnisation @ bitpack GmbH
+{{__('Mitarbeiter')}} &triangleright; {{__('Organisation')}} @ bitpack GmbH
 @endsection
 
 @section('mainSection')
-    Organisation
+{{__('Organisation')}}
 @endsection
 
 @section('menu')
@@ -17,32 +17,30 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col">
-                <h1>Mitarbeiter</h1>
-                <span class="badge badge-light">Gesamt: {{ $profileList->total() }}</span>
+                <h1 class="h3">{{__('Mitarbeiter')}}</h1>
+                <span class="badge badge-light">{{__('Gesamt')}}: {{ $profileList->total() }}</span>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-sm table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>MA Nummer</th>
-                        <th>Nachname</th>
-                        <th>Eingestellt</th>
-                        <th>Telefon</th>
-                        <th>E-Mail</th>
-                        <th></th>
+                        <th>{{__('Nachname')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('MA Nummer')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Eingestellt')}}</th>
+                        <th>{{__('Telefon')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('E-Mail')}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($profileList as $profile)
                         <tr>
-                            <td>{{ $profile->ma_nummer }}</td>
-                            <td>{{ $profile->ma_name }}</td>
-                            <td>{{ $profile->ma_eingetreten }}</td>
+                            <td><a href="{{ route('profile.show',['profile'=>$profile]) }}">{{ $profile->ma_vorname . ' ' . $profile->ma_name }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $profile->ma_nummer }}</td>
+                            <td class="d-none d-md-table-cell">{{ $profile->ma_eingetreten }}</td>
                             <td>{{ $profile->ma_telefon }}</td>
-                            <td>{{ $profile->user->email }} </td>
-                            <td><a href="{{ route('profile.show',['profile'=>$profile]) }}">öffnen</a></td>
+                            <td class="d-none d-md-table-cell">{{ $profile->user->email }} </td>
                         </tr>
                     @empty
 

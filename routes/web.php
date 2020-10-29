@@ -16,27 +16,26 @@ Route::get('docs', function () {
     return view('docs.index');
 });
 
-Route::get('user.resetPassword','UserController@resetPassword')->name('user.resetPassword');
-
+Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
 
 
 Route::resources([
-    'location' => 'LocationsController',
-    'building' => 'BuildingsController',
-    'room'=> 'RoomController',
-    'profile' => 'ProfileController',
-    'produkt' => 'ProduktController',
-    'produktDoku' => 'ProduktDocController',
-    'equipDoku' => 'EquipmentDocController',
-    'firma' => 'FirmaController',
-    'adresse' => 'AdresseController',
-    'testware' => 'TestwareController',
-    'equipment' => 'EquipmentController',
-    'controlevent' => 'ControlEventController',
-    'user' => 'UserController',
-    'stellplatz' => 'StellplatzController',
-    'anforderung' => 'AnforderungsController',
-    'verordnung' => 'VerordnungController',
+    'location'               => 'LocationsController',
+    'building'               => 'BuildingsController',
+    'room'                   => 'RoomController',
+    'profile'                => 'ProfileController',
+    'produkt'                => 'ProduktController',
+    'produktDoku'            => 'ProduktDocController',
+    'equipDoku'              => 'EquipmentDocController',
+    'firma'                  => 'FirmaController',
+    'adresse'                => 'AdresseController',
+    'testware'               => 'TestwareController',
+    'equipment'              => 'EquipmentController',
+    'controlevent'           => 'ControlEventController',
+    'user'                   => 'UserController',
+    'stellplatz'             => 'StellplatzController',
+    'anforderung'            => 'AnforderungsController',
+    'verordnung'             => 'VerordnungController',
     'anforderungcontrolitem' => 'AnforderungControlItemController',
 
 ]);
@@ -44,23 +43,20 @@ Route::resources([
 /**
  * Verwaltung/Admin routes laden
  */
-require base_path().'/routes/admintools/admintools.php';
+require base_path() . '/routes/admintools/admintools.php';
 
 /**
  *  Produkt routes laden
  */
-require base_path().'/routes/produkttools/produkttools.php';
+require base_path() . '/routes/produkttools/produkttools.php';
 
 
+Route::get('getFirmenAjaxListe', 'FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
+Route::get('getFirmenDaten', 'FirmaController@getFirmenDaten')->name('getFirmenDaten');
 
-Route::get('getFirmenAjaxListe','FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
-Route::get('getFirmenDaten','FirmaController@getFirmenDaten')->name('getFirmenDaten');
-
-Route::get('getAddressenAjaxListe','AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
-Route::get('getAddressDaten','AdresseController@getAddressDaten')->name('getAddressDaten');
-Route::get('getControlEventDataSheet','ControlEventController@getControlEventDataSheet')->name('getControlEventDataSheet');
-
-
+Route::get('getAddressenAjaxListe', 'AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
+Route::get('getAddressDaten', 'AdresseController@getAddressDaten')->name('getAddressDaten');
+Route::get('getControlEventDataSheet', 'ControlEventController@getControlEventDataSheet')->name('getControlEventDataSheet');
 
 
 /*
@@ -95,11 +91,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
 Route::get('organisationMain', function () {
-    return view('admin.organisation.index');
+    return view('admin.organisation.index', [
+        'firmas'   => App\Firma::take(5)->latest()->get(),
+        'adresses' => App\Adresse::take(5)->latest()->get(),
+        'profiles' => App\Profile::take(5)->latest()->get(),
+    ]);
 })->name('organisationMain')->middleware('auth');
 
 Route::get('standorteMain', function () {
-    return view('admin.standorte.index');
+    return view('admin.standorte.index',[
+        'locations'=>App\Location::take(5)->latest()->get(),
+        'buildings' => App\Building::take(5)->latest()->get(),
+        'rooms' => App\Room::take(5)->latest()->get(),
+    ]);
 })->name('standorteMain')->middleware('auth');
 
 Route::get('produktMain', function () {

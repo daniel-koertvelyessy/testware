@@ -17,10 +17,8 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>{{__('Standort-Verwaltung')}}</h1>
+                <h1>{{__('Standortverwaltung')}}</h1>
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
-
-                {{ env('app.maxobjekte') }}
             </div>
         </div>
         <div class="row">
@@ -69,7 +67,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\Location::all()->sortDesc()->take(5) as $loc)
+                    @forelse ($locations as $loc)
                         <tr>
                             <td>{{ $loc->l_name_kurz }}</td>
                             <td>{{ $loc->l_name_lang }}</td>
@@ -97,7 +95,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\Building::all()->sortDesc()->take(5) as $loc)
+                    @forelse ($buildings as $loc)
                         <tr>
                             <td>{{ $loc->b_name_kurz }}</td>
                             <td>{{ $loc->b_name_lang }}</td>
@@ -125,7 +123,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\Room::all()->sortDesc()->take(5) as $loc)
+
+                    @forelse ($rooms as $loc)
                         <tr>
                             <td>{{ $loc->r_name_kurz }}</td>
                             <td>{{ $loc->r_name_lang }}</td>

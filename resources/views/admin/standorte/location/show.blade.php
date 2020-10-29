@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('mainSection')
-    Standorte
+    {{__('Standorte')}}
 @endsection
 
 @section('pagetitle')
-    Standortverwaltung | Start @ bitpack GmbH
+    {{__('Standortverwaltung')}} | Start @ bitpack GmbH
 @endsection
 
 @section('menu')
@@ -15,30 +15,62 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Portal</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('location.index') }}">Standorte</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{  $location->l_name_kurz  }}</li>
+            <li class="breadcrumb-item">
+                <a href="/">{{__('Portal')}}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('location.index') }}">{{__('Standorte')}}</a>
+            </li>
+            <li class="breadcrumb-item active"
+                aria-current="page"
+            >{{  $location->l_name_kurz  }}</li>
         </ol>
     </nav>
 @endsection
 
 @section('modals')
-    <div class="modal" id="modalAddBuildingType" tabindex="-1" aria-labelledby="modalAddBuildingTypeLabel" aria-hidden="true">
+    <div class="modal"
+         id="modalAddBuildingType"
+         tabindex="-1"
+         aria-labelledby="modalAddBuildingTypeLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('createBuildingType') }}#locGebauede" method="POST" class="needs-validation" id="frmCreateBuildingType" name="frmCreateBuildingType">
+                <form action="{{ route('createBuildingType') }}#locGebauede"
+                      method="POST"
+                      class="needs-validation"
+                      id="frmCreateBuildingType"
+                      name="frmCreateBuildingType"
+                >
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalAddBuildingTypeLabel">Neuen Gebäudetyp erstellen</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title"
+                            id="modalAddBuildingTypeLabel"
+                        >{{__('Neuen Gebäudetyp erstellen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="frmOrigin" id="frmOrigin" value="location">
+                        <input type="hidden"
+                               name="frmOrigin"
+                               id="frmOrigin"
+                               value="location"
+                        >
                         @csrf
                         <div class="form-group">
                             <label for="btname">Name</label>
-                            <input type="text" name="btname" id="btname" class="form-control {{ $errors->has('btname') ? ' is-invalid ': '' }}" value="{{ old('btname') ?? '' }}" required>
+                            <input type="text"
+                                   name="btname"
+                                   id="btname"
+                                   class="form-control {{ $errors->has('btname') ? ' is-invalid ': '' }}"
+                                   value="{{ old('btname') ?? '' }}"
+                                   required
+                            >
                             @if ($errors->has('btname'))
                                 <span class="text-danger small">{{ $errors->first('btname') }}</span>
                             @else
@@ -47,13 +79,23 @@
                         </div>
                         <div class="form-group">
                             <label for="btbeschreibung">Beschreibung des Gebäudetyps</label>
-                            <textarea id="btbeschreibung" name="btbeschreibung" class="form-control">{{ old('btbeschreibung') ?? '' }}</textarea>
+                            <textarea id="btbeschreibung"
+                                      name="btbeschreibung"
+                                      class="form-control"
+                            >{{ old('btbeschreibung') ?? '' }}</textarea>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                        <button type="submit" class="btn btn-primary">Gebäudetyp speichern</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                        >Abbruch
+                        </button>
+                        <button type="submit"
+                                class="btn btn-primary"
+                        >Gebäudetyp speichern
+                        </button>
                     </div>
                 </form>
             </div>
@@ -67,7 +109,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">Übersicht Standort </span>{{ $location->l_name_kurz }}</h1>
+                <h1 class="h3"><span class="d-none d-md-inline">{{__('Übersicht Standort')}} </span>{{ $location->l_name_kurz }}</h1>
                 {{--                <div class="visible-print text-center">
                                     {!! QrCode::size(65)->generate($location->standort_id); !!}
                                     <p class="text-muted small">Standort-ID</p>
@@ -76,20 +118,60 @@
         </div>
         <div class="row">
             <div class="col">
-                <ul class="nav nav-tabs mainNavTab" id="myTab" role="tablist">
-                    <li class="nav-item " role="presentation">
-                        <a class="nav-link active" id="Stammdaten-tab" data-toggle="tab" href="#Stammdaten" role="tab" aria-controls="Stammdaten" aria-selected="true">Stammdaten</a>
+                <ul class="nav nav-tabs mainNavTab"
+                    id="myTab"
+                    role="tablist"
+                >
+                    <li class="nav-item "
+                        role="presentation"
+                    >
+                        <a class="nav-link active"
+                           id="Stammdaten-tab"
+                           data-toggle="tab"
+                           href="#Stammdaten"
+                           role="tab"
+                           aria-controls="Stammdaten"
+                           aria-selected="true"
+                        >Stammdaten
+                        </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="Anforderungen-tab" data-toggle="tab" href="#Anforderungen" role="tab" aria-controls="Anforderungen" aria-selected="false">Anforderungen</a>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="Anforderungen-tab"
+                           data-toggle="tab"
+                           href="#Anforderungen"
+                           role="tab"
+                           aria-controls="Anforderungen"
+                           aria-selected="false"
+                        >Anforderungen
+                        </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="locGebauede-tab" data-toggle="tab" href="#locGebauede" role="tab" aria-controls="locGebauede" aria-selected="false">Gebäude <span class="badge badge-info">{{ $location->Building->count() }}</span></a>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locGebauede-tab"
+                           data-toggle="tab"
+                           href="#locGebauede"
+                           role="tab"
+                           aria-controls="locGebauede"
+                           aria-selected="false"
+                        >Gebäude <span class="badge badge-info">{{ $location->Building->count() }}</span></a>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active p-2 " id="Stammdaten" role="tabpanel" aria-labelledby="Stammdaten-tab">
-                        <form action="{{ route('location.update',['location'=>$location->id]) }}" method="post">
+                <div class="tab-content"
+                     id="myTabContent"
+                >
+                    <div class="tab-pane fade show active p-2 "
+                         id="Stammdaten"
+                         role="tabpanel"
+                         aria-labelledby="Stammdaten-tab"
+                    >
+                        <form action="{{ route('location.update',['location'=>$location->id]) }}"
+                              method="post"
+                        >
                             <div class="row">
                                 <div class="col-lg-4">
                                     {{--                                    <h2 class="h5">Bezeichner</h2>--}}
@@ -99,36 +181,67 @@
 
                                     <div class="form-group">
                                         <label for="l_name_kurz">Kurzbezeichnung (max 10 Zeichen)</label>
-                                        <input type="text" name="l_name_kurz" id="l_name_kurz" class="form-control {{ $errors->has('l_name_kurz') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $location->l_name_kurz }}">
+                                        <input type="text"
+                                               name="l_name_kurz"
+                                               id="l_name_kurz"
+                                               class="form-control {{ $errors->has('l_name_kurz') ? ' is-invalid ': '' }}"
+                                               maxlength="10"
+                                               value="{{ $location->l_name_kurz }}"
+                                        >
                                     </div>
                                     <div class="form-group">
                                         <label for="l_name_lang">Bezeichnung (max 100 Zeichen)</label>
-                                        <input type="text" name="l_name_lang" id="l_name_lang" class="form-control" maxlength="100" value="{{ $location->l_name_lang ?? '' }}">
+                                        <input type="text"
+                                               name="l_name_lang"
+                                               id="l_name_lang"
+                                               class="form-control"
+                                               maxlength="100"
+                                               value="{{ $location->l_name_lang ?? '' }}"
+                                        >
                                     </div>
                                     <div class="form-group">
                                         <label for="l_beschreibung">Beschreibung</label>
-                                        <textarea name="l_beschreibung" id="l_beschreibung" class="form-control" rows="3">{{ $location->l_beschreibung ?? '' }}</textarea>
+                                        <textarea name="l_beschreibung"
+                                                  id="l_beschreibung"
+                                                  class="form-control"
+                                                  rows="3"
+                                        >{{ $location->l_beschreibung ?? '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <h2 class="h5">Anschrift</h2>
                                     <div class="form-group">
                                         @if ($location->adresse_id===NULL)
-                                            <label for="adresse_id" class="sr-only">Adresse auswähen und zuordnen</label>
-                                            <select name="adresse_id" id="adresse_id" class="custom-select">
+                                            <label for="adresse_id"
+                                                   class="sr-only"
+                                            >Adresse auswähen und zuordnen</label>
+                                            <select name="adresse_id"
+                                                    id="adresse_id"
+                                                    class="custom-select"
+                                            >
                                                 <option value="void">Bitte Adresse zuordnen</option>
                                                 @foreach (App\Adresse::all() as $adresse)
                                                     <option value="{{ $adresse->id }}">{{ $adresse->ad_name_lang }}</option>
                                                 @endforeach
                                             </select>
-                                            <a href="{{ route('adresse.create') }}" class="btn btn-outline-primary btn-block">neue Adresse anlegen</a>
+                                            <a href="{{ route('adresse.create') }}"
+                                               class="btn btn-outline-primary btn-block"
+                                            >neue Adresse anlegen
+                                            </a>
                                         @else
-                                            <label for="adresse_id" class="sr-only">Die Adresse des Standortes festlegen</label>
-                                            <select class="custom-select" aria-label="Default select example" name="adresse_id" id="adresse_id">
+                                            <label for="adresse_id"
+                                                   class="sr-only"
+                                            >Die Adresse des Standortes festlegen</label>
+                                            <select class="custom-select"
+                                                    aria-label="Default select example"
+                                                    name="adresse_id"
+                                                    id="adresse_id"
+                                            >
                                                 @foreach (App\Adresse::all() as $addItem)
-                                                    <option value="{{$addItem->id}}" @if ($addItem->id == $location->adresse_id)
-                                                    selected
-                                                        @endif>{{ $addItem->ad_anschrift_ort }},  {{ $addItem->ad_anschrift_strasse }} - {{ $addItem->ad_anschrift_hausnummer }}</option>
+                                                    <option value="{{$addItem->id}}"
+                                                            @if ($addItem->id == $location->adresse_id)
+                                                            selected
+                                                        @endif>{{ $addItem->ad_anschrift_ort }}, {{ $addItem->ad_anschrift_strasse }} - {{ $addItem->ad_anschrift_hausnummer }}</option>
                                                 @endforeach
                                             </select>
 
@@ -167,14 +280,27 @@
                                     <div class="form-group">
                                         @if ($location->profile_id === NULL)
                                             <label for="profile_id">Keine Mitarbeiter gefunden!</label>
-                                            <input type="hidden" name="profile_id" id="profile_id">
-                                            <a href="{{ route('profile.create') }}" class="btn btn-outline-primary btn-block">neuen Mitarbeiter anlegen</a>
+                                            <input type="hidden"
+                                                   name="profile_id"
+                                                   id="profile_id"
+                                            >
+                                            <a href="{{ route('profile.create') }}"
+                                               class="btn btn-outline-primary btn-block"
+                                            >neuen Mitarbeiter anlegen
+                                            </a>
                                         @else
-                                            <label for="profile_id" class="sr-only">Leitung des Standortes hat</label>
-                                            <select class="custom-select" aria-label="Default select example" name="profile_id" id="profile_id">
+                                            <label for="profile_id"
+                                                   class="sr-only"
+                                            >Leitung des Standortes hat</label>
+                                            <select class="custom-select"
+                                                    aria-label="Default select example"
+                                                    name="profile_id"
+                                                    id="profile_id"
+                                            >
                                                 @foreach (App\Profile::all() as $profileItem)
-                                                    <option value="{{$profileItem->id}}" @if ($profileItem->id == $location->profile_id)
-                                                    selected
+                                                    <option value="{{$profileItem->id}}"
+                                                            @if ($profileItem->id == $location->profile_id)
+                                                            selected
                                                         @endif>{{ $profileItem->ma_vorname }} {{ $profileItem->ma_name }}</option>
                                                 @endforeach
                                             </select>
@@ -195,11 +321,14 @@
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">Mobil</dt>
-                                                        <dd class="col-sm-9"><a href="tel:{{ $location->Profile->ma_mobil }}">{{ $location->Profile->ma_mobil }}</a></dd>
+                                                        <dd class="col-sm-9">
+                                                            <a href="tel:{{ $location->Profile->ma_mobil }}">{{ $location->Profile->ma_mobil }}</a>
+                                                        </dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-3">E-Mail</dt>
-                                                        <dd class="col-sm-9">@if ($location->Profile->User) <a href="mailto:{{ $location->Profile->User->email }}">{{ $location->Profile->User->email }}</a> @else - @endif</dd>
+                                                        <dd class="col-sm-9">@if ($location->Profile->User)
+                                                                <a href="mailto:{{ $location->Profile->User->email }}">{{ $location->Profile->User->email }}</a> @else - @endif</dd>
                                                     </dl>
 
                                                 </div>
@@ -211,29 +340,52 @@
                             <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> Stammdaten speichern</button>
                         </form>
                     </div>
-                    <div class="tab-pane fade p-2" id="Anforderungen" role="tabpanel" aria-labelledby="Anforderungen-tab">
+                    <div class="tab-pane fade p-2"
+                         id="Anforderungen"
+                         role="tabpanel"
+                         aria-labelledby="Anforderungen-tab"
+                    >
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <h2 class="h5">Anforderung auswählen</h2>
-                                <form action="{{ route('addLocationAnforderung') }}#Anforderungen" method="post">
+                                <form action="{{ route('addLocationAnforderung') }}#Anforderungen"
+                                      method="post"
+                                >
                                     @csrf
-                                    <input type="hidden" name="location_id" id="id_location_anforderung" value="{{ $location->id }}">
-                                    <input type="hidden" name="an_name_kurz" id="name_anforderung">
-                                    <x-selectfield id="anforderung_id" label="Anforderung wählen">
+                                    <input type="hidden"
+                                           name="location_id"
+                                           id="id_location_anforderung"
+                                           value="{{ $location->id }}"
+                                    >
+                                    <input type="hidden"
+                                           name="an_name_kurz"
+                                           id="name_anforderung"
+                                    >
+                                    <x-selectfield id="anforderung_id"
+                                                   label="Anforderung wählen"
+                                    >
                                         <option value="">bitte wählen</option>
                                         @foreach (App\Anforderung::all() as $anforderung)
                                             <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
                                         @endforeach
                                     </x-selectfield>
                                     <button class="btn btn-primary btn-block mt-1">Anforderung zuordnen</button>
-                                    <div class="card p-2 my-2" id="produktAnforderungText">
+                                    <div class="card p-2 my-2"
+                                         id="produktAnforderungText"
+                                    >
                                         <x-notifyer>Details zu Anforderung</x-notifyer>
                                     </div>
                                 </form>
                                 @error('anforderung_id')
-                                <div class="alert alert-dismissible fade show alert-info mt-5" role="alert">
+                                <div class="alert alert-dismissible fade show alert-info mt-5"
+                                     role="alert"
+                                >
                                     Bitte eine Anforderung auswählen!
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button"
+                                            class="close"
+                                            data-dismiss="alert"
+                                            aria-label="Close"
+                                    >
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -285,12 +437,26 @@
                                                 </dd>
                                             </dl>
                                             <nav class="border-top mt-2 pt-2 d-flex justify-content-end">
-                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen" method="post">
+                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen"
+                                                      method="post"
+                                                >
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="an_name_kurz" id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}">
-                                                    <input type="hidden" name="id" id="id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $produktAnforderung->id }}">
-                                                    <input type="hidden" name="location_id" id="location_id_delAnf_{{ $produktAnforderung->anforderung_id }}" value="{{ $location->id }}">
+                                                    <input type="hidden"
+                                                           name="an_name_kurz"
+                                                           id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}"
+                                                    >
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           id="id_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $produktAnforderung->id }}"
+                                                    >
+                                                    <input type="hidden"
+                                                           name="location_id"
+                                                           id="location_id_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $location->id }}"
+                                                    >
                                                     <button class="btn btn-sm btn-outline-primary">löschen</button>
                                                 </form>
                                             </nav>
@@ -305,26 +471,48 @@
                         </div>
 
 
-
-
-
                     </div>
-                    <div class="tab-pane fade" id="locGebauede" role="tabpanel" aria-labelledby="locGebauede-tab">
+                    <div class="tab-pane fade"
+                         id="locGebauede"
+                         role="tabpanel"
+                         aria-labelledby="locGebauede-tab"
+                    >
                         <div class="row">
                             <div class="col">
                                 <form class="row gy-2 gx-3  my-3"
-                                      action="{{ route('building.store') }}#locGebauede" method="post" name="frmAddNewBuilding" id="frmAddNewBuilding">
+                                      action="{{ route('building.store') }}#locGebauede"
+                                      method="post"
+                                      name="frmAddNewBuilding"
+                                      id="frmAddNewBuilding"
+                                >
                                     @csrf
                                     <input type="hidden"
                                            name="standort_id"
                                            id="standort_id"
                                            value="{{ Str::uuid() }}"
                                     >
-                                    <input type="hidden" name="location_id" id="location_id" value="{{ $location->id }}">
-                                    <input type="hidden" name="frmOrigin" id="frmOriginAddNewBuilding" value="location">
+                                    <input type="hidden"
+                                           name="location_id"
+                                           id="location_id"
+                                           value="{{ $location->id }}"
+                                    >
+                                    <input type="hidden"
+                                           name="frmOrigin"
+                                           id="frmOriginAddNewBuilding"
+                                           value="location"
+                                    >
                                     <div class="col-auto">
-                                        <label class="sr-only" for=""></label>
-                                        <input type="text" class="form-control" id="b_name_kurz" name="b_name_kurz" required placeholder="Gebäudename kurz" value="{{ old('b_name_kurz')??'' }}">
+                                        <label class="sr-only"
+                                               for=""
+                                        ></label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="b_name_kurz"
+                                               name="b_name_kurz"
+                                               required
+                                               placeholder="Gebäudename kurz"
+                                               value="{{ old('b_name_kurz')??'' }}"
+                                        >
                                         @if ($errors->has('b_name_kurz'))
                                             <span class="text-danger small">{{ $errors->first('b_name_kurz') }}</span>
                                         @else
@@ -332,8 +520,16 @@
                                         @endif
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only" for="b_name_ort">Gebäudeort</label>
-                                        <input type="text" class="form-control" id="b_name_ort" name="b_name_ort" placeholder="Gebäudeort" value="{{ old('b_name_ort')??'' }}">
+                                        <label class="sr-only"
+                                               for="b_name_ort"
+                                        >Gebäudeort</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="b_name_ort"
+                                               name="b_name_ort"
+                                               placeholder="Gebäudeort"
+                                               value="{{ old('b_name_ort')??'' }}"
+                                        >
                                         @if ($errors->has('b_name_ort'))
                                             <span class="text-danger small">{{ $errors->first('b_name_ort') }}</span>
                                         @else
@@ -342,18 +538,31 @@
                                     </div>
                                     <div class="col-auto">
                                         <div class="input-group">
-                                            <label for="building_type_id" class="sr-only">Gebäudetyp angeben</label>
-                                            <select name="building_type_id" id="building_type_id" class="custom-select">
+                                            <label for="building_type_id"
+                                                   class="sr-only"
+                                            >Gebäudetyp angeben</label> <select name="building_type_id"
+                                                                                id="building_type_id"
+                                                                                class="custom-select"
+                                            >
                                                 @foreach (\App\BuildingTypes::all() as $roomType)
-                                                    <option value="{{ $roomType->id }}" title="{{ $roomType->btbeschreibung  }}">{{ $roomType->btname  }}</option>
+                                                    <option value="{{ $roomType->id }}"
+                                                            title="{{ $roomType->btbeschreibung  }}"
+                                                    >{{ $roomType->btname  }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalAddBuildingType"><i class="fas fa-plus"></i></button>
+                                            <button type="button"
+                                                    class="btn btn-outline-secondary"
+                                                    data-toggle="modal"
+                                                    data-target="#modalAddBuildingType"
+                                            ><i class="fas fa-plus"></i></button>
                                         </div>
                                         <span class="small text-primary">Gebäudetyp</span>
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary" >Neues Gebäude anlegen</button>
+                                        <button type="submit"
+                                                class="btn btn-primary"
+                                        >Neues Gebäude anlegen
+                                        </button>
                                     </div>
                                 </form>
                                 @if ($location->Building->count()>0)
@@ -395,36 +604,54 @@
                                                         <button type="button"
                                                                 class="btn btn-sm btn-outline-primary dropdown-toggle"
                                                                 id="editObjekt{{ $building->id }}"
-                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                data-toggle="dropdown"
+                                                                aria-haspopup="true"
+                                                                aria-expanded="false"
                                                         >
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <div class="dropdown-menu" aria-labelledby="editObjekt{{ $building->id }}">
+                                                        <div class="dropdown-menu"
+                                                             aria-labelledby="editObjekt{{ $building->id }}"
+                                                        >
                                                             <a href="{{ route('building.show',$building) }}"
                                                                class="dropdown-item d-flex justify-content-between align-items-center"
                                                                title="Gebäudedaten ansehen"
                                                             >
                                                                 Öffnen <i class="fas fa-angle-right"></i>
                                                             </a>
-                                                            <a href="#" class="btnDeleteBuildig dropdown-item d-flex justify-content-between align-items-center"
+                                                            <a href="#"
+                                                               class="btnDeleteBuildig dropdown-item d-flex justify-content-between align-items-center"
                                                                data-id="{{ $building->id }}"
                                                             >
-                                                                Löschen
-                                                                <i class="far fa-trash-alt"></i>
+                                                                Löschen <i class="far fa-trash-alt"></i>
                                                             </a>
                                                             <a href="#"
                                                                class="dropdown-item d-flex justify-content-between align-items-center copyBuilding {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
                                                                data-objid="{{ $building->id }}"
-                                                            >Kopieren
-                                                                <i class="fas fa-copy"></i>
+                                                            >Kopieren <i class="fas fa-copy"></i>
                                                             </a>
                                                             @if ($building->rooms()->count()===0)
-                                                                <form action="{{ route('building.destroy',$building->id) }}#locGebauede" id="frmDeleteBuildig_{{ $building->id }}" target="_blank">
+                                                                <form action="{{ route('building.destroy',$building->id) }}#locGebauede"
+                                                                      id="frmDeleteBuildig_{{ $building->id }}"
+                                                                      target="_blank"
+                                                                >
                                                                     @csrf
                                                                     @method('delete')
-                                                                    <input type="hidden" name="id" id="id_{{ $building->id }}" value="{{ $building->id }}">
-                                                                    <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $building->id }}" value="locaion">
-                                                                    <input type="hidden" name="b_name_kurz" id="b_name_kurz{{ $building->b_name_kurz }}" value="{{ $building->r_name_kurz }}">
+                                                                    <input type="hidden"
+                                                                           name="id"
+                                                                           id="id_{{ $building->id }}"
+                                                                           value="{{ $building->id }}"
+                                                                    >
+                                                                    <input type="hidden"
+                                                                           name="frmOrigin"
+                                                                           id="frmOrigin_{{ $building->id }}"
+                                                                           value="locaion"
+                                                                    >
+                                                                    <input type="hidden"
+                                                                           name="b_name_kurz"
+                                                                           id="b_name_kurz{{ $building->b_name_kurz }}"
+                                                                           value="{{ $building->r_name_kurz }}"
+                                                                    >
                                                                 </form>
                                                             @endif
                                                         </div>
@@ -455,10 +682,25 @@
 @section('actionMenuItems')
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>
-        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item" href="#"><i class="fas fa-print"></i> Drucke Übersicht</a>
-            <a class="dropdown-item" href="#"><i class="far fa-file-pdf"></i> Standortbericht</a>
+        <a class="nav-link dropdown-toggle"
+           href="#"
+           id="navTargetAppAktionItems"
+           role="button"
+           data-toggle="dropdown"
+           aria-expanded="false"
+        ><i class="fas fa-bars"></i> Aktionen
+        </a>
+        <ul class="dropdown-menu"
+            aria-labelledby="navTargetAppAktionItems"
+        >
+            <a class="dropdown-item"
+               href="#"
+            ><i class="fas fa-print"></i> Drucke Übersicht
+            </a>
+            <a class="dropdown-item"
+               href="#"
+            ><i class="far fa-file-pdf"></i> Standortbericht
+            </a>
 
         </ul>
     </li>
@@ -473,15 +715,15 @@
     @endif
     <script>
 
-        $('#anforderung_id').change( () => {
+        $('#anforderung_id').change(() => {
 
             $.ajax({
                 type: "get",
                 dataType: 'json',
                 url: "{{ route('getAnforderungData') }}",
-                data: {id:$('#anforderung_id :selected').val()},
+                data: {id: $('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const text = (res.an_name_text===null) ? '-' : res.an_name_text;
+                    const text = (res.an_name_text === null) ? '-' : res.an_name_text;
                     $('#name_anforderung').val(res.an_name_kurz);
                     $('#produktAnforderungText').html(`
                          <dl class="row">
@@ -498,7 +740,7 @@
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Intervall</dt>
-                            <dd class="col-sm-8">${res.an_control_interval}  ${res.control_interval.ci_name }</dd>
+                            <dd class="col-sm-8">${res.an_control_interval}  ${res.control_interval.ci_name}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Beschreibung</dt>
@@ -515,9 +757,9 @@
                 type: "POST",
                 dataType: 'json',
                 url: "{{ route('destroyBuildingAjax') }}",
-                data: $('#frmDeleteBuildig_'+buildingId).serialize(),
+                data: $('#frmDeleteBuildig_' + buildingId).serialize(),
                 success: function (res) {
-                    if(res) location.reload();
+                    if (res) location.reload();
 
                 }
             });
@@ -531,7 +773,7 @@
                 url: "{{ route('copyBuilding') }}",
                 data: {id},
                 success: (res) => {
-                    if (res>0) location.reload();
+                    if (res > 0) location.reload();
 
                 }
             });
