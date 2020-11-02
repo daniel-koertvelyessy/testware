@@ -111,8 +111,8 @@
 @endif
 <footer class="page-footer fixed-bottom px-1">
     <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020 :
-            <a href="https://bitpack.io/" title="bitpack.io">
+        <div class="col-auto small mr-auto pl-3">© 2020 
+         M   <a href="https://bitpack.io/" title="bitpack.io">
                 <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
             </a>
             GmbH
