@@ -97,7 +97,7 @@ return [
     'password' => 'The password is incorrect.',
     'present' => 'The :attribute field must be present.',
     'regex' => 'The :attribute format is invalid.',
-    'required' => 'Das Feld ist erforderlich und kan nicht leer gelassen werden.',
+    'required' => 'Das Feld ( :attribute ) ist erforderlich und kan nicht leer gelassen werden.',
     'required_if' => 'Das Feld ist erforderlich, wenn :other aktiviert ist.',
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
     'required_with' => 'The :attribute field is required when :values is present.',

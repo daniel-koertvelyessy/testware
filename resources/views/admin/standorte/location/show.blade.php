@@ -566,7 +566,9 @@
                                     </div>
                                 </form>
                                 @if ($location->Building->count()>0)
-                                    <table class="table table-striped">
+
+
+                                    <table class="table table-striped" id="tabBuildingListe">
                                         <thead>
                                         <tr>
                                             <th>Nummer / ID</th>
@@ -592,70 +594,23 @@
                                                 <td class="d-none d-md-table-cell text-center">
                                                     {{ $building->rooms()->count() }}
                                                 </td>
-                                                <td class="d-none d-md-table-cell">
+                                                <td class="d-none d-md-table-cell text-center">
                                                     @if ($building->b_we_has === 1)
                                                         {{$building->b_we_name}}
                                                     @else
                                                         <span class="fas fa-times"></span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <div class="btn-group dropleft">
-                                                        <button type="button"
-                                                                class="btn btn-sm btn-outline-primary dropdown-toggle"
-                                                                id="editObjekt{{ $building->id }}"
-                                                                data-toggle="dropdown"
-                                                                aria-haspopup="true"
-                                                                aria-expanded="false"
-                                                        >
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu"
-                                                             aria-labelledby="editObjekt{{ $building->id }}"
-                                                        >
-                                                            <a href="{{ route('building.show',$building) }}"
-                                                               class="dropdown-item d-flex justify-content-between align-items-center"
-                                                               title="Gebäudedaten ansehen"
-                                                            >
-                                                                Öffnen <i class="fas fa-angle-right"></i>
-                                                            </a>
-                                                            <a href="#"
-                                                               class="btnDeleteBuildig dropdown-item d-flex justify-content-between align-items-center"
-                                                               data-id="{{ $building->id }}"
-                                                            >
-                                                                Löschen <i class="far fa-trash-alt"></i>
-                                                            </a>
-                                                            <a href="#"
-                                                               class="dropdown-item d-flex justify-content-between align-items-center copyBuilding {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
-                                                               data-objid="{{ $building->id }}"
-                                                            >Kopieren <i class="fas fa-copy"></i>
-                                                            </a>
-                                                            @if ($building->rooms()->count()===0)
-                                                                <form action="{{ route('building.destroy',$building->id) }}#locGebauede"
-                                                                      id="frmDeleteBuildig_{{ $building->id }}"
-                                                                      target="_blank"
-                                                                >
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <input type="hidden"
-                                                                           name="id"
-                                                                           id="id_{{ $building->id }}"
-                                                                           value="{{ $building->id }}"
-                                                                    >
-                                                                    <input type="hidden"
-                                                                           name="frmOrigin"
-                                                                           id="frmOrigin_{{ $building->id }}"
-                                                                           value="locaion"
-                                                                    >
-                                                                    <input type="hidden"
-                                                                           name="b_name_kurz"
-                                                                           id="b_name_kurz{{ $building->b_name_kurz }}"
-                                                                           value="{{ $building->r_name_kurz }}"
-                                                                    >
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    </div>
+                                                <td style="text-align: right;">
+                                                    <x-menu_context
+                                                        :object="$building"
+                                                        routeOpen="{{ route('building.show',$building) }}"
+                                                        routeCopy="{{ route('copyBuilding',$building) }}"
+                                                        routeDestory="{{ route('building.destroy',$building) }}"
+                                                        tabName="locGebauede"
+                                                        objectVal="{{$building->b_name_kurz}}"
+                                                        objectName="b_name_kurz"
+                                                    />
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -713,7 +668,21 @@
             $('#modalAddBuildingType').modal('show');
         </script>
     @endif
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     <script>
+
+
+        $('#tabBuildingListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            "columnDefs": [
+                { "orderable": false, "targets": 5 }
+            ],
+            "dom":'t'
+        });
 
         $('#anforderung_id').change(() => {
 
@@ -750,13 +719,13 @@
                 }
             });
         });
-
-        $('.btnDeleteBuildig').click(function () {
-            const buildingId = $(this).data('id');
-            $.ajax({
-                type: "POST",
-                dataType: 'json',
-                url: "{{ route('destroyBuildingAjax') }}",
+        /*
+              $('.btnDeleteBuildig').click(function () {
+                       const buildingId = $(this).data('id');
+                       $.ajax({
+                           type: "POST",
+                           dataType: 'json',
+                           url: "{{ route('destroyBuildingAjax') }}",
                 data: $('#frmDeleteBuildig_' + buildingId).serialize(),
                 success: function (res) {
                     if (res) location.reload();
@@ -778,5 +747,6 @@
                 }
             });
         });
+*/
     </script>
 @endsection

@@ -149,6 +149,16 @@ class ProduktController extends Controller
         return redirect($produkt->path());
     }
 
+    public function ajaxstore(Request $request) {
+        $produkt = Produkt::create($this->validateNewProdukt());
+        if (request()->has('control_product')){
+            $controlProduct = new ControlProdukt();
+            $controlProduct->produkt_id = $produkt->id;
+            $controlProduct->save();
+        }
+        return $produkt->id;
+    }
+
 
     /**
      * Remove the specified resource from storage.

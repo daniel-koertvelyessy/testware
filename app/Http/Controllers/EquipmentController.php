@@ -26,7 +26,6 @@ use Illuminate\View\View;
 
 class EquipmentController extends Controller
 {
-    use SoftDeletes;
 
     public function __construct()
     {

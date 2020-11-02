@@ -84,7 +84,7 @@
                         </tbody>
                     </table>
                     <div class="d-flex justify-content-center">
-                        {!! $roomList->onEachSide(2)->links() !!}
+                        {!! $roomList->appends(['sort' => 'l_name_kurz'])->onEachSide(2)->links() !!}
                     </div>
                 </div>
             </div>

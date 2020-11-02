@@ -47,7 +47,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse(App\Equipment::take(5)->latest()->get() as $equipment)
+                    @forelse($equipmentList as $equipment)
                         <tr>
                             <td>
                                 <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
@@ -98,6 +98,11 @@
                     @endforelse
                     </tbody>
                 </table>
+                @if(count($equipmentList)>0)
+                    <div class="d-flex justify-content-center">
+                        {!! $equipmentList->onEachSide(2)->links() !!}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

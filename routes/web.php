@@ -111,11 +111,13 @@ Route::get('produktMain', function () {
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    return view('testware.equipment.main');
+    $equipmentList = \App\Equipment::paginate(10);
+    return view('testware.equipment.main',['equipmentList'=>$equipmentList]);
 })->name('equipMain')->middleware('auth');
 
 Route::get('equipMaker', function () {
-    return view('testware.equipment.maker');
+    $produktList = \App\Produkt::paginate(10);
+    return view('testware.equipment.maker',['produktList'=>$produktList]);
 })->name('equipMaker')->middleware('auth');
 
 Route::get('verordnung.main', function () {

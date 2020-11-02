@@ -189,15 +189,16 @@
                                                 <td>{{ $spl->sp_name_kurz }}</td>
                                                 <td>{{ $spl->sp_name_lang }}</td>
                                                 <td>{{ \App\StellplatzTyp::find($spl->stellplatz_typ_id)->spt_name_kurz }}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-secondary btn-sm btnDeleteStellPlatzItem" data-spid="{{ $spl->id }}"><span class="far fa-trash-alt"></span></button>
-                                                    <form action="{{ route('destroyStellplatzAjax',$spl->id) }}" id="frmDeleteStellplatzItem_{{ $spl->id }}" target="_blank">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <input type="hidden" name="id" id="id_{{ $spl->id }}" value="{{ $spl->id }}">
-                                                        <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $spl->id }}" value="room">
-                                                        <input type="hidden" name="sp_name_kurz" id="sp_name_kurz{{ $spl->id }}" value="{{ $spl->sp_name_kurz }}">
-                                                    </form>
+                                                <td class="text-right">
+                                                    <x-menu_context
+                                                        :object="$spl"
+                                                        routeOpen="#"
+                                                        routeCopy="{{ route('copyStellplatz',$spl) }}"
+                                                        routeDestory="{{ route('stellplatz.destroy',$spl) }}"
+                                                        tabName="roomStellPlatze"
+                                                        objectVal="{{$spl->sp_name_kurz}}"
+                                                        objectName="sp_name_kurz"
+                                                    />
                                                 </td>
 
                                             </tr>

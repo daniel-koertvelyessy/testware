@@ -12,15 +12,13 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
-class StellplatzController extends Controller
-{
+class StellplatzController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
-    {
+    public function index() {
         //
     }
 
@@ -29,79 +27,107 @@ class StellplatzController extends Controller
      *
      * @return Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 //        dd($request->room_id);
-        $sp =  Stellplatz::create($this->validateNeuStellPlatz());
-        (new \App\Standort)->add($request->standort_id, $request->sp_name_kurz,'stellplatzs');
+        $sp = Stellplatz::create($this->validateNeuStellPlatz());
+        (new \App\Standort)->add($request->standort_id, $request->sp_name_kurz, 'stellplatzs');
         $request->session()->flash('status', 'Der Stellplatzt <strong>' . request('sp_name_kurz') . '</strong> wurde angelegt!');
         return redirect()->back();
     }
 
     /**
+     * @param  Request    $reuest
+     * @return RedirectResponse
+     */
+    public function copyStellplatz(Request $reuest) {
+        $stellplatz = Stellplatz::find($reuest->id);
+        $name = strtr('Kopie_'.$stellplatz->sp_name_kurz,0,19);
+        $newStellplatz = $stellplatz->replicate()->fill([
+            'sp_name_kurz' => $name
+        ]);
+
+        $newStellplatz->save();
+
+        session()->flash('status', 'Der Stellplatzt <strong>' . $stellplatz->sp_name_kurz. '</strong> wurde kopiert!');
+        return redirect()->back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNeuStellPlatz()
+    : array {
+        return request()->validate([
+            'sp_name_kurz'      => 'bail|unique:stellplatzs,sp_name_kurz|required|min:1|max:20',
+            'sp_name_lang'      => 'max:100',
+            'sp_name_text'      => '',
+            'room_id'           => 'required',
+            'stellplatz_typ_id' => 'required',
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param Stellplatz $stellplatz
+     * @param  Stellplatz $stellplatz
      * @return Response
      */
-    public function show(Stellplatz $stellplatz)
-    {
+    public function show(Stellplatz $stellplatz) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Stellplatz $stellplatz
+     * @param  Stellplatz $stellplatz
      * @return Response
      */
-    public function edit(Stellplatz $stellplatz)
-    {
+    public function edit(Stellplatz $stellplatz) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Stellplatz $stellplatz
+     * @param  Request    $request
+     * @param  Stellplatz $stellplatz
      * @return Response
      */
-    public function update(Request $request, Stellplatz $stellplatz)
-    {
+    public function update(Request $request, Stellplatz $stellplatz) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Stellplatz $stellplatz
-     * @return Response
+     * @param  Request    $request
+     * @param  Stellplatz $stellplatz
+     * @return RedirectResponse
+     * @throws \Exception
      */
-    public function destroy(Stellplatz $stellplatz)
-    {
-        //
+    public function destroy(Request $request, Stellplatz $stellplatz) {
+        $stellplatz->delete();
+        $request->session()->flash('status', 'Der Stellplatz <strong>' . $request->sp_name_kurz . '</strong>  wurde gelöscht!');
+        return redirect()->back();
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @return boolean
      */
-    public function destroyStellplatzAjax(Request $request )
-    {
+    public function destroyStellplatzAjax(Request $request) {
         if (Stellplatz::destroy($request->id)) {
-            $request->session()->flash('status', 'Der Stellplatz <strong>'.$request->sp_name_kurz.'</strong>  wurde gelöscht!');
+            $request->session()->flash('status', 'Der Stellplatz <strong>' . $request->sp_name_kurz . '</strong>  wurde gelöscht!');
             return true;
         } else {
             return false;
@@ -112,27 +138,13 @@ class StellplatzController extends Controller
     /**
      * @return array
      */
-    public function validateNeuStellPlatz(): array
-    {
+    public function validateStellPlatz()
+    : array {
         return request()->validate([
-            'sp_name_kurz' => 'bail|unique:stellplatzs,sp_name_kurz|required|min:1|max:20',
-            'sp_name_lang' => 'max:100',
-            'sp_name_text' => '',
-            'room_id' => 'required',
-            'stellplatz_typ_id' => 'required',
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateStellPlatz(): array
-    {
-        return request()->validate([
-            'sp_name_kurz' => 'bail|required|min:1|max:20',
-            'sp_name_lang' => 'max:100',
-            'sp_name_text' => '',
-            'room_id' => 'required',
+            'sp_name_kurz'      => 'bail|required|min:1|max:20',
+            'sp_name_lang'      => 'max:100',
+            'sp_name_text'      => '',
+            'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);
     }

@@ -142,10 +142,11 @@
                                 <div class="col-lg-6">
                                     <h2 class="h5">Standort</h2>
                                     <div class="form-group">
+                                        {{ $building->location_id }}
                                         <label for="location_id">ist zugeordnet</label>
                                         <select name="location_id" id="location_id" class="custom-select">
                                             @foreach (App\Location::all() as $loc)
-                                                <option value="{{ $loc->id }}" {{ ($loc->id === $building->locations_id) ? ' selected ' : '' }}>{{ $loc->l_name_kurz }}</option>
+                                                <option value="{{ $loc->id }}" {{ ($loc->id === $building->location_id) ? ' selected ' : '' }}>{{ $loc->l_name_kurz }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -268,44 +269,17 @@
                                                 <td>{{ $room->r_name_lang }}</td>
                                                 <td>{{ \App\RoomType::find($room->room_type_id)->rt_name_kurz }}</td>
                                                 <td>{{ $room->stellplatzs()->count() }}</td>
-                                                <td>
-                                                    <div class="btn-group dropleft">
-                                                        <button type="button"
-                                                                class="btn btn-sm btn-outline-primary"
-                                                                id="editObjekt{{ $room->id }}"
-                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                        >
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="editObjekt{{ $room->id }}">
-                                                            <a href="{{ route('room.show',$room) }}"
-                                                               class="dropdown-item d-flex justify-content-between align-items-center"
-                                                               title="Raum ansehen"
-                                                            >
-                                                                Öffnen <i class="fas fa-angle-right"></i>
-                                                            </a>
-                                                            <a href="#" class="btnDeleteRoom dropdown-item d-flex justify-content-between align-items-center"
-                                                               data-id="{{ $room->id }}"
-                                                            >
-                                                                Löschen
-                                                                <i class="far fa-trash-alt"></i>
-                                                            </a>
+                                                <td class="text-right">
+                                                    <x-menu_context
+                                                        :object="$room"
+                                                        routeOpen="{{ route('room.show',$room) }}"
+                                                        routeCopy="{{ route('copyRoom',$room) }}"
+                                                        routeDestory="{{ route('room.destroy',$room) }}"
+                                                        tabName="gebRooms"
+                                                        objectVal="{{$room->r_name_kurz}}"
+                                                        objectName="r_name_kurz"
+                                                    />
 
-                                                            <a href="#"
-                                                               class="dropdown-item d-flex justify-content-between align-items-center copyRoom {{-- @if (!env('app.makeobjekte') ) disabled @endif --}} "
-                                                               data-objid="{{ $room->id }}"
-                                                            >Kopieren
-                                                                <i class="fas fa-copy"></i>
-                                                            </a>
-                                                            <form action="{{ route('room.destroy',$room->id) }}" id="frmDeleteRoom_{{ $room->id }}" target="_blank">
-                                                                @csrf
-                                                                @method('delete')
-                                                                <input type="hidden" name="id" id="id_{{ $room->id }}" value="{{ $room->id }}">
-                                                                <input type="hidden" name="frmOrigin" id="frmOrigin_{{ $room->id }}" value="building">
-                                                                <input type="hidden" name="r_name_kurz" id="r_name_kurz_{{ $room->id }}" value="{{ $room->r_name_kurz }}">
-                                                            </form>
-                                                        </div>
-                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach

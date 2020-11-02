@@ -66,7 +66,11 @@
                 @endforelse
                 </tbody>
             </table>
-            @if(count($produktList)>0) {{ $produktList->links() }}  @endif
+            @if(count($produktList)>0)
+            <div class="d-flex justify-content-center">
+                {!! $produktList->onEachSide(2)->links() !!}
+            </div>
+            @endif
         </div>
     </div>
 </div>

@@ -47,6 +47,7 @@ Route::delete('deleteStellPlatzType', 'AdminController@deleteStellPlatzType')->n
 Route::get('getUsedObjByStellPlatzType', 'AdminController@getUsedObjByStellPlatzType')->name('getUsedObjByStellPlatzType');
 Route::get('getUsedStellplatzByType', 'AdminController@getUsedStellplatzByType')->name('getUsedStellplatzByType');
 
+Route::post('copyStellplatz', 'StellplatzController@copyStellplatz')->name('copyStellplatz');
 Route::get('exportStellplatzJSON','DataportController@exportStellplatzJSON')->name('exportStellplatzJSON');
 Route::post('importStellplatzJSON','DataportController@importStellplatzJSON')->name('importStellplatzJSON');
 
@@ -66,7 +67,7 @@ Route::post('createRoomType', 'AdminController@createRoomType')->name('createRoo
 Route::post('getRoomTypeData', 'AdminController@getRoomTypeData')->name('getRoomTypeData');
 Route::delete('deleteRoomType', 'AdminController@deleteRoomType')->name('deleteRoomType');
 Route::get('getUsedRoomsByRoomType', 'AdminController@getUsedRoomsByRoomType')->name('getUsedRoomsByRoomType');
-Route::get('copyRoom', 'RoomController@copyRoom')->name('copyRoom');
+Route::post('copyRoom', 'RoomController@copyRoom')->name('copyRoom');
 Route::get('getRoomListeAsKachel', 'RoomController@getRoomListeAsKachel')->name('getRoomListeAsKachel');
 Route::get('getRoomListeAsTable', 'RoomController@getRoomListeAsTable')->name('getRoomListeAsTable');
 
@@ -92,7 +93,7 @@ Route::put('updateBuildingType', 'AdminController@updateBuildingType')->name('up
 Route::get('getUsedBuildingsByBuildingType', 'AdminController@getUsedBuildingsByBuildingType')->name('getUsedBuildingsByBuildingType');
 Route::delete('deleteBuildingType', 'AdminController@deleteBuildingType')->name('deleteBuildingType');
 Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->name('room.getBuildingList');
-Route::get('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuilding');
+Route::post('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuilding');
 Route::get('getBuildingListeAsTable', 'BuildingsController@getBuildingListeAsTable')->name('getBuildingListeAsTable');
 Route::get('getBuildingListeAsKachel', 'BuildingsController@getBuildingListeAsKachel')->name('getBuildingListeAsKachel');
 

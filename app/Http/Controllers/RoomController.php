@@ -14,24 +14,19 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class RoomController extends Controller
-{
+class RoomController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
     /**
      * Display a listing of the resource.
-     *
-     *
      */
-    public function index()
-    {
-        if(Room::all()->count()>15){
-            $roomList = Room::with('RoomType')->paginate(15);
-            return view('admin.standorte.room.index',['roomList'=>$roomList]);
+    public function index() {
+        if (Room::all()->count() > 8) {
+            $roomList = Room::with('RoomType')->paginate(100);
+            return view('admin.standorte.room.index', ['roomList' => $roomList]);
         } else {
             return view('admin.standorte.room.index');
         }
@@ -40,44 +35,54 @@ class RoomController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     *
      */
-    public function create()
-    {
+    public function create() {
         return view('admin.standorte.room.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $set = Room::create($this->validateNewRoom());
 
-        (new \App\Standort)->add($request->standort_id, $request->r_name_kurz,'rooms');
+        (new \App\Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
 
         $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde angelegt!');
 
-return  redirect()->back();
+        return redirect()->back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNewRoom()
+    : array {
+        return request()->validate([
+            'r_name_kurz'  => 'bail|unique:rooms,r_name_kurz|max:20|required|',
+            'standort_id'  => 'unique:rooms,standort_id',
+            'r_name_lang'  => 'max:100',
+            'r_name_text'  => '',
+            'building_id'  => 'required',
+            'room_type_id' => 'required'
+        ]);
     }
 
     public function copyRoom(Request $request) {
 
-        if ($request->id){
+        if ($request->id) {
 
             $bul = Room::find($request->id);
             $neuroom = '';
-            switch (true)
-            {
+            switch (true) {
                 case strlen($bul->r_name_kurz) <= 20 && strlen($bul->r_name_kurz) > 14:
-                    $neuroom = substr($bul->r_name_kurz,0,13).'_1';
+                    $neuroom = substr($bul->r_name_kurz, 0, 13) . '_1';
                     break;
                 case strlen($bul->b_name_kurz) <= 14:
-                    $neuroom = $bul->r_name_kurz.'_1';
+                    $neuroom = $bul->r_name_kurz . '_1';
                     break;
             }
 
@@ -98,20 +103,20 @@ return  redirect()->back();
                 $copy->room_type_id,
                 $copy->standort_id,
             ], [
-                'r_name_kurz' => 'bail|required|unique:rooms,r_name_kurz|max:20',
-                'r_name_text' =>'',
-                'r_name_lang' =>'',
-                'building_id' =>'',
-                'room_type_id' =>'',
-                'standort_id' =>'',
+                'r_name_kurz'  => 'bail|required|unique:rooms,r_name_kurz|max:20',
+                'r_name_text'  => '',
+                'r_name_lang'  => '',
+                'building_id'  => '',
+                'room_type_id' => '',
+                'standort_id'  => '',
 
             ]);
             $copy->save();
 
-            $std = (new \App\Standort)->add($copy->standort_id, $neuroom,'rooms');
+            $std = (new \App\Standort)->add($copy->standort_id, $neuroom, 'rooms');
 
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde kopiert!');
-            return $copy->id;
+            return redirect()->back();
         } else {
             return 0;
         }
@@ -121,34 +126,31 @@ return  redirect()->back();
     /**
      * Display the specified resource.
      *
-     * @param Room $room
+     * @param  Room $room
      * @return Response
      */
-    public function show(Room $room)
-    {
-        return view('admin.standorte.room.show',['room'=>$room]);
+    public function show(Room $room) {
+        return view('admin.standorte.room.show', ['room' => $room]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Room $room
+     * @param  Room $room
      * @return Response
      */
-    public function edit(Room $room)
-    {
-        return view('admin.standorte.room.edit',compact('room'));
+    public function edit(Room $room) {
+        return view('admin.standorte.room.edit', compact('room'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Room $room
+     * @param  Request $request
+     * @param  Room    $room
      * @return Response
      */
-    public function update(Request $request, Room $room)
-    {
+    public function update(Request $request, Room $room) {
 
 //        dd($room);
         $room->update($this->validateRoom());
@@ -158,36 +160,45 @@ return  redirect()->back();
     }
 
     /**
+     * @return array
+     */
+    public function validateRoom()
+    : array {
+        return request()->validate([
+            'r_name_kurz' => 'bail|min:2|max:10|required|',
+            'r_name_lang' => 'bail|min:2|max:100',
+            'r_name_text' => '',
+            'building_id' => 'required'
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
-     * @param Room $room
-     * @param Request $request
-     *
+     * @param  Room    $room
+     * @param  Request $request
      * @return Application|RedirectResponse|Response|Redirector
      * @throws Exception
      */
-    public function destroy(Request $request,Room $room)
-    {
-        dd($request);
+    public function destroy(Request $request, Room $room) {
+//        dd($request);
         Room::destroy($request->id);
         $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde gelöscht!');
-        return (isset($request->frmOrigin)) ? redirect('building/'.$request->building_id.'#gebRooms') : redirect('room');
+        return redirect()->back();
     }
 
     /**
      * Lösche Raum aus GebäudeView über Ajax-Request.
      *
-     * @param Request $request
-     *
+     * @param  Request $request
      * @return bool
      */
-    public function destroyRoomAjax(Request $request)
-    {
+    public function destroyRoomAjax(Request $request) {
 
         $rm = Room::find($request->id)->standort_id;
 
         $rname = request('r_name_kurz');
-        if ( Room::destroy($request->id) ){
+        if (Room::destroy($request->id)) {
 
             $request->session()->flash('status', 'Der Raum <strong>' . $rname . '</strong> wurde gelöscht!');
             return true;
@@ -195,6 +206,7 @@ return  redirect()->back();
             return false;
         }
     }
+
     public function getRoomListeAsTable() {
         $html = '<div class="col">
 <table class="table table-sm table-striped">
@@ -210,85 +222,52 @@ return  redirect()->back();
 <tbody>
         ';
 
-        foreach (Room::all() as $room)
-        {
-            $html.='
+        foreach (Room::all() as $room) {
+            $html .= '
             <tr>
-            <td><a href="/location/'. $room->building->location->id  .'">'. $room->building->location->l_name_kurz  .'</a></td>
-            <td><a href="/building/'. $room->building->id  .'">'. $room->building->b_name_kurz  .'</a></td>
-            <td>'. $room->r_name_kurz .'</td>
-            <td>'. $room->r_name_lang .'</td>
+            <td><a href="/location/' . $room->building->location->id . '">' . $room->building->location->l_name_kurz . '</a></td>
+            <td><a href="/building/' . $room->building->id . '">' . $room->building->b_name_kurz . '</a></td>
+            <td>' . $room->r_name_kurz . '</td>
+            <td>' . $room->r_name_lang . '</td>
             <td>
-                <a href="'.$room->path().'">
+                <a href="' . $room->path() . '">
                     <i class="fas fa-chalkboard"></i>
-                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
+                    <span class="d-none d-md-table-cell">' . __('Übersicht') . '</span>
                 </a>
             </td>
             </tr>';
         }
-        $html .='</tbody></table></div>';
+        $html .= '</tbody></table></div>';
 
-        return ['html'=> $html];
+        return ['html' => $html];
 
     }
 
     public function getRoomListeAsKachel() {
         $html = '';
-        foreach (Room::all() as $room)
-        {
-            $html.='<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_'.$room->id.'">
+        foreach (Room::all() as $room) {
+            $html .= '<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_' . $room->id . '">
                         <div class="card" style="height:20em;">
                             <div class="card-header">
                                  Befindet sich in <i class="fas fa-angle-right text-muted"></i>
-                                <a href="/location/'. $room->building->location->id  .'">'. $room->building->location->l_name_kurz  .'</a>
+                                <a href="/location/' . $room->building->location->id . '">' . $room->building->location->l_name_kurz . '</a>
                                 <i class="fas fa-angle-right"></i>
-                                <a href="/building/'. $room->building->id  .'">'. $room->building->b_name_kurz  .'</a>
+                                <a href="/building/' . $room->building->id . '">' . $room->building->b_name_kurz . '</a>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">'. $room->r_name_kurz .'</h5>
-                                <h6 class="card-subtitletext-muted">'. $room->r_name_lang .'</h6>
+                                <h5 class="card-title">' . $room->r_name_kurz . '</h5>
+                                <h6 class="card-subtitletext-muted">' . $room->r_name_lang . '</h6>
                                 <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
-                                <p class="mt-0" style="height:6em;">'. str_limit($room->r_name_text,100) .'</p>
+                                <p class="mt-0" style="height:6em;">' . str_limit($room->r_name_text, 100) . '</p>
                             </div>
                             <div class="card-footer">
-                                <a href="'.$room->path().'" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                                <a href="' . $room->path() . '" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>
                             </div>
                         </div>
                     </div>';
         }
 
-        return ['html'=> $html];
+        return ['html' => $html];
 
-    }
-
-
-
-
-    /**
-     * @return array
-     */
-    public function validateRoom(): array
-    {
-        return request()->validate([
-            'r_name_kurz' => 'bail|min:2|max:10|required|',
-            'r_name_lang' =>'bail|min:2|max:100',
-            'r_name_text' =>'',
-            'building_id' =>'required'
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateNewRoom(): array
-    {
-        return request()->validate([
-            'r_name_kurz' => 'bail|unique:rooms,r_name_kurz|max:20|required|',
-            'standort_id' => 'unique:rooms,standort_id',
-            'r_name_lang' =>'max:100',
-            'r_name_text' =>'',
-            'building_id' =>'required',
-            'room_type_id' =>'required'
-        ]);
     }
 }
