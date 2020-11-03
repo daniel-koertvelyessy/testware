@@ -17,7 +17,7 @@ class CreateProduktDocsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('proddoc_name_kurz', 150)->unique();
+            $table->string('proddoc_name_kurz', 150);
             $table->string('proddoc_name_lang', 150)->nullable();
             $table->string('proddoc_name_pfad', 150)->nullable();
             $table->text('proddoc_name_text')->nullable();

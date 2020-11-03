@@ -44,7 +44,7 @@ class EquipmentDocController extends Controller
 
             $validation = $request->validate([
                 'equipDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_name_kurz' => 'required|unique:equipment_docs,eqdoc_name_kurz'
+                'eqdoc_name_kurz' => 'required|max:150'
             ]);
 
 //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());

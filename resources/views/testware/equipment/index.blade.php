@@ -7,9 +7,7 @@
 @endsection
 
 @section('content')
-
     <div class="container-fluid">
-
         <div class="row">
             <div class="col">
                 <h1 class="h4">Übersicht aller Geräte</h1>
@@ -67,7 +65,7 @@
                                 <p>
                                     <x-notifyer>Keine Geräte gefunden</x-notifyer>
                                 </p>
-                                <a href="{{ route('equipMaker') }}" class="btn mt-2 btn-outline-primary">{{__('neues Gerät anlegen')}}</a>
+                                <a href="{{ route('equipment.maker') }}" class="btn mt-2 btn-outline-primary">{{__('neues Gerät anlegen')}}</a>
                             </td>
                         </tr>
                     @endforelse

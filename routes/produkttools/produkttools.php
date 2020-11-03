@@ -13,7 +13,7 @@ Route::get('/produkt/kategorie/{id}','ProduktController@getKategorieProducts')->
 Route::delete('deleteProduktKategorieParam','ProduktController@deleteProduktKategorieParam')->name('deleteProduktKategorieParam');
 Route::get('getProduktKategorieParams','ProduktController@getProduktKategorieParams')->name('getProduktKategorieParams');
 Route::post('addProduktKategorieParam','ProduktController@addProduktKategorieParam')->name('addProduktKategorieParam');
-Route::post('ajaxstore','ProduktController@ajaxstore')->name('ajaxstore');
+Route::post('produkt.ajaxstore','ProduktController@ajaxstore')->name('produkt.ajaxstore');
 
 Route::get('getUsedProduktsByPK','ProduktController@getUsedProduktsByPK')->name('getUsedProduktsByPK');
 

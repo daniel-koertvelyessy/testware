@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_FAV_Grey.svg') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
@@ -41,7 +41,7 @@
     @if (session()->has('status'))
         <div class="toast fixed-top bg-light" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <img src="{{ url('img/icon/testWareLogo_FAV_Grey.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
+                <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
                 <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

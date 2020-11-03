@@ -26,7 +26,7 @@
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
 
-                        <a href="{{ route('equipMaker') }}"
+                        <a href="{{ route('equipment.maker') }}"
                            class="tile-small rounded m-lg-3"
                            data-role="tile"
                         >
@@ -90,7 +90,7 @@
                                 <p>
                                     <x-notifyer>Keine Geräte gefunden</x-notifyer>
                                 </p>
-                                <a href="{{ route('equipMaker') }}"
+                                <a href="{{ route('equipment.maker') }}"
                                    class="btn mt-2 btn-outline-primary"
                                 >{{__('neues Gerät anlegen')}}</a>
                             </td>

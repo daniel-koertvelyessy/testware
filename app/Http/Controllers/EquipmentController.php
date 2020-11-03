@@ -7,8 +7,10 @@ use App\ControlEquipment;
 use App\ControlInterval;
 use App\Equipment;
 use App\EquipmentDoc;
+use App\EquipmentFuntionControl;
 use App\EquipmentHistory;
 use App\EquipmentParam;
+use App\EquipmentUid;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
@@ -62,13 +64,19 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-
         $lastDate = $request->qe_control_date_last;
 
         $prod = Produkt::find($request->produkt_id);
         $equipment = Equipment::create($this->validateNewEquipment());
-        $eh = new EquipmentHistory();
 
+        $euid = new EquipmentUid();
+        $euid->equipment_uid = $request->eq_uid;
+        $euid->equipment_id = $equipment->id;
+        $euid->save();
+
+
+
+        $eh = new EquipmentHistory();
         $eh->eqh_eintrag_kurz = 'Gerät angelegt';
         $eh->eqh_eintrag_text = 'Das Gerät mit der Inventar-Nr'.request('eq_inventar_nr').' wurde angelegt';
         $eh->equipment_id = $equipment->id;
@@ -76,8 +84,6 @@ class EquipmentController extends Controller
 
         foreach($prod->ProduktAnforderung as $prodAnforderung)
         {
-
-
             $conEquip = new ControlEquipment();
                 $interval = $prodAnforderung->Anforderung->an_control_interval;
                 $conInt = $prodAnforderung->Anforderung->control_interval_id;
@@ -101,8 +107,6 @@ class EquipmentController extends Controller
         }
 
         if (isset($request->pp_id)&& count($request->pp_id)>0) {
-
-
             for ($i=0; $i<count($request->pp_id);$i++)
             {
                 $pp = ProduktParam::find($request->pp_id[$i]);
@@ -113,10 +117,43 @@ class EquipmentController extends Controller
                 $equipParam->equipment_id = $equipment->id;
                 $equipParam->save();
             }
-
         }
 
+        $func = new EquipmentFuntionControl();
+        $func->function_control_date = $request->function_control_date;
+        $func->function_control_firma = $request->function_control_firma;
+        $func->function_control_pass = $request->function_control_pass;
+        $func->equipment_id = $equipment->id;
+        $func->save();
 
+        $eh = new EquipmentHistory();
+
+        $eh->eqh_eintrag_kurz = 'Funktionsprüfung erfolgt';
+        $eh->eqh_eintrag_text = 'Das Geräte wurde am '.$request->function_control_date.' einer Funktionsprüfung unterzogen.';
+        $eh->eqh_eintrag_text .= ($request->function_control_pass==='1') ? ' Die Prüfung wurde erfolgreich abgeschlossen.' : ' Die Prüfung konnte nicht erfolgreich abgeschlossen werden. ';
+        if ($request->function_control_text !== NULL)
+            $eh->eqh_eintrag_text .= 'Bemerkungen: ' . $request->function_control_text;
+        $eh->equipment_id = $equipment->id;
+        $eh->save();
+
+        if ($request->hasFile('equipDokumentFile')) {
+
+            $proDocFile = new EquipmentDoc();
+            $file = $request->file('equipDokumentFile');
+
+            $validation = $request->validate([
+                'equipDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
+                'eqdoc_name_kurz' => 'required|max:150'
+            ]);
+
+            $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
+            $proDocFile->eqdoc_name_pfad= $file->store('equipment_docu/'.$equipment->id);
+            $proDocFile->document_type_id = request('document_type_id');
+            $proDocFile->equipment_id = $equipment->id;
+            $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
+            $proDocFile->eqdoc_name_kurz = request('eqdoc_name_kurz');
+            $proDocFile->save();
+        }
 
         $request->session()->flash('status', 'Das Gerät <strong>' . request('setNewEquipmentFromProdukt') . '</strong> wurde angelegt!');
 
@@ -239,29 +276,18 @@ class EquipmentController extends Controller
             $eh->save();
             $request->session()->flash('status', __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!',['equipName'=>request('eq_inventar_nr') ]));
 
-
-
             return view('testware.equipment.show',['equipment'=>$equipment]);
         } else {
-
             $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
             return view('testware.equipment.show',['equipment'=>$equipment]);
         }
-
-
-
-
-
-
-
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  Equipment $equipment
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function destroy(Equipment $equipment)
     {
@@ -278,9 +304,6 @@ class EquipmentController extends Controller
 
         $equipment->delete();
 
-
-
-
         return view('testware.equipment.index');
 
     }
@@ -293,6 +316,7 @@ class EquipmentController extends Controller
         return request()->validate([
             'eq_inventar_nr' => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
             'eq_serien_nr' => 'bail|unique:equipment,eq_serien_nr|max:100',
+            'eq_uid' => 'bail|required|unique:equipment,eq_uid',
             'eq_qrcode' => '',
             'eq_text' => '',
             'eq_ibm' => 'date',

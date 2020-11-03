@@ -46,6 +46,9 @@ class Equipment extends Model
     public function ControlEquipment() {
         return $this->hasMany(ControlEquipment::class);
     }
+    public function EquipmentUid() {
+        return $this->hasOne(EquipmentUid::class);
+    }
 
     static function getControlEquipmentList()
     {

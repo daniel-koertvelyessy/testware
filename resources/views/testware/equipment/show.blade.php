@@ -367,6 +367,40 @@
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
+                                    <h2 class="h4 mt-5">Funtionstest</h2>
+                                    @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',1)->get() as $bda)
+
+                                        <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <span class="text-muted small">{{ $bda->eqdoc_name_kurz }}</span><br> <span class="lead">{{ $bda->eqdoc_name_lang }}</span><br>
+                                                {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)/1028,1) }}kB
+                                            </div>
+                                            <div>
+                                                <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
+                                                      method="get"
+                                                      id="downloadFuntionsTest_{{ $bda->id }}"
+                                                >
+                                                    @csrf
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           id="FuntionsTest_{{ $bda->id }}"
+                                                           value="{{ $bda->id }}"
+                                                    >
+                                                </form>
+                                                <button
+                                                    class="btn btn-lg btn-outline-primary"
+                                                    onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
+                                                >
+                                                    <span class="fas fa-download"></span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                    @empty
+                                        <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
+                                    @endforelse
+
 
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
                                 @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(10)->latest()->onlyTrashed()->get() as $bda)
@@ -485,18 +519,18 @@
                                                 <td>
                                                     <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                           method="get"
-                                                          id="downloadProdDoku_{{ $equipDoc->id }}"
+                                                          id="downloadEquipmentDoku_{{ $equipDoc->id }}"
                                                     >
                                                         @csrf
                                                         <input type="hidden"
                                                                name="id"
-                                                               id="download_produktdoc_id_{{ $equipDoc->id }}"
+                                                               id="download_equipment_id_{{ $equipDoc->id }}"
                                                                value="{{ $equipDoc->id }}"
                                                         >
                                                     </form>
                                                     <button
                                                         class="btn btn-sm btn-outline-secondary"
-                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $equipDoc->id }}').submit();"
+                                                        onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                     >
                                                         <span class="fas fa-download"></span>
                                                     </button>

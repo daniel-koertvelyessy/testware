@@ -67,6 +67,7 @@ class EquipmentSeeder extends Seeder
         ]);
 
 
+        $uid = \Illuminate\Support\Str::uuid();
         DB::table('equipment')->insert([
             [
                 'id' => '4',
@@ -81,9 +82,16 @@ class EquipmentSeeder extends Seeder
                 'equipment_state_id' => '1',
                 'produkt_id' => '31',
                 'standort_id' => '4',
+                'eq_uid' => $uid,
             ]
         ]);
 
+        DB::table('equipment_uids')->insert([
+            [
+                'equipment_uid' => $uid,
+                'equipment_id' => '4'
+            ]
+        ]);
 
         DB::table('equipment_histories')->insert([
             [

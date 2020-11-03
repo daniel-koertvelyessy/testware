@@ -115,10 +115,10 @@ Route::get('equipMain', function () {
     return view('testware.equipment.main',['equipmentList'=>$equipmentList]);
 })->name('equipMain')->middleware('auth');
 
-Route::get('equipMaker', function () {
+Route::get('equipment.maker', function () {
     $produktList = \App\Produkt::paginate(10);
     return view('testware.equipment.maker',['produktList'=>$produktList]);
-})->name('equipMaker')->middleware('auth');
+})->name('equipment.maker')->middleware('auth');
 
 Route::get('verordnung.main', function () {
     return view('admin.verordnung.main');

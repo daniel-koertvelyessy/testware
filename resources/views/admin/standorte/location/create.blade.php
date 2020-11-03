@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Neu anlegen &triangleright; Standortverwaltung @ bitpack.io GmbH
+{{__('Neu anlegen')}} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+    {{__('Standorte')}}
 @endsection
 
 @section('menu')
@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="container mt-2">
-        <h1 class="h3">Neuen Standort anlegen</h1>
+        <h1 class="h3">{{__('Neuen Standort anlegen')}}</h1>
         <form action="{{ route('location.store') }}" method="post" class="needs-validation">
             @csrf
             <input type="hidden"
@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        @if (App\Adresse::all()->count() === 0)
+                        @if (App\Adresse::count() === 0)
                             <label for="adresse_id">Keine Adressen gefunden!</label>
                             <input type="hidden" name="adresse_id" id="adresse_id">
                             <a href="{{ route('adresse.create') }}" class="btn btn-outline-primary btn-block">neue Adresse anlegen</a>
@@ -67,11 +67,10 @@
 
                 </div>
             </div>
-            @if (!env('app.makeobjekte') )
-                <x-btnMain>Standort anlegen <span class="fas fa-download"></span></x-btnMain>
-            @else
-                <x-btnMainDisabled>Standort anlegen <span class="fas fa-download"></span></x-btnMainDisabled>
-            @endif
+            <x-btnMain>Standort anlegen <span class="ml-3 fas fa-download"></span></x-btnMain>
+            {{--    @if (!env('app.makeobjekte') )        @else
+                <x-btnMainDisabled>Standort anlegen <span class="ml-2 fas fa-download"></span></x-btnMainDisabled>
+            @endif--}}
         </form>
     </div>
 
@@ -79,12 +78,12 @@
 
 
 @section('actionMenuItems')
-{{--    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>
-        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
-            <a class="dropdown-item" href="#">Drucke Übersicht</a>
-            <a class="dropdown-item" href="#">Standortbericht</a>
-            <a class="dropdown-item" href="#">Formularhilfe</a>
-        </ul>--}}
+    {{--    <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>
+            <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">
+                <a class="dropdown-item" href="#">Drucke Übersicht</a>
+                <a class="dropdown-item" href="#">Standortbericht</a>
+                <a class="dropdown-item" href="#">Formularhilfe</a>
+            </ul>--}}
 @endsection()
 

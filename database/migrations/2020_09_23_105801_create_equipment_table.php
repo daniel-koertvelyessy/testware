@@ -22,7 +22,7 @@ class CreateEquipmentTable extends Migration
             $table->string('eq_qrcode')->unique()->nullable();
             $table->date('eq_ibm')->nullable();
             $table->text('eq_text')->nullable();
-
+            $table->uuid('eq_uid');
             $table->foreignId('equipment_state_id')
                 ->nullable()
                 ->constrained()

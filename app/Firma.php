@@ -36,4 +36,8 @@ class Firma extends Model
         return Adresse::find($aid)->first();
     }
 
+    public function EquipmentFuntionControl()
+    {
+        return $this->hasMany(EquipmentFuntionControl::class);
+    }
 }

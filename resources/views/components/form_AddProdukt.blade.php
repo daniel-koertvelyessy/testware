@@ -18,15 +18,28 @@
                         @endif
                     >{{ $produktKategorie->pk_name_kurz }}</option>
                 @endforeach
+                @if (!isset($mkpk))
+                    <option value="new">Neu anlegen</option>
+                @endif
             </select>
             @if (isset($mkpk))
-            <button type="button"
-                    class="btn btn-outline-primary ml-2"
-                    data-toggle="modal"
-                    data-target="#modalAddProduktKategorie"
-            >
-                <i class="fas fa-plus"></i>
-            </button>
+                <button type="button"
+                        class="btn btn-outline-primary ml-2"
+                        data-toggle="modal"
+                        data-target="#modalAddProduktKategorie"
+                >
+                    <i class="fas fa-plus"></i>
+                </button>
+            @else
+                <label for="newProduktKategorie"
+                       class="sr-only"
+                >Neue Produktkategorie</label>
+                <input type="text"
+                       id="newProduktKategorie"
+                       name="newProduktKategorie"
+                       class="form-control d-none"
+                       placeholder="Neue Produktkategorie"
+                >
             @endif
         </div>
     </div>

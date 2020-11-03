@@ -50,6 +50,7 @@ class ProduktDocController extends Controller
 
             $proDocFile = new ProduktDoc();
             $file = $request->file('prodDokumentFile');
+            $val = $this->validateNewProduktDokument();
 
             $validation = $request->validate([
                 'prodDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240' // size:2048 => 2048kB
@@ -135,8 +136,6 @@ class ProduktDocController extends Controller
      */
     public function destroy(Request $request)
     {
-
-
         $prodDoku = ProduktDoc::find($request->id);
 //        dd($prodDoku->proddoc_name_pfad);
         $file = $prodDoku->proddoc_name_lang;
@@ -150,15 +149,15 @@ class ProduktDocController extends Controller
     /**
      * @return array
      */
-    public function validateNewMaterialDokument(): array
+    public function validateNewProduktDokument(): array
     {
         return request()->validate([
-            'matdoc_name_kurz' => 'bail|required|unique:material_docs,matdoc_name_kurz|min:1|max:20',
-            'matdoc_name_lang' => 'max:100',
-            'matdoc_name_pfad' => 'max:150',
-            'material_stamm_id' => 'required',
+            'proddoc_name_kurz' => 'bail|required|max:150',
+            'proddoc_name_lang' => 'max:100',
+            'proddoc_name_pfad' => 'max:150',
+            'produkt_id' => 'required',
             'document_type_id' => 'required',
-            'matdoc_name_text' => ''
+            'proddoc_name_text' => ''
         ]);
     }
 

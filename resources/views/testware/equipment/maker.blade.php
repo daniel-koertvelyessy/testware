@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{{__('Start')}}} &triangleright; {{__('Geräte')}} @ bitpack GmbH
+{{{__('Start')}}} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('mainSection')
@@ -33,30 +33,158 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form action="{{ route('equipment.create') }}"
-                          method="get"
-                          class="needs-validation"
-                          id="frmAddNewProduktModal"
-                    >
-                        @csrf
-                        <input type="text"
+                <form action="{{ route('produkt.ajaxstore') }}"
+                      method="POST"
+                      enctype="multipart/form-data"
+                      class="needs-validation"
+                      id="frmAddNewProduktModal"
+                >
+                    @csrf
+                    <div class="modal-body">
+
+                        <input type="hidden"
                                name="produkt_id"
                                id="produkt_id_modal"
                         >
-                        <x-form_AddProdukt/>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button"
-                            class="btn btn-outline-secondary"
-                            data-dismiss="modal"
-                    >{{__('Abbruch')}}</button>
-                    <button type="button"
-                            class="btn btn-outline-primary"
-                            id="btnAddNewProduktAndProceed"
-                    >{{__('Produkt anlegen und fortfahren')}}</button>
-                </div>
+                        <nav>
+                            <div class="nav nav-tabs"
+                                 id="nav-tab"
+                                 role="tablist"
+                            >
+                                <a class="nav-link active"
+                                   id="new-prod-stamm-tab"
+                                   data-toggle="tab"
+                                   href="#new-prod-stamm"
+                                   role="tab"
+                                   aria-controls="new-prod-stamm"
+                                   aria-selected="true"
+                                >{{ __('Stammdaten') }}</a>
+                                <a class="nav-link"
+                                   id="new-prod-anforderungen-tab"
+                                   data-toggle="tab"
+                                   href="#new-prod-anforderungen"
+                                   role="tab"
+                                   aria-controls="new-prod-anforderungen"
+                                   aria-selected="false"
+                                >{{ __('Anforderungen') }}</a>
+                                <a class="nav-link"
+                                   id="new-prod-proddocs-tab"
+                                   data-toggle="tab"
+                                   href="#new-prod-proddocs"
+                                   role="tab"
+                                   aria-controls="new-prod-proddocs"
+                                   aria-selected="false"
+                                >{{ __('Dokumente') }}</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content"
+                             id="nav-tabContent"
+                        >
+                            <div class="tab-pane fade show active"
+                                 id="new-prod-stamm"
+                                 role="tabpanel"
+                                 aria-labelledby="new-prod-stamm-tab"
+                            >
+                                <x-form_AddProdukt/>
+                                <div class="border-top pt-2 mt-5 d-flex justify-content-end">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary bentNextTab"
+                                            data-showtab="#new-prod-anforderungen-tab"
+                                    >{{__('weiter')}}</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade"
+                                 id="new-prod-anforderungen"
+                                 role="tabpanel"
+                                 aria-labelledby="new-prod-anforderungen-tab"
+                            >
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <x-selectfield id="anforderung_id"
+                                                       label="Anforderung wählen"
+                                        >
+                                            <option value="void">{{__('bitte wählen')}}</option>
+                                            @foreach (App\Anforderung::all() as $anforderung)
+                                                <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                            @endforeach
+                                        </x-selectfield>
+                                        <button type="button"
+                                                class="btn btn-outline-primary mt-1 btnAddAnforderung"
+                                        >{{__('Anforderung auswählen')}} <i class="fas fa-angle-right"></i></button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled"
+                                            id="newProduktAnforderungListe"
+                                        >
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="border-top mt-5 pt-2 d-flex justify-content-end">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary bentBackTab mr-2"
+                                            data-showtab="#new-prod-stamm-tab"
+                                    >{{__('zurück')}}</button>
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary bentNextTab"
+                                            data-showtab="#new-prod-proddocs-tab"
+                                    >{{__('weiter')}}</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane"
+                                 id="new-prod-proddocs"
+                                 role="tabpanel"
+                                 aria-labelledby="new-prod-proddocs-tab"
+                            >
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="document_type_id">{{__('Dokument Typ')}}</label>
+                                            <div class="input-group">
+                                                <select name="document_type_id"
+                                                        id="document_type_id"
+                                                        class="custom-select"
+                                                >
+                                                    @foreach (App\DocumentType::all() as $ad)
+                                                        <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-file">
+                                                <input type="file"
+                                                       id="prodDokumentFile"
+                                                       name="prodDokumentFile"
+                                                       data-browse="{{__('Datei')}}"
+                                                       class="custom-file-input"
+                                                       accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
+                                                >
+                                                <label class="custom-file-label"
+                                                       for="prodDokumentFile"
+                                                >{{__('Datei wählen')}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <x-textfield id="proddoc_name_kurz"
+                                                     label="{{ __('Bezeichnung') }}"
+                                        />
+                                        <x-textarea id="proddoc_name_text"
+                                                    label="{{ __('Datei Informationen') }}"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="border-top pt-2 mt-5 d-flex justify-content-end">
+                                    <button type="submit"
+                                            class="btn btn-primary"
+                                            id="btnAddNewProduktAndProceed"
+                                    >{{__('Produkt anlegen und fortfahren')}} <i class="fas fa-angle-right ml-2"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -80,6 +208,7 @@
                                placeholder="{{__('Bitte Produktnummer oder -name eingeben')}}"
                                class="form-control getProduktListe"
                                value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
+                               autocomplete="new-password"
                         >
                         <button
                             class="btn btn-primary ml-2"
@@ -155,10 +284,6 @@
 @endsection
 
 @section('autocomplete')
-
-    <link rel="stylesheet"
-          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
-    >
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(".getProduktListe").autocomplete({
@@ -203,6 +328,34 @@
 
 @section('scripts')
     <script>
+
+        $(document).on('click', '.btnAddAnforderung', function () {
+            const nd = $('#anforderung_id :selected');
+            if (nd.val() !== 'void')
+
+                $('#newProduktAnforderungListe').append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center" id="anforderungListItem${nd.val()}">
+            ${nd.text()}
+            <input type="hidden" name="anforderung_id[]" id="${nd.val()}" value="${nd.val()}">
+            <button type="button" class="btn m-0 deleteAnforderungsListItem" data-id="#anforderungListItem${nd.val()}">
+                  <i class="fas fa-times"></i>
+            </button>
+        </li>
+                `);
+            nd.attr('disabled', true);
+        });
+        $(document).on('click', '.deleteAnforderungsListItem', function () {
+            console.log($(this).data('id'));
+            $($(this).data('id')).remove();
+        });
+
+        $(document).on('change', '#produkt_kategorie_id', function () {
+            const nd = $('#newProduktKategorie');
+            ($('#produkt_kategorie_id :selected').val() === 'new') ?
+                nd.removeClass('d-none') :
+                nd.addClass('d-none');
+        })
+
         function frmSubmitNewEquipment() {
             event.preventDefault();
             ($('#produkt_id').val() !== '') ?
@@ -216,19 +369,37 @@
             document.getElementById('createEquipmentFromProdukt').submit()
         });
 
-        $('#btnAddNewProduktAndProceed').click(function () {
-            $.ajax({
-                type: "post",
-                dataType: 'json',
-                url: "{{ route('ajaxstore') }}",
+
+        /*
+                $('#frmAddNewProduktModal').submit(function (e) {
+                    const ndFormAddNewprodukt = $('#frmAddNewProduktModal');
+                    const formData = new FormData(this);
+                    $.ajax({
+                        type: "post",
+                        dataType: 'json',
+                        url: "{{ route('produkt.ajaxstore') }}",
                 data:
-                    $('#frmAddNewProduktModal').serialize()
+                formData
                 ,
                 success: function (res) {
                     console.debug(res);
+                    $('#produkt_id_modal').val(res);
                     const nd = $('#frmAddNewProduktModal');
                     const nummer = nd.find('#prod_nummer').val();
                     const prod_name_lang = nd.find('#prod_name_lang').val();
+
+
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('produktDoku.store') }}",
+                        data: {formData},
+                        success: function (res) {
+                            console.debug(res);
+
+                        }
+                    });
+
+
 
                     $('#produktListe').append(`
                      <tr>
@@ -246,11 +417,12 @@
                             </td>
                         </tr>
                     `);
-                    $('#produkt_id_modal').val(res);
-                    setTimeout(nd.submit(), 500);
+                    // setTimeout(nd.submit(), 500);
                 }
             });
+            e.preventDefault();
         })
+*/
 
     </script>
 @endsection
