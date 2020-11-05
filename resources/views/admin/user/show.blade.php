@@ -79,10 +79,11 @@
                     <div class="form-group">
                         <label for="systemTheme">{{__('Farbschema auswählen')}}</label>
                         <select name="systemTheme" id="systemTheme" class="custom-select">
-                            <option value="https://bootswatch.com/4/yeti/bootstrap.min.css">Yeti</option>
-                            <option value="https://bootswatch.com/4/minty/bootstrap.min.css">Mint</option>
-                            <option value="https://bootswatch.com/4/flatly/bootstrap.min.css">Dunkel blau</option>
-                            <option value="https://bootswatch.com/4/superhero/bootstrap.min.css">Hero blau</option>
+                            <option value="css/sand.css" data-asset="{{ asset('css/sand.css') }}">Sandstone</option>
+                            <option value="css/minty.css" data-asset="{{ asset('css/minty.css') }}">Mint</option>
+                            <option value="css/flatly.css" data-asset="{{ asset('css/flatly.css') }}">Dunkel blau</option>
+                            <option value="css/hero.css" data-asset="{{ asset('css/hero.css') }}">Hero blau</option>
+                            <option value="css/materia.css" data-asset="{{ asset('css/materia.css') }}">Material</option>
                         </select>
                     </div>
                     <button type="button" class="btn btn-secondary btn-block" id="btnChangeDisplayTheme">{{__('Vorschau')}}</button>
@@ -123,7 +124,7 @@
 @section('scripts')
     <script>
         $('#btnChangeDisplayTheme').click(function () {
-            const theme = $('#systemTheme :selected').val();
+            const theme = $('#systemTheme :selected').data('asset');
             console.log(theme);
             $('#themeId').attr('href',theme);
 

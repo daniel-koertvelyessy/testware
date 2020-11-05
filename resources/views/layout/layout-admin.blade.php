@@ -8,10 +8,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link id="themeId" rel="stylesheet" href="{{ Auth::user()->user_theme }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link id="themeId" rel="stylesheet" href="{{ asset(Auth::user()->user_theme) }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery_3.5.min.js') }}"></script>
     <title>@yield('pagetitle')</title>
 </head>
 <body>

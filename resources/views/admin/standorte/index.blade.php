@@ -57,26 +57,24 @@
             </div>
             <div class="col-md-8">
                 <h3 class="h5">{{__('Kürzlich bearbeitete Standorte')}}</h3>
-                <table class="table table-striped table-sm">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>{{__('Kennung')}}</th>
                         <th>{{__('Bezeichnung')}}</th>
+                        <th>{{__('Kennung')}}</th>
                         <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($locations as $loc)
                         <tr>
+                            <td><a href="{{ route('location.show',$loc) }}">{{ $loc->l_name_lang }}</a></td>
                             <td>{{ $loc->l_name_kurz }}</td>
-                            <td>{{ $loc->l_name_lang }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at }}</td>
-                            <td><a href="{{ route('location.show',$loc) }}">{{__('öffnen')}}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">
+                            <td colspan="3">
                                 <x-notifyer>{{__('Keine Standorte angelegt!')}}</x-notifyer>
                             </td>
                         </tr>
@@ -85,26 +83,24 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Gebäude')}}</h3>
-                <table class="table table-striped table-sm">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>{{__('Kennung')}}</th>
                         <th>{{__('Bezeichnung')}}</th>
+                        <th>{{__('Kennung')}}</th>
                         <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($buildings as $loc)
                         <tr>
+                            <td><a href="{{ route('building.show',$loc) }}">{{ $loc->b_name_lang }}</a></td>
                             <td>{{ $loc->b_name_kurz }}</td>
-                            <td>{{ $loc->b_name_lang }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at }}</td>
-                            <td><a href="{{ route('building.show',$loc) }}">{{__('öffnen')}}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">
+                            <td colspan="3">
                                 <x-notifyer>{{__('Keine Gebäude angelegt!')}}</x-notifyer>
                             </td>
                         </tr>
@@ -113,27 +109,25 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Räume')}}</h3>
-                <table class="table table-striped table-sm">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>{{__('Kennung')}}</th>
                         <th>{{__('Bezeichnung')}}</th>
+                        <th>{{__('Kennung')}}</th>
                         <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
 
                     @forelse ($rooms as $loc)
                         <tr>
+                            <td><a href="{{ route('room.show',$loc) }}">{{ $loc->r_name_lang }}</a></td>
                             <td>{{ $loc->r_name_kurz }}</td>
-                            <td>{{ $loc->r_name_lang }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at }}</td>
-                            <td><a href="{{ route('room.show',$loc) }}">{{__('öffnen')}}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">
+                            <td colspan="3">
                                 <x-notifyer>{{__('Keine Räume angelegt!')}}</x-notifyer>
                             </td>
                         </tr>

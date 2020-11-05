@@ -442,24 +442,24 @@ Entwicklungsinitiativen bereitstellt.',
 
         DB::table('document_types')->insert([
             [
-                'doctyp_name_kurz' => 'Funktionstest',
-                'doctyp_name_lang' => 'Funktionstest',
-                'doctyp_mandatory' => '1',
-            ],
-            [
                 'doctyp_name_kurz' => 'Anleitung',
                 'doctyp_name_lang' => 'Betriebsanleitung',
                 'doctyp_mandatory' => '1',
             ],
             [
-                'doctyp_name_kurz' => 'Zeichnung',
-                'doctyp_name_lang' => 'Technische Zeichnung',
-                'doctyp_mandatory' => '0',
+                'doctyp_name_kurz' => 'Funktionstest',
+                'doctyp_name_lang' => 'Funktionstest',
+                'doctyp_mandatory' => '1',
             ],
             [
                 'doctyp_name_kurz' => 'Prüfbericht',
                 'doctyp_name_lang' => 'Bericht über den Verlauf einer Geräteprüfung',
-                'doctyp_mandatory' => '1',
+                'doctyp_mandatory' => '0',
+            ],
+            [
+                'doctyp_name_kurz' => 'Zeichnung',
+                'doctyp_name_lang' => 'Technische Zeichnung',
+                'doctyp_mandatory' => '0',
             ],
             [
                 'doctyp_name_kurz' => 'Verordnung',

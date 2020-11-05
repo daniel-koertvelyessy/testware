@@ -48,13 +48,14 @@ class AdresseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return Application|Factory|Response|View
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         $adresse= Adresse::create($this->validateNewAddress());
         $request->session()->flash('status', 'Die Adresse <strong>' . $request->ad_name_lang . '</strong> wurde angelegt!');
-        return view('admin.organisation.adresse.show',['adresse'=>$adresse]);
+        return redirect()->back();
+//        return view('admin.organisation.adresse.show',['adresse'=>$adresse]);
     }
 
     /**

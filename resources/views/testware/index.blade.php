@@ -186,14 +186,24 @@
 
             <x-dashborarditem>
                 <h2 class="h5">Mitteilungen</h2>
-                <x-systemmessage
-                    link="{{ route('equipment.show',1) }}"
-                    linkText="zum Gerät"
-                    date="2020-09-29"
-                >
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, alias autem doloribus dolorum eligendi est, et fugit illum iure molestias nam neque nulla quisquam repellat tempore unde ut vitae voluptate
-                </x-systemmessage>
+                @forelse(App\EquipmentEvent::all() as $equipmentEvent)
 
+                     @foreach($equipmentEvent->notifications as $notification)
+
+            <x-systemmessage
+                    link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
+                    linkText="zum Gerät"
+                    date="{{ $equipmentEvent->created_at }}"
+                >
+                <strong>Schadensmeldung vom InfoSy App</strong>
+                <p>{{ $equipmentEvent->equipment_event_text }}</p>
+
+
+                </x-systemmessage>
+                    @endforeach
+                @empty
+                --
+                @endforelse
             </x-dashborarditem>
         </div>
 

@@ -86,7 +86,6 @@
                     <a class="nav-link active" id="Objekte-tab" data-toggle="tab" href="#Objekte" role="tab" aria-controls="Objekte" aria-selected="true">Objekte</a>
                     <a class="nav-link" id="Produkte-tab" data-toggle="tab" href="#Produkte" role="tab" aria-controls="Produkte" aria-selected="false">Produkte</a>
                     <a class="nav-link" id="Belege-tab" data-toggle="tab" href="#Belege" role="tab" aria-controls="Belege" aria-selected="false">Belege</a>
-                    <a class="nav-link" id="Anzeige-tab" data-toggle="tab" href="#Anzeige" role="tab" aria-controls="Anzeige" aria-selected="false">Anzeige</a>
                 </nav>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active p-2 " id="Objekte" role="tabpanel" aria-labelledby="Objekte-tab">

@@ -1,4 +1,4 @@
-console.log("main.js bs loaded");
+// console.log("main.js bs loaded");
 /*!
  * bsCustomFileInput v1.3.4 (https://github.com/Johann-S/bs-custom-file-input)
  * Copyright 2018 - 2020 Johann-S <johann.servoire@gmail.com>
@@ -150,10 +150,16 @@ $("#btnaddNewGebtype").click(function() {
 $(document).on("blur", ".checkLabel", function() {
     let label = $(this)
         .val()
-        .toLowerCase();
-    const rex = /\s|[^a-zA-Z0-9][^_]/g;
-    $(this).val(label.replace(rex, "_"));
+        .toLowerCase()
+        .trim();
+    const rex = /[^a-zA-Z0-9_]/g;
+    $(this)
+        .val(label.replace(rex, "_"))
+        .attr('title','Leer- und Sonderzeichen werden in diesem Feld automatisch entfernt!')
+        .tooltip('show');
 });
+
+
 
 $('.btnShowDataStyle').click(function () {
     const src = $(this).data('src');

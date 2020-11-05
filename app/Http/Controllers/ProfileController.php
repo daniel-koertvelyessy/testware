@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Profile;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -41,13 +42,14 @@ class ProfileController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return Application|Factory|Response|View
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         $profile = Profile::create($this->validateNewProfile());
         $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt!');
-        return view('admin.organisation.profile.show',['profile'=>$profile]);
+//        return view('admin.organisation.profile.show',['profile'=>$profile]);
+        return redirect()->back();
     }
 
     /**

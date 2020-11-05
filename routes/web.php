@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 
 Route::get('/', function () {
@@ -9,8 +10,35 @@ Route::get('/', function () {
 
 Route::get('support', function () {
     return view('support');
-});
+})->name('support');
 
+Route::get('app', function () {
+    return view('testware.app.index');
+})->name('app');
+
+Route::get('edata/{ident}', function ($ident, Request $request) {
+    $equipment = \App\EquipmentUid::where('equipment_uid', $ident)->first();
+    if ($equipment) {
+        $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+        return view('testware.app.equipmentdata', ['edata' => $edata, 'ident' => $ident]);
+    } else {
+        $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+        return redirect()->route('app');
+    }
+
+})->name('edata');
+
+Route::get('edmg/{ident}', function ($ident, Request $request) {
+    $equipment = \App\EquipmentUid::where('equipment_uid', $ident)->first();
+    if ($equipment) {
+        $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+
+        return view('testware.app.reportdamage', ['edata' => $edata, 'ident' => $ident]);
+    } else {
+        $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+        return redirect()->route('app');
+    }
+})->name('edmg');
 
 Route::get('docs', function () {
     return view('docs.index');
@@ -37,6 +65,8 @@ Route::resources([
     'anforderung'            => 'AnforderungsController',
     'verordnung'             => 'VerordnungController',
     'anforderungcontrolitem' => 'AnforderungControlItemController',
+    'equipmentevent'         => 'EquipmentEventController',
+    'equipmenteventitem'     => 'EquipmentEventItemController',
 
 ]);
 
@@ -99,10 +129,10 @@ Route::get('organisationMain', function () {
 })->name('organisationMain')->middleware('auth');
 
 Route::get('standorteMain', function () {
-    return view('admin.standorte.index',[
-        'locations'=>App\Location::take(5)->latest()->get(),
+    return view('admin.standorte.index', [
+        'locations' => App\Location::take(5)->latest()->get(),
         'buildings' => App\Building::take(5)->latest()->get(),
-        'rooms' => App\Room::take(5)->latest()->get(),
+        'rooms'     => App\Room::take(5)->latest()->get(),
     ]);
 })->name('standorteMain')->middleware('auth');
 
@@ -112,12 +142,12 @@ Route::get('produktMain', function () {
 
 Route::get('equipMain', function () {
     $equipmentList = \App\Equipment::paginate(10);
-    return view('testware.equipment.main',['equipmentList'=>$equipmentList]);
+    return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 
 Route::get('equipment.maker', function () {
     $produktList = \App\Produkt::paginate(10);
-    return view('testware.equipment.maker',['produktList'=>$produktList]);
+    return view('testware.equipment.maker', ['produktList' => $produktList]);
 })->name('equipment.maker')->middleware('auth');
 
 Route::get('verordnung.main', function () {

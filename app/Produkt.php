@@ -10,6 +10,16 @@ class Produkt extends Model {
 
     protected $guarded = [];
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'prod_nummer';
+    }
+
     public function ProduktKategorie() {
         return $this->belongsTo(ProduktKategorie::class);
     }
@@ -41,6 +51,10 @@ class Produkt extends Model {
 
     public function ControlProdukt() {
         return $this->hasOne(ControlProdukt::class);
+    }
+
+    public function Equipment() {
+        return $this->hasMany(Equipment::class);
     }
 
 

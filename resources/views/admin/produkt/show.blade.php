@@ -231,9 +231,12 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="prodDoku-tab" data-toggle="tab" href="#prodDoku" role="tab" aria-controls="prodDoku" aria-selected="false">Dokumente <span class="badge badge-primary">{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="prodEquip-tab" data-toggle="tab" href="#prodEquip" role="tab" aria-controls="prodEquip" aria-selected="false">Geräte <span class="badge badge-primary">{{ $produkt->Equipment->count() }}</span></a>
+                    </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active p-2" id="prodStammdaten" role="tabpanel" aria-labelledby="prodStammdaten-tab">
+                <div class="tab-content p-2" id="myTabContent">
+                    <div class="tab-pane fade show active" id="prodStammdaten" role="tabpanel" aria-labelledby="prodStammdaten-tab">
                         <div class="row">
                             <div class="col">
                                 <form action="{{ route('produkt.update',['produkt'=>$produkt->id]) }}" method="post" class="needs-validation">
@@ -326,7 +329,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-2" id="prodAnfordrungen" role="tabpanel" aria-labelledby="prodAnfordrungen-tab">
+                    <div class="tab-pane fade" id="prodAnfordrungen" role="tabpanel" aria-labelledby="prodAnfordrungen-tab">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <h2 class="h5">Anforderung auswählen</h2>
@@ -424,7 +427,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-2" id="prodFirmen" role="tabpanel" aria-labelledby="prodFirmen-tab">
+                    <div class="tab-pane fade" id="prodFirmen" role="tabpanel" aria-labelledby="prodFirmen-tab">
                         <div class="row">
                             <div class="col-md-8">
                                 <form action="{{ route('addProduktFirma') }}#prodFirmen" method="post">
@@ -724,7 +727,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-2" id="prodDoku" role="tabpanel" aria-labelledby="prodDoku-tab">
+                    <div class="tab-pane fade" id="prodDoku" role="tabpanel" aria-labelledby="prodDoku-tab">
                         <div class="row">
                             <div class="col-md-6">
                                 <form action="{{ route('produktDoku.store') }}#prodDoku" method="POST" enctype="multipart/form-data">
@@ -793,7 +796,10 @@
                                                 <td class="d-none d-lg-table-cell" style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
                                                 <td class="d-none d-lg-table-cell">{{ $produktDoc->created_at }}</td>
                                                 <td>
-                                                    <x-deletebutton action="{{ route('produktDoku.destroy',$produktDoc->id) }}" id="{{ $produktDoc->id }}" />
+                                                    <x-deletebutton
+                                                        prefix="produktDoc"
+                                                        action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                        id="{{ $produktDoc->id }}" />
 
 
                                                     {{--   <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
@@ -834,6 +840,42 @@
                                 @else
                                     <p class="small text-muted">Keine Dateien zum Produkt gefunden!</p>
                                 @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="prodEquip" role="tabpanel" aria-labelledby="prodEquip-tab">
+                        <div class="row">
+                            <div class="col">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Inventarnummer</th>
+                                        <th>Seriennummer</th>
+                                        <th>Inbetriebname</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse($produkt->Equipment as $equipment)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('equipment.show',$equipment) }}">{{ $equipment->eq_inventar_nr }}</a>
+                                            </td>
+                                            <td>
+                                                {{ $equipment->eq_serien_nr }}
+                                            </td>
+                                            <td>
+                                                {{ Carbon\Carbon::parse($equipment->eq_ibm)->DiffForHumans() }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3">
+                                                <x-notifyer>Keine Geräte mit diesem Produkt gefunden</x-notifyer>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

@@ -9,16 +9,12 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarEquipmentDropdown">
             <h6 class="dropdown-header">{{__('Neuesten Geräte')}}</h6>
-            @forelse (\App\Equipment::take(5)->latest()->get() as $equipMen)
-                <a class="dropdown-item" href="#">{{ $equipMen->eq_inventar_nr }}</a>
-            @empty
-
-            @endforelse
+            @foreach (\App\Equipment::take(5)->latest()->get() as $equipMen)
+                <a class="dropdown-item" href="{{ route('equipment.show',$equipMen) }}">{{ $equipMen->eq_inventar_nr }}</a>
+            @endforeach
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('equipMain') }}">{{__('Übersicht')}}</a>
             <a class="dropdown-item" href="{{ route('equipment.maker') }}">{{__('Neu')}}</a>
-
-
         </div>
     </li>
 

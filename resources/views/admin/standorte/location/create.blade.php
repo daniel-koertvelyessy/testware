@@ -12,6 +12,54 @@
     @include('menus._menuStandort')
 @endsection
 
+@section('modals')
+    <div class="modal fade" id="modalAddNewAdresse" tabindex="-1" aria-labelledby="modalAddNewAdresseLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('adresse.store') }}"
+                      method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddNewAdresseLabel">{{ __('Neue Adresse anlegen') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <x-frm_AddAdresse/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">{{ __('Anlegen') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddNewProfile" tabindex="-1" aria-labelledby="modalAddNewProfileLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('profile.store') }}"
+                      method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddNewProfileLabel">{{ __('Neuen Mitarbeiter anlegen') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                       <x-frm_newprofile />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">{{ __('Anlegen') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
 
 @section('content')
     <div class="container mt-2">
@@ -25,37 +73,24 @@
             >
             <div class="row">
                 <div class="col">
-                    <div class="form-group">
-                        @if (App\Adresse::count() === 0)
-                            <label for="adresse_id">Keine Adressen gefunden!</label>
-                            <input type="hidden" name="adresse_id" id="adresse_id">
-                            <a href="{{ route('adresse.create') }}" class="btn btn-outline-primary btn-block">neue Adresse anlegen</a>
-                        @else
-                            <label for="adresse_id">Die Adresse des Standortes festlegen</label>
-                            <select class="custom-select" aria-label="Default select example" name="adresse_id" id="adresse_id">
-                                @foreach (App\Adresse::all() as $addItem)
-                                    <option value="{{$addItem->id}}">{{ $addItem->ad_name_kurz  }} - {{ $addItem->ad_anschrift_strasse }}</option>
-                                @endforeach
-                            </select>
-                        @endif
 
-                    </div>
+                    <x-selectModalgroup id="adresse_id" label="{{__('Die Adresse des Standortes festlegen')}}" class="btnAddNewAdresse" modalid="modalAddNewAdresse">
+                        @forelse (App\Adresse::all() as $addItem)
+                            <option value="{{$addItem->id}}">{{ $addItem->ad_name_kurz  }} - {{ $addItem->ad_anschrift_strasse }}</option>
+                        @empty
+                            <option value="void" disabled>{{__('keine Adressen vorhanden')}}</option>
+                        @endforelse
+                    </x-selectModalgroup>
+
                 </div>
                 <div class="col">
-                    <div class="form-group">
-                        @if (App\Profile::all()->count() === 0)
-                            <label for="profile_id">Keine Mitarbeiter gefunden!</label>
-                            <input type="hidden" name="profile_id" id="profile_id">
-                            <a href="{{ route('profile.create') }}" class="btn btn-outline-primary btn-block">neuen Mitarbeiter anlegen</a>
-                        @else
-                            <label for="profile_id">Leitung des Standortes hat</label>
-                            <select class="custom-select" aria-label="Default select example" name="profile_id" id="profile_id">
-                                @foreach (App\Profile::all() as $profileItem)
-                                    <option value="{{$profileItem->id}}">{{ $profileItem->ma_name }}, {{ $profileItem->ma_vorname }}</option>
-                                @endforeach
-                            </select>
-                        @endif
-                    </div>
+                    <x-selectModalgroup id="profile_id" label="{{__('Leitung des Standortes hat')}}" class="btnAddNewProfile" modalid="modalAddNewProfile">
+                        @forelse (App\Profile::all() as $profileItem)
+                            <option value="{{$profileItem->id}}">{{ $profileItem->ma_name }}, {{ $profileItem->ma_vorname }}</option>
+                        @empty
+                            <option value="void" disabled>{{__('keine Mitarbeiter vorhanden')}}</option>
+                        @endforelse
+                    </x-selectModalgroup>
                 </div>
             </div>
 
@@ -87,3 +122,11 @@
             </ul>--}}
 @endsection()
 
+@section('scripts')
+
+    <script>
+
+
+    </script>
+
+@endsection

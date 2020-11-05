@@ -64,9 +64,13 @@
                                     </a>
                                     <span class="branding-bar text-center">testWare</span>
                                 </div>
-                                <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
+                                <a href="{{ route('app') }}" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
                                     <span class="icon"><i class="fas fa-qrcode"></i></span>
-                                    <span class="branding-bar text-center">{{__('App')}}</span>
+                                    <span class="branding-bar text-center">{{__('Infoapp')}}</span>
+                                </a>
+                                <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
+                                    <span class="icon"><i class="fas fa-mobile-alt"></i></span>
+                                    <span class="branding-bar text-center">{{__('Registrieren')}}</span>
                                 </a>
                             </div>
                         </div>

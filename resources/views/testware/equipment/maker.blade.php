@@ -85,7 +85,7 @@
                                  role="tabpanel"
                                  aria-labelledby="new-prod-stamm-tab"
                             >
-                                <x-form_AddProdukt/>
+                                <x-frm_AddProdukt/>
                                 <div class="border-top pt-2 mt-5 d-flex justify-content-end">
                                     <button type="button"
                                             class="btn btn-sm btn-primary bentNextTab"
@@ -201,22 +201,25 @@
             <div class="col-md-6 mb-2">
                 @if(App\Produkt::all()->count() >0)
                     <label for="setNewEquipmentFromProdukt">{{__('Neues Gerät aus Produkt-Vorlage erstellen')}}</label>
-                    <div class="input-group">
-                        <input type="text"
-                               name="setNewEquipmentFromProdukt"
-                               id="setNewEquipmentFromProdukt"
-                               placeholder="{{__('Bitte Produktnummer oder -name eingeben')}}"
-                               class="form-control getProduktListe"
-                               value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
-                               autocomplete="new-password"
-                        >
-                        <button
-                            class="btn btn-primary ml-2"
-                            onclick="frmSubmitNewEquipment()"
-                        >
-                            <span class="d-none d-md-inline">{{__('Gerät jetzt')}} </span>{{__('anlegen')}}
-                        </button>
-                    </div>
+                    <form autocomplete="off">
+                        <div class="input-group">
+                            <input type="text"
+                                   name="setNewEquipmentFromProdukt"
+                                   id="setNewEquipmentFromProdukt"
+                                   placeholder="{{__('Bitte Produktnummer oder -name eingeben')}}"
+                                   class="form-control getProduktListe"
+                                   value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
+                                   autocomplete="off"
+                            >
+                            <button type="button"
+                                    class="btn btn-primary ml-2"
+                                    onclick="frmSubmitNewEquipment()"
+                            >
+                                <span class="d-none d-md-inline">{{__('Gerät jetzt')}} </span>{{__('anlegen')}}
+                            </button>
+
+                        </div>
+                    </form>
                     <form action="{{ route('equipment.create') }}"
                           method="GET"
                           id="createEquipmentFromProdukt"

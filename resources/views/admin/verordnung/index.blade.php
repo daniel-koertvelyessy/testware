@@ -39,7 +39,13 @@
                             <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $verordnung->updated_at??'-' }}</td>
                             <td style="vertical-align: middle;" class="text-center d-none d-md-table-cell">{{ $verordnung->anforderung->count() }}</td>
                             <td style="vertical-align: middle; text-align: right;">
-                                <x-menu_context :object="$verordnung" route="verordnung" />
+                                <x-menu_context :object="$verordnung" route="verordnung"
+                                                routeOpen="{{ route('verordnung.show',$verordnung) }}"
+                                                routeDestory="{{ route('verordnung.destroy',$verordnung) }}"
+                                                routeCopy="#"
+                                                tabName=""
+                                                objectName="verordnung"
+                                                objectVal="{{ $verordnung->id }}"/>
                             </td>
                         </tr>
                     @empty

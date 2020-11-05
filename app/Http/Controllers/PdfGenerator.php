@@ -6,6 +6,7 @@ use App\ControlEquipment;
 use App\ControlEvent;
 use App\Equipment;
 use App\EquipmentDoc;
+use App\EquipmentUid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PDF;
@@ -140,11 +141,9 @@ class PdfGenerator extends Controller
 
         $html = view('pdf.html.qrcode_Equipment',['equipment'=>$euqipment_id])->render();
         PDF::SetLineWidth( 1 );
-
         PDF::setHeaderCallback(function ($pdf) use ($euqipment_id) {
-            $inv = Equipment::find($euqipment_id)->eq_inventar_nr;
-            $std_id= Equipment::find($euqipment_id)->standort->std_id;
-            $val = $std_id . '||' . $inv;
+            $val = EquipmentUid::where('equipment_id',$euqipment_id)->first()->equipment_uid;
+
             $style = array(
                 'border' => 0,
                 'vpadding' => 'auto',
@@ -155,18 +154,18 @@ class PdfGenerator extends Controller
                 'module_height' => 1 // height of a single module in points
             );
             //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
-            $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 32, $y = 64, $w = '', $h = 20, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
-            $pdf->write2DBarcode($val, 'QRCODE,M', 2, 22, 50, 50,  $style, 'N');
+            $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 1, $y = 15, $w = '', $h = 10, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
+            $pdf->write2DBarcode($val, 'QRCODE,M', 2, 1, 23,23,  $style, 'N');
             $pdf->setY(5);
-            $pdf->cell(0,5, __('Inventarnummer') .': ',0,1);
+//            $pdf->cell(0,5, __('Inventarnummer') .': ',0,1);
             $pdf->SetFont('Helvetica', '', 22);
-            $pdf->cell(0,10, $inv,0,1);
+//            $pdf->cell(0,10, $inv,0,1);
         });
 
         PDF::SetAutoPageBreak(false);
         PDF::SetMargins(5, 5, 2);
-        PDF::AddPage('P','E8');
-        PDF::writeHTML($html, true, false, true, false, '');
+        PDF::AddPage('P',[23,23]);
+//        PDF::writeHTML($html, true, false, true, false, '');
         // D is the change of these two functions. Including D parameter will avoid
         // loading PDF in browser and allows downloading directly
         PDF::Output('QRCODE_'.date('Y-m-d').'.pdf');

@@ -18,55 +18,62 @@
                 Öffnen <i class="fas fa-angle-right"></i>
             </a>
         @endif
-        <a href="#"
-           class="dropdown-item d-flex justify-content-between align-items-center {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
-           onclick="event.preventDefault(); document.getElementById('frm_copy_object_{{ $object->id }}').submit();"
-        >Kopieren <i class="fas fa-copy"></i>
-        </a>
-        <a href="#"
-           class="dropdown-item d-flex justify-content-between align-items-center"
-           onclick="event.preventDefault(); document.getElementById('frm_delete_object_{{ $object->id }}').submit();"
-        >
-            Löschen <i class="far fa-trash-alt"></i>
-        </a>
-        <form action="{{ $routeCopy }}#{{$tabName}}"
-              id="frm_copy_object_{{ $object->id }}"
-              method="post"
-        >
-            @csrf
-            <input type="hidden"
-                   name="id"
-                   id="id_copy_object_{{ $object->id }}"
-                   value="{{ $object->id }}"
+        @if($routeCopy!=='#')
+            <a href="#"
+               class="dropdown-item d-flex justify-content-between align-items-center {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
+               onclick="event.preventDefault(); document.getElementById('frm_copy_object_{{ $object->id }}').submit();"
+            >Kopieren <i class="fas fa-copy"></i>
+            </a>
+        @endif
+        @if($routeDestory!=='#')
+            <a href="#"
+               class="dropdown-item d-flex justify-content-between align-items-center"
+               onclick="event.preventDefault(); document.getElementById('frm_delete_object_{{ $object->id }}').submit();"
             >
-            <input type="hidden"
-                   name="{{ $objectName }}"
-                   id="{{ $objectName }}_copy_object_{{ $object->id }}"
-                   value="{{ $objectVal }}"
+                Löschen <i class="far fa-trash-alt"></i>
+            </a>
+        @endif
+        @if($routeDestory!=='#')
+            <form action="{{ $routeCopy }}#{{$tabName}}"
+                  id="frm_copy_object_{{ $object->id }}"
+                  method="post"
             >
-        </form>
-        <form action="{{ $routeDestory }}#{{$tabName}}"
-              id="frm_delete_object_{{ $object->id }}"
-              method="post"
-        >
-            @csrf
-            @method('delete')
-            <input type="hidden"
-                   name="id"
-                   id="id_delete_object{{ $object->id }}"
-                   value="{{ $object->id }}"
+                @csrf
+                <input type="hidden"
+                       name="id"
+                       id="id_copy_object_{{ $object->id }}"
+                       value="{{ $object->id }}"
+                >
+                <input type="hidden"
+                       name="{{ $objectName }}"
+                       id="{{ $objectName }}_copy_object_{{ $object->id }}"
+                       value="{{ $objectVal }}"
+                >
+            </form>
+        @endif
+        @if($routeCopy!=='#')
+            <form action="{{ $routeDestory }}#{{$tabName}}"
+                  id="frm_delete_object_{{ $object->id }}"
+                  method="post"
             >
-            <input type="hidden"
-                   name="frmOrigin"
-                   id="frmOrigin_{{ $object->id }}"
-                   value="locaion"
-            >
-            <input type="hidden"
-                   name="{{ $objectName }}"
-                   id="{{ $objectName }}_delete_object_{{ $object->id }}"
-                   value="{{ $objectVal }}"
-            >
-        </form>
-
+                @csrf
+                @method('delete')
+                <input type="hidden"
+                       name="id"
+                       id="id_delete_object{{ $object->id }}"
+                       value="{{ $object->id }}"
+                >
+                <input type="hidden"
+                       name="frmOrigin"
+                       id="frmOrigin_{{ $object->id }}"
+                       value="locaion"
+                >
+                <input type="hidden"
+                       name="{{ $objectName }}"
+                       id="{{ $objectName }}_delete_object_{{ $object->id }}"
+                       value="{{ $objectVal }}"
+                >
+            </form>
+        @endif
     </div>
 </div>

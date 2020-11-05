@@ -14,6 +14,16 @@ class Equipment extends Model
 
     use SoftDeletes;
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'eq_inventar_nr';
+    }
+
 
     public function produkt()
     {

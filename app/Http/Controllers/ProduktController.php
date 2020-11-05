@@ -193,7 +193,7 @@ class ProduktController extends Controller {
         $produkt->prod_active = $request->prod_active;
         $produkt->prod_nummer = $request->prod_nummer;
         $produkt->prod_name_text = $request->prod_name_text;
-        $produkt->prod_name_text = $produkt_kategorie_id;
+        $produkt->produkt_kategorie_id = $produkt_kategorie_id;
         $produkt->save();
 
 
@@ -556,12 +556,12 @@ class ProduktController extends Controller {
      * Fügt neue Kategorie für Produktstamm hinzu
      *
      * @param  Request $request
-     * @return Application|Response
+     * @return RedirectResponse
      */
     public function addProduktParams(Request $request) {
         ProduktParam::create($this->validateProduktParam());
         $request->session()->flash('status', 'Das Datenfeld  <strong>' . request('pp_name') . '</strong> wurde angelegt!');
-        return redirect(route('produkt.show', ['produkt' => request('produkt_id')]));
+        return redirect()->back();
     }
 
     /**
@@ -581,7 +581,7 @@ class ProduktController extends Controller {
      *  Löscht die Zuordnung der Anforderung vom Produkt
      *
      * @param  Request $request
-     * @return Application|Response
+     * @return RedirectResponse
      */
     public function deleteProduktAnfordrung(Request $request) {
 
@@ -614,7 +614,7 @@ class ProduktController extends Controller {
         ProduktAnforderung::find($request->id)->delete();
 
         $request->session()->flash('status', 'Das Anforderung  <strong>' . request('an_name_kurz') . '</strong> wurde vom Produkt entfernt!' . $euipUdate);
-        return redirect(route('produkt.show', ['produkt' => request('produkt_id')]));
+        return redirect()->back();
     }
 
     public function addProduktAnforderung(Request $request) {
@@ -657,7 +657,7 @@ class ProduktController extends Controller {
 
         }
         $request->session()->flash('status', 'Die Anforderung wurde erfolgreich  <strong>' . request('an_name_kurz') . '</strong> verknüpft!' . $euipUdate);
-        return redirect(route('produkt.show', ['produkt' => request('produkt_id')]));
+        return redirect()->back();
     }
 
     /**

@@ -49,9 +49,11 @@
                             />
                         </div>
                         <div class="col-md-4">
-                            <x-rtextfield id="eq_inventar_nr"
-                                          label="Inventar - Nr"
-                                          max="100"
+                            <x-textfield id="eq_inventar_nr"
+                                         label="Inventar - Nr"
+                                         max="100"
+                                         required
+                                         class="checkLabel"
                             />
                         </div>
 
