@@ -3,83 +3,90 @@
 namespace App\Http\Controllers;
 
 use App\EquipmentEventItem;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class EquipmentEventItemController extends Controller
-{
+class EquipmentEventItemController extends Controller {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index() {
         //
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\EquipmentEventItem  $equipmentEventItem
-     * @return \Illuminate\Http\Response
+     * @param  EquipmentEventItem $equipmenteventitem
+     * @return Response
      */
-    public function show(EquipmentEventItem $equipmentEventItem)
-    {
+    public function show(EquipmentEventItem $equipmenteventitem) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\EquipmentEventItem  $equipmentEventItem
-     * @return \Illuminate\Http\Response
+     * @param  EquipmentEventItem $equipmenteventitem
+     * @return Response
      */
-    public function edit(EquipmentEventItem $equipmentEventItem)
-    {
+    public function edit(EquipmentEventItem $equipmenteventitem) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EquipmentEventItem  $equipmentEventItem
-     * @return \Illuminate\Http\Response
+     * @param  Request            $request
+     * @param  EquipmentEventItem $equipmenteventitem
+     * @return RedirectResponse
      */
-    public function update(Request $request, EquipmentEventItem $equipmentEventItem)
-    {
-        //
+    public function update(Request $request, EquipmentEventItem $equipmenteventitem) {
+        $equipmenteventitem->update($this->validateEquipmentEventItem());
+        return redirect()->back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateEquipmentEventItem()
+    : array {
+        return request()->validate([
+            'equipment_event_item_text' => '',
+            'user_id'                   => '',
+            'equipment_event_id'        => 'required',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EquipmentEventItem  $equipmentEventItem
-     * @return \Illuminate\Http\Response
+     * @param  EquipmentEventItem $equipmenteventitem
+     * @return Response
      */
-    public function destroy(EquipmentEventItem $equipmentEventItem)
-    {
+    public function destroy(EquipmentEventItem $equipmenteventitem) {
         //
     }
 }

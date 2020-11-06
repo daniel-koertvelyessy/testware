@@ -15,6 +15,7 @@ class CreateEquipmentEventsTable extends Migration {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+            $table->timestamp('read')->nullable();
             $table->text('equipment_event_text')->nullable();
             $table->foreignId('equipment_event_user')->nullable();
             $table->foreign('equipment_event_user')

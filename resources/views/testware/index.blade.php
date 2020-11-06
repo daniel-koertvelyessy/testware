@@ -12,7 +12,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <h2 class="h5">{{ __('Status') }} <a href="{{ route('equipment.index') }}">{{ __('Geräte')}}</a></h2>
+        <h2 class="h5">{{ __('Status') }}
+            <a href="{{ route('equipment.index') }}">{{ __('Geräte')}}</a>
+        </h2>
         <div class="row">
 
             @foreach (App\EquipmentState::all() as $equipmentState)
@@ -20,12 +22,25 @@
                     $equipments = App\Equipment::where('equipment_state_id',$equipmentState->id)->get();
                 @endphp
                 <div class="col-lg-3 col-md-6">
-                    <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center" style="height: 8em;" >
+                    <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
+                         style="height: 8em;"
+                    >
                         <div style="display: flex; flex-direction: column;">
-                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span>
-                            <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,50) }}</span>
+                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,50) }}</span>
                         </div>
-                        <span style="font-size: 3rem;" class="ml-2 text-{{ ($equipmentState->id !== 1 && $equipments->count()>1) ?$equipmentState->color : 'success' }}">{{$equipments->count()}}</span>
+                        @if ($equipmentState->id === 1)
+                            <span style="font-size: 3rem;"
+                                  class="ml-2 text-{{ ($equipments->count()<1) ? 'warning ' : 'success ' }}"
+                            >{{$equipments->count()}}
+                        </span>
+                        @else
+                            <span style="font-size: 3rem;"
+                                  class="ml-2 text-{{ ($equipments->count()>0) ? 'warning ' : 'success ' }}"
+                            >{{$equipments->count()}}
+                        </span>
+                        @endif
+
+
                     </div>
                 </div>
             @endforeach
@@ -34,22 +49,60 @@
         <div class="row mt-4">
             <x-dashborarditem>
                 <h2 class="h5">{{__('Anstehende')}}
-                    <a href="{{ route('controlevent.index') }}">{{ __('Prüfungen') }}</a></h2>
+                    <a href="{{ route('controlevent.index') }}">{{ __('Prüfungen') }}</a>
+                </h2>
 
                 <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-link active" id="controlWeek-tab" data-toggle="tab" href="#controlWeek" role="tab" aria-controls="controlWeek" aria-selected="true">4 {{__('Wochen')}}</a>
-                        <a class="nav-link" id="controlMonth-tab" data-toggle="tab" href="#controlMonth" role="tab" aria-controls="controlMonth" aria-selected="false">3 {{__('Monate')}}</a>
-                        <a class="nav-link" id="controlYear-tab" data-toggle="tab" href="#controlYear" role="tab" aria-controls="controlYear" aria-selected="false">{{__('Jahr')}}</a>
-                        <a class="nav-link" id="controlAll-tab" data-toggle="tab" href="#controlAll" role="tab" aria-controls="controlAll" aria-selected="false">{{__('Alle')}}</a>
+                    <div class="nav nav-tabs"
+                         id="nav-tab"
+                         role="tablist"
+                    >
+                        <a class="nav-link active"
+                           id="controlWeek-tab"
+                           data-toggle="tab"
+                           href="#controlWeek"
+                           role="tab"
+                           aria-controls="controlWeek"
+                           aria-selected="true"
+                        >4 {{__('Wochen')}}</a>
+                        <a class="nav-link"
+                           id="controlMonth-tab"
+                           data-toggle="tab"
+                           href="#controlMonth"
+                           role="tab"
+                           aria-controls="controlMonth"
+                           aria-selected="false"
+                        >3 {{__('Monate')}}</a>
+                        <a class="nav-link"
+                           id="controlYear-tab"
+                           data-toggle="tab"
+                           href="#controlYear"
+                           role="tab"
+                           aria-controls="controlYear"
+                           aria-selected="false"
+                        >{{__('Jahr')}}</a>
+                        <a class="nav-link"
+                           id="controlAll-tab"
+                           data-toggle="tab"
+                           href="#controlAll"
+                           role="tab"
+                           aria-controls="controlAll"
+                           aria-selected="false"
+                        >{{__('Alle')}}</a>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
+                <div class="tab-content"
+                     id="nav-tabContent"
+                >
                     @php
                         $controls = \App\ControlEquipment::take(10);
                     @endphp
 
-                    <div class="tab-pane fade show active" id="controlWeek" role="tabpanel" aria-labelledby="controlWeek-tab">
+                    <div class="tab-pane fade show active"
+                         id="controlWeek"
+                         role="tabpanel"
+                         aria-labelledby="controlWeek-tab"
+                    >
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
@@ -81,7 +134,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="controlMonth" role="tabpanel" aria-labelledby="controlMonth-tab">
+                    <div class="tab-pane fade"
+                         id="controlMonth"
+                         role="tabpanel"
+                         aria-labelledby="controlMonth-tab"
+                    >
                         <h2 class="h5">{{__('Anstehende Prüfungen') .' '. date('Y')}} </h2>
                         <table class="table table-striped table-sm">
                             <thead>
@@ -114,7 +171,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="controlYear" role="tabpanel" aria-labelledby="controlYear-tab">
+                    <div class="tab-pane fade"
+                         id="controlYear"
+                         role="tabpanel"
+                         aria-labelledby="controlYear-tab"
+                    >
                         <h2 class="h5">{{__('Anstehende Prüfungen') .' '. date('Y')}} </h2>
                         <table class="table table-striped table-sm">
                             <thead>
@@ -147,7 +208,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="controlAll" role="tabpanel" aria-labelledby="controlAll-tab">
+                    <div class="tab-pane fade"
+                         id="controlAll"
+                         role="tabpanel"
+                         aria-labelledby="controlAll-tab"
+                    >
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
@@ -185,24 +250,25 @@
             </x-dashborarditem>
 
             <x-dashborarditem>
-                <h2 class="h5">Mitteilungen</h2>
-                @forelse(App\EquipmentEvent::all() as $equipmentEvent)
-
-                     @foreach($equipmentEvent->notifications as $notification)
-
-            <x-systemmessage
-                    link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
-                    linkText="zum Gerät"
-                    date="{{ $equipmentEvent->created_at }}"
-                >
-                <strong>Schadensmeldung vom InfoSy App</strong>
-                <p>{{ $equipmentEvent->equipment_event_text }}</p>
-
-
-                </x-systemmessage>
+                <h2 class="h5">
+                    Ungelesene
+                    <a href="{{ route('equipmentevent.index') }}">{{__('Meldungen')}}</a>
+                </h2>
+                @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
+                    @foreach($equipmentEvent->notifications as $notification)
+                        <x-systemmessage
+                            link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
+                            linkText="{{__('zum Gerät')}}"
+                            date="{{ $equipmentEvent->created_at }}"
+                        >
+                            <strong>
+                                <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
+                            </strong>
+                            <p>{{ $equipmentEvent->equipment_event_text }}</p>
+                        </x-systemmessage>
                     @endforeach
                 @empty
-                --
+                   <x-notifyer>Keine ungelesenen Meldungen gefunden!</x-notifyer>
                 @endforelse
             </x-dashborarditem>
         </div>

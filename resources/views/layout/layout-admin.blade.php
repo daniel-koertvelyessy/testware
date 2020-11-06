@@ -39,20 +39,23 @@
         </div>
     </nav>
     @if (session()->has('status'))
-        <div class="toast fixed-top bg-light" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
-                <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
-                <p id="toastMessageBody">
-                    {!! session()->get('status') !!}
-                </p>
+        <div class=" fixed-top d-flex justify-content-end d-block" >
+            <div class="toast bg-light" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
+                    <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    <p id="toastMessageBody">
+                        {!! session()->get('status') !!}
+                    </p>
+                </div>
             </div>
         </div>
+
     @endif
     @yield('breadcrumbs')
 </header>

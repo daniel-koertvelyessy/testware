@@ -25,4 +25,9 @@ class EquipmentEvent extends Model
     public function Equipment() {
         return $this->belongsTo(Equipment::class);
     }
+
+    public function eventitems() {
+        return $this->hasMany(EquipmentEventItem::class);
+    }
+
 }

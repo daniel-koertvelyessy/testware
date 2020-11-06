@@ -40,11 +40,17 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
     }
 })->name('edmg');
 
+
 Route::get('docs', function () {
     return view('docs.index');
 });
 
 Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
+Route::post('equipmentevent.restore', 'EquipmentEventController@restore')->name('equipmentevent.restore');
+Route::middleware('throttle:5|60,1')->group(function () {
+    Route::post('equipmentevent.appstore', 'EquipmentEventController@appstore')->name('equipmentevent.appstore');
+});
+Route::put('equipmentevent.accept', 'EquipmentEventController@accept')->name('equipmentevent.accept');
 
 
 Route::resources([

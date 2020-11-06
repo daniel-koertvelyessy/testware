@@ -236,7 +236,7 @@ class InitialValueSeeder extends Seeder
             ],
             [
                 'estat_name_kurz' => 'reparatur',
-                'estat_name_lang' => 'Gerät kann nicht verwendet werden und muss repariert werden',
+                'estat_name_lang' => 'Gerät wird repariert und kann nicht verwendet werden',
                 'estat_color' => 'warning',
                 'estat_icon' => 'fas fa-exclamation-triangle',
             ],

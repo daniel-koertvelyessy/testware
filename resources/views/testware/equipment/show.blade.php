@@ -276,6 +276,19 @@
                         > {{ __('Logs')}}
                         </a>
                     </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="events-tab"
+                           data-toggle="tab"
+                           href="#events"
+                           role="tab"
+                           aria-controls="events"
+                           aria-selected="false"
+                        > {{ __('Meldungen')}}
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content"
                      id="myTabContent"
@@ -656,6 +669,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <div class="tab-pane fade p-2"
                          id="logs"
                          role="tabpanel"
@@ -664,9 +678,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Historie')}}</h3>
-                                @foreach (App\EquipmentHistory::where('equipment_id',$equipment->id)->latest()->get() as $equipmentHistorie)
+                                @foreach (App\EquipmentHistory::where('equipment_id',$equipment->id)->take(10)->latest()->get() as $equipmentHistorie)
                                     <dl class="row">
-                                        <dt class="col-sm-4">{{ $equipmentHistorie->created_at }}</dt>
+                                        <dt class="col-sm-4">{{ $equipmentHistorie->created_at->DiffForhumans() }}</dt>
                                         <dd class="col-sm-8">{{ $equipmentHistorie->eqh_eintrag_text }}</dd>
                                     </dl>
                                 @endforeach
@@ -718,6 +732,48 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-pane fade p-2"
+                         id="events"
+                         role="tabpanel"
+                         aria-labelledby="events-tab"
+                    >
+                        @forelse (App\EquipmentEvent::where('equipment_id',$equipment->id)->withTrashed()->take(10)->latest()->get() as $equipmentEvent)
+                            <dl class="row">
+                                <dt class="col-sm-4">
+                                    <strong>eröffnet:</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
+                                    <br><strong>geschlossen:</strong>
+                                    @if ($equipmentEvent->deleted_at)
+                                        {{ $equipmentEvent->deleted_at->DiffForhumans() }}
+                                    @else
+                                        -
+                                        @endif
+                                    <br>
+                                    @if ($equipmentEvent->deleted_at)
+                                        <form action="{{ route('equipmentevent.restore') }}" method="post">
+                                            @csrf
+                                            <input type="hidden"
+                                                   name="id"
+                                                   id="id_equipment_event_{{ $equipmentEvent->id }}"
+                                                   value="{{ $equipmentEvent->id }}"
+                                            >
+<button class="btn btn-sm btn-outline-primary mt-2">wiederherstellen</button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('equipmentevent.show',$equipmentEvent) }}" class="btn btn-sm btn-outline-primary mt-2">öffnen</a>
+                                    @endif
+
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <span class="lead">{{ __('Meldung:') }}</span><br>{{ $equipmentEvent->equipment_event_text??'keine Information übermittelt' }}</dd>
+                            </dl>
+                        @if (!$loop->last)
+                                <div class="dropdown-divider my-2"></div>
+                        @endif
+
+                        @empty
+                            <x-notifyer>{{__('Keine Meldungen zum Gerät gefunden!')}}</x-notifyer>
+                        @endforelse
                     </div>
                 </div>
             </div>
