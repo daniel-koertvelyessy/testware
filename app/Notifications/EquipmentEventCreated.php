@@ -13,7 +13,7 @@ class EquipmentEventCreated extends Notification
 {
     use Queueable;
 
-    protected EquipmentEvent $equipmentEvent;
+    protected $equipmentEvent;
 
     /**
      * Create a new notification instance.
@@ -63,7 +63,6 @@ class EquipmentEventCreated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'event'=>$this->equipmentEvent,
             'user'=>$this->equipmentEvent->equipment_event_user,
             'text'=>$this->equipmentEvent->equipment_event_text,
         ];

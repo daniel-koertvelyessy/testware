@@ -12,7 +12,6 @@
 <div class="container">
     <div class="row mt-md-5 mt-sm-1">
         <div class="col">
-            {{ $edata }}
             <h1 class="h3">Schaden am Gerät melden</h1>
             <form action="{{ route('equipmentevent.store') }}"
                   method="post">
