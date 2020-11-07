@@ -11,6 +11,7 @@ use App\EquipmentUid;
 use App\Notifications\EquipmentEventChanged;
 use App\Notifications\EquipmentEventCreated;
 use App\User;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
 class EquipmentEventController extends Controller {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -69,8 +74,6 @@ class EquipmentEventController extends Controller {
      * @return RedirectResponse
      */
     public function accept(Request $request) {
-
-
         $this->validateNewEquipmentEvent();
 
         $equipmentevent = EquipmentEvent::find($request->equipment_event_id);
@@ -103,37 +106,6 @@ class EquipmentEventController extends Controller {
         }
 
         return redirect()->route('equipmentevent.show', $equipmentevent);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request $request
-     * @return RedirectResponse
-     */
-    public function appstore(Request $request) {
-
-
-        $userid = (isset($request->equipment_event_user)) ? $request->equipment_event_user : 1;
-        $equipment = EquipmentUid::where('equipment_uid', $request->equipment_id)->first();
-        $this->validateNewEquipmentEvent();
-//        dd($equipment->equipment_id);
-        $eevent = new EquipmentEvent();
-        $eevent->equipment_event_text = $request->equipment_event_text;
-        $eevent->equipment_event_user = $userid;
-        $eevent->equipment_id = $equipment->equipment_id;
-        $eevent->save();
-
-        $eh = new EquipmentHistory();
-
-        $eh->eqh_eintrag_kurz = __('Schadensmeldung');
-        $eh->eqh_eintrag_text = 'Gerät wurde über die App als beschädigt gemeldet. Das Event wurde ausgelöst und wird nachverfolgt.';
-        $eh->equipment_id = $equipment->equipment_id;
-        $eh->save();
-        Notification::send(User::find($userid), new EquipmentEventCreated($eevent));
-
-        $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
-        return redirect()->route('app');
     }
 
     /**
@@ -175,10 +147,9 @@ class EquipmentEventController extends Controller {
      * @param  EquipmentEvent $equipmentevent
      * @param  Request        $request
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(EquipmentEvent $equipmentevent, Request $request) {
-
         $equipmentevent->delete();
 
         $eh = new EquipmentHistory();
@@ -192,21 +163,57 @@ class EquipmentEventController extends Controller {
         $eh->equipment_id = $equipmentevent->equipment->id;
         $eh->save();
 
-        $equipment = Equipment::find($eh->equipment_id);
-        $equipment->equipment_state_id = $request->equipment_state_id;
-        $equipment->save();
+        if (isset($request->equipment_state_id)) {
+            $equipment = Equipment::find($eh->equipment_id);
+            $equipment->equipment_state_id = $request->equipment_state_id;
+            $equipment->save();
+            $stat = EquipmentState::find($request->equipment_state_id)->first();
 
-
-        $stat = EquipmentState::find($request->equipment_state_id)->first();
-
-        $eh = new EquipmentHistory();
-        $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
-        $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
-        $eh->equipment_id = $equipmentevent->equipment->id;
-        $eh->save();
+            $eh = new EquipmentHistory();
+            $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
+            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
+            $eh->equipment_id = $equipmentevent->equipment->id;
+            $eh->save();
+        }
 
         return redirect()->route('testware.index');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  EquipmentEvent $equipmentevent
+     * @param  Request        $request
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function close(EquipmentEvent $equipmentevent, Request $request) {
+//dd($request);
+        $equipmentevent->delete();
+
+        $eh = new EquipmentHistory();
+        $eh->eqh_eintrag_kurz = __('Schadensmeldung - Abgeschlossen');
+        $eh->eqh_eintrag_text = 'Die Schadensmeldung wurde geschlossen. Bemerkung: ' . request('equipment_event_item_text');
+        $eh->equipment_id = $request->equipment_id;
+        $eh->save();
+
+        $equipment = Equipment::find($request->equipment_id);
+        $equipment->equipment_state_id = $request->equipment_state_id;
+        $equipment->save();
+
+        $eh = new EquipmentHistory();
+        $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
+        $stat = EquipmentState::find($request->equipment_state_id)->first();
+        $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
+        $eh->equipment_id = $request->equipment_id;
+        $eh->save();
+
+        $doc = new EquipmentDocController();
+        $doc->store($request);
+
+        return redirect()->route('testware.index');
+    }
+
 
     public function restore(Request $request) {
         $equipmentevent = EquipmentEvent::withTrashed()->find($request->id);

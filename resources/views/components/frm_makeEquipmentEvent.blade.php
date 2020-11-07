@@ -4,7 +4,7 @@
     <input type="hidden"
            name="equipment_id"
            id="equipment_id"
-           value="{{ $edata->eq_uid }}"
+           value="{{ $edata->eq_uid??'' }}"
     >
     @auth
 
@@ -15,7 +15,7 @@
         >
 
     @endauth
-    <x-textarea id="equipment_event_text" label="Beschreibung"/>
+    <x-textarea id="equipment_event_text" label="{{__('Beschreibung des Schadens')}}"/>
     <button class="btn btn-primary">
         Schaden melden!
     </button>

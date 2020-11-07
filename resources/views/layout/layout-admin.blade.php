@@ -22,7 +22,7 @@
         <a href="/" class="ml-5 navbar-brand">
             <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
             @yield('mainSection')
-            <i class="fas fa-angle-right d-none d-md-inline"></i>
+{{--            <i class="fas fa-angle-right d-none d-md-inline"></i>--}}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

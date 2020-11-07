@@ -10,18 +10,18 @@
     >
     <link rel="icon"
           type="image/png"
-          href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          href="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
           sizes="32x32"
     >
     <link rel="apple-touch-icon"
           sizes="180x180"
-          href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          href="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
     >
     <meta name="msapplication-TileColor"
           content="#ffffff"
     >
     <meta name="msapplication-TileImage"
-          content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          content="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
     >
     <script src="https://kit.fontawesome.com/b5297e65e8.js"
             crossorigin="anonymous"
@@ -47,7 +47,7 @@
         <a class="navbar-brand"
            href="#"
         >
-            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+            <img src="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
                  alt=""
                  height="30px"
             >

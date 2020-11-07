@@ -59,19 +59,22 @@
                         <div class="card-body">
                             <div class="tiles-grid justify-content-center">
                                 <div class="tile-medium rounded" data-role="tile">
-                                    <a href="{{ route('testware.index') }}">
-                                        <img src="{{ url('img/icon/icon_testWare_35.svg') }}" alt="Logo" class="img-fluid p-1" style="max-height: 250px;">
+                                    <a href="{{ route('testware.index') }}" class="d-flex align-items-center justify-content-center">
+                                        <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="Logo" class="img-fluid p-1" style="max-height: 100px; margin-top: 0.8em;">
                                     </a>
                                     <span class="branding-bar text-center">testWare</span>
                                 </div>
-                                <a href="{{ route('app') }}" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
-                                    <span class="icon"><i class="fas fa-qrcode"></i></span>
-                                    <span class="branding-bar text-center">{{__('Infoapp')}}</span>
-                                </a>
-                                <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
-                                    <span class="icon"><i class="fas fa-mobile-alt"></i></span>
-                                    <span class="branding-bar text-center">{{__('Registrieren')}}</span>
-                                </a>
+                                <div class="tile-medium rounded" data-role="tile">
+                                    <a href="{{ route('app') }}" class="d-flex align-items-center justify-content-center" data-role="tile" aria-label="Standorte">
+                                        <img src="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}" alt="Logo" class="img-fluid p-1" style="max-height: 100px; margin-top: 0.8em;">
+
+                                    </a>
+                                    <span class="branding-bar text-center">{{__('InfoSy')}}</span>
+                                </div>
+                                {{--  <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
+                                      <span class="icon"><i class="fas fa-mobile-alt"></i></span>
+                                      <span class="branding-bar text-center">{{__('Registrieren')}}</span>
+                                  </a>--}}
                             </div>
                         </div>
                     </div>

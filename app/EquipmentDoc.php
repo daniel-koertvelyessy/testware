@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class EquipmentDoc extends Model {
+    use SoftDeletes;
+
+    protected $guarded = [];
+
     public static function addReport($equip_id, $filename, $reportID) {
         $proDocFile = new EquipmentDoc();
         $proDocFile->eqdoc_name_lang = $filename;
@@ -14,8 +19,7 @@ class EquipmentDoc extends Model {
         $proDocFile->equipment_id = $equip_id;
 
 
-
-        if (EquipmentDoc::where('eqdoc_name_kurz', $reportID)->count()===0 ) {
+        if (EquipmentDoc::where('eqdoc_name_kurz', $reportID)->count() === 0) {
             $proDocFile->eqdoc_name_kurz = $reportID;
             $proDocFile->save();
         }
@@ -31,7 +35,7 @@ class EquipmentDoc extends Model {
 
     public function getSize($file) {
 //        $size = Storage::zs
-        return number_format(Storage::size($file) / 1028, 1, ',', '.');
+        return helpers::fileSizeForHumans(Storage::size($file));
     }
 
     public function url($pfad) {

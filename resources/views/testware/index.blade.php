@@ -251,22 +251,21 @@
 
             <x-dashborarditem>
                 <h2 class="h5">
-                    Ungelesene
-                    <a href="{{ route('equipmentevent.index') }}">{{__('Meldungen')}}</a>
+                    Offene
+                    <a href="{{ route('equipmentevent.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
                 @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
-                    @foreach($equipmentEvent->notifications as $notification)
                         <x-systemmessage
                             link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
                             linkText="{{__('zum Gerät')}}"
                             date="{{ $equipmentEvent->created_at }}"
+                            subject="{{ $equipmentEvent->equipment->produkt->prod_name_lang }}"
                         >
                             <strong>
                                 <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
                             </strong>
                             <p>{{ $equipmentEvent->equipment_event_text }}</p>
                         </x-systemmessage>
-                    @endforeach
                 @empty
                    <x-notifyer>Keine ungelesenen Meldungen gefunden!</x-notifyer>
                 @endforelse

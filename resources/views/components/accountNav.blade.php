@@ -8,11 +8,14 @@
                data-toggle="dropdown"
                aria-expanded="false"
             >
-                <i class="fas fa-user"></i> {{ Auth::user()->username ?? Auth::user()->name }}
                 @if (Auth::user()->unreadNotifications()->count()>0)
-                    <span class="badge   badge-info ">{{ Auth::user()->unreadNotifications()->count() }}</span>
+                    <i class="fas fa-envelope text-info"
+                       title="{{ Auth::user()->unreadNotifications()->count() }} {{ __(' neue Nachrichten') }}"
+                    ></i>
+                @else
+                    <i class="fas fa-user"></i>
                 @endif
-
+                {{ Auth::user()->username ?? Auth::user()->name }}
             </a>
             <ul class="dropdown-menu"
                 aria-labelledby="navbarUserAccount"

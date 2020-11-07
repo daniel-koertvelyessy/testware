@@ -17,23 +17,42 @@ Route::get('app', function () {
 })->name('app');
 
 Route::get('edata/{ident}', function ($ident, Request $request) {
-    $equipment = \App\EquipmentUid::where('equipment_uid', $ident)->first();
-    if ($equipment) {
-        $edata = \App\Equipment::findOrFail($equipment->equipment_id);
-        return view('testware.app.equipmentdata', ['edata' => $edata, 'ident' => $ident]);
+    $str = str_split($ident, strlen(env('APP_HSKEY')));
+    if ($str[0] === env('APP_HSKEY')) {
+        $e = explode(env('APP_HSKEY'), $ident);
+        $uid = $e[1];
+
+        $equipment = \App\EquipmentUid::where('equipment_uid', $uid)->first();
+        if ($equipment) {
+            $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+            return view('testware.app.equipmentdata', ['edata' => $edata, 'ident' => $ident]);
+        } else {
+            $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+            return redirect()->route('app');
+        }
     } else {
         $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
         return redirect()->route('app');
     }
-
 })->name('edata');
 
 Route::get('edmg/{ident}', function ($ident, Request $request) {
-    $equipment = \App\EquipmentUid::where('equipment_uid', $ident)->first();
-    if ($equipment) {
-        $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+    $str = str_split($ident, strlen(env('APP_HSKEY')));
 
-        return view('testware.app.reportdamage', ['edata' => $edata, 'ident' => $ident]);
+    if ($str[0] === env('APP_HSKEY')) {
+        $e = explode(env('APP_HSKEY'), $ident);
+        $uid = $e[1];
+        $equipment = \App\EquipmentUid::where('equipment_uid', $uid)->first();
+
+
+        if ($equipment) {
+            $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+//            dd($edata);
+            return view('testware.app.reportdamage', ['edata' => $edata, 'ident' => $ident]);
+        } else {
+            $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+            return redirect()->route('app');
+        }
     } else {
         $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
         return redirect()->route('app');
@@ -47,8 +66,10 @@ Route::get('docs', function () {
 
 Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
 Route::post('equipmentevent.restore', 'EquipmentEventController@restore')->name('equipmentevent.restore');
+Route::delete('equipmentevent.close', 'EquipmentEventController@close')->name('equipmentevent.close');
+
 Route::middleware('throttle:5|60,1')->group(function () {
-    Route::post('equipmentevent.appstore', 'EquipmentEventController@appstore')->name('equipmentevent.appstore');
+    Route::post('app.store', 'AppController@store')->name('app.store');
 });
 Route::put('equipmentevent.accept', 'EquipmentEventController@accept')->name('equipmentevent.accept');
 

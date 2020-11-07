@@ -286,7 +286,7 @@
                            role="tab"
                            aria-controls="events"
                            aria-selected="false"
-                        > {{ __('Meldungen')}}
+                        > {{ __('Ereignisse')}}
                         </a>
                     </li>
                 </ul>
@@ -352,8 +352,11 @@
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br> <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
-                                            {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)/1028,1) }}kB
+                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br>
+                                            <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
+                                            <span class="text-muted small">
+                                                {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
+                                            </span>
                                         </div>
                                         <div>
                                             <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
@@ -381,12 +384,14 @@
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
                                 <h2 class="h4 mt-5">Funtionstest</h2>
-                                @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',1)->get() as $bda)
+                                @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
                                             <span class="text-muted small">{{ $bda->eqdoc_name_kurz }}</span><br> <span class="lead">{{ $bda->eqdoc_name_lang }}</span><br>
-                                            {{ number_format(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)/1028,1) }}kB
+                                            <span class="text-muted small">
+                                                {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)) }}
+                                            </span>
                                         </div>
                                         <div>
                                             <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
@@ -526,7 +531,7 @@
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
-                                                <th style="text-align: right;">{{ __('Größe')}} kB</th>
+                                                <th style="text-align: right;">{{ __('Größe')}}</th>
                                                 <th></th>
                                                 <th></th>
                                                 </thead>
@@ -535,7 +540,9 @@
                                                     <tr>
                                                         <td>{{ $equipDoc->eqdoc_name_lang }}</td>
                                                         <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
-                                                        <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
+                                                        <td style="text-align: right;">
+                                                            {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
+                                                        </td>
                                                         <td>
                                                             <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                                   method="get"
@@ -579,40 +586,42 @@
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
-                                                <th style="text-align: right;">{{ __('Größe')}} kB</th>
+                                                <th style="text-align: right;">{{ __('Größe')}}</th>
                                                 <th></th>
                                                 <th></th>
                                                 </thead>
                                                 <tbody>
-                                                @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',1)->get() as $equipDoc)
+                                                @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
                                                     <tr>
-                                                        <td>{{ $equipDoc->eqdoc_name_lang }}</td>
-                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
-                                                        <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
+                                                        <td>{{ $equipFunctionDoc->eqdoc_name_lang }}</td>
+                                                        <td class="d-none d-md-table-cell">{{ $equipFunctionDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                        <td style="text-align: right;">
+                                                            {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
+                                                        </td>
                                                         <td>
                                                             <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                                   method="get"
-                                                                  id="downloadEquipmentFunction_{{ $equipDoc->id }}"
+                                                                  id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
                                                             >
                                                                 @csrf
                                                                 <input type="hidden"
                                                                        name="id"
-                                                                       id="download_equipment_function_id_{{ $equipDoc->id }}"
-                                                                       value="{{ $equipDoc->id }}"
+                                                                       id="download_equipment_function_id_{{ $equipFunctionDoc->id }}"
+                                                                       value="{{ $equipFunctionDoc->id }}"
                                                                 >
                                                             </form>
                                                             <button
                                                                 class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipDoc->id }}').submit();"
+                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
                                                         </td>
                                                         <td>
-                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}#dokumente"
+                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#dokumente"
                                                                             tabtarget="dokumente"
                                                                             prefix="EquipmentFunction"
-                                                                            id="{{ $equipDoc->id }}"
+                                                                            id="{{ $equipFunctionDoc->id }}"
                                                             />
                                                         </td>
                                                     </tr>
@@ -680,8 +689,11 @@
                                 <h3 class="h5">{{__('Historie')}}</h3>
                                 @foreach (App\EquipmentHistory::where('equipment_id',$equipment->id)->take(10)->latest()->get() as $equipmentHistorie)
                                     <dl class="row">
-                                        <dt class="col-sm-4">{{ $equipmentHistorie->created_at->DiffForhumans() }}</dt>
-                                        <dd class="col-sm-8">{{ $equipmentHistorie->eqh_eintrag_text }}</dd>
+                                        <dt class="col-md-4 col-lg-3">{{ $equipmentHistorie->created_at->DiffForhumans() }}</dt>
+                                        <dd class="col-sm-8 col-lg-9">
+                                            <strong>{{ $equipmentHistorie->eqh_eintrag_kurz }}</strong><br>
+                                            {{ $equipmentHistorie->eqh_eintrag_text }}
+                                        </dd>
                                     </dl>
                                 @endforeach
                             </div>
