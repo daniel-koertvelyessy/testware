@@ -19,7 +19,7 @@ class EquipmentEvent extends Model
     use Notifiable;
 
     public function User() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'equipment_event_user');
     }
 
     public function Equipment() {

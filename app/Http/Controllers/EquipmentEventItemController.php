@@ -34,10 +34,12 @@ class EquipmentEventItemController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return Response
+     * @return RedirectResponse
      */
     public function store(Request $request) {
-        //
+        EquipmentEventItem::create($this->validateEquipmentEventItem());
+        $request->session()->flash('status', 'Die Meldung wurde angelegt!');
+        return redirect()->back();
     }
 
     /**

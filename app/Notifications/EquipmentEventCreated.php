@@ -45,11 +45,12 @@ class EquipmentEventCreated extends Notification
     public function toMail($notifiable)
     {
         $equipment = Equipment::find($this->equipmentEvent->equipment_id)->first();
+        $url = 'http://testware.hub.bitpack.io/equipment/'.$equipment->eq_inventar_nr;
         return (new MailMessage)
             ->subject('testWare Serviceinfo: Neue Schadensmeldung eingegangen!')
             ->greeting('Hallo !')
                     ->line('Es wurde eine Schadensmeldung für ein Geräte erzeugt. Bitte prüfen Sie den Vorgang in der testWare.')
-                    ->action('Direkter Link', url('http://testware.hub.bitpack.io/equipment/',$equipment->eq_inventar_nr))
+                    ->action('Direkter Link zum Gerät', url($url))
                     ->line('Diese Meldung erscheint auch in Ihrem Dashboard, wenn Sie sich das nächste mal anmelden!')
                     ->line('Ihr testWare Team');
     }
@@ -62,9 +63,6 @@ class EquipmentEventCreated extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            'user'=>$this->equipmentEvent->equipment_event_user,
-            'text'=>$this->equipmentEvent->equipment_event_text,
-        ];
+        return $this->equipmentEvent->toArray();
     }
 }

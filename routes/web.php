@@ -107,6 +107,8 @@ require base_path() . '/routes/admintools/admintools.php';
  */
 require base_path() . '/routes/produkttools/produkttools.php';
 
+Route::post('user.setMsgRead', 'UserController@setMsgRead')->name('user.setMsgRead');
+Route::delete('user.deleteMsg', 'UserController@deleteMsg')->name('user.deleteMsg');
 
 Route::get('getFirmenAjaxListe', 'FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
 Route::get('getFirmenDaten', 'FirmaController@getFirmenDaten')->name('getFirmenDaten');
@@ -184,6 +186,9 @@ Route::get('verordnung.main', function () {
 Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
+
+
+
 
 /*
 

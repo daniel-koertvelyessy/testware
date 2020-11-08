@@ -283,10 +283,12 @@
                         />
                         <input type="hidden"
                                id="equipment_event_id"
+                               name="equipment_event_id"
                                value="{{ $equipmentevent->id }}"
                         >
                         <input type="hidden"
                                id="user_id"
+                               name="user_id"
                                value="{{ Auth::user()->id }}"
                         >
 

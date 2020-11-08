@@ -46,7 +46,7 @@ class AppController extends Controller
         Notification::send(User::find($userid), new EquipmentEventCreated($eevent));
 
         $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
-        return redirect()->route('app');
+        return redirect()->route('portal-main');
     }
     /**
      * @return array

@@ -102,6 +102,7 @@ class EquipmentEventController extends Controller {
         $equipmentevent = EquipmentEvent::find($request->equipment_event_id)->first();
 
         if (isset($request->setInformUser)) {
+//            request()->user()->notify(new EquipmentEventChanged($eeitem));
             Notification::send(User::find($request->user_id), new EquipmentEventChanged($eeitem));
         }
 

@@ -22,7 +22,7 @@
         <a href="/" class="ml-5 navbar-brand">
             <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
             @yield('mainSection')
-{{--            <i class="fas fa-angle-right d-none d-md-inline"></i>--}}
+            {{--            <i class="fas fa-angle-right d-none d-md-inline"></i>--}}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -35,7 +35,7 @@
             <form class="d-flex ml-2" id="frmSrchInAdminBereich">
                 <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off">
             </form>
-           <x-accountNav/>
+            <x-accountNav/>
         </div>
     </nav>
     @if (session()->has('status'))
@@ -59,7 +59,52 @@
     @endif
     @yield('breadcrumbs')
 </header>
+<section id="messageBox">
+    <div class="modal fade" id="userMsgModal" tabindex="-1" aria-labelledby="userMsgModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
 
+                    @forelse(auth()->user()->unreadNotifications()->get() as $notification)
+                        <div class="d-flex border p-2 flex-column"
+                             id="msg{{ $notification->id }}"
+                        >
+                            <div class="d-flex ml-2 justify-content-between small">
+                                <span>
+                                    Nachricht:
+                                     {{ $notification->type === 'App\Notifications\EquipmentEventChanged' ? 'Änderung Ereignis' : 'Neues Ereignis' }}
+                                </span>
+
+                                <span>{{ $notification->created_at->DiffForHumans() }}</span>
+                            </div>
+                            <div class="d-flex mt-3 ml-2 flex-row align-items-center">
+                                <div class="d-flex
+                                 flex-column">
+                                    <span class="small">von: {{ $notification->data['userid'] }}</span>
+                                    <span class="small">Nachricht:</span>
+                                    <span class="lead"> {{ $notification->data['message'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <span class="list-group-item">
+                                <x-notifyer>Keine neuen Nachrichten</x-notifyer>
+                            </span>
+                    @endforelse
+                        <div class="d-flex justify-content-end align-items-center">
+                            <form action="{{ route('user.setMsgRead') }}"
+                                  method="post">
+                                @csrf
+                                <button class="btn btn-sm btn-link">
+                                  Nachrichten als  gelesen markieren
+                                </button>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <main id="app" class="mt-3 ">
     <a href="#content" class="sr-only">{{__('Überspringe Seiten-Navigation')}}</a>
     <x-sidebar/>
@@ -114,11 +159,14 @@
 @endif
 <footer class="page-footer fixed-bottom px-1">
     <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020
-        <a href="https://bitpack.io/" title="bitpack.io">
+        <div class="col-auto small mr-auto pl-3">
+            <span>
+                © 2020
+            <a href="https://bitpack.io/" title="bitpack.io">
                 <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
             </a>
-            GmbH
+            &nbsp; GmbH
+            </span>
         </div>
     </div>
 </footer>
@@ -139,6 +187,20 @@
 
 @yield('scripts')
 <script>
+/*    $(document).on('click','.markNoteAsRead',function () {
+        const id = $(this).data('id');
+        $.ajax({
+            type: "post",
+            dataType: 'json',
+            url: '{{ route('user.setMsgRead') }}',
+            data: {id},
+            success: (res) => {
+                console.debug(res);
+
+            }
+        });
+        console.log(id);
+    });*/
     // $('#lockscreen').hide();
     // $('#sideNav').hide();
     // $('#NavToggler').click(function () {

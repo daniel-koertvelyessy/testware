@@ -61,9 +61,10 @@
         function onScanSuccess(qrCodeMessage) {
             html5QrcodeScanner.clear();
             beep();
-            location.href = 'edata/'+qrCodeMessage;
+            const link_array = qrCodeMessage.split('/');
+            location.href = 'edata/'+link_array[4].trim();
         }
-        var html5QrcodeScanner = new Html5QrcodeScanner(
+        const html5QrcodeScanner = new Html5QrcodeScanner(
             "reader", { fps: 10, qrbox: 250 });
         html5QrcodeScanner.render(onScanSuccess);
     </script>

@@ -1,9 +1,7 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
-
 @section('pagetitle')
-    {{__('Dashboard')}} @ bitpack.io GmbH
+    {{__('Dashboard')}}
 @endsection
 
 @section('menu')
@@ -13,7 +11,7 @@
 @section('content')
     <div class="container-fluid">
         <h2 class="h5">{{ __('Status') }}
-            <a href="{{ route('equipment.index') }}">{{ __('Geräte')}}</a>
+            <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
         </h2>
         <div class="row">
 
@@ -25,8 +23,11 @@
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
                          style="height: 8em;"
                     >
-                        <div style="display: flex; flex-direction: column;">
-                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,50) }}</span>
+                        <div class="d-none d-xl-inline-flex" style="display: flex; flex-direction: column;">
+                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,60) }}</span>
+                        </div>
+                        <div class="d-xl-none" style="display: flex; flex-direction: column;">
+                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,40) }}</span>
                         </div>
                         @if ($equipmentState->id === 1)
                             <span style="font-size: 3rem;"

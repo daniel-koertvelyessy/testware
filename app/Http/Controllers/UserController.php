@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -127,6 +129,12 @@ class UserController extends Controller
     public function resetPassword(Request $request) {
         $ops = password_hash($request->pswd, PASSWORD_DEFAULT);
         $user = User::find($request->id);
+    }
+
+    public function setMsgRead(Request $request)
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back();
     }
 
 }

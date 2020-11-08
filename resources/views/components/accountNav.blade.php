@@ -36,9 +36,9 @@
                 </li>
                 <li>
                     <a class="dropdown-item d-flex justify-content-md-between align-items-center"
-                       href="#"
+                       href="#" data-toggle="modal" data-target="#userMsgModal"
                     >
-                        <span><span class="badge badge-light ">{{ Auth::user()->notifications()->count() }}</span> {{__('Nachrichten')}}</span> <i class="fas fa-inbox ml-2"></i>
+                        <span><span class="badge badge-light ">{{ Auth::user()->unreadNotifications()->count() }}</span> {{__('Nachrichten')}}</span> <i class="fas fa-inbox ml-2"></i>
                     </a>
                 </li>
                 <li>
