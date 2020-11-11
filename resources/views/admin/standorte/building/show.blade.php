@@ -252,7 +252,7 @@
                                     </div>
                                 </form>
                                 @if ($building->rooms->count()>0)
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" id="tabRoomListe">
                                         <thead>
                                         <tr>
                                             <th>Nummer</th>
@@ -320,7 +320,23 @@
         </script>
     @endif
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
     <script>
+
+
+        $('#tabRoomListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            "columnDefs": [
+                { "orderable": false, "targets": 4 }
+            ],
+            "dom":'t'
+        });
+
         $('.btnDeleteRoom').click(function () {
             const rommId = $(this).data('id');
             $.ajax({

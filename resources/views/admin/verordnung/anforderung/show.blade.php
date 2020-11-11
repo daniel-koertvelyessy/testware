@@ -116,21 +116,21 @@
                     <tr>
                         <th>Kürzel</th>
                         <th>Aufgabe</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->get() as $aci)
                         <tr>
                             <td>
-                                {{ $aci->aci_name_kurz }}
+                                <a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{ $aci->aci_name_kurz }}</a>
                             </td>
                             <td>
                                 {{ $aci->aci_name_lang }}
-                            </td>
-                            <td>
-                                <a href="{{ route('anforderungcontrolitem.show',$aci) }}">Öffnen</a>
-                                {{ $aci->id }}
+                                @if ($aci->isIncomplete($aci))
+                                    <ul class="text-warning">
+                                        {!! $aci->isIncomplete($aci) !!}
+                                    </ul>
+                                @endif
                             </td>
                         </tr>
                     @empty

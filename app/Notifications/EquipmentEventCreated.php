@@ -63,6 +63,10 @@ class EquipmentEventCreated extends Notification
      */
     public function toArray($notifiable)
     {
-        return $this->equipmentEvent->toArray();
+        return [
+            'userid'=>$this->equipmentEvent->equipment_event_user,
+            'message'=>$this->equipmentEvent->equipment_event_item_text,
+            'eventid'=>$this->equipmentEvent->equipment_event_id,
+        ];
     }
 }

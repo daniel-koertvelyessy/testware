@@ -31,7 +31,7 @@
         @method('delete')
         <input type="hidden"
                name="id"
-               id="id"
+               id="id_delete_equipment"
         >
         <button class="btn btn-outline-danger">Gerät löschen <span class="ml-2 fas fa-times"></span></button>
     </form>
@@ -79,6 +79,10 @@
                             <x-datepicker id="eq_ibm" label="{{__('Inbetriebnahme am')}}" value="{{ $equipment->eq_ibm }}" />
                         </div>
 
+                        <div class="col-md-6">
+
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -113,7 +117,7 @@
                             <x-textarea id="eq_text" label="{{__('Beschreibung')}}" value="{{ $equipment->eq_text }}"/>
                         </div>
                     </div>
-                    <x-btnMain>{{__('Gerät speichern')}} <span class="fas fa-download"></span></x-btnMain>
+                    <x-btnMain>{{__('Gerät speichern')}} <span class="ml-2 fas fa-download"></span></x-btnMain>
                 </form>
             </div>
         </div>

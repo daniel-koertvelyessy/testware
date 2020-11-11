@@ -18,7 +18,16 @@ class ControlEquipment extends Model {
         return $this->belongsTo(Anforderung::class);
     }
 
+    public function checkDueDateIcon(ControlEquipment $qeitem) {
+        if (now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due) {
+            return '<span class="fas fa-circle text-success mr-3"></span> ';
+        } elseif (now()->addWeeks($qeitem->qe_control_date_warn) >= $qeitem->qe_control_date_due && now() < $qeitem->qe_control_date_due) {
+            return '<span class="fas fa-circle text-warning mr-3"></span> ';
+        } else {
+            return '<span class="fas fa-circle text-danger mr-3"></span> ';
+        }
 
+    }
 
     public function checkDueDate(ControlEquipment $qeitem) {
         $date = Carbon::parse($qeitem->qe_control_date_due)->DiffForHumans();
@@ -31,6 +40,8 @@ class ControlEquipment extends Model {
         }
 
     }
+
+
 
 
 }

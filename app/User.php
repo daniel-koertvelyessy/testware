@@ -54,7 +54,21 @@ class User extends Authenticatable
 
     public function AnforderungControlItem()
     {
-        // gibt die Profile Daten zurück
         return $this->hasOne(AnforderungControlItem::class);
+    }
+
+    public function qualifiedUser()
+    {
+        return $this->hasMany(EquipmentQualifiedUser::class);
+    }
+
+    public function hasEquipment()
+    {
+        return $this->hasManyThrough('Equipment','EquipmentQualifiedUser');
+    }
+
+    public function instructedOnEquipment()
+    {
+        return $this->hasMany(EquipmentInstruction::class);
     }
 }

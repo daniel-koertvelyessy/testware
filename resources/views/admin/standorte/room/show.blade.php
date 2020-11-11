@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{ __('Raum')}} {{  $room->r_name_kurz  }} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
+{{ __('Raum')}} {{  $room->r_name_kurz  }} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
@@ -15,24 +15,24 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Portal</a></li>
+            <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
             <li class="breadcrumb-item">
-                <a href="{{ route('location.index') }}">Standort </a>
+                <a href="{{ route('location.index') }}">{{__('Standort')}} </a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_name_kurz }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('building.index') }}">Gebäude</a>
+                <a href="{{ route('building.index') }}">{{__('Gebäude')}}</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_name_kurz }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('room.index') }}">Räume <i class="fas fa-angle-right"></i></a>
+                <a href="{{ route('room.index') }}">{{__('Räume')}} <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                Raum {{  $room->r_name_kurz  }}
+                {{__('Raum')}} {{  $room->r_name_kurz  }}
             </li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@
             <div class="modal-content">
                 <form action="{{ route('createStellPlatzType') }}" method="POST" class="needs-validation" id="frmCreateRoomType" name="frmCreateRoomType">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalAddStellPlatzTypeLabel">Neuen Stellplatztyp erstellen</h5>
+                        <h5 class="modal-title" id="modalAddStellPlatzTypeLabel">{{__('Neuen Stellplatztyp erstellen')}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -54,9 +54,9 @@
                         <input type="hidden" name="frmOrigin" id="frmOriginCreateStellPlatzType" value="room">
                         <input type="hidden" name="room_id" id="room_id" value="{{ $room->id }}">
                         @csrf
-                        <x-rtextfield id="spt_name_kurz" label="Kürzel" />
-                        <x-textfield id="spt_name_lang" label="Beschreibung" />
-                        <x-textarea id="spt_name_text" label="Beschreibung des Typs" />
+                        <x-rtextfield id="spt_name_kurz" label="{{__('Kürzel')}}" />
+                        <x-textfield id="spt_name_lang" label="{{__('Beschreibung')}}" />
+                        <x-textarea id="spt_name_text" label="{{__('Beschreibung des Typs')}}" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -73,7 +73,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">Übersicht Raum </span>{{ $room->r_name_kurz }}</h1>
+                <h1 class="h3"><span class="d-none d-md-inline">{{__('Übersicht Raum')}} </span>{{ $room->r_name_kurz }}</h1>
           {{--      <div class="visible-print text-center">
                     {!! QrCode::size(65)->generate($room->standort_id); !!}
                     <p class="text-muted small">Standort-ID</p>
@@ -84,11 +84,11 @@
             <div class="col">
                 <ul class="nav nav-tabs mainNavTab" id="myTab" role="tablist">
                     <li class="nav-item " role="presentation">
-                        <a class="nav-link active" id="roomStammDaten-tab" data-toggle="tab" href="#roomStammDaten" role="tab" aria-controls="roomStammDaten" aria-selected="true">Stammdaten</a>
+                        <a class="nav-link active" id="roomStammDaten-tab" data-toggle="tab" href="#roomStammDaten" role="tab" aria-controls="roomStammDaten" aria-selected="true">{{__('Stammdaten')}}</a>
                     </li>
 
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="roomStellPlatze-tab" data-toggle="tab" href="#roomStellPlatze" role="tab" aria-controls="roomStellPlatze" aria-selected="false">Stellplätze <span class="badge {{ ($room->stellplatzs()->count()>0)? ' badge-info ' : '' }} ">{{ $room->stellplatzs()->count() }}</span></a>
+                        <a class="nav-link" id="roomStellPlatze-tab" data-toggle="tab" href="#roomStellPlatze" role="tab" aria-controls="roomStellPlatze" aria-selected="false">{{__('Stellplätze')}} <span class="badge {{ ($room->stellplatzs()->count()>0)? ' badge-info ' : '' }} ">{{ $room->stellplatzs()->count() }}</span></a>
                     </li>
 {{--                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="roomEquip-tab" data-toggle="tab" href="#roomEquip" role="tab" aria-controls="roomEquip" aria-selected="false">Geräte</a>
@@ -101,30 +101,29 @@
                             @csrf
                             <div class="row">
                                 <div class="col">
-                                    <x-selectfield id="building_id" label="Raum befindet sich im Gebäude">
+                                    <x-selectfield id="building_id" label="{{__('Raum befindet sich im Gebäude')}}">
                                         @foreach (App\Building::all() as $bul)
                                             <option value="{{ $bul->id }}" {{ ($bul->id === $room->building_id) ? ' selected ' : '' }}>{{ $bul->b_name_kurz }}</option>
                                         @endforeach
                                     </x-selectfield>
-
                                     <div class="form-group">
-                                        <label for="room_type_id"> </label>
+                                        <label for="room_type_id"></label>
                                         <div class="input-group">
                                             <select name="room_type_id" id="room_type_id" class="custom-select">
                                                 @foreach (App\RoomType::all() as $bty)
                                                     <option value="{{ $bty->id }}" {{ ($bty->id === $room->room_type_id ) ? ' selected ' : '' }}>{{ $bty->rt_name_kurz }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modalAddStellPlatzType"><i class="fas fa-plus"></i><span class="d-none d-md-inline"> Raumtyp neu anlegen</span></button>
+                                            <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modalAddStellPlatzType"><i class="fas fa-plus"></i><span class="d-none d-md-inline"> {{__('Raumtyp neu anlegen')}}</span></button>
 
                                         </div>
                                     </div>
-                                    <x-rtextfield id="r_name_kurz" label="Kurzbezeichnung" value="{{ $room->r_name_kurz }}"/>
-                                    <x-textfield id="r_name_lang" label="Bezeichnung" value="{{ $room->r_name_lang }}"/>
-                                    <x-textarea id="r_name_text" label="Beschreibung" value="{{ $room->r_name_text }}"/>
+                                    <x-rtextfield id="r_name_kurz" label="{{__('Kurzbezeichnung')}}" value="{{ $room->r_name_kurz }}"/>
+                                    <x-textfield id="r_name_lang" label="{{__('Bezeichnung')}}" value="{{ $room->r_name_lang }}"/>
+                                    <x-textarea id="r_name_text" label="{{__('Beschreibung')}}" value="{{ $room->r_name_text }}"/>
                                 </div>
                             </div>
-                            <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> Stammdaten speichern</button>
+                            <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> {{__('Stammdaten speichern')}}</button>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="roomStellPlatze" role="tabpanel" aria-labelledby="roomStellPlatze-tab">
@@ -141,7 +140,7 @@
                                     <input type="hidden" name="frmOrigin" id="frmOriginAddNewStellPlatz" value="room">
                                     <div class="col-auto">
                                         <label class="sr-only" for="sp_name_kurz">Name kurz</label>
-                                        <input type="text" class="form-control" id="sp_name_kurz" name="sp_name_kurz" required placeholder="Stellplatz Name" value="{{ old('sp_name_kurz')??'' }}">
+                                        <input type="text" class="form-control" id="sp_name_kurz" name="sp_name_kurz" required placeholder="Stellplatz Nummer" value="{{ old('sp_name_kurz')??'' }}">
                                         @if ($errors->has('sp_name_kurz'))
                                             <span class="text-danger small">{{ $errors->first('sp_name_kurz') }}</span>
                                         @else
@@ -150,7 +149,7 @@
                                     </div>
                                     <div class="col-auto">
                                         <label class="sr-only" for="sp_name_lang">Beschreibung kurz</label>
-                                        <input type="text" class="form-control" id="sp_name_lang" name="sp_name_lang" placeholder="Stellplatz Nummer" value="{{ old('sp_name_lang')??'' }}">
+                                        <input type="text" class="form-control" id="sp_name_lang" name="sp_name_lang" placeholder="Stellplatz Name" value="{{ old('sp_name_lang')??'' }}">
                                         @if ($errors->has('sp_name_lang'))
                                             <span class="text-danger small">{{ $errors->first('sp_name_lang') }}</span>
                                         @else
@@ -174,11 +173,11 @@
                                     </div>
                                 </form>
                                 @if ($room->stellplatzs()->count()>0)
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" id="tabStellplatzListe">
                                         <thead>
                                         <tr>
-                                            <th>Platz</th>
                                             <th>Nummer</th>
+                                            <th>Platz</th>
                                             <th>Typ</th>
                                             <th></th>
                                         </tr>
@@ -229,7 +228,24 @@
         </script>
     @endif
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
     <script>
+
+
+        $('#tabStellplatzListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            "columnDefs": [
+                { "orderable": false, "targets": 3 }
+            ],
+            "dom":'t'
+        });
+
+
         $('.btnDeleteStellPlatzItem').click(function () {
             const spid = $(this).data('spid');
             $.ajax({
@@ -245,17 +261,4 @@
     </script>
 @endsection
 
-@section('locationActionMenuItems')
-
-    <div class="btn-group dropleft">
-        <button type="button" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            Aktion
-        </button>
-        <ul class="dropdown-menu">
-            <a class="dropdown-item" href="#"><i class="fas fa-print"></i> Drucke Übersicht</a>
-            <a class="dropdown-item" href="#"><i class="far fa-file-pdf"></i> Standortbericht</a>
-        </ul>
-    </div>
-
-@endsection()
 

@@ -14,7 +14,6 @@
             <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
         </h2>
         <div class="row">
-
             @foreach (App\EquipmentState::all() as $equipmentState)
                 @php
                     $equipments = App\Equipment::where('equipment_state_id',$equipmentState->id)->get();
@@ -23,10 +22,14 @@
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
                          style="height: 8em;"
                     >
-                        <div class="d-none d-xl-inline-flex" style="display: flex; flex-direction: column;">
+                        <div class="d-none d-xl-inline-flex"
+                             style="display: flex; flex-direction: column;"
+                        >
                             <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,60) }}</span>
                         </div>
-                        <div class="d-xl-none" style="display: flex; flex-direction: column;">
+                        <div class="d-xl-none"
+                             style="display: flex; flex-direction: column;"
+                        >
                             <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_name_kurz) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name_lang,40) }}</span>
                         </div>
                         @if ($equipmentState->id === 1)
@@ -52,7 +55,12 @@
                 <h2 class="h5">{{__('Anstehende')}}
                     <a href="{{ route('controlevent.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
-
+                @if (\App\ControlProdukt::count()===0)
+                    <div class="m-2 border-warning">
+                        <span class="fas fa-exclamation-circle text-warning"></span>
+                        Es sind bislang keine Prüfgeräte angelegt!
+                    </div>
+                @endif
                 <nav>
                     <div class="nav nav-tabs"
                          id="nav-tab"
@@ -256,19 +264,19 @@
                     <a href="{{ route('equipmentevent.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
                 @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
-                        <x-systemmessage
-                            link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
-                            linkText="{{__('zum Gerät')}}"
-                            date="{{ $equipmentEvent->created_at }}"
-                            subject="{{ $equipmentEvent->equipment->produkt->prod_name_lang }}"
-                        >
-                            <strong>
-                                <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
-                            </strong>
-                            <p>{{ $equipmentEvent->equipment_event_text }}</p>
-                        </x-systemmessage>
+                    <x-systemmessage
+                        link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
+                        linkText="{{__('zum Gerät')}}"
+                        date="{{ $equipmentEvent->created_at }}"
+                        subject="{{ $equipmentEvent->equipment->produkt->prod_name_lang }}"
+                    >
+                        <strong>
+                            <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
+                        </strong>
+                        <p>{{ $equipmentEvent->equipment_event_text }}</p>
+                    </x-systemmessage>
                 @empty
-                   <x-notifyer>Keine ungelesenen Meldungen gefunden!</x-notifyer>
+                    <x-notifyer>Keine ungelesenen Meldungen gefunden!</x-notifyer>
                 @endforelse
             </x-dashborarditem>
         </div>

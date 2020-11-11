@@ -59,7 +59,7 @@ class EquipmentEventChanged extends Notification
     {
 
         return [
-           'userid'=>$notifiable->name,
+           'userid'=>$notifiable->id,
            'message'=>$this->equipmentEventItem->equipment_event_item_text,
            'eventid'=>$this->equipmentEventItem->equipment_event_id,
         ];

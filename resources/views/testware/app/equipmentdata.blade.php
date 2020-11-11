@@ -9,13 +9,12 @@
     <div class="container">
         <div class="row mt-md-5 mt-sm-1">
             <div class="col">
-                <h1 class="h3 d-flex justify-content-between">
-                    Gerät <small>
-                        {{ $edata->produkt->prod_name_lang }}
-                    </small>
-                </h1>
+                <span class="h5">Gerät</span>
+                <h1 class="h3">{{ $edata->produkt->prod_name_lang }}</h1>
+
+                <h2 class="h5 mt-3">{{__('Dokumente')}}</h2>
                 @if (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->count()>0)
-                    <h2 class="h5">{{__('Dokumente')}}</h2>
+
                     @foreach (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->get() as $produktDoc)
                         <div class="card p-2 col-md-4 col-lg-3">
                             <dl class="row">

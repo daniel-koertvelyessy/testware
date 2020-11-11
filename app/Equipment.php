@@ -6,43 +6,50 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Equipment extends Model
-{
+class Equipment extends Model {
     protected $guarded = [];
 
 //    protected $table = 'equipments';
 
     use SoftDeletes;
 
+    static function getControlEquipmentList() {
+        return \DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id',
+            'control_equipment.qe_control_date_due',
+            'produkts.prod_name_kurz')
+            ->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')
+            ->join('control_equipment', 'control_equipment.equipment_id', '=', 'equipment.id')
+            ->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')
+            ->get();
+    }
+
     /**
      * Get the route key for the model.
      *
      * @return string
      */
-    public function getRouteKeyName()
-    {
+    public function getRouteKeyName() {
         return 'eq_inventar_nr';
     }
 
-
-    public function produkt()
-    {
+    public function produkt() {
         return $this->belongsTo(Produkt::class);
     }
 
-    public function EquipmentParam()
-    {
+    public function EquipmentParam() {
         return $this->hasMany(EquipmentParam::class);
     }
 
-    public function EquipmentState()
-    {
+    public function EquipmentState() {
         return $this->belongsTo(EquipmentState::class);
     }
 
-    public function EquipmentHistory()
-    {
+    public function EquipmentHistory() {
         return $this->hasMany(EquipmentHistory::class);
+    }
+
+    public function showStatus(){
+        return '<span class="'. $this->EquipmentState->estat_icon .' text-'.$this->EquipmentState->estat_color.'"></span>';
     }
 
     public function standort() {
@@ -56,18 +63,12 @@ class Equipment extends Model
     public function ControlEquipment() {
         return $this->hasMany(ControlEquipment::class);
     }
+
     public function EquipmentUid() {
         return $this->hasOne(EquipmentUid::class);
     }
 
-    static function getControlEquipmentList()
-    {
-        return \DB::table('equipment')->select('equipment.eq_inventar_nr','equipment.id',
-            'control_equipment.qe_control_date_due',
-            'produkts.prod_name_kurz')
-            ->join('control_produkts','equipment.produkt_id','=','control_produkts.produkt_id')
-            ->join('control_equipment','control_equipment.equipment_id','=','equipment.id')
-            ->join('produkts','equipment.produkt_id','=','produkts.id')
-            ->get();
+    public function hasUser() {
+        return $this->hasManyThrough('User', 'EquipmentQualifiedUser');
     }
 }

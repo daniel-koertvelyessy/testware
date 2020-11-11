@@ -231,19 +231,20 @@ class ProduktController extends Controller {
             $proDocFile->save();
         }
 
-        return redirect()->route('equipment.create',['produkt_id'=>$produkt->id]);
+        return redirect()->route('equipment.create', ['produkt_id' => $produkt->id]);
 
     }
+
     /**
      * @return array
      */
-    public function validateNewProduktDokument(): array
-    {
+    public function validateNewProduktDokument()
+    : array {
         return request()->validate([
             'proddoc_name_kurz' => 'bail|required|max:150',
             'proddoc_name_lang' => 'max:100',
             'proddoc_name_pfad' => 'max:150',
-            'document_type_id' => 'required',
+            'document_type_id'  => 'required',
             'proddoc_name_text' => ''
         ]);
     }
@@ -270,7 +271,19 @@ class ProduktController extends Controller {
         $st['request'] = $request;
 
         if (isset($request->ckAddNewAddress)) {
-            $addresse = Adresse::create($this->validateAdresse());
+
+            $this->validateAdresse();
+            $addresse = new Adresse();
+            $addresse->ad_name_kurz = $request->ad_name_kurz;
+            $addresse->ad_anschrift_strasse = $request->ad_anschrift_strasse;
+            $addresse->ad_anschrift_plz = $request->ad_anschrift_plz;
+            $addresse->ad_anschrift_ort = $request->ad_anschrift_ort;
+            $addresse->ad_anschrift_hausnummer = $request->ad_anschrift_hausnummer;
+            $addresse->land_id = $request->land_id;
+            $addresse->address_type_id = $request->address_type_id;
+            $addresse->ad_name_firma = $request->fa_name_lang;
+            $addresse->save();
+
             $address_id = $addresse->id;
             $st['add'][] = 'Neue Adresse anlegen';
 //            $address_id = 12;
@@ -281,7 +294,7 @@ class ProduktController extends Controller {
 //            $firma_id = 59;
             if ($address_id !== false) {
                 $st['firma'][] = '$address_id -> ' . $address_id;
-                $valdateFirma = $this->validateFirma();
+                $this->validateFirma();
                 $fa = new Firma();
                 $fa->fa_name_kurz = $request->fa_name_kurz;
                 $fa->fa_name_lang = $request->fa_name_lang;
@@ -346,6 +359,7 @@ class ProduktController extends Controller {
             'ad_anschrift_ort'        => 'bail|required|max:100',
             'ad_anschrift_hausnummer' => 'max:100',
             'land_id'                 => 'max:100',
+            'address_type_id'         => '',
         ]);
     }
 

@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped" id="tabAnforderungItemListe">
                 <thead>
                 <tr>
                     <th>{{__('Bezeichnung')}}</th>
@@ -64,5 +64,35 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('scripts')
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
+
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
+    ></script>
+
+    <script>
+        const dom = ($('tr').length > 15) ? 't<"bottom"flp><"clear">' : 't';
+        $('#tabAnforderungItemListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            "columnDefs": [
+                {"orderable": false, "targets": 5}
+            ],
+            "dom": dom
+        });
+    </script>
 
 @endsection

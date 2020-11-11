@@ -190,25 +190,240 @@
         </div>
     </div>
 
-    <div class="modal fade" id="controlEventModal" tabindex="-1" aria-labelledby="controlEventModalLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="controlEventModal"
+         tabindex="-1"
+         aria-labelledby="controlEventModalLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="controlEventModalLabel">{{__('Prüfung')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title"
+                        id="controlEventModalLabel"
+                    >{{__('Prüfung')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="controlEventModalBody">
+                <div class="modal-body"
+                     id="controlEventModalBody"
+                >
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Schließen') }}</button>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                    >{{ __('Schließen') }}</button>
                     {{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade"
+         id="addQualifiedUser"
+         tabindex="-1"
+         aria-labelledby="addQualifiedUserLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="addQualifiedUserLabel"
+                    >{{__('Befähigte Person hinzufügen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('EquipmentQualifiedUser.store') }}"
+                      method="post"
+                >
+                    <div class="modal-body">
+
+                        @csrf
+                        <input type="hidden"
+                               name="equipment_id"
+                               id="equipment_id_qualified_user"
+                               value="{{ $equipment->id }}"
+                        >
+                        <div class="row">
+                            <div class="col-md-4">
+                                <x-datepicker id="equipment_qualified_date"
+                                              label="{{ __('Befähigung erhalten am') }}"
+                                              value="{{ date('Y-m-d') }}"
+                                />
+                            </div>
+                            <div class="col-md-8">
+                                <x-selectfield id="equipment_qualified_firma"
+                                               label="{{__('durch Firma / Institution')}}"
+                                >
+                                    @forelse($equipment->produkt->firma as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                    @empty
+                                        @foreach(App\Firma::all() as $company)
+                                            <option value="{{ $company->id }}">{{ $company->fa_name_lang }}</option>
+                                        @endforeach
+                                    @endforelse
+                                </x-selectfield>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <x-selectfield id="user_id"
+                                               label="{{__('Mitarbeiter')}}"
+                                >
+                                    @foreach(App\User::all() as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            {{__('Befähigte Person anlegen')}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade"
+         id="addInstructedUser"
+         tabindex="-1"
+         aria-labelledby="addInstructedUserLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="addInstructedUserLabel"
+                    >{{__('Unterwiesene Person hinzufügen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('EquipmentInstruction.store') }}"
+                          method="post"
+                    >
+                        @csrf
+                        <input type="hidden"
+                               name="equipment_id"
+                               id="equipment_id_instructions_modal"
+                               value="{{ $equipment->id }}"
+                        >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-datepicker id="equipment_instruction_date"
+                                              label="{{__('Unterweisung erfolgte am')}}"
+                                              value="{{ date('Y-m-d') }}"
+                                              required
+                                />
+                                <x-selectfield id="equipment_instruction_trainee_id"
+                                               label="{{__('Unterwiesene Person')}}"
+                                >
+                                    @foreach(App\User::all() as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label>Unterschrift Unterwiesener</label>
+                                    <div>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnClearCanvas"
+                                                data-targetpad="trainee"
+                                        >{{__('Neu')}}</button>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnSignZuruck"
+                                                data-targetpad="trainee"
+                                        >{{__('Zurück')}}</button>
+                                    </div>
+                                </div>
+                                <input type="hidden"
+                                       name="equipment_instruction_trainee_signature"
+                                       id="equipment_instruction_trainee_signature"
+                                >
+                                <div class="wrapper">
+                                    <canvas id="signatureField_equipment_instruction_trainee_signature"
+                                            class="signature-pad"
+                                    ></canvas>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <x-selectfield id="equipment_instruction_instructor_profile_id"
+                                               label="{{__('Interne Unterweisung durch')}}"
+                                               required
+                                >
+                                    <option value="0">Externe Unterweisung</option>
+                                    @foreach(App\User::all() as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                                <x-selectfield id="equipment_instruction_instructor_firma_id"
+                                               label="{{__('Externe Unterweisung durch')}}"
+                                >
+                                    <option value="0">Interne Unterweisung</option>
+                                    @foreach($equipment->produkt->firma as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                    @endforeach
+                                </x-selectfield>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label>Unterschrift Einweiser</label>
+                                    <div>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnClearCanvas"
+                                                data-targetpad="instructor"
+                                        >{{__('Neu')}}</button>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnSignZuruck"
+                                                data-targetpad="instructor"
+                                        >{{__('Zurück')}}</button>
+                                    </div>
+                                </div>
+                                <input type="hidden"
+                                       name="equipment_instruction_instructor_signature"
+                                       id="equipment_instruction_instructor_signature"
+                                >
+                                <div class="wrapper">
+                                    <canvas id="signatureField_equipment_instruction_instructor_signature"
+                                            class="signature-pad"
+                                    ></canvas>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">{{ __('Unterweisung speichern') }}</button>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -303,34 +518,34 @@
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{__('Bezeichnung')}}:"
-                                               value="{{ $equipment->produkt->prod_name_lang }}"
+                                               value="{!! $equipment->produkt->prod_name_lang !!}"
                                 />
                                 <x-staticfield id="Standort"
                                                label="{{__('Standort')}}:"
-                                               value="{{ App\Standort::find($equipment->standort_id)->std_kurzel }}"
+                                               value="{!!  App\Standort::find($equipment->standort_id)->std_kurzel !!}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
                                                label="{{__('Inventarnummer')}}:"
-                                               value="{{ $equipment->eq_inventar_nr }}"
+                                               value="{!!  $equipment->eq_inventar_nr !!}"
                                 />
                                 <x-staticfield id="eq_ibm"
                                                label="{{__('Inbetriebnahme am')}}:"
-                                               value="{{ $equipment->eq_ibm }}"
+                                               value="{!!  $equipment->eq_ibm !!}"
                                 />
                                 <x-staticfield id="eq_serien_nr"
                                                label="{{__('Seriennummer')}}:"
-                                               value="{{ $equipment->eq_serien_nr ?? '-' }}"
+                                               value="{!!  $equipment->eq_serien_nr ?? '-' !!}"
                                 />
                                 <label for="firma">{{__('Hersteller')}}:</label>
                                 <input type="text"
                                        id="firma"
                                        class="form-control-plaintext"
-                                       value="@foreach ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @endforeach"
+                                       value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name_lang !!} @endforeach"
                                 >
                                 <button
-                                    class="btn btn-primary btn-lg mt-3"
-                                    data-toggle="modal"
-                                    data-target="#modalStartControl"
+                                        class="btn btn-primary btn-lg mt-3"
+                                        data-toggle="modal"
+                                        data-target="#modalStartControl"
                                 >{{__('Prüfung/Wartung erfassen')}}</button>
 
                             </div>
@@ -352,9 +567,7 @@
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br>
-                                            <span class="lead">{{ $bda->proddoc_name_lang }}</span><br>
-                                            <span class="text-muted small">
+                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br> <span class="lead">{{ str_limit($bda->proddoc_name_lang,30) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -371,8 +584,8 @@
                                                 >
                                             </form>
                                             <button
-                                                class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
+                                                    class="btn btn-lg btn-outline-primary"
+                                                    onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
                                             >
                                                 <span class="fas fa-download"></span>
                                             </button>
@@ -385,11 +598,9 @@
                                 @endforelse
                                 <h2 class="h4 mt-5">Funtionstest</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
-
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->eqdoc_name_kurz }}</span><br> <span class="lead">{{ $bda->eqdoc_name_lang }}</span><br>
-                                            <span class="text-muted small">
+                                            <span class="text-muted small">{{ $bda->eqdoc_name_kurz }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_name_lang,30) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -406,15 +617,13 @@
                                                 >
                                             </form>
                                             <button
-                                                class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
+                                                    class="btn btn-lg btn-outline-primary"
+                                                    onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
                                             >
                                                 <span class="fas fa-download"></span>
                                             </button>
                                         </div>
-
                                     </div>
-
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</span>
                                 @endforelse
@@ -426,7 +635,7 @@
                                             <span class="small text-muted pl-2">
                                                 {{$bda->deleted_at->diffForHumans()}}
                                             </span> <span class="p-2">
-                                                {{ $bda->Anforderung->an_name_lang }}
+                                                {{ str_limit($bda->Anforderung->an_name_lang,20) }}
                                             </span>
                                             </div>
                                             <div class="pr-2">
@@ -455,57 +664,169 @@
                          role="tabpanel"
                          aria-labelledby="anforderungen-tab"
                     >
-                        @php
-                            $Anforderung = App\Anforderung::all();
-                        @endphp
-                        @forelse (\App\ProduktAnforderung::where('produkt_id',$equipment->produkt->id)->get() as $produktAnforderung)
-                            @if ($produktAnforderung->anforderung_id!=0)
-                                <div class="card p-2 mb-2">
-                                    <dl class="row lead">
-                                        <dt class="col-md-3">{{ __('Verordnung')}}</dt>
-                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
-                                    </dl>
-                                    <dl class="row">
-                                        <dt class="col-md-3">{{__('Anforderung')}}</dt>
-                                        <dd class="col-md-9 d-flex justify-content-between align-items-center">
-                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}
-                                        </dd>
-                                    </dl>
-                                    <dl class="row">
-                                        <dt class="col-md-3">{{ __('Bezeichnung')}}</dt>
-                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
-                                    </dl>
-                                    <dl class="row">
-                                        <dt class="col-md-3">{{ __('Intervall')}}</dt>
-                                        <dd class="col-md-9">
-                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                            {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
-                                        </dd>
-                                    </dl>
-                                    <dl class="row">
-                                        <dt class="col-md-3">{{ __('Beschreibung')}}</dt>
-                                        <dd class="col-md-9">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
-                                    </dl>
-                                    <dl class="row">
-                                        <dt class="col-md-3">
-                                            {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? __('Vorgänge') : __('Vorgang') }}
-                                        </dt>
-                                        <dd class="col-md-9">
-                                            <ul class="list-group">
-                                                @foreach (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        {{ $aci->aci_name_lang }}
-
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </dd>
-                                    </dl>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="h5">Befähigte Personen</h3>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#addQualifiedUser"
+                                    >
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus"></i>
+                                    </button>
                                 </div>
-                            @endif
-                        @empty
-                            <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
-                        @endforelse
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Qualifiziert am</th>
+                                        <th>durch</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse (\App\EquipmentQualifiedUser::all() as $equipmentUser)
+                                        <tr>
+                                            <td>{{ $equipmentUser->user->name }}</td>
+                                            <td>{{ $equipmentUser->equipment_qualified_date }}</td>
+                                            <td>{{ $equipmentUser->firma->fa_name_lang }}</td>
+                                            <td style="padding: 0;">
+                                                <form action="{{ route('EquipmentInstruction.destroy',$equipmentUser) }}"
+                                                      method="post"
+                                                >
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <span class="far fa-trash-alt"></span> <span class="d-none d-lg-inline">Löschen</span>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3">
+                                                <p class="m-2">
+                                                    <x-notifyer>Keine befähigte Personen gefunden</x-notifyer>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="h5">{{__('Unterwiesene Personen')}}</h3>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#addInstructedUser"
+                                    >
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus"></i>
+                                    </button>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Unterwiesen am</th>
+                                        <th>gez.</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse (\App\EquipmentInstruction::all() as $instructedUser)
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $instructedUser->user->name }}</td>
+                                            <td style="vertical-align: middle;">{{ $instructedUser->equipment_instruction_date }}</td>
+                                            <td>
+                                                <img src="{{ $instructedUser->equipment_instruction_trainee_signature }}"
+                                                     class="img-fluid"
+                                                     style="max-height: 40px"
+                                                     alt="unterschrift"
+                                                >
+                                            </td>
+                                            <td style="vertical-align: middle; text-align:right; padding:0">
+                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}"
+                                                      method="post"
+                                                >
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <span class="far fa-trash-alt"></span> <span class="d-none d-lg-inline">Löschen</span>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">
+                                                <x-notifyer>Keine unterwiesene Personen gefunden</x-notifyer>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                @php
+                                    $Anforderung = App\Anforderung::all();
+                                @endphp
+                                @forelse (\App\ProduktAnforderung::where('produkt_id',$equipment->produkt->id)->get() as $produktAnforderung)
+                                    @if ($produktAnforderung->anforderung_id!=0)
+                                        <div class="card p-2 mb-2">
+                                            <dl class="row lead">
+                                                <dt class="col-md-5 col-lg-4">{{ __('Verordnung')}}</dt>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-md-5 col-lg-4">{{__('Anforderung')}}</dt>
+                                                <dd class="col-md-7 col-lg-8 ">
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}
+                                                </dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-md-5 col-lg-4">{{ __('Bezeichnung')}}</dt>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-md-5 col-lg-4">{{ __('Intervall')}}</dt>
+                                                <dd class="col-md-7 col-lg-8">
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                </dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-md-5 col-lg-4">{{ __('Beschreibung')}}</dt>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text ?? '-' }}</dd>
+                                            </dl>
+                                            <dl class="row">
+                                                <dt class="col-md-5 col-lg-4">
+                                                    {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? __('Vorgänge') : __('Vorgang') }}
+                                                </dt>
+                                                <dd class="col-md-7 col-lg-8">
+                                                    <ul class="list-group">
+                                                        @forelse (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
+                                                            <li class="list-group-item">
+                                                                {{ $aci->aci_name_lang }}
+
+                                                            </li>
+                                                        @empty
+                                                            <li class="list-group-item">
+                                                                <x-notifyer>Keine Daten gefunden!</x-notifyer>
+                                                            </li>
+                                                        @endforelse
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    @endif
+                                @empty
+                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
+                                @endforelse
+                            </div>
+                        </div>
+
 
                     </div>
                     <div class="tab-pane fade p-2"
@@ -515,17 +836,47 @@
                     >
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <a class="nav-link active" id="equipDocuEquipment-tab" data-toggle="pill" href="#equipDocuEquipment" role="tab" aria-controls="equipDocuEquipment" aria-selected="true">{{__('Gerät')}}</a>
-                                    <a class="nav-link" id="equipDocuInstruction-tab" data-toggle="pill" href="#equipDocuInstruction" role="tab" aria-controls="equipDocuInstruction" aria-selected="false">{{ __('Unterweisungen') }}</a>
-                                    <a class="nav-link" id="equipDocuFuntion-tab" data-toggle="pill" href="#equipDocuFuntion" role="tab" aria-controls="equipDocuFuntion" aria-selected="false">{{ __('Funktionsprüfung') }}</a>
-                                    <a class="nav-link" id="equipDocuProduct-tab" data-toggle="pill" href="#equipDocuProduct" role="tab" aria-controls="equipDocuProduct" aria-selected="false">{{__('Produkt')}}</a>
+                                <div class="nav flex-column nav-pills"
+                                     id="v-pills-tab"
+                                     role="tablist"
+                                     aria-orientation="vertical"
+                                >
+                                    <a class="nav-link active"
+                                       id="equipDocuEquipment-tab"
+                                       data-toggle="pill"
+                                       href="#equipDocuEquipment"
+                                       role="tab"
+                                       aria-controls="equipDocuEquipment"
+                                       aria-selected="true"
+                                    >{{__('Gerät')}}</a>
+                                    <a class="nav-link"
+                                       id="equipDocuFuntion-tab"
+                                       data-toggle="pill"
+                                       href="#equipDocuFuntion"
+                                       role="tab"
+                                       aria-controls="equipDocuFuntion"
+                                       aria-selected="false"
+                                    >{{ __('Funktionsprüfung') }}</a>
+                                    <a class="nav-link"
+                                       id="equipDocuProduct-tab"
+                                       data-toggle="pill"
+                                       href="#equipDocuProduct"
+                                       role="tab"
+                                       aria-controls="equipDocuProduct"
+                                       aria-selected="false"
+                                    >{{__('Produkt')}}</a>
 
                                 </div>
                             </div>
                             <div class="col-md-9">
-                                <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="equipDocuEquipment" role="tabpanel" aria-labelledby="equipDocuEquipment-tab">
+                                <div class="tab-content"
+                                     id="v-pills-tabContent"
+                                >
+                                    <div class="tab-pane fade show active"
+                                         id="equipDocuEquipment"
+                                         role="tabpanel"
+                                         aria-labelledby="equipDocuEquipment-tab"
+                                    >
                                         @if (\App\EquipmentDoc::where('equipment_id',$equipment->id)->count()>0)
                                             <table class="table table-striped table-sm">
                                                 <thead>
@@ -538,7 +889,9 @@
                                                 <tbody>
                                                 @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
                                                     <tr>
-                                                        <td>{{ $equipDoc->eqdoc_name_lang }}</td>
+                                                        <td>
+                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name_lang }}</span>
+                                                        </td>
                                                         <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
                                                         <td style="text-align: right;">
                                                             {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
@@ -556,8 +909,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
+                                                                    class="btn btn-sm btn-outline-secondary"
+                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -577,11 +930,12 @@
                                             <x-notifyer>{{__('Keine Dateien zum Gerät gefunden')}}!</x-notifyer>
                                         @endif
                                     </div>
-                                    <div class="tab-pane fade" id="equipDocuInstruction" role="tabpanel" aria-labelledby="equipDocuInstruction-tab">
-
-                                    </div>
-                                    <div class="tab-pane fade" id="equipDocuFuntion" role="tabpanel" aria-labelledby="equipDocuFuntion-tab">
-                                        @if (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',1)->count()>0)
+                                    <div class="tab-pane fade"
+                                         id="equipDocuFuntion"
+                                         role="tabpanel"
+                                         aria-labelledby="equipDocuFuntion-tab"
+                                    >
+                                        @if (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->count()>0)
                                             <table class="table table-striped table-sm">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
@@ -593,8 +947,10 @@
                                                 <tbody>
                                                 @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
                                                     <tr>
-                                                        <td>{{ $equipFunctionDoc->eqdoc_name_lang }}</td>
-                                                        <td class="d-none d-md-table-cell">{{ $equipFunctionDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                        <td>
+                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name_lang }}</span>
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_name_kurz }}</td>
                                                         <td style="text-align: right;">
                                                             {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                         </td>
@@ -611,8 +967,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
+                                                                    class="btn btn-sm btn-outline-secondary"
+                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -632,23 +988,34 @@
                                             <x-notifyer>{{__('Keine Dateien zum Gerät gefunden')}}!</x-notifyer>
                                         @endif
                                     </div>
-                                    <div class="tab-pane fade" id="equipDocuProduct" role="tabpanel" aria-labelledby="equipDocuProduct-tab">
+                                    <div class="tab-pane fade"
+                                         id="equipDocuProduct"
+                                         role="tabpanel"
+                                         aria-labelledby="equipDocuProduct-tab"
+                                    >
                                         @if (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->count()>0)
                                             <table class="table table-striped table-sm">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
-                                                <th>{{ __('Typ')}}</th>
+                                                <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
                                                 <th style="text-align: right;">{{ __('Größe')}} kB</th>
                                                 <th></th>
                                                 </thead>
                                                 <tbody>
                                                 @foreach (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->get() as $produktDoc)
                                                     <tr>
-                                                        <td>{{ $produktDoc->proddoc_name_lang }}</td>
-                                                        <td>{{ $produktDoc->DocumentType->doctyp_name_kurz }}</td>
-                                                        <td style="text-align: right;">{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
                                                         <td>
-                                                            <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
+                                                            <span class="d-md-none">{{ str_limit($produktDoc->proddoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_name_lang }}</span>
+
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell">
+                                                            {{ $produktDoc->DocumentType->doctyp_name_kurz }}
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
+                                                        </td>
+                                                        <td>
+                                                            <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
                                                                   method="get"
                                                                   id="downloadProdDoku_{{ $produktDoc->id }}"
                                                             >
@@ -660,8 +1027,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                                    class="btn btn-sm btn-outline-secondary"
+                                                                    onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -674,7 +1041,6 @@
                                             <x-notifyer>{{__('Keine Dateien zum Produkt gefunden')}}!</x-notifyer>
                                         @endif
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -728,7 +1094,7 @@
                                             <td style="text-align: right; "
                                                 @if ($controlItem->AnforderungControlItem[0]->aci_vaule_soll)
                                                 class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
-                                                @endif
+                                                    @endif
 
                                             >
                                                 {{ $controlItem->control_item_read }}
@@ -759,29 +1125,34 @@
                                         {{ $equipmentEvent->deleted_at->DiffForhumans() }}
                                     @else
                                         -
-                                        @endif
+                                    @endif
                                     <br>
                                     @if ($equipmentEvent->deleted_at)
-                                        <form action="{{ route('equipmentevent.restore') }}" method="post">
+                                        <form action="{{ route('equipmentevent.restore') }}"
+                                              method="post"
+                                        >
                                             @csrf
                                             <input type="hidden"
                                                    name="id"
                                                    id="id_equipment_event_{{ $equipmentEvent->id }}"
                                                    value="{{ $equipmentEvent->id }}"
                                             >
-<button class="btn btn-sm btn-outline-primary mt-2">wiederherstellen</button>
+                                            <button class="btn btn-sm btn-outline-primary mt-2">wiederherstellen</button>
                                         </form>
                                     @else
-                                        <a href="{{ route('equipmentevent.show',$equipmentEvent) }}" class="btn btn-sm btn-outline-primary mt-2">öffnen</a>
+                                        <a href="{{ route('equipmentevent.show',$equipmentEvent) }}"
+                                           class="btn btn-sm btn-outline-primary mt-2"
+                                        >öffnen
+                                        </a>
                                     @endif
 
                                 </dt>
                                 <dd class="col-sm-8">
                                     <span class="lead">{{ __('Meldung:') }}</span><br>{{ $equipmentEvent->equipment_event_text??'keine Information übermittelt' }}</dd>
                             </dl>
-                        @if (!$loop->last)
+                            @if (!$loop->last)
                                 <div class="dropdown-divider my-2"></div>
-                        @endif
+                            @endif
 
                         @empty
                             <x-notifyer>{{__('Keine Meldungen zum Gerät gefunden!')}}</x-notifyer>
@@ -795,6 +1166,7 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/signatures.js') }}"></script>
     @error('eqdoc_name_kurz')
     <script>
         $('#modalAddEquipDoc').modal('show');
@@ -815,6 +1187,75 @@
 
                 }
             });
+        });
+
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+            // This part causes the canvas to be cleared
+            trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
+            trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
+            trainee_pad_id.getContext("2d").scale(ratio, ratio);
+
+            // This part causes the canvas to be cleared
+            instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
+            instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
+            instructor_pad_id.getContext("2d").scale(ratio, ratio);
+
+            // This library does not listen for canvas changes, so after the canvas is automatically
+            // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+            // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+            // that the state of this library is consistent with visual state of the canvas, you
+            // have to clear it manually.
+            signaturePadTrainee.clear();
+            signaturePadInstructor.clear();
+        }
+
+        let trainee_pad_id = document.getElementById('signatureField_equipment_instruction_trainee_signature'),
+            signaturePadTrainee = new SignaturePad(trainee_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#equipment_instruction_trainee_signature').val(this.toDataURL());
+                }
+            }),
+            instructor_pad_id = document.getElementById('signatureField_equipment_instruction_instructor_signature'),
+            signaturePadInstructor = new SignaturePad(instructor_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#equipment_instruction_instructor_signature').val(this.toDataURL());
+                }
+            })
+        ;
+
+        $('#addInstructedUser').on('shown.bs.modal', function () {
+            resizeCanvas();
+        });
+
+        // On mobile devices it might make more sense to listen to orientation change,
+        // rather than window resize events.
+        window.onresize = resizeCanvas;
+
+
+        $('.btnClearCanvas').click(function () {
+            ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
+        });
+        $('.btnSignZuruck').click(function () {
+            let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
+            if (data) {
+                data.pop(); // remove the last dot or line\n'+
+                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
+            }
         });
     </script>
 @endsection

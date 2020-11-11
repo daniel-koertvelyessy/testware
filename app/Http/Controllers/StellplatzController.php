@@ -38,27 +38,11 @@ class StellplatzController extends Controller {
      * @return RedirectResponse
      */
     public function store(Request $request) {
+//        dump($request);
 //        dd($request->room_id);
         $sp = Stellplatz::create($this->validateNeuStellPlatz());
         (new \App\Standort)->add($request->standort_id, $request->sp_name_kurz, 'stellplatzs');
         $request->session()->flash('status', 'Der Stellplatzt <strong>' . request('sp_name_kurz') . '</strong> wurde angelegt!');
-        return redirect()->back();
-    }
-
-    /**
-     * @param  Request    $reuest
-     * @return RedirectResponse
-     */
-    public function copyStellplatz(Request $reuest) {
-        $stellplatz = Stellplatz::find($reuest->id);
-        $name = strtr('Kopie_'.$stellplatz->sp_name_kurz,0,19);
-        $newStellplatz = $stellplatz->replicate()->fill([
-            'sp_name_kurz' => $name
-        ]);
-
-        $newStellplatz->save();
-
-        session()->flash('status', 'Der Stellplatzt <strong>' . $stellplatz->sp_name_kurz. '</strong> wurde kopiert!');
         return redirect()->back();
     }
 
@@ -71,9 +55,27 @@ class StellplatzController extends Controller {
             'sp_name_kurz'      => 'bail|unique:stellplatzs,sp_name_kurz|required|min:1|max:20',
             'sp_name_lang'      => 'max:100',
             'sp_name_text'      => '',
+            'standort_id'       => 'required',
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);
+    }
+
+    /**
+     * @param  Request $reuest
+     * @return RedirectResponse
+     */
+    public function copyStellplatz(Request $reuest) {
+        $stellplatz = Stellplatz::find($reuest->id);
+        $name = strtr('Kopie_' . $stellplatz->sp_name_kurz, 0, 19);
+        $newStellplatz = $stellplatz->replicate()->fill([
+            'sp_name_kurz' => $name
+        ]);
+
+        $newStellplatz->save();
+
+        session()->flash('status', 'Der Stellplatzt <strong>' . $stellplatz->sp_name_kurz . '</strong> wurde kopiert!');
+        return redirect()->back();
     }
 
     /**

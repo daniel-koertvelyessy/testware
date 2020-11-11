@@ -15,18 +15,18 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Anforderungen</h1>
+                <h1 class="h3">{{__('Anforderungen')}}</h1>
             </div>
         </div>
         <div class="row">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped"  id="tabAnforderungListe">
                 <thead>
                 <tr>
-                    <th>Bezeichnung</th>
-                    <th class="d-none d-md-table-cell">Kennung</th>
-                    <th class="d-none d-md-table-cell">Bearbeitet</th>
-                    <th class="d-none d-md-table-cell">Intervall</th>
-                    <th class="text-center d-none d-md-table-cell">Vorgänge</th>
+                    <th>{{__('Bezeichnung')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
+                    <th class="d-none d-md-table-cell">{{__('Intervall')}}</th>
+                    <th class="text-center d-none d-md-table-cell">{{__('Vorgänge')}}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -97,5 +97,35 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('scripts')
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
+
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
+    ></script>
+
+    <script>
+        const dom = ($('tr').length > 15) ? 't<"bottom"flp><"clear">' : 't';
+        $('#tabAnforderungListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            "columnDefs": [
+                {"orderable": false, "targets": 5}
+            ],
+            "dom": dom
+        });
+    </script>
 
 @endsection

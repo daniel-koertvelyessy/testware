@@ -503,7 +503,7 @@
                                     >
                                     <div class="col-auto">
                                         <label class="sr-only"
-                                               for=""
+                                               for="b_name_kurz"
                                         ></label>
                                         <input type="text"
                                                class="form-control"

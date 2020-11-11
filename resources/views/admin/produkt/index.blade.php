@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Produktübersicht @ bitpack GmbH
+    Produktübersicht
 @endsection
 
 @section('mainSection')
@@ -36,7 +36,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <table class="table table-striped">
+            <table class="table table-striped" id="tabProduktListe">
                 <thead>
                 <tr>
                     <th>{{__('Bezeichung')}}</th>
@@ -77,7 +77,29 @@
 @endsection
 
 @section('scripts')
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
 
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
+
+    <script>
+
+
+        $('#tabProduktListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            // "columnDefs": [
+            //     {"orderable": false, "targets": 2}
+            // ],
+            "dom": 't'
+        });
+    </script>
 @endsection
 
 

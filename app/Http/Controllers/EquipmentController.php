@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -306,6 +307,24 @@ class EquipmentController extends Controller
 
         return view('testware.equipment.index');
 
+    }
+
+    public function getEquipmentAjaxListe(Request $request) {
+        return DB::table('equipment')->select(
+            'eq_inventar_nr',
+            'equipment.id',
+            'equipment.eq_serien_nr',
+            'prod_name_lang'
+        )
+            ->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')
+            ->where('eq_serien_nr','like', '%'.$request->term . '%')
+            ->orWhere('eq_inventar_nr','like', '%'.$request->term . '%')
+            ->orWhere('eq_uid','like', '%'.$request->term . '%')
+            ->orWhere('prod_nummer','like', '%'.$request->term . '%')
+            ->orWhere('prod_name_lang','like', '%'.$request->term . '%')
+            ->orWhere('prod_name_kurz','like', '%'.$request->term . '%')
+            ->orWhere('prod_name_text','like', '%'.$request->term . '%')
+            ->get();
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Neu anlegen')}} &triangleright; {{__('Produkt')}} @ bitpack GmbH
+{{__('Neu anlegen')}} &triangleright; {{__('Produkt')}}
 @endsection
 
 @section('mainSection')
@@ -69,7 +69,7 @@
             <div class="col">
                 <form action="{{ route('produkt.store') }}" method="post" class="needs-validation">
                     @csrf
-                    <x-form_AddProdukt :pk="$pk" mkpk />
+                    <x-frm_AddProdukt :pk="$pk" mkpk />
                     <button class="btn btn-primary btn-block">{{__('Produkt anlegen')}}</button>
 {{--
 <button @if (!config('app.makeobjekte') ) disabled @endif  class="btn btn-primary btn-block">Produkt anlegen</button>

@@ -313,7 +313,7 @@
                                     <x-textarea id="equipment_event_item_text_update_{{ $equipmenteventitem->id }}"
                                                 name="equipment_event_item_text"
                                                 label="{{__('Meldungstext')}}"
-                                                value="{{ $equipmenteventitem->equipment_event_item_text }}"
+                                                value="{!! ($equipmenteventitem->equipment_event_item_text) !!}"
                                     />
                                     <input type="hidden"
                                            name="equipment_event_id"

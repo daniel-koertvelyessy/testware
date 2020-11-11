@@ -17,7 +17,7 @@
                 <h1 class="h3">
                     {{ __('Meldungen & Ereignisse') }}
                 </h1>
-                <table class="table">
+                <table class="table" id="tableEventListe">
                     <thead>
                     <tr>
                         <th>Vom</th>
@@ -55,6 +55,31 @@
 @endsection
 
 @section('scripts')
+
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
+
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
+
+    <script>
+
+
+        $('#tableEventListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            // "columnDefs": [
+            //     {"orderable": false, "targets": 2}
+            // ],
+            "dom": 't'
+        });
+    </script>
+
     <script>
         document.addEventListener("keydown", function (zEvent) {
 

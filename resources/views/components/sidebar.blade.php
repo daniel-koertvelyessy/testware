@@ -10,7 +10,29 @@
        id="sideNav"
        style="display: flex; flex-direction: column;"
 >
-    <p class="h3  text-white">{{__('Module')}}</p>
+    <p class="h3" style="color:#c7d301;">{{__('testWare')}}</p>
+
+    <a href="{{ route('testware.index') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
+        <span>Dashboard</span>
+        <span class="fas fa-desktop"></span>
+    </a>
+
+    <a href="{{ route('equipMain') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
+        <span>Geräte</span>
+        <span class="fas fa-boxes"></span>
+    </a>
+
+    <a href="{{ route('controlevent.index') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
+        <span>Prüfungen</span>
+        <span class="fas fa-stethoscope"></span>
+    </a>
+
+    <a href="{{ route('equipmentevent.index') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
+        <span>Ereignisse</span>
+        <span class="fas fa-inbox"></span>
+    </a>
+    <div class="dropdown-divider"></div>
+
     <a href="#sideNavProdukt"
        class="lead text-white "
        data-toggle="collapse"
@@ -73,10 +95,10 @@
        class="lead text-white "
        data-toggle="collapse"
        role="button"
-       aria-expanded="true"
+       aria-expanded="false"
        aria-controls="sideNavOrganisation"
     >{{__('Organisation')}}</a>
-    <div class="collapse show"
+    <div class="collapse"
          id="sideNavOrganisation"
     >
         <ul class="nav flex-column">
@@ -108,10 +130,10 @@
        class="lead text-white "
        data-toggle="collapse"
        role="button"
-       aria-expanded="true"
+       aria-expanded="false"
        aria-controls="sideNavLocations"
     >{{__('Standorte')}}</a>
-    <div class="collapse show"
+    <div class="collapse"
          id="sideNavLocations"
     >
         <ul class="nav flex-column">
@@ -137,10 +159,10 @@
        class="lead text-white "
        data-toggle="collapse"
        role="button"
-       aria-expanded="true"
+       aria-expanded="false"
        aria-controls="sideNavSystem"
     >{{__('System')}}</a>
-    <div class="collapse show"
+    <div class="collapse"
          id="sideNavSystem"
     >
         <ul class="nav flex-column">

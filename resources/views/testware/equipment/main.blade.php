@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Start')}} &triangleright; {{__('Geräte')}} @ bitpack.io GmbH
+{{__('Start')}} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('mainSection')
@@ -25,7 +25,6 @@
             <div class="col-md-2">
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
-
                         <a href="{{ route('equipment.maker') }}"
                            class="tile-small rounded m-lg-3"
                            data-role="tile"
@@ -36,14 +35,14 @@
                 </section>
             </div>
             <div class="col-md-10">
-                <table class="table">
+                <table class="table" id="tabEquipmentListe">
                     <thead>
                     <tr>
-                        <th>Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Inventar-Nr</th>
-                        <th class="d-none d-md-table-cell">Stellplatz</th>
-                        <th class="d-none d-lg-table-cell">Status</th>
-                        <th>Prüfung fällig</th>
+                        <th>{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Inventar-Nr')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Stellplatz')}}</th>
+                        <th class="d-none d-lg-table-cell">{{__('Status')}}</th>
+                        <th>{{__('Prüfung fällig')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -91,8 +90,8 @@
                                     <x-notifyer>Keine Geräte gefunden</x-notifyer>
                                 </p>
                                 <a href="{{ route('equipment.maker') }}"
-                                   class="btn mt-2 btn-outline-primary"
-                                >{{__('neues Gerät anlegen')}}</a>
+                                   class="btn mt-2 btn-primary"
+                                >{{__('neues Gerät anlegen')}} <span class="fas fa-angle-right ml-3"></span></a>
                             </td>
                         </tr>
                     @endforelse
@@ -107,4 +106,34 @@
         </div>
     </div>
 
+@endsection
+
+
+@section('scripts')
+    @if($equipmentList->count()>0)
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
+
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
+
+    <script>
+
+
+        $('#tabEquipmentListe').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+            },
+            // "columnDefs": [
+            //     {"orderable": false, "targets": 2}
+            // ],
+            "dom": 't'
+        });
+    </script>
+
+    @endif
 @endsection

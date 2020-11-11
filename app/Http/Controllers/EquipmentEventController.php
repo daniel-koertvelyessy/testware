@@ -38,10 +38,10 @@ class EquipmentEventController extends Controller {
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function create() {
-        //
+        return view('testware.events.create');
     }
 
     /**
@@ -51,7 +51,8 @@ class EquipmentEventController extends Controller {
      * @return RedirectResponse
      */
     public function store(Request $request) {
-        $equipmentevent = EquipmentEvent::find()->update($this->validateNewEquipmentEvent());
+
+        $equipmentevent = EquipmentEvent::create($this->validateNewEquipmentEvent());
         return redirect()->route('equipmentevent.show', $equipmentevent);
     }
 

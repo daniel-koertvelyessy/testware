@@ -12,6 +12,9 @@ class InitialValueSeeder extends Seeder
      */
     public function run()
     {
+
+
+
         DB::table('users')->insert([
             [
                 'name' => 'Daniel Körtvélyessy',
@@ -38,6 +41,8 @@ class InitialValueSeeder extends Seeder
 
         DB::table('profiles')->insert([
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'user_id' => 3,
                 'ma_nummer' => random_int(1000, 2000),
                 'ma_name' => 'Roethig',
@@ -49,6 +54,8 @@ class InitialValueSeeder extends Seeder
                 'ma_mobil' => '',
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'user_id' => 2,
                 'ma_nummer' => random_int(1000, 2000),
                 'ma_name' => 'Schubert',
@@ -60,6 +67,8 @@ class InitialValueSeeder extends Seeder
                 'ma_mobil' => '',
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'user_id' => 1,
                 'ma_nummer' => random_int(1000, 2000),
                 'ma_name' => 'Körtvélyessy',
@@ -190,6 +199,8 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
+        factory(App\Firma::class)->create();
+
         DB::table('room_types')->insert([
             [
                 'rt_name_kurz' => 'Büro',
@@ -254,22 +265,26 @@ class InitialValueSeeder extends Seeder
                 'pk_name_nummer' => '-',
                 'pk_name_lang' => 'Keine Zuordnung'
             ],
-            [
-                'pk_name_kurz' => 'kühlerMed',
-                'pk_name_nummer' => 'mk-',
-                'pk_name_lang' => 'Medizinische Kühlschänke'
-            ],
+//            [
+//                'pk_name_kurz' => 'kühlerMed',
+//                'pk_name_nummer' => 'mk-',
+//                'pk_name_lang' => 'Medizinische Kühlschänke'
+//            ],
 
         ]);
         DB::table('verordnungs')->insert([
             [
-                'vo_name_kurz' => 'VDE 0100-600',
-                'vo_nummer' => 'DIN VDE 0100-600',
+                'created_at' => now(),
+                'updated_at' => now(),
+                'vo_name_kurz' => 'VDE 0701-0702',
+                'vo_nummer' => 'DIN VDE 0701-0702',
                 'vo_stand' => '2016',
                 'vo_name_lang' => 'Erst- / Prüfung von elektrischen Geräten',
                 'vo_name_text' => 'Errichten von Niederspannungsanlagen - Teil 6: Prüfungen (IEC 60364-6:2016); Deutsche Übernahme HD 60364-6:2016 + A11:2017',
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'vo_name_kurz' => 'MPBetreibV',
                 'vo_nummer' => 'MPBetreibV-2018',
                 'vo_stand' => '29.11.2018 I 2034',
@@ -277,6 +292,8 @@ class InitialValueSeeder extends Seeder
                 'vo_name_text' => 'Verordnung über das Errichten, Betreiben und Anwenden von Medizinprodukten',
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'vo_name_kurz' => 'MPSV',
                 'vo_nummer' => 'MPSV_2017',
                 'vo_stand' => '01.1.2017',
@@ -284,6 +301,8 @@ class InitialValueSeeder extends Seeder
                 'vo_name_text' => 'Verordnung über die Erfassung, Bewertung und Abwehr von Risiken bei Medizinprodukten',
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'vo_name_kurz' => 'iso9001',
                 'vo_nummer' => '9001:2015',
                 'vo_stand' => '2015',
@@ -316,6 +335,8 @@ Entwicklungsinitiativen bereitstellt.',
 
         DB::table('anforderungs')->insert([
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'VDE Klasse 1',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 1',
                 'verordnung_id' => 1,
@@ -324,6 +345,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'VDE Klasse 2',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 2',
                 'verordnung_id' => 1,
@@ -332,6 +355,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'VDE Klasse 3',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse 3',
                 'verordnung_id' => 1,
@@ -340,6 +365,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'VDE Leitungen',
                 'an_name_lang' => 'Einstufung VDE Schutzklasse Leitungen',
                 'verordnung_id' => 1,
@@ -348,6 +375,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'MedProdUnkr',
                 'an_name_lang' => 'Unkritischen Medizinprodukt',
                 'verordnung_id' => 2,
@@ -356,6 +385,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'MedProdSK-A',
                 'an_name_lang' => 'Semikritisches Medizinprodukt Typ A',
                 'verordnung_id' => 2,
@@ -364,6 +395,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'MedProdSK-B',
                 'an_name_lang' => 'Semikritisches Medizinprodukt Typ B',
                 'verordnung_id' => 2,
@@ -372,6 +405,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'MedProdKR-A',
                 'an_name_lang' => 'Kritisches Medizinprodukt Typ A',
                 'verordnung_id' => 2,
@@ -380,6 +415,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => 'MedProdKR-B',
                 'an_name_lang' => 'Kritisches Medizinprodukt Typ B',
                 'verordnung_id' => 2,
@@ -388,6 +425,8 @@ Entwicklungsinitiativen bereitstellt.',
                 'control_interval_id' => 8,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'an_name_kurz' => '9001-Cal',
                 'an_name_lang' => 'Kalibrierung Prüfmittel',
                 'verordnung_id' => 4,
@@ -397,31 +436,72 @@ Entwicklungsinitiativen bereitstellt.',
             ],
         ]);
 
-     /*   DB::table('anforderung_control_items')->insert([
+       DB::table('anforderung_control_items')->insert([
+           [
+               'created_at' => now(),
+               'updated_at' => now(),
+               'aci_name_kurz' => 'sicht_gehaeuse',
+               'aci_name_lang' => 'Sichtprüfung Gehäuse',
+               'aci_task' => 'Ist das gehäuse und evtl. mechanische Teile unbeschädugt.',
+               'aci_value_si' => NULL,
+               'aci_vaule_soll' => NULL,
+               'aci_contact_id' => 1,
+               'firma_id' => 1,
+               'anforderung_id' => 1,
+           ],
+           [
+               'created_at' => now(),
+               'updated_at' => now(),
+               'aci_name_kurz' => 'sicht_isolierung',
+               'aci_name_lang' => 'Sichtprüfung Leitungen',
+               'aci_task' => 'Isolierte Leitungen mängelfrei',
+               'aci_value_si' => NULL,
+               'aci_vaule_soll' => NULL,
+               'aci_contact_id' => 1,
+               'firma_id' => 1,
+               'anforderung_id' => 1,
+           ],
+           [
+               'created_at' => now(),
+               'updated_at' => now(),
+               'aci_name_kurz' => 'sicht_typschild',
+               'aci_name_lang' => 'Sichtprüfung Aufschriften',
+               'aci_task' => 'Sind Typenschilder korrekt, Aufschriften vorhanden bzw. vollständig.',
+               'aci_value_si' => NULL,
+               'aci_vaule_soll' => NULL,
+               'aci_contact_id' => 1,
+               'firma_id' => 1,
+               'anforderung_id' => 1,
+           ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'aci_name_kurz' => 'conL',
                 'aci_name_lang' => 'Prüfung auf Durchgängigkeit',
                 'aci_task' => 'Die Prüfung der Durchgängigkeit der Leiter und die Verbindung zu Körpern, falls zutreffend, muss dabei laut Unterabschnitt 6.4.3.2 durch eine Widerstandsmessung erfolgen. Dazu zählen:
                 - Schutzleiter (einschließlich der Schutzpotenzialausgleichsleiter)
                 - Körper
                 - aktive Leiter ringförmiger Endstromkreise.',
-                'aci_value_si' => '',
-                'aci_vaule_soll' => 0,
+                'aci_value_si' => NULL,
+                'aci_vaule_soll' => NULL,
                 'aci_contact_id' => 1,
                 'firma_id' => 1,
                 'anforderung_id' => 1,
             ],
             [
+                'created_at' => now(),
+                'updated_at' => now(),
                 'aci_name_kurz' => 'Riso',
                 'aci_name_lang' => 'Messung des Isolationswiderstand',
                 'aci_task' => 'Isolationswiderstand zwischen a) aktiven Leitern und b) aktiven Leitern und dem mit der Erdungsanlage verbundenen Schutzleiter gemessen werden muss.Prüfung des Isolationswiderstand bei 500V. Dieser darf nicht unter 0,5MOhm betragen.',
                 'aci_value_si' => 'MOhm',
-                'aci_vaule_soll' => 0,
+                'aci_vaule_soll' => 0.23,
                 'aci_contact_id' => 1,
                 'firma_id' => 1,
                 'anforderung_id' => 1,
             ],
-        ]);*/
+        ]);
+
 
 
         DB::table('stellplatz_typs')->insert([
@@ -476,6 +556,6 @@ Entwicklungsinitiativen bereitstellt.',
 
 
 
-        factory(App\Profile::class, 6)->create();
+//        factory(App\Profile::class, 6)->create();
     }
 }

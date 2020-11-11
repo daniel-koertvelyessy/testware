@@ -94,6 +94,8 @@ Route::resources([
     'anforderungcontrolitem' => 'AnforderungControlItemController',
     'equipmentevent'         => 'EquipmentEventController',
     'equipmenteventitem'     => 'EquipmentEventItemController',
+    'EquipmentInstruction'     => 'EquipmentInstructionController',
+    'EquipmentQualifiedUser'     => 'EquipmentQualifiedUserController',
 
 ]);
 
@@ -117,6 +119,7 @@ Route::get('getAddressenAjaxListe', 'AdresseController@getAddressenAjaxListe')->
 Route::get('getAddressDaten', 'AdresseController@getAddressDaten')->name('getAddressDaten');
 Route::get('getControlEventDataSheet', 'ControlEventController@getControlEventDataSheet')->name('getControlEventDataSheet');
 
+Route::get('getEquipmentAjaxListe', 'EquipmentController@getEquipmentAjaxListe')->name('getEquipmentAjaxListe');
 
 /*
 

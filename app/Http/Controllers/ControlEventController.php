@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AnforderungControlItem;
 use App\ControlEvent;
 use App\ControlEquipment;
 use App\ControlEventEquipment;
@@ -41,15 +42,27 @@ class ControlEventController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function create(Request $request) {
+        $aci_execution = 0;
+        $aci_control_equipment_required = 0;
         $controlItem = ControlEquipment::find($request->controlItem);
-        return view('testware.control.create', ['controlItem' => $controlItem]);
+        $acidata = AnforderungControlItem::where('anforderung_id', $controlItem->anforderung_id)->get();
+        foreach ($acidata as $aci) {
+            $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
+            $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
+        }
+
+        return view('testware.control.create', [
+            'controlItem'                    => $controlItem,
+            'aci_execution'                  => $aci_execution,
+            'aci_control_equipment_required' => $aci_control_equipment_required,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return Application|Factory|Response|View
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request) {
 
@@ -107,15 +120,15 @@ class ControlEventController extends Controller {
             $file = $request->file('controlDokumentFile');
 
             $validation = $request->validate([
-                'controlDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_name_kurz' => 'required|unique:equipment_docs,eqdoc_name_kurz'
+                'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
+                'eqdoc_name_kurz'     => 'required|unique:equipment_docs,eqdoc_name_kurz'
             ]);
 
-            $eventHasDoku=true;
+            $eventHasDoku = true;
 //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
             $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
-            $proDocFile->eqdoc_name_pfad= $file->store('equipment_docu/'.\request('equipment_id'));
+            $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = request('equipment_id');
             $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
@@ -131,10 +144,10 @@ class ControlEventController extends Controller {
         $eh->eqh_eintrag_kurz = 'Prüfung am ' . $request->control_event_date . ' ausgeführt ';
 
         $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
-        if(isset($request->evenItem))
+        if (isset($request->evenItem))
             $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
         $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
-        if($eventHasDoku) {
+        if ($eventHasDoku) {
             $text .= ' Das Dokument ' . $filename . ' wurde erfolgreich angefügt.';
         }
 
@@ -143,7 +156,7 @@ class ControlEventController extends Controller {
         $eh->save();
 
 
-        return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
+        return redirect()->route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]);
 
     }
 
@@ -162,7 +175,7 @@ class ControlEventController extends Controller {
             'control_event_supervisor_name'      => '',
             'user_id'                            => '',
             'control_event_text'                 => '',
-//            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
+            //            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
             'control_equipment_id'               => 'required'
         ]);
     }

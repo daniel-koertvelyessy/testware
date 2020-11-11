@@ -27,4 +27,25 @@ class AnforderungControlItem extends Model
         return $this->belongsTo(Firma::class);
     }
 
+    public function isIncomplete(AnforderungControlItem $anforderungControlItem)
+    {
+        $isInComplete = false;
+        $msgPG = '';
+        $msgTo='';
+        if ($anforderungControlItem->aci_control_equipment_required === 1) {
+
+            if (ControlProdukt::all()->count() === 0) {
+                $msgPG = '<li>Kein Prüfgerät vorhanden!</li>';
+                $isInComplete = true;
+            }
+        }
+
+        if ($anforderungControlItem->aci_value_target_mode === 'eq') {
+            if ($anforderungControlItem->aci_value_tol === '' || $anforderungControlItem->aci_value_tol_mod === '')
+                $msgTo = '<li>Toleranzangaben sind unvollständig</li>';
+            $isInComplete = true;
+        }
+        return ($isInComplete) ? $msgPG.$msgTo : false;
+    }
+
 }
