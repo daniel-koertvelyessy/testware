@@ -12,6 +12,13 @@ class AnforderungControlItem extends Model
 
     protected $guarded = [];
 
+    public function search($term) {
+        return AnforderungControlItem::where('aci_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('aci_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('aci_task', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function Anforderung() {
         return $this->belongsTo(Anforderung::class);
 }

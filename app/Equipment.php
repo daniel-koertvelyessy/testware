@@ -23,6 +23,16 @@ class Equipment extends Model {
             ->get();
     }
 
+    public function search($term)
+    {
+        return Equipment::where('eq_inventar_nr', 'like', '%' . $term . '%')
+            ->orWhere('eq_serien_nr', 'like', '%' . $term . '%')
+            ->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')
+            ->orWhere('eq_text', 'like', '%' . $term . '%')
+            ->orWhere('eq_uid', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     /**
      * Get the route key for the model.
      *

@@ -13,9 +13,9 @@
             <a class="nav-link" href="/registerphone"><i class="fas fa-qrcode"></i> {{__('App aktivieren')}}</a>
         </li>
     </ul>
-    <form class="form-inline" action="#" method="get">
+{{--    <form class="form-inline" action="#" method="get">
         <div class="md-form my-0">
             <input class="form-control form-control-sm mr-sm-2" type="text" id="kb" name="kb" placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}">
         </div>
-    </form>
+    </form>--}}
 

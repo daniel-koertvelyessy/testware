@@ -17,6 +17,15 @@ class Building extends Model
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Building::where('b_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('b_name_ort', 'like', '%' . $term . '%')
+            ->orWhere('b_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('b_name_text', 'like', '%' . $term . '%')
+            ->orWhere('b_we_name', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function path()
     {
         return route('building.show', $this);

@@ -31,6 +31,24 @@ use SoftDeletes;
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Adresse::where('ad_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma_2', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma_co', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma_abladestelle', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma_wareneingang', 'like', '%' . $term . '%')
+            ->orWhere('ad_name_firma_abteilung', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_strasse', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_hausnummer', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_etage', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_eingang', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_plz', 'like', '%' . $term . '%')
+            ->orWhere('ad_anschrift_ort', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function profile()
     {
         return $this->belongsTo(Location::class);

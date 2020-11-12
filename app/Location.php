@@ -28,6 +28,13 @@ class Location extends Model
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Location::where('l_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('l_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('l_beschreibung', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     /**
      * Returns the path of the page
      * @return string

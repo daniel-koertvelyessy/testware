@@ -32,8 +32,8 @@
                 @yield('menu')
                 @yield('actionMenuItems')
             </ul>
-            <form class="d-flex ml-2" id="frmSrchInAdminBereich">
-                <input class="form-control mr-2 srchInAdminBereich" id="srchInAdminBereich" name="srchInAdminBereich"  placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off">
+            <form class="d-flex ml-2" id="frmSrchInAdminBereich" autocomplete="off" action="{{ route('search.index') }}">
+                <input class="form-control mr-2" id="srchTopMenuTerm" name="srchTopMenuTerm"  placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off" value="{{ old('srchTopMenuTerm') ?? '' }}">
             </form>
             <x-accountNav/>
         </div>
@@ -71,7 +71,7 @@
                         >
                             <div class="d-flex ml-2 justify-content-between small">
                                 <span>
-                                    Nachricht:
+                                    {{__('Nachricht')}}:
                                      {{ $notification->type === 'App\Notifications\EquipmentEventChanged' ? 'Änderung Ereignis' : 'Neues Ereignis' }}
                                 </span>
 
@@ -80,15 +80,15 @@
                             <div class="d-flex mt-3 ml-2 flex-row align-items-center">
                                 <div class="d-flex
                                  flex-column">
-                                    <span class="small">von: {{ $notification->data['userid'] }}</span>
-                                    <span class="small">Nachricht:</span>
+                                    <span class="small">{{__('von')}}: {{ $notification->data['userid'] }}</span>
+                                    <span class="small">{{__('Nachricht')}}:</span>
                                     <span class="lead"> {{ $notification->data['message'] }}</span>
                                 </div>
                             </div>
                         </div>
                     @empty
                         <span class="list-group-item">
-                                <x-notifyer>Keine neuen Nachrichten</x-notifyer>
+                                <x-notifyer>{{__('Keine neuen Nachrichten')}}</x-notifyer>
                             </span>
                     @endforelse
                         <div class="d-flex justify-content-end align-items-center">
@@ -96,7 +96,7 @@
                                   method="post">
                                 @csrf
                                 <button class="btn btn-sm btn-link">
-                                  Nachrichten als  gelesen markieren
+                                    {{__('Nachrichten als gelesen markieren')}}
                                 </button>
                             </form>
                         </div>
@@ -112,6 +112,38 @@
     @yield('content')
 </main>
 @yield('autocomplete')
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $("#srchTopMenuTerm").autocomplete({
+        position: { my : "right top", at: "right bottom" },
+        source: function (request, response) {
+            $.ajax({
+                url: "{{ route('searchInModules') }}",
+                type: 'GET',
+                dataType: "json",
+                data: {
+                    term: request.term
+                },
+                success: function (data) {
+
+                    let resp = $.map(data, function (obj) {
+                        return {
+                            label: obj.label,
+                            link: obj.link
+                        };
+                    });
+                    response(resp);
+                }
+            });
+        },
+        select: function (event, ui) {
+            // console.log();
+            location.href=ui.item.link;
+        }
+    });
+
+
+</script>
 <!-- MODALS   -->
 <div class="modal fade" id="lockUserView" style="z-index: 3000;" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="lockUserViewLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

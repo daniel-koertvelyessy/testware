@@ -10,6 +10,13 @@ class Anforderung extends Model {
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Anforderung::where('an_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('an_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('an_name_text', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function ProduktAnforderung() {
         return $this->hasMany(ProduktAnforderung::class);
     }

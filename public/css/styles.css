@@ -229,7 +229,7 @@ a.subnav {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
     color: #2c3e50;
-    background-color: #DBE802;
+    background-color: #c7d301;
     border-color: #dee2e6 #dee2e6 #fff;
 }
 
@@ -428,4 +428,6 @@ input[data-function*='swipe']:checked ~ .sidebar {
 }
 
 
-
+.mark{
+    background-color: #c7d301;
+}

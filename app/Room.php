@@ -12,6 +12,13 @@ class Room extends Model
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Room::where('r_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('r_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('r_name_text', 'like', '%' . $term . '%')
+            ->get();
+    }
+
 
     public function building()
     {

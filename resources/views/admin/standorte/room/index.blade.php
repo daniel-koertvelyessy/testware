@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Übersicht Räume')}} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
+{{__('Übersicht Räume')}} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
@@ -159,12 +159,6 @@
             @endif
         @endif
     </div>
-
-@endsection
-
-@section('autocomplete')
-
-
 
 @endsection
 

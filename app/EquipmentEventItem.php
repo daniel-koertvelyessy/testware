@@ -21,4 +21,9 @@ class EquipmentEventItem extends Model {
         return $this->belongsTo(EquipmentEvent::class);
     }
 
+    public function search($term) {
+        return EquipmentEventItem::where('equipment_event_item_text', 'like', '%' . $term . '%')
+            ->get();
+    }
+
 }

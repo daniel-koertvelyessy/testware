@@ -18,6 +18,11 @@ class EquipmentEvent extends Model
 
     use Notifiable;
 
+    public function search($term) {
+        return EquipmentEvent::where('equipment_event_text', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function User() {
         return $this->belongsTo(User::class, 'equipment_event_user');
     }

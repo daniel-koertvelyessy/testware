@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Raum bearbeiten')}} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
+{{__('Raum bearbeiten')}} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')

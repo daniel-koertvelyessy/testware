@@ -12,6 +12,14 @@ class ControlEvent extends Model
 //    protected $table = 'equipments';
 
     use SoftDeletes;
+
+    public function search($term) {
+        return ControlEvent::where('control_event_text', 'like', '%' . $term . '%')
+            ->orWhere('control_event_supervisor_name', 'like', '%' . $term . '%')
+            ->orWhere('control_event_controller_name', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     public function Equipment() {
         return $this->belongsTo(Equipment::class);
     }

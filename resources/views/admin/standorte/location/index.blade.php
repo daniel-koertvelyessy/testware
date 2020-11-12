@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Standortverwaltung | Start @ bitpack GmbH
+{{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+{{__('Standorte')}}
 @endsection
 
 @section('menu')
@@ -17,11 +17,11 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="/">Portal</a>
+                <a href="/">{{__('Portal')}}</a>
             </li>
             <li class="breadcrumb-item active"
                 aria-current="page"
-            >Standorte
+            >{{__('Standorte')}}
             </li>
         </ol>
     </nav>
@@ -33,7 +33,7 @@
     <div class="container-fluid mt-2">
         <div class="row">
             <div class="col">
-                <h1 class="h4">Übersicht Standorte</h1>
+                <h1 class="h4">{{__('Übersicht Standorte')}}</h1>
             </div>
         </div>
         @if (isset($locationList))
@@ -43,10 +43,10 @@
                     <table class="table table-sm table-striped">
                         <thead>
                         <tr>
-                            <th class="d-none d-md-table-cell">Standort</th>
-                            <th>Bezeichnung</th>
-                            <th class="d-none d-md-table-cell">Gebäude</th>
-                            <th class="d-none d-md-table-cell">Räume</th>
+                            <th class="d-none d-md-table-cell">{{__('Standort')}}</th>
+                            <th>{{__('Bezeichnung')}}</th>
+                            <th class="d-none d-md-table-cell">{{__('Gebäude')}}</th>
+                            <th class="d-none d-md-table-cell">{{__('Räume')}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -107,8 +107,8 @@
                                         <div class="card-body">
                                             <h5 class="card-title">{{ $location->l_name_kurz }}</h5>
                                             <h6 class="card-subtitletext-muted">{{ $location->l_name_lang }}</h6>
-                                            <p class="card-text mt-1 mb-0"><small><strong>Gebäude:</strong> {{ $location->Building->count() }}</small></p>
-                                            <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
+                                            <p class="card-text mt-1 mb-0"><small><strong>{{__('Gebäude')}}:</strong> {{ $location->Building->count() }}</small></p>
+                                            <p class="card-text mt-1 mb-0"><small><strong>{{__('Beschreibung')}}:</strong></small></p>
                                             <p class="mt-0"
                                                style="height:6em;overflow-y: scroll"
                                             >{{ $location->l_beschreibung }}</p>

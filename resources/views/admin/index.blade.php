@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Systemeinstellungen | Start @ bitpack GmbH
+{{__('Systemeinstellungen')}} &triangleright;
 @endsection
 
 @section('mainSection')
-    Admin
+{{__('Admin')}}
 @endsection
 
 @section('menu')

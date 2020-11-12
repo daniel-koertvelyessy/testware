@@ -10,6 +10,14 @@ class Produkt extends Model {
 
     protected $guarded = [];
 
+    public function search($term) {
+        return Produkt::where('prod_name_kurz', 'like', '%' . $term . '%')
+            ->orWhere('prod_name_lang', 'like', '%' . $term . '%')
+            ->orWhere('prod_name_text', 'like', '%' . $term . '%')
+            ->orWhere('prod_nummer', 'like', '%' . $term . '%')
+            ->get();
+    }
+
     /**
      * Get the route key for the model.
      *

@@ -1102,7 +1102,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3">
+                                            <td colspan="4">
                                                 <x-notifyer>Keine Geräte mit diesem Produkt gefunden</x-notifyer>
                                             </td>
                                         </tr>
@@ -1131,31 +1131,35 @@
     </script>
     @enderror
 
+    @if ($produkt->Equipment->count()>0)
 
-    <link rel="stylesheet"
-        type="text/css"
-        href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
 
-    <script type="text/javascript"
-        charset="utf8"
-        src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
-    ></script>
+        <link rel="stylesheet"
+              type="text/css"
+              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+        >
+        <script type="text/javascript"
+                charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+        ></script>
+        <script type="text/javascript"
+                charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
+        ></script>
+        <script>
+            const dom = ($('#tabProduktEquipmentListe > tbody > tr').length > 14) ? 't<"bottom"flp><"clear">' : 't';
+            $('#tabProduktEquipmentListe').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+                },
+                // "columnDefs": [
+                //     {"orderable": false, "targets": 5}
+                // ],
+                "dom": dom
+            });
+        </script>
+    @endif
     <script>
-        const dom = ($('#tabProduktEquipmentListe > tbody > tr').length > 14) ? 't<"bottom"flp><"clear">' : 't';
-        $('#tabProduktEquipmentListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            // "columnDefs": [
-            //     {"orderable": false, "targets": 5}
-            // ],
-            "dom": dom
-        });
         $('.tooltips').tooltip();
 
         $('#btnGetAnforderungsListe').click(() => {
@@ -1208,171 +1212,4 @@
 
     </script>
 @endsection
-
-@section('autoloadscripts')
-    <link rel="stylesheet"
-          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
-    >
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-
-        $("#srchInAdminBereich").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{ route('acAdminLocations') }}",
-                    type: 'GET',
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
-                        response(data);
-                    }
-                });
-            },
-            select: function (event, ui) {
-
-                console.log(ui.item.value);
-                console.log(ui.item.value);
-                location.href = `/${ui.item.group}/${ui.item.value}`;
-
-            }
-
-        });
-        $(".getFirma").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{ route('getFirmenAjaxListe') }}",
-                    type: 'GET',
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
-                        let resp = $.map(data, function (obj) {
-                            return {
-                                label: `(${obj.fa_kreditor_nr}) ${obj.fa_name_lang} - ${obj.ad_anschrift_ort} - ${obj.ad_anschrift_strasse}`,
-                                id: obj.id,
-                                value: obj.fa_name_kurz
-                            };
-                        });
-                        response(resp);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                $.ajax({
-                    type: "get",
-                    dataType: 'json',
-                    url: "{{ route('getFirmenDaten') }}",
-                    data: {id: ui.item.id},
-                    success: (res) => {
-                        $('#btnMakeNewFirma').text('Details');
-                        $('#fa_name_kurz').val(res.firma.fa_name_kurz);
-                        $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
-                        $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
-                        $('#fa_name_lang, #searchFirma').val(res.firma.fa_name_lang);
-                        $('#fa_vat').val(res.firma.fa_vat);
-                        $('#firma_id, #firma_id_tabfp').val(res.firma.id);
-                        $('#adress_id').val(res.firma.adress_id);
-                        $('#searchAddress').val(`${res.adresse.ad_anschrift_strasse} ${res.adresse.ad_anschrift_hausnummer} / ${res.adresse.ad_anschrift_ort}`);
-                        $('#address_type_id').val(res.adresse.address_type_id);
-                        $('#ad_name_kurz').val(res.adresse.ad_name_kurz);
-                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
-                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
-                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
-                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
-                        $('#ckAddNewFirma').prop('checked', false);
-                        $('#ckAddNewAddress').prop('checked', false);
-                        $('#ckAddNewContact').prop('checked', false);
-
-                        $('#con_name_kurz').val(res.contact.con_name_kurz);
-                        $('#con_vorname').val(res.contact.con_vorname);
-                        $('#con_name').val(res.contact.con_name);
-                        $('#con_email').val(res.contact.con_email);
-                        $('#con_telefon').val(res.contact.con_telefon);
-                        $('#anrede_id').val(res.contact.anrede_id);
-                        // $.each(res.contactnction (key, item) {
-                        //     $('#setContact').append(`
-                        //     <option value="${item.id}">${item.con_vorname} ${item.con_name}</option>
-                        //     `);
-                        // });
-
-                    }
-                });
-            }
-        });
-
-        $(".getAddress").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{ route('getAddressenAjaxListe') }}",
-                    type: 'GET',
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
-                        let resp = $.map(data, function (obj) {
-                            return {
-                                label: `(${obj.ad_name_kurz}) ${obj.ad_name_lang} - ${obj.ad_anschrift_ort} - ${obj.ad_anschrift_strasse}`,
-                                id: obj.id,
-                                value: obj.ad_name_kurz
-                            };
-                        });
-                        response(resp);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                $.ajax({
-                    type: "get",
-                    dataType: 'json',
-                    url: "{{ route('getAddressDaten') }}",
-                    data: {id: ui.item.id},
-                    success: (res) => {
-                        $('#searchAddress').val(`${res.adresse.ad_anschrift_strasse} ${res.adresse.ad_anschrift_hausnummer} / ${res.adresse.ad_anschrift_ort}`);
-                        $('#adress_id').val(res.adresse.id);
-                        $('#address_type_id').val(res.adresse.address_type_id);
-                        $('#ad_name_kurz').val(res.adresse.ad_name_kurz);
-                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
-                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
-                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
-                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
-                        $('#ckAddNewAddress').prop('checked', false);
-                    }
-                });
-            }
-        });
-
-        $('#ckAddNewFirma').click(function () {
-            if ($(this).prop('checked')) {
-                $('#firma_id').val('');
-                $('#fa_name_kurz')
-                    .val('')
-                    .attr('placeholder', 'Bitte ein neues Kürzel vergeben!')
-                    // .addClass('border-warning')
-                    .focus();
-            }
-        });
-        $('#ckAddNewAddress').click(function () {
-            if ($(this).prop('checked')) {
-                $('#adress_id').val('');
-                $('#ad_name_kurz')
-                    .val('')
-                    .attr('placeholder', 'Bitte ein neues Kürzel vergeben!')
-                    .addClass('border-warning')
-                    .focus();
-            }
-        });
-        $('#ad_name_kurz').blur(function () {
-            ($(this).val() !== '' && $(this).hasClass('border-warning')) ? $(this).removeClass('border-warning') : $(this).addClass('border-warning');
-        })
-
-        $('#fa_name_kurz').blur(function () {
-            ($(this).val() !== '' && $(this).hasClass('border-warning')) ? $(this).removeClass('border-warning') : $(this).addClass('border-warning');
-        })
-    </script>
-@endsection
-
 

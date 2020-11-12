@@ -1,10 +1,10 @@
 @extends('layout.layout-admin')
 @section('pagetitle')
-    Produkte in Kategorie {{ App\ProduktKategorie::find($id->id)->pk_name_kurz }} bearbeiten &triangleright; Produkte @ bitpack GmbH
+{{__('Produkte in Kategorie')}} {{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}
 @endsection
 
 @section('mainSection')
-    Produkte
+{{__('Produkte')}}
 @endsection
 
 @section('menu')
@@ -14,13 +14,12 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Portal</a></li>
-            <li class="breadcrumb-item"><a href="/produkt">Produkte</a></li>
+            <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
+            <li class="breadcrumb-item"><a href="/produkt">{{__('Produkte')}}</a></li>
             <li class="breadcrumb-item active" aria-current="page">
                 {{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}
             </li>
         </ol>
-
     </nav>
 @endsection
 @section('content')
@@ -28,7 +27,7 @@
         <div class="row">
             <div class="col">
                 <h1 class="h3">
-                    <span class="d-none d-md-inline">Alle Produkte der Kategorie</span> <span class="badge badge-primary">{{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}</span>
+                    <span class="d-none d-md-inline">{{__('Alle Produkte der Kategorie')}}</span> <span class="badge badge-primary">{{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}</span>
                 </h1>
             </div>
         </div>

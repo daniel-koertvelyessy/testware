@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Standortverwaltung | Start @ bitpack GmbH
+{{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+{{__('Standorte')}}
 @endsection
 
 @section('menu')
@@ -16,7 +16,7 @@
 @section('content')
 
     <div class="container mt-2">
-        <h1 class="h3">Standort Stammdaten bearbeiten</h1>
+        <h1 class="h3">{{__('Standort Stammdaten bearbeiten')}}</h1>
         <div class="row">
             <div class="col">
                 <form action="{{ route('location.update',['location'=>$location->id]) }}" method="post">
