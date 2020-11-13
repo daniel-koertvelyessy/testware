@@ -60,13 +60,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\Produkt::all()->sortDesc()->take(10) as $loc)
+                    @forelse ($produkts as $produkt)
                         <tr>
                             <td>
-                                <a href="{{ route('produkt.show',$loc) }}">{{ $loc->prod_name_lang }}</a>
+                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name_lang }}</a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ $loc->prod_name_kurz }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $produkt->prod_name_kurz }}</td>
+                            <td class="d-none d-md-table-cell">{{ $produkt->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -117,19 +117,16 @@
 @endsection
 
 @section('scripts')
+    @if ($produkts->count() >0)
     <link rel="stylesheet"
           type="text/css"
           href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
     >
-
     <script type="text/javascript"
             charset="utf8"
             src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
     ></script>
-
     <script>
-
-
         $('#tabProduktListe').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
@@ -140,4 +137,5 @@
             "dom": 't'
         });
     </script>
+    @endif
 @endsection

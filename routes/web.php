@@ -170,7 +170,8 @@ Route::get('standorteMain', function () {
 })->name('standorteMain')->middleware('auth');
 
 Route::get('produktMain', function () {
-    return view('admin.produkt.main');
+
+    return view('admin.produkt.main', ['produkts'=>App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {

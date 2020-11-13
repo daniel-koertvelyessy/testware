@@ -105,7 +105,81 @@
 
 
 @section('content')
+    <style>
+        .tree, .tree ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            margin-left: 10px;
+        }
 
+        .tree ul {
+            margin-left: 1em;
+            position: relative
+        }
+
+        .tree ul ul {
+            margin-left: .5em
+        }
+
+        .tree ul:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left: 1px solid
+        }
+
+        .tree li {
+            margin: 0;
+            padding: 0 1em;
+            line-height: 2em;
+            color: #369;
+            font-weight: 700;
+            position: relative
+        }
+
+        .tree ul li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-top: 1px solid;
+            margin-top: -1px;
+            position: absolute;
+            top: 1em;
+            left: 0
+        }
+
+        .tree ul li:last-child:before {
+            background: #fff;
+            height: auto;
+            top: 1em;
+            bottom: 0
+        }
+
+        .indicator {
+            margin-right: 5px;
+        }
+
+        .tree li a {
+            text-decoration: none;
+            color: #369;
+        }
+
+        .tree li button, .tree li button:active, .tree li button:focus {
+            text-decoration: none;
+            color: #369;
+            border: none;
+            background: transparent;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            outline: 0;
+        }
+    </style>
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
@@ -146,6 +220,19 @@
                            aria-controls="Anforderungen"
                            aria-selected="false"
                         >Anforderungen
+                        </a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locExplorer-tab"
+                           data-toggle="tab"
+                           href="#locExplorer"
+                           role="tab"
+                           aria-controls="locExplorer"
+                           aria-selected="false"
+                        >Explorer
                         </a>
                     </li>
                     <li class="nav-item"
@@ -473,6 +560,53 @@
 
                     </div>
                     <div class="tab-pane fade"
+                         id="locExplorer"
+                         role="tabpanel"
+                         aria-labelledby="locExplorer-tab"
+                    >
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul id="tree1">
+                                    <li>
+
+                                            <a href="#">Standort {{ $location->l_name_kurz }}</a>
+                                            <span class="badge badge-info">
+                                                {{ App\Building::where('location_id',$location->id)->count() }}
+                                            </span>
+
+                                        @if (App\Building::where('location_id',$location->id)->count()>0)
+                                        <ul>
+                                            @foreach(App\Building::where('location_id',$location->id)->get() as $building)
+                                                <li>{{ $building->b_name_kurz }}
+                                                    @if (App\Room::where('building_id',$building->id)->count() > 0)
+                                                        <ul>
+                                                            @foreach(App\Room::where('building_id',$building->id)->get() as $room)
+                                                                <li>{{ $room->r_name_kurz }}
+                                                                    @if (App\Stellplatz::where('room_id',$room->id)->count() > 0)
+                                                                        <ul>
+                                                                            @foreach(App\Stellplatz::where('room_id',$room->id)->get() as $stellplatz)
+                                                                                <li>{{ $stellplatz->sp_name_kurz }}
+
+                                                                                </li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    @endif
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        @endif
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade"
                          id="locGebauede"
                          role="tabpanel"
                          aria-labelledby="locGebauede-tab"
@@ -566,9 +700,9 @@
                                     </div>
                                 </form>
                                 @if ($location->Building->count()>0)
-
-
-                                    <table class="table table-striped" id="tabBuildingListe">
+                                    <table class="table table-striped"
+                                           id="tabBuildingListe"
+                                    >
                                         <thead>
                                         <tr>
                                             <th>Nummer / ID</th>
@@ -668,9 +802,15 @@
             $('#modalAddBuildingType').modal('show');
         </script>
     @endif
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+    >
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+    ></script>
     <script>
 
 
@@ -679,9 +819,9 @@
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
             },
             "columnDefs": [
-                { "orderable": false, "targets": 5 }
+                {"orderable": false, "targets": 5}
             ],
-            "dom":'t'
+            "dom": 't'
         });
 
         $('#anforderung_id').change(() => {
@@ -748,5 +888,64 @@
             });
         });
 */
+
+        $.fn.extend({
+            treed: function (o) {
+
+                let openedClass = 'fa-minus-circle';
+                let closedClass = 'fa-plus-circle';
+
+                if (typeof o != 'undefined') {
+                    if (typeof o.openedClass != 'undefined') {
+                        openedClass = o.openedClass;
+                    }
+                    if (typeof o.closedClass != 'undefined') {
+                        closedClass = o.closedClass;
+                    }
+                }
+
+                //initialize each of the top levels
+                let tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function () {
+                    let branch = $(this); //li with children ul
+                    branch.prepend("");
+                    branch.addClass('branch');
+                    branch.on('click', function (e) {
+                        if (this === e.target) {
+                            let icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+                //fire event from the dynamically added icon
+                tree.find('.branch .indicator').each(function () {
+                    $(this).on('click', function () {
+                        $(this).closest('li').click();
+                    });
+                });
+                //fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+                //fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+        //Initialization of treeviews
+
+        $('#tree1').treed();
+
     </script>
 @endsection

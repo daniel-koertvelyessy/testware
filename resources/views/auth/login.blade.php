@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center" style="height: 90vh;">
             <div class="col-md-6">
-                <div class="card shadow-sm">
+                <div class="card shadow">
                     <div class="d-flex justify-content-between px-3 py-2">
                         <h1 class="h5 mb-3">
                             <i class="fas fa-lock"></i> {{ __('Anmeldung') }}
@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label for="email">{{ __('E-Mail Adresse') }}</label>
 
-                                <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="email" type="text" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -31,7 +31,7 @@
                             <div class="form-group mt-1">
                                 <label for="password">{{ __('Passwort') }}</label>
 
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -54,7 +54,11 @@
 
                         </form>
                     </div>
-                   <div class="card-footer">
+                   <div class="card-footer d-flex justify-content-between align-items-center">
+                       <div>
+                           <a href="{{ route('portal-main') }}"><span class="fas fa-angle-left"></span> {{__('zurück zum Portal')}}</a>
+                       </div>
+                       <div>
                         <a class="btn btn-sm btn-link" href="{{ route('register') }}">
                             <i class="fas fa-pen-alt"></i>  {{ __('Jetzt registrieren!') }}
                         </a>
@@ -63,6 +67,8 @@
                                 <i class="fas fa-question"></i>  {{ __('Passwort vergessen?') }}
                             </a>
                         @endif
+                       </div>
+
                     </div>{{-- --}}
                 </div>
             </div>
