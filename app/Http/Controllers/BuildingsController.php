@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Building;
 use App\BuildingTypes;
+use App\Location;
 use App\Standort;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -26,6 +27,10 @@ class BuildingsController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
+        if(Location::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
+            return redirect()->route('location.create');
+        }
 
         if (Building::all()->count() > 6) {
             $buildingList = Building::with('BuildingType')->paginate(10);
@@ -39,6 +44,10 @@ class BuildingsController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
+        if(Location::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
+            return redirect()->route('location.create');
+        }
         return view('admin.standorte.building.create');
     }
 
@@ -71,6 +80,7 @@ class BuildingsController extends Controller {
             'b_name_lang'      => '',
             'b_name_text'      => '',
             'b_we_has'         => '',
+            'standort_id'         => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
             'building_type_id' => 'required',
@@ -252,6 +262,10 @@ class BuildingsController extends Controller {
      */
     public function destroyBuildingAjax(Request $request) {
 
+        $rm = Building::find($request->id)->standort_id;
+        $stnd = Standort::where('std_id',$rm)->first();
+
+        $stnd->delete();
         $rname = Building::find($request->id)->first()->b_name_lang;
         if (Building::destroy($request->id)) {
 

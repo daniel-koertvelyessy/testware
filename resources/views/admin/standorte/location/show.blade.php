@@ -263,10 +263,12 @@
                         <input type="hidden"
                                name="id"
                                id="id_modal_room"
+                               placeholder="id_modal_room"
                         >
                         <input type="hidden"
                                name="building_id"
                                id="building_id_room_modal"
+                               placeholder="building_id_room_modal"
                         >
                         @csrf
                         <input type="hidden"
@@ -996,7 +998,7 @@
                                 <input type="hidden"
                                        name="building_id"
                                        id="building_id"
-                                       value="{{ App\Building::where('location_id',$location->id)->first()->id }}"
+                                       value="{{ App\Building::where('location_id',$location->id)->first()->id??'' }}"
                                 >
                                 <h2 class="h4">Gebäude</h2>
                                 <div class="btn-toolbar"
@@ -1007,8 +1009,8 @@
                                          role="group"
                                     >
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary btnBuilding"
                                                 data-type="new"
+                                                class="btn btn-sm btn-outline-primary btnBuilding"
                                         >
                                             <span class="d-none d-lg-inline">{{__('Neu')}}</span> <span class="fas fa-plus"></span>
                                         </button>
@@ -1069,8 +1071,7 @@
                                          aria-label="{{__('Raumliste')}}"
                                     >
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary btnRoom disabled"
-                                                disabled
+                                                class="btn btn-sm btn-outline-primary btnRoom "
                                                 data-type="new"
                                         >
                                             <span class="d-none d-lg-inline">{{__('Neu')}}</span> <span class="fas fa-plus"></span>
@@ -1130,9 +1131,8 @@
                                          aria-label="{{__('Stellplatzliste')}}"
                                     >
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary btnStellplatz disabled"
+                                                class="btn btn-sm btn-outline-primary btnStellplatz"
                                                 data-type="new"
-                                                disabled
                                         >
                                             <span class="d-none d-lg-inline">{{__('Neu')}}</span> <span class="fas fa-plus"></span>
                                         </button>
@@ -1190,17 +1190,17 @@
                                                           id="frmAddNewBuilding"
                                                     >
                                                         @csrf
-                                                        <input type="hidden"
+                                                        <input type="text"
                                                                name="standort_id"
                                                                id="standort_id"
                                                                value="{{ Str::uuid() }}"
                                                         >
-                                                        <input type="hidden"
+                                                        <input type="text"
                                                                name="location_id"
                                                                id="location_id"
                                                                value="{{ $location->id }}"
                                                         >
-                                                        <input type="hidden"
+                                                        <input type="text"
                                                                name="frmOrigin"
                                                                id="frmOriginAddNewBuilding"
                                                                value="location"
@@ -1375,7 +1375,7 @@
             $('#modalAddBuildingType').modal('show');
         </script>
     @endif
-    <link rel="stylesheet"
+{{--    <link rel="stylesheet"
           type="text/css"
           href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
     >
@@ -1385,11 +1385,11 @@
             src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
     ></script>
 
-    <script src="{{ asset('js/bootstrap-treeview.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-treeview.js') }}"></script>--}}
     <script>
 
 
-        $('#tabBuildingListe').DataTable({
+ /*       $('#tabBuildingListe').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
             },
@@ -1397,7 +1397,7 @@
                 {"orderable": false, "targets": 5}
             ],
             "dom": 't'
-        });
+        });*/
 
         $('#anforderung_id').change(() => {
 
@@ -1470,6 +1470,7 @@
 
         $('#buildingList').change(function () {
             const id = $('#buildingList :selected').val();
+            console.log(id);
             $('#building_id').val(id);
             $('#id_delete_Building').val(id);
             $('#building_id_room_modal').val(id);
@@ -1564,7 +1565,7 @@
                 id = $('#buildingList :selected').val(),
                 form = $('#frmModalSetBuilding');
 
-            if (type === 'new' && id !== 'void') {
+            if (type === 'new') {
                 $('#modalSetBuildingLabel').text('Neues Gebäude anlegen');
                 $.ajax({
                     type: "get",
@@ -1640,7 +1641,7 @@
                 id = $('#roomList :selected').val(),
                 form = $('#frmModalSetRoom');
 
-            if (type === 'new' && id !== 'void') {
+            if (type === 'new' ) {
                 $('#modalSetRoomLabel').text('Neues Raum anlegen');
                 $.ajax({
                     type: "get",
@@ -1649,7 +1650,7 @@
                     success: function (res) {
                         form.find('#standort_id_room').val(res);
                         form.find('#modalType_room').val('new');
-                        form.find('#building_id_room_modal').val(res.building_id);
+                        // form.find('#building_id_room_modal').val(res.building_id);
                         modalRoom.modal('show');
                     }
                 });
@@ -1714,7 +1715,7 @@
                 id = $('#stellplatzList :selected').val(),
                 form = $('#frmModalSetStellplatz');
 
-            if (type === 'new' && id !== 'void') {
+            if (type === 'new') {
                 $('#modalSetStellplatzLabel').text('Neuen Stellplatz anlegen');
                 $.ajax({
                     type: "get",

@@ -35,9 +35,13 @@ class LocationsController extends Controller {
      */
     public function index() {
 
+
         if (Location::all()->count() > 15) {
             $locationList = Location::all()->paginate(15);
             return view('admin.standorte.location.index', ['locationList' => $locationList]);
+        } elseif(Location::all()->count() === 0){
+            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!');
+            return view('admin.standorte.location.create');
         } else {
             return view('admin.standorte.location.index');
         }

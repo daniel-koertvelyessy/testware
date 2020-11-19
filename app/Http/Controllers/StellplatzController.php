@@ -211,7 +211,7 @@ class StellplatzController extends Controller {
         $data['html'] = '';
         if ($request->id !== 'void') {
             $data['html'] .= '
-<option value="void">Stellplatz auswählen</option>
+<option value="void">Stellplatz auswählen oder anlegen</option>
 ';
             foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz)
                 $data['html'] .= '

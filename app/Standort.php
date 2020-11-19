@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Standort extends Model
 {
+    use SoftDeletes;
+
     public function add($stid, $kurzel, $typ) {
         $sd = new Standort();
         $sd->std_objekt_typ = $typ;

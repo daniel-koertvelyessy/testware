@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Building;
+use App\Location;
 use App\Room;
 use App\RoomType;
 use App\Standort;
 use App\Stellplatz;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class RoomController extends Controller {
 
@@ -25,6 +29,14 @@ class RoomController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
+        if(Location::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+            return redirect()->route('location.create');
+        }
+        if(Building::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Gebäude!</span> <br>Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!');
+            return redirect()->route('building.create');
+        }
         if (Room::all()->count() > 8) {
             $roomList = Room::with('RoomType')->paginate(100);
             return view('admin.standorte.room.index', ['roomList' => $roomList]);
@@ -38,6 +50,14 @@ class RoomController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
+        if(Location::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+            return redirect()->route('location.create');
+        }
+        if(Building::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">Es existieren noch keine Gebäude!</span> <br>Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!');
+            return redirect()->route('building.create');
+        }
         return view('admin.standorte.room.create');
     }
 
@@ -128,7 +148,7 @@ class RoomController extends Controller {
      * Display the specified resource.
      *
      * @param  Room $room
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function show(Room $room) {
         return view('admin.standorte.room.show', ['room' => $room]);
@@ -138,7 +158,7 @@ class RoomController extends Controller {
      * Show the form for editing the specified resource.
      *
      * @param  Room $room
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function edit(Room $room) {
         return view('admin.standorte.room.edit', compact('room'));
@@ -149,7 +169,7 @@ class RoomController extends Controller {
      *
      * @param  Request $request
      * @param  Room    $room
-     * @return Response
+     * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Room $room) {
 
@@ -198,6 +218,10 @@ class RoomController extends Controller {
 
         $rm = Room::find($request->id)->standort_id;
 
+        $stnd = Standort::where('std_id',$rm)->first();
+
+        $stnd->delete();
+
         $rname = request('r_name_kurz');
         if (Room::destroy($request->id)) {
 
@@ -212,7 +236,7 @@ class RoomController extends Controller {
         $data['html'] = '';
         if ($request->id !== 'void') {
             $data['html'] .= '
-<option value="void">Raum auswählen</option>
+<option value="void">Raum auswählen oder anlegen</option>
 ';
             foreach (Room::where('building_id', $request->id)->get() as $room)
                 $data['html'] .= '
@@ -252,6 +276,7 @@ class RoomController extends Controller {
             $room->r_name_kurz = $request->r_name_kurz;
             $room->r_name_lang = $request->r_name_lang;
             $room->r_name_text = $request->r_name_text;
+            $room->standort_id = $request->standort_id;
             $room->building_id = $request->building_id;
             $room->save();
 

@@ -153,104 +153,10 @@
                                 </div>
                             @endforeach
                         </div>
-                    @else<h5 class="card-title">Schnellstart</h5>
-                    <form action="{{ route('location.store') }}"
-                          method="post"
-                          class=" needs-validation"
-                    >
-                        <div class="row">
+                    @else
 
-                            @csrf
-                            <div class="col-md-4">
+                        <a href="{{ route('location.create') }}" class="btn-outline-primary btn btn-lg">Neuen Standort erstellen</a>
 
-                                <h6 class="card-subtitle mb-2 text-muted">Erstellen Sie den ersten Standort</h6>
-                                <x-rtextfield id="l_name_kurz"
-                                              label="Kurzbezeichnung"
-                                />
-                                <x-textfield id="l_name_lang"
-                                             label="Bezeichnung"
-                                />
-                                <p class="card-text">Sie können später weitere Informationen anlegen</p>
-
-                                <input type="hidden"
-                                       name="standort_id"
-                                       id="standort_id"
-                                       value="{{ Str::uuid() }}"
-                                >
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="card-subtitle mb-2 text-muted">Adresse</h6>
-                                @php($adressen = App\Adresse::all())
-                                @if ($adressen->count()>0)
-                                    <x-selectfield id="adresse_id"
-                                                   label="Bitte die Adresse auswählen"
-                                    >
-                                        @foreach($adressen as $adresse)
-                                            <option value="{{ $adresse->id }}">{{ $adresse->ad_name_kurz }}</option>
-                                        @endforeach
-                                    </x-selectfield>
-
-                                @else
-                                    <x-rtextfield id="ad_name_kurz"
-                                                  label="Kürzel"
-                                    />
-                                    <x-rtextfield id="ad_anschrift_strasse"
-                                                  label="Straße"
-                                    />
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <x-rtextfield id="ad_anschrift_plz"
-                                                          label="PLZ"
-                                                          max="30"
-                                            />
-                                        </div>
-                                        <div class="col-md-9">
-                                            <x-rtextfield id="ad_anschrift_ort"
-                                                          label="Ort"
-                                                          max="100"
-                                            />
-                                        </div>
-                                    </div>
-                                    <input type="hidden"
-                                           name="address_type_id"
-                                           id="address_type_id"
-                                           value="1"
-                                    >
-                                @endif
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="card-subtitle mb-2 text-muted">Leitung</h6>
-                                @php($profiles = App\Profile::all())
-                                @if ($profiles->count()>0)
-                                    <x-selectfield id="profile_id"
-                                                   label="Bitte Leitung des Standortes festlegen"
-                                    >
-                                        @foreach($profiles as $ma)
-                                            <option value="{{ $ma->id }}">{{ $ma->ma_name }}, {{ $ma->ma_vorname }} </option>
-                                        @endforeach
-                                    </x-selectfield>
-
-                                @else
-                                    <x-rtextfield id="ma_vorname"
-                                                  label="Vorname"
-                                    />
-                                    <x-rtextfield id="ma_name"
-                                                  label="Nachname"
-                                    />
-                                    <x-selectfield id="user_id"
-                                                   label="System Benutzer zuordnen"
-                                    >
-                                        @foreach (App\User::all() as $user)
-                                            <option value="{{ $user->id }}">{{ $user->username }}</option>
-                                        @endforeach
-                                    </x-selectfield>
-                                @endif
-                            </div>
-
-                            {{--                dd(Profile::all()->count(),Adresse::all()->count());--}}
-                        </div>
-                        <x-btnMain> Standort anlegen <i class="far fa-save"></i></x-btnMain>
-                    </form>
                     @endif
 
                 @endif
