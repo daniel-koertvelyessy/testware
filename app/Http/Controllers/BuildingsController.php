@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Building;
+use App\BuildingTypes;
+use App\Standort;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -64,7 +66,7 @@ class BuildingsController extends Controller {
     public function validateNewBuilding()
     : array {
         return request()->validate([
-            'b_name_kurz'      => 'bail|required|unique:buildings,b_name_kurz|min:2|max:10',
+            'b_name_kurz'      => 'bail|required|unique:buildings,b_name_kurz|min:2|max:20',
             'b_name_ort'       => '',
             'b_name_lang'      => '',
             'b_name_text'      => '',
@@ -180,7 +182,7 @@ class BuildingsController extends Controller {
     public function validateBuilding()
     : array {
         return request()->validate([
-            'b_name_kurz'      => 'bail|required|min:2|max:10',
+            'b_name_kurz'      => 'bail|required|min:2|max:20',
             'b_name_ort'       => '',
             'b_name_lang'      => '',
             'b_name_text'      => '',
@@ -190,6 +192,7 @@ class BuildingsController extends Controller {
             'building_type_id' => '',
         ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -208,6 +211,39 @@ class BuildingsController extends Controller {
 
     }
 
+    public function getBuildingData(Request $request) {
+        return Building::find($request->id);
+    }
+
+    public function modal(Request $request) {
+
+        if ($request->building_type_id === 'new' && isset($request->newBuildingType)) {
+            $bt = new BuildingTypes();
+            $bt->btname = $request->newBuildingType;
+            $bt->save();
+            $request->building_type_id = $bt->id;
+        }
+
+
+        if ($request->modalType === 'edit') {
+            $buildingOld = Building::find($request->id);
+            $buildingOld->b_we_has = $request->has('b_we_has') ? 1 : 0;
+            if ($buildingOld->b_name_kurz !== $request->b_name_kurz) {
+                $standort = Standort::where('std_id', $request->standort_id)->first();
+                $standort->std_kurzel = $request->b_name_kurz;
+                $standort->save();
+            }
+            $buildingOld->update($this->validateBuilding());
+            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde aktualisiert!');
+        } else {
+            $request->b_we_has = $request->has('b_we_has') ? 1 : 0;
+            Building::create($this->validateNewBuilding());
+            $std = (new \App\Standort)->add($request->standort_id, $request->b_name_kurz, 'buildings');
+            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde angelegt!');
+        }
+        return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -215,7 +251,8 @@ class BuildingsController extends Controller {
      * @return bool
      */
     public function destroyBuildingAjax(Request $request) {
-        $rname = request('b_name_lang');
+
+        $rname = Building::find($request->id)->first()->b_name_lang;
         if (Building::destroy($request->id)) {
 
             $request->session()->flash('status', 'Das Gebäude <strong>' . $rname . '</strong> wurde gelöscht!');

@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Neues Gebäude anlegen  &triangleright;  Gebäudeverwaltung @ bitpack GmbH
+{{__('Neues Gebäude anlegen')}}  &triangleright;  {{__('Gebäudeverwaltung')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+{{__('Standorte')}}
 @endsection
 
 @section('menu')
@@ -16,7 +16,7 @@
 @section('content')
     {{-- `user_id``adress_id``l_beschreibung``l_name_lang``l_name_kurz``l_benutzt`--}}
     <div class="container mt-2">
-        <h1 class="h3">Neues Gebäude anlegen</h1>
+        <h1 class="h3">{{__('Neues Gebäude anlegen')}}</h1>
         <form action="{{ route('building.store') }}" method="post" class=" needs-validation">
             @csrf
             <input type="hidden"

@@ -12,5 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js').sourceMaps()
+    .css('vendor/bootstrap-treeview-1.2.0/src/css/bootstrap-treeview.css','public/css')
+    .js('vendor/bootstrap-treeview-1.2.0/src/js/bootstrap-treeview.js','public/js')
     // .less('node_modules/font-awesome/less/font-awesome.less', 'public/css' )
     .sass('resources/sass/app.scss', 'public/css');

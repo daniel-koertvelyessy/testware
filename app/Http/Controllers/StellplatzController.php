@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Standort;
 use App\Stellplatz;
 use App\StellplatzTyp;
 use Illuminate\Contracts\Foundation\Application;
@@ -137,6 +138,61 @@ class StellplatzController extends Controller {
 
     }
 
+    public function modal(Request $request) {
+
+        if ($request->stellplatz_typ_id === 'new' && isset($request->stellplatz_typ_id)) {
+            $bt = new StellplatzTyp();
+            $bt->spt_name_kurz = $request->newStellplatzType;
+            $bt->save();
+            $request->stellplatz_typ_id = $bt->id;
+        }
+
+        if ($request->modalType === 'edit') {
+            $this->validateStellPlatz();
+            $stellplatz = Stellplatz::find($request->id);
+
+            if ($stellplatz->sp_name_kurz !== $request->sp_name_kurz) {
+                $standort = Standort::where('std_id', $request->standort_id)->first();
+                $standort->std_kurzel = $request->sp_name_kurz;
+                $standort->save();
+            }
+
+            $stellplatz->sp_name_kurz = $request->sp_name_kurz;
+            $stellplatz->sp_name_lang = $request->sp_name_lang;
+            $stellplatz->sp_name_text = $request->sp_name_text;
+            $stellplatz->room_id = $request->room_id;
+            $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
+            $stellplatz->save();
+
+
+            $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_name_kurz') . '</strong> wurde aktualisiert!');
+
+        } else {
+
+            $this->validateNeuStellPlatz();
+
+            $stellplatz = new Stellplatz();
+            $stellplatz->sp_name_kurz = $request->sp_name_kurz;
+            $stellplatz->sp_name_lang = $request->sp_name_lang;
+            $stellplatz->sp_name_text = $request->sp_name_text;
+            $stellplatz->room_id = $request->room_id;
+            $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
+            $stellplatz->standort_id = $request->standort_id;
+            $stellplatz->save();
+
+            $std = (new \App\Standort)->add($request->standort_id, $request->sp_name_kurz, 'stellplatzs');
+            $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_name_kurz') . '</strong> wurde angelegt!');
+
+        }
+
+        return redirect()->back();
+
+    }
+
+    public function getStellplatzData(Request $request) {
+        return Stellplatz::find($request->id);
+    }
+
     /**
      * @return array
      */
@@ -149,5 +205,23 @@ class StellplatzController extends Controller {
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);
+    }
+
+    public function getStellplatzList(Request $request) {
+        $data['html'] = '';
+        if ($request->id !== 'void') {
+            $data['html'] .= '
+<option value="void">Stellplatz auswählen</option>
+';
+            foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz)
+                $data['html'] .= '
+<option value="' . $stellplatz->id . '">' . $stellplatz->sp_name_kurz . ' / ' . $stellplatz->sp_name_lang . '</option>
+';
+        } else {
+            $data['html'] .= '
+<option value="void">Bitte Stellplatz auswählen</option>
+';
+        }
+        return $data;
     }
 }

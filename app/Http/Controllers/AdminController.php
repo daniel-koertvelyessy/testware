@@ -31,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -258,6 +259,19 @@ class AdminController extends Controller
     public function getBuildingTypeData(Request $id)
     {
         $data = BuildingTypes::find($id);
+        return $data;
+        // return response()->json($data);
+    }
+
+    public function getBuildingTypeList()
+    {
+        $data['html']='';
+       foreach (BuildingTypes::all() as $bt){
+           $data['html'].='
+           <option value="'.$bt->id.'">'.$bt->btname.'</option>
+           ';
+       }
+
         return $data;
         // return response()->json($data);
     }
@@ -977,6 +991,10 @@ class AdminController extends Controller
             ->get();
 
         return ['loc'=>$loc,'bul'=>$bul,'rom'=>$rom,'stp'=>$stp];
+    }
+
+    public function fetchUid() {
+        return  Str::uuid();
     }
 
 }

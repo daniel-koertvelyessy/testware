@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Room;
+use App\RoomType;
 use App\Standort;
 use App\Stellplatz;
 use Exception;
@@ -207,6 +208,65 @@ class RoomController extends Controller {
         }
     }
 
+    public function getRoomList(Request $request) {
+        $data['html'] = '';
+        if ($request->id !== 'void') {
+            $data['html'] .= '
+<option value="void">Raum auswählen</option>
+';
+            foreach (Room::where('building_id', $request->id)->get() as $room)
+                $data['html'] .= '
+<option value="' . $room->id . '">' . $room->r_name_kurz . ' / ' . $room->r_name_lang . '</option>
+';
+        } else {
+            $data['html'] .= '
+<option value="void">Bitte Gebäude auswählen</option>
+';
+        }
+        return $data;
+    }
+
+    public function modal(Request $request) {
+
+
+
+        if ($request->room_type_id === 'new' && isset($request->newRoomType)) {
+            $bt = new RoomType();
+            $bt->rt_name_kurz = $request->newRoomType;
+            $bt->save();
+            $request->room_type_id = $bt->id;
+        }
+
+        if ($request->modalType === 'edit') {
+            $room = Room::find($request->id);
+            if ($room->r_name_kurz !== $request->r_name_kurz) {
+                $standort = Standort::where('std_id', $request->standort_id)->first();
+                $standort->std_kurzel = $request->r_name_kurz;
+                $standort->save();
+            }
+            $room->update($this->validateRoom());
+            $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde aktualisiert!');
+        } else {
+            $this->validateNewRoom();
+            $room = new Room();
+            $room->r_name_kurz = $request->r_name_kurz;
+            $room->r_name_lang = $request->r_name_lang;
+            $room->r_name_text = $request->r_name_text;
+            $room->building_id = $request->building_id;
+            $room->save();
+
+            $std = (new \App\Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
+            $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde angelegt!');
+        }
+
+        return redirect()->back();
+
+    }
+
+
+    public function getRoomData(Request $request) {
+        return Room::find($request->id);
+    }
     public function getRoomListeAsTable() {
         $html = '<div class="col">
 <table class="table table-sm table-striped">

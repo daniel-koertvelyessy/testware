@@ -9,7 +9,9 @@ use App\Location;
 use App\Building;
 use App\LocationAnforderung;
 use App\Profile;
+use App\Room;
 use App\Standort;
+use App\Stellplatz;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -20,11 +22,9 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 
-class LocationsController extends Controller
-{
+class LocationsController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -33,12 +33,11 @@ class LocationsController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function index()
-    {
+    public function index() {
 
-        if(Location::all()->count()>15){
+        if (Location::all()->count() > 15) {
             $locationList = Location::all()->paginate(15);
-            return view('admin.standorte.location.index',['locationList'=>$locationList]);
+            return view('admin.standorte.location.index', ['locationList' => $locationList]);
         } else {
             return view('admin.standorte.location.index');
         }
@@ -47,13 +46,11 @@ class LocationsController extends Controller
     }
 
 
-    public function search()
-    {
+    public function search() {
         return view('search');
     }
 
-    public function autocomplete(Request $request)
-    {
+    public function autocomplete(Request $request) {
         $search = $request->input('query');
         $locresults = Location::select("id", "l_name_kurz", 'l_name_lang')
             ->where('l_name_kurz', 'LIKE', "%$search%")
@@ -69,21 +66,19 @@ class LocationsController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function create()
-    {
+    public function create() {
         return view('admin.standorte.location.create');
     }
 
     /**
      * Speichere neuen Standort
      *
-     * @param Request $request
+     * @param  Request $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 
-        if ($request->adresse_id === NULL){
+        if ($request->adresse_id === NULL) {
 
             $a = $this->validateInitialAdresse();
             $adresse = new Adresse();
@@ -95,7 +90,7 @@ class LocationsController extends Controller
             $request->adresse_id = $adresse->id;
         }
 
-        if ($request->profile_id === NULL){
+        if ($request->profile_id === NULL) {
             $p = $this->validateInitialProfile();
             $profile = new Profile();
             $profile->ma_name = $request->ma_name;
@@ -104,7 +99,6 @@ class LocationsController extends Controller
             $profile->save();
             $request->profile_id = $profile->id;
         }
-
 
 
         $location = new Location();
@@ -126,13 +120,39 @@ class LocationsController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public
+    function validateInitialAdresse()
+    : array {
+        return request()->validate([
+            'ad_name_kurz'         => 'bail|max:20|required|unique:adresses,ad_name_kurz',
+            'ad_anschrift_strasse' => 'required',
+            'ad_anschrift_plz'     => 'required',
+            'ad_anschrift_ort'     => 'required'
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public
+    function validateInitialProfile()
+    : array {
+        return request()->validate([
+            'ma_name'    => 'bail|max:20|required|unique:profiles,ma_name',
+            'ma_vorname' => 'max:100',
+            'user_id'    => '',
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param Location $location
+     * @param  Location $location
      * @return Application|Factory|Response|View
      */
-    public function show(Location $location)
-    {
+    public function show(Location $location) {
         return view('admin.standorte.location.show', ['location' => $location]);
     }
 
@@ -142,8 +162,7 @@ class LocationsController extends Controller
      * @param  Location $location
      * @return Application|Factory|View
      */
-    public function edit(location $location)
-    {
+    public function edit(location $location) {
 
         return view('admin.standorte.location.edit', compact('location'));
 
@@ -152,18 +171,32 @@ class LocationsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Location $location
+     * @param  Request  $request
+     * @param  Location $location
      * @return Response
      */
-    public function update(Request $request, Location $location)
-    {
+    public function update(Request $request, Location $location) {
         $location->update($this->validateLocation());
 
         $request->session()->flash('status', 'Der Standort <strong>' . $location->l_name_kurz . '</strong> wurde aktualisiert!');
         return redirect($location->path());
     }
 
+    /**
+     * @return array
+     */
+    public
+    function validateLocation()
+    : array {
+        return request()->validate([
+            'standort_id'    => '',
+            'l_name_kurz'    => 'bail|min:2|max:20|required',
+            'l_name_lang'    => '',
+            'l_beschreibung' => '',
+            'adresse_id'     => 'required',
+            'profile_id'     => 'required'
+        ]);
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -171,10 +204,9 @@ class LocationsController extends Controller
      * @param  Request $request
      * @return bool
      */
-    public function destroyLocationAjax(Request $request)
-    {
+    public function destroyLocationAjax(Request $request) {
         $rname = request('l_name_kurz');
-        if ( Location::destroy($request->id) ){
+        if (Location::destroy($request->id)) {
 
             $request->session()->flash('status', 'Der Standort <strong>' . $rname . '</strong> wurde gelöscht!');
             return true;
@@ -182,7 +214,6 @@ class LocationsController extends Controller
             return false;
         }
     }
-
 
     public function getLocationListeAsTable() {
         $html = '
@@ -198,56 +229,50 @@ class LocationsController extends Controller
 <tbody>
         ';
 
-        foreach (Location::all() as $location)
-        {
-            $html.='
+        foreach (Location::all() as $location) {
+            $html .= '
             <tr>
-            <td><a href="/location/'. $location->id  .'">'. $location->l_name_kurz  .'</a></td>
-            <td>'. $location->l_name_lang .'</td>
-            <td>'. $location->Building->count() .'</td>
+            <td><a href="/location/' . $location->id . '">' . $location->l_name_kurz . '</a></td>
+            <td>' . $location->l_name_lang . '</td>
+            <td>' . $location->Building->count() . '</td>
             <td>
-                <a href="'.$location->path().'">
+                <a href="' . $location->path() . '">
                     <i class="fas fa-chalkboard"></i>
-                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
+                    <span class="d-none d-md-table-cell">' . __('Übersicht') . '</span>
                 </a>
             </td>
             </tr>';
         }
-        $html .='</tbody>
+        $html .= '</tbody>
 </table>';
 
 //        echo $html;
-        return ['html'=> $html];
+        return ['html' => $html];
 
     }
 
     public function getLocationListeAsKachel() {
         $html = '';
-        foreach (Location::all() as $location)
-        {
-            $html.=' <div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 " id="loc_id_'.$location->id.'">
+        foreach (Location::all() as $location) {
+            $html .= ' <div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 " id="loc_id_' . $location->id . '">
                     <div class="card" style="height:20em;">
                         <div class="card-body">
-                            <h5 class="card-title">'. $location->l_name_kurz .'</h5>
-                            <h6 class="card-subtitletext-muted">'. $location->l_name_lang .'</h6>
-                            <p class="card-text mt-1 mb-0"><small><strong>Gebäude:</strong> '. $location->Building->count() .'</small></p>
+                            <h5 class="card-title">' . $location->l_name_kurz . '</h5>
+                            <h6 class="card-subtitletext-muted">' . $location->l_name_lang . '</h6>
+                            <p class="card-text mt-1 mb-0"><small><strong>Gebäude:</strong> ' . $location->Building->count() . '</small></p>
                             <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
-                            <p class="mt-0" style="height:6em;overflow-y: scroll">'. $location->l_beschreibung .'</p>
+                            <p class="mt-0" style="height:6em;overflow-y: scroll">' . $location->l_beschreibung . '</p>
                         </div>
                         <div class="card-footer d-flex align-items-center">
-                            <a href="'.$location->path().'" class="btn btn-link btn-sm mr-auto"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                            <a href="' . $location->path() . '" class="btn btn-link btn-sm mr-auto"><i class="fas fa-chalkboard"></i> Übersicht</a>
                         </div>
                     </div>
                     </div>';
         }
 //echo $html;
-        return ['html'=> $html];
+        return ['html' => $html];
 
     }
-
-
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -256,8 +281,7 @@ class LocationsController extends Controller
      * @param  Location $location
      * @return RedirectResponse
      */
-    public function addLocationAnforderung(Request $request,location $location)
-    {
+    public function addLocationAnforderung(Request $request, location $location) {
 
 
         LocationAnforderung::create($this->validateLocationAnforderung());
@@ -271,10 +295,20 @@ class LocationsController extends Controller
         $request->session()->flash('status', 'Die Anforderung <strong>' . $request->an_name_kurz . '</strong> wurde dem Standort angefügt!');
 
 
-
-
         return redirect()->back();
 
+    }
+
+    /**
+     * @return array
+     */
+    public
+    function validateLocationAnforderung()
+    : array {
+        return request()->validate([
+            'anforderung_id' => 'required',
+            'location_id'    => 'required',
+        ]);
     }
 
     /**
@@ -283,77 +317,104 @@ class LocationsController extends Controller
      * @param  Location $location
      * @return Application|Factory|View
      */
-    public function deleteLocationAnforderung(Request $request,location $location)
-    {
+    public function deleteLocationAnforderung(Request $request, location $location) {
 
 
+    }
 
+    public function getLocationTree(Request $request) {
+
+        $location = Location::find($request->id);
+        $room = [];
+        $data = [
+            'text' => $location->l_name_kurz,
+            'href' => $location->id,
+            'tags' => [__('Gebäude'), Building::where('location_id', $location->id)->count()],
+
+        ];
+        if (Building::where('location_id', $location->id)->count() > 0) {
+            foreach (Building::where('location_id', $location->id)->get() as $building) {
+                if (Room::where('building_id', $building->id)->count() > 0) {
+                    foreach (Room::where('building_id', $building->id)->get() as $room) {
+                        if (Stellplatz::where('room_id', $room->id)->count() > 0) {
+                            foreach (Stellplatz::where('room_id', $room->id)->get() as $stellplatz) {
+                                $spl[] = [
+                                    'type' => 'stellplatz',
+                                    'text' => 'Stellplatz ' . $stellplatz->sp_name_kurz,
+                                    'href' => $stellplatz->id,
+                                ];
+                            }
+
+                            $rm[] = [
+                                'text'  => 'Raum ' . $room->r_name_kurz,
+                                'href'  => $room->id,
+                                'type'  => 'room',
+                                'tags'  => [__('Stellplätze'), Stellplatz::where('room_id', $room->id)->count()],
+                                'state' => [
+                                    'expanded' => false,
+                                    'selected' => false
+                                ],
+                                'nodes' => $spl
+                            ];
+
+                        } else {
+                            $rm[] = [
+                                'text'  => 'Raum ' . $room->r_name_kurz,
+                                'href'  => $room->id,
+                                'type'  => 'room',
+                                'tags'  => [__('Stellplätze'), Stellplatz::where('room_id', $room->id)->count()],
+                                'state' => [
+                                    'expanded' => false,
+                                    'selected' => false
+                                ]
+                            ];
+                        }
+
+
+                    }
+                    $data['nodes'][] = [
+                        'text'  => 'Gebäude ' . $building->b_name_kurz,
+                        'href'  => $building->id,
+                        'type'  => 'building',
+                        'tags'  => [__('Räume'), Room::where('building_id', $building->id)->count()],
+                        'state' => [
+                            'expanded' => false,
+                            'selected' => false
+                        ],
+                        'nodes' => $rm
+                    ];
+                } else {
+                    $data['nodes'][] = [
+                        'text'  => 'Gebäude ' . $building->b_name_kurz,
+                        'href'  => $building->id,
+                        'type'  => 'building',
+                        'tags'  => [__('Räume'), Room::where('building_id', $building->id)->count()],
+                        'state' => [
+                            'expanded' => false,
+                            'selected' => false
+                        ]
+                    ];
+                }
+
+
+            }
+        }
+        return json_encode($data);
     }
 
     /**
      * @return array
      */
-    public function validateLocation(): array
-    {
+    public
+    function validateNewLocation()
+    : array {
         return request()->validate([
-            'standort_id' => '',
-            'l_name_kurz' => 'bail|min:2|max:20|required',
-            'l_name_lang' => '',
+            'l_name_kurz'    => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
+            'l_name_lang'    => '',
             'l_beschreibung' => '',
-            'adresse_id' => 'required',
-            'profile_id' => 'required'
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateInitialAdresse(): array
-    {
-        return request()->validate([
-            'ad_name_kurz' => 'bail|max:20|required|unique:adresses,ad_name_kurz',
-            'ad_anschrift_strasse' => 'required',
-            'ad_anschrift_plz' => 'required',
-            'ad_anschrift_ort' => 'required'
-        ]);
-    }
-    /**
-     * @return array
-     */
-    public function validateLocationAnforderung(): array
-    {
-        return request()->validate([
-            'anforderung_id' => 'required',
-            'location_id' => 'required',
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateInitialProfile(): array
-    {
-        return request()->validate([
-            'ma_name' => 'bail|max:20|required|unique:profiles,ma_name',
-            'ma_vorname' => 'max:100',
-            'user_id' => '',
-        ]);
-    }
-
-
-
-    /**
-     * @return array
-     */
-    public function validateNewLocation(): array
-    {
-        return request()->validate([
-            'l_name_kurz' => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
-            'l_name_lang' => '',
-            'l_beschreibung' => '',
-            'standort_id' => 'unique:locations,standort_id',
-            'adresse_id' => 'required',
-            'profile_id' => 'required'
+            'standort_id'    => 'unique:locations,standort_id',
+            'adresse_id'     => 'required',
+            'profile_id'     => 'required'
         ]);
     }
 }
