@@ -9,7 +9,6 @@ use Illuminate\Http\Response;
 
 class EquipmentInstructionController extends Controller {
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -17,65 +16,36 @@ class EquipmentInstructionController extends Controller {
      * @return RedirectResponse
      */
     public function store(Request $request) {
-
         EquipmentInstruction::create($this->validateEquipmentInstruction());
+        $request->session()->flash('status', __('Die Unterweisung wurde angelegt!'));
         return redirect()->back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\EquipmentInstruction $equipmentInstruction
-     * @return Response
-     */
-    public function show(EquipmentInstruction $equipmentInstruction) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\EquipmentInstruction $equipmentInstruction
-     * @return Response
-     */
-    public function edit(EquipmentInstruction $equipmentInstruction) {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request                   $request
-     * @param  \App\EquipmentInstruction $equipmentInstruction
-     * @return Response
-     */
-    public function update(Request $request, EquipmentInstruction $equipmentInstruction) {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EquipmentInstruction $equipmentInstruction
-     * @return Response
+     * @param  Request $request
+     * @return RedirectResponse
      */
-    public function destroy(EquipmentInstruction $equipmentInstruction) {
-        //
+    public function destroy(Request $request) {
+        $request->session()->flash('status', __('Die Unterweisung wurde gelöscht!'));
+        EquipmentInstruction::find($request->id)->delete();
+        return redirect()->back();
     }
 
     /**
      * @return array
      */
-    public function validateEquipmentInstruction(): array
-    {
+    public function validateEquipmentInstruction()
+    : array {
         return request()->validate([
-            'equipment_instruction_date' => 'bail|required|date',
-            'equipment_instruction_instructor_signature' => '',
+            'equipment_instruction_date'                  => 'bail|required|date',
+            'equipment_instruction_instructor_signature'  => '',
             'equipment_instruction_instructor_profile_id' => '',
-            'equipment_instruction_instructor_firma_id' => '',
-            'equipment_instruction_trainee_signature' => '',
-            'equipment_instruction_trainee_id' => 'required',
-            'equipment_id' => 'required'
+            'equipment_instruction_instructor_firma_id'   => '',
+            'equipment_instruction_trainee_signature'     => '',
+            'equipment_instruction_trainee_id'            => 'required',
+            'equipment_id'                                => 'required'
         ]);
     }
 }

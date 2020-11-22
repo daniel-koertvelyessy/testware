@@ -235,9 +235,9 @@ class RoomController extends Controller {
     public function getRoomList(Request $request) {
         $data['html'] = '';
         if ($request->id !== 'void') {
-            $data['html'] .= '
-<option value="void">Raum auswählen oder anlegen</option>
-';
+//            $data['html'] .= '
+//<option value="void">Raum auswählen oder anlegen</option>
+//';
             foreach (Room::where('building_id', $request->id)->get() as $room)
                 $data['html'] .= '
 <option value="' . $room->id . '">' . $room->r_name_kurz . ' / ' . $room->r_name_lang . '</option>
@@ -251,8 +251,6 @@ class RoomController extends Controller {
     }
 
     public function modal(Request $request) {
-
-
 
         if ($request->room_type_id === 'new' && isset($request->newRoomType)) {
             $bt = new RoomType();
@@ -278,6 +276,7 @@ class RoomController extends Controller {
             $room->r_name_text = $request->r_name_text;
             $room->standort_id = $request->standort_id;
             $room->building_id = $request->building_id;
+            $room->room_type_id = $request->room_type_id;
             $room->save();
 
             $std = (new \App\Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');

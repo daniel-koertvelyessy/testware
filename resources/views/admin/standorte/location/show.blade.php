@@ -1000,10 +1000,10 @@
                                        id="building_id"
                                        value="{{ App\Building::where('location_id',$location->id)->first()->id??'' }}"
                                 >
-                                <h2 class="h4">Gebäude</h2>
+                                <h2 class="h4">{{ __('Gebäude') }}</h2>
                                 <div class="btn-toolbar"
                                      role="toolbar"
-                                     aria-label="Toolbar für Gebäude"
+                                     aria-label="{{__('Toolbar für Gebäude')}}"
                                 >
                                     <div class="btn-group mb-2 btn-block"
                                          role="group"
@@ -1044,8 +1044,9 @@
                                     >{{__('Gebäudeliste')}}</label>
                                     <select class="custom-select"
                                             id="buildingList"
+                                            multiple
+                                            size="10"
                                     >
-                                        <option value="void">{{__('Gebäude auswählen')}}</option>
                                         @foreach(App\Building::with('BuildingType')->where('location_id',$location->id)->get() as $building)
                                             <option value="{{ $building->id }}">
                                                 {{ $building->BuildingType->btname }} =>
@@ -1111,6 +1112,8 @@
                                     >{{__('Gebäudeliste')}}</label>
                                     <select class="custom-select"
                                             id="roomList"
+                                            multiple
+                                            size="10"
                                     >
                                         <option value="void">{{__('Gebäude auswählen')}}</option>
                                     </select>
@@ -1169,6 +1172,8 @@
                                     >{{__('Gebäudeliste')}}</label>
                                     <select class="custom-select"
                                             id="stellplatzList"
+                                            multiple
+                                            size="10"
                                     >
                                         <option value="void">Bitte erst Gebäude wählen</option>
                                     </select>
@@ -1470,7 +1475,6 @@
 
         $('#buildingList').change(function () {
             const id = $('#buildingList :selected').val();
-            console.log(id);
             $('#building_id').val(id);
             $('#id_delete_Building').val(id);
             $('#building_id_room_modal').val(id);
@@ -1481,6 +1485,8 @@
                 data: {id},
                 success: (res) => {
                     $('#roomList').html(res.html);
+                    if (id==='void')
+                        $('#stellplatzList').html('<option>Bitte Gebäude auswählen</option>');
                 }
             });
         });

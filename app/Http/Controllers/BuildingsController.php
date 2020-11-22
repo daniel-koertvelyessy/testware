@@ -6,6 +6,7 @@ use App\Building;
 use App\BuildingTypes;
 use App\Location;
 use App\Standort;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,7 @@ class BuildingsController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        if(Location::all()->count() === 0) {
+        if (Location::all()->count() === 0) {
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
             return redirect()->route('location.create');
         }
@@ -44,7 +45,7 @@ class BuildingsController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
-        if(Location::all()->count() === 0) {
+        if (Location::all()->count() === 0) {
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
             return redirect()->route('location.create');
         }
@@ -80,7 +81,7 @@ class BuildingsController extends Controller {
             'b_name_lang'      => '',
             'b_name_text'      => '',
             'b_we_has'         => '',
-            'standort_id'         => '',
+            'standort_id'      => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
             'building_type_id' => 'required',
@@ -210,10 +211,9 @@ class BuildingsController extends Controller {
      * @param  Request  $request
      * @param  Building $building
      * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy(Request $request, Building $building) {
-
-
         $rname = request('b_name_kurz');
         $building->delete();
         $request->session()->flash('status', 'Das Gebäude <strong>' . $rname . '</strong> wurde gelöscht!');
@@ -246,8 +246,20 @@ class BuildingsController extends Controller {
             $buildingOld->update($this->validateBuilding());
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde aktualisiert!');
         } else {
-            $request->b_we_has = $request->has('b_we_has') ? 1 : 0;
-            Building::create($this->validateNewBuilding());
+
+            $this->validateNewBuilding();
+            $building = new Building(); //::create();
+            $building->b_name_kurz = $request->b_name_kurz;
+            $building->b_name_ort = $request->b_name_ort;
+            $building->b_name_lang = $request->b_name_lang;
+            $building->b_name_text = $request->b_name_text;
+            $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
+            $building->standort_id = $request->standort_id;
+            $building->b_we_name = $request->b_we_name;
+            $building->location_id = $request->location_id;
+            $building->building_type_id = $request->building_type_id;
+            $building->save();
+
             $std = (new \App\Standort)->add($request->standort_id, $request->b_name_kurz, 'buildings');
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_name_kurz') . '</strong> wurde angelegt!');
         }
@@ -263,7 +275,7 @@ class BuildingsController extends Controller {
     public function destroyBuildingAjax(Request $request) {
 
         $rm = Building::find($request->id)->standort_id;
-        $stnd = Standort::where('std_id',$rm)->first();
+        $stnd = Standort::where('std_id', $rm)->first();
 
         $stnd->delete();
         $rname = Building::find($request->id)->first()->b_name_lang;

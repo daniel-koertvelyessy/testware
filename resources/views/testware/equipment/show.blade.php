@@ -307,24 +307,24 @@
          aria-hidden="true"
     >
         <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="addInstructedUserLabel"
-                    >{{__('Unterwiesene Person hinzufügen')}}</h5>
-                    <button type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('EquipmentInstruction.store') }}"
-                          method="post"
-                    >
+            <form action="{{ route('EquipmentInstruction.store') }}"
+                  method="post"
+                  id="frmAddEquipmentInstruction"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="addInstructedUserLabel"
+                        >{{__('Unterwiesene Person hinzufügen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                         @csrf
                         <input type="hidden"
                                name="equipment_id"
@@ -367,15 +367,15 @@
                                     <canvas id="signatureField_equipment_instruction_trainee_signature"
                                             class="signature-pad"
                                     ></canvas>
-
                                 </div>
+                                <span class="small text-primary">{{ __('erforderliches Feld') }}</span>
                             </div>
                             <div class="col-md-6">
                                 <x-selectfield id="equipment_instruction_instructor_profile_id"
                                                label="{{__('Interne Unterweisung durch')}}"
                                                required
                                 >
-                                    <option value="0">Externe Unterweisung</option>
+                                    <option value="0">{{ __('bitte auswählen') }}</option>
                                     @foreach(App\User::all() as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
@@ -383,7 +383,7 @@
                                 <x-selectfield id="equipment_instruction_instructor_firma_id"
                                                label="{{__('Externe Unterweisung durch')}}"
                                 >
-                                    <option value="0">Interne Unterweisung</option>
+                                    <option value="0">bitte auswählen</option>
                                     @foreach($equipment->produkt->firma as $firma)
                                         <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
                                     @endforeach
@@ -415,13 +415,12 @@
 
                             </div>
                         </div>
-                        <button class="btn btn-primary">{{ __('Unterweisung speichern') }}</button>
-
-                    </form>
-
-
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">{{ __('Unterweisung erfassen') }}</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -543,9 +542,9 @@
                                        value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name_lang !!} @endforeach"
                                 >
                                 <button
-                                        class="btn btn-primary btn-lg mt-3"
-                                        data-toggle="modal"
-                                        data-target="#modalStartControl"
+                                    class="btn btn-primary btn-lg mt-3"
+                                    data-toggle="modal"
+                                    data-target="#modalStartControl"
                                 >{{__('Prüfung/Wartung erfassen')}}</button>
 
                             </div>
@@ -584,8 +583,8 @@
                                                 >
                                             </form>
                                             <button
-                                                    class="btn btn-lg btn-outline-primary"
-                                                    onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
+                                                class="btn btn-lg btn-outline-primary"
+                                                onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
                                             >
                                                 <span class="fas fa-download"></span>
                                             </button>
@@ -617,8 +616,8 @@
                                                 >
                                             </form>
                                             <button
-                                                    class="btn btn-lg btn-outline-primary"
-                                                    onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
+                                                class="btn btn-lg btn-outline-primary"
+                                                onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
                                             >
                                                 <span class="fas fa-download"></span>
                                             </button>
@@ -673,16 +672,16 @@
                                             data-toggle="modal"
                                             data-target="#addQualifiedUser"
                                     >
-                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus"></i>
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
 
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Qualifiziert am</th>
-                                        <th>durch</th>
+                                        <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Qualifiziert am') }}</th>
+                                        <th>{{ __('durch') }}</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -692,14 +691,19 @@
                                             <td>{{ $equipmentUser->user->name }}</td>
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
                                             <td>{{ $equipmentUser->firma->fa_name_lang }}</td>
-                                            <td style="padding: 0;">
-                                                <form action="{{ route('EquipmentInstruction.destroy',$equipmentUser) }}"
+                                            <td style="padding: 0; vertical-align: middle; text-align: right;">
+                                                <form action="{{ route('EquipmentQualifiedUser.destroy',$equipmentUser) }}"
                                                       method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           id="id_delete_Qualified_User_{{ $equipmentUser->id }}"
+                                                           value="{{ $equipmentUser->id }}"
+                                                    >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="far fa-trash-alt"></span> <span class="d-none d-lg-inline">Löschen</span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -715,6 +719,7 @@
                                     @endforelse
                                     </tbody>
                                 </table>
+                                <div class="dropdown-divider my-4"></div>
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Unterwiesene Personen')}}</h3>
                                     <button type="button"
@@ -722,15 +727,15 @@
                                             data-toggle="modal"
                                             data-target="#addInstructedUser"
                                     >
-                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus"></i>
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Unterwiesen am</th>
-                                        <th>gez.</th>
+                                        <th>{{__('Name')}}</th>
+                                        <th>{{__('Unterwiesen am')}}</th>
+                                        <th>{{__('gez.')}}</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -747,13 +752,18 @@
                                                 >
                                             </td>
                                             <td style="vertical-align: middle; text-align:right; padding:0">
-                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}"
+                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}#anforderungen"
                                                       method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           id="id_delete_EquipmentInstruction_{{ $instructedUser->id }}"
+                                                           value="{{ $instructedUser->id }}"
+                                                    >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="far fa-trash-alt"></span> <span class="d-none d-lg-inline">Löschen</span>
+                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt ml-2"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -761,7 +771,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="4">
-                                                <x-notifyer>Keine unterwiesene Personen gefunden</x-notifyer>
+                                                <x-notifyer>{{__('Keine unterwiesene Personen gefunden')}}</x-notifyer>
                                             </td>
                                         </tr>
                                     @endforelse
@@ -909,8 +919,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                    class="btn btn-sm btn-outline-secondary"
-                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -967,8 +977,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                    class="btn btn-sm btn-outline-secondary"
-                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -1027,8 +1037,8 @@
                                                                 >
                                                             </form>
                                                             <button
-                                                                    class="btn btn-sm btn-outline-secondary"
-                                                                    onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
                                                             >
                                                                 <span class="fas fa-download"></span>
                                                             </button>
@@ -1094,7 +1104,7 @@
                                             <td style="text-align: right; "
                                                 @if ($controlItem->AnforderungControlItem[0]->aci_vaule_soll)
                                                 class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
-                                                    @endif
+                                                @endif
 
                                             >
                                                 {{ $controlItem->control_item_read }}
@@ -1174,6 +1184,20 @@
     @enderror
 
     <script>
+
+        $('#frmAddEquipmentInstruction').submit(function (e) {
+            e.preventDefault();
+            if (
+                $('#equipment_instruction_instructor_profile_id :selected ').val() === '0' &&
+                $('#equipment_instruction_instructor_firma_id :selected ').val() === '0'
+            ) {
+                $('#equipment_instruction_instructor_profile_id').addClass('is-invalid');
+                $('#equipment_instruction_instructor_firma_id').addClass('is-invalid');
+            } else {
+                this.submit();
+            }
+        });
+
         $('.btnOpenControlEventModal').click(function () {
             const id = $(this).data('control-event-id');
             $.ajax({

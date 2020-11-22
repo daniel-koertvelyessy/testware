@@ -53,7 +53,7 @@ class EquipmentQualifiedUserController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  \App\EquipmentQualifieduser $equipmentQualifieduser
+     * @param  EquipmentQualifieduser $equipmentQualifieduser
      * @return \Illuminate\Http\Response
      */
     public function show(EquipmentQualifieduser $equipmentQualifieduser) {
@@ -63,7 +63,7 @@ class EquipmentQualifiedUserController extends Controller {
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\EquipmentQualifieduser $equipmentQualifieduser
+     * @param  EquipmentQualifieduser $equipmentQualifieduser
      * @return \Illuminate\Http\Response
      */
     public function edit(EquipmentQualifieduser $equipmentQualifieduser) {
@@ -73,8 +73,8 @@ class EquipmentQualifiedUserController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request                     $request
-     * @param  \App\EquipmentQualifieduser $equipmentQualifieduser
+     * @param  Request                $request
+     * @param  EquipmentQualifieduser $equipmentQualifieduser
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, EquipmentQualifieduser $equipmentQualifieduser) {
@@ -84,10 +84,13 @@ class EquipmentQualifiedUserController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EquipmentQualifieduser $equipmentQualifieduser
-     * @return \Illuminate\Http\Response
+     * @param  Request                $request
+     * @param  EquipmentQualifieduser $equipmentQualifieduser
+     * @return RedirectResponse
      */
-    public function destroy(EquipmentQualifieduser $equipmentQualifieduser) {
-        //
+    public function destroy(Request $request, EquipmentQualifieduser $equipmentQualifieduser) {
+      EquipmentQualifieduser::find($request->id)->delete();
+        $request->session()->flash('status', 'Die Zuordnung wurde gelöscht!');
+        return redirect()->back();
     }
 }

@@ -234,6 +234,8 @@
                 @else
                     <h2 class="h5">{{__('Es sind noch keine Produkte angelegt worden')}}!</h2>
                     <a href="{{ route('produkt.create') }}"
+                       data-toggle="modal"
+                       data-target="#modalAddProdukt"
                        class="btn btn-lg btn-primary"
                     >{{__('Neues Produkt anlegen')}}</a>
                 @endif
