@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Adresse;
+use App\Location;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -53,9 +54,20 @@ class AdresseController extends Controller
     public function store(Request $request)
     {
         $adresse= Adresse::create($this->validateNewAddress());
-        $request->session()->flash('status', 'Die Adresse <strong>' . $request->ad_name_lang . '</strong> wurde angelegt!');
+        $text='';
+
+        if (isset($request->setAdressAsNewMain)){
+
+            $location = Location::find($request->setAdressAsNewMain);
+            $location->adresse_id = $adresse->id;
+            $location->save();
+            $text=' und als neue Hauptadresse des Standort '.$location->l_name_kurz.' gesetzt';
+
+        }
+
+        $request->session()->flash('status', "Die Adresse <strong>{$request->ad_name_lang}</strong> wurde angelegt {$text}!");
         return redirect()->back();
-//        return view('admin.organisation.adresse.show',['adresse'=>$adresse]);
+
     }
 
     /**

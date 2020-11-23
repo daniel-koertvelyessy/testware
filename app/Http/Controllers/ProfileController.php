@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Location;
 use App\Profile;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -47,7 +48,16 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $profile = Profile::create($this->validateNewProfile());
-        $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt!');
+        $text='';
+        if (isset($request->setProfileAsNewMain)){
+
+            $location = Location::find($request->setProfileAsNewMain);
+            $location->profile_id = $profile->id;
+            $location->save();
+            $text=' und als neue Leitung des Standortes '.$location->l_name_kurz.' gesetzt';
+
+        }
+        $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt'.$text);
 //        return view('admin.organisation.profile.show',['profile'=>$profile]);
         return redirect()->back();
     }

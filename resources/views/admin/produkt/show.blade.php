@@ -621,6 +621,7 @@
                                 <form action="{{ route('addProduktFirma') }}#prodFirmen"
                                       id="frmAddProduktFirma"
                                       method="post"
+                                      autocomplete="off"
                                 >
                                     @csrf
                                     <input type="hidden"
@@ -712,7 +713,6 @@
                                                     />
                                                 </div>
                                             </div>
-
                                         </div> <!-- Firma Details -->
                                         <div class="card p-3 mb-2">
                                             <div class="d-flex justify-content-md-between">
@@ -796,7 +796,8 @@
                                                     >
                                                     <label class="custom-control-label"
                                                            for="ckAddNewContact"
-                                                    >Kontakt neu anlegen</label>
+                                                    >Kontakt neu anlegen
+                                                    </label>
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
@@ -819,11 +820,12 @@
                                                     </span>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <label for="anrede_id">Anrede</label> <select name="anrede_id"
-                                                                                                  id="anrede_id"
-                                                                                                  aria-label="Suche"
-                                                                                                  autocomplete="off"
-                                                                                                  class="custom-select @error('anrede_id') is-invalid @enderror"
+                                                    <label for="anrede_id">Anrede</label>
+                                                    <select name="anrede_id"
+                                                            id="anrede_id"
+                                                            aria-label="Suche"
+                                                            autocomplete="off"
+                                                            class="custom-select @error('anrede_id') is-invalid @enderror"
                                                     >
                                                         @foreach (App\Anrede::all() as $anrede)
                                                             <option value="{{ $anrede->id }}">{{ $anrede->an_kurz }}</option>
@@ -979,7 +981,8 @@
                                             >
                                             <label class="custom-file-label"
                                                    for="prodDokumentFile"
-                                            >Datei wählen</label>
+                                            >Datei wählen
+                                            </label>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Produkt anhängen</button>
@@ -1172,7 +1175,18 @@
                     $('#anforderung_id').html(res.html);
                 }
             });
-        })
+        });
+
+        $('#proddoc_name_kurz').val(
+           $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+        );
+
+        $('#document_type_id').change(()=>{
+            $('#proddoc_name_kurz').val(
+                $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+            );
+        });
+
 
         $('#anforderung_id').change(() => {
 
@@ -1208,8 +1222,73 @@
                 }
             });
         });
-
-
     </script>
 @endsection
 
+@section('autocomplete')
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(".getFirma").autocomplete({
+            // position: { my : "right top", at: "right bottom" },
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('getFirmenAjaxListe') }}",
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+
+                        let resp = $.map(data, function (obj) {
+                            return {
+                                label: `(${obj.fa_name_kurz}) ${obj.fa_name_lang} `,
+                                id: obj.id
+                            };
+                        });
+                        response(resp);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $('#btnMakeNewFirma').text('bearbeiten');
+                $.ajax({
+                    type: "get",
+                    dataType: 'json',
+                    url: "{{ route('getFirmenDaten') }}",
+                    data: {id: ui.item.id},
+                    success: function (res) {
+
+                        $('#adress_id').val(res.adresse.id);
+                        $('#ad_name_kurz').val(res.adresse.ad_name_kurz);
+                        $('#address_type_id').val(res.adresse.address_type_id);
+                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
+                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
+                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
+                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
+                        $('#land_id').val(res.adresse.land_id);
+
+                        $('#firma_id').val(res.firma.id);
+                        $('#firma_id_tabfp').val(res.firma.id);
+                        $('#fa_name_kurz').val(res.firma.fa_name_kurz);
+                        $('#fa_name_lang').val(res.firma.fa_name_lang);
+                        $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
+                        $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
+                        $('#fa_vat').val(res.firma.fa_vat);
+
+                        $('#anrede_id').val(res.contact.anrede_id);
+                        $('#con_name_kurz').val(res.contact.con_name_kurz);
+                        $('#con_vorname').val(res.contact.con_vorname);
+                        $('#con_name').val(res.contact.con_name);
+                        $('#con_telefon').val(res.contact.con_telefon);
+                        $('#con_email').val(res.contact.con_email);
+
+                    }
+                });
+
+            }
+        });
+    </script>
+
+@endsection

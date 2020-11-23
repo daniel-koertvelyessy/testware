@@ -1185,6 +1185,16 @@
 
     <script>
 
+        $('#eqdoc_name_kurz').val(
+            $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
+        );
+
+        $('#document_type_id').change(()=>{
+            $('#eqdoc_name_kurz').val(
+                $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
+            );
+        });
+
         $('#frmAddEquipmentInstruction').submit(function (e) {
             e.preventDefault();
             if (

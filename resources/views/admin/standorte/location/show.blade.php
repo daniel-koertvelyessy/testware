@@ -538,7 +538,19 @@
                                 </option>
                             @endforeach
                         </x-selectfield>
-                        <p class="text-info small">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="setAdressAsNewMain"
+                                   name="setAdressAsNewMain"
+                                   checked
+                                   value="{{ $location->id }}"
+                            >
+                            <label class="custom-control-label"
+                                   for="setAdressAsNewMain"
+                            >{{ __('Diese Adresse als neue Standortadresse anlegen') }}</label>
+                        </div>
+                        <p class="text-info small mt-4">
                             {{ __('Sie können in der Adress-Verwaltung weitere Inhalte ergänzen!') }}
                         </p>
                     </div>
@@ -581,25 +593,50 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <x-textfield id="ma_vorname" label="{{ __('Vorname') }}" />
+                                <x-textfield id="ma_vorname"
+                                             label="{{ __('Vorname') }}"
+                                />
                             </div>
                             <div class="col-md-6">
-                                <x-textfield id="ma_name" label="{{ __('Nachname') }}" required />
+                                <x-textfield id="ma_name"
+                                             label="{{ __('Nachname') }}"
+                                             required
+                                />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <x-textfield id="ma_telefon" label="{{ __('Telefon') }}" />
+                                <x-textfield id="ma_telefon"
+                                             label="{{ __('Telefon') }}"
+                                />
                             </div>
                             <div class="col-md-6">
-                                <x-textfield id="ma_mobil" label="{{ __('Mobil') }}" required />
+                                <x-textfield id="ma_mobil"
+                                             label="{{ __('Mobil') }}"
+                                             required
+                                />
                             </div>
                         </div>
-                        <x-selectfield id="user_id" label="{{ __('testWare Benutzerkonto zuordnen') }}" required >
+                        <x-selectfield id="user_id"
+                                       label="{{ __('testWare Benutzerkonto zuordnen') }}"
+                                       required
+                        >
                             @foreach(App\User::all() as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
+                            @endforeach
                         </x-selectfield>
+                        <div class="custom-control custom-checkbox my-4">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="setProfileAsNewMain"
+                                   name="setProfileAsNewMain"
+                                   checked
+                                   value="{{ $location->id }}"
+                            >
+                            <label class="custom-control-label"
+                                   for="setProfileAsNewMain"
+                            >{{ __('Mitarbeiter als Leitung des Standortes festlegen') }}</label>
+                        </div>
                         <p class="text-info small">
                             {{ __('Sie können in der Mitarbeiter-Verwaltung weitere Inhalte ergänzen!') }}
                         </p>
@@ -1053,7 +1090,7 @@
                                                 {{ $building->b_name_kurz }} /
                                                 {{ $building->b_name_lang }}
                                             </option>
-                                            @empty
+                                        @empty
                                             <option value="void">Keine Gebäude im Standort angelegt</option>
                                         @endforelse
                                     </select>
@@ -1382,29 +1419,29 @@
             $('#modalAddBuildingType').modal('show');
         </script>
     @endif
-{{--    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
+    {{--    <link rel="stylesheet"
+              type="text/css"
+              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+        >
 
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
+        <script type="text/javascript"
+                charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+        ></script>
 
-    <script src="{{ asset('js/bootstrap-treeview.js') }}"></script>--}}
+        <script src="{{ asset('js/bootstrap-treeview.js') }}"></script>--}}
     <script>
 
 
- /*       $('#tabBuildingListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 5}
-            ],
-            "dom": 't'
-        });*/
+        /*       $('#tabBuildingListe').DataTable({
+                   "language": {
+                       "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+                   },
+                   "columnDefs": [
+                       {"orderable": false, "targets": 5}
+                   ],
+                   "dom": 't'
+               });*/
 
         $('#anforderung_id').change(() => {
 
@@ -1487,7 +1524,7 @@
                 data: {id},
                 success: (res) => {
                     $('#roomList').html(res.html);
-                    if (id==='void')
+                    if (id === 'void')
                         $('#stellplatzList').html('<option>Bitte Gebäude auswählen</option>');
                 }
             });
@@ -1649,7 +1686,7 @@
                 id = $('#roomList :selected').val(),
                 form = $('#frmModalSetRoom');
 
-            if (type === 'new' ) {
+            if (type === 'new') {
                 $('#modalSetRoomLabel').text('Neues Raum anlegen');
                 $.ajax({
                     type: "get",

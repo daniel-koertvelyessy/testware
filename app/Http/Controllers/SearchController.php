@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller {
 
-
     public function __construct() {
         $this->middleware('auth');
     }
@@ -292,7 +291,6 @@ class SearchController extends Controller {
         return view('location.index');
     }
 
-
     public function acAdminLocations(Request $request) {
         $search = $request->get('term');
 
@@ -333,4 +331,5 @@ class SearchController extends Controller {
 
         return response()->json($l);
     }
+
 }
