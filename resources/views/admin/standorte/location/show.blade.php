@@ -1047,13 +1047,15 @@
                                             multiple
                                             size="10"
                                     >
-                                        @foreach(App\Building::with('BuildingType')->where('location_id',$location->id)->get() as $building)
+                                        @forelse(App\Building::with('BuildingType')->where('location_id',$location->id)->get() as $building)
                                             <option value="{{ $building->id }}">
                                                 {{ $building->BuildingType->btname }} =>
                                                 {{ $building->b_name_kurz }} /
                                                 {{ $building->b_name_lang }}
                                             </option>
-                                        @endforeach
+                                            @empty
+                                            <option value="void">Keine Gebäude im Standort angelegt</option>
+                                        @endforelse
                                     </select>
                                 </div>
                             </div>
