@@ -33,7 +33,7 @@ class EquipmentQualifiedUserController extends Controller {
      */
     public function store(Request $request) {
 //        dd($request);
-        EquipmentQualifieduser::create($this->validateQualifiedUser());
+        EquipmentQualifiedUser::create($this->validateQualifiedUser());
         return redirect()->back();
     }
 
