@@ -107,7 +107,11 @@ class StellplatzController extends Controller {
      * @return Response
      */
     public function update(Request $request, Stellplatz $stellplatz) {
-        //
+        if ($stellplatz->sp_name_kurz !== $request->sp_name_kurz) {
+            $standort = Standort::where('std_id', $request->standort_id)->first();
+            $standort->std_kurzel = $request->sp_name_kurz;
+            $standort->save();
+        }
     }
 
     /**

@@ -180,6 +180,12 @@ class BuildingsController extends Controller {
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Building $building) {
+
+        if ($building->b_name_kurz !== $request->b_name_kurz) {
+            $standort = Standort::where('std_id', $request->standort_id)->first();
+            $standort->std_kurzel = $request->b_name_kurz;
+            $standort->save();
+        }
         $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $building->update($this->validateBuilding());
 

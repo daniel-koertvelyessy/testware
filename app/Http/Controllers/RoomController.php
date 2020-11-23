@@ -175,7 +175,11 @@ class RoomController extends Controller {
 
 //        dd($room);
         $room->update($this->validateRoom());
-
+        if ($room->r_name_kurz !== $request->r_name_kurz) {
+            $standort = Standort::where('std_id', $request->standort_id)->first();
+            $standort->std_kurzel = $request->r_name_kurz;
+            $standort->save();
+        }
         $request->session()->flash('status', 'Der Raum <strong>' . $room->r_name_kurz . '</strong> wurde aktualisiert!');
         return redirect($room->path());
     }
