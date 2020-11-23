@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\EquipmentQualifieduser;
+
+use App\EquipmentQualifiedUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
