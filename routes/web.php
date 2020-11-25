@@ -96,6 +96,7 @@ Route::resources([
     'equipmenteventitem'     => 'EquipmentEventItemController',
     'EquipmentInstruction'   => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
+    'lizenz'                 => 'LizenzController',
     'search'                 => 'SearchController'
 ]);
 
@@ -171,7 +172,7 @@ Route::get('standorteMain', function () {
 
 Route::get('produktMain', function () {
 
-    return view('admin.produkt.main', ['produkts'=>App\Produkt::all()->sortDesc()->take(10)]);
+    return view('admin.produkt.main', ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {

@@ -28,6 +28,12 @@ class LocationsController extends Controller {
         $this->middleware('auth');
     }
 
+    public function explorer(Request $request, Location $location) {
+        if(isset($request->location))
+            $location = Location::find($request->location);
+        return view('admin.standorte.explorer',['location'=>$location]);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -16,6 +16,10 @@ class CreateLizenzTable extends Migration
         Schema::create('lizenz', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->uuid('lizenz_id')->nullable();
+            $table->string('lizenz_user')->nullable();
+            $table->string('lizenz_order')->nullable();
+            $table->foreignId('lizenz_max_objects')->default(100);
         });
     }
 

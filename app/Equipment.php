@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Equipment extends Model {
     protected $guarded = [];
@@ -12,6 +13,16 @@ class Equipment extends Model {
 //    protected $table = 'equipments';
 
     use SoftDeletes;
+
+    public static function boot() {
+        parent::boot();
+        static::saving(function (Equipment $equipment) {
+            Cache::forget('app-get-current-amount-Equipment');
+        });
+        static::updating(function (Equipment $equipment) {
+            Cache::forget('app-get-current-amount-Equipment');
+        });
+    }
 
     static function getControlEquipmentList() {
         return \DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id',
@@ -23,8 +34,7 @@ class Equipment extends Model {
             ->get();
     }
 
-    public function search($term)
-    {
+    public function search($term) {
         return Equipment::where('eq_inventar_nr', 'like', '%' . $term . '%')
             ->orWhere('eq_serien_nr', 'like', '%' . $term . '%')
             ->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')
@@ -58,8 +68,8 @@ class Equipment extends Model {
         return $this->hasMany(EquipmentHistory::class);
     }
 
-    public function showStatus(){
-        return '<span class="'. $this->EquipmentState->estat_icon .' text-'.$this->EquipmentState->estat_color.'"></span>';
+    public function showStatus() {
+        return '<span class="' . $this->EquipmentState->estat_icon . ' text-' . $this->EquipmentState->estat_color . '"></span>';
     }
 
     public function standort() {

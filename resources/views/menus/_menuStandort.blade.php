@@ -12,6 +12,12 @@
     </a>
 </li>
 
+<li class="nav-item {{ Request::routeIs('lexplorer')  ? ' active ' : '' }}">
+    <a class="nav-link " href="{{ route('lexplorer') }}">
+        <i class="fas fa-project-diagram"></i> Explorer
+    </a>
+</li>
+
 <li class="nav-item dropdown {{ Request::routeIs('location.*') ? ' active ' : '' }}">
         <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-industry"></i> Standorte </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuLocations">

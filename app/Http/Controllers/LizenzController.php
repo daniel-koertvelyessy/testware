@@ -3,83 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Lizenz;
+use http\Env;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class LizenzController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $liz = Lizenz::where('lizenz_id',$request->lizenz_id)->first();
+        $liz->lizenz_max_objects += $request->buyObjectAmount;
+        $liz->save();
+
+
+        Cache::forget('app-get-current-amount-Location');
+        Cache::forget('app-get-current-amount-Building');
+        Cache::forget('app-get-current-amount-Room');
+        Cache::forget('app-get-current-amount-Stellplatz');
+        Cache::forget('app-get-current-amount-Equipment');
+
+        return redirect()->back();
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Lizenz  $lizenz
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Lizenz $lizenz)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Lizenz  $lizenz
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Lizenz $lizenz)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Lizenz  $lizenz
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Lizenz $lizenz)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Lizenz  $lizenz
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Lizenz $lizenz)
-    {
-        //
-    }
 }

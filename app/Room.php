@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Room extends Model
 {
@@ -11,6 +12,16 @@ class Room extends Model
     //
 
     protected $guarded = [];
+
+    public static function boot() {
+        parent::boot();
+        static::saving(function (Room $room) {
+            Cache::forget('app-get-current-amount-Room');
+        });
+        static::updating(function (Room $room) {
+            Cache::forget('app-get-current-amount-Room');
+        });
+    }
 
     public function search($term) {
         return Room::where('r_name_kurz', 'like', '%' . $term . '%')

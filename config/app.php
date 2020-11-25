@@ -235,7 +235,8 @@ return [
 
     ],
 
-    'maxobjekte'  => 1000,
+    'lizenzid'  => '228a7111-c27a-44c2-8a30-13da26eb079f',
+    'maxobjekte'  => 100,
     'makeobjekte' => true,
     'kskey'       => env('APP_HSKEY', null),
 ];

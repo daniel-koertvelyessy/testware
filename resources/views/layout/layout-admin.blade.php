@@ -20,7 +20,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <a href="/" class="ml-5 navbar-brand">
-            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px">
+            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px" class="d-md-none">
             @yield('mainSection')
             {{--            <i class="fas fa-angle-right d-none d-md-inline"></i>--}}
         </a>
@@ -190,7 +190,7 @@
     </div>
 @endif
 <footer class="page-footer fixed-bottom px-1">
-    <div class="row align-items-center">
+    <div class="row align-items-center justify-content-between">
         <div class="col-auto small mr-auto pl-3">
             <span>
                 © 2020
@@ -199,7 +199,12 @@
             </a>
             &nbsp; GmbH
             </span>
+
+            <span>
+
+            </span>
         </div>
+        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />
     </div>
 </footer>
 @yield('autoloadscripts')

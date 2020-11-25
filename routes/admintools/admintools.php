@@ -106,6 +106,7 @@ Route::delete('location.destroyLocationAjax', 'LocationsController@destroyLocati
 Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name('getStandortIdListAll');
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
 
+Route::get('lexplorer', 'LocationsController@explorer')->name('lexplorer');
 Route::get('getLocationData', 'LocationsController@getLocationData')->name('getLocationData');
 Route::get('getLocationListeAsTable', 'LocationsController@getLocationListeAsTable')->name('getLocationListeAsTable');
 Route::get('getLocationListeAsKachel', 'LocationsController@getLocationListeAsKachel')->name('getLocationListeAsKachel');

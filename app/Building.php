@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Stellplatz;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 class Building extends Model
 {
@@ -16,6 +17,16 @@ class Building extends Model
      */
 
     protected $guarded = [];
+
+    public static function boot() {
+        parent::boot();
+        static::saving(function (Building $building){
+            Cache::forget('app-get-current-amount-Building');
+        });
+        static::updating(function (Building $building){
+            Cache::forget('app-get-current-amount-Building');
+        });
+    }
 
     public function search($term) {
         return Building::where('b_name_kurz', 'like', '%' . $term . '%')

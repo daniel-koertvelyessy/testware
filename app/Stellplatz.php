@@ -3,10 +3,21 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Stellplatz extends Model
 {
     protected $guarded = [];
+
+    public static function boot() {
+        parent::boot();
+        static::saving(function (Stellplatz $stellplatz) {
+            Cache::forget('app-get-current-amount-Stellplatz');
+        });
+        static::updating(function (Stellplatz $stellplatz) {
+            Cache::forget('app-get-current-amount-Stellplatz');
+        });
+    }
 
     public function search($term) {
         return Stellplatz::where('sp_name_kurz', 'like', '%' . $term . '%')

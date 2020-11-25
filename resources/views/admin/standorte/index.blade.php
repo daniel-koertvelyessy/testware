@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Start')}} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
+{{__('Start')}} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
@@ -24,6 +24,12 @@
         <div class="row">
             <div class="col-md-4">
                 <section class="card-body text-dark">
+
+                    <a href="{{ route('lexplorer') }}" class="tile-small rounded mb-3" data-role="tile">
+                        <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                        <span class="branding-bar text-center">{{__('Explorer')}}</span>
+                    </a>
+
                     <nav class="tiles-grid ">
 
                         <a href="{{ route('location.index') }}" class="tile-small rounded" data-role="tile">

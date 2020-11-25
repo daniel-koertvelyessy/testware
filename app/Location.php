@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Building;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 class Location extends Model
 {
@@ -27,6 +28,16 @@ class Location extends Model
 */
 
     protected $guarded = [];
+
+    public static function boot() {
+        parent::boot();
+        static::saving(function (Location $location) {
+            Cache::forget('app-get-current-amount-Location');
+        });
+        static::updating(function (Location $location) {
+            Cache::forget('app-get-current-amount-Location');
+        });
+    }
 
     public function search($term) {
         return Location::where('l_name_kurz', 'like', '%' . $term . '%')
