@@ -62,6 +62,7 @@ Route::get('getRoomListeAsTable', 'RoomController@getRoomListeAsTable')->name('g
 Route::get('getRoomTypeList', 'RoomController@getRoomTypeList')->name('getRoomTypeList');
 Route::get('getRoomData', 'RoomController@getRoomData')->name('getRoomData');
 Route::get('getRoomList', 'RoomController@getRoomList')->name('getRoomList');
+Route::get('getStellplatzListInRoom', 'RoomController@getStellplatzListInRoom')->name('getStellplatzListInRoom');
 
 Route::post('room.modal', 'RoomController@modal')->name('room.modal');
 
@@ -84,6 +85,7 @@ Route::get('getBuildingList/{locid}', 'BuildingsController@getBuildingList')->na
 Route::post('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuilding');
 Route::get('getBuildingListeAsTable', 'BuildingsController@getBuildingListeAsTable')->name('getBuildingListeAsTable');
 Route::get('getBuildingListeAsKachel', 'BuildingsController@getBuildingListeAsKachel')->name('getBuildingListeAsKachel');
+Route::get('getRoomListInBuilding', 'BuildingsController@getRoomListInBuilding')->name('getRoomListInBuilding');
 
 Route::get('getBuildingTypeList', 'AdminController@getBuildingTypeList')->name('getBuildingTypeList');
 Route::get('getBuildingData', 'BuildingsController@getBuildingData')->name('getBuildingData');
@@ -107,6 +109,7 @@ Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
 
 Route::get('lexplorer', 'LocationsController@explorer')->name('lexplorer');
+Route::get('getBuildingListInLocation', 'LocationsController@getBuildingListInLocation')->name('getBuildingListInLocation');
 Route::get('getLocationData', 'LocationsController@getLocationData')->name('getLocationData');
 Route::get('getLocationListeAsTable', 'LocationsController@getLocationListeAsTable')->name('getLocationListeAsTable');
 Route::get('getLocationListeAsKachel', 'LocationsController@getLocationListeAsKachel')->name('getLocationListeAsKachel');

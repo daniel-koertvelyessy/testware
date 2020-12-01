@@ -159,6 +159,14 @@ $(document).on("blur", ".checkLabel", function() {
         .tooltip('show');
 });
 
+$('.checkLabel').on('shown.bs.tooltip',function(){
+
+    setTimeout(function () {
+        console.log('shown.bs.tooltip   FIRERD');
+        $('.checkLabel').tooltip('hide')
+    },1000)
+});
+
 
 
 $('.btnShowDataStyle').click(function () {

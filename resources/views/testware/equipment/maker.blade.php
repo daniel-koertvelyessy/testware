@@ -428,6 +428,16 @@
             e.preventDefault();
         })
 */
+        $('#prod_name_lang').change(function () {
+            const name = $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val();
+            console.log(name);
+            $('#proddoc_name_kurz').val(name);
+        });
 
+        $('#document_type_id').change(()=>{
+            $('#proddoc_name_kurz').val(
+                $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+            );
+        });
     </script>
 @endsection

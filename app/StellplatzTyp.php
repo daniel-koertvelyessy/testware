@@ -8,7 +8,7 @@ class StellplatzTyp extends Model
 {
     protected $guarded = [];
 
-    public function stellplatzs()
+    public function stellplatz()
     {
         return $this->hasMany(Stellplatz::class);
     }

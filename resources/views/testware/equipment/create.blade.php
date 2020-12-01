@@ -10,7 +10,6 @@
     @include('menus._menu_testware_main')
 @endsection
 
-
 @section('content')
     <div class="container">
         <div class="row">
@@ -56,7 +55,6 @@
                                          class="checkLabel"
                             />
                         </div>
-
                         <div class="col-md-2">
                             <x-datepicker id="eq_ibm"
                                           label="Inbetriebname"
@@ -133,7 +131,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <h2 class="h5">Funktionsprüfung</h2>
+                            <h2 class="h5">{{__('Funktionsprüfung')}}</h2>
                             <div class="btn-group btn-group-toggle mb-3"
                                  data-toggle="buttons"
                             >
@@ -159,13 +157,29 @@
                                           required
                                           value="{{ date('Y-m-d') }}"
                             />
-                            <x-selectfield id="function_control_firma"
-                                           label="durch Firma"
-                            >
-                                @foreach(\App\Firma::all() as $firma)
-                                    <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
-                                @endforeach
-                            </x-selectfield>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <x-selectfield id="function_control_firma"
+                                                   label="durch Firma"
+                                    >
+                                        <option value="void">bitte wählen</option>
+                                        @foreach(\App\Firma::all() as $firma)
+                                            <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                </div>
+                                <div class="col-md-6">
+                                    <x-selectfield id="function_control_profil"
+                                                   label="durch befähigte Person"
+                                    >
+                                        <option value="void">bitte wählen</option>
+                                        @foreach(\App\User::all() as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                </div>
+                            </div>
+
                             <x-textarea id="function_control_text"
                                         label="{{__('Bemerkungen zur Prüfung')}}"
                             />

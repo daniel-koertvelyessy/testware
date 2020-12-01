@@ -690,7 +690,7 @@
                                         <tr>
                                             <td>{{ $equipmentUser->user->name }}</td>
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
-                                            <td>{{ $equipmentUser->firma->fa_name_lang }}</td>
+                                            <td>{{ $equipmentUser->firma->fa_name_lang ?? '-' }}</td>
                                             <td style="padding: 0; vertical-align: middle; text-align: right;">
                                                 <form action="{{ route('EquipmentQualifiedUser.destroy',$equipmentUser) }}"
                                                       method="post"

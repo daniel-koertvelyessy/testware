@@ -14,10 +14,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h4">{{__('Prüfungen')}} {{__('Übersicht')}}</h1>
+                <h1 class="h4">{{__('Übersicht')}}</h1>
             </div>
         </div>
-        @if (isset($controlItem))
+        @if (isset($controlItems))
             <div class="row">
                 <div class="col">
                     <table class="table table-striped table-sm">
@@ -31,7 +31,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @forelse (App\ControlEquipment::orderBy('qe_control_date_due')->get() as $controlItem)
+                        @forelse ($controlItems as $controlItem)
                             <tr>
                                 <td class="d-none d-md-table-cell">
                                     {{ $controlItem->Equipment->Produkt->prod_name_kurz }}

@@ -236,19 +236,26 @@ class RoomController extends Controller {
         }
     }
 
-    public function getRoomList(Request $request) {
+    public function getStellplatzListInRoom(Request $request) {
         $data['html'] = '';
         if ($request->id !== 'void') {
 //            $data['html'] .= '
-//<option value="void">Raum auswählen oder anlegen</option>
+//<option value="void">Stellplatz auswählen oder anlegen</option>
 //';
-            foreach (Room::where('building_id', $request->id)->get() as $room)
-                $data['html'] .= '
-<option value="' . $room->id . '">' . $room->r_name_kurz . ' / ' . $room->r_name_lang . '</option>
+            if (Stellplatz::where('room_id', $request->id)->count()>0) {
+                foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz) {
+                    $data['html'] .= '
+<option value="' . $stellplatz->id . '">[' . $stellplatz->StellplatzTyp->spt_name_kurz . '] ' . $stellplatz->sp_name_kurz . ' / ' . $stellplatz->sp_name_lang . '</option>
 ';
+                }
+            } else {
+                $data['html'] .= '
+<option value="void">Keine Stellplätze im Raum vorhanden</option>
+';
+            }
         } else {
             $data['html'] .= '
-<option value="void">Bitte Gebäude auswählen</option>
+<option value="void">Bitte Stellplatz auswählen</option>
 ';
         }
         return $data;

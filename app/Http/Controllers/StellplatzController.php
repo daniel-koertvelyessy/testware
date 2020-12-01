@@ -211,21 +211,4 @@ class StellplatzController extends Controller {
         ]);
     }
 
-    public function getStellplatzList(Request $request) {
-        $data['html'] = '';
-        if ($request->id !== 'void') {
-//            $data['html'] .= '
-//<option value="void">Stellplatz auswählen oder anlegen</option>
-//';
-            foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz)
-                $data['html'] .= '
-<option value="' . $stellplatz->id . '">' . $stellplatz->sp_name_kurz . ' / ' . $stellplatz->sp_name_lang . '</option>
-';
-        } else {
-            $data['html'] .= '
-<option value="void">Bitte Stellplatz auswählen</option>
-';
-        }
-        return $data;
-    }
 }

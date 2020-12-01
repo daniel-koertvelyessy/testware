@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Building;
 use App\BuildingTypes;
 use App\Location;
+use App\Room;
 use App\Standort;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -292,6 +293,28 @@ class BuildingsController extends Controller {
         } else {
             return false;
         }
+    }
+
+    public function getRoomListInBuilding(Request $request) {
+        $data['html'] = '';
+        if ($request->id !== 'void') {
+            if (Room::where('building_id', $request->id)->count()>0) {
+                foreach (Room::where('building_id', $request->id)->get() as $room) {
+                    $data['html'] .= '
+<option value="' . $room->id . '">[' . $room->RoomType->rt_name_kurz . '] ' . $room->r_name_kurz . ' / ' . $room->r_name_lang . '</option>
+';
+                }
+            } else {
+                $data['html'] .= '
+<option value="void">Keine Räume im Gebäude vorhanden</option>
+';
+            }
+        } else {
+            $data['html'] .= '
+<option value="void">Bitte Gebäude auswählen</option>
+';
+        }
+        return $data;
     }
 
     public function getBuildingListeAsTable() {

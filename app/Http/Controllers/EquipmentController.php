@@ -10,11 +10,13 @@ use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
 use App\EquipmentHistory;
 use App\EquipmentParam;
+use App\EquipmentQualifiedUser;
 use App\EquipmentUid;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
+use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,7 +72,6 @@ class EquipmentController extends Controller {
         $euid->equipment_id = $equipment->id;
         $euid->save();
 
-
         $eh = new EquipmentHistory();
         $eh->eqh_eintrag_kurz = 'Gerät angelegt';
         $eh->eqh_eintrag_text = 'Das Gerät mit der Inventar-Nr' . request('eq_inventar_nr') . ' wurde angelegt';
@@ -111,7 +112,8 @@ class EquipmentController extends Controller {
 
         $func = new EquipmentFuntionControl();
         $func->function_control_date = $request->function_control_date;
-        $func->function_control_firma = $request->function_control_firma;
+        $func->function_control_firma = ($request->function_control_firma === 'void') ? NULL : $request->function_control_firma;
+        $func->function_control_profil = ($request->function_control_profil === 'void') ? NULL : $request->function_control_profil;
         $func->function_control_pass = $request->function_control_pass;
         $func->equipment_id = $equipment->id;
         $func->save();
@@ -141,8 +143,23 @@ class EquipmentController extends Controller {
             $proDocFile->save();
         }
 
+        if ($request->function_control_profil !=='void'){
+            $qualifiedUser = new EquipmentQualifiedUser();
+            $qualifiedUser->equipment_qualified_firma = NULL;
+            $qualifiedUser->equipment_qualified_date = date('Y-m-d');
+            $qualifiedUser->user_id = $request->function_control_profil;
+            $qualifiedUser->equipment_id = $equipment->id;
+            $qualifiedUser->save();
+
+            $eh = new EquipmentHistory();
+            $eh->eqh_eintrag_kurz = 'Befähigte Person angelegt';
+            $eh->eqh_eintrag_text = User::find($request->function_control_profil)->name . ' wurde als befähigte Person hinzugefügt.';
+            $eh->equipment_id = $equipment->id;
+            $eh->save();
+        }
+
         $request->session()->flash('status', 'Das Gerät <strong>' . request('setNewEquipmentFromProdukt') . '</strong> wurde angelegt!');
-        
+
         return redirect(route('equipment.show', ['equipment' => $equipment]));
 
     }

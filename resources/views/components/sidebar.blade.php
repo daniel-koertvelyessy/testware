@@ -139,6 +139,11 @@
         <ul class="nav flex-column">
             <li class="nav-item border-left ml-3">
                 <a class="nav-link"
+                   href="{{ route('lexplorer') }}"
+                >{{__('Explorer')}}</a>
+            </li>
+            <li class="nav-item border-left ml-3">
+                <a class="nav-link"
                    href="{{ route('location.index') }}"
                 >{{__('Standorte')}}</a>
             </li>

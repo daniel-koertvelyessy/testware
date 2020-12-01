@@ -35,4 +35,10 @@ class Stellplatz extends Model
     {
         return $this->belongsTo(StellplatzTyp::class);
     }
+    public function StellplatzTyp()
+    {
+        return $this->belongsTo(StellplatzTyp::class);
+    }
+
+
 }

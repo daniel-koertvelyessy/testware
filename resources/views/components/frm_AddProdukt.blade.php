@@ -97,6 +97,7 @@
 <div class="row">
     <div class="col">
         <x-textfield id="prod_nummer"
+                     class="checkLabel"
                      label="Artikel Nummer"
         />
         @if (isset($pk))

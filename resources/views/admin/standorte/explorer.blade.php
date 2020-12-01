@@ -364,7 +364,7 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6 col-xl-4">
-                <form action="{{ route('lexplorer') }}">
+                <form action="{{ route('lexplorer') }}" method="get" id="frmSetLocation">
                     <label for="location">{{ __('Standort auswählen') }}</label>
                     <div class="input-group">
                         <select id="location"
@@ -373,13 +373,14 @@
                         >
                             @foreach(\App\Location::all() as $loc)
                                 <option value="{{ $loc->id }}"
-                                        @if(isset($location) && $loc->id === $location->id) selected @endif
+                                        data-loc="{{ $loc->id }}"
+                                        data-location="{{ $location->id }}"
+                                        @if( $loc->id === $location->id) selected @endif
                                 >{{ $loc->l_name_lang }}</option>
                             @endforeach
                         </select>
                         <button class="btn btn-outline-primary ml-2">Daten holen</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -408,18 +409,21 @@
                                 data-type="edit"
                                 class="btn btn-sm btn-outline-primary btnBuilding"
                         >
-                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span class="fas fa-edit"></span>
+                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
+                                class="fas fa-edit"></span>
                         </button>
                         <button type="button"
                                 data-type="copy"
                                 class="btn btn-sm btn-outline-primary btnBuilding"
                         >
-                            <span class="d-none d-lg-inline">{{__('Kopieren')}}</span> <span class="fas fa-copy"></span></button>
+                            <span class="d-none d-lg-inline">{{__('Kopieren')}}</span> <span class="fas fa-copy"></span>
+                        </button>
 
                         <button type="button"
                                 class="btn btn-sm btn-outline-primary btnBuildingDelete"
                         >
-                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt"></span></button>
+                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
+                                class="far fa-trash-alt"></span></button>
 
                     </div>
                     <form id="frmDeleteBuilding">
@@ -439,7 +443,7 @@
                     >
                         @forelse(App\Building::with('BuildingType')->where('location_id',$location->id)->get() as $building)
                             <option value="{{ $building->id }}">
-                                {{ $building->BuildingType->btname }} =>
+                                [{{ $building->BuildingType->btname }}]
                                 {{ $building->b_name_kurz }} /
                                 {{ $building->b_name_lang }}
                             </option>
@@ -474,7 +478,8 @@
                                 disabled
                                 data-type="edit"
                         >
-                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span class="fas fa-edit"></span>
+                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
+                                class="fas fa-edit"></span>
                         </button>
                         <button type="button"
                                 class="btn btn-sm btn-outline-primary btnRoom disabled"
@@ -487,7 +492,8 @@
                                 class="btn btn-sm btn-outline-primary btnRoomDelete disabled"
                                 disabled
                         >
-                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt"></span>
+                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
+                                class="far fa-trash-alt"></span>
                         </button>
                     </div>
                     <form id="frmDeleteRoom"
@@ -536,7 +542,8 @@
                                 data-type="edit"
                                 disabled
                         >
-                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span class="fas fa-edit"></span>
+                            <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
+                                class="fas fa-edit"></span>
                         </button>
                         <button type="button"
                                 class="btn btn-sm btn-outline-primary btnStellplatz disabled"
@@ -549,7 +556,8 @@
                                 class="btn btn-sm btn-outline-primary btnStellplatzDelete disabled"
                                 disabled
                         >
-                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt"></span>
+                            <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
+                                class="far fa-trash-alt"></span>
                         </button>
                     </div>
                     <form id="frmDeleteStellplatz">
@@ -578,26 +586,27 @@
 @endsection
 @section('scripts')
     <script>
-        $('#buildingList').change(function () {
-            const id = $('#buildingList :selected').val();
+        function setBuildingValues(id) {
             $('#building_id').val(id);
             $('#id_delete_Building').val(id);
             $('#building_id_room_modal').val(id);
             $.ajax({
                 type: "get",
                 dataType: 'json',
-                url: "{{ route('getRoomList') }}",
+                url: "{{ route('getRoomListInBuilding') }}",
                 data: {id},
                 success: (res) => {
                     $('#roomList').html(res.html);
+                    setTimeout(function () {
+                        buildingList.val(id)
+                    },400);
                     if (id === 'void')
                         $('#stellplatzList').html('<option>Bitte Gebäude auswählen</option>');
                 }
             });
-        });
+        }
 
-        $('#roomList').change(function () {
-            const id = $('#roomList :selected').val();
+        function setRoomValues(id) {
             if (id === 'void') {
                 $('.btnRoom').attr('disabled', true).addClass('disabled');
                 $('.btnRoomDelete').attr('disabled', true).addClass('disabled');
@@ -608,22 +617,28 @@
             $('#room_id').val(id);
             $('#id_modal_room').val(id);
             $('#room_id_stellplatz_modal').val(id);
+
             $.ajax({
                 type: "get",
                 dataType: 'json',
-                url: "{{ route('getStellplatzList') }}",
+                url: "{{ route('getStellplatzListInRoom') }}",
                 data: {id},
                 success: (res) => {
                     $('#stellplatzList').html(res.html);
+                    setTimeout(function () {
+                        roomList.val(id)
+                    },400);
                 }
             });
-        });
+        }
 
-        $('#stellplatzList').change(function () {
-            const id = $('#stellplatzList :selected').val();
+        function setStellplatzValues(id) {
             $('#stellplatz_id').val(id);
             $('#id_modal_stellplatz').val(id);
             $('#id_delete_Stellplatz').val(id);
+            setTimeout(function () {
+                stellplatzList.val(id)
+            },400);
             if (id === 'void') {
                 $('.btnStellplatz').attr('disabled', true).addClass('disabled');
                 $('.btnStellplatzDelete').attr('disabled', true).addClass('disabled');
@@ -631,7 +646,66 @@
                 $('.btnStellplatz').attr('disabled', false).removeClass('disabled');
                 $('.btnStellplatzDelete').attr('disabled', false).removeClass('disabled');
             }
+        }
+
+
+        const locationlist = $('#location');
+        const roomList = $('#roomList');
+        const buildingList = $('#buildingList');
+        const stellplatzList = $('#stellplatzList');
+
+        $('#frmSetLocation').submit(function () {
+            localStorage.setItem('explorer_location', $('#location :selected').val());
+            localStorage.removeItem('explorer_building');
+            localStorage.removeItem('explorer_room');
+            localStorage.removeItem('explorer_stellplatz');
         });
+
+        buildingList.change(function () {
+            const id = $('#buildingList :selected').val();
+            localStorage.setItem('explorer_building', id);
+            setBuildingValues(id);
+        });
+
+        roomList.change(function () {
+            const id = $('#roomList :selected').val();
+            localStorage.setItem('explorer_room', id);
+            setRoomValues(id);
+        });
+
+        stellplatzList.change(function () {
+            const id = $('#stellplatzList :selected').val();
+            localStorage.setItem('explorer_stellplatz', id);
+            setStellplatzValues(id)
+        });
+
+        if (localStorage.getItem('explorer_location') !== null) {
+            const lid = parseInt(localStorage.getItem('explorer_location'));
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getBuildingListInLocation') }}",
+                data: {id: lid},
+                success: (res) => {
+                    $('#buildingList').html(res.html);
+                    locationlist.val(lid);
+                }
+            });
+        }
+        if (localStorage.getItem('explorer_building') !== null) {
+            const bid = (localStorage.getItem('explorer_building'));
+            setBuildingValues(bid);
+        }
+
+        if (localStorage.getItem('explorer_room') !== null) {
+            const rid = (localStorage.getItem('explorer_room'));
+            setRoomValues(rid);
+        }
+
+        if (localStorage.getItem('explorer_stellplatz') !== null) {
+            const sid = (localStorage.getItem('explorer_stellplatz'));
+            setStellplatzValues(sid);
+        }
 
         $('#building_type_id').change(function () {
             const nBtNod = $('#newBuildingType');
