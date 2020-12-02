@@ -24,9 +24,9 @@
                         <thead>
                         <tr>
                             <th class="d-none d-md-table-cell">{{__('Gerät')}}</th>
-                            <th>{{__('Inventar-Nr')}}</th>
-                            <th class="d-none d-md-table-cell">{{__('Prüfung')}}</th>
-                            <th class="d-none d-md-table-cell">{{__('Fällig bis')}}</th>
+                            <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventar-Nr'))</th>
+                            <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name_lang', __('Prüfung'))</th>
+                            <th class="d-none d-md-table-cell">@sortablelink('qe_control_date_due', __('Fällig'))</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -54,7 +54,7 @@
                                     {!! $controlItem->checkDueDate($controlItem) !!}
                                 </td>
                                 <td>
-                                    <a href="{{ route('controlevent.create',['controlItem' => $controlItem]) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ route('testing.create',['test_id' => $controlItem]) }}" class="btn btn-sm btn-outline-primary">
                                         <span class="d-none d-md-inline">{{__('jetzt prüfen')}}</span>
                                         <span class="fas fa-stethoscope"></span>
                                     </a>

@@ -27,7 +27,16 @@ class AnforderungControlItemController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function index() {
-        return view('admin.verordnung.anforderungitem.index');
+        if (AnforderungControlItem::all()->count() > 10)
+        {
+            return view('admin.verordnung.anforderungitem.index',[
+                'aciitems' => AnforderungControlItem::sortable()->paginate(10)
+            ]);
+        } else {
+            return view('admin.verordnung.anforderungitem.index',[
+                'aciitems' => AnforderungControlItem::sortable()->get()
+            ]);
+        }
     }
 
     /**

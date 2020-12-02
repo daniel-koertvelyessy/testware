@@ -20,7 +20,17 @@ class VerordnungController extends Controller
      */
     public function index()
     {
-        return view('admin.verordnung.index');
+        if (Verordnung::all()->count() > 10)
+        {
+            return view('admin.verordnung.index',[
+                'verordnungen' => Verordnung::with('anforderung')->sortable()->paginate(10)
+            ]);
+        } else {
+            return view('admin.verordnung.index',[
+                'verordnungen' => Verordnung::with('anforderung')->sortable()->get()
+            ]);
+        }
+
     }
 
 

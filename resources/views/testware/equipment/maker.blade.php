@@ -245,8 +245,8 @@
                 <table class="table table-sm">
                     <thead>
                     <tr>
-                        <th>{{__('Produkt-Nummer')}}</th>
-                        <th>{{__('Bezeichnung')}}</th>
+                        <th>@sortablelink('prod_nummer', __('Produktnummer'))</th>
+                        <th>@sortablelink('prod_name_lang', __('Bezeichnung'))</th>
                         <th></th>
                     </tr>
                     </thead>

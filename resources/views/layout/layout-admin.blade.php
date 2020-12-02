@@ -204,7 +204,7 @@
 
             </span>
         </div>
-        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />
+{{--        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />--}}
     </div>
 </footer>
 @yield('autoloadscripts')

@@ -4,11 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kyslik\ColumnSortable\Sortable;
 
 class AnforderungControlItem extends Model
 {
 
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
+
+    public $sortable = [
+        'id',
+        'created_at',
+        'updated_at',
+        'aci_name_kurz',
+        'aci_name_lang',
+        'aci_task',
+    ];
 
     protected $guarded = [];
 

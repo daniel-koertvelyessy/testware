@@ -4,11 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kyslik\ColumnSortable\Sortable;
 
 class Produkt extends Model {
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
 
     protected $guarded = [];
+
+    public $sortable = [
+        'id',
+        'prod_name_kurz',
+        'prod_name_lang',
+        'prod_nummer',
+        'prod_active',
+
+        ];
 
     public function search($term) {
         return Produkt::where('prod_name_kurz', 'like', '%' . $term . '%')
@@ -56,13 +66,16 @@ class Produkt extends Model {
         return $this->belongsToMany(Firma::class);
     }
 
-
     public function ControlProdukt() {
         return $this->hasOne(ControlProdukt::class);
     }
 
     public function Equipment() {
         return $this->hasMany(Equipment::class);
+    }
+
+    public function EquipmentDetails() {
+        return $this->hasOne(Equipment::class);
     }
 
 

@@ -4,12 +4,24 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kyslik\ColumnSortable\Sortable;
 
 class Verordnung extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
 
     protected $guarded = [];
+
+    public $sortable = [
+        'id',
+        'vo_name_kurz',
+        'vo_name_lang',
+        'vo_nummer',
+        'vo_stand',
+        'vo_name_text',
+        ''
+
+        ];
 
 
     public function Anforderung()

@@ -75,29 +75,29 @@ Route::put('event.accept', 'EquipmentEventController@accept')->name('event.accep
 
 
 Route::resources([
-    'location'               => 'LocationsController',
-    'building'               => 'BuildingsController',
-    'room'                   => 'RoomController',
-    'profile'                => 'ProfileController',
-    'produkt'                => 'ProduktController',
-    'produktDoku'            => 'ProduktDocController',
-    'equipDoku'              => 'EquipmentDocController',
-    'firma'                  => 'FirmaController',
-    'adresse'                => 'AdresseController',
-    'testware'               => 'TestwareController',
-    'equipment'              => 'EquipmentController',
-    'controlevent'           => 'ControlEventController',
-    'user'                   => 'UserController',
-    'stellplatz'             => 'StellplatzController',
-    'anforderung'            => 'AnforderungsController',
-    'verordnung'             => 'VerordnungController',
+    'location' => 'LocationsController',
+    'building' => 'BuildingsController',
+    'room' => 'RoomController',
+    'profile' => 'ProfileController',
+    'produkt' => 'ProduktController',
+    'produktDoku' => 'ProduktDocController',
+    'equipDoku' => 'EquipmentDocController',
+    'firma' => 'FirmaController',
+    'adresse' => 'AdresseController',
+    'testware' => 'TestwareController',
+    'equipment' => 'EquipmentController',
+    'testing' => 'ControlEquipmentController',
+    'user' => 'UserController',
+    'stellplatz' => 'StellplatzController',
+    'anforderung' => 'AnforderungsController',
+    'verordnung' => 'VerordnungController',
     'anforderungcontrolitem' => 'AnforderungControlItemController',
-    'event'         => 'EquipmentEventController',
-    'eventitem'     => 'EquipmentEventItemController',
-    'EquipmentInstruction'   => 'EquipmentInstructionController',
+    'event' => 'EquipmentEventController',
+    'eventitem' => 'EquipmentEventItemController',
+    'EquipmentInstruction' => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
-    'lizenz'                 => 'LizenzController',
-    'search'                 => 'SearchController'
+    'lizenz' => 'LizenzController',
+    'search' => 'SearchController'
 ]);
 
 /**
@@ -118,7 +118,7 @@ Route::get('getFirmenDaten', 'FirmaController@getFirmenDaten')->name('getFirmenD
 
 Route::get('getAddressenAjaxListe', 'AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
 Route::get('getAddressDaten', 'AdresseController@getAddressDaten')->name('getAddressDaten');
-Route::get('getControlEventDataSheet', 'ControlEventController@getControlEventDataSheet')->name('getControlEventDataSheet');
+Route::get('getControlEventDataSheet', 'ControlEquipmentController@getControlEventDataSheet')->name('getControlEventDataSheet');
 
 Route::get('getEquipmentAjaxListe', 'EquipmentController@getEquipmentAjaxListe')->name('getEquipmentAjaxListe');
 Route::get('searchInModules', 'SearchController@searchInModules')->name('searchInModules');
@@ -156,7 +156,7 @@ Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
 Route::get('organisationMain', function () {
     return view('admin.organisation.index', [
-        'firmas'   => App\Firma::take(5)->latest()->get(),
+        'firmas' => App\Firma::take(5)->latest()->get(),
         'adresses' => App\Adresse::take(5)->latest()->get(),
         'profiles' => App\Profile::take(5)->latest()->get(),
     ]);
@@ -166,24 +166,22 @@ Route::get('standorteMain', function () {
     return view('admin.standorte.index', [
         'locations' => App\Location::take(5)->latest()->get(),
         'buildings' => App\Building::take(5)->latest()->get(),
-        'rooms'     => App\Room::take(5)->latest()->get(),
+        'rooms' => App\Room::take(5)->latest()->get(),
     ]);
 })->name('standorteMain')->middleware('auth');
 
 Route::get('produktMain', function () {
-
     return view('admin.produkt.main', ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    $equipmentList = \App\Equipment::paginate(10);
-
-
+    $equipmentList = \App\Equipment::with('produkt', 'standort', 'EquipmentState', 'ControlEquipment')
+        ->sortable()->paginate(10);
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 
 Route::get('equipment.maker', function () {
-    $produktList = \App\Produkt::paginate(10);
+    $produktList = \App\Produkt::sortable()->paginate(10);
     return view('testware.equipment.maker', ['produktList' => $produktList]);
 })->name('equipment.maker')->middleware('auth');
 

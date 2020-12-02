@@ -53,7 +53,7 @@
         <div class="row mt-4">
             <x-dashborarditem>
                 <h2 class="h5">{{__('Anstehende')}}
-                    <a href="{{ route('controlevent.index') }}">{{ __('Prüfungen') }}</a>
+                    <a href="{{ route('testing.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
                 @if (\App\ControlProdukt::count()===0)
                     <div class="m-2 border-warning">

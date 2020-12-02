@@ -77,7 +77,7 @@
 @section('content')
 
 
-    <form action="{{ route('controlevent.store') }}"
+    <form action="{{ route('testing.store') }}"
           method="post"
           id="frmAddControlEvent"
           enctype="multipart/form-data"
@@ -158,12 +158,12 @@
                                     <input type="hidden"
                                            name="equipment_id"
                                            id="equipment_id"
-                                           value="{{ $controlItem->equipment_id}}"
+                                           value="{{ $test->equipment_id}}"
                                     >
                                     <input type="hidden"
                                            name="control_equipment_id"
                                            id="control_equipment_id"
-                                           value="{{ $controlItem->id }}"
+                                           value="{{ $test->id }}"
                                     >
                                 </div>
                                 <div class="col-md-2">
@@ -182,7 +182,7 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <p class="lead p-3 border">{{ $controlItem->Anforderung->an_name_lang }}</p>
+                            <p class="lead p-3 border">{{ $test->Anforderung->an_name_lang }}</p>
                         </div>
                     </div>
 
@@ -280,7 +280,7 @@
                             <div class="col">
                                 <table class="table table-borderless">
 
-                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$controlItem->anforderung_id)->get() as $aci)
+                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->get() as $aci)
                                         @if($aci->aci_contact_id === auth()->user()->id)
                                             <tr>
                                                 <td colspan="4"
@@ -581,7 +581,7 @@
                                     <x-datepicker id="control_event_next_due_date"
                                                   label="{{__('Fällig bis')}}"
                                                   value="{{ now()
-->add($controlItem->Anforderung->an_control_interval.$controlItem->Anforderung->ControlInterval->ci_si)
+->add($test->Anforderung->an_control_interval.$test->Anforderung->ControlInterval->ci_si)
 ->toDateString() }}"
                                     />
 

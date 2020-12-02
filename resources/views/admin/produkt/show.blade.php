@@ -349,7 +349,7 @@
                     >
                         <div class="row">
                             <div class="col">
-                                <form action="{{ route('produkt.update',['produkt'=>$produkt->id]) }}"
+                                <form action="{{ route('produkt.update',['produkt'=>$produkt]) }}"
                                       method="post"
                                       class="needs-validation"
                                 >
@@ -1080,14 +1080,15 @@
                                 >
                                     <thead>
                                     <tr>
-                                        <th>{{__('Inventarnummer')}}</th>
-                                        <th>{{__('Seriennummer')}}</th>
-                                        <th>{{__('Inbetriebname')}}</th>
-                                        <th>{{__('Status')}}</th>
+                                        <th>@sortablelink('produktDetails.eq_inventar_nr', __('Inventarnummer'))</th>
+                                        <th>@sortablelink('produktDetails.eq_serien_nr', __('Seriennummer'))</th>
+                                        <th>@sortablelink('produktDetails.eq_ibm', __('Inbetriebname'))</th>
+                                        <th>@sortablelink('EquipmentState.estat_name_kurz', __('Status'))</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse($produkt->Equipment as $equipment)
+                                    @forelse($equipLists as $equipment)
                                         <tr>
                                             <td>
                                                 <a href="{{ route('equipment.show',$equipment) }}">{{ $equipment->eq_inventar_nr }}</a>
@@ -1112,6 +1113,11 @@
                                     @endforelse
                                     </tbody>
                                 </table>
+                                @if($equipLists->count() >0)
+                                    <div class="d-flex justify-content-center">
+                                        {!! $equipLists->onEachSide(2)->links() !!}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -1134,34 +1140,6 @@
     </script>
     @enderror
 
-    @if ($produkt->Equipment->count()>0)
-
-
-        <link rel="stylesheet"
-              type="text/css"
-              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-        >
-        <script type="text/javascript"
-                charset="utf8"
-                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-        ></script>
-        <script type="text/javascript"
-                charset="utf8"
-                src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
-        ></script>
-        <script>
-            const dom = ($('#tabProduktEquipmentListe > tbody > tr').length > 14) ? 't<"bottom"flp><"clear">' : 't';
-            $('#tabProduktEquipmentListe').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-                },
-                // "columnDefs": [
-                //     {"orderable": false, "targets": 5}
-                // ],
-                "dom": dom
-            });
-        </script>
-    @endif
     <script>
         $('.tooltips').tooltip();
 

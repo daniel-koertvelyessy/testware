@@ -22,17 +22,16 @@
             <table class="table table-striped"  id="tabAnforderungListe">
                 <thead>
                 <tr>
-                    <th>{{__('Bezeichnung')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Intervall')}}</th>
+                    <th>@sortablelink('an_name_lang', __('Bezeichnung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('an_name_kurz', __('Kennung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Bearbeitet'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('an_control_interval', __('Intervall'))</th>
                     <th class="text-center d-none d-md-table-cell">{{__('Vorgänge')}}</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-
-                @forelse (App\Anforderung::latest()->get() as $anforderung)
+                @forelse ($anforderungen as $anforderung)
                     <tr>
                         <td style="vertical-align: middle;">{{ $anforderung->an_name_lang }}</td>
                         <td style="vertical-align: middle;"
@@ -87,7 +86,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td>
+                        <td colspan="6">
                             <x-notifyer>{{ __('Keine Anforderungen gefunden') }}</x-notifyer>
                         </td>
                     </tr>
@@ -100,32 +99,4 @@
 
 @endsection
 
-@section('scripts')
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
 
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
-    ></script>
-
-    <script>
-        const dom = ($('tr').length > 15) ? 't<"bottom"flp><"clear">' : 't';
-        $('#tabAnforderungListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 5}
-            ],
-            "dom": dom
-        });
-    </script>
-
-@endsection

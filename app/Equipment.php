@@ -6,13 +6,25 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Kyslik\ColumnSortable\Sortable;
 
 class Equipment extends Model {
     protected $guarded = [];
 
 //    protected $table = 'equipments';
 
-    use SoftDeletes;
+    use SoftDeletes,Sortable;
+
+    public $sortable = [
+        'id',
+        'eq_inventar_nr',
+        'eq_serien_nr',
+        'eq_ibm',
+        'eq_uid',
+        'produkt_id',
+        'created_at',
+        'updated_at'
+    ];
 
     public static function boot() {
         parent::boot();
@@ -54,6 +66,10 @@ class Equipment extends Model {
 
     public function produkt() {
         return $this->belongsTo(Produkt::class);
+    }
+
+    public function produktDetails() {
+        return $this->belongsTo(Produkt::class,'produkt_id','id','EquipmentDetails');
     }
 
     public function EquipmentParam() {

@@ -19,8 +19,8 @@
         </div>
     </li>
 
-    <li class="nav-item {{ Request::routeIs('controlevent.*') ? ' active ' : ' ' }}">
-        <a class="nav-link " href="{{ route('controlevent.index') }}"><i class="fas fa-stethoscope"></i> {{__('Prüfungen')}}</a>
+    <li class="nav-item {{ Request::routeIs('testing.*') ? ' active ' : ' ' }}">
+        <a class="nav-link " href="{{ route('testing.index') }}"><i class="fas fa-stethoscope"></i> {{__('Prüfungen')}}</a>
     </li>
 
     <li class="nav-item dropdown {{ Request::routeIs('event.*')  ? ' active ' : ' ' }}">

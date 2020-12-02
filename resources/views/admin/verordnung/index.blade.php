@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Verordnungen</h1>
+                <h1 class="h3">{{__('Übersicht')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -24,16 +24,16 @@
                 >
                     <thead>
                     <tr>
-                        <th>Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Kennung</th>
-                        <th class="d-none d-md-table-cell">Bearbeitet</th>
-                        <th class="text-center d-none d-md-table-cell">Anforderungen</th>
+                        <th>@sortablelink('vo_name_lang', __('Bezeichnung'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('vo_nummer', __('Kennung'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Bearbeitet'))</th>
+                        <th class="text-center d-none d-md-table-cell">{{ __('Anforderungen')}}</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    @forelse (App\Verordnung::latest()->get() as $verordnung)
+                    @forelse ($verordnungen as $verordnung)
                         <tr>
                             <td style="vertical-align: middle;">{{ $verordnung->vo_name_lang }}</td>
                             <td style="vertical-align: middle;"
@@ -71,34 +71,4 @@
 
     </div>
 
-@endsection
-
-@section('scripts')
-
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
-    ></script>
-
-    <script>
-        const dom = ($('tr').length > 15) ? 't<"bottom"flp><"clear">' : 't';
-        $('#tabVerordnungListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 4}
-            ],
-            "dom": dom
-        });
-    </script>
 @endsection

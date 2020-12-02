@@ -169,7 +169,7 @@
                                 <td>{{ $controlItem->Anforderung->an_name_lang }}</td>
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                 <td>
-                                    <a href="{{ route('controlevent.create',['controlItem' => $controlItem]) }}"
+                                    <a href="{{ route('testing.create',['test_id' => $controlItem]) }}"
                                        class="btn btn-sm btn-outline-primary"
                                     > Prüfung starten
                                     </a>

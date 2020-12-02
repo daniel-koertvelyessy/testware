@@ -20,14 +20,14 @@
                 <table class="table" id="tableEventListe">
                     <thead>
                     <tr>
-                        <th>{{__('Vom')}}</th>
+                        <th>@sortablelink('created_at', __('Vom'))</th>
                         <th class="d-none d-md-table-cell">{{__('gelesen')}}</th>
-                        <th>{{__('Gerät')}} / {{__('Inventarnummer')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Bearbeiter')}}</th>
+                        <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventar-Nr'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('user.name', __('Bearbeiter'))</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (\App\EquipmentEvent::all() as $equipmentEvent)
+                    @foreach ($eventListItems as $equipmentEvent)
                         <tr>
                             <td>
                                 <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
@@ -39,11 +39,12 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>
                         </tr>
-                    @empty
-
-                    @endforelse
+                    @endforeach
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center">
+                    {!! $eventListItems->onEachSide(2)->links() !!}
+                </div>
             </div>
         </div>
 
@@ -55,30 +56,6 @@
 @endsection
 
 @section('scripts')
-
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-
-    <script>
-
-
-        $('#tableEventListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            // "columnDefs": [
-            //     {"orderable": false, "targets": 2}
-            // ],
-            "dom": 't'
-        });
-    </script>
 
     <script>
         document.addEventListener("keydown", function (zEvent) {

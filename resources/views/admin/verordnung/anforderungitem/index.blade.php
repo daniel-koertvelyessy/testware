@@ -24,17 +24,17 @@
             <table class="table table-striped" id="tabAnforderungItemListe">
                 <thead>
                 <tr>
-                    <th>{{__('Bezeichnung')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Anforderung')}}</th>
-                    <th class="d-none d-md-table-cell">{{__('Geändert')}}</th>
-                    <th class="text-center d-none d-md-table-cell">{{__('Ausführung')}}</th>
+                    <th>@sortablelink('Anforderung.an_name_kurz', __('Bezeichnung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('aci_name_lang', __('Anforderung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Geändert'))</th>
+                    <th class="text-center d-none d-md-table-cell">@sortablelink('aci_execution', __('Ausführung'))</th>
                     <th></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @forelse (App\AnforderungControlItem::latest()->get() as $aci)
+                @forelse ($aciitems as $aci)
                     <tr>
                         <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->Anforderung->an_name_kurz }}</td>
                         <td style="vertical-align: middle;">{{ $aci->aci_name_lang }}</td>
@@ -47,14 +47,13 @@
                             <form action="{{ route('anforderungcontrolitem.destroy',$aci) }}" method="post">
                                 @csrf
                                 @method('delete')
-
                                 <button class="btn btn-link">{{__('löschen')}}</button>
                             </form>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td>
+                        <td colspan="6">
                             <x-notifyer>{{ __('Keine Verordnungen gefunden') }}</x-notifyer>
                         </td>
                     </tr>
@@ -64,35 +63,5 @@
         </div>
 
     </div>
-
-@endsection
-
-@section('scripts')
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"
-    ></script>
-
-    <script>
-        const dom = ($('tr').length > 15) ? 't<"bottom"flp><"clear">' : 't';
-        $('#tabAnforderungItemListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 5}
-            ],
-            "dom": dom
-        });
-    </script>
 
 @endsection

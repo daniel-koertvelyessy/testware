@@ -20,8 +20,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 
-class EquipmentEventController extends Controller {
-    public function __construct() {
+class EquipmentEventController extends Controller
+{
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -30,9 +32,15 @@ class EquipmentEventController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function index() {
-        $eventList = EquipmentEvent::paginate(10);
-        return view('testware.events.index', ['eventListItems' => $eventList]);
+    public function index()
+    {
+        if (EquipmentEvent::count() > 10) {
+            $eventList = EquipmentEvent::with('Equipment','User')->sortable()->paginate(10);
+            return view('testware.events.index', ['eventListItems' => $eventList]);
+        } else {
+            $eventList = EquipmentEvent::all();
+            return view('testware.events.index', ['eventListItems' => $eventList]);
+        }
     }
 
     /**
@@ -40,17 +48,19 @@ class EquipmentEventController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function create() {
+    public function create()
+    {
         return view('testware.events.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $event = EquipmentEvent::create($this->validateNewEquipmentEvent());
         return redirect()->route('event.show', $event);
@@ -59,22 +69,23 @@ class EquipmentEventController extends Controller {
     /**
      * @return array
      */
-    public function validateNewEquipmentEvent()
-    : array {
+    public function validateNewEquipmentEvent(): array
+    {
         return request()->validate([
             'equipment_event_text' => '',
             'equipment_event_user' => '',
-            'equipment_id'         => 'required',
+            'equipment_id' => 'required',
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function accept(Request $request) {
+    public function accept(Request $request)
+    {
         $this->validateNewEquipmentEvent();
 
         $event = EquipmentEvent::find($request->equipment_event_id);
@@ -113,10 +124,11 @@ class EquipmentEventController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  EquipmentEvent $event
+     * @param EquipmentEvent $event
      * @return Application|Factory|Response|View
      */
-    public function show(EquipmentEvent $event) {
+    public function show(EquipmentEvent $event)
+    {
         /*    $event->updated_at = now();
             $event->update();*/
         return view('testware.events.show', ['event' => $event]);
@@ -125,33 +137,36 @@ class EquipmentEventController extends Controller {
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  EquipmentEvent $equipmentEvent
+     * @param EquipmentEvent $equipmentEvent
      * @return Response
      */
-    public function edit(EquipmentEvent $equipmentEvent) {
+    public function edit(EquipmentEvent $equipmentEvent)
+    {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request        $request
-     * @param  EquipmentEvent $equipmentEvent
+     * @param Request $request
+     * @param EquipmentEvent $equipmentEvent
      * @return Response
      */
-    public function update(Request $request, EquipmentEvent $equipmentEvent) {
+    public function update(Request $request, EquipmentEvent $equipmentEvent)
+    {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentEvent $event
-     * @param  Request        $request
+     * @param EquipmentEvent $event
+     * @param Request $request
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(EquipmentEvent $event, Request $request) {
+    public function destroy(EquipmentEvent $event, Request $request)
+    {
         $event->delete();
 
         $eh = new EquipmentHistory();
@@ -184,12 +199,13 @@ class EquipmentEventController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentEvent $event
-     * @param  Request        $request
+     * @param EquipmentEvent $event
+     * @param Request $request
      * @return RedirectResponse
      * @throws Exception
      */
-    public function close(EquipmentEvent $event, Request $request) {
+    public function close(EquipmentEvent $event, Request $request)
+    {
 //dd($request);
         $event->delete();
 
@@ -217,7 +233,8 @@ class EquipmentEventController extends Controller {
     }
 
 
-    public function restore(Request $request) {
+    public function restore(Request $request)
+    {
         $event = EquipmentEvent::withTrashed()->find($request->id);
         $event->restore();
         return redirect()->route('event.show', $event);

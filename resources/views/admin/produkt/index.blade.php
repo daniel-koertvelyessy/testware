@@ -41,12 +41,12 @@
                 >
                     <thead>
                     <tr>
-                        <th>{{__('Bezeichung')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Produkt Nummer')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Kategorie')}}</th>
-                        <th>{{__('Aktiv')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Prüfmittel')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Status')}}</th>
+                        <th>@sortablelink('prod_name_kurz', __('Bezeichung'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('prod_nummer', __('Artikelnummer'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('ProduktKategorie.pk_name_kurz', __('Kategorie'))</th>
+                        <th>@sortablelink('prod_active', __('Aktiv'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('ControlProdukt.id', __('Prüfmittel'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_name_kurz', __('Status'))</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -81,30 +81,7 @@
 @endsection
 
 @section('scripts')
-    @if ($produktList->count()>0)
-        <link rel="stylesheet"
-              type="text/css"
-              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-        >
 
-        <script type="text/javascript"
-                charset="utf8"
-                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-        ></script>
-
-        <script>
-
-            $('#tabProduktListe').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-                },
-                // "columnDefs": [
-                //     {"orderable": false, "targets": 2}
-                // ],
-                "dom": 't'
-            });
-        </script>
-    @endif
 @endsection
 
 

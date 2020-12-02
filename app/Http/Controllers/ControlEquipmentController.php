@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Kyslik\ColumnSortable\Sortable;
 
-class ControlEventController extends Controller {
+class ControlEquipmentController extends Controller {
 
     use SoftDeletes, Sortable;
 
@@ -53,7 +53,7 @@ class ControlEventController extends Controller {
     public function create(Request $request) {
         $aci_execution = 0;
         $aci_control_equipment_required = 0;
-        $controlItem = ControlEquipment::find($request->controlItem);
+        $controlItem = ControlEquipment::find($request->test_id);
         $acidata = AnforderungControlItem::where('anforderung_id', $controlItem->anforderung_id)->get();
         foreach ($acidata as $aci) {
             $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
@@ -61,7 +61,7 @@ class ControlEventController extends Controller {
         }
 
         return view('testware.control.create', [
-            'controlItem'                    => $controlItem,
+            'test'                    => $controlItem,
             'aci_execution'                  => $aci_execution,
             'aci_control_equipment_required' => $aci_control_equipment_required,
         ]);

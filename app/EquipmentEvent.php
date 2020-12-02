@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Kyslik\ColumnSortable\Sortable;
 
 class EquipmentEvent extends Model
 {
@@ -14,9 +15,17 @@ class EquipmentEvent extends Model
         'equipment_id',
     ];
 
-    use SoftDeletes;
+    use SoftDeletes, Notifiable, Sortable;
 
-    use Notifiable;
+    public $sortable = [
+        'id',
+        'created_at',
+        'updated_at',
+        'equipment_event_user',
+        'equipment_event_text',
+        'equipment_id',
+        ];
+
 
     public function search($term) {
         return EquipmentEvent::where('equipment_event_text', 'like', '%' . $term . '%')

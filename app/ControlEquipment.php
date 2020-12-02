@@ -6,19 +6,33 @@ use Carbon\Carbon;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kyslik\ColumnSortable\Sortable;
 
-class ControlEquipment extends Model {
-    use SoftDeletes;
+class ControlEquipment extends Model
+{
+    use SoftDeletes, Sortable;
 
-    public function Equipment() {
+    public $sortable = [
+        'id',
+        'qe_control_date_due',
+    ];
+    public function Equipment()
+    {
         return $this->belongsTo(Equipment::class);
     }
 
-    public function Anforderung() {
+/*    public function Produkt()
+    {
+        return $this->hasOneThrough('App\Produkt','App\Equipment');
+    }*/
+
+    public function Anforderung()
+    {
         return $this->belongsTo(Anforderung::class);
     }
 
-    public function checkDueDateIcon(ControlEquipment $qeitem) {
+    public function checkDueDateIcon(ControlEquipment $qeitem)
+    {
         if (now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due) {
             return '<span class="fas fa-circle text-success mr-3"></span> ';
         } elseif (now()->addWeeks($qeitem->qe_control_date_warn) >= $qeitem->qe_control_date_due && now() < $qeitem->qe_control_date_due) {
@@ -29,7 +43,8 @@ class ControlEquipment extends Model {
 
     }
 
-    public function checkDueDate(ControlEquipment $qeitem) {
+    public function checkDueDate(ControlEquipment $qeitem)
+    {
         $date = Carbon::parse($qeitem->qe_control_date_due)->DiffForHumans();
         if (now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due) {
             return '<span class="fas fa-circle text-success mr-3"></span> ' . $date;

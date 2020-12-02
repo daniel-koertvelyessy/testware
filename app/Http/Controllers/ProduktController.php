@@ -41,8 +41,13 @@ class ProduktController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function index() {
-        $produktList = Produkt::with('ProduktKategorie', 'ProduktState')->paginate(15);
+        if (Produkt::all()->count()>10)
+       { $produktList = Produkt::with('ProduktKategorie', 'ProduktState','ControlProdukt')->sortable()->paginate(10);
         return view('admin.produkt.index', ['produktList' => $produktList]);
+       } else {
+            $produktList = Produkt::with('ProduktKategorie', 'ProduktState')->all();
+            return view('admin.produkt.index', ['produktList' => $produktList]);
+        }
     }
 
     /**
@@ -81,7 +86,18 @@ class ProduktController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function show(Produkt $produkt) {
-        return view('admin.produkt.show', ['produkt' => $produkt]);
+        if (Equipment::where('produkt_id',$produkt->id)->count() > 10){
+            return view('admin.produkt.show', [
+                'produkt' => $produkt,
+                'equipLists' => Equipment::where('produkt_id',$produkt->id)->with('EquipmentState','produktDetails')->sortable()->paginate(10)
+            ]);
+        } else {
+            return view('admin.produkt.show', [
+                'produkt' => $produkt,
+                'equipLists' => Equipment::where('produkt_id',$produkt->id)->with('EquipmentState')->sortable()->get()
+            ]);
+        }
+
     }
 
     /**
@@ -93,7 +109,14 @@ class ProduktController extends Controller {
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Produkt $produkt) {
+
+        if (isset($request->control_product)){
+            $con = ControlProdukt::updateOrInsert(['produkt_id'=>$request->id]);
+        }
+
         $produkt->prod_active = $request->has('prod_active') ? 1 : 0;
+
+
         $produkt->update($this->validateProdukt());
 
 //        dd(isset($request->pp_label));

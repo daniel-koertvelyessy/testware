@@ -39,19 +39,20 @@
                     <thead>
                     <tr>
                         <th class="">
-                            {{__('Bezeichnung')}}
+                            @sortablelink('produkt.prod_name_lang', __('Bezeichnung'))
                         </th>
                         <th class="d-none d-md-table-cell ">
-                            {{__('Inventar-Nr')}}
+                            @sortablelink('eq_inventar_nr', __('Inventarnummer'))
                         </th>
                         <th class="d-none d-md-table-cell ">
-                            {{__('Stellplatz')}}
+                            @sortablelink('standort.std_kurzel', __('Stellplatz'))
                         </th>
                         <th class="d-none d-lg-table-cell ">
-                            {{__('Status')}}
+                            @sortablelink('EquipmentState.estat_name_kurz', __('Status'))
                         </th>
                         <th class="">
-                            {{__('Prüfung fällig')}}
+{{--                            @sortablelink('ControlEquipment.qe_control_date_due', __('Fällig'))--}}
+                            {{__('Prüfung(en) fällig')}}
                         </th>
                     </tr>
                     </thead>

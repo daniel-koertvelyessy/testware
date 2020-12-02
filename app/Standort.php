@@ -5,10 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Kyslik\ColumnSortable\Sortable;
 
 class Standort extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes ,Sortable;
+
+    public $sortable = [
+        'id',
+        'std_kurzel',
+        'std_id',
+    ];
 
     public function add($stid, $kurzel, $typ) {
         $sd = new Standort();
@@ -86,9 +93,12 @@ class Standort extends Model
 
         }
 
-
-
         return $path;
 
+    }
+
+    public function Equipment()
+    {
+        return $this->hasMany(Equipment::class);
     }
 }

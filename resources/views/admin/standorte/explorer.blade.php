@@ -359,7 +359,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Standort-Explorer</h1>
+                <h1 class="h3">Explorer</h1>
             </div>
         </div>
         <div class="row mb-4">
@@ -379,7 +379,7 @@
                                 >{{ $loc->l_name_lang }}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-outline-primary ml-2">Daten holen</button>
+                        <button class="btn btn-outline-primary ml-2">{{__('Daten holen')}}</button>
                     </div>
                 </form>
             </div>
@@ -448,7 +448,7 @@
                                 {{ $building->b_name_lang }}
                             </option>
                         @empty
-                            <option value="void">Keine Gebäude im Standort angelegt</option>
+                            <option value="void">{{__('Keine Gebäude im Standort angelegt')}}</option>
                         @endforelse
                     </select>
                 </div>
@@ -575,7 +575,7 @@
                             multiple
                             size="10"
                     >
-                        <option value="void">Bitte erst Gebäude wählen</option>
+                        <option value="void">{{__('Bitte erst Gebäude wählen')}}</option>
                     </select>
                 </div>
             </div>
@@ -601,7 +601,7 @@
                         buildingList.val(id)
                     },400);
                     if (id === 'void')
-                        $('#stellplatzList').html('<option>Bitte Gebäude auswählen</option>');
+                        $('#stellplatzList').html('<option>{{__(\'Bitte erst Gebäude wählen\')}}</option>');
                 }
             });
         }
@@ -751,7 +751,8 @@
                 form = $('#frmModalSetBuilding');
 
             if (type === 'new') {
-                $('#modalSetBuildingLabel').text('Neues Gebäude anlegen');
+                const txt = '{{__('Bitte erst Gebäude wählen')}}';
+                $('#modalSetBuildingLabel').text(txt);
                 $.ajax({
                     type: "get",
                     dataType: 'json',
@@ -792,7 +793,7 @@
                                 url: "{{ route('fetchUid') }}",
                                 success: function (res) {
                                     $('#modalSetBuildingLabel').text('Gebäude kopieren');
-                                    form.find('#b_name_kurz').attr('placeholder', 'neue Kurzbezeichnung angeben')
+                                    form.find('#b_name_kurz').attr('placeholder', 'neue Kurzbezeichnung angeben');
                                     form.find('#standort_id_building').val(res);
                                     form.find('#modalType').val('copy');
                                     modalBuilding.modal('show');

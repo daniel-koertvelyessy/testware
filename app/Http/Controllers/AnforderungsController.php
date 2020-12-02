@@ -33,7 +33,18 @@ class AnforderungsController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function index() {
-        return view('admin.verordnung.anforderung.index');
+
+        if (Anforderung::all()->count() > 10)
+        {
+            return view('admin.verordnung.anforderung.index',[
+                'anforderungen' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
+            ]);
+        } else {
+            return view('admin.verordnung.anforderung.index',[
+                'anforderungen' => Anforderung::with('ControlInterval')->sortable()->get()
+            ]);
+        }
+
     }
 
     /**
