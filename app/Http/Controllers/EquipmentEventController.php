@@ -38,7 +38,7 @@ class EquipmentEventController extends Controller
             $eventList = EquipmentEvent::with('Equipment','User')->sortable()->paginate(10);
             return view('testware.events.index', ['eventListItems' => $eventList]);
         } else {
-            $eventList = EquipmentEvent::all();
+            $eventList = EquipmentEvent::with('Equipment','User')->sortable()->get();
             return view('testware.events.index', ['eventListItems' => $eventList]);
         }
     }

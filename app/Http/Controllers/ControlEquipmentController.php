@@ -39,7 +39,9 @@ class ControlEquipmentController extends Controller {
                 ->paginate(20);
             return view('testware.control.index',['controlItems'=>$controlItems]);
         } else {
-            $controlItems = ControlEquipment::orderBy('qe_control_date_due')->get();
+            $controlItems = ControlEquipment::with('Equipment','Anforderung')
+                ->sortable()
+                ->get();
             return view('testware.control.index',['controlItems'=>$controlItems]);
         }
     }

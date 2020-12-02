@@ -27,7 +27,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach ($eventListItems as $equipmentEvent)
+                    @forelse ($eventListItems as $equipmentEvent)
                         <tr>
                             <td>
                                 <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
@@ -39,12 +39,20 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>
                         </tr>
-                    @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4">
+                                <x-notifyer>Keine aktiven Ereignisse gefunden</x-notifyer>
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
+                @if($eventListItems->count()>10)
                 <div class="d-flex justify-content-center">
                     {!! $eventListItems->onEachSide(2)->links() !!}
                 </div>
+                    @endif
             </div>
         </div>
 
