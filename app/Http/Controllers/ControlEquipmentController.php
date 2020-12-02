@@ -16,10 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Kyslik\ColumnSortable\Sortable;
 
 class ControlEventController extends Controller {
 
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
 
     public function __construct() {
         $this->middleware('auth');
@@ -32,8 +33,10 @@ class ControlEventController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function index() {
-        if (ControlEquipment::all()->count() > 20){
-            $controlItems = ControlEquipment::orderBy('qe_control_date_due')->paginate(20);
+        if (ControlEquipment::count() > 20){
+            $controlItems = ControlEquipment::with('Equipment','Anforderung')
+                ->sortable()
+                ->paginate(20);
             return view('testware.control.index',['controlItems'=>$controlItems]);
         } else {
             $controlItems = ControlEquipment::orderBy('qe_control_date_due')->get();
