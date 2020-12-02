@@ -19,7 +19,7 @@
     >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('equipmentevent.destroy',$equipmentevent) }}"
+                <form action="{{ route('event.destroy',$event) }}"
                       method="post"
                 >
                     <div class="modal-header">
@@ -37,7 +37,7 @@
                     <div class="modal-body">
                         @csrf
                         @method('delete')
-                        @if ($equipmentevent->equipment_event_user>0)
+                        @if ($event->equipment_event_user>0)
                             <x-textarea required
                                         id="event_decline_text"
                                         label="{{__('Begründung')}}"
@@ -45,7 +45,7 @@
                             <input type="hidden"
                                    name="event_decline_user"
                                    id="event_decline_user"
-                                   value="{{ $equipmentevent->equipment_event_user }}"
+                                   value="{{ $event->equipment_event_user }}"
                             >
                         @endif
                     </div>
@@ -66,7 +66,7 @@
     >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('equipmentevent.accept',$equipmentevent) }}"
+                <form action="{{ route('event.accept',$event) }}"
                       method="post"
                 >
                     @method('put')
@@ -87,13 +87,13 @@
                         <input type="hidden"
                                name="equipment_event_id"
                                id="equipment_event_id_modal"
-                               value="{{ $equipmentevent->id }}"
+                               value="{{ $event->id }}"
                         >
 
                         <input type="hidden"
                                name="equipment_id"
                                id="equipment_id_modal"
-                               value="{{ $equipmentevent->equipment_id }}"
+                               value="{{ $event->equipment_id }}"
                         >
                         <x-textarea required
                                     id="equipment_event_item_text_modal"
@@ -133,7 +133,7 @@
                                 >
                                     @foreach(App\User::all() as $user)
                                         <option value="{{ $user->id }}"
-                                                @if ($equipmentevent->equipment_event_user === $user->id)
+                                                @if ($event->equipment_event_user === $user->id)
                                                 selected
                                             @endif>
                                             {{ $user->name }}
@@ -161,7 +161,7 @@
     >
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('equipmentevent.close',$equipmentevent) }}"
+                <form action="{{ route('event.close',$event) }}"
                       method="post"
                       id="frmDeleteEquipmentEvent"
                       enctype="multipart/form-data"
@@ -184,13 +184,13 @@
                         <input type="hidden"
                                name="equipment_event_id"
                                id="equipment_event_id_close"
-                               value="{{ $equipmentevent->id }}"
+                               value="{{ $event->id }}"
                         >
 
                         <input type="hidden"
                                name="equipment_id"
                                id="equipment_id_close"
-                               value="{{ $equipmentevent->equipment_id }}"
+                               value="{{ $event->equipment_id }}"
                         >
                         <x-textarea required
                                     id="equipment_event_item_text_close"
@@ -269,11 +269,11 @@
                 </h1>
             </div>
         </div>
-        @if ($equipmentevent->eventitems->count()>0)
+        @if ($event->eventitems->count()>0)
             <div class="row">
                 <div class="col-md-8">
                     <h2 class="h5 mt-3">{{__('Neue Meldung')}} </h2>
-                    <form action="{{ route('equipmenteventitem.store') }}"
+                    <form action="{{ route('eventitem.store') }}"
                           method="post"
                           id="frmAddEquipmentEventItem"
                     >
@@ -284,7 +284,7 @@
                         <input type="hidden"
                                id="equipment_event_id"
                                name="equipment_event_id"
-                               value="{{ $equipmentevent->id }}"
+                               value="{{ $event->id }}"
                         >
                         <input type="hidden"
                                id="user_id"
@@ -297,33 +297,33 @@
                         </button>
                     </form>
                     <div class="dropdown-divider my-3"></div>
-                    @foreach($equipmentevent->eventitems as $equipmenteventitem)
-                        @if ($equipmenteventitem->user_id === Auth::user()->id )
+                    @foreach($event->eventitems as $eventitem)
+                        @if ($eventitem->user_id === Auth::user()->id )
                             <div class="card px-3 py-1 mb-3">
-                                <form action="{{ route('equipmenteventitem.update',$equipmenteventitem) }}"
+                                <form action="{{ route('eventitem.update',$eventitem) }}"
                                       method="post"
-                                      id="frmUpdateEquipmentEventItem{{ $equipmenteventitem->id }}"
+                                      id="frmUpdateEquipmentEventItem{{ $eventitem->id }}"
                                 >
                                     @csrf
                                     @method('put')
                                     <div class="d-flex justify-content-between">
-                                        <x-notifyer>{{__('Erstellt')}}: {{ $equipmenteventitem->created_at->DiffForHumans() }}</x-notifyer>
-                                        <x-notifyer>{{__('Aktualisiert')}}: {{ $equipmenteventitem->updated_at->DiffForHumans() }}</x-notifyer>
+                                        <x-notifyer>{{__('Erstellt')}}: {{ $eventitem->created_at->DiffForHumans() }}</x-notifyer>
+                                        <x-notifyer>{{__('Aktualisiert')}}: {{ $eventitem->updated_at->DiffForHumans() }}</x-notifyer>
                                     </div>
-                                    <x-textarea id="equipment_event_item_text_update_{{ $equipmenteventitem->id }}"
+                                    <x-textarea id="equipment_event_item_text_update_{{ $eventitem->id }}"
                                                 name="equipment_event_item_text"
                                                 label="{{__('Meldungstext')}}"
-                                                value="{!! ($equipmenteventitem->equipment_event_item_text) !!}"
+                                                value="{!! ($eventitem->equipment_event_item_text) !!}"
                                     />
                                     <input type="hidden"
                                            name="equipment_event_id"
-                                           id="equipment_event_id_update_{{ $equipmenteventitem->id }}"
-                                           value="{{ $equipmenteventitem->equipment_event_id }}"
+                                           id="equipment_event_id_update_{{ $eventitem->id }}"
+                                           value="{{ $eventitem->equipment_event_id }}"
                                     >
                                     <input type="hidden"
                                            name="user_id"
-                                           id="user_id_update_{{ $equipmenteventitem->id }}"
-                                           value="{{ $equipmenteventitem->user_id }}"
+                                           id="user_id_update_{{ $eventitem->id }}"
+                                           value="{{ $eventitem->user_id }}"
                                     >
 
                                     <button class="btn btn-sm btn-outline-primary ">
@@ -337,13 +337,13 @@
 
                             <div class="card px-3 py-1 mb-3">
                                 <div class="d-flex justify-content-between">
-                                    <x-notifyer>{{__('Erstellt')}}: {{ $equipmenteventitem->created_at->DiffForHumans() }}</x-notifyer>
+                                    <x-notifyer>{{__('Erstellt')}}: {{ $eventitem->created_at->DiffForHumans() }}</x-notifyer>
                                     <x-notifyer>{{__('von')}}:
-                                        <a href="mailto:{{ App\User::find($equipmenteventitem->user_id)->email }}">{{ App\User::find($equipmenteventitem->user_id)->name }}</a>
+                                        <a href="mailto:{{ App\User::find($eventitem->user_id)->email }}">{{ App\User::find($eventitem->user_id)->name }}</a>
                                     </x-notifyer>
-                                    <x-notifyer>{{__('Aktualisiert')}}: {{ $equipmenteventitem->updated_at->DiffForHumans() }}</x-notifyer>
+                                    <x-notifyer>{{__('Aktualisiert')}}: {{ $eventitem->updated_at->DiffForHumans() }}</x-notifyer>
                                 </div>
-                                <p class="mt-2">{{ $equipmenteventitem->equipment_event_item_text }}</p>
+                                <p class="mt-2">{{ $eventitem->equipment_event_item_text }}</p>
                             </div>
                         @endif
 
@@ -355,27 +355,27 @@
                         <h2 class="h5">{{__('Details zum Vorgang')}} </h2>
                         <dl class="row">
                             <dt class="col-lg-4">{{__('Erstellt')}}</dt>
-                            <dd class="col-lg-8">{{ $equipmentevent->created_at->DiffForHumans() }}</dd>
+                            <dd class="col-lg-8">{{ $event->created_at->DiffForHumans() }}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-lg-4">{{__('von Benutzer')}}</dt>
                             <dd class="col-lg-8">
-                                @if ($equipmentevent->equipment_event_user>0)
-                                    {{ \App\User::find($equipmentevent->equipment_event_user)->name }}
+                                @if ($event->equipment_event_user>0)
+                                    {{ \App\User::find($event->equipment_event_user)->name }}
                                 @endif
                             </dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-lg-4">{{__('Gerät')}}</dt>
                             <dd class="col-lg-8">
-                                <p>  {{ App\Produkt::find($equipmentevent->equipment->produkt_id)->prod_name_lang }}
+                                <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name_lang }}
                                 </p>
-                                {{__('Inventar')}}-# {{ $equipmentevent->equipment->eq_inventar_nr }}
+                                {{__('Inventar')}}-# {{ $event->equipment->eq_inventar_nr }}
                             </dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-lg-4">{{__('Meldung')}}</dt>
-                            <dd class="col-lg-8">{{ $equipmentevent->equipment_event_text }}</dd>
+                            <dd class="col-lg-8">{{ $event->equipment_event_text }}</dd>
                         </dl>
                     </div>
                     <button type="button"
@@ -395,27 +395,27 @@
                     <h2 class="h5 mt-3">{{__('Details zur Meldung')}} </h2>
                     <dl class="row">
                         <dt class="col-sm-3">{{__('Erstellt')}}</dt>
-                        <dd class="col-sm-9">{{ $equipmentevent->created_at->DiffForHumans() }}</dd>
+                        <dd class="col-sm-9">{{ $event->created_at->DiffForHumans() }}</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">{{__('von Benutzer')}}</dt>
                         <dd class="col-sm-9">
-                            @if ($equipmentevent->equipment_event_user>0)
-                                {{ \App\User::find($equipmentevent->equipment_event_user)->name }}
+                            @if ($event->equipment_event_user>0)
+                                {{ \App\User::find($event->equipment_event_user)->name }}
                             @endif
                         </dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">{{__('Gerät')}}</dt>
                         <dd class="col-sm-9">
-                            <p>  {{ App\Produkt::find($equipmentevent->equipment->produkt_id)->prod_name_lang }}
+                            <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name_lang }}
                             </p>
-                            {{__('Inventar-#')}} {{ $equipmentevent->equipment->eq_inventar_nr }}
+                            {{__('Inventar-#')}} {{ $event->equipment->eq_inventar_nr }}
                         </dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-3">{{__('Meldung')}}</dt>
-                        <dd class="col-sm-9">{{ $equipmentevent->equipment_event_text }}</dd>
+                        <dd class="col-sm-9">{{ $event->equipment_event_text }}</dd>
                     </dl>
                 </div>
             </div>

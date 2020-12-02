@@ -27,7 +27,7 @@
         <span class="fas fa-stethoscope"></span>
     </a>
 
-    <a href="{{ route('equipmentevent.index') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
+    <a href="{{ route('event.index') }}" class="text-white my-2 d-flex align-items-center justify-content-between">
         <span>Ereignisse</span>
         <span class="fas fa-inbox"></span>
     </a>

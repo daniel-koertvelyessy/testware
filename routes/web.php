@@ -65,13 +65,13 @@ Route::get('docs', function () {
 });
 
 Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
-Route::post('equipmentevent.restore', 'EquipmentEventController@restore')->name('equipmentevent.restore');
-Route::delete('equipmentevent.close', 'EquipmentEventController@close')->name('equipmentevent.close');
+Route::post('event.restore', 'EquipmentEventController@restore')->name('event.restore');
+Route::delete('event.close', 'EquipmentEventController@close')->name('event.close');
 
 Route::middleware('throttle:5|60,1')->group(function () {
     Route::post('app.store', 'AppController@store')->name('app.store');
 });
-Route::put('equipmentevent.accept', 'EquipmentEventController@accept')->name('equipmentevent.accept');
+Route::put('event.accept', 'EquipmentEventController@accept')->name('event.accept');
 
 
 Route::resources([
@@ -92,8 +92,8 @@ Route::resources([
     'anforderung'            => 'AnforderungsController',
     'verordnung'             => 'VerordnungController',
     'anforderungcontrolitem' => 'AnforderungControlItemController',
-    'equipmentevent'         => 'EquipmentEventController',
-    'equipmenteventitem'     => 'EquipmentEventItemController',
+    'event'         => 'EquipmentEventController',
+    'eventitem'     => 'EquipmentEventItemController',
     'EquipmentInstruction'   => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
     'lizenz'                 => 'LizenzController',
@@ -177,6 +177,8 @@ Route::get('produktMain', function () {
 
 Route::get('equipMain', function () {
     $equipmentList = \App\Equipment::paginate(10);
+
+
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 

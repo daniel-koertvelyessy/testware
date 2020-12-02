@@ -32,8 +32,8 @@ class ControlEventController extends Controller {
      * @return Application|Factory|Response|View
      */
     public function index() {
-        if (ControlEquipment::all()->count() > 10){
-            $controlItems = ControlEquipment::orderBy('qe_control_date_due')->paginate(15);
+        if (ControlEquipment::all()->count() > 20){
+            $controlItems = ControlEquipment::orderBy('qe_control_date_due')->paginate(20);
             return view('testware.control.index',['controlItems'=>$controlItems]);
         } else {
             $controlItems = ControlEquipment::orderBy('qe_control_date_due')->get();

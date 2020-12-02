@@ -21,7 +21,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <form action="{{ route('equipmentevent.store') }}" method="post">
+                <form action="{{ route('event.store') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

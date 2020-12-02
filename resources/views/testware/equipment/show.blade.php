@@ -1138,7 +1138,7 @@
                                     @endif
                                     <br>
                                     @if ($equipmentEvent->deleted_at)
-                                        <form action="{{ route('equipmentevent.restore') }}"
+                                        <form action="{{ route('event.restore') }}"
                                               method="post"
                                         >
                                             @csrf
@@ -1150,7 +1150,7 @@
                                             <button class="btn btn-sm btn-outline-primary mt-2">wiederherstellen</button>
                                         </form>
                                     @else
-                                        <a href="{{ route('equipmentevent.show',$equipmentEvent) }}"
+                                        <a href="{{ route('event.show',$equipmentEvent) }}"
                                            class="btn btn-sm btn-outline-primary mt-2"
                                         >öffnen
                                         </a>

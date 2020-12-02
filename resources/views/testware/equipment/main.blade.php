@@ -14,10 +14,10 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">{{__('Geräte-Verwaltung')}}</h1>
+                <h1 class="h3">{{__('Verwaltung')}}</h1>
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
             </div>
         </div>
@@ -38,11 +38,21 @@
                 <table class="table" id="tabEquipmentListe">
                     <thead>
                     <tr>
-                        <th>{{__('Bezeichnung')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Inventar-Nr')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Stellplatz')}}</th>
-                        <th class="d-none d-lg-table-cell">{{__('Status')}}</th>
-                        <th>{{__('Prüfung fällig')}}</th>
+                        <th class="">
+                            {{__('Bezeichnung')}}
+                        </th>
+                        <th class="d-none d-md-table-cell ">
+                            {{__('Inventar-Nr')}}
+                        </th>
+                        <th class="d-none d-md-table-cell ">
+                            {{__('Stellplatz')}}
+                        </th>
+                        <th class="d-none d-lg-table-cell ">
+                            {{__('Status')}}
+                        </th>
+                        <th class="">
+                            {{__('Prüfung fällig')}}
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -109,7 +119,7 @@
 @endsection
 
 
-@section('scripts')
+{{--@section('scripts')
     @if($equipmentList->count()>0)
     <link rel="stylesheet"
           type="text/css"
@@ -136,4 +146,4 @@
     </script>
 
     @endif
-@endsection
+@endsection--}}

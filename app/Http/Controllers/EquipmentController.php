@@ -17,6 +17,7 @@ use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
 use App\User;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -319,8 +320,9 @@ class EquipmentController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Equipment $equipment
-     * @return Application|Factory|Response|View
+     * @param Equipment $equipment
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy(Equipment $equipment) {
 
@@ -335,7 +337,7 @@ class EquipmentController extends Controller {
 
         $equipment->delete();
 
-        return view('testware.equipment.index');
+        return redirect()->route('equipMain');
 
     }
 

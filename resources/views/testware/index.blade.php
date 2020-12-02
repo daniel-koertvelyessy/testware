@@ -127,7 +127,7 @@
                                     <td>
                                         <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
                                         <br>
-                                        <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
+                                        <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                     </td>
                                     <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                                     <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -148,7 +148,6 @@
                          role="tabpanel"
                          aria-labelledby="controlMonth-tab"
                     >
-                        <h2 class="h5">{{__('Anstehende Prüfungen') .' '. date('Y')}} </h2>
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
@@ -159,12 +158,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse(\App\ControlEquipment::take(10)->where('qe_control_date_due','<=',now()->addMonths(4))->orderBy('qe_control_date_due')->get() as $controlEquipment)
+                            @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now()->addWeeks(4),now()->addMonths(3)])->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                 <tr>
                                     <td>
                                         <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
                                         <br>
-                                        <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
+                                        <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                     </td>
                                     <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                                     <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -196,12 +195,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse(\App\ControlEquipment::take(10)->where('qe_control_date_due','<=',date('Y'.'-12-31'))->orderBy('qe_control_date_due')->get() as $controlEquipment)
+                            @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now(),date('Y'.'-12-31')])->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                 <tr>
                                     <td>
                                         <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
                                         <br>
-                                        <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
+                                        <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                     </td>
                                     <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                                     <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -237,7 +236,7 @@
                                     <td>
                                         <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
                                         <br>
-                                        <x-notifyer>Inventar-Nr: {{ $controlEquipment->Equipment->eq_inventar_nr }}</x-notifyer>
+                                        <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                     </td>
                                     <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                                     <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -261,7 +260,7 @@
             <x-dashborarditem>
                 <h2 class="h5">
                     Offene
-                    <a href="{{ route('equipmentevent.index') }}">{{__('Ereignisse')}}</a>
+                    <a href="{{ route('event.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
                 @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
                     <x-systemmessage
@@ -271,7 +270,7 @@
                         subject="{{ $equipmentEvent->equipment->produkt->prod_name_lang }}"
                     >
                         <strong>
-                            <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
+                            <a href="{{ route('event.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
                         </strong>
                         <p>{{ $equipmentEvent->equipment_event_text }}</p>
                     </x-systemmessage>

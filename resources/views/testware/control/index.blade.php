@@ -20,7 +20,7 @@
         @if (isset($controlItems))
             <div class="row">
                 <div class="col">
-                    <table class="table table-striped table-sm">
+                    <table class="table table-striped table-sm" id="tabControlListe">
                         <thead>
                         <tr>
                             <th class="d-none d-md-table-cell">{{__('Gerät')}}</th>
@@ -75,6 +75,9 @@
                         @endforelse
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center">
+                        {!! $controlItems->onEachSide(2)->links() !!}
+                    </div>
                     @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung) )
                         <blockquote class="d-md-none blockquote border-left border-warning pl-3"><span class="fas fa-exclamation-triangle text-warning"
                                                                                                        aria-label="Symbol für unvollständige Prüfung"
@@ -84,7 +87,6 @@
                 </div>
             </div>
         @else
-
             @if(App\Produkt::count()>0)
                 <div class="row d-flex justify-content-center mt-5">
                     <div class="col-md-6 border p-3">
@@ -117,3 +119,29 @@
     </div>
 
 @endsection
+{{--@section('scripts')
+    @if ($controlItems->count()>0)
+        <link rel="stylesheet"
+              type="text/css"
+              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+        >
+        <script type="text/javascript"
+                charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+        ></script>
+
+        <script>
+
+            $('#tabControlListe').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+                },
+                "columnDefs": [
+                    {"orderable": false, "targets": 4}
+                ],
+                "dom": '<"top"i>rt<"bottom"p><"clear">',
+                "pagingType": "full"
+            });
+        </script>
+    @endif
+@endsection--}}

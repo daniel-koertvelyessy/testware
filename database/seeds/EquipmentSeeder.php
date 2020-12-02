@@ -11,9 +11,48 @@ class EquipmentSeeder extends Seeder
      */
     public function run()
     {
+        $produkt = factory(App\Produkt::class, 300)->create();
+        $standort= \App\Standort::all();
+        $bul =  factory(App\Equipment::class, 2356)->make()->each(function ($equip) use($produkt,$standort) {
+            $uid = \Illuminate\Support\Str::uuid();
+            $equip->eq_uid = $uid;
+            $equip->standort_id =  $standort->random()->id;
+            $equip->produkt_id = $produkt->random()->id;
+            $equip->save();
+
+            DB::table('equipment_uids')->insert([
+                'equipment_uid' => $uid,
+                'equipment_id' => $equip->id
+            ]);
+
+            DB::table('equipment_histories')->insert([
+                [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'deleted_at' => NULL,
+                    'eqh_eintrag_kurz' => 'Neu',
+                    'eqh_eintrag_text' => 'Das Gerät wurde angelegt',
+                    'equipment_id' => $equip->id,
+                ]
+            ]);
+
+            DB::table('control_equipment')->insert([
+                [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'deleted_at' => NULL,
+                    'qe_control_date_last' => now()->addMonths(-2),
+                    'qe_control_date_due' => now()->addWeeks(random_int(3,40)),
+                    'anforderung_id' => 1,
+                    'equipment_id' => $equip->id,
+                ]
+            ]);
+
+        });
 
 
-        DB::table('produkts')->insert([
+
+/*        DB::table('produkts')->insert([
             [
                 'id' => '31',
                 'created_at' => '2020-09-28 13:03:00',
@@ -29,7 +68,6 @@ class EquipmentSeeder extends Seeder
             ]
         ]);
 
-
         DB::table('produkt_docs')->insert([
             [
                 'id' => '1',
@@ -40,17 +78,17 @@ class EquipmentSeeder extends Seeder
                 'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
                 'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
                 'proddoc_name_text' => NULL,
-                'produkt_id'=>'31',
-                'document_type_id'=>'1',
+                'produkt_id' => '31',
+                'document_type_id' => '1',
             ]
         ]);
 
-                DB::table('produkt_docs')->insert([
+        DB::table('produkt_docs')->insert([
             [
-                'proddoc_name_lang'=>'MED_288_ULTIMATE.pdf',
-                'proddoc_name_pfad'=>'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
+                'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
+                'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
 
-                'proddoc_name_kurz'=>'Anleitung',
+                'proddoc_name_kurz' => 'Anleitung',
             ]
         ]);
 
@@ -64,7 +102,6 @@ class EquipmentSeeder extends Seeder
                 'produkt_id' => '31',
             ]
         ]);
-
 
         $uid = \Illuminate\Support\Str::uuid();
         DB::table('equipment')->insert([
@@ -100,20 +137,9 @@ class EquipmentSeeder extends Seeder
                 'deleted_at' => NULL,
                 'eqh_eintrag_kurz' => 'Neu',
                 'eqh_eintrag_text' => 'Das Gerät wurde angelegt',
-                'equipment_id' => '4' ,
+                'equipment_id' => '4',
             ]
-        ]);
-
-
-
-
-
-
-
-
-
-
-
+        ]);*/
 
 
     }

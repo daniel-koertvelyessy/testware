@@ -3,7 +3,7 @@
 @section('mainSection', 'testWare')
 
 @section('pagetitle')
-    {{__('Meldungen')}}
+    {{__('Ereignisse von Geräten')}}
 @endsection
 
 @section('menu')
@@ -15,22 +15,22 @@
         <div class="row">
             <div class="col">
                 <h1 class="h3">
-                    {{ __('Meldungen & Ereignisse') }}
+                    {{ __('Übersicht') }}
                 </h1>
                 <table class="table" id="tableEventListe">
                     <thead>
                     <tr>
-                        <th>Vom</th>
-                        <th class="d-none d-md-table-cell">gelesen</th>
-                        <th>Gerät / Inv-#</th>
-                        <th class="d-none d-md-table-cell">Bearbeiter</th>
+                        <th>{{__('Vom')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('gelesen')}}</th>
+                        <th>{{__('Gerät')}} / {{__('Inventarnummer')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Bearbeiter')}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse (\App\EquipmentEvent::all() as $equipmentEvent)
                         <tr>
                             <td>
-                                <a href="{{ route('equipmentevent.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
+                                <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? 'offen' }}</td>
                             <td>
@@ -83,12 +83,11 @@
     <script>
         document.addEventListener("keydown", function (zEvent) {
 
-            if (zEvent.altKey && zEvent.key === "s") {  // case sensitive
-                document.forms[0].submit()
-            }
+            // if (zEvent.altKey && zEvent.key === "s") {  // case sensitive
+            //     document.forms[0].submit()
+            // }
             if (zEvent.altKey && zEvent.key === "n") {  // case sensitive
-                location.href = "{{ route('profile.create') }}"
-
+                location.href = "{{ route('event.create') }}"
             }
         });
 
