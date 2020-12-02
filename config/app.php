@@ -179,7 +179,6 @@ return [
         Elibyy\TCPDF\ServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
-
     ],
 
     /*
