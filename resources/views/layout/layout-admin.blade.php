@@ -16,15 +16,21 @@
 </head>
 <body>
 <a href="#app" class="sr-only">{{__('Überspringe gesamte Navigation')}}</a>
-<div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;" id="lockscreen" aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
+<div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;"
+     id="lockscreen"
+     aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <a href="/" class="ml-5 navbar-brand">
-            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px" class="d-md-none">
+        <span id="sidebarCollapse" class="btn m-0">
+            <img src="{{ asset('img/icon/toggle_icon.svg') }}" alt="toggle icon sidemenu" height="20">
+        </span>
+        <a href="/" class="ml-1 navbar-brand">
+{{--            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px" class="d-md-none">--}}
             @yield('mainSection')
             {{--            <i class="fas fa-angle-right d-none d-md-inline"></i>--}}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout" aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navLoginLayout"
+                aria-controls="navLoginLayout" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse " id="navLoginLayout">
@@ -32,17 +38,21 @@
                 @yield('menu')
                 @yield('actionMenuItems')
             </ul>
-            <form class="d-flex ml-2" id="frmSrchInAdminBereich" autocomplete="off" action="{{ route('search.index') }}">
-                <input class="form-control mr-2" id="srchTopMenuTerm" name="srchTopMenuTerm"  placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off" value="{{ old('srchTopMenuTerm') ?? '' }}">
+            <form class="d-flex ml-2" id="frmSrchInAdminBereich" autocomplete="off"
+                  action="{{ route('search.index') }}">
+                <input class="form-control mr-2" id="srchTopMenuTerm" name="srchTopMenuTerm"
+                       placeholder="{{__('Suche')}}" aria-label="{{__('Suche')}}" autocomplete="off"
+                       value="{{ old('srchTopMenuTerm') ?? '' }}">
             </form>
             <x-accountNav/>
         </div>
     </nav>
     @if (session()->has('status'))
-        <div class=" fixed-top d-flex justify-content-end d-block" >
+        <div class=" fixed-top d-flex justify-content-end d-block">
             <div class="toast bg-light" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                    <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}" class="rounded mr-2" height="18px;" alt="Icon der Systemmeldung ">
+                    <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}" class="rounded mr-2" height="18px;"
+                         alt="Icon der Systemmeldung ">
                     <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -59,6 +69,7 @@
     @endif
     @yield('breadcrumbs')
 </header>
+<a href="#content" class="sr-only">{{__('Überspringe Seiten-Navigation')}}</a>
 <section id="messageBox">
     <div class="modal fade" id="userMsgModal" tabindex="-1" aria-labelledby="userMsgModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -91,31 +102,34 @@
                                 <x-notifyer>{{__('Keine neuen Nachrichten')}}</x-notifyer>
                             </span>
                     @endforelse
-                        <div class="d-flex justify-content-end align-items-center">
-                            <form action="{{ route('user.setMsgRead') }}"
-                                  method="post">
-                                @csrf
-                                <button class="btn btn-sm btn-link">
-                                    {{__('Nachrichten als gelesen markieren')}}
-                                </button>
-                            </form>
-                        </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <form action="{{ route('user.setMsgRead') }}"
+                              method="post">
+                            @csrf
+                            <button class="btn btn-sm btn-link">
+                                {{__('Nachrichten als gelesen markieren')}}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<main id="app" class="mt-3 ">
-    <a href="#content" class="sr-only">{{__('Überspringe Seiten-Navigation')}}</a>
-    <x-sidebar/>
-    <a id="content"></a>
-    @yield('content')
-</main>
+<div class="wrapper">
+    <nav id="sidebar" class="active">
+        <x-sidebar/>
+    </nav>
+    <main id="app" class="mt-3 " style="flex:1;">
+        <a id="content"></a>
+        @yield('content')
+    </main>
+</div>
 @yield('autocomplete')
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
     $("#srchTopMenuTerm").autocomplete({
-        position: { my : "right top", at: "right bottom" },
+        position: {my: "right top", at: "right bottom"},
         source: function (request, response) {
             $.ajax({
                 url: "{{ route('searchInModules') }}",
@@ -138,18 +152,20 @@
         },
         select: function (event, ui) {
             // console.log();
-            location.href=ui.item.link;
+            location.href = ui.item.link;
         }
     });
 
 
 </script>
 <!-- MODALS   -->
-<div class="modal fade" id="lockUserView" style="z-index: 3000;" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="lockUserViewLabel" aria-hidden="true">
+<div class="modal fade" id="lockUserView" style="z-index: 3000;" data-backdrop="static" data-keyboard="false"
+     tabindex="-1" aria-labelledby="lockUserViewLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header d-flex justify-content-between align-items-center">
                 <h5 class="modal-title" id="lockUserViewLabel">{{__('Bildschirm gesperrt')}}</h5>
+                <span class="lead">für DEMO PIN 2231</span>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -204,7 +220,7 @@
 
             </span>
         </div>
-{{--        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />--}}
+        {{--        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />--}}
     </div>
 </footer>
 @yield('autoloadscripts')
@@ -212,8 +228,12 @@
 {{--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>--}}
 {{--<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>--}}
 <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.de.min.js" integrity="sha512-3V4cUR2MLZNeqi+4bPuXnotN7VESQC2ynlNH/fUljXZiQk1BGowTqO5O2gElABNMIXzzpYg5d8DxNoXKlM210w==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.de.min.js"
+        integrity="sha512-3V4cUR2MLZNeqi+4bPuXnotN7VESQC2ynlNH/fUljXZiQk1BGowTqO5O2gElABNMIXzzpYg5d8DxNoXKlM210w=="
+        crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 
 @if (session()->has('status'))
@@ -224,12 +244,12 @@
 
 @yield('scripts')
 <script>
-/*    $(document).on('click','.markNoteAsRead',function () {
-        const id = $(this).data('id');
-        $.ajax({
-            type: "post",
-            dataType: 'json',
-            url: '{{ route('user.setMsgRead') }}',
+    /*    $(document).on('click','.markNoteAsRead',function () {
+            const id = $(this).data('id');
+            $.ajax({
+                type: "post",
+                dataType: 'json',
+                url: '{{ route('user.setMsgRead') }}',
             data: {id},
             success: (res) => {
                 console.debug(res);

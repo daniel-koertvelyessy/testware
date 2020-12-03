@@ -41,7 +41,6 @@
                 >
                     @csrf
                     <div class="modal-body">
-
                         <input type="hidden"
                                name="produkt_id"
                                id="produkt_id_modal"
@@ -90,6 +89,8 @@
                                     <button type="button"
                                             class="btn btn-sm btn-primary bentNextTab"
                                             data-showtab="#new-prod-anforderungen-tab"
+                                            data-required="#prod_name_lang,#prod_name_kurz"
+
                                     >{{__('weiter')}}</button>
                                 </div>
                             </div>
@@ -274,7 +275,6 @@
                             </td>
                         </tr>
                     @endforelse
-
                     </tbody>
                 </table>
                 @if(count($produktList)>0)
@@ -285,7 +285,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('autocomplete')
@@ -316,7 +315,6 @@
                             }
                         );
                         response(resp);
-
                     }
                 });
             },
@@ -325,8 +323,6 @@
                 $('#produkt_id').val(ui.item.id);
             }
         });
-
-
     </script>
 
 @endsection
@@ -359,7 +355,7 @@
             ($('#produkt_kategorie_id :selected').val() === 'new') ?
                 nd.removeClass('d-none') :
                 nd.addClass('d-none');
-        })
+        });
 
         function frmSubmitNewEquipment() {
             event.preventDefault();
@@ -374,63 +370,8 @@
             document.getElementById('createEquipmentFromProdukt').submit()
         });
 
-
-        /*
-                $('#frmAddNewProduktModal').submit(function (e) {
-                    const ndFormAddNewprodukt = $('#frmAddNewProduktModal');
-                    const formData = new FormData(this);
-                    $.ajax({
-                        type: "post",
-                        dataType: 'json',
-                        url: "{{ route('produkt.ajaxstore') }}",
-                data:
-                formData
-                ,
-                success: function (res) {
-                    console.debug(res);
-                    $('#produkt_id_modal').val(res);
-                    const nd = $('#frmAddNewProduktModal');
-                    const nummer = nd.find('#prod_nummer').val();
-                    const prod_name_lang = nd.find('#prod_name_lang').val();
-
-
-                    $.ajax({
-                        type: "post",
-                        url: "{{ route('produktDoku.store') }}",
-                        data: {formData},
-                        success: function (res) {
-                            console.debug(res);
-
-                        }
-                    });
-
-
-
-                    $('#produktListe').append(`
-                     <tr>
-                    <td style="vertical-align: middle">
-                        ${nummer}
-                    </td>
-                    <td style="vertical-align: middle">
-                        ${prod_name_lang}
-                    </td>
-                    <td>
-                        <button
-                            data-produktid="${res}"
-                            data-produktname="${prod_name_lang}"
-                            class="btn btn-sm btn-outline-primary setProduktAsTemplate">{{__('verwenden')}}</button>
-                            </td>
-                        </tr>
-                    `);
-                    // setTimeout(nd.submit(), 500);
-                }
-            });
-            e.preventDefault();
-        })
-*/
         $('#prod_name_lang').change(function () {
             const name = $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val();
-            console.log(name);
             $('#proddoc_name_kurz').val(name);
         });
 

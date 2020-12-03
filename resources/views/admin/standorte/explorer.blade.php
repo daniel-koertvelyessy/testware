@@ -600,8 +600,9 @@
                     setTimeout(function () {
                         buildingList.val(id)
                     },400);
+                    let text = '{{__('Bitte erst Gebäude wählen')}}';
                     if (id === 'void')
-                        $('#stellplatzList').html('<option>{{__(\'Bitte erst Gebäude wählen\')}}</option>');
+                        $('#stellplatzList').html(`<option>${text}</option>`);
                 }
             });
         }
