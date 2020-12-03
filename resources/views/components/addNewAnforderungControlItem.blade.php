@@ -101,6 +101,7 @@
                     data-showtab="#nav-cianforderung-tab"
             >{{__('zurück')}}</button>
             <button type="button" class="btn btn-sm btn-primary bentNextTab"
+                    data-required="#aci_name_kurz,#aci_name_lang"
                     data-showtab="#nav-cicontact-tab"
             >{{__('weiter')}}</button>
         </div>

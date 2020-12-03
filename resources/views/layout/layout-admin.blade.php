@@ -16,9 +16,11 @@
 </head>
 <body>
 <a href="#app" class="sr-only">{{__('Überspringe gesamte Navigation')}}</a>
+@auth
 <div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;"
      id="lockscreen"
      aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"></div>
+@endauth
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <span id="sidebarCollapse" class="btn m-0">
