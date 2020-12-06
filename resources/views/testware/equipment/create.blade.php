@@ -10,6 +10,41 @@
     @include('menus._menu_testware_main')
 @endsection
 
+@section('modals')
+
+    <div class="modal" id="modalSetStandort" tabindex="-1" aria-labelledby="modalSetStandortLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="modalSetStandortLabel">{{__('Verfügbare Aufstellplätze / Standorte')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @forelse(App\Standort::all() as $standort)
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="setStandort_{{ $standort->id }}" name="setStandort[]"
+                                   class="custom-control-input setStandort" value="{{ $standort->id }}">
+                            <label class="custom-control-label"
+                                   for="setStandort_{{ $standort->id }}">{{ $standort->std_kurzel }}</label>
+                        </div>
+                    @empty
+                        <x-notifyer>Es sind keine Standorte angelegt</x-notifyer>
+                    @endforelse
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+                    <button type="button" class="btn btn-primary" id="btnSetStandortFromModal">Übernehmen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row">
@@ -70,15 +105,22 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
+
                             <div class="form-group">
                                 <label for="setStandOrtId">Aufstellplatz / Standort</label>
-                                <input type="text"
-                                       name="setStandOrtId"
-                                       id="setStandOrtId"
-                                       class="form-control @error('setStandOrtId') is-invalid @enderror"
-                                       value="{{ old( 'setStandOrtId') ??''  }}"
-                                       required
-                                >
+                                <div class="input-group">
+                                    <input type="text"
+                                           name="setStandOrtId"
+                                           id="setStandOrtId"
+                                           class="form-control @error('setStandOrtId') is-invalid @enderror"
+                                           value="{{ old( 'setStandOrtId') ??''  }}"
+                                           required
+                                           placeholder="Eingabe startet Suche"
+                                    >
+                                    <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal"
+                                            data-target="#modalSetStandort">Suche
+                                    </button>
+                                </div>
                                 <span class="text-warning small d-block"
                                       id="standortStatus"
                                 ></span>
@@ -87,6 +129,7 @@
                                 @enderror
                                 <span class="small text-primary @error( 'setStandOrtId') d-none @enderror ">erforderliches Feld, max 20 Zeichen</span>
                             </div>
+
                         </div>
                         <div class="col-md-4">
                             <x-textfield id="eq_serien_nr"
@@ -99,7 +142,8 @@
                                            label="Geräte Status"
                             >
                                 @foreach (App\EquipmentState::all() as $equipmentState)
-                                    <option value="{{ $equipmentState->id }}">{{ $equipmentState->estat_name_kurz }}</option>
+                                    <option
+                                        value="{{ $equipmentState->id }}">{{ $equipmentState->estat_name_kurz }}</option>
                                 @endforeach
                             </x-selectfield>
                         </div>
@@ -359,6 +403,13 @@
         $('#eqdoc_name_kurz').change(function () {
             if ($(this).val() !== '' && $('#equipDokumentFile').val() !== '')
                 $('#btnAddNewEquipment').attr('disabled', false);
+        });
+
+        $('#btnSetStandortFromModal').click(function () {
+            const setStandortNd = $('input.setStandort');
+            $('#standort_id').val(setStandortNd.val());
+            $('#setStandOrtId').val($('.setStandort').next('label').html());
+            $('#modalSetStandort').modal('hide');
         });
 
     </script>

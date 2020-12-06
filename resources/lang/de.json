@@ -1,4 +1,10 @@
 {
+    "Not Found" : "Nicht gefunden",
+    "Page Expired" : "Sitzung abgelaufen",
+    "Server Error" : "Fehler bei der Verarbeitung",
+    "Forbidden" : "Zugang verweigert",
+    "Too Many Requests" : "Zu viele Anfragen",
+    "Service Unavailable" : "Service nicht verfügbar",
 
     "Überspringe Navigationsbereich": "Überspringe Navigationsbereich",
     "Willkommen": "Willkommen",

@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Produkt {{ $produkt->prod_nummer }} bearbeiten &triangleright; Produkte @ bitpack GmbH
+    Produkt {{ $produkt->prod_nummer }} bearbeiten &triangleright; Produkte
 @endsection
 
 @section('mainSection')
@@ -269,7 +269,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h4">Produkt <span class="badge badge-primary">{{ $produkt->prod_nummer }}</span> bearbeiten</h1>
+                <h1 class="h4">Produkt <span class="badge badge-primary">{{ $produkt->prod_nummer }}</span> bearbeiten
+                </h1>
             </div>
         </div>
         <div class="row">
@@ -300,7 +301,8 @@
                            role="tab"
                            aria-controls="prodAnfordrungen"
                            aria-selected="false"
-                        >{{__('Anforderungen')}} <span class="badge badge-primary">{{ $produkt->ProduktAnforderung->count() }}</span></a>
+                        >{{__('Anforderungen')}} <span
+                                class="badge badge-primary">{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -324,7 +326,8 @@
                            role="tab"
                            aria-controls="prodDoku"
                            aria-selected="false"
-                        >{{__('Dokumente')}} <span class="badge badge-primary">{{ $produkt->ProduktDoc->count() }}</span></a>
+                        >{{__('Dokumente')}} <span
+                                class="badge badge-primary">{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -336,7 +339,8 @@
                            role="tab"
                            aria-controls="prodEquip"
                            aria-selected="false"
-                        >{{__('Geräte')}} <span class="badge badge-primary">{{ $produkt->Equipment->count() }}</span></a>
+                        >{{__('Geräte')}} <span
+                                class="badge badge-primary">{{ $produkt->Equipment->count() }}</span></a>
                     </li>
                 </ul>
                 <div class="tab-content p-2"
@@ -395,7 +399,8 @@
                                                            label="{{__('Produkt Status')}}"
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
-                                                    <option value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_name_kurz }}</option>
+                                                    <option
+                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_name_kurz }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -461,7 +466,9 @@
                                                                  max="150"
                                                     />
                                                 @empty
-                                                    <x-notifyer>{{__('Es wurden bislang keine Datenfelder angelegt')}}.</x-notifyer>
+                                                    <x-notifyer>{{__('Es wurden bislang keine Datenfelder angelegt')}}
+                                                        .
+                                                    </x-notifyer>
                                                 @endforelse
                                             @endforelse
                                         </div>
@@ -478,7 +485,8 @@
                                             />
                                         </div>
                                     </div>
-                                    <x-btnMain>{{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span></x-btnMain>
+                                    <x-btnMain>{{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span>
+                                    </x-btnMain>
                                 </form>
                             </div>
                         </div>
@@ -505,10 +513,12 @@
                                     >
                                         <option value="">{{__('bitte wählen')}}</option>
                                         @foreach (App\Anforderung::all() as $anforderung)
-                                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                            <option
+                                                value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
                                         @endforeach
                                     </x-selectfield>
-                                    <button class="btn btn-primary btn-block mt-1">{{__('Anforderung zuordnen')}}</button>
+                                    <button
+                                        class="btn btn-primary btn-block mt-1">{{__('Anforderung zuordnen')}}</button>
                                     <div class="card p-2 my-2"
                                          id="produktAnforderungText"
                                     >
@@ -600,7 +610,8 @@
                                                            id="anforderung_id_delete_anforderung_{{ $produktAnforderung->anforderung_id }}"
                                                            value="{{ $produktAnforderung->anforderung_id }}"
                                                     >
-                                                    <button class="btn btn-sm btn-outline-primary">{{__('löschen')}}</button>
+                                                    <button
+                                                        class="btn btn-sm btn-outline-primary">{{__('löschen')}}</button>
                                                 </form>
                                             </nav>
                                         </div>
@@ -645,9 +656,11 @@
                                                 aria-expanded="false"
                                                 aria-controls="sectionFirmaDetails"
                                         >
-                                            <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span class="fas fa-angle-down"></span>
+                                            <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
+                                                class="fas fa-angle-down"></span>
                                         </button>
-                                        <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span class="fas fa-angle-right"></span></button>
+                                        <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
+                                                class="fas fa-angle-right"></span></button>
                                     </div>
                                     <div class="collapse @if (count($errors)>0) show @endif "
                                          id="sectionFirmaDetails"
@@ -741,7 +754,8 @@
                                                                    label="{{__('Adresse Typ')}}"
                                                     >
                                                         @foreach (App\AddressType::all() as $addressType)
-                                                            <option value="{{ $addressType->id }}">{{ $addressType->adt_name }}</option>
+                                                            <option
+                                                                value="{{ $addressType->id }}">{{ $addressType->adt_name }}</option>
                                                         @endforeach
                                                     </x-selectfield>
                                                 </div>
@@ -765,7 +779,8 @@
                                                                    label="{{__('Land')}}"
                                                     >
                                                         @foreach (App\Land::all() as $country)
-                                                            <option value="{{ $country->id }}">{{ $country->land_iso }}</option>
+                                                            <option
+                                                                value="{{ $country->id }}">{{ $country->land_iso }}</option>
                                                         @endforeach
                                                     </x-selectfield>
                                                 </div>
@@ -815,7 +830,8 @@
                                                     @error('con_name_kurz')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
-                                                    <span class="small text-primary @error('con_name_kurz') d-none @enderror ">
+                                                    <span
+                                                        class="small text-primary @error('con_name_kurz') d-none @enderror ">
                                                         erforderliches Feld, max 20 Zeichen
                                                     </span>
                                                 </div>
@@ -828,7 +844,8 @@
                                                             class="custom-select @error('anrede_id') is-invalid @enderror"
                                                     >
                                                         @foreach (App\Anrede::all() as $anrede)
-                                                            <option value="{{ $anrede->id }}">{{ $anrede->an_kurz }}</option>
+                                                            <option
+                                                                value="{{ $anrede->id }}">{{ $anrede->an_kurz }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -847,7 +864,8 @@
                                                     @error('con_vorname')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
-                                                    <span class="small text-primary @error('con_vorname') d-none @enderror ">max 100 Zeichen</span>
+                                                    <span
+                                                        class="small text-primary @error('con_vorname') d-none @enderror ">max 100 Zeichen</span>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <label for="con_name">Nachname</label>
@@ -862,7 +880,8 @@
                                                     @error('con_name')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
-                                                    <span class="small text-primary @error('con_name') d-none @enderror ">max 100 Zeichen</span>
+                                                    <span
+                                                        class="small text-primary @error('con_name') d-none @enderror ">max 100 Zeichen</span>
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
@@ -879,7 +898,8 @@
                                                     @error('con_telefon')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
-                                                    <span class="small text-primary @error('con_telefon') d-none @enderror ">max 100 Zeichen</span>
+                                                    <span
+                                                        class="small text-primary @error('con_telefon') d-none @enderror ">max 100 Zeichen</span>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <x-emailfield id="con_email"
@@ -985,7 +1005,9 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Produkt anhängen</button>
+                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues
+                                        Dokument an Produkt anhängen
+                                    </button>
                                 </form>
                             </div>
                             <div class="col-md-6">
@@ -1113,7 +1135,7 @@
                                     @endforelse
                                     </tbody>
                                 </table>
-                                @if($equipLists->count() >0)
+                                @if($equipLists->count() > 10)
                                     <div class="d-flex justify-content-center">
                                         {!! $equipLists->onEachSide(2)->links() !!}
                                     </div>
@@ -1156,10 +1178,10 @@
         });
 
         $('#proddoc_name_kurz').val(
-           $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+            $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
         );
 
-        $('#document_type_id').change(()=>{
+        $('#document_type_id').change(() => {
             $('#proddoc_name_kurz').val(
                 $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
             );

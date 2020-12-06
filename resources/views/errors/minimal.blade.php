@@ -1,62 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>@yield('title')</title>
-
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .code {
-                border-right: 2px solid;
-                font-size: 26px;
-                padding: 0 15px 0 15px;
-                text-align: center;
-            }
-
-            .message {
-                font-size: 18px;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="code">
-                @yield('code')
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
+    <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
+    <title>@yield('title')</title>
+</head>
+<body>
+<main id="app" class="d-flex justify-content-center align-items-center" style="height: 90vh;">
+    <section class="container">
+        <div class="row shadow p-4 border rounded">
+            <div class="col-md-3 d-flex justify-content-center flex-column align-items-center">
+                <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="Logo testWare" style="max-height: 150px;">
+                <p class="h3 text-muted">{{ __('Fehler ') }} @yield('code')</p>
             </div>
-
-            <div class="message" style="padding: 10px;">
-                @yield('message')
+            <div class="col-md-6">
+                <p class="mb-5">@yield('message')</p>
+                <div class="mt-5">
+                    @yield('buttons')
+                </div>
             </div>
         </div>
-    </body>
+    </section>
+</main>
+<footer class="page-footer fixed-bottom px-1">
+    <div class="row align-items-center">
+        <div class="col-auto small mr-auto pl-3">© 2020
+            <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
+        </div>
+    </div>
+</footer>
+
+
+<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.de.min.js" integrity="sha512-3V4cUR2MLZNeqi+4bPuXnotN7VESQC2ynlNH/fUljXZiQk1BGowTqO5O2gElABNMIXzzpYg5d8DxNoXKlM210w==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+</body>
 </html>

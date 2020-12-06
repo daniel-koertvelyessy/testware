@@ -89,7 +89,7 @@
                 </div>
             </div>
         @else
-            @if  (App\Room::all()->count() >0)
+            @if  (App\Room::all()->count() > 10)
                 <nav class="d-flex justify-content-end align-items-center mb-2">
 
                     <button type="button"

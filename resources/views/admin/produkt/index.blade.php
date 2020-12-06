@@ -31,7 +31,8 @@
         <div class="row mb-4">
             <div class="col">
                 <h1 class="h4 mb-0">{{__('Übersicht Produkte')}}</h1>
-                <span class="small mt-0">Gesamt: <span class="badge badge-light">{{ number_format(App\Produkt::all()->count(),0,',','.') }}</span></span>
+                <span class="small mt-0">Gesamt: <span
+                        class="badge badge-light">{{ number_format(App\Produkt::all()->count(),0,',','.') }}</span></span>
             </div>
         </div>
         <div class="row">
@@ -43,7 +44,9 @@
                     <tr>
                         <th>@sortablelink('prod_name_kurz', __('Bezeichung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('prod_nummer', __('Artikelnummer'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('ProduktKategorie.pk_name_kurz', __('Kategorie'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('ProduktKategorie.pk_name_kurz',
+                            __('Kategorie'))
+                        </th>
                         <th>@sortablelink('prod_active', __('Aktiv'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ControlProdukt.id', __('Prüfmittel'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_name_kurz', __('Status'))</th>

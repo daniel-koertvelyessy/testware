@@ -29,7 +29,8 @@
                        class="tile-small rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
-                        <span class="icon"><i class="fas fa-boxes"></i></span> <span class="branding-bar text-center">{{__('Übersicht')}}</span>
+                        <span class="icon"><i class="fas fa-boxes"></i></span> <span
+                            class="branding-bar text-center">{{__('Übersicht')}}</span>
                     </a>
                     {{--                        @if (!env('app.makeobjekte') )
                                                 <span class="tile-small-disabled rounded" data-role="tile">
@@ -41,7 +42,8 @@
                        class="tile-small rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
-                        <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">Neu</span>
+                        <span class="icon"><i class="fas fa-box"></i></span> <span
+                            class="branding-bar text-center">Neu</span>
                     </a>
                     {{--                            @endif--}}
 
@@ -102,7 +104,8 @@
                            class="tile-small rounded mr-lg-3 mr-sm-2"
                            data-role="tile"
                         >
-                            <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">{{$produktKategorie->pk_name_kurz}}</span>
+                            <span class="icon"><i class="fas fa-box"></i></span> <span
+                                class="branding-bar text-center">{{$produktKategorie->pk_name_kurz}}</span>
                         </a>
                     @endforeach
                 </nav>
@@ -118,24 +121,24 @@
 
 @section('scripts')
     @if ($produkts->count() >0)
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-    <script>
-        $('#tabProduktListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            // "columnDefs": [
-            //     {"orderable": false, "targets": 2}
-            // ],
-            "dom": 't'
-        });
-    </script>
+        <link rel="stylesheet"
+              type="text/css"
+              href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
+        >
+        <script type="text/javascript"
+                charset="utf8"
+                src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
+        ></script>
+        <script>
+            $('#tabProduktListe').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
+                },
+                // "columnDefs": [
+                //     {"orderable": false, "targets": 2}
+                // ],
+                "dom": 't'
+            });
+        </script>
     @endif
 @endsection

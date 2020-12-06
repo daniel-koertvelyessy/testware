@@ -1,4 +1,12 @@
 {
+    "Not Found" : "Page Not Found",
+    "Page Expired" : "Session expired",
+    "Server Error" : "Server Error",
+    "Forbidden" : "Forbidden",
+    "Too Many Requests" : "Too Many Requests",
+    "Service Unavailable" : "Service Unavailable",
+
+
     "Willkommen": "Welcome",
     "Seite": "Page",
     "Benutzer": "User",
