@@ -197,8 +197,6 @@ class ProduktController extends Controller {
     }
 
     public function ajaxstore(Request $request) {
-
-
         if (isset($request->produkt_kategorie_id) && $request->produkt_kategorie_id === 'new') {
             $prodKat = new ProduktKategorie();
             $prodKat->pk_name_kurz = $request->newProduktKategorie;
@@ -207,7 +205,6 @@ class ProduktController extends Controller {
         } else {
             $produkt_kategorie_id = $request->produkt_kategorie_id;
         }
-
         $prodVal = $this->validateNewProdukt();
         $produkt = new Produkt();
         $produkt->prod_name_kurz = $request->prod_name_kurz;

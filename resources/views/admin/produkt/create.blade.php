@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-{{__('Produkte')}}
+    {{__('Produkte')}}
 @endsection
 
 @section('menu')
@@ -13,44 +13,72 @@
 @endsection
 
 @section('breadcrumbs')
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('produkt.index') }}">{{__('Produkte')}}</a></li>
-                @if ($pk)
-                <li class="breadcrumb-item"><a href="/produkt/kategorie/{{ $pk }}">{{ App\ProduktKategorie::find($pk)->pk_name_kurz }}</a></li>
-                @endif
-                <li class="breadcrumb-item active" aria-current="page">{{__('Neu anlegen')}}</li>
-            </ol>
-        </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">{{__('Portal')}}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('produkt.index') }}">{{__('Produkte')}}</a>
+            </li>
+            @if ($pk)
+                <li class="breadcrumb-item align-items-center">
+                    <span class="text-muted">
+                        {{ __('Kategorie') }} <span class="fas fa-angle-right mx-1"></span>
+                    </span>
+                    <a href="/produkt/kategorie/{{ $pk }}">{{ App\ProduktKategorie::find($pk)->pk_name_kurz }}</a>
+                </li>
+            @endif
+            <li class="breadcrumb-item active"
+                aria-current="page"
+            >{{__('Neu anlegen')}}</li>
+        </ol>
+    </nav>
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="modalAddProduktKategorie" tabindex="-1" aria-labelledby="modalAddProduktKategorieLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="modalAddProduktKategorie"
+         tabindex="-1"
+         aria-labelledby="modalAddProduktKategorieLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Neue Produkt Kategorie anlegen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title">{{__('Neue Produkt Kategorie anlegen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('createProdKat') }}"
-                          method="POST" class="needs-validation"
-                          id="frmAddNewProduktKategorie" name="frmAddNewProduktKategorie"
+                          method="POST"
+                          class="needs-validation"
+                          id="frmAddNewProduktKategorie"
+                          name="frmAddNewProduktKategorie"
                     >
                         @csrf
-                        <x-rtextfield id="pk_name_kurz" label="Name - Kürzel" />
+                        <x-rtextfield id="pk_name_kurz"
+                                      label="Kürzel"
+                        />
 
-                        <x-textfield id="pk_name_lang" label="Name" />
+                        <x-textfield id="pk_name_lang"
+                                     label="Name"
+                        />
 
-                        <x-textarea id="pk_name_text" label="Beschreibung" />
+                        <x-textarea id="pk_name_text"
+                                    label="Beschreibung"
+                        />
 
-                        <x-btnMain>Neue Kategorie anlegen <span class="fas fa-download"></span></x-btnMain>
+                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download"></span></x-btnMain>
 
-                </form>
+                    </form>
                 </div>
 
             </div>
@@ -62,18 +90,20 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h4">{{__('Neues')}} @if ($pk) {{ App\ProduktKategorie::find($pk)->pk_name_kurz}} @endif {{__('Produkt anlegen')}}</h1>
+                <h1 class="h4">{{__('Neues Produkt anlegen')}}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <form action="{{ route('produkt.store') }}" method="post" class="needs-validation">
+                <form action="{{ route('produkt.store') }}"
+                      method="post"
+                      class="needs-validation"
+                >
                     @csrf
-                    <x-frm_AddProdukt :pk="$pk" mkpk />
-                    <button class="btn btn-primary btn-block">{{__('Produkt anlegen')}}</button>
-{{--
-<button @if (!config('app.makeobjekte') ) disabled @endif  class="btn btn-primary btn-block">Produkt anlegen</button>
---}}
+                    <x-frm_AddProdukt :pk="$pk"
+                                      mkpk
+                    />
+                    <button class="btn btn-primary btn-block">{{__('Produkt anlegen')}} <i class="fas fa-download ml-2"></i></button>
                 </form>
             </div>
         </div>

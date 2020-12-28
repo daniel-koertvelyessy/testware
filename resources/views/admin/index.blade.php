@@ -172,14 +172,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Übersicht Systemverwaltung</h1>
+                <h1 class="h3">{{__('Übersicht Systemverwaltung')}}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
             </div>
             <div class="col-md-6">
-                <h2 class="h4">Lizenzdaten</h2>
+{{--                <h2 class="h4">Lizenzdaten</h2>
                 <ul class="list-unstyled">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>Lizenznehmer</span> <span class="text-info">thermo-control Körtvélyessy GmbH</span>
@@ -187,41 +187,41 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>Lizenznummer</span> <span class="text-info">{{ config('app.lizenzid') }}</span>
                     </li>
-                </ul>
-                <h3 class="h5">Objektliste</h3>
+                </ul>--}}
+                <h3 class="h5">{{__('Objektliste')}}</h3>
                 <ul class="list-unstyled">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Standorte</span> <span>{{$countLocation =  \App\Location::all()->count() }}</span>
+                        <span>{{__('Standorte')}}</span> <span>{{$countLocation =  \App\Location::all()->count() }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Gebäude</span> <span>{{$countBuilding =  \App\Building::all()->count() }}</span>
+                        <span>{{__('Gebäude')}}</span> <span>{{$countBuilding =  \App\Building::all()->count() }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Räume</span> <span>{{ $countRoom = \App\Room::all()->count() }}</span>
+                        <span>{{__('Räume')}}</span> <span>{{ $countRoom = \App\Room::all()->count() }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Stellplätze</span> <span>{{$countStelplatz =  \App\Stellplatz::all()->count() }}</span>
+                        <span>{{__('Stellplätze')}}</span> <span>{{$countStelplatz =  \App\Stellplatz::all()->count() }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Geräte</span> <span>{{$countEquipment =  \App\Equipment::all()->count() }}</span>
+                        <span>{{__('Geräte')}}</span> <span>{{$countEquipment =  \App\Equipment::all()->count() }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span class="lead">Gesamt</span> <span class="lead text-info">{{ App\Lizenz::getNumObjekte() }}</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Kontingent</span> <span>{{ \App\Lizenz::getMaxObjects(config('app.lizenzid')) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-success">
-                        <span class="lead">Verfügbar</span> <span class="lead">{{ \App\Lizenz::getMaxObjects(config('app.lizenzid'))-App\Lizenz::getNumObjekte()}}</span>
-                    </li>
+{{--                    <li class="list-group-item d-flex justify-content-between align-items-center">--}}
+{{--                        <span>Kontingent</span> <span>{{ \App\Lizenz::getMaxObjects(config('app.lizenzid')) }}</span>--}}
+{{--                    </li>--}}
+{{--                    <li class="list-group-item d-flex justify-content-between align-items-center text-success">--}}
+{{--                        <span class="lead">Verfügbar</span> <span class="lead">{{ \App\Lizenz::getMaxObjects(config('app.lizenzid'))-App\Lizenz::getNumObjekte()}}</span>--}}
+{{--                    </li>--}}
                 </ul>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-sm btn-outline-primary"
-                            data-toggle="modal"
-                            data-target="#modalBuyObjects"
-                    >Objekte kaufen <i class="fas fa-shopping-cart"></i></button>
+{{--                <div class="d-flex justify-content-end">--}}
+{{--                    <button class="btn btn-sm btn-outline-primary"--}}
+{{--                            data-toggle="modal"--}}
+{{--                            data-target="#modalBuyObjects"--}}
+{{--                    >Objekte kaufen <i class="fas fa-shopping-cart"></i></button>--}}
 
-                </div>
+{{--                </div>--}}
             </div>
         </div>
 

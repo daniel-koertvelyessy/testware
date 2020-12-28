@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{__('Gerät :equip bearbeiten',['equip'=>$equipment->eq_inventar_nr])}} &triangleright; {{__('Geräte')}} @ bitpack GmbH
+{{__('Gerät :equip bearbeiten',['equip'=>$equipment->eq_inventar_nr])}} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('mainSection', 'testWare')
@@ -11,30 +11,41 @@
 @endsection
 
 @section('modals')
-    <div class="modal" id="modalDeleteEquipment" tabindex="-1" aria-labelledby="modalDeleteEquipmentLabel" aria-hidden="true">
+    <div class="modal"
+         id="modalDeleteEquipment"
+         tabindex="-1"
+         aria-labelledby="modalDeleteEquipmentLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="modalDeleteEquipmentLabel">{{__('Gerät löschen')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title"
+                        id="modalDeleteEquipmentLabel"
+                    >{{__('Gerät löschen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="lead">Bitte beachten Sie, dass <strong>alle</strong> Daten und Vorgänge zu diesem Gerät gelöscht werden. Das schließt hochgeladene oder generierte Dokumente ein.</p>
-                    <p>Das Produkt bleibt davon unberührt.</p>
-                    <p class="mx-3 text-danger lead">Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.</p>
-    <form action="{{ route('equipment.destroy',$equipment) }}"
-          method="post"
-    >
-        @csrf
-        @method('delete')
-        <input type="hidden"
-               name="id"
-               id="id_delete_equipment"
-        >
-        <button class="btn btn-outline-danger">Gerät löschen <span class="ml-2 fas fa-times"></span></button>
-    </form>
+                    <p class="lead">{{__('Bitte beachten Sie, dass <strong>alle</strong> Daten und Vorgänge zu diesem Gerät gelöscht werden. Das schließt hochgeladene oder generierte Dokumente ein.')}}</p>
+                    <p>{{__('Das Produkt bleibt davon unberührt.')}}</p>
+                    <p class="mx-3 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
+                    <form action="{{ route('equipment.destroy',$equipment) }}"
+                          method="post"
+                    >
+                        @csrf
+                        @method('delete')
+                        <input type="hidden"
+                               name="id"
+                               id="id_delete_equipment"
+                        >
+                        <button class="btn btn-outline-danger">{{__('Gerät löschen')}} <span class="ml-2 fas fa-times"></span></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -51,7 +62,10 @@
         </div>
         <div class="row mb-5">
             <div class="col">
-                <form action="{{ route('equipment.update',$equipment) }}" method="post" class="needs-validation">
+                <form action="{{ route('equipment.update',$equipment) }}"
+                      method="post"
+                      class="needs-validation"
+                >
                     @csrf
                     @method('put')
                     <input type="hidden"
@@ -72,11 +86,18 @@
                     <div class="row">
 
                         <div class="col-md-4">
-                            <x-staticCheckfield id="eq_inventar_nr" label="{{__('Inventarnummer')}}" max="100" value="{{ $equipment->eq_inventar_nr }}"/>
+                            <x-staticCheckfield id="eq_inventar_nr"
+                                                label="{{__('Inventarnummer')}}"
+                                                max="100"
+                                                value="{{ $equipment->eq_inventar_nr }}"
+                            />
                         </div>
 
                         <div class="col-md-2">
-                            <x-datepicker id="eq_ibm" label="{{__('Inbetriebnahme am')}}" value="{{ $equipment->eq_ibm }}" />
+                            <x-datepicker id="eq_ibm"
+                                          label="{{__('Inbetriebnahme am')}}"
+                                          value="{{ $equipment->eq_ibm }}"
+                            />
                         </div>
 
                         <div class="col-md-6">
@@ -86,13 +107,22 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <x-rtextfield id="setStandOrtId" label="{{__('Aufstellplatz / Standort')}}" value="{{ $equipment->standort->std_kurzel }}" />
+                            <x-rtextfield id="setStandOrtId"
+                                          label="{{__('Aufstellplatz / Standort')}}"
+                                          value="{{ $equipment->standort->std_kurzel }}"
+                            />
                         </div>
                         <div class="col-md-4">
-                            <x-textfield id="eq_serien_nr" label="{{__('Seriennummer')}}" max="100" value="{{ $equipment->eq_serien_nr }}" />
+                            <x-textfield id="eq_serien_nr"
+                                         label="{{__('Seriennummer')}}"
+                                         max="100"
+                                         value="{{ $equipment->eq_serien_nr }}"
+                            />
                         </div>
                         <div class="col-md-4">
-                            <x-selectfield id="equipment_state_id" label="{{__('Geräte Status')}}" >
+                            <x-selectfield id="equipment_state_id"
+                                           label="{{__('Geräte Status')}}"
+                            >
                                 @foreach (App\EquipmentState::all() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}"
                                             @if($equipmentState->id === $equipment->equipment_state_id) selected @endif
@@ -104,17 +134,26 @@
                     <div class="row">
                         <div class="col">
                             @foreach (\App\ProduktParam::where('produkt_id',$equipment->produkt_id )->get() as $produktParam)
-                                <x-textfield id="{{ $produktParam->pp_label }}" name="ep_value[]"
+                                <x-textfield id="{{ $produktParam->pp_label }}"
+                                             name="ep_value[]"
                                              label="{{ $produktParam->pp_name }}"
-                                             value="{{ $produktParam->pp_value }}" max="150"
+                                             value="{{ $produktParam->pp_value }}"
+                                             max="150"
                                 />
-                                <input type="hidden" name="pp_id[]" id="pp_id_{{ $produktParam->id }}" value="{{ $produktParam->id }}">
+                                <input type="hidden"
+                                       name="pp_id[]"
+                                       id="pp_id_{{ $produktParam->id }}"
+                                       value="{{ $produktParam->id }}"
+                                >
                             @endforeach
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-textarea id="eq_text" label="{{__('Beschreibung')}}" value="{{ $equipment->eq_text }}"/>
+                            <x-textarea id="eq_text"
+                                        label="{{__('Beschreibung')}}"
+                                        value="{{ $equipment->eq_text }}"
+                            />
                         </div>
                     </div>
                     <x-btnMain>{{__('Gerät speichern')}} <span class="ml-2 fas fa-download"></span></x-btnMain>
@@ -126,21 +165,23 @@
                 <button
                     type="button"
                     class="btn btn-outline-danger"
-                    data-toggle="modal" data-target="#modalDeleteEquipment"
+                    data-toggle="modal"
+                    data-target="#modalDeleteEquipment"
                 >
-                    Gerät löschen
-                    <span class="ml-2 fas fa-times"></span>
+                    Gerät löschen <span class="ml-2 fas fa-times"></span>
                 </button>
             </div>
         </div>
     </div>
-{{--    {{ App\Produkt::find(request('produkt_id'))  }}--}}
+    {{--    {{ App\Produkt::find(request('produkt_id'))  }}--}}
 @endsection
 
 @section('autocomplete')
 
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet"
+          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+    >
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $("#setNewEquipmentFromProdukt").autocomplete({
             source: function (request, response) {
@@ -152,11 +193,11 @@
                         term: request.term
                     },
                     success: function (data) {
-                        let resp = $.map(data,function(obj){
+                        let resp = $.map(data, function (obj) {
                             return {
-                                label : `(${obj.prod_nummer}) ${obj.pk_name_kurz} - ${obj.prod_name_lang}` ,
-                                id:obj.id,
-                                value:obj.prod_name_kurz
+                                label: `(${obj.prod_nummer}) ${obj.pk_name_kurz} - ${obj.prod_name_lang}`,
+                                id: obj.id,
+                                value: obj.prod_name_kurz
                             };
                         });
                         response(resp);
@@ -172,19 +213,20 @@
             const nd = $('#setStandOrtId'),
                 name = nd.val();
 
-            if (name !== ''){
+            if (name !== '') {
                 $.ajax({
                     type: "get",
                     dataType: 'json',
                     url: "{{ route('checkStandortValid') }}",
-                    data: {name },
+                    data: {name},
                     success: (res) => {
                         const sts = $('#standortStatus');
-                       if (res===0) {
-                           sts.text('Dieser Standort existiert nicht');
-                           nd.addClass('is-invalid').attr('title', 'Dieser Standort existiert nicht!');
-                       }else {
-                           sts.text('');
+                        if (res === 0) {
+                            let text = '{{__('Dieser Standort existiert nicht!')}}';
+                            sts.text(text);
+                            nd.addClass('is-invalid').attr('title',text );
+                        } else {
+                            sts.text('');
                             nd.removeClass('is-invalid')
                         }
 
@@ -203,16 +245,16 @@
                         term: request.term
                     },
                     success: function (data) {
-                        let resp = $.map(data,function(obj){
+                        let resp = $.map(data, function (obj) {
 
 
-                          return  $.map(obj,function(res){
+                            return $.map(obj, function (res) {
 
 
                                 return {
-                                    label : `${res.std_kurzel} - ${res.name_lang}` ,
-                                    id:res.id,
-                                    value:res.std_kurzel
+                                    label: `${res.std_kurzel} - ${res.name_lang}`,
+                                    id: res.id,
+                                    value: res.std_kurzel
                                 };
 
 
@@ -224,7 +266,6 @@
                     }
 
 
-
                 });
             },
             select: function (event, ui) {
@@ -233,7 +274,7 @@
         });
 
         $('.setFieldReadWrite').click(function () {
-            ($(this).prop('checked')) ? $($(this).data('targetid')).attr('readonly',false) : $($(this).data('targetid')).attr('readonly',true)
+            ($(this).prop('checked')) ? $($(this).data('targetid')).attr('readonly', false) : $($(this).data('targetid')).attr('readonly', true)
         });
     </script>
 @endsection

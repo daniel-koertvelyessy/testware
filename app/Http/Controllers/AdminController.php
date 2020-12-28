@@ -451,7 +451,7 @@ class AdminController extends Controller
     {
         ProduktKategorie::create($this->validateProduktKategorie());
 
-        $request->session()->flash('status', 'Die Prdukt-Kategorie <strong>' . request('pk_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', __('Die Produktkategorie').' <strong>' . request('pk_name_kurz') . '</strong> '. __('wurde angelegt!'));
         return redirect()->back();
     }
 

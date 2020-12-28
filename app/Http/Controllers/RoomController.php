@@ -29,19 +29,23 @@ class RoomController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        if(Location::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+        if (Location::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Standorte!').'</span> <br>'.__('Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!'));
             return redirect()->route('location.create');
         }
-        if(Building::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Gebäude!</span> <br>Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!');
+        if (Building::all()->count() === 0) {
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Gebäude!').'</span> <br>'.__('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        if (Room::all()->count() > 8) {
-            $roomList = Room::with('RoomType')->paginate(100);
+        if (Room::all()->count() > 20) {
+            $roomList = Room::with('RoomType','location')->sortable()->paginate(20);
             return view('admin.standorte.room.index', ['roomList' => $roomList]);
-        } else {
-            return view('admin.standorte.room.index');
+        } elseif (Room::all()->count() > 0){
+            $roomList = Room::with('RoomType','location')->sortable()->get();
+            return view('admin.standorte.room.index',['roomList' => $roomList]);
+        }else {
+            session()->flash('status', __('Es existieren noch keine Räume!'));
+            return redirect()->route('room.create');
         }
 
     }
@@ -50,12 +54,13 @@ class RoomController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
+
         if(Location::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Standorte!').'</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
             return redirect()->route('location.create');
         }
         if(Building::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Gebäude!</span> <br>Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!');
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Gebäude!').'</span> <br>'.__('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
         return view('admin.standorte.room.create');
@@ -68,13 +73,13 @@ class RoomController extends Controller {
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request) {
-        $set = Room::create($this->validateNewRoom());
-
-        (new \App\Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
-
-        $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde angelegt!');
-
-        return redirect()->back();
+        $room =  Room::create($this->validateNewRoom());
+        (new Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
+        $request->session()->flash(
+            'status',
+            __('Der Raum'). ' <strong>' . request('r_name_kurz') . '</strong> '.  __('wurde angelegt!')
+        );
+        return redirect()->route('room.show',$room);
     }
 
     /**
@@ -134,7 +139,7 @@ class RoomController extends Controller {
             ]);
             $copy->save();
 
-            $std = (new \App\Standort)->add($copy->standort_id, $neuroom, 'rooms');
+            $std = (new Standort)->add($copy->standort_id, $neuroom, 'rooms');
 
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde kopiert!');
             return redirect()->back();
@@ -290,7 +295,7 @@ class RoomController extends Controller {
             $room->room_type_id = $request->room_type_id;
             $room->save();
 
-            $std = (new \App\Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
+            $std = (new Standort)->add($request->standort_id, $request->r_name_kurz, 'rooms');
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_name_kurz') . '</strong> wurde angelegt!');
         }
 

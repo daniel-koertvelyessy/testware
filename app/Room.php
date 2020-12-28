@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Kyslik\ColumnSortable\Sortable;
 
 class Room extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
     //
 
     protected $guarded = [];
@@ -48,7 +49,11 @@ class Room extends Model
 
     public function stellplatzs()
     {
-        return $this->hasMany(Stellplatz::class)    ;
+        return $this->hasMany(Stellplatz::class);
+    }
+
+    public function location() {
+        return $this->building()->with('Location');
     }
 
 

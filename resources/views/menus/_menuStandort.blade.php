@@ -19,10 +19,10 @@
 </li>
 
 <li class="nav-item dropdown {{ Request::routeIs('location.*') ? ' active ' : '' }}">
-        <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-industry"></i> Standorte </a>
+        <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-industry"></i> {{__('Standorte')}} </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuLocations">
-            <li><a class="dropdown-item" href="{{ route('location.index') }}">Übersicht</a></li>
-            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('location.create') }}">Neu anlegen</a></li>
+            <li><a class="dropdown-item" href="{{ route('location.index') }}">{{__('Übersicht')}}</a></li>
+            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('location.create') }}">{{__('Neu anlegen')}}</a></li>
             <li><hr class="dropdown-divider"></li>
             @if(count($locations)>0)
                 <h6 class="dropdown-header">Zuletzt angelegt</h6>
@@ -33,14 +33,14 @@
         </ul>
     </li>
     <li class="nav-item dropdown {{ Request::routeIs('building.*')  ? ' active ' : '' }}">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuBuildings" role="button" data-toggle="dropdown" aria-expanded="false"><i class="far fa-building"></i> Gebäude </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuBuildings" role="button" data-toggle="dropdown" aria-expanded="false"><i class="far fa-building"></i> {{__('Gebäude')}} </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuBuildings">
-            <li><a class="dropdown-item" href="{{ route('building.index') }}">Übersicht</a></li>
-            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('building.create') }}">Neu anlegen</a></li>
+            <li><a class="dropdown-item" href="{{ route('building.index') }}">{{__('Übersicht')}}</a></li>
+            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} " href="{{ route('building.create') }}">{{__('Neu anlegen')}}</a></li>
             <li><hr class="dropdown-divider"></li>
 
             @if(count($buildings)>0)
-                <h6 class="dropdown-header">Zuletzt angelegt</h6>
+                <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
             @foreach( $buildings as $gebItem)
                 <li><a class="dropdown-item @if (isset($building) && $gebItem->id === $building->id) active @endif" href="{{ route('building.show',$gebItem) }}">{{  $gebItem->b_name_kurz  }}</a></li>
             @endforeach()
@@ -48,13 +48,13 @@
         </ul>
     </li>
     <li class="nav-item dropdown {{ Request::routeIs('room.*')  ? ' active ' : '' }}">
-        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuRooms" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-door-open"></i> Räume </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuRooms" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-door-open"></i> {{__('Räume')}} </a>
         <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuRooms">
-            <li><a class="dropdown-item" href="{{ route('room.index') }}">Übersicht</a></li>
-            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}" href="{{ route('room.create') }}">Neu anlegen</a></li>
+            <li><a class="dropdown-item" href="{{ route('room.index') }}">{{__('Übersicht')}}</a></li>
+            <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}" href="{{ route('room.create') }}">{{__('Neu anlegen')}}</a></li>
             <li><hr class="dropdown-divider"></li>
              @if(count($rooms)>0)
-                <h6 class="dropdown-header">Zuletzt angelegt</h6>
+                <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
             @foreach( $rooms as $roomItem)
                  <li><a class="dropdown-item @if (isset($Room) && $roomItem->id === $building->id) active @endif" href="{{ route('room.show',$roomItem) }}">{{  $roomItem->r_name_kurz  }}</a></li>
              @endforeach()

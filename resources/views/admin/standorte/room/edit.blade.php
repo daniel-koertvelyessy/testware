@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')
@@ -53,7 +53,7 @@
                    value="{{ $room->standort_id }}"
             >
             <div class="row">
-                <div class="col">
+                <div class="col-md-6">
                     <x-selectfield id="building_id" label="{{__('Raum befindet sich im Gebäude')}}">
                         @foreach (\App\Building::all() as $building)
                             <option value="{{ $building->id }}"
@@ -61,7 +61,7 @@
                         @endforeach
                     </x-selectfield>
                 </div>
-                <div class="col">
+                <div class="col-md-6">
                     <x-selectModalgroup
                         id="room_type_id"
                         label="{{__('Raum Typ')}}"
@@ -69,7 +69,7 @@
                     >
                         @foreach (\App\RoomType::all() as $roomType)
                             <option value="{{ $roomType->id }}"
-                                    @if($room->room_type_id == $roomType-id) selected @endif>{{ $roomType->rt_name_kurz }}</option>
+                                    @if($room->room_type_id == $roomType->id) selected @endif>{{ $roomType->rt_name_kurz }}</option>
                         @endforeach
                     </x-selectModalgroup>
                 </div>
@@ -77,8 +77,8 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <x-rtextfield id="r_name_kurz" label="{{__('Raum Kürzel')}} value="{{ $room->r_name_kurz }}""/>
-                    <x-textfield id="r_name_lang" label="{{__('Bezeichnung')}} value="{{ $room->r_name_lang }}""/>
+                    <x-rtextfield id="r_name_kurz" label="{{__('Nummer')}} value="{{ $room->r_name_kurz }}""/>
+                    <x-textfield id="r_name_lang" label="{{__('Name')}} value="{{ $room->r_name_lang }}""/>
                     <x-textarea id="r_name_text" label="{{__('Beschreibung')}} value="{{ $room->r_name_text }}"" />
                 </div>
             </div>

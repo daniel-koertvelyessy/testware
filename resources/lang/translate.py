@@ -1,54 +1,57 @@
 import json
-import six
-from google.cloud import translate_v2 as translate
-from google_auth_oauthlib import flow
-from google.cloud import bigquery
+import sys
+from google_trans_new import google_translator
 
 
-launch_browser = True
-project = 'testwaretranslate'
+class ProgressBar():
+    def __init__(self, total, suffix, count=0, bar_len=60, bar_symbol='='):
+        self.total = total
+        self.count = count
+        self.suffix = suffix
+        self.bar_len = bar_len
+        self.bar_symbol = bar_symbol
+
+    def draw(self):
+        self.count += 1
+        filled_len = int(round(self.bar_len * self.count / float(self.total)))
+        percents = round(100.0 * self.count / float(self.total), 1)
+        bar = self.bar_symbol * filled_len + '-' * (self.bar_len - filled_len)
+        sys.stdout.write('[%s] %s%s %s\r' %
+                         (bar, percents, '%', self.suffix))
+        sys.stdout.flush()
 
 
-appflow = flow.InstalledAppFlow.from_client_secrets_file(
-    "client_secrets.json", scopes=["https://www.googleapis.com/auth/bigquery"]
-)
+translator = google_translator()
+lang = input('Sprache angeben (de, en fr ...): ')
+langData = {}
+skipped = 0
+entrie = 0
 
-if launch_browser:
-    appflow.run_local_server()
-else:
-    appflow.run_console()
-
-credentials = appflow.credentials
-print(credentials)
-client = bigquery.Client(project=project, credentials=credentials)
-'''
-Translate testWare languagefiles
-
-Using Google Translate API
-https://cloud.google.com/translate/docs/basic/translating-text#translate_translate_text-python
-
-'''
-
-with open('de.json', 'r') as myfile:
+with open('de.json', 'r', encoding='utf-8') as myfile:
     data = myfile.read()
 
+json_entries = data.count('": ')
+pg = ProgressBar(
+    json_entries, f' von {json_entries} Einträgen übersetzt', bar_symbol='⫼')
 obj = json.loads(data)
-langData = {}
-
-translate_client = translate.Client()
-
-lang = input("Sprache angeben (de,en, usw.): ")
-
 
 for item in obj:
-    if isinstance(item, six.binary_type):
-        decodedItem = item.decode("utf-8")
+    entrie += 1
+    text = obj[item]
+    translated = translator.translate(text, lang_tgt=lang)
+    if type(translated) is not list:
+        if text == translated.rstrip():
+            skipped += 1
+        langData[item] = translated[0].upper() + translated[1:].rstrip()  #
+    else:
+        if text == translated[0].rstrip():
+            skipped += 1
+            langData[item] = translated[0][0].upper() + \
+                translated[0][1:].rstrip()  #
 
-    langData[item] = item
-    newLang = translate_client.translate(item, target_language=lang)
-    print(newLang)
-    langData[item] = newLang
+    pg.draw()
 
-
-with open(lang + '.json', 'w') as langFile:
-    json.dump(langData, langFile)
+with open(lang + '.json', 'w', encoding='utf-8') as langFile:
+    json.dump(langData, langFile, ensure_ascii=False)
+    print(
+        f'\n\nDatei erstellt ✔\n{skipped} Einträge wurde nicht übersetzt :( ')

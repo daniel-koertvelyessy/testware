@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-6">
         <x-textfield id="prod_name_lang"
-                     label="Bezeichnung"
+                     label="{{__('Bezeichnung')}}"
         />
     </div>
     <div class="col-md-6">
-        <label for="produkt_kategorie_id">Produkt Kategorie</label>
+        <label for="produkt_kategorie_id">{{__('Kategorie')}}</label>
         <div class="input-group">
             <select name="produkt_kategorie_id"
                     id="produkt_kategorie_id"
@@ -19,7 +19,7 @@
                     >{{ $produktKategorie->pk_name_kurz }}</option>
                 @endforeach
                 @if (!isset($mkpk))
-                    <option value="new">Neu anlegen</option>
+                    <option value="new">{{__('Neu anlegen')}}</option>
                 @endif
             </select>
             @if (isset($mkpk))
@@ -33,12 +33,12 @@
             @else
                 <label for="newProduktKategorie"
                        class="sr-only"
-                >Neue Produktkategorie</label>
+                >{{__('Neue Produktkategorie')}}</label>
                 <input type="text"
                        id="newProduktKategorie"
                        name="newProduktKategorie"
                        class="form-control d-none"
-                       placeholder="Neue Produktkategorie"
+                       placeholder="{{__('Neue Produktkategorie')}}"
                 >
             @endif
         </div>
@@ -47,14 +47,14 @@
 <div class="row">
     <div class="col-md-4">
         <x-rtextfield id="prod_name_kurz"
-                      label="Kurzbezeichnung / Spezifikation"
+                      label="{{__('Kurzbezeichnung / Spezifikation')}}"
                       max="20"
         />
     </div>
     <div class="col-md-4">
         <x-selectfield name="produkt_state_id"
                        id="produkt_state_id"
-                       label="Produkt Status"
+                       label="{{__('Status')}}"
         >
             @foreach (App\ProduktState::all() as $produktState)
                 <option value="{{ $produktState->id }}">{{ $produktState->ps_name_kurz }}</option>
@@ -74,7 +74,7 @@
                 >
                 <label class="custom-control-label"
                        for="prod_active"
-                >Produkt aktiv</label>
+                >{{__('Produkt aktiv')}}</label>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
     <div class="col">
         <x-textfield id="prod_nummer"
                      class="checkLabel"
-                     label="Artikel Nummer"
+                     label="{{__('Artikelnummer')}}"
         />
         @if (isset($pk))
             @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
@@ -125,13 +125,13 @@
                     @if ($errors->has($pkpItem->pkp_label))
                         <span class="text-danger small">{{ $errors->first($pkpItem->pkp_label) }}</span>
                     @else
-                        <span class="small text-primary">max 100 Zeichen</span>
+                        <span class="small text-primary">{{__('max 100 Zeichen')}}</span>
                     @endif
                 </div>
             @endforeach
         @endif
         <div class="form-group">
-            <label for="prod_name_text">Beschreibung</label>
+            <label for="prod_name_text">{{__('Beschreibung')}}</label>
             <textarea name="prod_name_text"
                       id="prod_name_text"
                       class="form-control"

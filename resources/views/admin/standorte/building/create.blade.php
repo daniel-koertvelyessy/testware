@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Neues Gebäude anlegen')}}  &triangleright;  {{__('Gebäudeverwaltung')}}
+{{__('Neues Gebäude anlegen')}} &triangleright; {{__('Gebäudeverwaltung')}}
 @endsection
 
 @section('mainSection')
-{{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')

@@ -1,11 +1,11 @@
 @extends('layout.layout-login')
 
 @section('pagetitle')
-    Standortverwaltung | Start @ bitpack GmbH
+{{__('Gebäudeverwaltung')}} &triangleright; {{__('Start')}}
 @endsection
 
 @section('mainSection')
-    Standort
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')

@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Gebäudeverwaltung | Start @ bitpack GmbH
+{{__('Gebäudeverwaltung')}} &triangleright; {{__('Start')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+    {{__('memStandorte')}}
 @endsection
 
 @section('breadcrumbs')

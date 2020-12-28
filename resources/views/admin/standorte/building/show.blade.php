@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Gebäudeverwaltung | Start @ bitpack GmbH
+{{__('Gebäudeverwaltung')}} &triangleright; {{__('Start')}}
 @endsection
 
 @section('mainSection')
-    Standorte
+{{__('memStandorte')}}
 @endsection
 
 @section('menu')
@@ -15,10 +15,10 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">Portal</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('location.index') }}">Standorte</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">{{__('Portal')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('location.index') }}">{{__('Standorte')}} <i class="fas fa-angle-right"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_name_kurz }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('building.index') }}">Gebäude</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a></li>
             <li class="breadcrumb-item active" aria-current="page">{{  $building->b_name_kurz  }}</li>
         </ol>
     </nav>

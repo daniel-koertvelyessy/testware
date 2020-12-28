@@ -102,7 +102,6 @@
                                     label="{{__('Datei Informationen')}}"
                         />
 
-
                         <div class="form-group">
                             <div class="custom-file">
                                 <input type="file"
@@ -158,8 +157,8 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Prüfung</th>
-                            <th>Fällig</th>
+                            <th>{{__('Prüfung')}}</th>
+                            <th>{{__('Fällig')}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -171,14 +170,14 @@
                                 <td>
                                     <a href="{{ route('testing.create',['test_id' => $controlItem]) }}"
                                        class="btn btn-sm btn-outline-primary"
-                                    > Prüfung starten
+                                    > {{__('Prüfung starten')}}
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="3">
-                                    <x-notifyer>Keine Prüfungen hinterlegt.</x-notifyer>
+                                    <x-notifyer>{{__('Keine Prüfungen hinterlegt')}}</x-notifyer>
                                 </td>
                             </tr>
                         @endforelse
@@ -219,7 +218,6 @@
                             class="btn btn-secondary"
                             data-dismiss="modal"
                     >{{ __('Schließen') }}</button>
-                    {{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
                 </div>
             </div>
         </div>
@@ -345,9 +343,31 @@
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
                                 </x-selectfield>
-
+                            </div>
+                            <div class="col-md-6">
+                                <x-selectfield id="equipment_instruction_instructor_profile_id"
+                                               label="{{__('Interne Unterweisung durch')}}"
+                                               required
+                                >
+                                    <option value="0">{{ __('bitte auswählen') }}</option>
+                                    @foreach(App\User::all() as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                                <x-selectfield id="equipment_instruction_instructor_firma_id"
+                                               label="{{__('Externe Unterweisung durch')}}"
+                                >
+                                    <option value="0">{{__('bitte auswählen')}}</option>
+                                    @foreach($equipment->produkt->firma as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <label>Unterschrift Unterwiesener</label>
+                                    <label>{{__('Unterschrift Unterwiesener')}}</label>
                                     <div>
                                         <button type="button"
                                                 class="btn btn-link btn-sm btnClearCanvas"
@@ -371,26 +391,8 @@
                                 <span class="small text-primary">{{ __('erforderliches Feld') }}</span>
                             </div>
                             <div class="col-md-6">
-                                <x-selectfield id="equipment_instruction_instructor_profile_id"
-                                               label="{{__('Interne Unterweisung durch')}}"
-                                               required
-                                >
-                                    <option value="0">{{ __('bitte auswählen') }}</option>
-                                    @foreach(App\User::all() as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </x-selectfield>
-                                <x-selectfield id="equipment_instruction_instructor_firma_id"
-                                               label="{{__('Externe Unterweisung durch')}}"
-                                >
-                                    <option value="0">bitte auswählen</option>
-                                    @foreach($equipment->produkt->firma as $firma)
-                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
-                                    @endforeach
-                                </x-selectfield>
-
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <label>Unterschrift Einweiser</label>
+                                    <label>{{__('Unterschrift Einweiser')}}</label>
                                     <div>
                                         <button type="button"
                                                 class="btn btn-link btn-sm btnClearCanvas"
@@ -410,9 +412,7 @@
                                     <canvas id="signatureField_equipment_instruction_instructor_signature"
                                             class="signature-pad"
                                     ></canvas>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -520,7 +520,7 @@
                                                value="{!! $equipment->produkt->prod_name_lang !!}"
                                 />
                                 <x-staticfield id="Standort"
-                                               label="{{__('Standort')}}:"
+                                               label="{{__('Aufstellplatz / Standort')}}:"
                                                value="{!!  App\Standort::find($equipment->standort_id)->std_kurzel !!}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
@@ -546,7 +546,6 @@
                                     data-toggle="modal"
                                     data-target="#modalStartControl"
                                 >{{__('Prüfung/Wartung erfassen')}}</button>
-
                             </div>
                             <div class="col-md-5 pl-3 mb-3">
                                 @if ($equipment->produkt->ControlProdukt)
@@ -554,8 +553,6 @@
                                 @else
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
-
-
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
                                 </div>
@@ -589,9 +586,7 @@
                                                 <span class="fas fa-download"></span>
                                             </button>
                                         </div>
-
                                     </div>
-
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
@@ -666,7 +661,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="d-flex justify-content-between">
-                                    <h3 class="h5">Befähigte Personen</h3>
+                                    <h3 class="h5">{{__('Befähigte Personen')}}</h3>
                                     <button type="button"
                                             class="btn btn-sm btn-outline-primary"
                                             data-toggle="modal"
@@ -712,7 +707,7 @@
                                         <tr>
                                             <td colspan="3">
                                                 <p class="m-2">
-                                                    <x-notifyer>Keine befähigte Personen gefunden</x-notifyer>
+                                                    <x-notifyer>{{__('Keine befähigte Personen gefunden')}}</x-notifyer>
                                                 </p>
                                             </td>
                                         </tr>
@@ -819,11 +814,10 @@
                                                         @forelse (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
                                                             <li class="list-group-item">
                                                                 {{ $aci->aci_name_lang }}
-
                                                             </li>
                                                         @empty
                                                             <li class="list-group-item">
-                                                                <x-notifyer>Keine Daten gefunden!</x-notifyer>
+                                                                <x-notifyer>{{__('Keine Daten gefunden!')}}</x-notifyer>
                                                             </li>
                                                         @endforelse
                                                     </ul>
@@ -1075,7 +1069,6 @@
                             </div>
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Logs')}}</h3>
-
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -1129,8 +1122,8 @@
                         @forelse (App\EquipmentEvent::where('equipment_id',$equipment->id)->withTrashed()->take(10)->latest()->get() as $equipmentEvent)
                             <dl class="row">
                                 <dt class="col-sm-4">
-                                    <strong>eröffnet:</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
-                                    <br><strong>geschlossen:</strong>
+                                    <strong>{{__('eröffnet')}}:</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
+                                    <br><strong>{{__('geschlossen')}}:</strong>
                                     @if ($equipmentEvent->deleted_at)
                                         {{ $equipmentEvent->deleted_at->DiffForhumans() }}
                                     @else
@@ -1147,18 +1140,20 @@
                                                    id="id_equipment_event_{{ $equipmentEvent->id }}"
                                                    value="{{ $equipmentEvent->id }}"
                                             >
-                                            <button class="btn btn-sm btn-outline-primary mt-2">wiederherstellen</button>
+                                            <button class="btn btn-sm btn-outline-primary mt-2">{{__('wiederherstellen')}}</button>
                                         </form>
                                     @else
                                         <a href="{{ route('event.show',$equipmentEvent) }}"
                                            class="btn btn-sm btn-outline-primary mt-2"
-                                        >öffnen
+                                        >{{__('öffnen')}}
                                         </a>
                                     @endif
 
                                 </dt>
                                 <dd class="col-sm-8">
-                                    <span class="lead">{{ __('Meldung:') }}</span><br>{{ $equipmentEvent->equipment_event_text??'keine Information übermittelt' }}</dd>
+                                    <span class="lead">{{ __('Meldung:') }}</span><br>
+                                    {{ $equipmentEvent->equipment_event_text??__('keine Information übermittelt') }}
+                                </dd>
                             </dl>
                             @if (!$loop->last)
                                 <div class="dropdown-divider my-2"></div>

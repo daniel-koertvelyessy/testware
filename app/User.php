@@ -14,7 +14,10 @@ class User extends Authenticatable
 
     public const LOCALES = [
         'de' => 'Deutsch',
-        'en' => 'English'
+        'en' => 'English',
+        'nl' => 'Nederlands',
+        'th' => 'Tailand',
+        'fr' => 'French'
     ];
 
 

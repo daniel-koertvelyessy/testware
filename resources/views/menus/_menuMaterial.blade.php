@@ -1,15 +1,15 @@
 <ul class="navbar-nav mr-auto">
     <li class="nav-item {{ Request::routeIs('produktMain')  ? ' active ' : '' }}">
         <a class="nav-link " href="{{ route('produktMain') }}">
-            <i class="fas fa-desktop"></i> Start
+            <i class="fas fa-desktop"></i> {{__('Start')}}
         </a>
     </li>
     <li class="nav-item {{ Request::routeIs('produkt.index') ? ' active ' : ' ' }}">
-        <a class="nav-link " href="{{ route('produkt.index') }}"><i class="fas fa-boxes"></i> Übersicht
+        <a class="nav-link " href="{{ route('produkt.index') }}"><i class="fas fa-boxes"></i> {{__('Übersicht')}}
         </a>
     </li>
     <li class="nav-item {{ Request::routeIs('getKategorieProducts') ? ' active ' : '' }} dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-list-ol"></i> Kategorien</a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-list-ol"></i> {{__('Kategorien')}}</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownAddProdukt">
             @foreach (\App\ProduktKategorie::all() as $produktKategorie)
                 <li><a class="dropdown-item" href="/produkt/kategorie/{{ $produktKategorie->id }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
@@ -17,12 +17,11 @@
         </ul>
     </li>
     <li class="nav-item {{ Request::routeIs('produkt.create') ? ' active ' : '' }} dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-plus"></i> Neu</a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-plus"></i> {{__('Neu')}}</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownAddProdukt">
             @foreach (\App\ProduktKategorie::all() as $produktKategorie)
-                <li><a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}" href="{{ route('produkt.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('produkt.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
             @endforeach
-
         </ul>
     </li>
 {{--    <li class="nav-item {{ Request::routeIs('importProdukt')  ? ' active ' : '' }}">--}}

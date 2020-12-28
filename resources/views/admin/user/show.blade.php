@@ -65,7 +65,7 @@
             </div>
 
             @if(Auth::user()->id === $user->id)
-                <x-btnMain>{{__('Nutzerdaten aktualisieren')}} <span class="fas fa-download"></span></x-btnMain>
+                <x-btnMain>{{__('Nutzerdaten aktualisieren')}} <span class="fas fa-download ml-2"></span></x-btnMain>
             @endif
         </form>
         <form action="{{ route('updateUserTheme') }}" id="frmChangeUserTheme" name="frmChangeUserTheme" method="POST">

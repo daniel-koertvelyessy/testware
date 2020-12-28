@@ -40,9 +40,9 @@
                                 <a href="{{ route('standorteMain') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"
-                                   aria-label="Standorte"
+                                   aria-label="{{__('memStandorte')}}"
                                 >
-                                    <span class="icon"><i class="fa fa-boxes"></i></span> <span class="branding-bar text-center">{{__('Standorte')}}</span>
+                                    <span class="icon"><i class="fa fa-boxes"></i></span> <span class="branding-bar text-center">{{__('memStandorte')}}</span>
                                 </a>
                                 <a href="{{ route('organisationMain') }}"
                                    class="tile-medium rounded"

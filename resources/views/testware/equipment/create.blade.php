@@ -11,33 +11,53 @@
 @endsection
 
 @section('modals')
-
-    <div class="modal" id="modalSetStandort" tabindex="-1" aria-labelledby="modalSetStandortLabel" aria-hidden="true">
+    <div class="modal"
+         id="modalSetStandort"
+         tabindex="-1"
+         aria-labelledby="modalSetStandortLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"
-                        id="modalSetStandortLabel">{{__('Verfügbare Aufstellplätze / Standorte')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        id="modalSetStandortLabel"
+                    >{{__('Verfügbare Aufstellplätze / Standorte')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     @forelse(App\Standort::all() as $standort)
                         <div class="custom-control custom-radio">
-                            <input type="radio" id="setStandort_{{ $standort->id }}" name="setStandort[]"
-                                   class="custom-control-input setStandort" value="{{ $standort->id }}">
+                            <input type="radio"
+                                   id="setStandort_{{ $standort->id }}"
+                                   name="setStandort[]"
+                                   class="custom-control-input setStandort"
+                                   value="{{ $standort->id }}"
+                            >
                             <label class="custom-control-label"
-                                   for="setStandort_{{ $standort->id }}">{{ $standort->std_kurzel }}</label>
+                                   for="setStandort_{{ $standort->id }}"
+                            >{{ $standort->std_kurzel }}</label>
                         </div>
                     @empty
-                        <x-notifyer>Es sind keine Standorte angelegt</x-notifyer>
+                        <x-notifyer>{{__('Es sind keine Standorte angelegt')}}</x-notifyer>
                     @endforelse
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-                    <button type="button" class="btn btn-primary" id="btnSetStandortFromModal">Übernehmen</button>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                    >{{__('Schließen')}}</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            id="btnSetStandortFromModal"
+                    >{{__('Übernehmen')}}</button>
                 </div>
             </div>
         </div>
@@ -78,13 +98,13 @@
                     <div class="row">
                         <div class="col-md-4">
                             <x-textfield id="setNewEquipmentFromProdukt"
-                                         label="Import aus Produkt"
+                                         label="{{__('Import aus Produkt')}}"
                                          value="{{ App\Produkt::find($produkt)->prod_name_lang  }}"
                             />
                         </div>
                         <div class="col-md-4">
                             <x-textfield id="eq_inventar_nr"
-                                         label="Inventar - Nr"
+                                         label="{{__('Inventarnummer')}}"
                                          max="100"
                                          required
                                          class="checkLabel"
@@ -92,22 +112,21 @@
                         </div>
                         <div class="col-md-2">
                             <x-datepicker id="eq_ibm"
-                                          label="Inbetriebname"
+                                          label="{{__('Inbetriebname')}}"
                                           value="{{ date('Y-m-d') }}"
                             />
                         </div>
                         <div class="col-md-2">
                             <x-datepicker id="qe_control_date_last"
-                                          label="Letzte Prüfung"
+                                          label="{{__('Letzte Prüfung')}}"
                                           value="{{ date('Y-m-d') }}"
                             />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-
                             <div class="form-group">
-                                <label for="setStandOrtId">Aufstellplatz / Standort</label>
+                                <label for="setStandOrtId">{{__('Aufstellplatz / Standort')}}</label>
                                 <div class="input-group">
                                     <input type="text"
                                            name="setStandOrtId"
@@ -115,10 +134,15 @@
                                            class="form-control @error('setStandOrtId') is-invalid @enderror"
                                            value="{{ old( 'setStandOrtId') ??''  }}"
                                            required
-                                           placeholder="Eingabe startet Suche"
+                                           placeholder="{{__('Eingabe startet Suche')}}"
                                     >
-                                    <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal"
-                                            data-target="#modalSetStandort">Suche
+                                    <button type="button"
+                                            class="btn btn-outline-primary ml-2"
+                                            data-toggle="modal"
+                                            data-target="#modalSetStandort"
+                                    >
+                                       <span class="d-none d-md-inline">{{__('Suche')}}</span>
+                                        <span class="fas fa-search ml-md-2"></span>
                                     </button>
                                 </div>
                                 <span class="text-warning small d-block"
@@ -127,23 +151,24 @@
                                 @error('setStandOrtId')
                                 <span class="text-danger small">{{ $message }}</span>
                                 @enderror
-                                <span class="small text-primary @error( 'setStandOrtId') d-none @enderror ">erforderliches Feld, max 20 Zeichen</span>
+                                <span class="small text-primary @error( 'setStandOrtId') d-none @enderror ">{{__('erforderliches Feld, max 20 Zeichen')}}</span>
                             </div>
 
                         </div>
                         <div class="col-md-4">
                             <x-textfield id="eq_serien_nr"
-                                         label="Seriennummer"
+                                         label="{{__('Seriennummer')}}"
                                          max="100"
                             />
                         </div>
                         <div class="col-md-4">
                             <x-selectfield id="equipment_state_id"
-                                           label="Geräte Status"
+                                           label="{{__('Geräte Status')}}"
                             >
                                 @foreach (App\EquipmentState::all() as $equipmentState)
                                     <option
-                                        value="{{ $equipmentState->id }}">{{ $equipmentState->estat_name_kurz }}</option>
+                                        value="{{ $equipmentState->id }}"
+                                    >{{ $equipmentState->estat_name_kurz }}</option>
                                 @endforeach
                             </x-selectfield>
                         </div>
@@ -169,7 +194,7 @@
                     <div class="row">
                         <div class="col">
                             <x-textarea id="eq_text"
-                                        label="Beschreibung"
+                                        label="{{__('Beschreibung')}}"
                             />
                         </div>
                     </div>
@@ -186,7 +211,8 @@
                                            value="1"
                                            class="function_control_pass"
                                     > {{__('Bestanden')}}
-                                </label> <label class="btn btn-outline-danger">
+                                </label>
+                                <label class="btn btn-outline-danger">
                                     <input type="radio"
                                            id="controlEquipmentNotPassed"
                                            name="function_control_pass"
@@ -195,18 +221,17 @@
                                     > {{__('NICHT Bestanden')}}
                                 </label>
                             </div>
-
                             <x-datepicker id="function_control_date"
-                                          label="Die Prüfung erfolgte am"
+                                          label="{{__('Die Prüfung erfolgte am')}}"
                                           required
                                           value="{{ date('Y-m-d') }}"
                             />
                             <div class="row">
                                 <div class="col-md-6">
                                     <x-selectfield id="function_control_firma"
-                                                   label="durch Firma"
+                                                   label="{{__('durch Firma')}}"
                                     >
-                                        <option value="void">bitte wählen</option>
+                                        <option value="void">{{__('bitte wählen')}}</option>
                                         @foreach(\App\Firma::all() as $firma)
                                             <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
                                         @endforeach
@@ -214,22 +239,21 @@
                                 </div>
                                 <div class="col-md-6">
                                     <x-selectfield id="function_control_profil"
-                                                   label="durch befähigte Person"
+                                                   label="{{__('durch befähigte Person')}}"
                                     >
-                                        <option value="void">bitte wählen</option>
+                                        <option value="void">{{__('bitte wählen')}}</option>
                                         @foreach(\App\User::all() as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endforeach
                                     </x-selectfield>
                                 </div>
                             </div>
-
                             <x-textarea id="function_control_text"
                                         label="{{__('Bemerkungen zur Prüfung')}}"
                             />
                         </div>
                         <div class="col-md-6">
-                            <h2 class="h5">Bericht</h2>
+                            <h2 class="h5">{{__('Bericht')}}</h2>
                             <x-selectfield id="document_type_id"
                                            label="{{__('Dokument Typ')}}"
                             >
@@ -241,9 +265,7 @@
                                     >{{ $ad->doctyp_name_kurz }}</option>
                                 @endforeach
                             </x-selectfield>
-
                             <x-textfield id="eqdoc_name_kurz"
-                                         required
                                          label="{{__('Bezeichnung')}}"
                             />
 
@@ -256,10 +278,9 @@
                                     <input type="file"
                                            id="equipDokumentFile"
                                            name="equipDokumentFile"
-                                           data-browse="Datei"
+                                           data-browse="{{__('Datei')}}"
                                            class="custom-file-input"
                                            accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
-                                           required
                                     >
                                     <label class="custom-file-label"
                                            for="equipDokumentFile"
@@ -270,7 +291,7 @@
                     </div>
                     <button id="btnAddNewEquipment"
                             class="btn btn-primary"
-                    >Gerät anlegen <i class="fas fa-download ml-3"></i>
+                    >{{__('Gerät anlegen')}} <i class="fas fa-download ml-3"></i>
                     </button>
                 </form>
             </div>
@@ -280,7 +301,6 @@
 @endsection
 
 @section('autocomplete')
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $("#setNewEquipmentFromProdukt").autocomplete({
             source: function (request, response) {

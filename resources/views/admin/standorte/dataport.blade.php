@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')

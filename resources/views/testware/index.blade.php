@@ -55,24 +55,18 @@
                 <h2 class="h5">{{__('Anstehende')}}
                     <a href="{{ route('testing.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
-                @if (\App\ControlProdukt::count()===0)
-                    <div class="m-2 border-warning">
-                        <span class="fas fa-exclamation-circle text-warning"></span>
-                        Es sind bislang keine Prüfgeräte angelegt!
-                    </div>
-                @endif
                 <nav>
                     <div class="nav nav-tabs"
                          id="nav-tab"
                          role="tablist"
                     >
-                        <a class="nav-link active"
+                        <a class="nav-link"
                            id="controlWeek-tab"
                            data-toggle="tab"
                            href="#controlWeek"
                            role="tab"
                            aria-controls="controlWeek"
-                           aria-selected="true"
+                           aria-selected="false"
                         >4 {{__('Wochen')}}</a>
                         <a class="nav-link"
                            id="controlMonth-tab"
@@ -90,13 +84,13 @@
                            aria-controls="controlYear"
                            aria-selected="false"
                         >{{__('Jahr')}}</a>
-                        <a class="nav-link"
+                        <a class="nav-link active"
                            id="controlAll-tab"
                            data-toggle="tab"
                            href="#controlAll"
                            role="tab"
                            aria-controls="controlAll"
-                           aria-selected="false"
+                           aria-selected="true"
                         >{{__('Alle')}}</a>
                     </div>
                 </nav>
@@ -107,7 +101,7 @@
                         $controls = \App\ControlEquipment::take(10);
                     @endphp
 
-                    <div class="tab-pane fade show active"
+                    <div class="tab-pane fade"
                          id="controlWeek"
                          role="tabpanel"
                          aria-labelledby="controlWeek-tab"
@@ -115,9 +109,9 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
-                                <th>Gerät</th>
-                                <th>Anforderung</th>
-                                <th>Fällig</th>
+                                <th>{{__('Gerät')}}</th>
+                                <th>{{__('Anforderung')}}</th>
+                                <th>{{__('Fällig')}}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -127,7 +121,7 @@
                                     <td>
                                         <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_name_kurz }}</a>
                                         <br>
-                                        <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                        <x-notifyer>{{__('Inventar-Nr')}}: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                     </td>
                                     <td>{{ $controlEquipment->Anforderung->an_name_lang }}</td>
                                     <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -136,7 +130,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4">
-                                        <span class="text-success">Keine Prüfungen in den kommenden 4 Wochen fällig</span>
+                                        <span class="text-success">{{__('Keine Prüfungen in den kommenden 4 Wochen fällig')}}</span>
                                     </td>
                                 </tr>
                             @endforelse
@@ -151,9 +145,9 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
-                                <th>Gerät</th>
-                                <th>Anforderung</th>
-                                <th>Fällig</th>
+                                <th>{{__('Gerät')}}</th>
+                                <th>{{__('Anforderung')}}</th>
+                                <th>{{__('Fällig')}}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -172,7 +166,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4">
-                                        <span class="text-success">Keine Prüfungen in diesem Jahr fällig</span>
+                                        <span class="text-success">{{__('Keine Prüfungen in diesem Jahr fällig')}}</span>
                                     </td>
                                 </tr>
                             @endforelse
@@ -188,9 +182,9 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
-                                <th>Gerät</th>
-                                <th>Anforderung</th>
-                                <th>Fällig</th>
+                                <th>{{__('Gerät')}}</th>
+                                <th>{{__('Anforderung')}}</th>
+                                <th>{{__('Fällig')}}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -209,14 +203,14 @@
                             @empty
                                 <tr>
                                     <td colspan="4">
-                                        <span class="text-success">Keine Prüfungen in diesem Jahr fällig</span>
+                                        <span class="text-success">{{__('Keine Prüfungen in diesem Jahr fällig')}}</span>
                                     </td>
                                 </tr>
                             @endforelse
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade"
+                    <div class="tab-pane fade  show active"
                          id="controlAll"
                          role="tabpanel"
                          aria-labelledby="controlAll-tab"
@@ -224,9 +218,9 @@
                         <table class="table table-striped table-sm">
                             <thead>
                             <tr>
-                                <th>Gerät</th>
-                                <th>Anforderung</th>
-                                <th>Fällig</th>
+                                <th>{{__('Gerät')}}</th>
+                                <th>{{__('Anforderung')}}</th>
+                                <th>{{__('Fällig')}}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -245,7 +239,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4">
-                                        <span class="text-success">Keine Prüfungen in diesem Jahr fällig</span>
+                                        <span class="text-success">{{__('Keine Prüfungen in diesem Jahr fällig')}}</span>
                                     </td>
                                 </tr>
                             @endforelse
@@ -259,7 +253,7 @@
 
             <x-dashborarditem>
                 <h2 class="h5">
-                    Offene
+                    {{__('Offene')}}
                     <a href="{{ route('event.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
                 @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
@@ -270,15 +264,15 @@
                         subject="{{ $equipmentEvent->equipment->produkt->prod_name_lang }}"
                     >
                         <strong>
-                            <a href="{{ route('event.show',$equipmentEvent) }}">Schadensmeldung vom InfoSy App</a>
+                            <a href="{{ route('event.show',$equipmentEvent) }}">{{__('Schadensmeldung vom InfoSy App')}}</a>
                         </strong>
                         <p>{{ $equipmentEvent->equipment_event_text }}</p>
                     </x-systemmessage>
                 @empty
-                    <x-notifyer>Keine ungelesenen Meldungen gefunden!</x-notifyer>
+                    <x-notifyer>{{__('Keine ungelesenen Meldungen gefunden!')}}</x-notifyer>
                 @endforelse
             </x-dashborarditem>
         </div>
-
+{{--        {!!  App\Testware::checkTWStatus() !!}--}}
     </div>
 @endsection

@@ -98,7 +98,7 @@
                         <tr>
                             <td colspan="5">
                                 <p>
-                                    <x-notifyer>Keine Geräte gefunden</x-notifyer>
+                                    <x-notifyer>{{__('Keine Geräte gefunden')}}</x-notifyer>
                                 </p>
                                 <a href="{{ route('equipment.maker') }}"
                                    class="btn mt-2 btn-primary"
@@ -118,33 +118,3 @@
     </div>
 
 @endsection
-
-
-{{--@section('scripts')
-    @if($equipmentList->count()>0)
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-
-    <script>
-
-
-        $('#tabEquipmentListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            // "columnDefs": [
-            //     {"orderable": false, "targets": 2}
-            // ],
-            "dom": 't'
-        });
-    </script>
-
-    @endif
-@endsection--}}

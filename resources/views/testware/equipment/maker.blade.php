@@ -201,7 +201,7 @@
         <div class="row mb-3">
             <div class="col-md-6 mb-2">
                 @if(App\Produkt::all()->count() >0)
-                    <label for="setNewEquipmentFromProdukt">{{__('Neues Gerät aus Produkt-Vorlage erstellen')}}</label>
+                    <label for="setNewEquipmentFromProdukt">{{__('Neues Gerät aus Produkt erstellen')}}</label>
                     <form autocomplete="off">
                         <div class="input-group">
                             <input type="text"
@@ -271,13 +271,13 @@
                     @empty
                         <tr>
                             <td colspan="3">
-                                <x-notifyer>{{__('Keine Proukte angelegt')}}</x-notifyer>
+                                <x-notifyer>{{__('Keine Produkte angelegt')}}</x-notifyer>
                             </td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
-                @if(count($produktList)>0)
+                @if(count($produktList)>10)
                     <div class="d-flex justify-content-center">
                         {!! $produktList->onEachSide(2)->links() !!}
                     </div>

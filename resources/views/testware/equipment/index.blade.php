@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h4">Übersicht aller Geräte</h1>
+                <h1 class="h4">{{__('Übersicht aller Geräte')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -18,11 +18,11 @@
                 <table class="table table-sm">
                     <thead>
                     <tr>
-                        <th>Bezeichnung</th>
-                        <th>Inventar-Nr</th>
-                        <th>Stellplatz</th>
-                        <th>Status</th>
-                        <th>Prüfung fällig</th>
+                        <th>{{__('Bezeichnung')}}</th>
+                        <th>{{__('Inventarnummer')}}</th>
+                        <th>{{__('Stellplatz')}}</th>
+                        <th>{{__('Status')}}</th>
+                        <th>{{__('Prüfung fällig')}}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -57,13 +57,13 @@
                                     -
                                 @endforelse
                             </td>
-                            <td style="vertical-align: middle;"><a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">öffnen</a></td>
+                            <td style="vertical-align: middle;"><a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">{{__('öffnen')}}</a></td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5">
                                 <p>
-                                    <x-notifyer>Keine Geräte gefunden</x-notifyer>
+                                    <x-notifyer>{{__('Keine Geräte gefunden')}}</x-notifyer>
                                 </p>
                                 <a href="{{ route('equipment.maker') }}" class="btn mt-2 btn-outline-primary">{{__('neues Gerät anlegen')}}</a>
                             </td>
@@ -76,10 +76,3 @@
     </div>
 
 @endsection
-
-
-
-
-@section('scripts')
-
-@stop

@@ -144,7 +144,6 @@ Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
 
 Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEvent) {
     return App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(
-
         App\ControlEvent::find($controlEvent)
     );
 })->name('makePDFEquipmentControlReport');

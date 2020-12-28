@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Neuen Raum anlegen')}} &triangleright; {{__('Standortverwaltung')}} @ bitpack.io GmbH
+{{__('Neuen Raum anlegen')}} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
-    {{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')
@@ -81,7 +81,8 @@
                     <x-textarea id="r_name_text" label="{{__('Beschreibung')}}" />
                 </div>
             </div>
-            <x-btnMain>{{__('Raum anlegen')}} <i class="fas fa-download"></i></x-btnMain>
+            <x-btnMain>{{__('Raum anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>
+
         </form>
     </div>
 

@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('mainSection')
-    {{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('pagetitle')

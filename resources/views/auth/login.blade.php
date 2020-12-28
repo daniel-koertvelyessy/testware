@@ -13,14 +13,13 @@
                         </h1>
                         <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" height="30" alt="">
                     </div>
-
                     <div class="card-body">
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}" autocomplete="on">
                             @csrf
                             <div class="form-group">
                                 <label for="email">{{ __('E-Mail Adresse') }}</label>
 
-                                <input id="email" type="text" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="email" type="text" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

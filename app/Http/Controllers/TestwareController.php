@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Produkt;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class TestwareController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     /**
      * Display a listing of the resource.

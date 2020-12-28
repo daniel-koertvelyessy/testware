@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Standorte')}}
+    {{__('memStandorte')}}
 @endsection
 
 @section('menu')
@@ -93,7 +93,7 @@
                                         @foreach (App\BuildingTypes::all() as $bty)
                                             <option value="{{ $bty->id }}">{{ $bty->btname }}</option>
                                         @endforeach
-                                        <option value="new">neu anlegen</option>
+                                        <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
                                     <input type="text"
                                            id="newBuildingType"
@@ -130,11 +130,11 @@
                         <button type="button"
                                 class="btn btn-outline-secondary"
                                 data-dismiss="modal"
-                        >Abbruch
+                        >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >speichern
+                        >{{__('speichern')}}
                         </button>
                     </div>
                 </form>
@@ -209,7 +209,7 @@
                                         @foreach (App\RoomType::all() as $bty)
                                             <option value="{{ $bty->id }}">{{ $bty->rt_name_kurz }}</option>
                                         @endforeach
-                                        <option value="new">neu anlegen</option>
+                                        <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
                                     <input type="text"
                                            id="newRoomType"
@@ -235,11 +235,11 @@
                         <button type="button"
                                 class="btn btn-outline-secondary"
                                 data-dismiss="modal"
-                        >Abbruch
+                        >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >speichern
+                        >{{__('speichern')}}
                         </button>
                     </div>
                 </form>
@@ -312,7 +312,7 @@
                                         @foreach (App\StellplatzTyp::all() as $bty)
                                             <option value="{{ $bty->id }}">{{ $bty->spt_name_kurz }}</option>
                                         @endforeach
-                                        <option value="new">neu anlegen</option>
+                                        <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
                                     <input type="text"
                                            id="newStellplatzType"
@@ -359,7 +359,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Explorer</h1>
+                <h1 class="h3">{{__('Explorer')}}</h1>
             </div>
         </div>
         <div class="row mb-4">
@@ -461,7 +461,7 @@
                 <h2 class="h4">{{__('Räume')}}</h2>
                 <div class="btn-toolbar"
                      role="toolbar"
-                     aria-label="{{__('Übersicht der Räume des ausgewählten Raums')}}"
+                     aria-label="{{__('Übersicht der Räume des ausgewählten Gebäudes')}}"
                 >
                     <div class="btn-group mb-2 btn-block"
                          role="group"
@@ -752,8 +752,7 @@
                 form = $('#frmModalSetBuilding');
 
             if (type === 'new') {
-                const txt = '{{__('Bitte erst Gebäude wählen')}}';
-                $('#modalSetBuildingLabel').text(txt);
+                $('#modalSetBuildingLabel').text('{{__('Bitte erst Gebäude wählen')}}');
                 $.ajax({
                     type: "get",
                     dataType: 'json',
@@ -783,7 +782,7 @@
                         form.find('#building_type_id').val(res.building_type_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
-                            $('#modalSetBuildingLabel').text('Gebäude bearbeiten');
+                            $('#modalSetBuildingLabel').text('{{ __('Gebäude bearbeiten') }}');
                             form.find('#modalType').val('edit');
                             form.find('#b_name_kurz').val(res.b_name_kurz);
                             modalBuilding.modal('show');
@@ -793,8 +792,8 @@
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
                                 success: function (res) {
-                                    $('#modalSetBuildingLabel').text('Gebäude kopieren');
-                                    form.find('#b_name_kurz').attr('placeholder', 'neue Kurzbezeichnung angeben');
+                                    $('#modalSetBuildingLabel').text('{{ __('Gebäude kopieren') }}');
+                                    form.find('#b_name_kurz').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}');
                                     form.find('#standort_id_building').val(res);
                                     form.find('#modalType').val('copy');
                                     modalBuilding.modal('show');
@@ -829,7 +828,7 @@
                 form = $('#frmModalSetRoom');
 
             if (type === 'new') {
-                $('#modalSetRoomLabel').text('Neues Raum anlegen');
+                $('#modalSetRoomLabel').text('{{__('Neuen Raum anlegen')}}');
                 $.ajax({
                     type: "get",
                     dataType: 'json',
@@ -857,7 +856,7 @@
                         form.find('#room_type_id').val(res.room_type_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
-                            $('#modalSetRoomLabel').text('Raum bearbeiten');
+                            $('#modalSetRoomLabel').text('{{__('Raum bearbeiten')}}');
                             form.find('#modalType_room').val('edit');
                             form.find('#r_name_kurz').val(res.r_name_kurz);
                             modalRoom.modal('show');
@@ -867,8 +866,8 @@
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
                                 success: function (res) {
-                                    $('#modalSetRoomLabel').text('Raum kopieren');
-                                    form.find('#r_name_kurz').attr('placeholder', 'neue Kurzbezeichnung angeben').val('');
+                                    $('#modalSetRoomLabel').text('{{__('Raum kopieren')}}');
+                                    form.find('#r_name_kurz').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
                                     form.find('#standort_id_room').val(res);
                                     form.find('#modalType_room').val('copy');
                                     modalRoom.modal('show');
@@ -903,7 +902,7 @@
                 form = $('#frmModalSetStellplatz');
 
             if (type === 'new') {
-                $('#modalSetStellplatzLabel').text('Neuen Stellplatz anlegen');
+                $('#modalSetStellplatzLabel').text('{{__('Neuen Stellplatz anlegen')}}');
                 $.ajax({
                     type: "get",
                     dataType: 'json',
@@ -931,7 +930,7 @@
                         form.find('#stellplatz_typ_id').val(res.stellplatz_typ_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
-                            $('#modalSetStellplatzLabel').text('Stellplatz bearbeiten');
+                            $('#modalSetStellplatzLabel').text('{{__('Stellplatz bearbeiten')}}');
                             form.find('#modalType_stellplatz').val('edit');
                             form.find('#sp_name_kurz').val(res.sp_name_kurz);
                             modalStellplatz.modal('show');
@@ -941,8 +940,8 @@
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
                                 success: function (res) {
-                                    $('#modalSetStellplatzLabel').text('Stellplatz kopieren');
-                                    form.find('#sp_name_kurz').attr('placeholder', 'neue Kurzbezeichnung angeben').val('');
+                                    $('#modalSetStellplatzLabel').text('{{__('Stellplatz kopieren')}}');
+                                    form.find('#sp_name_kurz').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
                                     form.find('#standort_id_stellplatz').val(res);
                                     form.find('#modalType_stellplatz').val('copy');
                                     modalStellplatz.modal('show');
