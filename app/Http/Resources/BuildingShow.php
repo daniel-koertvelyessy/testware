@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Building extends JsonResource
+class BuildingShow extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +15,6 @@ class Building extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
             'identifier' => $this->b_name_kurz,

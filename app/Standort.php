@@ -23,9 +23,15 @@ class Standort extends Model
         $sd->std_id = $stid;
         $sd->std_kurzel = $kurzel;
         return $sd->save();
-
     }
 
+    public function change($stid, $kurzel, $typ) {
+        $sd = Standort::where('std_id',$stid)->first();
+        $sd->std_objekt_typ = $typ;
+        $sd->std_id = $stid;
+        $sd->std_kurzel = $kurzel;
+        return $sd->save();
+    }
     public function remove($id) {
         return Standort::find($id)->delete();
     }

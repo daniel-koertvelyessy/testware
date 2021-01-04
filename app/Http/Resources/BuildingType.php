@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdresseKurz extends JsonResource
+class BuildingType extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,8 @@ class AdresseKurz extends JsonResource
     public function toArray($request)
     {
         return [
-            'street' => $this->ad_anschrift_strasse,
-            'no' => $this->ad_anschrift_hausnummer,
-            'zip' => $this->ad_anschrift_plz,
-            'city' => $this->ad_anschrift_ort,
+            'name' => $this->btname,
+            'description' => $this->btbeschreibung,
         ];
     }
 }

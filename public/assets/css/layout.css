@@ -44,21 +44,21 @@ table th {
 ------------------------------------*/
 ::-moz-selection {
   color: #fff;
-  background-color: #007bff;
+  background-color: #18bc9c;
 }
 
 ::selection {
   color: #fff;
-  background-color: #007bff;
+  background-color: #18bc9c;
 }
 
 .bg-primary :not(.form-control) ::-moz-selection {
-  color: #007bff;
+  color: #18bc9c;
   background-color: #fff;
 }
 
 .bg-primary :not(.form-control) ::selection {
-  color: #007bff;
+  color: #18bc9c;
   background-color: #fff;
 }
 
@@ -102,7 +102,7 @@ table th {
 }
 
 .duik-anchorjs-link:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -205,7 +205,7 @@ h4:hover .duik-anchorjs-link {
 }
 
 .duik-callout-primary {
-  border-left-color: #007bff;
+  border-left-color: #18bc9c;
 }
 
 .duik-callout-secondary {
@@ -240,7 +240,7 @@ h4:hover .duik-anchorjs-link {
   Dropdown
 ------------------------------------*/
 .dropdown-menu {
-  border-top: solid 0.25rem #007bff;
+  border-top: solid 0.25rem #18bc9c;
 }
 
 /*------------------------------------
@@ -346,8 +346,8 @@ h4:hover .duik-anchorjs-link {
 }
 
 .duik-sidebar__link.active {
-  color: #007bff;
-  border-color: #007bff;
+  color: #18bc9c;
+  border-color: #c7d301;
   padding-top: .5rem;
 }
 
@@ -397,7 +397,7 @@ h4:hover .duik-anchorjs-link {
 
 .duik-content-nav__item.active > a,
 .duik-content-nav__item > a:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -429,7 +429,7 @@ h4:hover .duik-anchorjs-link {
   top: 0;
   left: 0;
   content: "—";
-  color: #007bff;
+  color: #18bc9c;
 }
 
 .list-icon {
@@ -454,7 +454,7 @@ h4:hover .duik-anchorjs-link {
   content: "\f005";
   font-family: "Font Awesome 5 Free";
   font-weight: 400;
-  color: #007bff;
+  color: #18bc9c;
 }
 
 /*------------------------------------
@@ -474,9 +474,9 @@ h4:hover .duik-anchorjs-link {
 }
 
 .page-link.active {
-  background-color: #007bff;
+  background-color: #18bc9c;
   color: #fff;
-  border-color: #007bff;
+  border-color: #18bc9c;
 }
 
 /*------------------------------------
@@ -562,7 +562,7 @@ label {
   left: calc(-2.25rem + 2px);
   width: calc(1rem - 4px);
   height: calc(1rem - 4px);
-  background-color: #007bff;
+  background-color: #18bc9c;
   border-radius: 0.5rem;
   -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -587,7 +587,7 @@ label {
 
 .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
   background-color: #fff;
-  border-color: #007bff;
+  border-color: #18bc9c;
   -webkit-transform: translateX(0.45rem);
       -ms-transform: translateX(0.45rem);
           transform: translateX(0.45rem);
@@ -683,7 +683,7 @@ label {
   z-index: 100;
   width: 2.75rem;
   height: 2.75rem;
-  background-color: #007bff;
+  background-color: #18bc9c;
   color: #fff;
   font-size: 1rem;
   border-radius: 50%;
@@ -772,7 +772,7 @@ label {
 }
 
 .duik-icon-svg-primary {
-  stroke: #007bff;
+  stroke: #18bc9c;
 }
 
 .duik-icon-svg-secondary {
@@ -812,8 +812,8 @@ label {
 
 .nav-bordered .nav-link.active,
 .nav-bordered .show > .nav-link {
-  color: #007bff;
-  border-bottom: solid 3px #007bff;
+  color: #18bc9c;
+  border-bottom: solid 3px #18bc9c;
 }
 
 /*------------------------------------
@@ -1012,10 +1012,10 @@ a.bg-hover-white:hover {
 ------------------------------------*/
 .gradient-primary {
   background-color: transparent;
-  background-image: -webkit-gradient(linear, left top, right top, from(#6c757d), to(#007bff));
-  background-image: -webkit-linear-gradient(left, #6c757d, #007bff);
-  background-image: -o-linear-gradient(left, #6c757d, #007bff);
-  background-image: linear-gradient(to right, #6c757d, #007bff);
+  background-image: -webkit-gradient(linear, left top, right top, from(#6c757d), to(#18bc9c));
+  background-image: -webkit-linear-gradient(left, #6c757d, #18bc9c);
+  background-image: -o-linear-gradient(left, #6c757d, #18bc9c);
+  background-image: linear-gradient(to right, #6c757d, #18bc9c);
 }
 
 .gradient-dark {
@@ -1029,10 +1029,10 @@ a.bg-hover-white:hover {
 @media (max-width: 991.98px) {
   .gradient-primary-md {
     background-color: transparent;
-    background-image: -webkit-gradient(linear, left top, right top, from(#6c757d), to(#007bff));
-    background-image: -webkit-linear-gradient(left, #6c757d, #007bff);
-    background-image: -o-linear-gradient(left, #6c757d, #007bff);
-    background-image: linear-gradient(to right, #6c757d, #007bff);
+    background-image: -webkit-gradient(linear, left top, right top, from(#6c757d), to(#18bc9c));
+    background-image: -webkit-linear-gradient(left, #6c757d, #18bc9c);
+    background-image: -o-linear-gradient(left, #6c757d, #18bc9c);
+    background-image: linear-gradient(to right, #6c757d, #18bc9c);
   }
 }
 
@@ -1040,7 +1040,7 @@ a.bg-hover-white:hover {
 	Links
 ------------------------------------*/
 .link {
-  color: #007bff;
+  color: #18bc9c;
   -webkit-transition: all .2s ease-in;
   -o-transition: all .2s ease-in;
   transition: all .2s ease-in;
@@ -1071,7 +1071,7 @@ a.bg-hover-white:hover {
 }
 
 .link-white-55:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -1083,7 +1083,7 @@ a.bg-hover-white:hover {
 }
 
 .link-dark:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -1095,7 +1095,7 @@ a.bg-hover-white:hover {
 }
 
 .link-headings-color:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -1111,7 +1111,7 @@ a.bg-hover-white:hover {
 }
 
 .link-muted:hover {
-  color: #007bff;
+  color: #18bc9c;
   text-decoration: none;
 }
 
@@ -1418,7 +1418,7 @@ div.code-toolbar > .toolbar a {
 }
 
 div.code-toolbar > .toolbar a:hover {
-  background-color: #007bff;
+  background-color: #18bc9c;
   color: #fff !important;
 }
 
@@ -1525,7 +1525,7 @@ div.code-toolbar > .toolbar a:hover {
 
 .duik-search__label {
   display: block;
-  color: #007bff;
+  color: #18bc9c;
 }
 
 .ui-autocomplete-wrapper--dark .duik-search__label {

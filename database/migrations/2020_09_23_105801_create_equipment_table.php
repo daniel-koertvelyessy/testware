@@ -17,11 +17,13 @@ class CreateEquipmentTable extends Migration
             $table->id();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('eq_name_lang',100)->nullable();
             $table->string('eq_inventar_nr')->unique();
             $table->string('eq_serien_nr')->unique()->nullable();
             $table->string('eq_qrcode')->unique()->nullable();
             $table->date('eq_ibm')->nullable();
             $table->text('eq_text')->nullable();
+            $table->decimal('eq_price',10,2)->nullable();
             $table->uuid('eq_uid');
             $table->foreignId('equipment_state_id')
                 ->nullable()

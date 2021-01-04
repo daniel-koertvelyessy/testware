@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AddressFull extends JsonResource
+class ProfileShort extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class AddressFull extends JsonResource
     public function toArray($request)
     {
         return [
-            'street' => $this->ad_anschrift_strasse,
-            'no' => $this->ad_anschrift_hausnummer,
-            'zip' => $this->ad_anschrift_plz,
-            'place' => $this->ad_anschrift_ort,
+            'name' => $this->ma_name,
+            'phone' => $this->ma_telefon,
+            'mobile' => $this->ma_mobil,
         ];
     }
 }

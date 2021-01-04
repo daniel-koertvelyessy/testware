@@ -13,13 +13,13 @@ class InitialValueSeeder extends Seeder
      */
     public function run()
     {
-
-        DB::table('lizenz')->insert([
-            'lizenz_id' => '228a7111-c27a-44c2-8a30-13da26eb079f',
-            'lizenz_user' => 'thermo-control Körtvélyessy GmbH',
-            'lizenz_order' => 'O0001415',
-            'lizenz_max_objects' => 100,
-        ]);
+//
+//        DB::table('lizenz')->insert([
+//            'lizenz_id' => '228a7111-c27a-44c2-8a30-13da26eb079f',
+//            'lizenz_user' => 'thermo-control Körtvélyessy GmbH',
+//            'lizenz_order' => 'O0001415',
+//            'lizenz_max_objects' => 100,
+//        ]);
 
 
         DB::table('users')->insert([

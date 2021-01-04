@@ -10,11 +10,15 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
 class UserController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -77,11 +81,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
-
-
         $user->update($this->validateUser());
-        $request->session()->flash('status', 'Dein Konto wurde aktualisiert!');
+        $request->session()->flash('status', __('Ihr Konto wurde aktualisiert!'));
         return redirect()->back();
     }
 
@@ -94,6 +95,13 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    public function addTokenToUser(User $user) {
+        $user->api_token = Str::random(80);
+        $user->save();
+        session()->flash('status', __('Ein Token wurde erfolgreich zugewiesen!'));
+        return redirect()->back();
     }
 
     /**

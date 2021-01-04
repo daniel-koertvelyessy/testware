@@ -27,11 +27,11 @@ Route::get('edata/{ident}', function ($ident, Request $request) {
             $edata = \App\Equipment::findOrFail($equipment->equipment_id);
             return view('testware.app.equipmentdata', ['edata' => $edata, 'ident' => $ident]);
         } else {
-            $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+            $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
             return redirect()->route('app');
         }
     } else {
-        $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+        $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
         return redirect()->route('app');
     }
 })->name('edata');
@@ -50,19 +50,27 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 //            dd($edata);
             return view('testware.app.reportdamage', ['edata' => $edata, 'ident' => $ident]);
         } else {
-            $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+            $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
             return redirect()->route('app');
         }
     } else {
-        $request->session()->flash('status', 'Das Gerät konnte nicht gefunden werden!');
+        $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
         return redirect()->route('app');
     }
 })->name('edmg');
 
+/**
+Documentation-Routes
+*/
+Route::get('docs', function () {return view('docs.index');})->name('docs.start');
+Route::get('docs/modules', function () {return view('docs.modules');})->name('docs.modules');
+Route::get('docs/testware', function () {return view('docs.testware.index');})->name('docs.testware.index');
+Route::get('docs/backend', function () {return view('docs.backend.index');})->name('docs.backend.index');
+Route::get('docs/api', function () {return view('docs.api.index');})->name('docs.api.index');
+Route::get('docs/api/endpoints', function () {return view('docs.api.endpoints');})->name('docs.api.endpoints');
+Route::get('docs/backend/locations', function () {return view('docs.backend.locations');})->name('docs.backend.locations');
 
-Route::get('docs', function () {
-    return view('docs.index');
-});
+
 
 Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
 Route::post('event.restore', 'EquipmentEventController@restore')->name('event.restore');
@@ -72,7 +80,6 @@ Route::middleware('throttle:5|60,1')->group(function () {
     Route::post('app.store', 'AppController@store')->name('app.store');
 });
 Route::put('event.accept', 'EquipmentEventController@accept')->name('event.accept');
-
 
 Route::resources([
     'location' => 'LocationsController',
@@ -122,6 +129,7 @@ Route::get('getControlEventDataSheet', 'ControlEquipmentController@getControlEve
 
 Route::get('getEquipmentAjaxListe', 'EquipmentController@getEquipmentAjaxListe')->name('getEquipmentAjaxListe');
 Route::get('searchInModules', 'SearchController@searchInModules')->name('searchInModules');
+Route::get('searchInDocumentation', 'SearchController@searchInDocumentation')->name('searchInDocumentation');
 
 /*
 
@@ -192,7 +200,7 @@ Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
 
-
+Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser' )->name('addApiTokenToUser')->middleware('auth');
 
 
 /*

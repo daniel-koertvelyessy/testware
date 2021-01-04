@@ -75,6 +75,7 @@
         <div class="row">
             <div class="col">
                 <form action="{{ route('equipment.store') }}"
+                      id="frmAddNewEquipment"
                       method="POST"
                       enctype="multipart/form-data"
                       class="needs-validation"
@@ -141,8 +142,7 @@
                                             data-toggle="modal"
                                             data-target="#modalSetStandort"
                                     >
-                                       <span class="d-none d-md-inline">{{__('Suche')}}</span>
-                                        <span class="fas fa-search ml-md-2"></span>
+                                        <span class="d-none d-md-inline">{{__('Suche')}}</span> <span class="fas fa-search ml-md-2"></span>
                                     </button>
                                 </div>
                                 <span class="text-warning small d-block"
@@ -166,8 +166,9 @@
                                            label="{{__('Geräte Status')}}"
                             >
                                 @foreach (App\EquipmentState::all() as $equipmentState)
-                                    <option
-                                        value="{{ $equipmentState->id }}"
+                                    <option value="{{ $equipmentState->id }}"
+                                            class="text-{{ $equipmentState->estat_color }}"
+                                            @if($equipmentState->id===4) selected  @endif
                                     >{{ $equipmentState->estat_name_kurz }}</option>
                                 @endforeach
                             </x-selectfield>
@@ -218,6 +219,7 @@
                                            name="function_control_pass"
                                            value="0"
                                            class="function_control_pass"
+                                           checked
                                     > {{__('NICHT Bestanden')}}
                                 </label>
                             </div>
@@ -290,6 +292,7 @@
                         </div>
                     </div>
                     <button id="btnAddNewEquipment"
+                            type="button"
                             class="btn btn-primary"
                     >{{__('Gerät anlegen')}} <i class="fas fa-download ml-3"></i>
                     </button>
@@ -396,6 +399,67 @@
 @section('scripts')
 
     <script>
+
+        function checkFunctionControl(){
+            const function_control_profil = $('#function_control_profil');
+            const function_control_firma = $('#function_control_firma');
+
+            let chekResult=false;
+
+            if (function_control_firma.val()==='void' && function_control_profil.val()==='void' ) {
+                function_control_profil.addClass('is-invalid');
+                function_control_firma.addClass('is-invalid');
+            }
+
+            if (function_control_firma.val()!=='void' || function_control_profil.val()!=='void'){
+                function_control_profil.removeClass('is-invalid');
+                function_control_firma.removeClass('is-invalid');
+                chekResult = true;
+            }
+
+            return chekResult;
+
+        }
+
+        $('#function_control_profil').change(function () {
+            checkFunctionControl();
+            $('#function_control_firma').val('void');
+        });
+
+        $('#function_control_firma').change(function () {
+            checkFunctionControl();
+            $('#function_control_profil').val('void');
+        });
+
+        $('#btnAddNewEquipment').click(function () {
+            const standort_id = $('#standort_id');
+            const eq_inventar_nr = $('#eq_inventar_nr');
+            const setStandOrtId = $('#setStandOrtId');
+
+            let frmIsComplete = true;
+            if (!($('#controlEquipmentPassed').prop('checked') || $('#controlEquipmentNotPassed').prop('checked'))) {
+                $('.function_control_pass').addClass('is-invalid');
+                frmIsComplete = false;
+            }
+
+            frmIsComplete = checkFunctionControl();
+
+            if (standort_id.val() === '')
+            {
+                setStandOrtId.addClass('is-invalid');
+                frmIsComplete = false;
+            }
+
+            if (eq_inventar_nr.val() === '')
+            {
+                eq_inventar_nr.addClass('is-invalid');
+                frmIsComplete = false;
+            }
+
+            if (frmIsComplete) $('#frmAddNewEquipment').submit()
+        });
+
+
         $('.function_control_pass').click(function () {
             const nd = $('#equipment_state_id');
             const eqdoc_name_kurz = $('#eqdoc_name_kurz');
@@ -428,7 +492,7 @@
         $('#btnSetStandortFromModal').click(function () {
             const setStandortNd = $('input.setStandort');
             $('#standort_id').val(setStandortNd.val());
-            $('#setStandOrtId').val($('.setStandort').next('label').html());
+            $('#setStandOrtId').removeClass('is-invalid').val($('.setStandort').next('label').html());
             $('#modalSetStandort').modal('hide');
         });
 

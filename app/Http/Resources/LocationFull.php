@@ -4,9 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AdresseKurz as AdresseKurzResource;
 
-class Location extends JsonResource
+class LocationFull extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,10 +18,13 @@ class Location extends JsonResource
         return [
             'id' => $this->id,
             'created' => (string)$this->created_at,
+            'updated' => (string)$this->updated_at,
+            'uid' => $this->standort_id,
             'name' => $this->l_name_lang,
             'identifier' => $this->l_name_kurz,
             'description' => $this->l_beschreibung,
-
+            'address'=> new AddressFull($this->Adresse),
+            'manager' => new ProfileFull($this->Profile)
         ];
     }
 }

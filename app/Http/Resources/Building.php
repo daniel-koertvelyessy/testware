@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BuildingFull extends JsonResource
+class Building extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,14 +19,13 @@ class BuildingFull extends JsonResource
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
             'identifier' => $this->b_name_kurz,
-            'location_id' => $this->standort_id,
+            'uid' => $this->standort_id,
+            'type' => new BuildingType($this->BuildingType),
             'name' => $this->b_name_lang,
             'place' => $this->b_name_ort,
             'description' => $this->b_name_text,
             'goods_income_has' => ($this->b_we_has===0)?false:true,
             'goods_income_name' => $this->b_we_name,
-            'type' => new BuildingType($this->BuildingType),
-            'location' => new LocationShort($this->location)
         ];
     }
 }

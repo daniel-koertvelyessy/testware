@@ -11,9 +11,9 @@ class EquipmentSeeder extends Seeder
      */
     public function run()
     {
-        $produkt = factory(App\Produkt::class, 300)->create();
+        $produkt = factory(App\Produkt::class, 100)->create();
         $standort= \App\Standort::all();
-        $bul =  factory(App\Equipment::class, 2356)->make()->each(function ($equip) use($produkt,$standort) {
+        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use($produkt,$standort) {
             $uid = \Illuminate\Support\Str::uuid();
             $equip->eq_uid = $uid;
             $equip->standort_id =  $standort->random()->id;

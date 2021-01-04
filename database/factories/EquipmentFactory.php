@@ -13,8 +13,9 @@ $factory->define(Equipment::class, function (Faker $faker) {
         'eq_ibm' => $faker->date('Y-m-d'),
         'eq_text' => $faker->text(100),
         'eq_uid' => $uid,
-        'equipment_state_id' => 1,
+        'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),
         'produkt_id' => NULL,
         'standort_id' => NULL,
+        'eq_price' => random_int(20, 10000)
     ];
 });

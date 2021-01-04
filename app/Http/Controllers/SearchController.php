@@ -332,4 +332,9 @@ class SearchController extends Controller {
         return response()->json($l);
     }
 
+    public function searchInDocumentation(Request $request)
+    : Request {
+        return $request;
+    }
+
 }

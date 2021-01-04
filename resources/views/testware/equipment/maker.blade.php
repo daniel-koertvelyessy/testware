@@ -277,9 +277,9 @@
                     @endforelse
                     </tbody>
                 </table>
-                @if(count($produktList)>10)
+                @if(count($produktList)>1)
                     <div class="d-flex justify-content-center">
-                        {!! $produktList->onEachSide(2)->links() !!}
+                        {!! $produktList->withQueryString()->onEachSide(2)->links() !!}
                     </div>
                 @endif
             </div>

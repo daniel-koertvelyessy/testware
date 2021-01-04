@@ -4,9 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AdresseKurz as AdresseKurzResource;
+use App\Http\Resources\AddressShort as AdresseKurzResource;
 
-class Location extends JsonResource
+class LocationShort extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,8 @@ class Location extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
             'name' => $this->l_name_lang,
             'identifier' => $this->l_name_kurz,
-            'description' => $this->l_beschreibung,
-            'location_id' => $this->standort_id,
-
         ];
     }
 }

@@ -12,6 +12,9 @@
     <div class="container-fluid">
         <h2 class="h5">{{ __('Status') }}
             <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
+            <br> <span class="small">
+                {{ __('Anzahl') }}: <span class="badge badge-info">{{ App\Equipment::all()->count() }}</span>
+            </span>
         </h2>
         <div class="row">
             @foreach (App\EquipmentState::all() as $equipmentState)
@@ -272,7 +275,64 @@
                     <x-notifyer>{{__('Keine ungelesenen Meldungen gefunden!')}}</x-notifyer>
                 @endforelse
             </x-dashborarditem>
+
+            <x-dashborarditem>
+                <div class="col-md-6">
+                    <h2 class="h5">{{ __('Status') }}
+                        <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
+                    </h2>
+                    <div id="myChart"
+                    ></div>
+                </div>
+            </x-dashborarditem>
         </div>
-{{--        {!!  App\Testware::checkTWStatus() !!}--}}
+        {{--        {!!  App\Testware::checkTWStatus() !!}--}}
     </div>
+@endsection
+
+
+@section('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+
+        let equipmentStateNumbers = [
+            @foreach(App\EquipmentState::all() as $eqs)
+            {{ App\Equipment::where('equipment_state_id',$eqs->id)->count() }},  // freigegeben
+            @endforeach
+        ];
+        let equipmentStateColors = [
+            "rgb(84,177,25)",
+            "rgb(208,191,31)",
+            "rgb(191,78,33)",
+            "rgb(193,8,8)"
+        ];
+        let equipmentStateLabels = [
+            "Freigegegben",
+            "Beschädigt",
+            "Reparatur",
+            "Gesperrt"
+        ];
+        const options = {
+            chart: {
+                type: 'pie'
+            },
+            colors: equipmentStateColors,
+
+            series: equipmentStateNumbers,
+
+            labels: [
+                "Freigegegben",
+                "Beschädigt",
+                "Reparatur",
+                "Gesperrt"
+            ]
+
+        }
+
+        var chart = new ApexCharts(document.querySelector("#myChart"), options);
+
+        chart.render();
+    </script>
+
 @endsection
