@@ -97,7 +97,7 @@
         >
             <div class="d-flex justify-content-between mb-3">
                 <!-- Sidebar Search -->
-                <form class="col form-inline input-group-sm pt-2">
+{{--                <form class="col form-inline input-group-sm pt-2">
                     <label for="searchfield" class="sr-only">Suche in Dokumentation</label>
                     <input id="searchfield"
                         class="js-search form-control form-control-sm w-100"
@@ -105,7 +105,7 @@
                         placeholder="{{__('Suche')}}..."
                         data-url="{{asset('assets/include/json/autocomplete-data-for-documentation-search.json')}}"
                     />
-                </form>
+                </form>--}}
                 <!-- End Sidebar Search -->
 
                 <!-- Responsive Toggle Button -->

@@ -4,8 +4,10 @@
   $(document).on('ready', function () {
     // Custom Scroll
     $('.js-scrollbar').mCustomScrollbar({
-      theme: 'minimal-dark',
-      scrollInertia: 150
+      // theme: 'dark-thick',
+      theme: 'rounded-dark',
+      scrollInertia: 200,
+        setTop: 502
     });
 
     // Scroll to Active

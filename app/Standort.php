@@ -105,6 +105,31 @@ class Standort extends Model
 
     public function Equipment()
     {
-        return $this->hasMany(Equipment::class);
+        return $this->belongsTo(Equipment::class);
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class,'standort_id');
+    }
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class);
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function compartment()
+    {
+        return $this->belongsTo(Stellplatz::class);
+    }
+
+    public function countReferencedEquipment() {
+        return Equipment::where('standort_id',$this->id)->count();
+    }
+
 }

@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Building;
 use DB;
 use Illuminate\Support\Facades\Cache;
+use Kyslik\ColumnSortable\Sortable;
 
 class Location extends Model
 {
 
-    use SoftDeletes;
+    use SoftDeletes, Sortable;
     /*
  *
  *    Schütz nicht vor Injektionsangriffen!!!!
@@ -114,8 +115,30 @@ class Location extends Model
                     </span>
                     ';
         }
-
-
-
     }
+
+    public function Standort() {
+        return $this->hasOne(Standort::class, 'std_id','standort_id');
+    }
+
+    public function countTotalEquipmentInLocation(){
+        $equipCounter = 0;
+        $equipCounter += $this->Standort->countReferencedEquipment();
+        $buildings = \App\Building::where('location_id',$this->id)->get();
+        foreach( $buildings as $building){
+            $equipCounter += $building->Standort->countReferencedEquipment();
+            $rooms = Room::where('building_id',$building->id)->get();
+            foreach($rooms as $room){
+                $equipCounter += $room->Standort->countReferencedEquipment();
+                $compartments = Stellplatz::where('room_id',$room->id)->get();
+                foreach($compartments as $compartment){
+                    $equipCounter += $compartment->Standort->countReferencedEquipment();
+                }
+            }
+        }
+
+        return $equipCounter;
+    }
+
+
 }

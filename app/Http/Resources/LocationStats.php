@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Stellplatz;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\AddressShort as AdresseKurzResource;
 
-class Location extends JsonResource
+class LocationStats extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,17 +17,21 @@ class Location extends JsonResource
      */
     public function toArray($request)
     {
+        $buildings = \App\Building::where('location_id',$this->id);
+        $roomCount = 0;
+        $compartmentCount = 0;
+        foreach($buildings->get() as $building){
+            $rooms = \App\Room::where('building_id',$building->id);
+            $roomCount += $rooms->count();
+            foreach($rooms->get() as $room){
+                $compartments = Stellplatz::where('room_id',$room->id);
+                $compartmentCount += $compartments->count();
+            }
+        }
         return [
-            'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
-            'uid' => $this->standort_id,
-            'name' => $this->l_name_lang,
-            'identifier' => $this->l_name_kurz,
-            'description' => $this->l_beschreibung,
-            'address_id' => $this->adresse_id,
-            'employee_id' => $this->profile_id,
-            'buildings' => \App\Building::where('location_id',$this->id)->count(),
+            'buildings' => $buildings->count(),
+            'rooms' => $roomCount,
+            'compartments' => $compartmentCount,
             'equipment' => $this->countTotalEquipmentInLocation()
         ];
     }

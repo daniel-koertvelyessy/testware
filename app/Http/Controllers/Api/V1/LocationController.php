@@ -32,7 +32,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        return LocationResource::collection(Location::all());
+        return LocationResource::collection(Location::with('Profile','Adresse','Building')->get());
     }
 
     /**

@@ -44,6 +44,7 @@ Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAj
 Route::post('copyStellplatz', 'StellplatzController@copyStellplatz')->name('copyStellplatz');
 Route::get('exportStellplatzJSON', 'DataportController@exportStellplatzJSON')->name('exportStellplatzJSON');
 Route::post('importStellplatzJSON', 'DataportController@importStellplatzJSON')->name('importStellplatzJSON');
+Route::get('exportjson.compartments', 'ExportController@compartmentsToJson')->name('exportjson.compartments');
 
 
 /**
@@ -68,6 +69,7 @@ Route::post('room.modal', 'RoomController@modal')->name('room.modal');
 
 Route::get('exportRoomJSON', 'DataportController@exportRoomJSON')->name('exportRoomJSON');
 Route::post('importRoomJSON', 'DataportController@importRoomJSON')->name('importRoomJSON');
+Route::get('exportjson.rooms', 'ExportController@roomsToJson')->name('exportjson.rooms');
 
 
 /**
@@ -95,6 +97,7 @@ Route::get('fetchUid', 'AdminController@fetchUid')->name('fetchUid');
 
 Route::get('exportBuildingJSON', 'DataportController@exportBuildingJSON')->name('exportBuildingJSON');
 Route::post('importBuildingJSON', 'DataportController@importBuildingJSON')->name('importBuildingJSON');
+Route::get('exportjson.buildings', 'ExportController@buildingsToJson')->name('exportjson.buildings');
 
 /**
  *   Standorte
@@ -109,6 +112,7 @@ Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
 
 Route::get('lexplorer', 'LocationsController@explorer')->name('lexplorer');
+Route::get('exportjson.locations', 'ExportController@locationsToJson')->name('exportjson.locations');
 Route::get('getBuildingListInLocation', 'LocationsController@getBuildingListInLocation')->name('getBuildingListInLocation');
 Route::get('getLocationData', 'LocationsController@getLocationData')->name('getLocationData');
 Route::get('getLocationListeAsTable', 'LocationsController@getLocationListeAsTable')->name('getLocationListeAsTable');

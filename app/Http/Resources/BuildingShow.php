@@ -19,12 +19,13 @@ class BuildingShow extends JsonResource
             'updated' => (string)$this->updated_at,
             'identifier' => $this->b_name_kurz,
             'uid' => $this->standort_id,
-            'type' => new BuildingType($this->BuildingType),
             'name' => $this->b_name_lang,
             'place' => $this->b_name_ort,
             'description' => $this->b_name_text,
             'goods_income_has' => ($this->b_we_has===0)?false:true,
             'goods_income_name' => $this->b_we_name,
+            'type' => new BuildingType($this->BuildingType),
+            'location' => new LocationShort($this->location),
         ];
     }
 }

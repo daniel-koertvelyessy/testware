@@ -293,7 +293,7 @@ h4:hover .duik-anchorjs-link {
 
 .duik-sidebar {
   z-index: 100;
-  padding: 5rem 0 0;
+  padding: 3rem 0 0;
 }
 
 @media (max-height: 500px) {

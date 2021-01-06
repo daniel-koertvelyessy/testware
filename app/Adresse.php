@@ -102,15 +102,15 @@ use SoftDeletes;
                     $address_type->adt_name = $request->address['address_type']['name'];
                     $address_type->adt_text_lang = (isset($request->address['address_type']['description'])) ? $request->address['address_type']['description'] : NULL;
                     $address_type->save();
-                    $adresse->adresse_type_id = $address_type->id;
+                    $adresse->address_type_id = $address_type->id;
                 } else{
-                    $adresse->adresse_type_id = $st->id;
+                    $adresse->address_type_id = $st->id;
                 }
 
             } elseif (isset($request->address['address_type_id'])){
-                $adresse->adresse_type_id = (AddressType::find($request->address['address_type_id'])) ? $request->address['address_type_id'] : 1 ;
+                $adresse->address_type_id = (AddressType::find($request->address['address_type_id'])) ? $request->address['address_type_id'] : 1 ;
             } else {
-                $adresse->adresse_type_id = 1;
+                $adresse->address_type_id = 1;
             }
             $adresse->save();
             return $adresse->id;

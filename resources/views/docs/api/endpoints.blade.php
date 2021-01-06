@@ -301,7 +301,12 @@
                         <dl class="row">
                             <dt class="col-sm-3">Aufgabe</dt>
                             <dd class="col-sm-9">
-                                Abrufen aller Betriebe inklusive der kompletten Adresse und leitenden Person in der testWare
+                                Abrufen aller Betriebe in der testWare inklusive:
+                                <ul>
+                                    <li>der kompletten Adresse</li>
+                                    <li>leitenden Person </li>
+                                    <li>Objekte in dem Betrieb</li>
+                                </ul>
                             </dd>
                         </dl>
                         <dl class="row">
@@ -349,19 +354,25 @@
             "floor": null,
             "enterance": null
         },
-        "employee": {
-            "first_name": "Anja",
-            "name": "Janssen",
-            "name_2": "Frau Adele Fleischer",
-            "employee_number": "1526",
-            "date_birth": "2001-10-04",
-            "date_entry": "2013-06-05",
+        "manager": {
+            "first_name": "Lenard",
+            "name": "Hammer",
+            "name_2": "Herr Lenard H",
+            "employee_number": "1187",
+            "date_birth": "1972-09-03",
+            "date_entry": "2007-10-12",
             "date_leave": null,
-            "phone": "+49 (0) 6180 690281",
-            "mobile": "+2556088034473",
+            "phone": "0808862546",
+            "mobile": "+5211706111601",
             "fax": null,
             "com_1": null,
             "com_2": null
+        },
+        "location_objects": {
+            "buildings": 2,
+            "rooms": 5,
+            "compartments": 18,
+            "equipment": 738
         }
     },
     {...}
@@ -848,14 +859,17 @@
 [
     {
         "id": 1,
-        "created": "2020-12-29 11:30:16",
-        "updated": "2020-12-29 11:30:16",
-        "identifier": "geb-4027",
-        "name": "Werkstatt Kfz",
-        "location": null,
-        "description": "Veritatis quasi sit beatae perspiciatis ut tempore. Cupiditate qui consectetur quia odio accusantium.",
-        "goods_income_has": false,
-        "goods_income_name": null
+        "created": "2021-01-05 10:44:20",
+        "updated": "2021-01-05 10:44:20",
+        "identifier": "geb-8200",
+        "uid": "2a54b8f9-6ec3-3add-8e96-54f1868e1331",
+        "name": "Halle T61",
+        "place": "Tor Süd T61",
+        "description": "Molestias cupiditate et architecto provident ut libero laborum.....",
+        "goods_income_has": true,
+        "goods_income_name": "WE-GT61",
+        "building_type_id": 1,
+        "location_id": 1
     },
     {...}
 ]
@@ -902,21 +916,21 @@
 [
     {
         "id": 1,
-        "created": "2020-12-29 11:30:16",
-        "updated": "2020-12-29 11:30:16",
-        "identifier": "geb-4027",
-        "uid": "1c077d5b-2ed5-3ad7-b08f-0c66e31255cb",
-        "name": "deleniti-reiciendis-est",
-        "place": "521",
-        "description": "Veritatis quasi sit beatae perspiciatis ut tempore. Cupiditate qui consectetur quia odio accusantium. Et enim rerum ut at illum quis reprehenderit. Consectetur accusamus animi modi illo amet sed quo et. Neque quod voluptatem maxime rem laborum. Voluptas libero ut id sunt voluptatem velit. Consequatur fugiat deserunt ut maxime quas nam.",
-        "goods_income_has": false,
-        "goods_income_name": null,
+        "created": "2021-01-05 10:44:20",
+        "updated": "2021-01-05 10:44:20",
+        "identifier": "geb-8200",
+        "uid": "2a54b8f9-6ec3-3add-8e96-54f1868e1331",
+        "name": "Halle T61",
+        "place": "Tor Süd T61",
+        "description": "Molestias cupiditate et architecto provident ut libero laborum.....",
+        "goods_income_has": true,
+        "goods_income_name": "WE-GT61",
         "type": {
-            "name": "Büro",
-            "description": "Gebäude mit reiner Büronutzung"
+            "name": "Lager",
+            "description": "Gebäude zur Lagerung von Maschienen"
         },
         "location": {
-            "name": "neuer Name 6",
+            "name": "Werk 12",
             "identifier": "bln153"
         }
     },
@@ -963,19 +977,23 @@
                             <dd class="col-sm-9">
                             <pre><code class="language-json">
 {
-    "created": "2020-12-29 11:30:16",
-    "updated": "2020-12-29 11:30:16",
-    "identifier": "geb-4027",
-    "uid": "1c077d5b-2ed5-3ad7-b08f-0c66e31255cb",
+    "created": "2021-01-05 10:44:20",
+    "updated": "2021-01-05 10:44:20",
+    "identifier": "geb-8200",
+    "uid": "2a54b8f9-6ec3-3add-8e96-54f1868e1331",
+    "name": "Halle T61",
+    "place": "Tor Süd T61",
+    "description": "Molestias cupiditate et architecto provident ut libero laborum.....",
+    "goods_income_has": true,
+    "goods_income_name": "WE-GT61",
     "type": {
-        "name": "Büro",
-        "description": "Gebäude mit reiner Büronutzung"
+        "name": "Lager",
+        "description": "Gebäude zur Lagerung von Maschienen"
     },
-    "name": "deleniti-reiciendis-est",
-    "place": "521",
-    "description": "Veritatis quasi sit beatae perspiciatis ut tempore. Cupiditate qui consectetur quia odio accusantium.",
-    "goods_income_has": false,
-    "goods_income_name": null
+    "location": {
+        "name": "Werk 12",
+        "identifier": "bln153"
+    }
 }
                             </code></pre>
                             </dd>
@@ -1187,7 +1205,8 @@
     "place": null,
     "description": null,
     "goods_income_has": true,
-    "goods_income_name": null
+    "goods_income_name": null,
+    "location_id" : 1
 }
                                 </code></pre>
                             </dd>
@@ -1231,6 +1250,471 @@
                                 <pre><code class="language-json">
     {
         "status" : "building deleted"
+    }
+                                </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                </section>
+                <section id="rooms">
+                    <h2>{{ __('Räume') }}</h2>
+                    <p>Folgende Endpunkte sind verfügbar:</p>
+                    <div class="list-group mb-6">
+                        <a href="#endpoint-get-api-v1-room"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">GET</span> <span>/api/v1/room</span>
+                        </a>
+                        <a href="#endpoint-get-api-v1-room_list_complete"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">GET</span> <span>/api/v1/room_list_complete</span>
+                        </a>
+                        <a href="#endpoint-get-room_id"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">GET</span> <span>/api/v1/room/{id}</span>
+                        </a>
+                        <a href="#endpoint-post-room"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">POST</span> <span>/api/v1/room</span>
+                        </a>
+                        <a href="#endpoint-put-room_id"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">PUT</span> <span>/api/v1/room/{id}</span>
+                        </a>
+                        <a href="#endpoint-delete-room_id"
+                           class="list-group-item list-group-item-action js-anchor-link"
+                        >
+                            <span class="mr-5 badge badge-dark-soft">DELETE</span> <span>/api/v1/room/{id}</span>
+                        </a>
+                    </div>
+                    <article id="endpoint-get-api-v1-room">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Abrufen aller Räume der testWare
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>GET</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Antwort</dt>
+                            <dd class="col-sm-9">
+                                <pre><code class="language-json">
+[
+    {
+        "id": 1,
+        "created": "2021-01-05 10:44:20",
+        "updated": "2021-01-05 10:44:20",
+        "identifier": "rm-117",
+        "uid": "1e0cfa36-e485-36c7-8f22-21c83884a442",
+        "type": {
+            "identifier": "Material"
+        },
+        "name": "quis",
+        "description": "Amet minus dolorum at reprehenderit velit iste laudantium. Aperiam quo sapiente voluptatem aut.",
+        "building_id": 5
+    },
+    {...}
+]
+                                </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                    <div class="dropdown-divider my-5"></div>
+                    <article id="endpoint-get-api-v1-room_list_complete">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room_list_complete</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Abrufen aller Räume der testWare inklusive Räumetyp und Details des Gebäude
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>GET</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Antwort</dt>
+                            <dd class="col-sm-9">
+                                <pre><code class="language-json">
+[
+    {
+        "id": 1,
+        "created": "2021-01-05 10:44:20",
+        "updated": "2021-01-05 10:44:20",
+        "identifier": "rm-117",
+        "uid": "1e0cfa36-e485-36c7-8f22-21c83884a442",
+        "type": {
+            "identifier": "Material"
+        },
+        "name": "quis",
+        "description": "Amet minus dolorum at reprehenderit velit iste laudantium. ...",
+        "building": {
+            "identifier": "geb-7715",
+            "uid": "11a26323-672d-3ebf-92c0-349d1c397f6a",
+            "name": "fugit-qui",
+            "description": "Et magnam atque quidem ratione qui voluptates..."
+        }
+    },
+    {...}
+]
+                                </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                    <div class="dropdown-divider my-5"></div>
+                    <article id="endpoint-get-room_id">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room/{id}</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                <code>id</code> <span class="ml-5 badge badge-dark-soft">INTEGER</span>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Ruft die Daten zum einem Räume mit der <code>id</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>GET</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Antwort</dt>
+                            <dd class="col-sm-9">
+                            <pre><code class="language-json">
+{
+    "id": 1,
+    "created": "2021-01-05 10:44:20",
+    "updated": "2021-01-05 10:44:20",
+    "identifier": "rm-117",
+    "uid": "1e0cfa36-e485-36c7-8f22-21c83884a442",
+    "type": {
+        "identifier": "Material"
+    },
+    "name": "quis",
+    "description": "Amet minus dolorum at reprehenderit velit iste laudantium...",
+    "building": {
+        "identifier": "geb-7715",
+        "uid": "11a26323-672d-3ebf-92c0-349d1c397f6a",
+        "name": "fugit-qui",
+        "description": "Et magnam atque quidem ratione qui voluptates..."
+    }
+}
+                            </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                    <div class="dropdown-divider my-5"></div>
+                    <article id="endpoint-post-room">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Erstellt ein Räume.
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>POST</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                <p>Erforderliche Felder</p>
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <code>identifier</code> <span class="badge badge-dark-soft">STRING</span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <code>goods_income_has</code> <span class="badge badge-dark-soft">BOOLEAN</span>
+                                    </li>
+                                </ul>
+                                <a class="btn btn-sm btn-outline-dark-soft btn-pill"
+                                   data-toggle="collapse"
+                                   href="#rooms_optionals"
+                                   role="button"
+                                   aria-expanded="false"
+                                   aria-controls="rooms_optionals"
+                                >Optionale Felder
+                                </a>
+                                <div class="collapse"
+                                     id="rooms_optionals"
+                                >
+                                    <ul class="list-group list-group-flush mb-3">
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>description</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>uid</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>name</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>place</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>type</code> <span class="badge badge-dark-soft">OBJECT</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>location_id</code> <span class="badge badge-dark-soft">INTEGER</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <p class="mt-3">Wird das Objekt <code>type</code> verwendet, sind folgende Felder erforderlich</p>
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <code>type.name</code> <span class="badge badge-dark-soft">STRING</span>
+                                    </li>
+                                </ul>
+                                <a class="btn btn-sm btn-outline-dark-soft btn-pill"
+                                   data-toggle="collapse"
+                                   href="#rooms_put_optional_type"
+                                   role="button"
+                                   aria-expanded="false"
+                                   aria-controls="rooms_put_optional_type"
+                                >Optionale Felder
+                                </a>
+                                <div class="collapse"
+                                     id="rooms_put_optional_type"
+                                >
+                                    <ul class="list-group list-group-flush mb-3">
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>type.description</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Struktur</dt>
+                            <dd class="col-sm-9">
+                                <pre><code class="language-json">
+{
+    "identifier" : "b12345",
+    "goods_income_has" : false,
+    "uid" : "430eb8b6-619c-4ebf-8c54-b139b99e7a33",
+    "type" : {
+        "name": "Büro",
+        "description": "Räume mit reiner Büronutzung"
+    },
+    "name" : "Räume 12345",
+    "place" : "Tor Nord",
+    "description" : "Bürogebäude Zentraleinkauf",
+    "goods_income_name" : null,
+    "location_id" : 1
+}
+                                </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                    <div class="dropdown-divider my-5"></div>
+                    <article id="endpoint-put-room_id">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room/{id}</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                <code>id</code> <span class="ml-5 badge badge-dark-soft">INTEGER</span>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Aktualisiert die Daten eines Betriebes.
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>PUT</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                <p>Erforderliche Felder</p>
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <code>identifier</code> <span class="badge badge-dark-soft">STRING</span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <code>goods_income_has</code> <span class="badge badge-dark-soft">BOLEAN</span>
+                                    </li>
+                                </ul>
+                                <a class="btn btn-sm btn-outline-dark-soft btn-pill"
+                                   data-toggle="collapse"
+                                   href="#rooms_put_optionals"
+                                   role="button"
+                                   aria-expanded="false"
+                                   aria-controls="rooms_put_optionals"
+                                >Optionale Felder
+                                </a>
+                                <div class="collapse"
+                                     id="rooms_put_optionals"
+                                >
+                                    <ul class="list-group list-group-flush mb-3">
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>uid</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>description</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>goods_income_name</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>place</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>type_id</code> <span class="badge badge-dark-soft">INTEGER</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>location_id</code> <span class="badge badge-dark-soft">INTEGER</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Antwort</dt>
+                            <dd class="col-sm-9">
+                                <pre><code class="language-json">
+{
+    "created": "2021-01-04 22:53:55",
+    "updated": "2021-01-04 23:06:55",
+    "identifier": "geb-402ghz7323",
+    "uid": "430eb8b6-619c-4ebf-8c54-b139b99e7a33",
+    "type": {
+        "name": "Büro",
+        "description": "Räume mit reiner Büronutzung"
+    },
+    "name": null,
+    "place": null,
+    "description": null,
+    "goods_income_has": true,
+    "goods_income_name": null
+}
+                                </code></pre>
+                            </dd>
+                        </dl>
+                    </article>
+                    <div class="dropdown-divider my-5"></div>
+                    <article id="endpoint-delete-room_id">
+                        <dl class="row">
+                            <dt class="col-sm-3">Endpunkt</dt>
+                            <dd class="col-sm-9">
+                                <code>/api/v1/room/{id}</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Variable</dt>
+                            <dd class="col-sm-9">
+                                <code>id</code> <span class="ml-5 badge badge-dark-soft">INTEGER</span>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Aufgabe</dt>
+                            <dd class="col-sm-9">
+                                Löscht den Betrieb.
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Methode</dt>
+                            <dd class="col-sm-9">
+                                <code>DELETE</code>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Felder</dt>
+                            <dd class="col-sm-9">
+                                -
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Antwort</dt>
+                            <dd class="col-sm-9">
+                                <pre><code class="language-json">
+    {
+        "status" : "room deleted"
     }
                                 </code></pre>
                             </dd>

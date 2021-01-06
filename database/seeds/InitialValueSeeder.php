@@ -29,6 +29,7 @@ class InitialValueSeeder extends Seeder
                 'email_verified_at' => now(),
                 'username' => 'daniel',
                 'password' => '$2y$10$QTYenoYuRpR6Kp5e2UjidOZ8xRDlxnQjtdxFed/ecvfSzE3UVezna',
+                'api_token' => 'gMJtXnxgwWgQaIYGP5SVGGEzelWh6wBB9PvjJpMiomOQNpLOVc57Cw0QS40ejFCnV23u33DFM8yHilIi'
             ],
             [
                 'name' => 'Martin Schubert',
@@ -36,6 +37,8 @@ class InitialValueSeeder extends Seeder
                 'email_verified_at' => now(),
                 'username' => 'martin',
                 'password' => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
+                'api_token' => null
+
             ],
             [
                 'name' => 'Matthias Roethig',
@@ -43,6 +46,8 @@ class InitialValueSeeder extends Seeder
                 'email_verified_at' => now(),
                 'username' => 'matthias',
                 'password' => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
+                'api_token' => null
+
             ],
         ]);
 

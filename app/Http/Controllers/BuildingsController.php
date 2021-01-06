@@ -33,13 +33,13 @@ class BuildingsController extends Controller {
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
             return redirect()->route('location.create');
         }
-
-        if (Building::all()->count() > 6) {
-            $buildingList = Building::with('BuildingType')->paginate(10);
+        if (Building::all()->count() > 0) {
+            $buildingList = Building::with('BuildingType')->sortable()->paginate(10);
             return view('admin.standorte.building.index', ['buildingList' => $buildingList]);
         } else {
-            return view('admin.standorte.building.index');
+            return redirect()->route('building.create');
         }
+
     }
 
     /**
@@ -298,7 +298,7 @@ class BuildingsController extends Controller {
     public function getRoomListInBuilding(Request $request) {
         $data['html'] = '';
         if ($request->id !== 'void') {
-            if (Room::where('building_id', $request->id)->count()>0) {
+            if (Room::where('building_id', $request->id)->count() > 0) {
                 foreach (Room::where('building_id', $request->id)->get() as $room) {
                     $data['html'] .= '
 <option value="' . $room->id . '">[' . $room->RoomType->rt_name_kurz . '] ' . $room->r_name_kurz . ' / ' . $room->r_name_lang . '</option>

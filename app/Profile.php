@@ -65,7 +65,7 @@ class Profile extends Model {
                     'employee.date_birth'      => 'date_format:Y-m-d',
                     'employee.employee_number' => 'max:100',
                     'employee.date_entry'      => 'date_format:Y-m-d',
-                    'employee.date_leave'      => 'date_format:Y-m-d',
+                    'employee.date_leave'      => 'nullable|date_format:Y-m-d',
                     'employee.phone'           => '',
                     'employee.mobile'          => '',
                     'employee.fax'             => '',

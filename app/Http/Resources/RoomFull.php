@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Room extends JsonResource
+class RoomFull extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,9 +22,9 @@ class Room extends JsonResource
             'identifier' => $this->r_name_kurz,
             'uid' => $this->standort_id,
             'type' => new RoomTypeShort($this->RoomType),
-            'building' => new BuildingShort($this->building),
             'name' => $this->r_name_lang,
             'description' => $this->r_name_text,
+            'building' => new BuildingShort($this->building),
         ];
     }
 }

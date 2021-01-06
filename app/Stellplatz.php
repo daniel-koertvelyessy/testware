@@ -40,5 +40,8 @@ class Stellplatz extends Model
         return $this->belongsTo(StellplatzTyp::class);
     }
 
+    public function Standort() {
+        return $this->hasOne(Standort::class, 'std_id','standort_id');
+    }
 
 }

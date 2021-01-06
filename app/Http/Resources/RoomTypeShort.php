@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoomType extends JsonResource
+class RoomTypeShort extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,6 @@ class RoomType extends JsonResource
     {
         return [
             'identifier' => $this->rt_name_kurz,
-            'name' => $this->rt_name_lang,
-            'description' => $this->rt_name_text,
         ];
     }
 }

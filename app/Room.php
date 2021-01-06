@@ -56,6 +56,8 @@ class Room extends Model
         return $this->building()->with('Location');
     }
 
-
+    public function Standort() {
+        return $this->hasOne(Standort::class, 'std_id','standort_id');
+    }
 
 }

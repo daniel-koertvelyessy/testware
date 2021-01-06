@@ -26,7 +26,6 @@ class Location extends JsonResource
             'description' => $this->l_beschreibung,
             'address_id' => $this->adresse_id,
             'employee_id' => $this->profile_id,
-
         ];
     }
 }

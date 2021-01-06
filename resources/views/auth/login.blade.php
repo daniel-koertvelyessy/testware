@@ -57,7 +57,7 @@
                        <div>
                            <a href="{{ route('portal-main') }}"><span class="fas fa-angle-left"></span> {{__('zurück zum Portal')}}</a>
                        </div>
-                       <div>
+                     {{--  <div>
                         <a class="btn btn-sm btn-link" href="{{ route('register') }}">
                             <i class="fas fa-pen-alt"></i>  {{ __('Jetzt registrieren!') }}
                         </a>
@@ -66,7 +66,7 @@
                                 <i class="fas fa-question"></i>  {{ __('Passwort vergessen?') }}
                             </a>
                         @endif
-                       </div>
+                       </div>--}}
 
                     </div>{{-- --}}
                 </div>

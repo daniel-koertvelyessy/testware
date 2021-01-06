@@ -3,10 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Stellplatz;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CompartmentController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth:api');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -54,11 +63,15 @@ class CompartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Stellplatz $stellplatz
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(Stellplatz $stellplatz)
     {
-        //
+        $stellplatz->delete();
+        return response()->json([
+            'status' => 'compartment deleted'
+        ]);
     }
 }

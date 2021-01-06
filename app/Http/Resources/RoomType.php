@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AddressType extends JsonResource
+class RoomType extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,9 @@ class AddressType extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->adt_name,
-            'description' => $this->adt_text_lang,
+            'identifier' => $this->rt_name_kurz,
+            'name' => $this->rt_name_lang,
+            'description' => $this->rt_name_text,
         ];
     }
 }
