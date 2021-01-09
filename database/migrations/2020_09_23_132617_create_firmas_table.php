@@ -17,15 +17,15 @@ class CreateFirmasTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('fa_name_kurz', 20)->index();
-            $table->string('fa_name_lang', 100)->index()->nullable();
+            $table->string('fa_label', 20)->index();
+            $table->string('fa_name', 100)->index()->nullable();
             $table->text('fa_name_text')->nullable();
             $table->string('fa_kreditor_nr', 100)->index()->nullable();
             $table->string('fa_debitor_nr', 100)->index()->nullable();
             $table->string('fa_vat', 30)->nullable();
             $table->foreignId('adresse_id')
                 ->nullable()
-            ->constrained();
+                ->constrained();
         });
     }
 

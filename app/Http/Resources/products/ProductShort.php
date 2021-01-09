@@ -16,9 +16,9 @@ class ProductShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->b_name_kurz,
+            'label' => $this->b_label,
             'uid' => $this->standort_id,
-            'name' => $this->b_name_lang,
+            'name' => $this->b_name,
             'description' => $this->b_name_text,
         ];
     }

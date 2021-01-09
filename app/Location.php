@@ -19,8 +19,8 @@ class Location extends Model
 
 
     protected $fillable = [
-        'l_name_kurz',
-        'l_name_lang',
+        'l_label',
+        'l_name',
         'l_beschreibung',
         'adress_id',
         'profile_id'
@@ -30,7 +30,8 @@ class Location extends Model
 
     protected $guarded = [];
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
         static::saving(function (Location $location) {
             Cache::forget('app-get-current-amount-Location');
@@ -42,9 +43,10 @@ class Location extends Model
         });
     }
 
-    public function search($term) {
-        return Location::where('l_name_kurz', 'like', '%' . $term . '%')
-            ->orWhere('l_name_lang', 'like', '%' . $term . '%')
+    public function search($term)
+    {
+        return Location::where('l_label', 'like', '%' . $term . '%')
+            ->orWhere('l_name', 'like', '%' . $term . '%')
             ->orWhere('l_beschreibung', 'like', '%' . $term . '%')
             ->get();
     }
@@ -97,14 +99,13 @@ class Location extends Model
 
     static function checkStatus()
     {
-        if (rand(1,3) === 1)
-        {
+        if (rand(1, 3) === 1) {
             return '
                     <span class="sectionStatus">
                         Status <i class="fas fa-check-circle text-success"></i>
                     </span>
                     ';
-        } elseif (rand(1,3) === 2) {
+        } elseif (rand(1, 3) === 2) {
             return '
                     <span class="sectionStatus">
                         Status <i class="fas fa-exclamation-circle text-warning"></i>
@@ -119,26 +120,28 @@ class Location extends Model
         }
     }
 
-    public function Standort() {
-        return $this->hasOne(Standort::class, 'std_id','standort_id');
+    public function Standort()
+    {
+        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
     }
 
-    public function countTotalEquipmentInLocation(){
+    public function countTotalEquipmentInLocation()
+    {
 
         return Cache::remember(
             'countTotalEquipmentInLocation',
             now()->addSeconds(30),
-            function ()  {
+            function () {
                 $equipCounter = 0;
                 $equipCounter += $this->Standort->countReferencedEquipment();
-                $buildings = \App\Building::where('location_id',$this->id)->get();
-                foreach( $buildings as $building){
+                $buildings = \App\Building::where('location_id', $this->id)->get();
+                foreach ($buildings as $building) {
                     $equipCounter += $building->Standort->countReferencedEquipment();
-                    $rooms = Room::where('building_id',$building->id)->get();
-                    foreach($rooms as $room){
+                    $rooms = Room::where('building_id', $building->id)->get();
+                    foreach ($rooms as $room) {
                         $equipCounter += $room->Standort->countReferencedEquipment();
-                        $compartments = Stellplatz::where('room_id',$room->id)->get();
-                        foreach($compartments as $compartment){
+                        $compartments = Stellplatz::where('room_id', $room->id)->get();
+                        foreach ($compartments as $compartment) {
                             $equipCounter += $compartment->Standort->countReferencedEquipment();
                         }
                     }
@@ -146,9 +149,5 @@ class Location extends Model
                 return $equipCounter;
             }
         );
-
-
     }
-
-
 }

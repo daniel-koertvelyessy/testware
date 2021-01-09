@@ -17,8 +17,8 @@ class CreateControlDocsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('control_event_doc_name_kurz', 150)->unique();
-            $table->string('control_event_doc_name_lang', 150)->nullable();
+            $table->string('control_event_doc_label', 150)->unique();
+            $table->string('control_event_doc_name', 150)->nullable();
             $table->string('control_event_doc_name_pfad', 150)->nullable();
 
             $table->foreignId('control_event_id')

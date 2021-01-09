@@ -76,7 +76,7 @@
 
                     <x-selectModalgroup id="adresse_id" label="{{__('Die Adresse des Standortes festlegen')}}" class="btnAddNewAdresse" modalid="modalAddNewAdresse">
                         @forelse (App\Adresse::all() as $addItem)
-                            <option value="{{$addItem->id}}">{{ $addItem->ad_name_kurz  }} - {{ $addItem->ad_anschrift_strasse }}</option>
+                            <option value="{{$addItem->id}}">{{ $addItem->ad_label  }} - {{ $addItem->ad_anschrift_strasse }}</option>
                         @empty
                             <option value="void" disabled>{{__('keine Adressen vorhanden')}}</option>
                         @endforelse
@@ -96,8 +96,8 @@
 
             <div class="row">
                 <div class="col">
-                    <x-rtextfield id="l_name_kurz" label="Kürzel" />
-                    <x-textfield id="l_name_lang" label="Bezeichnung" />
+                    <x-rtextfield id="l_label" label="Kürzel" />
+                    <x-textfield id="l_name" label="Bezeichnung" />
                     <x-textarea id="l_beschreibung" label="Beschreibung" />
 
                 </div>

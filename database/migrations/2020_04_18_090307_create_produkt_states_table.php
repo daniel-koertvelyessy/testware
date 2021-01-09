@@ -17,10 +17,10 @@ class CreateProduktStatesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('ps_name_kurz',20)->unique();
-            $table->string('ps_name_lang',100)->nullable();
-            $table->string('ps_color',100)->nullable();
-            $table->string('ps_icon',100)->nullable();
+            $table->string('ps_label', 20)->unique();
+            $table->string('ps_name', 100)->nullable();
+            $table->string('ps_color', 100)->nullable();
+            $table->string('ps_icon', 100)->nullable();
             $table->text('ps_name_text')->nullable();
         });
     }

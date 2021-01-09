@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-md-4">
-        <x-rtextfield id="ad_name_kurz"
+        <x-rtextfield id="ad_label"
                       label="Kürzel"
-                      value="{{ old('ad_name_kurz')??'' }}"
+                      value="{{ old('ad_label')??'' }}"
         />
     </div>
     <div class="col-md-4">
-        <x-textfield id="ad_name_lang"
+        <x-textfield id="ad_name"
                      label="Bezeichner"
-                     value="{{ old('ad_name_lang')??'' }}"
+                     value="{{ old('ad_name')??'' }}"
         />
     </div>
     <div class="col-md-4">

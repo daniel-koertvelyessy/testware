@@ -30,7 +30,7 @@ class FirmaController extends Controller
     public function index()
     {
         $firmaList = Firma::with('Adresse')->paginate(15);
-        return view('admin.organisation.firma.index',['firmaList'=>$firmaList]);
+        return view('admin.organisation.firma.index', ['firmaList' => $firmaList]);
     }
 
     /**
@@ -52,9 +52,9 @@ class FirmaController extends Controller
      */
     public function store(Request $request)
     {
-       $firma = Firma::create($this->validateNewFirma());
-        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_name_kurz . '</strong> wurde angelegt!');
-        return view('admin.organisation.firma.show',['firma'=>$firma]);
+        $firma = Firma::create($this->validateNewFirma());
+        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_label . '</strong> wurde angelegt!');
+        return view('admin.organisation.firma.show', ['firma' => $firma]);
     }
 
 
@@ -66,7 +66,7 @@ class FirmaController extends Controller
      */
     public function show(Firma $firma)
     {
-        return view('admin.organisation.firma.show',['firma'=>$firma]);
+        return view('admin.organisation.firma.show', ['firma' => $firma]);
     }
 
     /**
@@ -90,7 +90,7 @@ class FirmaController extends Controller
     public function update(Request $request, Firma $firma)
     {
         $firma->update($this->validateFirma());
-        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_name_kurz . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_label . '</strong> wurde aktualisiert!');
         return redirect()->back();
     }
 
@@ -112,8 +112,8 @@ class FirmaController extends Controller
     public function validateNewFirma(): array
     {
         return request()->validate([
-            'fa_name_kurz' => 'bail|unique:firmas,fa_name_kurz|max:20|required',
-            'fa_name_lang' => 'bail|string|max:100',
+            'fa_label' => 'bail|unique:firmas,fa_label|max:20|required',
+            'fa_name' => 'bail|string|max:100',
             'fa_name_text' => '',
             'fa_kreditor_nr' => 'bail|unique:firmas,fa_kreditor_nr|max:100',
             'fa_debitor_nr' => 'max:100',
@@ -128,8 +128,8 @@ class FirmaController extends Controller
     public function validateFirma(): array
     {
         return request()->validate([
-            'fa_name_kurz' => 'bail|max:20|required',
-            'fa_name_lang' => 'bail|string|max:100',
+            'fa_label' => 'bail|max:20|required',
+            'fa_name' => 'bail|string|max:100',
             'fa_name_text' => '',
             'fa_kreditor_nr' => 'bail|max:100',
             'fa_debitor_nr' => 'max:100',
@@ -137,7 +137,7 @@ class FirmaController extends Controller
             'adresse_id' => '',
         ]);
     }
-/*
+    /*
  *
  *
  *
@@ -148,33 +148,33 @@ class FirmaController extends Controller
 
     public function getFirmenAjaxListe(Request $request)
     {
-       return   DB::table('firmas')->select(
-           'fa_name_kurz',
-           'firmas.id',
-           'firmas.fa_name_lang',
-           'ad_name_firma',
-           'ad_anschrift_ort',
-           'ad_anschrift_strasse',
-           'fa_kreditor_nr',
-           'fa_debitor_nr'
-                )
+        return   DB::table('firmas')->select(
+            'fa_label',
+            'firmas.id',
+            'firmas.fa_name',
+            'ad_name_firma',
+            'ad_anschrift_ort',
+            'ad_anschrift_strasse',
+            'fa_kreditor_nr',
+            'fa_debitor_nr'
+        )
             ->join('adresses', 'adresses.id', '=', 'firmas.adresse_id')
-            ->where('fa_name_kurz','like', '%'.$request->term . '%')
-            ->orWhere('fa_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('fa_name_text','like', '%'.$request->term . '%')
-            ->orWhere('fa_kreditor_nr','like', '%'.$request->term . '%')
-            ->orWhere('fa_debitor_nr','like', '%'.$request->term . '%')
-            ->orWhere('fa_vat','like', '%'.$request->term . '%')
-            ->orWhere('ad_name_firma','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_ort','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_plz','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_strasse','like', '%'.$request->term . '%')
+            ->where('fa_label', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_name', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_kreditor_nr', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_debitor_nr', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_vat', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_name_firma', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_ort', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_plz', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_strasse', 'like', '%' . $request->term . '%')
             ->get();
-
     }
 
-    public function getFirmaData(Request $request) {
-//        dd($request);
+    public function getFirmaData(Request $request)
+    {
+        //        dd($request);
         return Firma::find($request->id);
     }
 
@@ -183,18 +183,16 @@ class FirmaController extends Controller
     {
         $firma = Firma::find($request->id);
 
-//        dd($firma->adresse_id);
+        //        dd($firma->adresse_id);
 
         $adresses = Adresse::find($firma->adresse_id);
 
-        $contact = Contact::where('firma_id',$request->id)->first();
+        $contact = Contact::where('firma_id', $request->id)->first();
 
         return [
             'firma' => $firma,
             'adresse' => $adresses,
             'contact' => $contact
         ];
-
-
     }
 }

@@ -15,9 +15,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
-class RoomController extends Controller {
+class RoomController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
@@ -27,8 +29,9 @@ class RoomController extends Controller {
      * @param  Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request) {
-        if ($request->input('per_page')){
+    public function index(Request $request)
+    {
+        if ($request->input('per_page')) {
             return RoomResource::collection(
                 Room::with('RoomType', 'building')->paginate($request->input('per_page'))
             );
@@ -44,8 +47,9 @@ class RoomController extends Controller {
      * @param  Request $request
      * @return AnonymousResourceCollection
      */
-    public function full(Request $request) {
-        if ($request->input('per_page')){
+    public function full(Request $request)
+    {
+        if ($request->input('per_page')) {
             return RoomFullResource::collection(
                 Room::with('RoomType', 'building')->paginate($request->input('per_page'))
             );
@@ -61,9 +65,10 @@ class RoomController extends Controller {
      * @param  Request $request
      * @return RoomResource
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
-            'label'   => 'required|unique:rooms,r_name_kurz|max:20',
+            'label'   => 'required|unique:rooms,r_label|max:20',
             'uid'          => 'unique:rooms,standort_id',
             'name'         => '',
             'description'  => '',
@@ -83,9 +88,9 @@ class RoomController extends Controller {
 
         $room = new Room();
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-        $room->r_name_kurz = $request->label;
+        $room->r_label = $request->label;
         $room->standort_id = $uid;
-        $room->r_name_lang = $request->name;
+        $room->r_name = $request->name;
         $room->r_name_text = $request->description;
         $room->building_id = $request->building_id;
         $room->room_type_id = $request->room_type_id;
@@ -100,7 +105,8 @@ class RoomController extends Controller {
      * @param  Room $room
      * @return RoomResource
      */
-    public function show(Room $room) {
+    public function show(Room $room)
+    {
         return new RoomResource($room);
     }
 
@@ -111,7 +117,8 @@ class RoomController extends Controller {
      * @param  int     $id
      * @return RoomResource
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'label'   => 'required',
             'uid'          => '',
@@ -124,8 +131,8 @@ class RoomController extends Controller {
 
         $room = Room::find($id);
         if ($room) {
-            $room->r_name_kurz = (isset($request->label)) ? $request->label : $room->r_name_kurz;
-            $room->r_name_lang = (isset($request->name)) ? $request->name : $room->r_name_lang;
+            $room->r_label = (isset($request->label)) ? $request->label : $room->r_label;
+            $room->r_name = (isset($request->name)) ? $request->name : $room->r_name;
             $room->r_name_text = (isset($request->description)) ? $request->description : $room->r_name_text;
 
             /**
@@ -134,14 +141,13 @@ class RoomController extends Controller {
             $uid = (isset($request->uid)) ? $request->uid : $room->standort_id;
             $room->standort_id = $uid;
             (new \App\Standort)->change($uid, $request->label, 'rooms');
-
         } else {
             /**
              * Room was not found. Try to add as new room
              */
             $room = new Room();
-            $room->r_name_kurz = $request->label ;
-            $room->r_name_lang = (isset($request->name)) ? $request->name : null;
+            $room->r_label = $request->label;
+            $room->r_name = (isset($request->name)) ? $request->name : null;
             $room->r_name_text = (isset($request->description)) ? $request->description : null;
 
             /**
@@ -150,7 +156,6 @@ class RoomController extends Controller {
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
             $room->standort_id = $uid;
             (new \App\Standort)->add($uid, $request->label, 'rooms');
-
         }
 
         /**
@@ -182,8 +187,8 @@ class RoomController extends Controller {
                     'error' => 'referenced room type could not be found'
                 ], 422);
             }
-        } elseif (isset($request->type['label'])){
-            $roomType = RoomType::where('rt_name_kurz', $request->type['label'])->first();
+        } elseif (isset($request->type['label'])) {
+            $roomType = RoomType::where('rt_label', $request->type['label'])->first();
 
             if ($roomType) {
                 $room->room_type_id = $roomType->id;
@@ -204,7 +209,8 @@ class RoomController extends Controller {
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Room $room) {
+    public function destroy(Room $room)
+    {
         $room->delete();
         return response()->json([
             'status' => 'room deleted'

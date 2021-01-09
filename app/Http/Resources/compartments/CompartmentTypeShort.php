@@ -16,7 +16,7 @@ class CompartmentTypeShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->spt_name_kurz,
+            'label' => $this->spt_label,
             'id' => $this->id,
         ];
     }

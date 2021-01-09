@@ -34,7 +34,7 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? 'offen' }}</td>
                             <td>
-                                {{ $equipmentEvent->equipment->produkt->prod_name_kurz }} /
+                                {{ $equipmentEvent->equipment->produkt->prod_label }} /
                                 {{ $equipmentEvent->equipment->eq_inventar_nr }}
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>
@@ -50,7 +50,7 @@
                 </table>
                 @if($eventListItems->count()>10)
                 <div class="d-flex justify-content-center">
-                    {!! $eventListItems->onEachSide(2)->links() !!}
+                    {!! $eventListItems->withQueryString()->onEachSide(2)->links() !!}
                 </div>
                     @endif
             </div>

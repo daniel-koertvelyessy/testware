@@ -16,8 +16,8 @@ class RoomType extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->rt_name_kurz,
-            'name' => $this->rt_name_lang,
+            'label' => $this->rt_label,
+            'name' => $this->rt_name,
             'description' => $this->rt_name_text,
         ];
     }

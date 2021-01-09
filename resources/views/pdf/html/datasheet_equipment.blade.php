@@ -10,7 +10,7 @@
     <h1>{{__('Geräteübersicht')}}</h1>
 
     <p style="font-size: 9pt;">{{__('Bezeichnung')}}<br>
-    <span style="font-size: 16pt;">{{ $equipment->produkt->prod_name_lang }}</span>
+    <span style="font-size: 16pt;">{{ $equipment->produkt->prod_name }}</span>
     </p>
 
     <p style="font-size: 9pt;">{{__('Standort')}}<br>
@@ -31,7 +31,7 @@
 
     <p style="font-size: 9pt;">{{__('Hersteller')}}<br>
         <span style="font-size: 16pt;">
-            @forelse ($equipment->produkt->firma as $firma) {{ $firma->fa_name_lang }} @empty - @endforelse
+            @forelse ($equipment->produkt->firma as $firma) {{ $firma->fa_name }} @empty - @endforelse
         </span>
     </p>
 
@@ -55,7 +55,7 @@
                 </td>
                 <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->qe_control_date_warn }} {{__('Wochen')}}
                 </td>
-                <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->AnforderungControlItem->aci_name_lang }}
+                <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->AnforderungControlItem->aci_name }}
                 </td>
             </tr>
         @empty

@@ -41,21 +41,21 @@
                                     @if ($anforderung->id === $anforderungcontrolitem->anforderung_id )
                                         selected
                                     @endif
-                            >{{ $anforderung->an_name_lang }}</option>
+                            >{{ $anforderung->an_name }}</option>
                         @endforeach
                     </x-selectfield>
                     <div class="row">
                         <div class="col-md-4">
-                            <x-rtextfield id="aci_name_kurz"
+                            <x-rtextfield id="aci_label"
                                           label="Kürzel"
-                                          value="{{ $anforderungcontrolitem->aci_name_kurz }}"
+                                          value="{{ $anforderungcontrolitem->aci_label }}"
                             />
                         </div>
                         <div class="col-md-6">
-                            <x-rtextfield id="aci_name_lang"
+                            <x-rtextfield id="aci_name"
                                           label="Name"
                                           max="150"
-                                          value="{{ $anforderungcontrolitem->aci_name_lang }}"
+                                          value="{{ $anforderungcontrolitem->aci_name }}"
                             />
                         </div>
                         <div class="col-md-2 d-flex align-items-center">
@@ -204,7 +204,7 @@
                                                 @if ($firma->id === $anforderungcontrolitem->firma_id)
                                                 selected
                                             @endif
-                                        >{{ $firma->fa_name_lang }}</option>
+                                        >{{ $firma->fa_name }}</option>
                                     @endif
 
                                 @endforeach

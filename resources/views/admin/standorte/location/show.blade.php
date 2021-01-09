@@ -23,7 +23,7 @@
             </li>
             <li class="breadcrumb-item active"
                 aria-current="page"
-            >{{  $location->l_name_kurz  }}</li>
+            >{{  $location->l_label  }}</li>
         </ol>
     </nav>
 @endsection
@@ -129,7 +129,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <x-textfield id="ad_name_kurz"
+                                <x-textfield id="ad_label"
                                              label="{{__('Kürzel')}}"
                                              required
                                              max="20"
@@ -327,7 +327,7 @@
             <div class="col d-flex justify-content-between">
                 <h1 class="h3">
                     <span class="d-none d-md-inline">{{__('Übersicht Standort')}} </span>
-                    {{ $location->l_name_kurz }}
+                    {{ $location->l_label }}
                 </h1>
                 {{--                <div class="visible-print text-center">
                                     {!! QrCode::size(65)->generate($location->standort_id); !!}
@@ -404,23 +404,23 @@
                                            value="{{ $location->id }}"
                                     >
                                     <div class="form-group">
-                                        <label for="l_name_kurz">{{__('Kurzbezeichnung (max 10 Zeichen)')}}</label>
+                                        <label for="l_label">{{__('Kurzbezeichnung (max 10 Zeichen)')}}</label>
                                         <input type="text"
-                                               name="l_name_kurz"
-                                               id="l_name_kurz"
-                                               class="form-control {{ $errors->has('l_name_kurz') ? ' is-invalid ': '' }}"
+                                               name="l_label"
+                                               id="l_label"
+                                               class="form-control {{ $errors->has('l_label') ? ' is-invalid ': '' }}"
                                                maxlength="10"
-                                               value="{{ $location->l_name_kurz }}"
+                                               value="{{ $location->l_label }}"
                                         >
                                     </div>
                                     <div class="form-group">
-                                        <label for="l_name_lang">{{__('Bezeichnung (max 100 Zeichen)')}}</label>
+                                        <label for="l_name">{{__('Bezeichnung (max 100 Zeichen)')}}</label>
                                         <input type="text"
-                                               name="l_name_lang"
-                                               id="l_name_lang"
+                                               name="l_name"
+                                               id="l_name"
                                                class="form-control"
                                                maxlength="100"
-                                               value="{{ $location->l_name_lang ?? '' }}"
+                                               value="{{ $location->l_name ?? '' }}"
                                         >
                                     </div>
                                     <div class="form-group">
@@ -462,13 +462,13 @@
                                     </div>
                                     <div class="border-top pt-2">
                                         <div class="d-flex justify-content-md-between">
-                                            <h5 class="card-title">{{__('Kürzel')}}: {{ $location->Adresse->ad_name_kurz }}</h5>
+                                            <h5 class="card-title">{{__('Kürzel')}}: {{ $location->Adresse->ad_label }}</h5>
                                             <a href="{{ route('adresse.show',$location->Adresse) }}">{{__('Details')}}</a>
                                         </div>
 
                                         <dl class="row">
                                             <dt class="col-sm-3">{{__('Postal')}}:</dt>
-                                            <dd class="col-sm-9">{{ $location->Adresse->ad_name_lang }}</dd>
+                                            <dd class="col-sm-9">{{ $location->Adresse->ad_name }}</dd>
                                         </dl>
                                         <dl class="row">
                                             <dt class="col-sm-3">{{__('Straße')}}, {{__('Nr')}}</dt>
@@ -565,7 +565,7 @@
                                            value="{{ $location->id }}"
                                     >
                                     <input type="hidden"
-                                           name="an_name_kurz"
+                                           name="an_label"
                                            id="name_anforderung"
                                     >
                                     <x-selectfield id="anforderung_id"
@@ -573,7 +573,7 @@
                                     >
                                         <option value="">bitte wählen</option>
                                         @foreach (App\Anforderung::all() as $anforderung)
-                                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                            <option value="{{ $anforderung->id }}">{{ $anforderung->an_label }}</option>
                                         @endforeach
                                     </x-selectfield>
                                     <button class="btn btn-primary btn-block mt-1">Anforderung zuordnen</button>
@@ -609,21 +609,21 @@
                                         <div class="card p-2 mb-2">
                                             <dl class="row lead">
                                                 <dt class="col-sm-4">Verordnung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">Anforderung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">Bezeichnung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">Intervall</dt>
                                                 <dd class="col-sm-8">
                                                     {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
                                                 </dd>
                                             </dl>
                                             <dl class="row">
@@ -638,7 +638,7 @@
                                                     <ul class="list-group">
 
                                                         @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
-                                                            <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
+                                                            <li class="list-group-item">{{ $aci->aci_name }}</li>
                                                         @endforeach
                                                     </ul>
                                                 </dd>
@@ -650,9 +650,9 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden"
-                                                           name="an_name_kurz"
-                                                           id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}"
+                                                           name="an_label"
+                                                           id="an_label_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}"
                                                     >
                                                     <input type="hidden"
                                                            name="id"
@@ -709,18 +709,18 @@
                                     >
                                     <div class="col-auto">
                                         <label class="sr-only"
-                                               for="b_name_kurz"
+                                               for="b_label"
                                         ></label>
                                         <input type="text"
                                                class="form-control"
-                                               id="b_name_kurz"
-                                               name="b_name_kurz"
+                                               id="b_label"
+                                               name="b_label"
                                                required
                                                placeholder="Gebäudename kurz"
-                                               value="{{ old('b_name_kurz')??'' }}"
+                                               value="{{ old('b_label')??'' }}"
                                         >
-                                        @if ($errors->has('b_name_kurz'))
-                                            <span class="text-danger small">{{ $errors->first('b_name_kurz') }}</span>
+                                        @if ($errors->has('b_label'))
+                                            <span class="text-danger small">{{ $errors->first('b_label') }}</span>
                                         @else
                                             <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
                                         @endif
@@ -792,7 +792,7 @@
                                         @foreach ( $location->Building as $building)
                                             <tr>
                                                 <td>
-                                                    {{$building->b_name_kurz}}
+                                                    {{$building->b_label}}
                                                 </td>
                                                 <td>
                                                     {{$building->b_name_ort}}
@@ -817,8 +817,8 @@
                                                         routeCopy="{{ route('copyBuilding',$building) }}"
                                                         routeDestory="{{ route('building.destroy',$building) }}"
                                                         tabName="locGebauede"
-                                                        objectVal="{{$building->b_name_kurz}}"
-                                                        objectName="b_name_kurz"
+                                                        objectVal="{{$building->b_label}}"
+                                                        objectName="b_label"
                                                     />
                                                 </td>
                                             </tr>
@@ -905,19 +905,19 @@
                 data: {id: $('#anforderung_id :selected').val()},
                 success: (res) => {
                     const text = (res.an_name_text === null) ? '-' : res.an_name_text;
-                    $('#name_anforderung').val(res.an_name_kurz);
+                    $('#name_anforderung').val(res.an_label);
                     $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
-                            <dd class="col-sm-8">${res.verordnung.vo_name_kurz}</dd>
+                            <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Anfoderung</dt>
-                            <dd class="col-sm-8">${res.an_name_kurz}</dd>
+                            <dd class="col-sm-8">${res.an_label}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Bezeichnung</dt>
-                            <dd class="col-sm-8">${res.an_name_lang}</dd>
+                            <dd class="col-sm-8">${res.an_name}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Intervall</dt>

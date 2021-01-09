@@ -17,8 +17,8 @@ class LocationShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->l_name_kurz,
-            'name' => $this->l_name_lang,
+            'label' => $this->l_label,
+            'name' => $this->l_name,
         ];
     }
 }

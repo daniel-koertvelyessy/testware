@@ -18,8 +18,8 @@ class CreateAdressesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->string('ad_name_kurz', 20)->unique();
-            $table->string('ad_name_lang', 100)->nullable();
+            $table->string('ad_label', 20)->unique();
+            $table->string('ad_name', 100)->nullable();
             $table->string('ad_name_firma', 100)->nullable();
             $table->string('ad_name_firma_2', 100)->nullable();
             $table->string('ad_name_firma_co', 100)->nullable();
@@ -47,8 +47,6 @@ class CreateAdressesTable extends Migration
                 ->on('lands')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-
-
         });
     }
 

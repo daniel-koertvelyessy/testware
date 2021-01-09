@@ -52,7 +52,7 @@
 
                 @forelse (App\Verordnung::take(5)->latest()->get() as $verordnung)
                     <tr>
-                        <td><a href="{{ route('verordnung.show',$verordnung) }}">{{ $verordnung->vo_name_lang }}</a></td>
+                        <td><a href="{{ route('verordnung.show',$verordnung) }}">{{ $verordnung->vo_name }}</a></td>
                         <td class="d-none d-md-table-cell">{{ $verordnung->vo_nummer }}</td>
                         <td class="d-none d-md-table-cell">{{ $verordnung->updated_at? $verordnung->updated_at->DiffForHumans() : '-' }}</td>
                     </tr>
@@ -100,8 +100,8 @@
                     <tbody>
                     @forelse (App\Anforderung::take(5)->latest()->get() as $anforderung)
                         <tr>
-                            <td><a href="{{ route('anforderung.show',$anforderung) }}">{{ $anforderung->an_name_lang }}</a></td>
-                            <td class="d-none d-md-table-cell">{{ $anforderung->an_name_kurz }}</td>
+                            <td><a href="{{ route('anforderung.show',$anforderung) }}">{{ $anforderung->an_name }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $anforderung->an_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $anforderung->updated_at?$anforderung->updated_at->DiffForHumans() :'-' }}</td>
                         </tr>
                     @empty
@@ -148,8 +148,8 @@
                     <tbody>
                     @forelse (App\AnforderungControlItem::take(5)->latest()->get() as $anforderungItem)
                         <tr>
-                            <td><a href="{{ route('anforderungcontrolitem.show',$anforderungItem) }}">{{ $anforderungItem->aci_name_lang }}</a></td>
-                            <td class="d-none d-md-table-cell">{{ $anforderungItem->aci_name_kurz }}</td>
+                            <td><a href="{{ route('anforderungcontrolitem.show',$anforderungItem) }}">{{ $anforderungItem->aci_name }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $anforderungItem->aci_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $anforderungItem->updated_at? $anforderungItem->updated_at->DiffForHumans(): '-' }}</td>
                         </tr>
                     @empty

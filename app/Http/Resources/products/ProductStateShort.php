@@ -16,8 +16,8 @@ class ProductStateShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->ps_name_kurz,
-            'name' => $this->ps_name_lang,
+            'label' => $this->ps_label,
+            'name' => $this->ps_name,
         ];
     }
 }

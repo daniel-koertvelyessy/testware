@@ -52,11 +52,11 @@
                     <table class="table table-sm table-striped">
                         <thead>
                         <tr>
-                            <th class="d-none d-md-table-cell">@sortablelink('location.l_name_kurz', __('Standort'))</th>
-                            <th>@sortablelink('building.b_name_kurz', __('Gebäude'))</th>
-                            <th>@sortablelink('r_name_lang', __('Raum (Name)'))</th>
-                            <th class="d-none d-md-table-cell">@sortablelink('r_name_kurz', __('Nummer'))</th>
-                            <th>@sortablelink('RoomType.rt_name_kurz', __('Typ'))</th>
+                            <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>
+                            <th>@sortablelink('building.b_label', __('Gebäude'))</th>
+                            <th>@sortablelink('r_name', __('Raum (Name)'))</th>
+                            <th class="d-none d-md-table-cell">@sortablelink('r_label', __('Nummer'))</th>
+                            <th>@sortablelink('RoomType.rt_label', __('Typ'))</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,23 +64,23 @@
                         <tr>
                             <td class="d-none d-md-table-cell">
                                 <a href="/location/{{ $room->building->location->id??''  }}">
-                                    {{ $room->building->location->l_name_kurz??''  }}
+                                    {{ $room->building->location->l_label??''  }}
                                 </a>
                             </td>
-                            <td><a href="/building/{{ $room->building->id  }}">{{ $room->building->b_name_kurz  }}</a></td>
+                            <td><a href="/building/{{ $room->building->id  }}">{{ $room->building->b_label  }}</a></td>
                             <td><a href="{{$room->path()}}">
-                                {{ $room->r_name_lang }}
+                                {{ $room->r_name }}
                                 </a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ $room->r_name_kurz }}</td>
-                            <td>{{ $room->RoomType->rt_name_kurz }}</td>
+                            <td class="d-none d-md-table-cell">{{ $room->r_label }}</td>
+                            <td>{{ $room->RoomType->rt_label }}</td>
                         </tr>
                @endforeach
                         </tbody>
                     </table>
                     @if($roomList->count()>20)
                     <div class="d-flex justify-content-center">
-                        {!! $roomList->appends(['sort' => 'l_name_kurz'])->onEachSide(2)->links() !!}
+                        {!! $roomList->appends(['sort' => 'l_label'])->onEachSide(2)->links() !!}
                     </div>
                         @endif
                 </div>

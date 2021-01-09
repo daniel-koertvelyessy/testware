@@ -24,7 +24,7 @@
                 >
                     <thead>
                     <tr>
-                        <th>@sortablelink('vo_name_lang', __('Bezeichnung'))</th>
+                        <th>@sortablelink('vo_name', __('Bezeichnung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('vo_nummer', __('Kennung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Bearbeitet'))</th>
                         <th class="text-center d-none d-md-table-cell">{{ __('Anforderungen')}}</th>
@@ -35,7 +35,7 @@
 
                     @forelse ($verordnungen as $verordnung)
                         <tr>
-                            <td style="vertical-align: middle;">{{ $verordnung->vo_name_lang }}</td>
+                            <td style="vertical-align: middle;">{{ $verordnung->vo_name }}</td>
                             <td style="vertical-align: middle;"
                                 class="d-none d-md-table-cell"
                             >{{ $verordnung->vo_nummer }}</td>

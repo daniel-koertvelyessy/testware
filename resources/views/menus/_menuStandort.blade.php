@@ -43,7 +43,7 @@
             </li>
                 <h6 class="dropdown-header">Zuletzt angelegt</h6>
             @foreach( $locations as $locItem)
-                <li><a class="dropdown-item @if ( isset($location) && $locItem->id === $location->id) active @endif" href="{{ route('location.show',$locItem)  }}">{{  $locItem->l_name_kurz  }}</a></li>
+                <li><a class="dropdown-item @if ( isset($location) && $locItem->id === $location->id) active @endif" href="{{ route('location.show',$locItem)  }}">{{  $locItem->l_label  }}</a></li>
             @endforeach()
 
             @endif
@@ -65,7 +65,7 @@
                 </li>
                 <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
             @foreach( $buildings as $gebItem)
-                <li><a class="dropdown-item @if (isset($building) && $gebItem->id === $building->id) active @endif" href="{{ route('building.show',$gebItem) }}">{{  $gebItem->b_name_kurz  }}</a></li>
+                <li><a class="dropdown-item @if (isset($building) && $gebItem->id === $building->id) active @endif" href="{{ route('building.show',$gebItem) }}">{{  $gebItem->b_label  }}</a></li>
             @endforeach()
             @endif
         </ul>
@@ -85,7 +85,7 @@
                 </li>
                 <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
             @foreach( $rooms as $roomItem)
-                 <li><a class="dropdown-item @if (isset($Room) && $roomItem->id === $building->id) active @endif" href="{{ route('room.show',$roomItem) }}">{{  $roomItem->r_name_kurz  }}</a></li>
+                 <li><a class="dropdown-item @if (isset($Room) && $roomItem->id === $building->id) active @endif" href="{{ route('room.show',$roomItem) }}">{{  $roomItem->r_label  }}</a></li>
              @endforeach()
              @endif
         </ul>

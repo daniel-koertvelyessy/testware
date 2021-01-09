@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Profil {{ $profile->fa_name_kurz }} &triangleright; Organisation @ bitpack GmbH
+    Profil {{ $profile->fa_label }} &triangleright; Organisation @ bitpack GmbH
 @endsection
 
 @section('mainSection')

@@ -17,8 +17,8 @@ class CreateAnforderungTypesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('at_name_kurz',20)->unique();
-            $table->string('at_name_lang')->nullable();
+            $table->string('at_label', 20)->unique();
+            $table->string('at_name')->nullable();
             $table->text('at_name_text')->nullable();
         });
     }

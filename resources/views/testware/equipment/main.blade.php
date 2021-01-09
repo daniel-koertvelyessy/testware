@@ -39,7 +39,7 @@
                     <thead>
                     <tr>
                         <th class="">
-                            @sortablelink('produkt.prod_name_lang', __('Bezeichnung'))
+                            @sortablelink('produkt.prod_name', __('Bezeichnung'))
                         </th>
                         <th class="d-none d-md-table-cell ">
                             @sortablelink('eq_inventar_nr', __('Inventarnummer'))
@@ -48,7 +48,7 @@
                             @sortablelink('standort.std_kurzel', __('Stellplatz'))
                         </th>
                         <th class="d-none d-lg-table-cell ">
-                            @sortablelink('EquipmentState.estat_name_kurz', __('Status'))
+                            @sortablelink('EquipmentState.estat_label', __('Status'))
                         </th>
                         <th class="">
 {{--                            @sortablelink('ControlEquipment.qe_control_date_due', __('Fällig'))--}}
@@ -61,7 +61,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
-                                    {{ $equipment->produkt->prod_name_lang }}
+                                    {{ $equipment->produkt->prod_name }}
                                 </a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
@@ -70,9 +70,9 @@
                                 style="vertical-align: middle;"
                             >
                                 @if ($equipment->equipment_state_id >1)
-                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
                                 @else
-                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_label }}</span>
                                 @endif
                             </td>
                             <td>

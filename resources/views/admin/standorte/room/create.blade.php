@@ -26,9 +26,9 @@
                 <div class="modal-body">
                     <form action="{{ route('createRoomType') }}" method="POST" class="needs-validation" id="addNewRoomType" name="addNewRoomType">
                         @csrf
-                        <x-rtextfield id="rt_name_kurz" label="{{__('Kürzel')}}" />
+                        <x-rtextfield id="rt_label" label="{{__('Kürzel')}}" />
 
-                        <x-textfield id="rt_name_lang" label="{{__('Name')}} " />
+                        <x-textfield id="rt_name" label="{{__('Name')}} " />
 
                         <x-textarea id="rt_name_text" label="{{__('Beschreibung des Raumtyps')}}" />
 
@@ -56,7 +56,7 @@
                 <div class="col">
                     <x-selectfield id="building_id" label="{{__('Raum befindet sich im Gebäude')}}">
                     @foreach (\App\Building::all() as $building)
-                        <option value="{{ $building->id }}">{{ $building->b_name_kurz }}</option>
+                        <option value="{{ $building->id }}">{{ $building->b_label }}</option>
                     @endforeach
                     </x-selectfield>
                 </div>
@@ -68,7 +68,7 @@
                         modalid="modalAddRaumTyp"
                     >
                     @foreach (\App\RoomType::all() as $roomType)
-                            <option value="{{ $roomType->id }}">{{ $roomType->rt_name_kurz }}</option>
+                            <option value="{{ $roomType->id }}">{{ $roomType->rt_label }}</option>
                     @endforeach
                     </x-selectModalgroup>
                 </div>
@@ -76,8 +76,8 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <x-rtextfield id="r_name_kurz" label="{{__('Raum Kürzel')}}"/>
-                    <x-textfield id="r_name_lang" label="{{__('Bezeichnung')}}"/>
+                    <x-rtextfield id="r_label" label="{{__('Raum Kürzel')}}"/>
+                    <x-textfield id="r_name" label="{{__('Bezeichnung')}}"/>
                     <x-textarea id="r_name_text" label="{{__('Beschreibung')}}" />
                 </div>
             </div>

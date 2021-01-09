@@ -90,11 +90,11 @@
                                        label="{{__('Dokument Typ')}}"
                         >
                             @foreach (App\DocumentType::all() as $ad)
-                                <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                <option value="{{ $ad->id }}">{{ $ad->doctyp_label }}</option>
                             @endforeach
                         </x-selectfield>
 
-                        <x-textfield id="eqdoc_name_kurz"
+                        <x-textfield id="eqdoc_label"
                                      label="{{__('Bezeichnung')}}"
                         />
 
@@ -165,7 +165,7 @@
                         <tbody>
                         @forelse (App\ControlEquipment::where('equipment_id',$equipment->id)->orderBy('qe_control_date_due')->get() as $controlItem)
                             <tr>
-                                <td>{{ $controlItem->Anforderung->an_name_lang }}</td>
+                                <td>{{ $controlItem->Anforderung->an_name }}</td>
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                 <td>
                                     <a href="{{ route('testing.create',['test_id' => $controlItem]) }}"
@@ -267,10 +267,10 @@
                                                label="{{__('durch Firma / Institution')}}"
                                 >
                                     @forelse($equipment->produkt->firma as $firma)
-                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                                     @empty
                                         @foreach(App\Firma::all() as $company)
-                                            <option value="{{ $company->id }}">{{ $company->fa_name_lang }}</option>
+                                            <option value="{{ $company->id }}">{{ $company->fa_name }}</option>
                                         @endforeach
                                     @endforelse
                                 </x-selectfield>
@@ -359,7 +359,7 @@
                                 >
                                     <option value="0">{{__('bitte auswählen')}}</option>
                                     @foreach($equipment->produkt->firma as $firma)
-                                        <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                                     @endforeach
                                 </x-selectfield>
                             </div>
@@ -517,7 +517,7 @@
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{__('Bezeichnung')}}:"
-                                               value="{!! $equipment->produkt->prod_name_lang !!}"
+                                               value="{!! $equipment->produkt->prod_name !!}"
                                 />
                                 <x-staticfield id="Standort"
                                                label="{{__('Aufstellplatz / Standort')}}:"
@@ -539,7 +539,7 @@
                                 <input type="text"
                                        id="firma"
                                        class="form-control-plaintext"
-                                       value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name_lang !!} @endforeach"
+                                       value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name !!} @endforeach"
                                 >
                                 <button
                                     class="btn btn-primary btn-lg mt-3"
@@ -554,7 +554,7 @@
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name_lang }}</span>
+                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
 
 
@@ -563,7 +563,7 @@
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_name_kurz }}</span><br> <span class="lead">{{ str_limit($bda->proddoc_name_lang,30) }}</span><br> <span class="text-muted small">
+                                            <span class="text-muted small">{{ $bda->proddoc_label }}</span><br> <span class="lead">{{ str_limit($bda->proddoc_name,30) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -594,7 +594,7 @@
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->eqdoc_name_kurz }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_name_lang,30) }}</span><br> <span class="text-muted small">
+                                            <span class="text-muted small">{{ $bda->eqdoc_label }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_name,30) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -629,7 +629,7 @@
                                             <span class="small text-muted pl-2">
                                                 {{$bda->deleted_at->diffForHumans()}}
                                             </span> <span class="p-2">
-                                                {{ str_limit($bda->Anforderung->an_name_lang,20) }}
+                                                {{ str_limit($bda->Anforderung->an_name,20) }}
                                             </span>
                                             </div>
                                             <div class="pr-2">
@@ -685,7 +685,7 @@
                                         <tr>
                                             <td>{{ $equipmentUser->user->name }}</td>
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
-                                            <td>{{ $equipmentUser->firma->fa_name_lang ?? '-' }}</td>
+                                            <td>{{ $equipmentUser->firma->fa_name ?? '-' }}</td>
                                             <td style="padding: 0; vertical-align: middle; text-align: right;">
                                                 <form action="{{ route('EquipmentQualifiedUser.destroy',$equipmentUser) }}"
                                                       method="post"
@@ -782,23 +782,23 @@
                                         <div class="card p-2 mb-2">
                                             <dl class="row lead">
                                                 <dt class="col-md-5 col-lg-4">{{ __('Verordnung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-md-5 col-lg-4">{{__('Anforderung')}}</dt>
                                                 <dd class="col-md-7 col-lg-8 ">
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}
                                                 </dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-md-5 col-lg-4">{{ __('Bezeichnung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-md-5 col-lg-4">{{ __('Intervall')}}</dt>
                                                 <dd class="col-md-7 col-lg-8">
                                                     {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
                                                 </dd>
                                             </dl>
                                             <dl class="row">
@@ -813,7 +813,7 @@
                                                     <ul class="list-group">
                                                         @forelse (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
                                                             <li class="list-group-item">
-                                                                {{ $aci->aci_name_lang }}
+                                                                {{ $aci->aci_name }}
                                                             </li>
                                                         @empty
                                                             <li class="list-group-item">
@@ -894,9 +894,9 @@
                                                 @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
                                                     <tr>
                                                         <td>
-                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name_lang }}</span>
+                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name }}</span>
                                                         </td>
-                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
                                                         <td style="text-align: right;">
                                                             {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
                                                         </td>
@@ -952,9 +952,9 @@
                                                 @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
                                                     <tr>
                                                         <td>
-                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name_lang }}</span>
+                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name }}</span>
                                                         </td>
-                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
                                                         <td style="text-align: right;">
                                                             {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                         </td>
@@ -1009,11 +1009,11 @@
                                                 @foreach (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->get() as $produktDoc)
                                                     <tr>
                                                         <td>
-                                                            <span class="d-md-none">{{ str_limit($produktDoc->proddoc_name_lang,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_name_lang }}</span>
+                                                            <span class="d-md-none">{{ str_limit($produktDoc->proddoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_name }}</span>
 
                                                         </td>
                                                         <td class="d-none d-md-table-cell">
-                                                            {{ $produktDoc->DocumentType->doctyp_name_kurz }}
+                                                            {{ $produktDoc->DocumentType->doctyp_label }}
                                                         </td>
                                                         <td style="text-align: right;">
                                                             {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
@@ -1172,7 +1172,7 @@
 
 @section('scripts')
     <script src="{{ asset('js/signatures.js') }}"></script>
-    @error('eqdoc_name_kurz')
+    @error('eqdoc_label')
     <script>
         $('#modalAddEquipDoc').modal('show');
     </script>
@@ -1180,12 +1180,12 @@
 
     <script>
 
-        $('#eqdoc_name_kurz').val(
+        $('#eqdoc_label').val(
             $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
         );
 
         $('#document_type_id').change(()=>{
-            $('#eqdoc_name_kurz').val(
+            $('#eqdoc_label').val(
                 $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
             );
         });

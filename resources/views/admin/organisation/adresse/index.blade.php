@@ -37,7 +37,7 @@
                     @forelse ($adresseList as $adddress)
                         <tr>
                             <td><a href="{{ route('adresse.show',['adresse'=>$adddress]) }}">{{ $adddress->ad_name_firma }}</a></td>
-                            <td class="d-none d-md-table-cell">{{ $adddress->ad_name_kurz }}</td>
+                            <td class="d-none d-md-table-cell">{{ $adddress->ad_label }}</td>
                             <td class="d-none d-lg-table-cell">{{ $adddress->AddressType->adt_name }}</td>
                             <td>{{ $adddress->ad_anschrift_strasse }} / {{ $adddress->ad_anschrift_hausnummer }}</td>
                             <td class="d-none d-md-table-cell">{{ $adddress->ad_anschrift_plz }} - {{ $adddress->ad_anschrift_ort }} </td>

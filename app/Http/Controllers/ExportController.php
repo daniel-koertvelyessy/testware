@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Building;
-use App\Http\Resources\buildings\ProductFull;
-use App\Http\Resources\CompartmentFull;
+use App\Http\Resources\buildings\BuildingFull;
+use App\Http\Resources\compartments\CompartmentFull;
 use App\Http\Resources\locations\LocationFull;
-use App\Http\Resources\RoomFull;
+use App\Http\Resources\rooms\RoomFull;
 use App\Location;
 use App\Room;
 use App\Stellplatz;
@@ -31,7 +31,7 @@ class ExportController extends Controller
     }
 
     public function buildingsToJson() {
-        return response(ProductFull::collection(
+        return response(BuildingFull::collection(
             Building::all()
         ), 200)
             ->header('Cache-Control', 'public')

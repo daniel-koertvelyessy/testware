@@ -26,7 +26,7 @@
                     <span class="text-muted">
                         {{ __('Kategorie') }} <span class="fas fa-angle-right mx-1"></span>
                     </span>
-                    <a href="/produkt/kategorie/{{ $pk }}">{{ App\ProduktKategorie::find($pk)->pk_name_kurz }}</a>
+                    <a href="/produkt/kategorie/{{ $pk }}">{{ App\ProduktKategorie::find($pk)->pk_label }}</a>
                 </li>
             @endif
             <li class="breadcrumb-item active"
@@ -64,11 +64,11 @@
                           name="frmAddNewProduktKategorie"
                     >
                         @csrf
-                        <x-rtextfield id="pk_name_kurz"
+                        <x-rtextfield id="pk_label"
                                       label="Kürzel"
                         />
 
-                        <x-textfield id="pk_name_lang"
+                        <x-textfield id="pk_name"
                                      label="Name"
                         />
 

@@ -16,7 +16,7 @@ class RoomShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->r_name_kurz,
+            'label' => $this->r_label,
             'uid' => $this->standort_id,
         ];
     }

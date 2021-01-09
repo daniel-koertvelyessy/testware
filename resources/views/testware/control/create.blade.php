@@ -182,7 +182,7 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <p class="lead p-3 border">{{ $test->Anforderung->an_name_lang }}</p>
+                            <p class="lead p-3 border">{{ $test->Anforderung->an_name }}</p>
                         </div>
                     </div>
 
@@ -230,11 +230,11 @@
 
                                         @forelse (App\Equipment::getControlEquipmentList() as $controlProdukt)
                                             @if($controlProdukt->qe_control_date_due > now())
-                                                <option value="{{ $controlProdukt->id }}">{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }}</option>
+                                                <option value="{{ $controlProdukt->id }}">{{ $controlProdukt->prod_label.' - '. $controlProdukt->eq_inventar_nr }}</option>
                                             @else
                                                 <option value="{{ $controlProdukt->id }}"
                                                         disabled
-                                                >{{ $controlProdukt->prod_name_kurz.' - '. $controlProdukt->eq_inventar_nr }} Prüfung überfällig!
+                                                >{{ $controlProdukt->prod_label.' - '. $controlProdukt->eq_inventar_nr }} Prüfung überfällig!
                                                 </option>
                                             @endif
                                         @empty
@@ -296,7 +296,7 @@
                                                            id="control_item_aci_{{ $aci->id }}"
                                                            value="{{ $aci->id }}"
                                                     >
-                                                    <span class="text-muted small">{{ __('Aufgabe / Ziel') }}:</span><br><span class="lead"> {{ $aci->aci_name_lang }}</span>
+                                                    <span class="text-muted small">{{ __('Aufgabe / Ziel') }}:</span><br><span class="lead"> {{ $aci->aci_name }}</span>
                                                     <div class="dropdown d-md-none">
                                                         <button class="btn btn-sm btn-outline-primary"
                                                                 data-toggle="collapse"
@@ -393,7 +393,7 @@
                                         @else
                                             <tr>
                                                 <td>
-                                                    <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name_lang }}</span> fehlt Ihnen die benötige Berechtigung!</p>
+                                                    <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name }}</span> fehlt Ihnen die benötige Berechtigung!</p>
                                                     <p>Brechtigt sind: {{ App\User::with('profile')->find($aci->aci_contact_id)->name }}</p>
                                                 </td>
                                             </tr>
@@ -431,7 +431,7 @@
                             <p>{{__('Fügen Sie eine Datei zur Prüfung an.')}}</p>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <x-textfield id="eqdoc_name_kurz"
+                                    <x-textfield id="eqdoc_label"
                                                  label="Kürzel"
                                     />
                                 </div>
@@ -440,7 +440,7 @@
                                                    label="{{__('Dokument Typ')}}"
                                     >
                                         @foreach (App\DocumentType::all() as $ad)
-                                            <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                            <option value="{{ $ad->id }}">{{ $ad->doctyp_label }}</option>
                                         @endforeach
                                     </x-selectfield>
                                 </div>

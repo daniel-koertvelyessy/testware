@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{ __('Raum')}} {{  $room->r_name_kurz  }} &triangleright; {{__('Standortverwaltung')}}
+{{ __('Raum')}} {{  $room->r_label  }} &triangleright; {{__('Standortverwaltung')}}
 @endsection
 
 @section('mainSection')
@@ -22,13 +22,13 @@
                 <a href="{{ route('location.index') }}">{{ __('Standorte') }} <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_name_kurz }}</a>
+                <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_label }}</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_name_kurz }}</a>
+                <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_label }}</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('room.index') }}">{{__('Räume')}} <i class="fas fa-angle-right"></i></a>
@@ -36,7 +36,7 @@
             <li class="breadcrumb-item active"
                 aria-current="page"
             >
-                {{__('Raum')}} {{  $room->r_name_kurz  }}
+                {{__('Raum')}} {{  $room->r_label  }}
             </li>
         </ol>
     </nav>
@@ -82,10 +82,10 @@
                                value="{{ $room->id }}"
                         >
                         @csrf
-                        <x-rtextfield id="spt_name_kurz"
+                        <x-rtextfield id="spt_label"
                                       label="{{__('Kürzel')}}"
                         />
-                        <x-textfield id="spt_name_lang"
+                        <x-textfield id="spt_name"
                                      label="{{__('Beschreibung')}}"
                         />
                         <x-textarea id="spt_name_text"
@@ -111,7 +111,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">{{__('Übersicht Raum')}} </span>{{ $room->r_name_kurz }}</h1>
+                <h1 class="h3"><span class="d-none d-md-inline">{{__('Übersicht Raum')}} </span>{{ $room->r_label }}</h1>
             </div>
         </div>
         <div class="row">
@@ -169,7 +169,7 @@
                                                    label="{{__('Raum befindet sich im Gebäude')}}"
                                     >
                                         @foreach (App\Building::all() as $bul)
-                                            <option value="{{ $bul->id }}" {{ ($bul->id === $room->building_id) ? ' selected ' : '' }}>{{ $bul->b_name_kurz }}</option>
+                                            <option value="{{ $bul->id }}" {{ ($bul->id === $room->building_id) ? ' selected ' : '' }}>{{ $bul->b_label }}</option>
                                         @endforeach
                                     </x-selectfield>
                                 </div>
@@ -182,7 +182,7 @@
                                         @foreach (\App\RoomType::all() as $roomType)
                                             <option value="{{ $roomType->id }}"
                                                     @if($room->room_type_id == $roomType->id) selected @endif>
-                                                {{ $roomType->rt_name_kurz }}
+                                                {{ $roomType->rt_label }}
                                             </option>
                                         @endforeach
                                     </x-selectModalgroup>
@@ -190,13 +190,13 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <x-rtextfield id="r_name_kurz"
+                                    <x-rtextfield id="r_label"
                                                   label="{{__('Kurzbezeichnung')}}"
-                                                  value="{{ $room->r_name_kurz }}"
+                                                  value="{{ $room->r_label }}"
                                     />
-                                    <x-textfield id="r_name_lang"
+                                    <x-textfield id="r_name"
                                                  label="{{__('Bezeichnung')}}"
-                                                 value="{{ $room->r_name_lang }}"
+                                                 value="{{ $room->r_name }}"
                                     />
                                     <x-textarea id="r_name_text"
                                                 label="{{__('Beschreibung')}}"
@@ -238,37 +238,37 @@
                                     >
                                     <div class="col-auto">
                                         <label class="sr-only"
-                                               for="sp_name_kurz"
+                                               for="sp_label"
                                         >Name kurz
                                         </label>
                                         <input type="text"
                                                class="form-control"
-                                               id="sp_name_kurz"
-                                               name="sp_name_kurz"
+                                               id="sp_label"
+                                               name="sp_label"
                                                required
                                                placeholder="Stellplatz Nummer"
-                                               value="{{ old('sp_name_kurz')??'' }}"
+                                               value="{{ old('sp_label')??'' }}"
                                         >
-                                        @if ($errors->has('sp_name_kurz'))
-                                            <span class="text-danger small">{{ $errors->first('sp_name_kurz') }}</span>
+                                        @if ($errors->has('sp_label'))
+                                            <span class="text-danger small">{{ $errors->first('sp_label') }}</span>
                                         @else
                                             <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
                                         @endif
                                     </div>
                                     <div class="col-auto">
                                         <label class="sr-only"
-                                               for="sp_name_lang"
+                                               for="sp_name"
                                         >Beschreibung kurz
                                         </label>
                                         <input type="text"
                                                class="form-control"
-                                               id="sp_name_lang"
-                                               name="sp_name_lang"
+                                               id="sp_name"
+                                               name="sp_name"
                                                placeholder="Stellplatz Name"
-                                               value="{{ old('sp_name_lang')??'' }}"
+                                               value="{{ old('sp_name')??'' }}"
                                         >
-                                        @if ($errors->has('sp_name_lang'))
-                                            <span class="text-danger small">{{ $errors->first('sp_name_lang') }}</span>
+                                        @if ($errors->has('sp_name'))
+                                            <span class="text-danger small">{{ $errors->first('sp_name') }}</span>
                                         @else
                                             <span class="small text-primary">maximal 100 Zeichen</span>
                                         @endif
@@ -285,8 +285,8 @@
                                             >
                                                 @foreach (\App\StellplatzTyp::all() as $roomType)
                                                     <option value="{{ $roomType->id }}"
-                                                            title="{{ $roomType->spt_name_lang  }}"
-                                                    >{{ $roomType->spt_name_kurz  }}</option>
+                                                            title="{{ $roomType->spt_name  }}"
+                                                    >{{ $roomType->spt_label  }}</option>
                                                 @endforeach
                                             </select>
                                             <button type="button"
@@ -319,9 +319,9 @@
                                         <tbody>
                                         @foreach ($room->stellplatzs as $spl)
                                             <tr>
-                                                <td>{{ $spl->sp_name_kurz }}</td>
-                                                <td>{{ $spl->sp_name_lang }}</td>
-                                                <td>{{ \App\StellplatzTyp::find($spl->stellplatz_typ_id)->spt_name_kurz }}</td>
+                                                <td>{{ $spl->sp_label }}</td>
+                                                <td>{{ $spl->sp_name }}</td>
+                                                <td>{{ \App\StellplatzTyp::find($spl->stellplatz_typ_id)->spt_label }}</td>
                                                 <td class="text-right">
                                                     <x-menu_context
                                                         :object="$spl"
@@ -329,8 +329,8 @@
                                                         routeCopy="{{ route('copyStellplatz',$spl) }}"
                                                         routeDestory="{{ route('stellplatz.destroy',$spl) }}"
                                                         tabName="roomStellPlatze"
-                                                        objectVal="{{$spl->sp_name_kurz}}"
-                                                        objectName="sp_name_kurz"
+                                                        objectVal="{{$spl->sp_label}}"
+                                                        objectName="sp_label"
                                                     />
                                                 </td>
 
@@ -356,7 +356,7 @@
 @endsection
 
 @section('scripts')
-    @if ($errors->has('spt_name_kurz'))
+    @if ($errors->has('spt_label'))
         <script>
             $('#modalAddStellPlatzType').modal('show');
         </script>

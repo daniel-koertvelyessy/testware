@@ -54,9 +54,9 @@
                     @forelse ($produkts as $produkt)
                         <tr>
                             <td>
-                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name_lang }}</a>
+                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name }}</a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ $produkt->prod_name_kurz }}</td>
+                            <td class="d-none d-md-table-cell">{{ $produkt->prod_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $produkt->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
@@ -81,7 +81,7 @@
                            data-role="tile"
                         >
                             <span class="icon"><i class="fas fa-box"></i></span> <span
-                                class="branding-bar text-center">{{$produktKategorie->pk_name_kurz}}</span>
+                                class="branding-bar text-center">{{$produktKategorie->pk_label}}</span>
                         </a>
                     @endforeach
                 </nav>

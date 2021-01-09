@@ -12,8 +12,8 @@ class EquipmentSeeder extends Seeder
     public function run()
     {
         $produkt = factory(App\Produkt::class, 100)->create();
-        $standort= \App\Standort::all();
-        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use($produkt,$standort) {
+        $standort = \App\Standort::all();
+        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $standort) {
             $uid = \Illuminate\Support\Str::uuid();
             $equip->eq_uid = $uid;
             $equip->standort_id =  $standort->random()->id;
@@ -42,24 +42,23 @@ class EquipmentSeeder extends Seeder
                     'updated_at' => now(),
                     'deleted_at' => NULL,
                     'qe_control_date_last' => now()->addMonths(-2),
-                    'qe_control_date_due' => now()->addWeeks(random_int(3,40)),
+                    'qe_control_date_due' => now()->addWeeks(random_int(3, 40)),
                     'anforderung_id' => 1,
                     'equipment_id' => $equip->id,
                 ]
             ]);
-
         });
 
 
 
-/*        DB::table('produkts')->insert([
+        /*        DB::table('produkts')->insert([
             [
                 'id' => '31',
                 'created_at' => '2020-09-28 13:03:00',
                 'updated_at' => '2020-09-28 13:17:27',
                 'deleted_at' => NULL,
-                'prod_name_kurz' => 'MED-288-U',
-                'prod_name_lang' => 'Medikamenten-Kühlschrank MED 288 ULTIMATE',
+                'prod_label' => 'MED-288-U',
+                'prod_name' => 'Medikamenten-Kühlschrank MED 288 ULTIMATE',
                 'prod_name_text' => NULL,
                 'prod_nummer' => '92002652',
                 'prod_active' => '1',
@@ -74,8 +73,8 @@ class EquipmentSeeder extends Seeder
                 'created_at' => '2020-09-28 13:17:41',
                 'updated_at' => '2020-09-28 13:17:41',
                 'deleted_at' => NULL,
-                'proddoc_name_kurz' => 'Anleitung',
-                'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
+                'proddoc_label' => 'Anleitung',
+                'proddoc_name' => 'MED_288_ULTIMATE.pdf',
                 'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
                 'proddoc_name_text' => NULL,
                 'produkt_id' => '31',
@@ -85,10 +84,10 @@ class EquipmentSeeder extends Seeder
 
         DB::table('produkt_docs')->insert([
             [
-                'proddoc_name_lang' => 'MED_288_ULTIMATE.pdf',
+                'proddoc_name' => 'MED_288_ULTIMATE.pdf',
                 'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
 
-                'proddoc_name_kurz' => 'Anleitung',
+                'proddoc_label' => 'Anleitung',
             ]
         ]);
 
@@ -140,7 +139,5 @@ class EquipmentSeeder extends Seeder
                 'equipment_id' => '4',
             ]
         ]);*/
-
-
     }
 }

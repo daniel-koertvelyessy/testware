@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-6">
-        <x-textfield id="prod_name_lang"
+        <x-textfield id="prod_name"
                      label="{{__('Bezeichnung')}}"
         />
     </div>
@@ -16,7 +16,7 @@
                     @if (isset($pk))
                         {{ ($pk==$produktKategorie->id)? ' selected ': '' }}
                         @endif
-                    >{{ $produktKategorie->pk_name_kurz }}</option>
+                    >{{ $produktKategorie->pk_label }}</option>
                 @endforeach
                 @if (!isset($mkpk))
                     <option value="new">{{__('Neu anlegen')}}</option>
@@ -46,7 +46,7 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <x-rtextfield id="prod_name_kurz"
+        <x-rtextfield id="prod_label"
                       label="{{__('Kurzbezeichnung / Spezifikation')}}"
                       max="20"
         />
@@ -57,7 +57,7 @@
                        label="{{__('Status')}}"
         >
             @foreach (App\ProduktState::all() as $produktState)
-                <option value="{{ $produktState->id }}">{{ $produktState->ps_name_kurz }}</option>
+                <option value="{{ $produktState->id }}">{{ $produktState->ps_label }}</option>
             @endforeach
         </x-selectfield>
 

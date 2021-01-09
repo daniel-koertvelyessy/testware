@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
 
-class Room extends Model {
+class Room extends Model
+{
     use SoftDeletes, Sortable;
 
     //
 
     protected $guarded = [];
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
         static::saving(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
@@ -26,38 +28,46 @@ class Room extends Model {
         });
     }
 
-    public function search($term) {
-        return Room::where('r_name_kurz', 'like', '%' . $term . '%')
-            ->orWhere('r_name_lang', 'like', '%' . $term . '%')
+    public function search($term)
+    {
+        return Room::where('r_label', 'like', '%' . $term . '%')
+            ->orWhere('r_name', 'like', '%' . $term . '%')
             ->orWhere('r_name_text', 'like', '%' . $term . '%')
             ->get();
     }
 
-    public function path() {
+    public function path()
+    {
         return route('room.show', $this);
     }
 
-    public function RoomType() {
+    public function RoomType()
+    {
         return $this->belongsTo(RoomType::class);
     }
 
-    public function stellplatzs() {
+    public function stellplatzs()
+    {
         return $this->hasMany(Stellplatz::class);
     }
 
-    public function location() {
+    public function location()
+    {
         return $this->building()->with('Location');
     }
 
-    public function building() {
+    public function building()
+    {
         return $this->belongsTo(Building::class);
     }
 
-    public function Standort() {
+    public function Standort()
+    {
         return $this->hasOne(Standort::class, 'std_id', 'standort_id');
     }
 
-    public function countTotalEquipmentInRoom() {
+    public function countTotalEquipmentInRoom()
+    {
         Cache::remember(
             'countTotalEquipmentInRoom',
             now()->addSeconds(30),
@@ -70,7 +80,7 @@ class Room extends Model {
                     $equipCounter += $compartment->Standort->countReferencedEquipment();
                 }
                 return $equipCounter;
-            });
+            }
+        );
     }
-
 }

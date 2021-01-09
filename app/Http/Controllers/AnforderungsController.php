@@ -15,15 +15,18 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
-class AnforderungsController extends Controller {
+class AnforderungsController extends Controller
+{
 
     use SoftDeletes;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    static function getACI($anforderung_id) {
+    static function getACI($anforderung_id)
+    {
         return AnforderungControlItem::where('anforderung_id', $anforderung_id)->get();
     }
 
@@ -32,19 +35,18 @@ class AnforderungsController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function index() {
+    public function index()
+    {
 
-        if (Anforderung::all()->count() > 10)
-        {
-            return view('admin.verordnung.anforderung.index',[
+        if (Anforderung::all()->count() > 10) {
+            return view('admin.verordnung.anforderung.index', [
                 'anforderungen' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
             ]);
         } else {
-            return view('admin.verordnung.anforderung.index',[
+            return view('admin.verordnung.anforderung.index', [
                 'anforderungen' => Anforderung::with('ControlInterval')->sortable()->get()
             ]);
         }
-
     }
 
     /**
@@ -52,7 +54,8 @@ class AnforderungsController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function create() {
+    public function create()
+    {
         return view('admin.verordnung.anforderung.create');
     }
 
@@ -62,21 +65,22 @@ class AnforderungsController extends Controller {
      * @param  Request $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         Anforderung::create($this->validateAnforderung());
 
-        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde angelegt!');
         return back();
     }
 
     /**
      * @return array
      */
-    public function validateAnforderung()
-    : array {
+    public function validateAnforderung(): array
+    {
         return request()->validate([
-            'an_name_kurz'        => 'bail|required|max:20',
-            'an_name_lang'        => 'bail|max:100',
+            'an_label'        => 'bail|required|max:20',
+            'an_name'        => 'bail|max:100',
             'an_name_text'        => '',
             'an_control_interval' => 'integer',
             'control_interval_id' => '',
@@ -91,18 +95,19 @@ class AnforderungsController extends Controller {
      * @param  Request $request
      * @return RedirectResponse
      */
-    public function storeAnObjekt(Request $request) {
+    public function storeAnObjekt(Request $request)
+    {
         AnforderungObjekt::create($this->validateObjektAnforderung());
 
-        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde zugewiesen!');
+        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde zugewiesen!');
         return back();
     }
 
     /**
      * @return array
      */
-    public function validateObjektAnforderung()
-    : array {
+    public function validateObjektAnforderung(): array
+    {
         return request()->validate([
             'std_id'         => 'required',
             'anforderung_id' => 'required',
@@ -115,7 +120,8 @@ class AnforderungsController extends Controller {
      * @param  Anforderung $anforderung
      * @return Application|Factory|Response|View
      */
-    public function show(Anforderung $anforderung) {
+    public function show(Anforderung $anforderung)
+    {
         return view('admin.verordnung.anforderung.show', ['anforderung' => $anforderung]);
     }
 
@@ -126,7 +132,8 @@ class AnforderungsController extends Controller {
      * @param  Anforderung $anforderung
      * @return RedirectResponse
      */
-    public function update(Request $request, Anforderung $anforderung) {
+    public function update(Request $request, Anforderung $anforderung)
+    {
         $anforderung->update($this->validateAnforderung());
         return back();
     }
@@ -138,7 +145,8 @@ class AnforderungsController extends Controller {
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(Anforderung $anforderung) {
+    public function destroy(Anforderung $anforderung)
+    {
 
         $anforderung->delete();
         session()->flash('status', 'Die Anforderung wurde gelöscht!');

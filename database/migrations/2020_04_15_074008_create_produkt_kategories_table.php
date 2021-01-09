@@ -17,9 +17,9 @@ class CreateProduktKategoriesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('pk_name_kurz', 20)->unique();
+            $table->string('pk_label', 20)->unique();
             $table->string('pk_name_nummer', 100)->nullable();
-            $table->string('pk_name_lang', 100)->nullable();
+            $table->string('pk_name', 100)->nullable();
             $table->text('pk_name_text')->nullable();
         });
     }

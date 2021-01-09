@@ -20,8 +20,8 @@ class CreateRoomTypesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('rt_name_kurz',20);
-            $table->string('rt_name_lang',100)->nullable();
+            $table->string('rt_label', 20);
+            $table->string('rt_name', 100)->nullable();
             $table->text('rt_name_text')->nullable();
         });
     }

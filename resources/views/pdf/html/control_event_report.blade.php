@@ -18,7 +18,7 @@
     <p>Folgendes Gerät wurde überprüft:</p>
     <dl>
         <dt>{{ __('Bezeichnung')}}</dt>
-        <dd style="font-size: 14px;">{{ $equipment->produkt->prod_name_lang }}</dd>
+        <dd style="font-size: 14px;">{{ $equipment->produkt->prod_name }}</dd>
     </dl>
     <dl>
         <dt>{{ __('Inventarnummer')}}</dt>
@@ -52,7 +52,7 @@
                     $conEquip = App\ControlEquipment::where('equipment_id',$coEvEquip->Equipment->id )->get();
                 @endphp
                 <tr>
-                    <td>{{ $coEvEquip->Equipment->produkt->prod_name_lang }}</td>
+                    <td>{{ $coEvEquip->Equipment->produkt->prod_name }}</td>
                     <td>{{ $coEvEquip->Equipment->eq_serien_nr }}</td>
                     <td>{{ $conEquip[0]->qe_control_date_last  }}</td>
                     <td>{{ $conEquip[0]->qe_control_date_due  }}</td>
@@ -81,7 +81,7 @@
                         <span style="font-size: 11px; font-weight: bold;">
                             {{ __('Aufgabe / Ziel') }}:
                         </span><br/>
-                            {!! nl2br($aci->aci_name_lang) !!}
+                            {!! nl2br($aci->aci_name) !!}
                         </p>
 
                         <p>

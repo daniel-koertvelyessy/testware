@@ -3,8 +3,8 @@
 @section('content')
     @foreach (App\Location::all() as $loc)
         <div nobr="true" >
-            <h2>{{__('Standort')}} : {{ $loc->l_name_kurz }}</h2>
-            <p style="font-size: 11pt">{{ $loc->l_name_lang }}</p>
+            <h2>{{__('Standort')}} : {{ $loc->l_label }}</h2>
+            <p style="font-size: 11pt">{{ $loc->l_name }}</p>
             <p><strong style="font-size: 9pt">{{__('Beschreibung')}}:</strong><br>{{ $loc->l_beschreibung }}</p>
             <table  cellspacing="0" cellpadding="2" border="0">
                 <thead>
@@ -20,7 +20,7 @@
                 @foreach (App\Location::find($loc->id)->Building as $building)
                     <tr>
                         <td style="border-top: 1px solid #7c7c7c;" width="20%">
-                            {{$building->b_name_kurz}}
+                            {{$building->b_label}}
                         </td>
                         <td style="border-top: 1px solid #7c7c7c;" width="50%">
                             {{$building->b_raum_lang}}

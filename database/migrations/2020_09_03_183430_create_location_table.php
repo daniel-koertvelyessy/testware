@@ -18,8 +18,8 @@ class CreateLocationTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->timestamp('l_benutzt')->nullable();
-            $table->string('l_name_kurz', 20);
-            $table->string('l_name_lang', 100)->nullable();
+            $table->string('l_label', 20);
+            $table->string('l_name', 100)->nullable();
             $table->text('l_beschreibung')->nullable();
             $table->unsignedBigInteger('profile_id')->nullable();
             $table->foreignId('adresse_id')

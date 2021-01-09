@@ -17,7 +17,7 @@ class CreateContactsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('con_name_kurz', 20)->nullable()->index();
+            $table->string('con_label', 20)->nullable()->index();
             $table->string('con_name', 100)->index();
             $table->string('con_name_2', 100)->nullable();
             $table->string('con_vorname', 100)->nullable();

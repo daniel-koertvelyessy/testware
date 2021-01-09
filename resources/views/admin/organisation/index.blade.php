@@ -67,8 +67,8 @@
                     <tbody>
                     @forelse ($firmas as $loc)
                         <tr>
-                            <td><a href="{{ route('firma.show',$loc) }}">{{ $loc->fa_name_lang }}</a></td>
-                            <td>{{ $loc->fa_name_kurz }}</td>
+                            <td><a href="{{ route('firma.show',$loc) }}">{{ $loc->fa_name }}</a></td>
+                            <td>{{ $loc->fa_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
@@ -93,8 +93,8 @@
                     <tbody>
                     @forelse ($adresses as $loc)
                         <tr>
-                            <td><a href="{{ route('adresse.show',$loc) }}">{{ $loc->ad_name_lang }}</a></td>
-                            <td>{{ $loc->ad_name_kurz }}</td>
+                            <td><a href="{{ route('adresse.show',$loc) }}">{{ $loc->ad_name }}</a></td>
+                            <td>{{ $loc->ad_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty

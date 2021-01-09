@@ -17,9 +17,9 @@ class CreateControlIntervalsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('ci_name',10)->unique();
-            $table->string('ci_name_lang',150)->nullable();
-            $table->string('ci_si',10);
+            $table->string('ci_label', 10)->unique();
+            $table->string('ci_name', 150)->nullable();
+            $table->string('ci_si', 10);
             $table->string('ci_delta')->default('MONTH'); // 1 Woche in Sekunden
 
         });

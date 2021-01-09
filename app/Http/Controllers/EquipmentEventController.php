@@ -35,10 +35,10 @@ class EquipmentEventController extends Controller
     public function index()
     {
         if (EquipmentEvent::count() > 10) {
-            $eventList = EquipmentEvent::with('Equipment','User')->sortable()->paginate(10);
+            $eventList = EquipmentEvent::with('Equipment', 'User')->sortable()->paginate(10);
             return view('testware.events.index', ['eventListItems' => $eventList]);
         } else {
-            $eventList = EquipmentEvent::with('Equipment','User')->sortable()->get();
+            $eventList = EquipmentEvent::with('Equipment', 'User')->sortable()->get();
             return view('testware.events.index', ['eventListItems' => $eventList]);
         }
     }
@@ -104,7 +104,7 @@ class EquipmentEventController extends Controller
             $eh = new EquipmentHistory();
             $stat = EquipmentState::find($request->equipment_state_id)->first();
             $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
-            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
+            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
             $eh->equipment_id = $equipment->equipment_id;
             $eh->save();
             $equipment->equipment_state_id = $request->equipment_state_id;
@@ -114,7 +114,7 @@ class EquipmentEventController extends Controller
         $event = EquipmentEvent::find($request->equipment_event_id)->first();
 
         if (isset($request->setInformUser)) {
-//            request()->user()->notify(new EquipmentEventChanged($eeitem));
+            //            request()->user()->notify(new EquipmentEventChanged($eeitem));
             Notification::send(User::find($request->user_id), new EquipmentEventChanged($eeitem));
         }
 
@@ -188,7 +188,7 @@ class EquipmentEventController extends Controller
 
             $eh = new EquipmentHistory();
             $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
-            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
+            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
             $eh->equipment_id = $event->equipment->id;
             $eh->save();
         }
@@ -206,7 +206,7 @@ class EquipmentEventController extends Controller
      */
     public function close(EquipmentEvent $event, Request $request)
     {
-//dd($request);
+        //dd($request);
         $event->delete();
 
         $eh = new EquipmentHistory();
@@ -222,7 +222,7 @@ class EquipmentEventController extends Controller
         $eh = new EquipmentHistory();
         $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
         $stat = EquipmentState::find($request->equipment_state_id)->first();
-        $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_name_kurz . ' geändert';
+        $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
         $eh->equipment_id = $request->equipment_id;
         $eh->save();
 

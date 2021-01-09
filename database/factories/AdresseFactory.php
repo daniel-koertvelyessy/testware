@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Factory;
 $factory->define(Adresse::class, function (Faker $faker) {
     return [
         'address_type_id' => 1,
-        'ad_name_kurz' => substr(substr($faker->companySuffix, 0, 3) . $faker->randomNumber(3) .  $faker->postcode, 0, 10),
-        'ad_name_lang' => $faker->address,
+        'ad_label' => substr(substr($faker->companySuffix, 0, 3) . $faker->randomNumber(3) .  $faker->postcode, 0, 10),
+        'ad_name' => $faker->address,
         'ad_name_firma' => $faker->company,
         'ad_name_firma_2' => $faker->companySuffix,
         'ad_name_firma_co' => $faker->companySuffix,

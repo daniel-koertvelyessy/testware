@@ -9,7 +9,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Standort extends Model
 {
-    use SoftDeletes ,Sortable;
+    use SoftDeletes, Sortable;
 
     public $sortable = [
         'id',
@@ -17,11 +17,12 @@ class Standort extends Model
         'std_id',
     ];
 
-    public function add($uid, $label, $type) {
-        $standortByLabel = Standort::where('std_kurzel',$label)->first();
-        if(!$standortByLabel){
-            $standortByUid = Standort::where('std_id',$uid)->first();
-            if (!$standortByUid){
+    public function add($uid, $label, $type)
+    {
+        $standortByLabel = Standort::where('std_kurzel', $label)->first();
+        if (!$standortByLabel) {
+            $standortByUid = Standort::where('std_id', $uid)->first();
+            if (!$standortByUid) {
                 $standort = new Standort();
                 $standort->std_objekt_typ = $type;
                 $standort->std_id = $uid;
@@ -44,11 +45,13 @@ class Standort extends Model
         }
     }
 
-    public function change($uid, $label, $type) {
-       return $this->add($uid, $label, $type);
+    public function change($uid, $label, $type)
+    {
+        return $this->add($uid, $label, $type);
     }
 
-    public function remove() {
+    public function remove()
+    {
         return $this->delete();
     }
 
@@ -59,27 +62,26 @@ class Standort extends Model
 
         $table = $stdid->std_objekt_typ;
 
-        switch ($table)
-        {
+        switch ($table) {
 
-            case'locations':
+            case 'locations':
 
-                $loc = Location::where('standort_id',$stdid->std_id);
-                $path = __('Standort') . ': ' . $loc->l_name_kurz;
+                $loc = Location::where('standort_id', $stdid->std_id);
+                $path = __('Standort') . ': ' . $loc->l_label;
                 break;
 
-            case'buildings':
+            case 'buildings':
 
-                $bul = Building::where('standort_id',$stdid->std_id);
+                $bul = Building::where('standort_id', $stdid->std_id);
 
-                $loc = Location::where('id',$bul->location_id);
+                $loc = Location::where('id', $bul->location_id);
 
-                $path = __('Standort') . ': ' . $loc->l_name_kurz . ' > '. __('Gebäude').': ' . $bul->b_name_kurz;
+                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ': ' . $bul->b_label;
                 break;
 
-            case'rooms':
+            case 'rooms':
 
-                $rom = Room::where('standort_id',$stdid->std_id)->get();
+                $rom = Room::where('standort_id', $stdid->std_id)->get();
 
 
                 $bul = Building::find($rom[0]->building_id);
@@ -88,15 +90,15 @@ class Standort extends Model
                 $loc = Location::find($bul->location_id);
 
 
-                $path = __('Standort') . ': ' . $loc->l_name_kurz .
-                        ' > '. __('Gebäude').':' . ' ' . $bul->b_name_kurz .
-                        ' > '. __('Raum').':' . ' ' . $rom[0]->r_name_kurz ;
+                $path = __('Standort') . ': ' . $loc->l_label .
+                    ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
+                    ' > ' . __('Raum') . ':' . ' ' . $rom[0]->r_label;
 
                 break;
 
-            case'stellplatzs':
+            case 'stellplatzs':
 
-                $spl = Stellplatz::where('standort_id',$stdid->std_id)->get();
+                $spl = Stellplatz::where('standort_id', $stdid->std_id)->get();
 
                 $rom = Room::find($spl->id)->get();
 
@@ -106,17 +108,15 @@ class Standort extends Model
                 $loc = Location::find($bul->location_id);
 
 
-                $path = __('Standort') . ': ' . $loc->l_name_kurz .
-                    ' > '. __('Gebäude').':' . ' ' . $bul->b_name_kurz .
-                    ' > '. __('Raum').':' . ' ' . $rom->r_name_kurz .
-                    ' > '. __('Stellplatz').':' . ' ' . $spl[0]->sp_name_kurz ;
+                $path = __('Standort') . ': ' . $loc->l_label .
+                    ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
+                    ' > ' . __('Raum') . ':' . ' ' . $rom->r_label .
+                    ' > ' . __('Stellplatz') . ':' . ' ' . $spl[0]->sp_label;
 
                 break;
-
         }
 
         return $path;
-
     }
 
     public function Equipment()
@@ -126,7 +126,7 @@ class Standort extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class,'standort_id');
+        return $this->belongsTo(Location::class, 'standort_id');
     }
 
     public function building()
@@ -144,8 +144,8 @@ class Standort extends Model
         return $this->belongsTo(Stellplatz::class);
     }
 
-    public function countReferencedEquipment() {
-        return Equipment::where('standort_id',$this->id)->count();
+    public function countReferencedEquipment()
+    {
+        return Equipment::where('standort_id', $this->id)->count();
     }
-
 }

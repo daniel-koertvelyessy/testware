@@ -25,7 +25,7 @@
                     <tr>
                         <th class="d-none d-md-table-cell">{{__('Gerät')}}</th>
                         <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventar-Nr'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name_lang', __('Prüfung'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('qe_control_date_due', __('Fällig'))</th>
                         <th></th>
                     </tr>
@@ -34,7 +34,7 @@
                     @forelse ($controlItems as $controlItem)
                         <tr>
                             <td class="d-none d-md-table-cell">
-                                {{ $controlItem->Equipment->Produkt->prod_name_kurz }}
+                                {{ $controlItem->Equipment->Produkt->prod_label }}
                             </td>
                             <td>
                                 <span class="d-md-none">{!! $controlItem->checkDueDateIcon($controlItem) !!}</span>
@@ -43,11 +43,11 @@
                             <td class="d-none d-md-table-cell">
                                 @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
                                     <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
-                                        {{ $controlItem->Anforderung->an_name_lang }}
+                                        {{ $controlItem->Anforderung->an_name }}
                                     </a>
                                     {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
                                 @else
-                                    {{ $controlItem->Anforderung->an_name_lang }}
+                                    {{ $controlItem->Anforderung->an_name }}
                                 @endif
                             </td>
                             <td class="d-none d-md-table-cell">
@@ -90,7 +90,7 @@
                 </table>
                 @if($controlItems->count()>10)
                     <div class="d-flex justify-content-center">
-                        {!! $controlItems->onEachSide(2)->links()??'' !!}
+                        {!! $controlItems->withQueryString()->onEachSide(2)->links()??'' !!}
                     </div>
                 @endif
             </div>

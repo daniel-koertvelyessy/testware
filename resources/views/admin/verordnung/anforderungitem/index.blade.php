@@ -24,8 +24,8 @@
             <table class="table table-striped" id="tabAnforderungItemListe">
                 <thead>
                 <tr>
-                    <th>@sortablelink('Anforderung.an_name_kurz', __('Bezeichnung'))</th>
-                    <th class="d-none d-md-table-cell">@sortablelink('aci_name_lang', __('Anforderung'))</th>
+                    <th>@sortablelink('Anforderung.an_label', __('Bezeichnung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('aci_name', __('Anforderung'))</th>
                     <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Geändert'))</th>
                     <th class="text-center d-none d-md-table-cell">@sortablelink('aci_execution', __('Ausführung'))</th>
                     <th></th>
@@ -36,8 +36,8 @@
 
                 @forelse ($aciitems as $aci)
                     <tr>
-                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->Anforderung->an_name_kurz }}</td>
-                        <td style="vertical-align: middle;">{{ $aci->aci_name_lang }}</td>
+                        <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->Anforderung->an_label }}</td>
+                        <td style="vertical-align: middle;">{{ $aci->aci_name }}</td>
                         <td style="vertical-align: middle;" class="d-none d-md-table-cell">{{ $aci->updated_at->diffForHumans() ??'-' }}</td>
                         <td style="vertical-align: middle;" class="text-center d-none d-md-table-cell">
                             {{ $aci->aci_execution=== 1 ? 'extern' : 'intern'  }}

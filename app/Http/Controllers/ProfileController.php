@@ -26,7 +26,7 @@ class ProfileController extends Controller
     public function index()
     {
         $profileList = Profile::with('user')->paginate(15);
-        return view('admin.organisation.profile.index',['profileList'=>$profileList]);
+        return view('admin.organisation.profile.index', ['profileList' => $profileList]);
     }
 
     /**
@@ -36,7 +36,7 @@ class ProfileController extends Controller
      */
     public function create()
     {
-       return view('admin.organisation.profile.create');
+        return view('admin.organisation.profile.create');
     }
 
     /**
@@ -48,17 +48,16 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $profile = Profile::create($this->validateNewProfile());
-        $text='';
-        if (isset($request->setProfileAsNewMain)){
+        $text = '';
+        if (isset($request->setProfileAsNewMain)) {
 
             $location = Location::find($request->setProfileAsNewMain);
             $location->profile_id = $profile->id;
             $location->save();
-            $text=' und als neue Leitung des Standortes '.$location->l_name_kurz.' gesetzt';
-
+            $text = ' und als neue Leitung des Standortes ' . $location->l_label . ' gesetzt';
         }
-        $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt'.$text);
-//        return view('admin.organisation.profile.show',['profile'=>$profile]);
+        $request->session()->flash('status', 'Der Mitarbeiter wurde angelegt' . $text);
+        //        return view('admin.organisation.profile.show',['profile'=>$profile]);
         return redirect()->back();
     }
 
@@ -70,7 +69,7 @@ class ProfileController extends Controller
      */
     public function show(Profile $profile)
     {
-       return view('admin.organisation.profile.show',['profile'=>$profile]);
+        return view('admin.organisation.profile.show', ['profile' => $profile]);
     }
 
 
@@ -85,7 +84,7 @@ class ProfileController extends Controller
     {
         $profile->update($this->validateProfile());
         $request->session()->flash('status', 'Der Mitarbeiter wurde aktualisiert!');
-        return view('admin.organisation.profile.show',['profile'=>$profile]);
+        return view('admin.organisation.profile.show', ['profile' => $profile]);
     }
 
     /**
@@ -102,11 +101,12 @@ class ProfileController extends Controller
     /**
      * @return array
      */
-    public function validateNewProfile(): array {
+    public function validateNewProfile(): array
+    {
 
         return request()->validate([
             'ma_name'         => 'required|unique:profiles,ma_name|max:20',
-            'ad_name_lang'    => 'max:100',
+            'ad_name'    => 'max:100',
             'ma_nummer'       => 'max:100',
             'ma_name_2'       => '',
             'ma_vorname'      => '',
@@ -126,11 +126,12 @@ class ProfileController extends Controller
     /**
      * @return array
      */
-    public function validateProfile(): array {
+    public function validateProfile(): array
+    {
 
         return request()->validate([
             'ma_name'         => 'required|max:20',
-            'ad_name_lang'    => 'max:100',
+            'ad_name'    => 'max:100',
             'ma_nummer'       => 'max:100',
             'ma_name_2'       => '',
             'ma_vorname'      => '',

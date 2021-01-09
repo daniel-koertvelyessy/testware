@@ -26,10 +26,10 @@
                           method="post" id="frmAddNewAnforderungsType"
                     >
                         @csrf
-                        <x-rtextfield id="at_name_kurz"
+                        <x-rtextfield id="at_label"
                                       label="Kürzel"
                         />
-                        <x-textfield id="at_name_lang"
+                        <x-textfield id="at_name"
                                      label="Name"
                         />
                         <x-textarea id="at_name_text"
@@ -68,7 +68,7 @@
                                     @if ($ad->id === $anforderung->verordnung_id)
                                     selected
                                 @endif
-                            >{{ $ad->vo_name_kurz }}</option>
+                            >{{ $ad->vo_label }}</option>
                         @endforeach
                     </x-selectfield>
 
@@ -76,13 +76,13 @@
                         <x-selectModalgroup id="anforderung_type_id" label="Anforderung Typ"
                                             modalid="modalAddNewAnforderungType">
                             @foreach(App\AnforderungType::all() as $anforderungType)
-                                <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name_lang }}</option>
+                                <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name }}</option>
                             @endforeach
                         </x-selectModalgroup>
 
-                    <x-rtextfield id="updt_an_name_kurz" name="an_name_kurz" label="Name - Kürzel" value="{{ $anforderung->an_name_kurz }}" />
+                    <x-rtextfield id="updt_an_label" name="an_label" label="Name - Kürzel" value="{{ $anforderung->an_label }}" />
 
-                    <x-textfield id="updt_an_name_lang" name="an_name_lang" label="Name" value="{{ $anforderung->an_name_lang }}" />
+                    <x-textfield id="updt_an_name" name="an_name" label="Name" value="{{ $anforderung->an_name }}" />
 
                     <div class="row">
                         <div class="col-md-6">
@@ -96,7 +96,7 @@
                                                 selected
                                             @endif
                                     >
-                                        {{ $controlInterval->ci_name }}
+                                        {{ $controlInterval->ci_label }}
                                     </option>
                                 @endforeach
                             </x-selectfield>
@@ -122,10 +122,10 @@
                     @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->get() as $aci)
                         <tr>
                             <td>
-                                <a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{ $aci->aci_name_kurz }}</a>
+                                <a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{ $aci->aci_label }}</a>
                             </td>
                             <td>
-                                {{ $aci->aci_name_lang }}
+                                {{ $aci->aci_name }}
                                 @if ($aci->isIncomplete($aci))
                                     <ul class="text-warning">
                                         {!! $aci->isIncomplete($aci) !!}

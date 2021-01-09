@@ -27,9 +27,9 @@
                            name="id"
                            value="{{ $verordnung->id }}"
                     >
-                    <x-rtextfield id="updt_vo_name_kurz" name="vo_name_kurz" label="Name - Kürzel" value="{{ $verordnung->vo_name_kurz }}" />
+                    <x-rtextfield id="updt_vo_label" name="vo_label" label="Name - Kürzel" value="{{ $verordnung->vo_label }}" />
 
-                    <x-textfield id="updt_vo_name_lang" name="vo_name_lang" label="Name" value="{{ $verordnung->vo_name_lang }}" />
+                    <x-textfield id="updt_vo_name" name="vo_name" label="Name" value="{{ $verordnung->vo_name }}" />
 
                     <x-textfield id="updt_vo_nummer" name="vo_nummer" label="Nummer/Zeichen" value="{{ $verordnung->vo_nummer }}" />
 

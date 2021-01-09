@@ -18,11 +18,13 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Kyslik\ColumnSortable\Sortable;
 
-class ControlEquipmentController extends Controller {
+class ControlEquipmentController extends Controller
+{
 
     use SoftDeletes, Sortable;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -32,17 +34,18 @@ class ControlEquipmentController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function index() {
-        if (ControlEquipment::count() > 20){
-            $controlItems = ControlEquipment::with('Equipment','Anforderung')
+    public function index()
+    {
+        if (ControlEquipment::count() > 20) {
+            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')
                 ->sortable()
                 ->paginate(20);
-            return view('testware.control.index',['controlItems'=>$controlItems]);
+            return view('testware.control.index', ['controlItems' => $controlItems]);
         } else {
-            $controlItems = ControlEquipment::with('Equipment','Anforderung')
+            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')
                 ->sortable()
                 ->get();
-            return view('testware.control.index',['controlItems'=>$controlItems]);
+            return view('testware.control.index', ['controlItems' => $controlItems]);
         }
     }
 
@@ -52,7 +55,8 @@ class ControlEquipmentController extends Controller {
      * @param  Request $request
      * @return Application|Factory|Response|View
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $aci_execution = 0;
         $aci_control_equipment_required = 0;
         $controlItem = ControlEquipment::find($request->test_id);
@@ -75,7 +79,8 @@ class ControlEquipmentController extends Controller {
      * @param  Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
 
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
@@ -110,7 +115,6 @@ class ControlEquipmentController extends Controller {
                 $controlEventItem->control_event_id = $control_event_id;
                 $controlEventItem->equipment_id = $request->equipment_id;
                 $controlEventItem->save();
-
             }
         }
 
@@ -132,22 +136,21 @@ class ControlEquipmentController extends Controller {
 
             $validation = $request->validate([
                 'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_name_kurz'     => 'required|unique:equipment_docs,eqdoc_name_kurz'
+                'eqdoc_label'     => 'required|unique:equipment_docs,eqdoc_label'
             ]);
 
             $eventHasDoku = true;
-//dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
+            //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
-            $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
+            $proDocFile->eqdoc_name = $file->getClientOriginalName();
             $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = request('equipment_id');
             $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
-            $proDocFile->eqdoc_name_kurz = request('eqdoc_name_kurz');
+            $proDocFile->eqdoc_label = request('eqdoc_label');
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
             $filename = $file->getClientOriginalName();
-
         }
 
         $eh = new EquipmentHistory();
@@ -168,14 +171,13 @@ class ControlEquipmentController extends Controller {
 
 
         return redirect()->route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]);
-
     }
 
     /**
      * @return array
      */
-    public function validateNewControlEvent()
-    : array {
+    public function validateNewControlEvent(): array
+    {
         return request()->validate([
             'control_event_next_due_date'        => 'date|required',
             'control_event_pass'                 => 'required',
@@ -197,14 +199,15 @@ class ControlEquipmentController extends Controller {
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function show(ControlEvent $control) {
+    public function show(ControlEvent $control)
+    {
         //
     }
 
-    public function getControlEventDataSheet(Request $request) {
+    public function getControlEventDataSheet(Request $request)
+    {
 
         return ControlEvent::makeControlEventReport($request->id);
-
     }
 
     /**
@@ -213,7 +216,8 @@ class ControlEquipmentController extends Controller {
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function edit(ControlEvent $control) {
+    public function edit(ControlEvent $control)
+    {
         //
     }
 
@@ -224,7 +228,8 @@ class ControlEquipmentController extends Controller {
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function update(Request $request, ControlEvent $control) {
+    public function update(Request $request, ControlEvent $control)
+    {
         //
     }
 
@@ -234,7 +239,8 @@ class ControlEquipmentController extends Controller {
      * @param  \App\ControlEvent $control
      * @return Response
      */
-    public function destroy(ControlEvent $control) {
+    public function destroy(ControlEvent $control)
+    {
         //
     }
 }

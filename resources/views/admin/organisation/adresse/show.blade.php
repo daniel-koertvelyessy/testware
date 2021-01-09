@@ -30,10 +30,10 @@
             >
             <div class="row">
                 <div class="col-md-4">
-                    <x-rtextfield id="ad_name_kurz" label="Kürzel" value="{{ $adresse->ad_name_kurz??(old('ad_name_kurz')??'') }}"/>
+                    <x-rtextfield id="ad_label" label="Kürzel" value="{{ $adresse->ad_label??(old('ad_label')??'') }}"/>
                 </div>
                 <div class="col-md-4">
-                    <x-textfield id="ad_name_lang" label="Bezeichner" value="{{ $adresse->ad_name_lang??(old('ad_name_lang')??'') }}"/>
+                    <x-textfield id="ad_name" label="Bezeichner" value="{{ $adresse->ad_name??(old('ad_name')??'') }}"/>
                 </div>
                 <div class="col-md-4">
                     <x-selectfield id="address_type_id" label="Adress-Typ">

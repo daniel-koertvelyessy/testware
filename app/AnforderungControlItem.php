@@ -15,32 +15,37 @@ class AnforderungControlItem extends Model
         'id',
         'created_at',
         'updated_at',
-        'aci_name_kurz',
-        'aci_name_lang',
+        'aci_label',
+        'aci_name',
         'aci_task',
     ];
 
     protected $guarded = [];
 
-    public function search($term) {
-        return AnforderungControlItem::where('aci_name_kurz', 'like', '%' . $term . '%')
-            ->orWhere('aci_name_lang', 'like', '%' . $term . '%')
+    public function search($term)
+    {
+        return AnforderungControlItem::where('aci_label', 'like', '%' . $term . '%')
+            ->orWhere('aci_name', 'like', '%' . $term . '%')
             ->orWhere('aci_task', 'like', '%' . $term . '%')
             ->get();
     }
 
-    public function Anforderung() {
+    public function Anforderung()
+    {
         return $this->belongsTo(Anforderung::class);
-}
-    public function ControlEquipment() {
+    }
+    public function ControlEquipment()
+    {
         return $this->belongsTo(ControlEquipment::class);
     }
 
-    public function user() {
-        return $this->belongsTo(User::class,'aci_contact_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'aci_contact_id');
     }
 
-    public function firma() {
+    public function firma()
+    {
         return $this->belongsTo(Firma::class);
     }
 
@@ -48,7 +53,7 @@ class AnforderungControlItem extends Model
     {
         $isInComplete = false;
         $msgPG = '';
-        $msgTo='';
+        $msgTo = '';
         if ($anforderungControlItem->aci_control_equipment_required === 1) {
 
             if (ControlProdukt::all()->count() === 0) {
@@ -62,7 +67,6 @@ class AnforderungControlItem extends Model
                 $msgTo = '<li>Toleranzangaben sind unvollständig</li>';
             $isInComplete = true;
         }
-        return ($isInComplete) ? $msgPG.$msgTo : false;
+        return ($isInComplete) ? $msgPG . $msgTo : false;
     }
-
 }

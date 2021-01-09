@@ -16,8 +16,8 @@ class ProductCategory extends JsonResource
     public function toArray($request)
     {
         return [
-            'label' => $this->pk_name_kurz,
-            'name' => $this->pk_name_lang,
+            'label' => $this->pk_label,
+            'name' => $this->pk_name,
             'number' => $this->pk_name_nummer,
             'description' => $this->pk_name_text,
         ];

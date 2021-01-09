@@ -13,11 +13,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 
-class AnforderungControlItemController extends Controller {
+class AnforderungControlItemController extends Controller
+{
 
     use SoftDeletes;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -26,14 +28,14 @@ class AnforderungControlItemController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function index() {
-        if (AnforderungControlItem::all()->count() > 10)
-        {
-            return view('admin.verordnung.anforderungitem.index',[
+    public function index()
+    {
+        if (AnforderungControlItem::all()->count() > 10) {
+            return view('admin.verordnung.anforderungitem.index', [
                 'aciitems' => AnforderungControlItem::sortable()->paginate(10)
             ]);
         } else {
-            return view('admin.verordnung.anforderungitem.index',[
+            return view('admin.verordnung.anforderungitem.index', [
                 'aciitems' => AnforderungControlItem::sortable()->get()
             ]);
         }
@@ -44,7 +46,8 @@ class AnforderungControlItemController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function create() {
+    public function create()
+    {
         return view('admin.verordnung.anforderungitem.create');
     }
 
@@ -54,12 +57,13 @@ class AnforderungControlItemController extends Controller {
      * @param  Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->firma_id = ($request->aci_exinternal === 'internal') ? 1 : $request->firma_id;
 
         AnforderungControlItem::create($this->validateNewAnforderungControlItem());
 
-        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_label') . '</strong> wurde angelegt!');
         return back();
     }
 
@@ -69,7 +73,8 @@ class AnforderungControlItemController extends Controller {
      * @param  AnforderungControlItem $anforderungcontrolitem
      * @return Application|Factory|Response|View
      */
-    public function show(AnforderungControlItem $anforderungcontrolitem) {
+    public function show(AnforderungControlItem $anforderungcontrolitem)
+    {
         return view('admin.verordnung.anforderungitem.show', ['anforderungcontrolitem' => $anforderungcontrolitem]);
     }
 
@@ -81,16 +86,17 @@ class AnforderungControlItemController extends Controller {
      * @param  AnforderungControlItem $anforderungcontrolitem
      * @return RedirectResponse
      */
-    public function update(Request $request, AnforderungControlItem $anforderungcontrolitem) {
+    public function update(Request $request, AnforderungControlItem $anforderungcontrolitem)
+    {
 
-//        dd(request()->has('aci_control_equipment_required') );
-//        $data = AnforderungControlItem::find($request->id);
-        $anforderungcontrolitem->aci_control_equipment_required = request()->has('aci_control_equipment_required') ? 1:0;
-//        $data->update($this->validateAnforderungControlItem());
+        //        dd(request()->has('aci_control_equipment_required') );
+        //        $data = AnforderungControlItem::find($request->id);
+        $anforderungcontrolitem->aci_control_equipment_required = request()->has('aci_control_equipment_required') ? 1 : 0;
+        //        $data->update($this->validateAnforderungControlItem());
 
-//        dd($request->aci_control_equipment_required );
+        //        dd($request->aci_control_equipment_required );
         $anforderungcontrolitem->update($this->validateAnforderungControlItem());
-        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name_lang') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -101,7 +107,8 @@ class AnforderungControlItemController extends Controller {
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(AnforderungControlItem $anforderungcontrolitem) {
+    public function destroy(AnforderungControlItem $anforderungcontrolitem)
+    {
         $anforderungcontrolitem->delete();
         \request()->session()->flash('status', 'Der Vorgang wurde gelöscht!');
         return back();
@@ -109,7 +116,8 @@ class AnforderungControlItemController extends Controller {
 
 
 
-    public function getAnforderungControlItemData(Request $request) {
+    public function getAnforderungControlItemData(Request $request)
+    {
         return AnforderungControlItem::findorFail($request->id);
     }
 
@@ -119,8 +127,8 @@ class AnforderungControlItemController extends Controller {
     public function validateNewAnforderungControlItem(): array
     {
         return request()->validate([
-            'aci_name_kurz' => 'bail|alpha_dash|unique:anforderung_control_items,aci_name_kurz|required|max:20',
-            'aci_name_lang' => 'required',
+            'aci_label' => 'bail|alpha_dash|unique:anforderung_control_items,aci_label|required|max:20',
+            'aci_name' => 'required',
             'aci_task' => '',
             'aci_value_si' => 'max:10',
             'aci_vaule_soll' => '',
@@ -141,8 +149,8 @@ class AnforderungControlItemController extends Controller {
     public function validateAnforderungControlItem(): array
     {
         return request()->validate([
-            'aci_name_kurz' => 'bail|alpha_dash|required|max:20',
-            'aci_name_lang' => 'max:150',
+            'aci_label' => 'bail|alpha_dash|required|max:20',
+            'aci_name' => 'max:150',
             'aci_task' => '',
             'aci_value_si' => 'max:10',
             'aci_vaule_soll' => '',

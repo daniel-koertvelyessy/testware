@@ -34,8 +34,8 @@
                     <tbody>
                     @forelse ($firmaList as $firma)
                         <tr>
-                            <td><a href="{{ route('firma.show',['firma'=>$firma]) }}">{{ $firma->fa_name_lang }}</a></td>
-                            <td class="d-none d-md-table-cell">{{ $firma->fa_name_kurz }}</td>
+                            <td><a href="{{ route('firma.show',['firma'=>$firma]) }}">{{ $firma->fa_name }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $firma->fa_label }}</td>
                             <td class="d-none d-md-table-cell">@if ($firma->Adresse) {{ $firma->Adresse->ad_anschrift_plz }} - {{ $firma->Adresse->ad_anschrift_ort }} @endif</td>
                         </tr>
                     @empty

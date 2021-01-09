@@ -89,7 +89,7 @@
                                     <button type="button"
                                             class="btn btn-sm btn-primary bentNextTab"
                                             data-showtab="#new-prod-anforderungen-tab"
-                                            data-required="#prod_name_lang,#prod_name_kurz"
+                                            data-required="#prod_name,#prod_label"
 
                                     >{{__('weiter')}}</button>
                                 </div>
@@ -106,7 +106,7 @@
                                         >
                                             <option value="void">{{__('bitte wählen')}}</option>
                                             @foreach (App\Anforderung::all() as $anforderung)
-                                                <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                                <option value="{{ $anforderung->id }}">{{ $anforderung->an_label }}</option>
                                             @endforeach
                                         </x-selectfield>
                                         <button type="button"
@@ -147,7 +147,7 @@
                                                         class="custom-select"
                                                 >
                                                     @foreach (App\DocumentType::all() as $ad)
-                                                        <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                                        <option value="{{ $ad->id }}">{{ $ad->doctyp_label }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -168,7 +168,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <x-textfield id="proddoc_name_kurz"
+                                        <x-textfield id="proddoc_label"
                                                      label="{{ __('Bezeichnung') }}"
                                         />
                                         <x-textarea id="proddoc_name_text"
@@ -247,7 +247,7 @@
                     <thead>
                     <tr>
                         <th>@sortablelink('prod_nummer', __('Produktnummer'))</th>
-                        <th>@sortablelink('prod_name_lang', __('Bezeichnung'))</th>
+                        <th>@sortablelink('prod_name', __('Bezeichnung'))</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -258,12 +258,12 @@
                                 {{ $produkt->prod_nummer }}
                             </td>
                             <td style="vertical-align: middle">
-                                {{ $produkt->prod_name_lang }}
+                                {{ $produkt->prod_name }}
                             </td>
                             <td>
                                 <button
                                     data-produktid="{{ $produkt->id }}"
-                                    data-produktname="{{ $produkt->prod_name_lang }}"
+                                    data-produktname="{{ $produkt->prod_name }}"
                                     class="btn btn-sm btn-outline-primary setProduktAsTemplate"
                                 >{{__('verwenden')}}</button>
                             </td>
@@ -302,9 +302,9 @@
                     success: function (data) {
                         let resp = $.map(data, function (obj) {
                             return {
-                                label: `(${obj.prod_nummer}) ${obj.pk_name_kurz} - ${obj.prod_name_lang}`,
+                                label: `(${obj.prod_nummer}) ${obj.pk_label} - ${obj.prod_name}`,
                                 id: obj.id,
-                                value: obj.prod_name_lang
+                                value: obj.prod_name
                             };
                         });
                         resp.push(
@@ -370,14 +370,14 @@
             document.getElementById('createEquipmentFromProdukt').submit()
         });
 
-        $('#prod_name_lang').change(function () {
-            const name = $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val();
-            $('#proddoc_name_kurz').val(name);
+        $('#prod_name').change(function () {
+            const name = $('#document_type_id :selected').text() + ' ' + $('#prod_name').val();
+            $('#proddoc_label').val(name);
         });
 
         $('#document_type_id').change(()=>{
-            $('#proddoc_name_kurz').val(
-                $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+            $('#proddoc_label').val(
+                $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
             );
         });
     </script>

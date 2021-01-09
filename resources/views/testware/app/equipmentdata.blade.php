@@ -10,7 +10,7 @@
         <div class="row mt-md-5 mt-sm-1">
             <div class="col">
                 <span class="h5">Gerät</span>
-                <h1 class="h3">{{ $edata->produkt->prod_name_lang }}</h1>
+                <h1 class="h3">{{ $edata->produkt->prod_name }}</h1>
 
                 <h2 class="h5 mt-3">{{__('Dokumente')}}</h2>
                 @if (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->count()>0)
@@ -19,11 +19,11 @@
                         <div class="card p-2 col-md-4 col-lg-3">
                             <dl class="row">
                                 <dt class="col-md-4">{{ __(' Typ') }}:</dt>
-                                <dd class="col-md-8">{{ $produktDoc->DocumentType->doctyp_name_lang }}</dd>
+                                <dd class="col-md-8">{{ $produktDoc->DocumentType->doctyp_name }}</dd>
                             </dl>
                             <dl class="row">
                                 <dt class="col-md-4">{{ __(' Name') }}:</dt>
-                                <dd class="col-md-8">{{ $produktDoc->proddoc_name_kurz }}</dd>
+                                <dd class="col-md-8">{{ $produktDoc->proddoc_label }}</dd>
                             </dl>
 
                             <dl class="row">
@@ -89,8 +89,8 @@
                             <tbody>
                             @foreach (App\EquipmentDoc::where('equipment_id',$edata->id)->get() as $equipDoc)
                                 <tr>
-                                    <td>{{ $equipDoc->eqdoc_name_lang }}</td>
-                                    <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_name_kurz }}</td>
+                                    <td>{{ $equipDoc->eqdoc_name }}</td>
+                                    <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
                                     <td style="text-align: right;">{{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}</td>
                                     <td>
                                         <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"

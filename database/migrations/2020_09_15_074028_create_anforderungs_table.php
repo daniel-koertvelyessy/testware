@@ -17,8 +17,8 @@ class CreateAnforderungsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('an_name_kurz', 20)->unique();
-            $table->string('an_name_lang', 100)->nullable();
+            $table->string('an_label', 20)->unique();
+            $table->string('an_name', 100)->nullable();
             $table->text('an_name_text')->nullable();
 
             $table->unsignedSmallInteger('an_control_interval')->nullable();
@@ -40,8 +40,6 @@ class CreateAnforderungsTable extends Migration
                 ->constrained()
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-
-
         });
     }
 

@@ -83,29 +83,30 @@ class AdminController extends Controller
         return view('admin.standorte.dataport');
     }
 
-    public function checkStandortValid(Request $request) {
+    public function checkStandortValid(Request $request)
+    {
         //
         $bul = DB::table('buildings')->select('id')
-        ->where('b_name_kurz','like','%'.$request->name.'%')
-        ->orWhere('b_name_ort','like','%'.$request->name.'%')
-        ->orWhere('b_name_lang','like','%'.$request->name.'%')
-        ->orWhere('b_name_text','like','%'.$request->name.'%')
-        ->orWhere('b_we_name','like','%'.$request->name.'%')
+            ->where('b_label', 'like', '%' . $request->name . '%')
+            ->orWhere('b_name_ort', 'like', '%' . $request->name . '%')
+            ->orWhere('b_name', 'like', '%' . $request->name . '%')
+            ->orWhere('b_name_text', 'like', '%' . $request->name . '%')
+            ->orWhere('b_we_name', 'like', '%' . $request->name . '%')
             ->get();
 
         $rom = DB::table('rooms')->select('id')
-            ->where('r_name_kurz','like','%'.$request->name.'%')
-            ->orWhere('r_name_lang','like','%'.$request->name.'%')
-            ->orWhere('r_name_text','like','%'.$request->name.'%')
-                ->get();
-
-        $spl = DB::table('stellplatzs')->select('id')
-            ->where('sp_name_kurz','like','%'.$request->name.'%')
-            ->orWhere('sp_name_lang','like','%'.$request->name.'%')
-            ->orWhere('sp_name_text','like','%'.$request->name.'%')
+            ->where('r_label', 'like', '%' . $request->name . '%')
+            ->orWhere('r_name', 'like', '%' . $request->name . '%')
+            ->orWhere('r_name_text', 'like', '%' . $request->name . '%')
             ->get();
 
-        return ($bul->count()>0||$rom->count()>0||$spl->count()>0)?1:0;
+        $spl = DB::table('stellplatzs')->select('id')
+            ->where('sp_label', 'like', '%' . $request->name . '%')
+            ->orWhere('sp_name', 'like', '%' . $request->name . '%')
+            ->orWhere('sp_name_text', 'like', '%' . $request->name . '%')
+            ->get();
+
+        return ($bul->count() > 0 || $rom->count() > 0 || $spl->count() > 0) ? 1 : 0;
     }
 
     /**
@@ -126,10 +127,8 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function addObjektAnforderung(Request $request) {
-
-
-
+    public function addObjektAnforderung(Request $request)
+    {
     }
 
     /**
@@ -183,12 +182,11 @@ class AdminController extends Controller
     public function deleteTypeAdress(Request $request, AddressType $adt)
     {
 
-//        dd(, $adt->id);
+        //        dd(, $adt->id);
 
         AddressType::destroy($request->id);
         $request->session()->flash('status', 'Der Adresstyp wurde gelöscht!');
         return back();
-
     }
 
 
@@ -265,12 +263,12 @@ class AdminController extends Controller
 
     public function getBuildingTypeList()
     {
-        $data['html']='';
-       foreach (BuildingTypes::all() as $bt){
-           $data['html'].='
-           <option value="'.$bt->id.'">'.$bt->btname.'</option>
+        $data['html'] = '';
+        foreach (BuildingTypes::all() as $bt) {
+            $data['html'] .= '
+           <option value="' . $bt->id . '">' . $bt->btname . '</option>
            ';
-       }
+        }
 
         return $data;
         // return response()->json($data);
@@ -291,9 +289,9 @@ class AdminController extends Controller
     public function createRoomType(Request $request)
     {
 
-       $rt =  RoomType::create($this->validateNewRoomTypes());
+        $rt =  RoomType::create($this->validateNewRoomTypes());
 
-        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('rt_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('rt_label') . '</strong> wurde angelegt!');
         return redirect()->back();
     }
 
@@ -308,7 +306,7 @@ class AdminController extends Controller
     {
         $data = RoomType::findOrFail($request->id);
         $data->update($this->validateRoomTypes());
-        $request->session()->flash('status', 'Der Raumtyp <strong>' . request('rt_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Raumtyp <strong>' . request('rt_label') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -330,12 +328,11 @@ class AdminController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteRoomType(Request $request )
+    public function deleteRoomType(Request $request)
     {
         RoomType::destroy($request->id);
         $request->session()->flash('status', 'Der Raumtyp wurde gelöscht!');
         return back();
-
     }
 
 
@@ -370,14 +367,13 @@ class AdminController extends Controller
     {
         StellplatzTyp::create($this->validateNewStellPlatzTypes());
 
-        $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_label') . '</strong> wurde angelegt!');
 
         return (isset($request->frmOrigin) && $request->frmOrigin === 'room')
             ?
-            redirect(route('room.show',$request->room_id))
+            redirect(route('room.show', $request->room_id))
             :
             back();
-
     }
 
     /**
@@ -391,7 +387,7 @@ class AdminController extends Controller
     {
         $data = StellplatzTyp::findOrFail($request->id);
         $data->update($this->validateStellPlatzTypes());
-        $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_label') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -411,12 +407,11 @@ class AdminController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteStellPlatzType(Request $request )
+    public function deleteStellPlatzType(Request $request)
     {
         StellplatzTyp::destroy($request->id);
         $request->session()->flash('status', 'Der Stellplatztyp wurde gelöscht!');
         return back();
-
     }
 
 
@@ -451,7 +446,7 @@ class AdminController extends Controller
     {
         ProduktKategorie::create($this->validateProduktKategorie());
 
-        $request->session()->flash('status', __('Die Produktkategorie').' <strong>' . request('pk_name_kurz') . '</strong> '. __('wurde angelegt!'));
+        $request->session()->flash('status', __('Die Produktkategorie') . ' <strong>' . request('pk_label') . '</strong> ' . __('wurde angelegt!'));
         return redirect()->back();
     }
 
@@ -466,7 +461,7 @@ class AdminController extends Controller
     {
         $data = ProduktKategorie::findOrFail($request->id);
         $data->update($this->validateProduktKategorie());
-        $request->session()->flash('status', 'Die Produkt-Kategorie <strong>' . request('pk_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Produkt-Kategorie <strong>' . request('pk_label') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -486,12 +481,11 @@ class AdminController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteProdKat(Request $request )
+    public function deleteProdKat(Request $request)
     {
         ProduktKategorie::destroy($request->id);
         $request->session()->flash('status', 'Die Produkt-Kategorie wurde gelöscht!');
         return back();
-
     }
 
     /*
@@ -567,7 +561,7 @@ class AdminController extends Controller
     {
         $data = Anforderung::findOrFail($request->id);
         $data->update($this->validateAnforderung());
-        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -580,7 +574,7 @@ class AdminController extends Controller
      */
     public function getAnforderungData(Request $id)
     {
-        return Anforderung::with('verordnung','ControlInterval')->findOrFail($id->id);
+        return Anforderung::with('verordnung', 'ControlInterval')->findOrFail($id->id);
     }
 
     /**
@@ -597,44 +591,46 @@ class AdminController extends Controller
         foreach (Anforderung::where('verordnung_id',$request->id)->get() as $anf){
             $data['html'].='
             <option value="'.$anf->id.'"
-                    data-textlang="'.$anf->an_name_lang.'"
-            >'.$anf->an_name_kurz.'</option>
+                    data-textlang="'.$anf->an_name.'"
+            >'.$anf->an_label.'</option>
             ';
 
         }
         return $data;
     }
-*/
+     */
 
 
     /**
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteAnforderung(Request $request )
+    public function deleteAnforderung(Request $request)
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Die Die Anforderung wurde gelöscht!');
         return back();
-
     }
 
 
 
 
-    public function addNewAnforderungType(Request $request) {
+    public function addNewAnforderungType(Request $request)
+    {
         AnforderungType::create($this->validateNewAnforderungType());
-        $request->session()->flash('status', 'Der Prüfungstyp <strong>' . request('at_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Prüfungstyp <strong>' . request('at_label') . '</strong> wurde angelegt!');
         return back();
     }
-    public function updateAnforderungType(Request $request) {
+    public function updateAnforderungType(Request $request)
+    {
         $data = AnforderungType::findOrFail($request->id);
         $data->update($this->validateAnforderungType());
-        $request->session()->flash('status', 'Der Anforderung-Typ <strong>' . request('at_name_lang') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Anforderung-Typ <strong>' . request('at_name') . '</strong> wurde aktualisiert!');
         return back();
     }
 
-    public function getAnforderungTypData(Request $request) {
+    public function getAnforderungTypData(Request $request)
+    {
         return AnforderungType::findOrFail($request->id);
     }
 
@@ -642,12 +638,11 @@ class AdminController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteAnforderungType(Request $request )
+    public function deleteAnforderungType(Request $request)
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Der Anforderung-Typ wurde gelöscht!');
         return back();
-
     }
 
 
@@ -683,12 +678,9 @@ class AdminController extends Controller
     public function createDokumentType(Request $request)
     {
         DocumentType::create($this->validateNewDokumentType());
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde angelegt!');
 
         return redirect()->back();
-
-
-
     }
 
     /**
@@ -702,7 +694,7 @@ class AdminController extends Controller
     {
         $data = DocumentType::findOrFail($request->id);
         $data->update($this->validateDokumentType());
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde aktualisiert!');
         return redirect()->back();
     }
 
@@ -722,12 +714,11 @@ class AdminController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function deleteDokumentType(Request $request )
+    public function deleteDokumentType(Request $request)
     {
         DocumentType::destroy($request->id);
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_name_kurz') . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde gelöscht!');
         return back();
-
     }
 
     /**
@@ -736,8 +727,8 @@ class AdminController extends Controller
     public function validateDokumentType(): array
     {
         return request()->validate([
-            'doctyp_name_kurz' => 'bail|required|min:1|max:20',
-            'doctyp_name_lang' => 'bail|min:1|max:100',
+            'doctyp_label' => 'bail|required|min:1|max:20',
+            'doctyp_name' => 'bail|min:1|max:100',
             'doctyp_name_text' => '',
             'doctyp_mandatory' => 'required'
         ]);
@@ -749,8 +740,8 @@ class AdminController extends Controller
     public function validateNewDokumentType(): array
     {
         return request()->validate([
-            'doctyp_name_kurz' => 'bail|required|unique:document_types,doctyp_name_kurz|min:1|max:20',
-            'doctyp_name_lang' => 'bail|min:1|max:100',
+            'doctyp_label' => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
+            'doctyp_name' => 'bail|min:1|max:100',
             'doctyp_name_text' => '',
             'doctyp_mandatory' => 'required'
         ]);
@@ -793,8 +784,8 @@ class AdminController extends Controller
     public function validateNewStellPlatzTypes(): array
     {
         return request()->validate([
-            'spt_name_kurz' => 'bail|unique:stellplatz_typs,spt_name_kurz|required|min:1|max:20',
-            'spt_name_lang' => 'max:100',
+            'spt_label' => 'bail|unique:stellplatz_typs,spt_label|required|min:1|max:20',
+            'spt_name' => 'max:100',
             'spt_name_text' => ''
         ]);
     }
@@ -805,8 +796,8 @@ class AdminController extends Controller
     public function validateStellPlatzTypes(): array
     {
         return request()->validate([
-            'spt_name_kurz' => 'bail|required|min:1|max:20',
-            'spt_name_lang' => 'max:100',
+            'spt_label' => 'bail|required|min:1|max:20',
+            'spt_name' => 'max:100',
             'spt_name_text' => ''
         ]);
     }
@@ -839,8 +830,8 @@ class AdminController extends Controller
     public function validateNewRoomTypes(): array
     {
         return request()->validate([
-            'rt_name_kurz' => 'bail|unique:room_types,rt_name_kurz|required|min:1|max:20',
-            'rt_name_lang' => 'max:100',
+            'rt_label' => 'bail|unique:room_types,rt_label|required|min:1|max:20',
+            'rt_name' => 'max:100',
             'rt_name_text' => ''
         ]);
     }
@@ -851,8 +842,8 @@ class AdminController extends Controller
     public function validateRoomTypes(): array
     {
         return request()->validate([
-            'rt_name_kurz' => 'bail|required|min:1|max:20',
-            'rt_name_lang' => 'max:100',
+            'rt_label' => 'bail|required|min:1|max:20',
+            'rt_name' => 'max:100',
             'rt_name_text' => ''
         ]);
     }
@@ -863,8 +854,8 @@ class AdminController extends Controller
     public function validateProduktKategorie(): array
     {
         return request()->validate([
-            'pk_name_kurz' => 'bail|required|min:1|max:20',
-            'pk_name_lang' => 'bail|min:1|max:100',
+            'pk_label' => 'bail|required|min:1|max:20',
+            'pk_name' => 'bail|min:1|max:100',
             'pk_name_text' => ''
         ]);
     }
@@ -876,8 +867,8 @@ class AdminController extends Controller
     public function validateNewAnforderungType(): array
     {
         return request()->validate([
-            'at_name_kurz' => 'bail|required|unique:anforderung_types,at_name_kurz|max:20',
-            'at_name_lang' => 'bail|max:100',
+            'at_label' => 'bail|required|unique:anforderung_types,at_label|max:20',
+            'at_name' => 'bail|max:100',
             'at_name_text' => '',
         ]);
     }
@@ -888,8 +879,8 @@ class AdminController extends Controller
     public function validateAnforderungType(): array
     {
         return request()->validate([
-            'at_name_kurz' => 'bail|required|max:20',
-            'at_name_lang' => 'bail|max:100',
+            'at_label' => 'bail|required|max:20',
+            'at_name' => 'bail|max:100',
             'at_name_text' => '',
         ]);
     }
@@ -914,27 +905,27 @@ class AdminController extends Controller
 
     public function getUsedAdressesByAdressType(Adresse $adress, Request $adt_id)
     {
-        return $adress->where('address_type_id',$adt_id->id)->get();
+        return $adress->where('address_type_id', $adt_id->id)->get();
     }
 
     public function getUsedBuildingsByBuildingType(Building $building, Request $btid)
     {
-        return $building->where('building_type_id',$btid->id)->get();
+        return $building->where('building_type_id', $btid->id)->get();
     }
 
     public function getUsedRoomsByRoomType(Room $room, Request $btid)
     {
-        return $room->where('room_type_id',$btid->id)->get();
+        return $room->where('room_type_id', $btid->id)->get();
     }
 
     public function getUsedProdukteByKategorie(Produkt $produkt, Request $btid)
     {
-        return $produkt->where('produkt_kategorie_id',$btid->id)->get();
+        return $produkt->where('produkt_kategorie_id', $btid->id)->get();
     }
 
     public function getUsedStellplatzByType(Equipment $equipment, Request $request)
     {
-        return $equipment->with('produkt')->where('standort_id',$request->id)->get();
+        return $equipment->with('produkt')->where('standort_id', $request->id)->get();
     }
 
     public function getUsedEquipmentByProdAnforderung(Produkt $room, Request $btid)
@@ -944,7 +935,7 @@ class AdminController extends Controller
 
     public function getUsedAnforderungByVerordnung(Anforderung $anforderung, Request $request)
     {
-        return $anforderung->where('verordnung_id',$request->id)->get();
+        return $anforderung->where('verordnung_id', $request->id)->get();
     }
 
     public function getUsedDokuTypeProderial(Produkt $materialStamm, Request $btid)
@@ -955,46 +946,46 @@ class AdminController extends Controller
     public function getStandortIdListAll(Request $request)
     {
         $loc = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,l_name_lang as name_lang')
+            DB::raw('standorts.id,std_kurzel,standorts.std_id,l_name as name_lang')
         )->distinct()
             ->join('locations', 'standorts.std_id', '=', 'locations.standort_id')
-            ->where('std_kurzel','like', '%'.$request->term . '%')
-            ->orWhere('l_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('l_beschreibung','like', '%'.$request->term . '%')
+            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->orWhere('l_name', 'like', '%' . $request->term . '%')
+            ->orWhere('l_beschreibung', 'like', '%' . $request->term . '%')
             ->get();
 
         $bul = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,b_name_lang as name_lang')
+            DB::raw('standorts.id,std_kurzel,standorts.std_id,b_name as name_lang')
         )->distinct()
             ->join('buildings', 'standorts.std_id', '=', 'buildings.standort_id')
-            ->where('std_kurzel','like', '%'.$request->term . '%')
-            ->orWhere('b_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('b_name_text','like', '%'.$request->term . '%')
+            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->orWhere('b_name', 'like', '%' . $request->term . '%')
+            ->orWhere('b_name_text', 'like', '%' . $request->term . '%')
             ->get();
 
         $rom = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,r_name_lang as name_lang')
+            DB::raw('standorts.id,std_kurzel,standorts.std_id,r_name as name_lang')
         )->distinct()
             ->join('rooms', 'standorts.std_id', '=', 'rooms.standort_id')
-            ->where('std_kurzel','like', '%'.$request->term . '%')
-            ->orWhere('r_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('r_name_text','like', '%'.$request->term . '%')
+            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->orWhere('r_name', 'like', '%' . $request->term . '%')
+            ->orWhere('r_name_text', 'like', '%' . $request->term . '%')
             ->get();
 
         $stp = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,sp_name_lang as name_lang')
+            DB::raw('standorts.id,std_kurzel,standorts.std_id,sp_name as name_lang')
         )->distinct()
             ->join('stellplatzs', 'standorts.std_id', '=', 'stellplatzs.standort_id')
-            ->where('std_kurzel','like', '%'.$request->term . '%')
-            ->orWhere('sp_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('sp_name_text','like', '%'.$request->term . '%')
+            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->orWhere('sp_name', 'like', '%' . $request->term . '%')
+            ->orWhere('sp_name_text', 'like', '%' . $request->term . '%')
             ->get();
 
-        return ['loc'=>$loc,'bul'=>$bul,'rom'=>$rom,'stp'=>$stp];
+        return ['loc' => $loc, 'bul' => $bul, 'rom' => $rom, 'stp' => $stp];
     }
 
-    public function fetchUid() {
+    public function fetchUid()
+    {
         return  Str::uuid();
     }
-
 }

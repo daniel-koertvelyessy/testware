@@ -26,7 +26,7 @@
                     @csrf
                     <div class="row">
                         <div class="col">
-                            <x-rtextfield id="fa_name_kurz" label="Kürzel"/>
+                            <x-rtextfield id="fa_label" label="Kürzel"/>
                         </div>
                         <div class="col">
                             <x-textfield id="fa_vat" label="U-St-ID" max="30"/>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-textfield id="fa_name_lang" label="Name"/>
+                            <x-textfield id="fa_name" label="Name"/>
                         </div>
                     </div>
                     <div class="row">
@@ -42,7 +42,7 @@
                             <x-selectfield id="adresse_id" label="Adresse">
                                 @foreach(App\Adresse::all() as $adresse)
                                     <option value="{{ $adresse->id }}">
-                                        {{ $adresse->ad_name_lang }}
+                                        {{ $adresse->ad_name }}
                                     </option>
                                 @endforeach
                             </x-selectfield>

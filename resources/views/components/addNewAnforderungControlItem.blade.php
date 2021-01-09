@@ -17,7 +17,7 @@
 
             <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
                 @foreach (App\Anforderung::all() as $anforderung)
-                    <option value="{{ $anforderung->id }}">{{ $anforderung->an_name_lang }}</option>
+                    <option value="{{ $anforderung->id }}">{{ $anforderung->an_name }}</option>
                 @endforeach
             </x-selectfield>
 
@@ -29,10 +29,10 @@
             <p class="lead text-primary">{{__('Vergeben Sie Namen und Kürzel für den neuen Vorgang.')}}</p>
             <div class="row">
                 <div class="col-md-4">
-                    <x-rtextfield id="aci_name_kurz" label="Kürzel" />
+                    <x-rtextfield id="aci_label" label="Kürzel" />
                 </div>
                 <div class="col-md-6">
-                    <x-rtextfield id="aci_name_lang" label="Name" max="150" />
+                    <x-rtextfield id="aci_name" label="Name" max="150" />
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
                     <div class="custom-control custom-checkbox">
@@ -101,7 +101,7 @@
                     data-showtab="#nav-cianforderung-tab"
             >{{__('zurück')}}</button>
             <button type="button" class="btn btn-sm btn-primary bentNextTab"
-                    data-required="#aci_name_kurz,#aci_name_lang"
+                    data-required="#aci_label,#aci_name"
                     data-showtab="#nav-cicontact-tab"
             >{{__('weiter')}}</button>
         </div>
@@ -127,7 +127,7 @@
                     </div>
                     <x-selectfield id="firma_id" label="Firma">
                         @foreach (App\Firma::all() as $firma)
-                            <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                            <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                         @endforeach
                     </x-selectfield>
                 </div>

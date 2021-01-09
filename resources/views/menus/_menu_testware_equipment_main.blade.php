@@ -16,7 +16,7 @@
                 </span>
             </li>
             @foreach (\App\ProduktKategorie::all() as $produktKategorie)
-                <li><a class="dropdown-item" href="{{ route('equipment.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_name_kurz }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('equipment.create',['pk' => $produktKategorie->id]) }}">{{ $produktKategorie->pk_label }}</a></li>
             @endforeach
 
         </ul>

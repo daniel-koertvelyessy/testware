@@ -40,9 +40,9 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th class="d-none d-md-table-cell">@sortablelink('location.l_name_kurz', __('Standort'))</th>
-                        <th>@sortablelink('b_name_kurz', __('Nummer'))</th>
-                        <th>@sortablelink('b_name_lang', __('Name'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>
+                        <th>@sortablelink('b_label', __('Nummer'))</th>
+                        <th>@sortablelink('b_name', __('Name'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('BuildingType.btname', __('Typ'))</th>
                         <th class="d-none d-md-table-cell">{{__('Räume') }}</th>
                     </tr>
@@ -51,12 +51,12 @@
                     @foreach ($buildingList as $building)
                         <tr>
                             <td class="d-none d-md-table-cell">
-                                <a href="/location/{{$building->location->id}}">{{ $building->location->l_name_kurz  }}</a>
+                                <a href="/location/{{$building->location->id}}">{{ $building->location->l_label  }}</a>
                             </td>
                             <td>
-                                <a href="{{$building->path()}}">{{ $building->b_name_kurz }} </a>
+                                <a href="{{$building->path()}}">{{ $building->b_label }} </a>
                             </td>
-                            <td>{{ $building->b_name_lang }}</td>
+                            <td>{{ $building->b_name }}</td>
                             <td class="d-none d-md-table-cell">{{ $building->BuildingType->btname }}</td>
                             <td class="d-none d-md-table-cell">{{ $building->Rooms->count() }}</td>
                         </tr>
@@ -65,7 +65,7 @@
                 </table>
                 @if($buildingList->count()>0)
                     <div class="d-flex justify-content-center">
-                        {!! $buildingList->onEachSide(2)->links() !!}
+                        {!! $buildingList->withQueryString()->onEachSide(2)->links() !!}
                     </div>
                 @endif
             </div>

@@ -19,9 +19,9 @@ class LocationShow extends JsonResource
         return [
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
-            'label' => $this->l_name_kurz,
+            'label' => $this->l_label,
             'uid' => $this->standort_id,
-            'name' => $this->l_name_lang,
+            'name' => $this->l_name,
             'description' => $this->l_beschreibung,
             'address_id' => $this->adresse_id,
             'employee_id' => $this->profile_id,

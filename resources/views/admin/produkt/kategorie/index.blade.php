@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 @section('pagetitle')
-{{__('Produkte in Kategorie')}} {{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}
+{{__('Produkte in Kategorie')}} {{ App\ProduktKategorie::find($id->id)->pk_label }}
 @endsection
 
 @section('mainSection')
@@ -17,7 +17,7 @@
             <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
             <li class="breadcrumb-item"><a href="/produkt">{{__('Produkte')}}</a></li>
             <li class="breadcrumb-item active" aria-current="page">
-                {{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}
+                {{ App\ProduktKategorie::find($id->id)->pk_label }}
             </li>
         </ol>
     </nav>
@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col">
                 <h1 class="h3">
-                    <span class="d-none d-md-inline">{{__('Alle Produkte der Kategorie')}}</span> <span class="badge badge-primary">{{ App\ProduktKategorie::find($id->id)->pk_name_kurz }}</span>
+                    <span class="d-none d-md-inline">{{__('Alle Produkte der Kategorie')}}</span> <span class="badge badge-primary">{{ App\ProduktKategorie::find($id->id)->pk_label }}</span>
                 </h1>
             </div>
         </div>
@@ -49,8 +49,8 @@
                         <tr>
                             <td class="d-none d-md-table-cell">{{ $produkt->prod_nummer }}</td>
                             <td class="d-none d-md-table-cell">{{ $produkt->created_at }}</td>
-                            <td>{{ $produkt->prod_name_kurz }}</td>
-                            <td><i class="{{ $produkt->ProduktState->ps_icon}} text-{{$produkt->ProduktState->ps_color}}" title="{{$produkt->ProduktState->ps_name_lang}}"></i></td>
+                            <td>{{ $produkt->prod_label }}</td>
+                            <td><i class="{{ $produkt->ProduktState->ps_icon}} text-{{$produkt->ProduktState->ps_color}}" title="{{$produkt->ProduktState->ps_name}}"></i></td>
                             <td>{!!  ($produkt->prod_active === 1) ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' !!}</td>
                             <td><a href="/produkt/{{ $produkt->id }}">öffnen</a></td>
                         </tr>
@@ -58,7 +58,7 @@
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-center">
-                    {!! $prodList->onEachSide(2)->links() !!}
+                    {!! $prodList->withQueryString()->onEachSide(2)->links() !!}
                 </div>
             </div>
         </div>

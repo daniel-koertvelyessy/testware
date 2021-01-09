@@ -17,8 +17,8 @@ class CreateVerordnungsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('vo_name_kurz', 20)->unique();
-            $table->string('vo_name_lang', 100)->nullable();
+            $table->string('vo_label', 20)->unique();
+            $table->string('vo_name', 100)->nullable();
             $table->string('vo_nummer', 100)->nullable();
             $table->string('vo_stand', 100)->nullable();
             $table->text('vo_name_text')->nullable();

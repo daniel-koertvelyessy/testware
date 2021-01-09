@@ -44,17 +44,17 @@ class EquipmentDocController extends Controller
 
             $validation = $request->validate([
                 'equipDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_name_kurz' => 'required|max:150'
+                'eqdoc_label' => 'required|max:150'
             ]);
 
-//dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
+            //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
-            $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
-            $proDocFile->eqdoc_name_pfad= $file->store('equipment_docu/'.\request('equipment_id'));
+            $proDocFile->eqdoc_name = $file->getClientOriginalName();
+            $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = request('equipment_id');
             $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
-            $proDocFile->eqdoc_name_kurz = request('eqdoc_name_kurz');
+            $proDocFile->eqdoc_label = request('eqdoc_label');
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
             // $file->storeAs($pfad, $Dateiname->guessExtention() ); => Storage::disk('local')->putFileAs($pfad, $file, $Dateiname->guessExtention());
@@ -62,10 +62,9 @@ class EquipmentDocController extends Controller
             // 'local' oder 'public' oder default, wenn nicht angegeben
 
         } else {
-            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_name_kurz') . '</strong> konnte nicht hochgeladen werden!');
-
+            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_label') . '</strong> konnte nicht hochgeladen werden!');
         }
-//
+        //
         return redirect()->back();
     }
 
@@ -77,8 +76,7 @@ class EquipmentDocController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', Storage::mimeType($doc->eqdoc_name_pfad))
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=".$doc->eqdoc_name_lang)
-            ;
+            ->header('Content-disposition', "attachment; filename=" . $doc->eqdoc_name);
     }
 
     /**
@@ -124,8 +122,8 @@ class EquipmentDocController extends Controller
     public function destroy(Request $request)
     {
         $prodDoku = EquipmentDoc::find($request->id);
-//        dd($prodDoku->proddoc_name_pfad);
-        $file = $prodDoku->eqdoc_name_lang;
+        //        dd($prodDoku->proddoc_name_pfad);
+        $file = $prodDoku->eqdoc_name;
         Storage::delete($prodDoku->eqdoc_name_pfad);
         $prodDoku->delete();
         session()->flash('status', 'Das Dokument <strong>' . $file . '</strong> wurde gelöscht!');
@@ -133,7 +131,7 @@ class EquipmentDocController extends Controller
     }
 
 
-    public function equipDoku() {
-
+    public function equipDoku()
+    {
     }
 }

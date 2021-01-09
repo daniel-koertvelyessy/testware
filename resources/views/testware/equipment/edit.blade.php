@@ -126,7 +126,7 @@
                                 @foreach (App\EquipmentState::all() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}"
                                             @if($equipmentState->id === $equipment->equipment_state_id) selected @endif
-                                    >{{ $equipmentState->estat_name_kurz }}</option>
+                                    >{{ $equipmentState->estat_label }}</option>
                                 @endforeach
                             </x-selectfield>
                         </div>
@@ -195,9 +195,9 @@
                     success: function (data) {
                         let resp = $.map(data, function (obj) {
                             return {
-                                label: `(${obj.prod_nummer}) ${obj.pk_name_kurz} - ${obj.prod_name_lang}`,
+                                label: `(${obj.prod_nummer}) ${obj.pk_label} - ${obj.prod_name}`,
                                 id: obj.id,
-                                value: obj.prod_name_kurz
+                                value: obj.prod_label
                             };
                         });
                         response(resp);

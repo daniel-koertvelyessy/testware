@@ -15,9 +15,9 @@ class StandortSeeder extends Seeder
 
         foreach ($location as $loc)
             factory(App\Standort::class)->create([
-                'std_id'=>$loc->standort_id,
-                'std_kurzel'=>$loc->l_name_kurz,
-                'std_objekt_typ'=>'locations'
+                'std_id' => $loc->standort_id,
+                'std_kurzel' => $loc->l_label,
+                'std_objekt_typ' => 'locations'
             ]);
     }
 }

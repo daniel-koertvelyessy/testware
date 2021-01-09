@@ -22,7 +22,7 @@
                 <a href="{{ route('produkt.index') }}">Produkte</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/produkt/kategorie/{{ $produkt->ProduktKategorie->id }}">{{ $produkt->ProduktKategorie->pk_name_kurz }}</a>
+                <a href="/produkt/kategorie/{{ $produkt->ProduktKategorie->id }}">{{ $produkt->ProduktKategorie->pk_label }}</a>
             </li>
             <li class="breadcrumb-item active"
                 aria-current="page"
@@ -97,11 +97,11 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col">
-                                <x-textfield id="doctyp_name_kurz"
+                                <x-textfield id="doctyp_label"
                                              label="{{__('Kürzel')}}"
                                              required
                                 />
-                                <x-textfield id="doctyp_name_lang"
+                                <x-textfield id="doctyp_name"
                                              label="{{__('Bezeichnung')}}"
                                 />
                                 <x-textarea id="doctyp_name_text"
@@ -366,9 +366,9 @@
                                     >
                                     <div class="row">
                                         <div class="col-md-9">
-                                            <x-textfield id="prod_name_lang"
+                                            <x-textfield id="prod_name"
                                                          label="{{__('Bezeichnung')}}"
-                                                         value="{!! $produkt->prod_name_lang !!}"
+                                                         value="{!! $produkt->prod_name !!}"
                                             />
                                         </div>
                                         <div class="col md-3">
@@ -381,7 +381,7 @@
                                                             selected
                                                         @endif
                                                     >
-                                                        {{ $produktKategorie->pk_name_kurz }}
+                                                        {{ $produktKategorie->pk_label }}
                                                     </option>
                                                 @endforeach
                                             </x-selectfield>
@@ -389,9 +389,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <x-rtextfield id="prod_name_kurz"
+                                            <x-rtextfield id="prod_label"
                                                           label="{{__('Kurzbezeichnung / Spezifikation')}}"
-                                                          value="{!! $produkt->prod_name_kurz !!}"
+                                                          value="{!! $produkt->prod_label !!}"
                                             />
                                         </div>
                                         <div class="col-md-4">
@@ -400,7 +400,7 @@
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option
-                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_name_kurz }}</option>
+                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -514,7 +514,7 @@
                                         <option value="">{{__('bitte wählen')}}</option>
                                         @foreach (App\Anforderung::all() as $anforderung)
                                             <option
-                                                value="{{ $anforderung->id }}">{{ $anforderung->an_name_kurz }}</option>
+                                                value="{{ $anforderung->id }}">{{ $anforderung->an_label }}</option>
                                         @endforeach
                                     </x-selectfield>
                                     <button
@@ -550,21 +550,21 @@
                                         <div class="card p-2 mb-2">
                                             <dl class="row lead">
                                                 <dt class="col-sm-4">{{__('Verordnung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_name_kurz }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">{{__('Anforderung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">{{__('Bezeichnung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_lang }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">{{__('Intervall')}}</dt>
                                                 <dd class="col-sm-8">
                                                     {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_name }}
+                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
                                                 </dd>
                                             </dl>
                                             <dl class="row">
@@ -579,7 +579,7 @@
                                                     <ul class="list-group">
 
                                                         @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
-                                                            <li class="list-group-item">{{ $aci->aci_name_lang }}</li>
+                                                            <li class="list-group-item">{{ $aci->aci_name }}</li>
                                                         @endforeach
                                                     </ul>
                                                 </dd>
@@ -591,9 +591,9 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden"
-                                                           name="an_name_kurz"
-                                                           id="an_name_kurz_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_kurz }}"
+                                                           name="an_label"
+                                                           id="an_label_delAnf_{{ $produktAnforderung->anforderung_id }}"
+                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}"
                                                     >
                                                     <input type="hidden"
                                                            name="id"
@@ -694,7 +694,7 @@
                                             >
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    <x-textfield id="fa_name_kurz"
+                                                    <x-textfield id="fa_label"
                                                                  label="{{__('Kürzel')}}"
                                                                  class="getFirma checkLabel"
                                                                  required
@@ -702,7 +702,7 @@
                                                     <span class="small text-primary getFirmaRes"></span>
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <x-textfield id="fa_name_lang"
+                                                    <x-textfield id="fa_name"
                                                                  label="{{__('Name')}}"
                                                                  class="getFirma"
                                                     />
@@ -744,7 +744,7 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
-                                                    <x-textfield id="ad_name_kurz"
+                                                    <x-textfield id="ad_label"
                                                                  label="{{ __('Kürzel') }}"
                                                                  class="getAddress checkLabel"
                                                     />
@@ -817,21 +817,21 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
-                                                    <label for="con_name_kurz">Kürzel</label>
+                                                    <label for="con_label">Kürzel</label>
                                                     <input type="text"
-                                                           name="con_name_kurz"
-                                                           id="con_name_kurz"
+                                                           name="con_label"
+                                                           id="con_label"
                                                            aria-label="Suche"
                                                            autocomplete="off"
-                                                           class="form-control getAddress @error('con_name_kurz') is-invalid @enderror"
-                                                           value="{{ old('con_name_kurz') ?? '' }}"
+                                                           class="form-control getAddress @error('con_label') is-invalid @enderror"
+                                                           value="{{ old('con_label') ?? '' }}"
                                                            required
                                                     >
-                                                    @error('con_name_kurz')
+                                                    @error('con_label')
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
                                                     <span
-                                                        class="small text-primary @error('con_name_kurz') d-none @enderror ">
+                                                        class="small text-primary @error('con_label') d-none @enderror ">
                                                         erforderliches Feld, max 20 Zeichen
                                                     </span>
                                                 </div>
@@ -918,7 +918,7 @@
 
                                     @foreach ($produkt->firma as $firma)
                                         <x-addresslabel
-                                            firma="{!!  $firma->fa_name_lang !!}"
+                                            firma="{!!  $firma->fa_name !!}"
                                             address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
                                             firmaid="{{ $firma->id }}"
                                             produktid="{{ $produkt->id }}"
@@ -955,7 +955,7 @@
                                                     class="custom-select"
                                             >
                                                 @foreach (App\DocumentType::all() as $ad)
-                                                    <option value="{{ $ad->id }}">{{ $ad->doctyp_name_kurz }}</option>
+                                                    <option value="{{ $ad->id }}">{{ $ad->doctyp_label }}</option>
                                                 @endforeach
                                             </select>
                                             <button type="button"
@@ -968,18 +968,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="proddoc_name_kurz">Bezeichnung</label>
+                                        <label for="proddoc_label">Bezeichnung</label>
                                         <input type="text"
-                                               name="proddoc_name_kurz"
-                                               id="proddoc_name_kurz"
-                                               class="form-control @error('proddoc_name_kurz') is-invalid @enderror "
-                                               value="{{ old('proddoc_name_kurz') ?? '' }}"
+                                               name="proddoc_label"
+                                               id="proddoc_label"
+                                               class="form-control @error('proddoc_label') is-invalid @enderror "
+                                               value="{{ old('proddoc_label') ?? '' }}"
                                                required
                                         >
-                                        @error('proddoc_name_kurz')
+                                        @error('proddoc_label')
                                         <span class="text-danger small">Error {{ $message }}</span>
                                         @enderror
-                                        <span class="small text-primary @error('proddoc_name_kurz') d-none @enderror">max 20 Zeichen, erforderlichen Feld</span>
+                                        <span class="small text-primary @error('proddoc_label') d-none @enderror">max 20 Zeichen, erforderlichen Feld</span>
 
                                     </div>
                                     <div class="form-group">
@@ -1028,11 +1028,11 @@
                                         @foreach ($produkt->ProduktDoc as $produktDoc)
                                             <tr>
                                                 <td>
-                                                    <span title="{{ $produktDoc->proddoc_name_lang }}">
-                                                    {{ str_limit($produktDoc->proddoc_name_lang,25) }}
+                                                    <span title="{{ $produktDoc->proddoc_name }}">
+                                                    {{ str_limit($produktDoc->proddoc_name,25) }}
                                                     </span>
                                                 </td>
-                                                <td>{{ $produktDoc->DocumentType->doctyp_name_kurz }}</td>
+                                                <td>{{ $produktDoc->DocumentType->doctyp_label }}</td>
                                                 <td class="d-none d-lg-table-cell"
                                                     style="text-align: right;"
                                                 >{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
@@ -1105,7 +1105,7 @@
                                         <th>@sortablelink('produktDetails.eq_inventar_nr', __('Inventarnummer'))</th>
                                         <th>@sortablelink('produktDetails.eq_serien_nr', __('Seriennummer'))</th>
                                         <th>@sortablelink('produktDetails.eq_ibm', __('Inbetriebname'))</th>
-                                        <th>@sortablelink('EquipmentState.estat_name_kurz', __('Status'))</th>
+                                        <th>@sortablelink('EquipmentState.estat_label', __('Status'))</th>
 
                                     </tr>
                                     </thead>
@@ -1122,7 +1122,7 @@
                                                 {{ Carbon\Carbon::parse($equipment->eq_ibm)->DiffForHumans() }}
                                             </td>
                                             <td class="d-flex align-items-center justify-content-between">
-                                                {{ $equipment->EquipmentState->estat_name_kurz }}
+                                                {{ $equipment->EquipmentState->estat_label }}
                                                 {!! $equipment->showStatus() !!}
                                             </td>
                                         </tr>
@@ -1137,7 +1137,7 @@
                                 </table>
                                 @if($equipLists->count() > 10)
                                     <div class="d-flex justify-content-center">
-                                        {!! $equipLists->onEachSide(2)->links() !!}
+                                        {!! $equipLists->withQueryString()->onEachSide(2)->links() !!}
                                     </div>
                                 @endif
                             </div>
@@ -1150,7 +1150,7 @@
 @endsection
 
 @section('scripts')
-    @error('doctyp_name_kurz')
+    @error('doctyp_label')
     <script>
         $('#modalAddDokumentType').modal('show');
     </script>
@@ -1177,13 +1177,13 @@
             });
         });
 
-        $('#proddoc_name_kurz').val(
-            $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+        $('#proddoc_label').val(
+            $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
         );
 
         $('#document_type_id').change(() => {
-            $('#proddoc_name_kurz').val(
-                $('#document_type_id :selected').text() + ' ' + $('#prod_name_lang').val()
+            $('#proddoc_label').val(
+                $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
             );
         });
 
@@ -1200,15 +1200,15 @@
                     $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
-                            <dd class="col-sm-8">${res.verordnung.vo_name_kurz}</dd>
+                            <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Anfoderung</dt>
-                            <dd class="col-sm-8">${res.an_name_kurz}</dd>
+                            <dd class="col-sm-8">${res.an_label}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Bezeichnung</dt>
-                            <dd class="col-sm-8">${res.an_name_lang}</dd>
+                            <dd class="col-sm-8">${res.an_name}</dd>
                         </dl>
                         <dl class="row">
                             <dt class="col-sm-4">Intervall</dt>
@@ -1243,7 +1243,7 @@
 
                         let resp = $.map(data, function (obj) {
                             return {
-                                label: `(${obj.fa_name_kurz}) ${obj.fa_name_lang} `,
+                                label: `(${obj.fa_label}) ${obj.fa_name} `,
                                 id: obj.id
                             };
                         });
@@ -1261,7 +1261,7 @@
                     success: function (res) {
 
                         $('#adress_id').val(res.adresse.id);
-                        $('#ad_name_kurz').val(res.adresse.ad_name_kurz);
+                        $('#ad_label').val(res.adresse.ad_label);
                         $('#address_type_id').val(res.adresse.address_type_id);
                         $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
                         $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
@@ -1271,14 +1271,14 @@
 
                         $('#firma_id').val(res.firma.id);
                         $('#firma_id_tabfp').val(res.firma.id);
-                        $('#fa_name_kurz').val(res.firma.fa_name_kurz);
-                        $('#fa_name_lang').val(res.firma.fa_name_lang);
+                        $('#fa_label').val(res.firma.fa_label);
+                        $('#fa_name').val(res.firma.fa_name);
                         $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
                         $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
                         $('#fa_vat').val(res.firma.fa_vat);
 
                         $('#anrede_id').val(res.contact.anrede_id);
-                        $('#con_name_kurz').val(res.contact.con_name_kurz);
+                        $('#con_label').val(res.contact.con_label);
                         $('#con_vorname').val(res.contact.con_vorname);
                         $('#con_name').val(res.contact.con_name);
                         $('#con_telefon').val(res.contact.con_telefon);

@@ -444,11 +444,11 @@
                                                       name="addNewRoomType"
                                                 >
                                                     @csrf
-                                                    <x-rtextfield id="rt_name_kurz"
+                                                    <x-rtextfield id="rt_label"
                                                                   label="{{__('Kürzel')}}"
                                                     />
 
-                                                    <x-textfield id="rt_name_lang"
+                                                    <x-textfield id="rt_name"
                                                                  label="{{__('Name')}} "
                                                     />
 
@@ -478,7 +478,7 @@
                                                             >
                                                                 @foreach (App\RoomType::all() as $ad)
                                                                     <option value="{{ $ad->id }}"
-                                                                    >{{ $ad->rt_name_kurz }}</option>
+                                                                    >{{ $ad->rt_label }}</option>
                                                                 @endforeach
                                                             </select>
                                                             <x-btnLoad block="1"
@@ -487,13 +487,13 @@
                                                             </x-btnLoad>
                                                         </div>
 
-                                                        <x-rtextfield id="updt_rt_name_kurz"
-                                                                      name="rt_name_kurz"
+                                                        <x-rtextfield id="updt_rt_label"
+                                                                      name="rt_label"
                                                                       label="{{__('Kürzel')}}"
                                                         />
 
-                                                        <x-textfield id="updt_rt_name_lang"
-                                                                     name="rt_name_lang"
+                                                        <x-textfield id="updt_rt_name"
+                                                                     name="rt_name"
                                                                      label="{{__('Name')}}"
                                                         />
 
@@ -527,7 +527,7 @@
                                                                 >
                                                                     @foreach (App\RoomType::all() as $ad)
                                                                         <option value="{{ $ad->id }}"
-                                                                        >{{ $ad->rt_name_kurz }}</option>
+                                                                        >{{ $ad->rt_label }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <x-btnDelete block="1"
@@ -563,11 +563,11 @@
                                                 >
                                                     @csrf
 
-                                                    <x-rtextfield id="spt_name_kurz"
+                                                    <x-rtextfield id="spt_label"
                                                                   label="{{__('Kürzel')}}"
                                                     />
 
-                                                    <x-textfield id="spt_name_lang"
+                                                    <x-textfield id="spt_name"
                                                                  label="{{__('Name')}}"
                                                     />
 
@@ -596,7 +596,7 @@
                                                             >
                                                                 @foreach (App\StellplatzTyp::all() as $ad)
                                                                     <option value="{{ $ad->id }}"
-                                                                    >{{ $ad->spt_name_kurz }}</option>
+                                                                    >{{ $ad->spt_label }}</option>
                                                                 @endforeach
                                                             </select>
                                                             <x-btnLoad id="loadStellPlatzTypeItem"
@@ -606,13 +606,13 @@
                                                             </x-btnLoad>
                                                         </div>
 
-                                                        <x-rtextfield id="updt_spt_name_kurz"
-                                                                      name="spt_name_kurz"
+                                                        <x-rtextfield id="updt_spt_label"
+                                                                      name="spt_label"
                                                                       label="{{__('Kürzel')}}"
                                                         />
 
-                                                        <x-textfield name="spt_name_lang"
-                                                                     id="updt_spt_name_lang"
+                                                        <x-textfield name="spt_name"
+                                                                     id="updt_spt_name"
                                                                      label="{{__('Name')}}"
                                                         />
 
@@ -646,7 +646,7 @@
                                                                 >
                                                                     @foreach (App\StellplatzTyp::all() as $ad)
                                                                         <option value="{{ $ad->id }}"
-                                                                        >{{ $ad->spt_name_kurz }}</option>
+                                                                        >{{ $ad->spt_label }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <x-btnDelete block="1">
@@ -739,11 +739,11 @@
                                                       name="frmAddNewProduktKategorie"
                                                 >
                                                     @csrf
-                                                    <x-rtextfield id="pk_name_kurz"
+                                                    <x-rtextfield id="pk_label"
                                                                   label="{{__('Kürzel')}}"
                                                     />
 
-                                                    <x-textfield id="pk_name_lang"
+                                                    <x-textfield id="pk_name"
                                                                  label="{{__('Name')}}"
                                                     />
 
@@ -776,7 +776,7 @@
                                                             >
                                                                 @foreach (App\ProduktKategorie::all() as $ad)
                                                                     <option value="{{ $ad->id }}"
-                                                                    >{{ $ad->pk_name_kurz }}</option>
+                                                                    >{{ $ad->pk_label }}</option>
                                                                 @endforeach
                                                             </select>
                                                             <x-btnLoad block="1"
@@ -787,13 +787,13 @@
 
                                                         <div class="dropdown-divider my-3"></div>
 
-                                                        <x-rtextfield id="upd_pk_name_kurz"
-                                                                      name="pk_name_kurz"
+                                                        <x-rtextfield id="upd_pk_label"
+                                                                      name="pk_label"
                                                                       label="{{__('Kürzel')}}"
                                                         />
 
-                                                        <x-textfield id="updt_pk_name_lang"
-                                                                     name="pk_name_lang"
+                                                        <x-textfield id="updt_pk_name"
+                                                                     name="pk_name"
                                                                      label="{{__('Name')}}"
                                                         />
 
@@ -827,7 +827,7 @@
                                                                 >
                                                                     @foreach (App\ProduktKategorie::all() as $ad)
                                                                         <option value="{{ $ad->id }}"
-                                                                        >{{ $ad->pk_name_kurz }}</option>
+                                                                        >{{ $ad->pk_label }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <x-btnDelete block="1"
@@ -861,7 +861,7 @@
                                                     >
                                                         @foreach (App\ProduktKategorie::all() as $ad)
                                                             <option value="{{ $ad->id }}">
-                                                                {{ $ad->pk_name_kurz }} {{ ($ad->ProduktKategorieParam->count()>0) ? ' ('.$ad->ProduktKategorieParam->count() . ')' :'' }}
+                                                                {{ $ad->pk_label }} {{ ($ad->ProduktKategorieParam->count()>0) ? ' ('.$ad->ProduktKategorieParam->count() . ')' :'' }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -891,10 +891,10 @@
                                               id="frmAddNewAnforderungsType"
                                         >
                                             @csrf
-                                            <x-rtextfield id="at_name_kurz"
+                                            <x-rtextfield id="at_label"
                                                           label="Kürzel"
                                             />
-                                            <x-textfield id="at_name_lang"
+                                            <x-textfield id="at_name"
                                                          label="Name"
                                             />
                                             <x-textarea id="at_name_text"
@@ -922,15 +922,15 @@
                                                     >
                                                         @foreach(App\AnforderungType::all() as $anforderungType)
                                                             <option value="{{ $anforderungType->id }}"
-                                                            >{{ $anforderungType->at_name_kurz }}</option>
+                                                            >{{ $anforderungType->at_label }}</option>
                                                         @endforeach
                                                     </x-selectgroup>
-                                                    <x-rtextfield id="updt_at_name_kurz"
-                                                                  name="at_name_kurz"
+                                                    <x-rtextfield id="updt_at_label"
+                                                                  name="at_label"
                                                                   label="{{__('Kürzel')}}"
                                                     />
-                                                    <x-textfield id="updt_at_name_lang"
-                                                                 name="at_name_lang"
+                                                    <x-textfield id="updt_at_name"
+                                                                 name="at_name"
                                                                  label="{{__('Name')}}"
                                                     />
                                                     <x-textarea id="updt_at_name_text"
@@ -962,7 +962,7 @@
                                                                 >
                                                                     @foreach (App\AnforderungType::all() as $ad)
                                                                         <option value="{{ $ad->id }}"
-                                                                        >{{ $ad->at_name_kurz }}</option>
+                                                                        >{{ $ad->at_label }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">
@@ -1001,13 +1001,13 @@
                                                 >
                                                     @csrf
 
-                                                    <x-textfield id="doctyp_name_kurz"
+                                                    <x-textfield id="doctyp_label"
                                                                  label="{{ __('Kürzel') }}"
                                                                  required
                                                                  max="20"
                                                     />
 
-                                                    <x-textfield id="doctyp_name_lang"
+                                                    <x-textfield id="doctyp_name"
                                                                  label="{{ __('Name - lang') }}"
                                                                  required
                                                                  max="100"
@@ -1071,7 +1071,7 @@
                                                             >
                                                                 @foreach (App\DocumentType::all() as $ad)
                                                                     <option value="{{ $ad->id }}">
-                                                                        {{ $ad->doctyp_name_kurz }}
+                                                                        {{ $ad->doctyp_label }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -1083,13 +1083,13 @@
                                                         </div>
 
                                                         <x-textfield required
-                                                                     id="updt_doctyp_name_kurz"
+                                                                     id="updt_doctyp_label"
                                                                      label="{{__('Kürzel')}}"
                                                                      max="2"
                                                         />
 
                                                         <x-textfield required
-                                                                     id="updt_doctyp_name_lang"
+                                                                     id="updt_doctyp_name"
                                                                      label="{{__('Name - lang')}}"
                                                                      max="100"
                                                         />
@@ -1153,7 +1153,7 @@
                                                                 >
                                                                     @foreach (App\DocumentType::all() as $ad)
                                                                         <option value="{{ $ad->id }}"
-                                                                        >{{ $ad->doctyp_name_kurz }}</option>
+                                                                        >{{ $ad->doctyp_label }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">{{__('Dokumententyp löschen')}} <i
@@ -1253,8 +1253,8 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_rt_name_kurz').val(jsn.rt_name_kurz);
-                frm.find('#updt_rt_name_lang').val(jsn.rt_name_lang);
+                frm.find('#updt_rt_label').val(jsn.rt_label);
+                frm.find('#updt_rt_name').val(jsn.rt_name);
                 frm.find('#upd_rt_name_text').val(jsn.rt_name_text);
             });
 
@@ -1271,8 +1271,8 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_spt_name_kurz').val(jsn.spt_name_kurz);
-                frm.find('#updt_spt_name_lang').val(jsn.spt_name_lang);
+                frm.find('#updt_spt_label').val(jsn.spt_label);
+                frm.find('#updt_spt_name').val(jsn.spt_name);
                 frm.find('#updt_spt_name_text').val(jsn.spt_name_text);
             });
 
@@ -1289,8 +1289,8 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#upd_pk_name_kurz').val(jsn.pk_name_kurz);
-                frm.find('#updt_pk_name_lang').val(jsn.pk_name_lang);
+                frm.find('#upd_pk_label').val(jsn.pk_label);
+                frm.find('#updt_pk_name').val(jsn.pk_name);
                 frm.find('#updt_pk_name_text').val(jsn.pk_name_text);
             });
 
@@ -1306,8 +1306,8 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_at_name_kurz').val(jsn.at_name_kurz);
-                frm.find('#updt_at_name_lang').val(jsn.at_name_lang);
+                frm.find('#updt_at_label').val(jsn.at_label);
+                frm.find('#updt_at_name').val(jsn.at_name);
                 frm.find('#updt_at_name_text').val(jsn.at_name_text);
             });
 
@@ -1324,10 +1324,10 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_vo_name_kurz').val(jsn.vo_name_kurz);
+                frm.find('#updt_vo_label').val(jsn.vo_label);
                 frm.find('#updt_vo_stand').val(jsn.vo_stand);
                 frm.find('#updt_vo_nummer').val(jsn.vo_nummer);
-                frm.find('#updt_vo_name_lang').val(jsn.vo_name_lang);
+                frm.find('#updt_vo_name').val(jsn.vo_name);
                 frm.find('#updt_vo_name_text').val(jsn.vo_name_text);
             });
 
@@ -1344,9 +1344,9 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_an_name_kurz').val(jsn.an_name_kurz);
+                frm.find('#updt_an_label').val(jsn.an_label);
                 frm.find('#updt_anforderung_type_id').val(jsn.anforderung_type_id);
-                frm.find('#updt_an_name_lang').val(jsn.an_name_lang);
+                frm.find('#updt_an_name').val(jsn.an_name);
                 frm.find('#updt_an_name_text').val(jsn.an_name_text);
                 frm.find('#updt_an_control_interval').val(jsn.an_control_interval);
                 frm.find('#updt_control_interval_id').val(jsn.control_interval_id);
@@ -1365,8 +1365,8 @@
                     _token: $('input[name="_token"]').val()
                 }
             }).done(function (jsn) {
-                frm.find('#updt_doctyp_name_kurz').val(jsn.doctyp_name_kurz);
-                frm.find('#updt_doctyp_name_lang').val(jsn.doctyp_name_lang);
+                frm.find('#updt_doctyp_label').val(jsn.doctyp_label);
+                frm.find('#updt_doctyp_name').val(jsn.doctyp_name);
                 frm.find('#updt_doctyp_name_text').val(jsn.doctyp_name_text);
 
                 if (jsn.doctyp_mandatory === 1) {
@@ -1399,7 +1399,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedAddressesListe').append(`
-                    <li class="list-group-item usedAddressesListItem bg-warning text-white">${item.ad_name_kurz} - <span class="text-truncate">${item.ad_name_lang}</span></li>
+                    <li class="list-group-item usedAddressesListItem bg-warning text-white">${item.ad_label} - <span class="text-truncate">${item.ad_name}</span></li>
                     `);
                         });
                     } else {
@@ -1431,7 +1431,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedStellPlatzListe').append(`
-                    <li class="list-group-item usedStellplatzListItem bg-warning text-white">${item.produkt.prod_name_kurz} - <span class="text-truncate">${item.produkt.prod_name_lang}</span></li>
+                    <li class="list-group-item usedStellplatzListItem bg-warning text-white">${item.produkt.prod_label} - <span class="text-truncate">${item.produkt.prod_name}</span></li>
                     `);
                         });
                     } else {
@@ -1463,7 +1463,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedBuildingTypeListe').append(`
-                    <li class="list-group-item usedBuildingListItem bg-warning text-white">${item.b_name_kurz} - ${item.b_name_ort}</li>
+                    <li class="list-group-item usedBuildingListItem bg-warning text-white">${item.b_label} - ${item.b_name_ort}</li>
                     `);
                         });
                     } else {
@@ -1496,7 +1496,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedRoomsListe').append(`
-                    <li class="list-group-item usedRoomsListItem bg-warning text-white">${item.r_name_kurz} - ${item.r_name_lang}</li>
+                    <li class="list-group-item usedRoomsListItem bg-warning text-white">${item.r_label} - ${item.r_name}</li>
                     `);
                         });
                     } else {
@@ -1529,7 +1529,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedProdukteListe').append(`
-                    <li class="list-group-item usedProdStammListItem bg-warning text-white">${item.mat_name_nummer} - ${item.mat_name_kurz}</li>
+                    <li class="list-group-item usedProdStammListItem bg-warning text-white">${item.mat_name_nummer} - ${item.mat_label}</li>
                     `);
                         });
                     } else {
@@ -1562,7 +1562,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedProdukteListe').append(`
-                    <li class="list-group-item usedProdStammListItem bg-warning text-white">${item.mat_name_nummer} - ${item.mat_name_kurz}</li>
+                    <li class="list-group-item usedProdStammListItem bg-warning text-white">${item.mat_name_nummer} - ${item.mat_label}</li>
                     `);
                         });
                     } else {
@@ -1595,7 +1595,7 @@
                     `);
                         $.each(res, function (ui, item) {
                             $('#usedAnordnungenListe').append(`
-                    <li class="list-group-item usedAnordnungListItem bg-warning text-white">${item.an_name_kurz} - ${item.an_name_lang}</li>
+                    <li class="list-group-item usedAnordnungListItem bg-warning text-white">${item.an_label} - ${item.an_name}</li>
                     `);
                         });
                     } else {
@@ -1709,8 +1709,8 @@
                 success: function (res) {
                     $('#aci_id').val(res.id);
                     $('#updt_anforderung_id').val(res.anforderung_id);
-                    $('#updt_aci_name_kurz').val(res.aci_name_kurz);
-                    $('#updt_aci_name_lang').val(res.aci_name_lang);
+                    $('#updt_aci_label').val(res.aci_label);
+                    $('#updt_aci_name').val(res.aci_name);
                     $('#updt_aci_task').val(res.aci_task);
                     $('#updt_aci_value_si').val(res.aci_value_si);
                     $('#updt_aci_vaule_soll').val(res.aci_vaule_soll);

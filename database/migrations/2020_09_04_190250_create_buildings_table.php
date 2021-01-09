@@ -17,9 +17,9 @@ class CreateBuildingsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('b_name_kurz', 20)->unique();
+            $table->string('b_label', 20)->unique();
             $table->string('b_name_ort', 100)->nullable();
-            $table->string('b_name_lang', 100)->nullable();
+            $table->string('b_name', 100)->nullable();
             $table->text('b_name_text')->nullable();
             $table->boolean('b_we_has')->default(false);
             $table->string('b_we_name', 100)->nullable();

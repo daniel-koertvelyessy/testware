@@ -17,10 +17,10 @@ class CreateEquipmentStatesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('estat_name_kurz',20)->unique();
-            $table->string('estat_name_lang',100)->nullable();
-            $table->string('estat_color',100)->nullable();
-            $table->string('estat_icon',100)->nullable();
+            $table->string('estat_label', 20)->unique();
+            $table->string('estat_name', 100)->nullable();
+            $table->string('estat_color', 100)->nullable();
+            $table->string('estat_icon', 100)->nullable();
             $table->text('estat_name_text')->nullable();
         });
     }

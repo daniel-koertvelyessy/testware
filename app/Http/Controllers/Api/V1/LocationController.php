@@ -21,7 +21,8 @@ use Illuminate\Support\Str;
 class LocationController extends Controller
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
@@ -32,11 +33,11 @@ class LocationController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('per_page')){
-            return LocationResource::collection(Location::with('Profile','Adresse','Product')
+        if ($request->input('per_page')) {
+            return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')
                 ->paginate($request->input('per_page')));
         }
-        return LocationResource::collection(Location::with('Profile','Adresse','Product')->get());
+        return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')->get());
     }
 
     /**
@@ -46,12 +47,12 @@ class LocationController extends Controller
      */
     public function full(Request $request)
     {
-        if ($request->input('per_page')){
-        return LocationFullResource::collection(Location::with('Profile','Adresse','Product')
-            ->paginate($request->input('per_page')));
-    }
+        if ($request->input('per_page')) {
+            return LocationFullResource::collection(Location::with('Profile', 'Adresse', 'Building')
+                ->paginate($request->input('per_page')));
+        }
         return LocationFullResource::collection(
-            Location::with('Adresse','Profile' )->get()
+            Location::with('Adresse', 'Profile')->get()
         );
     }
 
@@ -71,19 +72,19 @@ class LocationController extends Controller
         (new \App\Standort)->add($standort_id, $request->label, 'locations');
 
         $location = new Location();
-        $location->l_name_kurz = $request->label;
-        $location->l_name_lang = $request->name;
+        $location->l_label = $request->label;
+        $location->l_name = $request->name;
         $location->l_beschreibung = $request->description;
         $location->adresse_id = $adresse_id;
         $location->profile_id = $profile_id;
         $location->standort_id = $standort_id;
         $location->save();
 
-        $adresse_id = ($adresse_id===NULL) ? 'referenced id not found' : $adresse_id;
-        $profile_id = ($profile_id===NULL) ? 'referenced id not found' : $profile_id;
+        $adresse_id = ($adresse_id === NULL) ? 'referenced id not found' : $adresse_id;
+        $profile_id = ($profile_id === NULL) ? 'referenced id not found' : $profile_id;
 
         return [
-            'status' =>true,
+            'status' => true,
             'id' => $location->id,
             'uid' => $standort_id,
             'address' => $adresse_id,
@@ -111,9 +112,9 @@ class LocationController extends Controller
      */
     public function update(Location $location, Request $request)
     {
-        $location->l_name_lang = (isset($request->name))? $request->name : $location->l_name_lang;
-        $location->l_name_kurz = (isset($request->label))? $request->label : $location->l_name_kurz;
-        $location->l_beschreibung = (isset($request->description))? $request->description : $location->l_beschreibung;
+        $location->l_name = (isset($request->name)) ? $request->name : $location->l_name;
+        $location->l_label = (isset($request->label)) ? $request->label : $location->l_label;
+        $location->l_beschreibung = (isset($request->description)) ? $request->description : $location->l_beschreibung;
         $location->save();
 
         return new LocationResource($location);
@@ -126,7 +127,8 @@ class LocationController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Location $location) {
+    public function destroy(Location $location)
+    {
         $location->delete();
         return response()->json([
             'status' => 'location deleted'
@@ -140,7 +142,7 @@ class LocationController extends Controller
     function validateNewLocation(): array
     {
         return request()->validate([
-            'label' => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
+            'label' => 'bail|unique:locations,l_label|min:2|max:20|required',
             'name' => '',
             'description' => '',
             'uid' => 'unique:locations,standort_id',

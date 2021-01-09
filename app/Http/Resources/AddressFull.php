@@ -16,8 +16,8 @@ class AddressFull extends JsonResource
     {
         return [
             'type' => new AddressType($this->AddressType),
-            'identifier' => $this->ad_name_kurz,
-            'name' => $this->ad_name_lang,
+            'identifier' => $this->ad_label,
+            'name' => $this->ad_name,
             'company' => $this->ad_name_firma,
             'company_2' => $this->ad_name_firma_2,
             'company_co' => $this->ad_name_firma_co,

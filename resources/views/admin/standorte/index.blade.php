@@ -74,8 +74,8 @@
                     <tbody>
                     @forelse ($locations as $loc)
                         <tr>
-                            <td><a href="{{ route('location.show',$loc) }}">{{ $loc->l_name_lang }}</a></td>
-                            <td>{{ $loc->l_name_kurz }}</td>
+                            <td><a href="{{ route('location.show',$loc) }}">{{ $loc->l_name }}</a></td>
+                            <td>{{ $loc->l_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
@@ -100,8 +100,8 @@
                     <tbody>
                     @forelse ($buildings as $loc)
                         <tr>
-                            <td><a href="{{ route('building.show',$loc) }}">{{ $loc->b_name_lang }}</a></td>
-                            <td>{{ $loc->b_name_kurz }}</td>
+                            <td><a href="{{ route('building.show',$loc) }}">{{ $loc->b_name }}</a></td>
+                            <td>{{ $loc->b_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty
@@ -127,8 +127,8 @@
 
                     @forelse ($rooms as $loc)
                         <tr>
-                            <td><a href="{{ route('room.show',$loc) }}">{{ $loc->r_name_lang }}</a></td>
-                            <td>{{ $loc->r_name_kurz }}</td>
+                            <td><a href="{{ route('room.show',$loc) }}">{{ $loc->r_name }}</a></td>
+                            <td>{{ $loc->r_label }}</td>
                             <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
                         </tr>
                     @empty

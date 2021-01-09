@@ -53,10 +53,10 @@
                         @foreach ($locationList as $location)
                             <tr>
                                 <td class="d-none d-md-table-cell">
-                                    <a href="/location/{{$location->location->id}}">{{ $location->location->l_name_kurz  }}</a>
+                                    <a href="/location/{{$location->location->id}}">{{ $location->location->l_label  }}</a>
                                 </td>
-                                <td>{{ $location->l_name_lang }}</td>
-                                <td>{{ $location->b_name_kurz }}</td>
+                                <td>{{ $location->l_name }}</td>
+                                <td>{{ $location->b_label }}</td>
                                 <td class="d-none d-md-table-cell">{{ $location->BuildingType->btname }}</td>
                                 <td>
                                     <a href="{{$location->path()}}">
@@ -68,7 +68,7 @@
                         </tbody>
                     </table>
                     <div class="d-flex justify-content-center">
-                        {!! $locationList->onEachSide(2)->links() !!}
+                        {!! $locationList->withQueryString()->onEachSide(2)->links() !!}
                     </div>
                 </div>
             </div>
@@ -102,8 +102,8 @@
                              style="height:21em;"
                         >
                             <div class="card-body">
-                                <h5 class="card-title">{{ $location->l_name_kurz }}</h5>
-                                <h6 class="card-subtitletext-muted">{{ $location->l_name_lang }}</h6>
+                                <h5 class="card-title">{{ $location->l_label }}</h5>
+                                <h6 class="card-subtitletext-muted">{{ $location->l_name }}</h6>
                                 <p class="card-text mt-1 mb-0"><small><strong>{{__('Gebäude')}}:</strong> {{ $location->Building->count() }}</small></p>
                                 <p class="card-text mt-1 mb-0"><small><strong>{{__('Geräte')}}:</strong> {{ $location->countTotalEquipmentInLocation() }}</small></p>
                                 <p class="card-text mt-1 mb-0"><small><strong>{{__('Beschreibung')}}:</strong></small></p>
@@ -122,7 +122,7 @@
                                     <button type="button"
                                             class="btn btn-link btn-sm btnDeleteLocation"
                                             data-id="{{ $location->id }}"
-                                            title="Standort {{ $location->l_name_kurz }} löschen"
+                                            title="Standort {{ $location->l_label }} löschen"
                                     ><i class="far fa-trash-alt"></i></button>
                                     <form action="{{ route('location.destroy',$location->id) }}"
                                           id="frmDeleteLocation_{{ $location->id }}"
@@ -141,9 +141,9 @@
                                                value="building"
                                         >
                                         <input type="hidden"
-                                               name="l_name_kurz"
-                                               id="l_name_kurz_{{ $location->id }}"
-                                               value="{{ $location->l_name_kurz }}"
+                                               name="l_label"
+                                               id="l_label_{{ $location->id }}"
+                                               value="{{ $location->l_label }}"
                                         >
                                     </form>
                                 @endif

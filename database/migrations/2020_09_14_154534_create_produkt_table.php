@@ -17,8 +17,8 @@ class CreateProduktTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('prod_name_kurz', 20);
-            $table->string('prod_name_lang', 100)->nullable();
+            $table->string('prod_label', 20);
+            $table->string('prod_name', 100)->nullable();
             $table->text('prod_name_text')->nullable();
             $table->string('prod_nummer', 100);
             $table->boolean('prod_active')->default(true);
@@ -36,7 +36,6 @@ class CreateProduktTable extends Migration
                 ->on('produkt_states')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-
         });
     }
 

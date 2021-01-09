@@ -49,7 +49,7 @@
                             <x-selectfield id="equipment_state_id" label="Neuer Gerätestatus">
                                 @foreach(App\EquipmentState::all() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}">
-                                        {{ $equipmentState->estat_name_lang }}
+                                        {{ $equipmentState->estat_name }}
                                     </option>
                                 @endforeach
                             </x-selectfield>
@@ -84,9 +84,9 @@
                     success: function (data) {
                         let resp = $.map(data, function (obj) {
                             return {
-                                label: `(${obj.eq_serien_nr}) ${obj.prod_name_lang} - ${obj.eq_inventar_nr} `,
+                                label: `(${obj.eq_serien_nr}) ${obj.prod_name} - ${obj.eq_inventar_nr} `,
                                 id: obj.id,
-                                value: `${obj.eq_serien_nr} - ${obj.prod_name_lang}`
+                                value: `${obj.eq_serien_nr} - ${obj.prod_name}`
                             };
                         });
                         response(resp);

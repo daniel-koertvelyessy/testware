@@ -140,11 +140,11 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->prod_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->prod_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->prod_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->prod_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -167,11 +167,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->vo_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->vo_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->vo_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->vo_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Nummer')}}:</dt>
@@ -202,11 +202,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->an_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->an_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->an_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->an_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -229,11 +229,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->aci_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->aci_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->aci_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->aci_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -257,11 +257,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->ad_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->ad_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->ad_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->ad_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Firma')}}:</dt>
@@ -329,11 +329,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -356,7 +356,7 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->b_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->b_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Ort')}}:</dt>
@@ -364,7 +364,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->l_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -387,11 +387,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->r_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->r_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->r_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->r_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
@@ -414,11 +414,11 @@
                                 <div class="list-group-item">
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Kürzel')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->sp_name_kurz }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->sp_label }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Bezeichnung')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{{ $objekt->sp_name_lang }}</dd>
+                                        <dd class="col-md-8 col-lg-9">{{ $objekt->sp_name }}</dd>
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>

@@ -17,9 +17,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">{{__('Portal')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.index') }}">{{__('Standorte')}} <i class="fas fa-angle-right"></i></a></li>
-            <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_name_kurz }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_label }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{  $building->b_name_kurz  }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{  $building->b_label  }}</li>
         </ol>
     </nav>
 @endsection
@@ -76,20 +76,20 @@
                         <input type="hidden" name="frmOrigin" id="frmOriginCreateRoomType" value="building">
                         @csrf
                         <div class="form-group">
-                            <label for="rt_name_kurz">Name</label>
-                            <input type="text" name="rt_name_kurz" id="rt_name_kurz" class="form-control {{ $errors->has('rt_name_kurz') ? ' is-invalid ': '' }}" value="{{ old('rt_name_kurz') ?? '' }}" required>
-                            @if ($errors->has('rt_name_kurz'))
-                                <span class="text-danger small">{{ $errors->first('rt_name_kurz') }}</span>
+                            <label for="rt_label">Name</label>
+                            <input type="text" name="rt_label" id="rt_label" class="form-control {{ $errors->has('rt_label') ? ' is-invalid ': '' }}" value="{{ old('rt_label') ?? '' }}" required>
+                            @if ($errors->has('rt_label'))
+                                <span class="text-danger small">{{ $errors->first('rt_label') }}</span>
                             @else
                                 <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
                             @endif
                         </div>
 
                         <div class="form-group">
-                            <label for="rt_name_lang">Name lang</label>
-                            <input type="text" name="rt_name_lang" id="rt_name_lang" class="form-control {{ $errors->has('rt_name_lang') ? ' is-invalid ': '' }}" value="{{ old('rt_name_lang') ?? '' }}">
-                            @if ($errors->has('rt_name_lang'))
-                                <span class="text-danger small">{{ $errors->first('rt_name_lang') }}</span>
+                            <label for="rt_name">Name lang</label>
+                            <input type="text" name="rt_name" id="rt_name" class="form-control {{ $errors->has('rt_name') ? ' is-invalid ': '' }}" value="{{ old('rt_name') ?? '' }}">
+                            @if ($errors->has('rt_name'))
+                                <span class="text-danger small">{{ $errors->first('rt_name') }}</span>
                             @else
                                 <span class="small text-primary">maximal 100 Zeichen</span>
                             @endif
@@ -115,7 +115,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">Übersicht Gebäude </span>{{ $building->b_name_kurz }}</h1>
+                <h1 class="h3"><span class="d-none d-md-inline">Übersicht Gebäude </span>{{ $building->b_label }}</h1>
 {{--                <div class="visible-print text-center">
                     {!! QrCode::size(65)->generate($building->standort_id); !!}
                     <p class="text-muted small">Standort-ID</p>
@@ -146,14 +146,14 @@
                                         <label for="location_id">ist zugeordnet</label>
                                         <select name="location_id" id="location_id" class="custom-select">
                                             @foreach (App\Location::all() as $loc)
-                                                <option value="{{ $loc->id }}" {{ ($loc->id === $building->location_id) ? ' selected ' : '' }}>{{ $loc->l_name_kurz }}</option>
+                                                <option value="{{ $loc->id }}" {{ ($loc->id === $building->location_id) ? ' selected ' : '' }}>{{ $loc->l_label }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <h2 class="h5">Bezeichner</h2>
                                     <div class="form-group">
-                                        <label for="b_name_kurz">Kurzbezeichnung (max 10 Zeichen)</label>
-                                        <input type="text" name="b_name_kurz" id="b_name_kurz" class="form-control {{ $errors->has('b_name_kurz') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $building->b_name_kurz }}">
+                                        <label for="b_label">Kurzbezeichnung (max 10 Zeichen)</label>
+                                        <input type="text" name="b_label" id="b_label" class="form-control {{ $errors->has('b_label') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $building->b_label }}">
                                     </div>
 
                                     <div class="form-group">
@@ -161,8 +161,8 @@
                                         <input type="text" name="b_name_ort" id="b_name_ort" class="form-control" maxlength="100" value="{{ $building->b_name_ort ?? '' }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="b_name_lang">Bezeichnung (max 100 Zeichen)</label>
-                                        <input type="text" name="b_name_lang" id="b_name_lang" class="form-control" maxlength="100" value="{{ $building->b_name_lang ?? '' }}">
+                                        <label for="b_name">Bezeichnung (max 100 Zeichen)</label>
+                                        <input type="text" name="b_name" id="b_name" class="form-control" maxlength="100" value="{{ $building->b_name ?? '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="b_name_text">Beschreibung</label>
@@ -217,19 +217,19 @@
                                     <input type="hidden" name="building_id" id="building_id" value="{{ $building->id }}">
                                     <input type="hidden" name="frmOrigin" id="frmOrigin" value="building">
                                     <div class="col-auto">
-                                        <label class="sr-only" for="r_name_kurz">Raum Nummer</label>
-                                        <input type="text" class="form-control" id="r_name_kurz" name="r_name_kurz" required placeholder="Raum Nummer" value="{{ old('r_name_kurz')??'' }}">
-                                        @if ($errors->has('r_name_kurz'))
-                                            <span class="text-danger small">{{ $errors->first('r_name_kurz') }}</span>
+                                        <label class="sr-only" for="r_label">Raum Nummer</label>
+                                        <input type="text" class="form-control" id="r_label" name="r_label" required placeholder="Raum Nummer" value="{{ old('r_label')??'' }}">
+                                        @if ($errors->has('r_label'))
+                                            <span class="text-danger small">{{ $errors->first('r_label') }}</span>
                                         @else
                                             <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
                                         @endif
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only" for="r_name_lang">Raum Bezeichnung, maximal 100 Zeichen</label>
-                                        <input type="text" class="form-control" id="r_name_lang" name="r_name_lang" placeholder="Raum Bezeichnung" value="{{ old('r_name_lang')??'' }}">
-                                        @if ($errors->has('r_name_lang'))
-                                            <span class="text-danger small">{{ $errors->first('r_name_lang') }}</span>
+                                        <label class="sr-only" for="r_name">Raum Bezeichnung, maximal 100 Zeichen</label>
+                                        <input type="text" class="form-control" id="r_name" name="r_name" placeholder="Raum Bezeichnung" value="{{ old('r_name')??'' }}">
+                                        @if ($errors->has('r_name'))
+                                            <span class="text-danger small">{{ $errors->first('r_name') }}</span>
                                         @else
                                             <span class="small text-primary">maximal 100 Zeichen</span>
                                         @endif
@@ -239,7 +239,7 @@
                                             <label for="room_type_id" class="sr-only">Raumtyp angeben</label>
                                             <select name="room_type_id" id="room_type_id" class="custom-select">
                                                 @foreach (\App\RoomType::all() as $roomType)
-                                                    <option value="{{ $roomType->id }}">{{ $roomType->rt_name_kurz  }}</option>
+                                                    <option value="{{ $roomType->id }}">{{ $roomType->rt_label  }}</option>
                                                 @endforeach
                                             </select>
                                             <button type="button" class="btn btn-outline-secondary ml-2" data-toggle="modal" data-target="#modalAddRoomType"><i class="fas fa-plus"></i></button>
@@ -265,9 +265,9 @@
                                         <tbody>
                                         @foreach ($building->rooms as $room)
                                             <tr>
-                                                <td>{{ $room->r_name_kurz }}</td>
-                                                <td>{{ $room->r_name_lang }}</td>
-                                                <td>{{ \App\RoomType::find($room->room_type_id)->rt_name_kurz }}</td>
+                                                <td>{{ $room->r_label }}</td>
+                                                <td>{{ $room->r_name }}</td>
+                                                <td>{{ \App\RoomType::find($room->room_type_id)->rt_label }}</td>
                                                 <td>{{ $room->stellplatzs()->count() }}</td>
                                                 <td class="text-right">
                                                     <x-menu_context
@@ -276,8 +276,8 @@
                                                         routeCopy="{{ route('copyRoom',$room) }}"
                                                         routeDestory="{{ route('room.destroy',$room) }}"
                                                         tabName="gebRooms"
-                                                        objectVal="{{$room->r_name_kurz}}"
-                                                        objectName="r_name_kurz"
+                                                        objectVal="{{$room->r_label}}"
+                                                        objectName="r_label"
                                                     />
 
                                                 </td>
@@ -314,7 +314,7 @@
             $('#modalAddBuildingType').modal('show');
         </script>
     @endif
-    @if ($errors->has('rt_name_kurz'))
+    @if ($errors->has('rt_label'))
         <script>
             $('#modalAddRoomType').modal('show');
         </script>

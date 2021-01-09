@@ -29,14 +29,14 @@
                     <tbody>
                     @forelse(App\Equipment::all() as $equipment)
                         <tr>
-                            <td>{{ $equipment->produkt->prod_name_lang }}</td>
+                            <td>{{ $equipment->produkt->prod_name }}</td>
                             <td>{{ $equipment->eq_inventar_nr }}</td>
                             <td>{{ $equipment->standort->std_kurzel }}</td>
                             <td style="vertical-align: middle;">
                                 @if ($equipment->equipment_state_id >1)
-                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
                                 @else
-                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_name_kurz }}</span>
+                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_label }}</span>
                                 @endif
                             </td>
                             <td>

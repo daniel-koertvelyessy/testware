@@ -17,8 +17,8 @@ class CreateDivisonsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('div_name_kurz',20)->unique();
-            $table->string('div_name_lang', 100)->nullable();
+            $table->string('div_label', 20)->unique();
+            $table->string('div_name', 100)->nullable();
             $table->text('div_name_text')->nullable();
             $table->unsignedBigInteger('profile_id')->nullable();
             $table->foreign('profile_id')

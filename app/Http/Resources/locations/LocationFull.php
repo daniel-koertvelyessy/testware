@@ -21,11 +21,11 @@ class LocationFull extends JsonResource
             'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
-            'label' => $this->l_name_kurz,
+            'label' => $this->l_label,
             'uid' => $this->standort_id,
-            'name' => $this->l_name_lang,
+            'name' => $this->l_name,
             'description' => $this->l_beschreibung,
-            'address'=> new AddressFull($this->Adresse),
+            'address' => new AddressFull($this->Adresse),
             'manager' => new ProfileFull($this->Profile),
             'location_objects' => new LocationStats($this)
         ];

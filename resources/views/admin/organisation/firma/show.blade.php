@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Firma {{ $firma->fa_name_kurz }} &triangleright; Organnisation @ bitpack GmbH
+    Firma {{ $firma->fa_label }} &triangleright; Organnisation @ bitpack GmbH
 @endsection
 
 @section('mainSection')
@@ -30,7 +30,7 @@
             >
             <div class="row">
                 <div class="col">
-                    <x-rtextfield id="fa_name_kurz" label="Kürzel" value="{{ $firma->fa_name_kurz }}"/>
+                    <x-rtextfield id="fa_label" label="Kürzel" value="{{ $firma->fa_label }}"/>
                 </div>
                 <div class="col">
                     <x-textfield id="fa_vat" label="U-St-ID" value="{{ $firma->fa_vat }}" max="30"/>
@@ -38,7 +38,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <x-textfield id="fa_name_lang" label="Name" value="{{ $firma->fa_name_lang }}"/>
+                    <x-textfield id="fa_name" label="Name" value="{{ $firma->fa_name }}"/>
                 </div>
             </div>
             <div class="row">
@@ -47,7 +47,7 @@
                         @foreach(App\Adresse::all() as $adresse)
                             <option value="{{ $adresse->id }}"
                                     @if($adresse->id === $firma->adresse_id) selected @endif >
-                                {{ $adresse->ad_name_lang }}
+                                {{ $adresse->ad_name }}
                             </option>
                         @endforeach
                     </x-selectfield>

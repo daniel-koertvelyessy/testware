@@ -13,7 +13,7 @@
     <div class="row mt-md-5 mt-sm-1">
         <div class="col">
             <h1 class="h3">Schaden am Gerät melden</h1>
-            <x-staticfield id="setEquipmentName" label="{{ __('Gerät') }}" value="{{ $edata->produkt->prod_name_lang }}" />
+            <x-staticfield id="setEquipmentName" label="{{ __('Gerät') }}" value="{{ $edata->produkt->prod_name }}" />
             <form action="{{ route('app.store') }}"
                   method="post">
                 @csrf

@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ProduktDocController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->middleware('auth');
-//    }
+    //    public function __construct()
+    //    {
+    //        $this->middleware('auth');
+    //    }
 
     /**
      * Display a listing of the resource.
@@ -56,14 +56,14 @@ class ProduktDocController extends Controller
                 'prodDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240' // size:2048 => 2048kB
             ]);
 
-//dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
+            //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
-            $proDocFile->proddoc_name_lang = $file->getClientOriginalName();
-            $proDocFile->proddoc_name_pfad= $file->store('produkt_docu/'.\request('produkt_id'));
+            $proDocFile->proddoc_name = $file->getClientOriginalName();
+            $proDocFile->proddoc_name_pfad = $file->store('produkt_docu/' . \request('produkt_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->produkt_id = request('produkt_id');
             $proDocFile->proddoc_name_text = request('proddoc_name_text');
-            $proDocFile->proddoc_name_kurz = request('proddoc_name_kurz');
+            $proDocFile->proddoc_label = request('proddoc_label');
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
             // $file->storeAs($pfad, $Dateiname->guessExtention() ); => Storage::disk('local')->putFileAs($pfad, $file, $Dateiname->guessExtention());
@@ -71,12 +71,11 @@ class ProduktDocController extends Controller
             // 'local' oder 'public' oder default, wenn nicht angegeben
 
         } else {
-            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_name_kurz') . '</strong> konnte nicht hochgeladen werden!');
-
+            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_label') . '</strong> konnte nicht hochgeladen werden!');
         }
-//
+        //
         return redirect()->back();
-//
+        //
 
     }
 
@@ -90,8 +89,7 @@ class ProduktDocController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', Storage::mimeType($doc->proddoc_name_pfad))
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=".str_replace(',','_',$doc->proddoc_name_lang))
-            ;
+            ->header('Content-disposition', "attachment; filename=" . str_replace(',', '_', $doc->proddoc_name));
     }
 
     /**
@@ -137,13 +135,12 @@ class ProduktDocController extends Controller
     public function destroy(Request $request)
     {
         $prodDoku = ProduktDoc::find($request->id);
-//        dd($prodDoku->proddoc_name_pfad);
-        $file = $prodDoku->proddoc_name_lang;
+        //        dd($prodDoku->proddoc_name_pfad);
+        $file = $prodDoku->proddoc_name;
         Storage::delete($prodDoku->proddoc_name_pfad);
         $prodDoku->delete();
         session()->flash('status', 'Das Dokument <strong>' . $file . '</strong> wurde gelöscht!');
         return redirect()->back();
-
     }
 
     /**
@@ -152,13 +149,12 @@ class ProduktDocController extends Controller
     public function validateNewProduktDokument(): array
     {
         return request()->validate([
-            'proddoc_name_kurz' => 'bail|required|max:150',
-            'proddoc_name_lang' => 'max:100',
+            'proddoc_label' => 'bail|required|max:150',
+            'proddoc_name' => 'max:100',
             'proddoc_name_pfad' => 'max:150',
             'produkt_id' => 'required',
             'document_type_id' => 'required',
             'proddoc_name_text' => ''
         ]);
     }
-
 }

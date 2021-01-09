@@ -13,7 +13,7 @@
         <li><a class="dropdown-item" href="{{ route('verordnung.create') }}">{{__('Neu anlegen')}}</a></li>
         <li><hr class="dropdown-divider"></li>
         @foreach( App\Verordnung::take(5)->latest()->get() as $verordnungItem)
-            <li><a class="dropdown-item" href="{{ route('verordnung.show',$verordnungItem) }}">{{  $verordnungItem->vo_name_kurz  }}</a></li>
+            <li><a class="dropdown-item" href="{{ route('verordnung.show',$verordnungItem) }}">{{  $verordnungItem->vo_label  }}</a></li>
         @endforeach()
     </ul>
 </li>
@@ -27,7 +27,7 @@
         <li><a class="dropdown-item" href="{{ route('anforderung.create') }}">{{__('Neu anlegen')}}</a></li>
         <li><hr class="dropdown-divider"></li>
         @foreach( App\Anforderung::take(5)->latest()->get() as $anforderungItem)
-            <li><a class="dropdown-item" href="{{ route('anforderung.show',$anforderungItem) }}">{{  $anforderungItem->an_name_kurz  }}</a></li>
+            <li><a class="dropdown-item" href="{{ route('anforderung.show',$anforderungItem) }}">{{  $anforderungItem->an_label  }}</a></li>
         @endforeach()
     </ul>
 </li>
@@ -41,7 +41,7 @@
         <li><a class="dropdown-item" href="{{ route('anforderungcontrolitem.create') }}">{{__('Neu anlegen')}}</a></li>
         <li><hr class="dropdown-divider"></li>
         @foreach( App\AnforderungControlItem::take(5)->latest()->get() as $anforderungItem)
-            <li><a class="dropdown-item" href="{{ route('anforderungcontrolitem.show',$anforderungItem) }}">{{  $anforderungItem->aci_name_lang  }}</a></li>
+            <li><a class="dropdown-item" href="{{ route('anforderungcontrolitem.show',$anforderungItem) }}">{{  $anforderungItem->aci_name  }}</a></li>
         @endforeach()
     </ul>
 </li>

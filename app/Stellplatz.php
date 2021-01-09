@@ -9,7 +9,8 @@ class Stellplatz extends Model
 {
     protected $guarded = [];
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
         static::saving(function (Stellplatz $stellplatz) {
             Cache::forget('app-get-current-amount-Stellplatz');
@@ -19,9 +20,10 @@ class Stellplatz extends Model
         });
     }
 
-    public function search($term) {
-        return Stellplatz::where('sp_name_kurz', 'like', '%' . $term . '%')
-            ->orWhere('sp_name_lang', 'like', '%' . $term . '%')
+    public function search($term)
+    {
+        return Stellplatz::where('sp_label', 'like', '%' . $term . '%')
+            ->orWhere('sp_name', 'like', '%' . $term . '%')
             ->orWhere('sp_name_text', 'like', '%' . $term . '%')
             ->get();
     }
@@ -44,16 +46,18 @@ class Stellplatz extends Model
         return $this->belongsTo(StellplatzTyp::class);
     }
 
-    public function Standort() {
-        return $this->hasOne(Standort::class, 'std_id','standort_id');
+    public function Standort()
+    {
+        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
     }
-    public function countTotalEquipmentInCompartment() {
+    public function countTotalEquipmentInCompartment()
+    {
         Cache::remember(
             'countTotalEquipmentInCompartment',
             now()->addSeconds(30),
             function () {
                 return $this->Standort->countReferencedEquipment();
-            });
+            }
+        );
     }
-
 }

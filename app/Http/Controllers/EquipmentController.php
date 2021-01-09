@@ -30,9 +30,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
-class EquipmentController extends Controller {
+class EquipmentController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -41,7 +43,8 @@ class EquipmentController extends Controller {
      *
      * @return Application|Factory|Response|View
      */
-    public function index() {
+    public function index()
+    {
         return view('testware.equipment.index');
     }
 
@@ -51,7 +54,8 @@ class EquipmentController extends Controller {
      * @param  Request $request
      * @return Application|Factory|Response|View
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $produkt = (isset($request->produkt_id)) ? request('produkt_id') : false;
         return view('testware.equipment.create', ['pk' => $request->pk, 'produkt' => $produkt]);
     }
@@ -62,7 +66,8 @@ class EquipmentController extends Controller {
      * @param  Request $request
      * @return Application|RedirectResponse|Response|Redirector
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $lastDate = $request->qe_control_date_last;
 
         $prod = Produkt::find($request->produkt_id);
@@ -93,10 +98,9 @@ class EquipmentController extends Controller {
 
             $eh = new EquipmentHistory();
             $eh->eqh_eintrag_kurz = 'Anforderung angelegt';
-            $eh->eqh_eintrag_text = 'Für das Geräte wurde die Anforderung ' . $prodAnforderung->Anforderung->an_name_lang . ' angelegt, welche am ' . $dueDate . ' zum ersten Mal fällig wird.';
+            $eh->eqh_eintrag_text = 'Für das Geräte wurde die Anforderung ' . $prodAnforderung->Anforderung->an_name . ' angelegt, welche am ' . $dueDate . ' zum ersten Mal fällig wird.';
             $eh->equipment_id = $equipment->id;
             $eh->save();
-
         }
 
         if (isset($request->pp_id) && count($request->pp_id) > 0) {
@@ -133,18 +137,18 @@ class EquipmentController extends Controller {
             $file = $request->file('equipDokumentFile');
             $validation = $request->validate([
                 'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_name_kurz'   => 'required|max:150'
+                'eqdoc_label'   => 'required|max:150'
             ]);
-            $proDocFile->eqdoc_name_lang = $file->getClientOriginalName();
+            $proDocFile->eqdoc_name = $file->getClientOriginalName();
             $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . $equipment->id);
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = $equipment->id;
             $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
-            $proDocFile->eqdoc_name_kurz = request('eqdoc_name_kurz');
+            $proDocFile->eqdoc_label = request('eqdoc_label');
             $proDocFile->save();
         }
 
-        if ($request->function_control_profil !=='void'){
+        if ($request->function_control_profil !== 'void') {
             $qualifiedUser = new EquipmentQualifiedUser();
             $qualifiedUser->equipment_qualified_firma = NULL;
             $qualifiedUser->equipment_qualified_date = date('Y-m-d');
@@ -162,14 +166,13 @@ class EquipmentController extends Controller {
         $request->session()->flash('status', 'Das Gerät <strong>' . request('setNewEquipmentFromProdukt') . '</strong> wurde angelegt!');
 
         return redirect(route('equipment.show', ['equipment' => $equipment]));
-
     }
 
     /**
      * @return array
      */
-    public function validateNewEquipment()
-    : array {
+    public function validateNewEquipment(): array
+    {
         return request()->validate([
             'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
             'eq_serien_nr'       => 'bail|nullable|unique:equipment,eq_serien_nr|max:100',
@@ -189,7 +192,8 @@ class EquipmentController extends Controller {
      * @param  Equipment $equipment
      * @return Application|Factory|Response|View
      */
-    public function show(Equipment $equipment) {
+    public function show(Equipment $equipment)
+    {
         return view('testware.equipment.show', ['equipment' => $equipment]);
     }
 
@@ -199,7 +203,8 @@ class EquipmentController extends Controller {
      * @param  Equipment $equipment
      * @return Application|Factory|Response|View
      */
-    public function edit(Equipment $equipment) {
+    public function edit(Equipment $equipment)
+    {
         return view('testware.equipment.edit', ['equipment' => $equipment]);
     }
 
@@ -210,7 +215,8 @@ class EquipmentController extends Controller {
      * @param  Equipment $equipment
      * @return Application|Factory|RedirectResponse|View
      */
-    public function update(Request $request, Equipment $equipment) {
+    public function update(Request $request, Equipment $equipment)
+    {
 
         $feld = '';
         $flag = false;
@@ -228,58 +234,58 @@ class EquipmentController extends Controller {
         $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ' => ';
         if ($upd->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Seriennummer'),
-                    'old' => $upd->eq_serien_nr,
-                    'new' => $request->eq_serien_nr,
-                ]) . ' | ';
+                'fld' => __('Seriennummer'),
+                'old' => $upd->eq_serien_nr,
+                'new' => $request->eq_serien_nr,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_qrcode != $request->eq_qrcode) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('QR Code'),
-                    'old' => $upd->eq_qrcode,
-                    'new' => $request->eq_qrcode,
-                ]) . ' | ';
+                'fld' => __('QR Code'),
+                'old' => $upd->eq_qrcode,
+                'new' => $request->eq_qrcode,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_ibm != $request->eq_ibm) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Inbetriebnahme am'),
-                    'old' => $upd->eq_ibm,
-                    'new' => $request->eq_ibm,
-                ]) . ' | ';
+                'fld' => __('Inbetriebnahme am'),
+                'old' => $upd->eq_ibm,
+                'new' => $request->eq_ibm,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_text != $request->eq_text) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Beschreibung'),
-                    'old' => $upd->eq_text,
-                    'new' => $request->eq_text,
-                ]) . ' | ';
+                'fld' => __('Beschreibung'),
+                'old' => $upd->eq_text,
+                'new' => $request->eq_text,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->equipment_state_id != $request->equipment_state_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Geräte Status'),
-                    'old' => $upd->equipment_state_id,
-                    'new' => $request->equipment_state_id,
-                ]) . ' | ';
+                'fld' => __('Geräte Status'),
+                'old' => $upd->equipment_state_id,
+                'new' => $request->equipment_state_id,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->standort_id != $request->standort_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Aufstellplatz / Standort'),
-                    'old' => $upd->standort_id,
-                    'new' => $request->standort_id,
-                ]) . ' | ';
+                'fld' => __('Aufstellplatz / Standort'),
+                'old' => $upd->standort_id,
+                'new' => $request->standort_id,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->produkt_id != $request->produkt_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Produkt'),
-                    'old' => $upd->produkt_id,
-                    'new' => $request->produkt_id,
-                ]) . ' | ';
+                'fld' => __('Produkt'),
+                'old' => $upd->produkt_id,
+                'new' => $request->produkt_id,
+            ]) . ' | ';
             $flag = true;
         }
 
@@ -303,8 +309,8 @@ class EquipmentController extends Controller {
     /**
      * @return array
      */
-    public function validateEquipment()
-    : array {
+    public function validateEquipment(): array
+    {
         return request()->validate([
             'eq_inventar_nr'     => '',
             'eq_serien_nr'       => 'max:100',
@@ -324,37 +330,37 @@ class EquipmentController extends Controller {
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(Equipment $equipment) {
+    public function destroy(Equipment $equipment)
+    {
 
 
         foreach (EquipmentDoc::where('equipment_id', $equipment->id)->get() as $prodDoku) {
             EquipmentDoc::find($prodDoku->id);
-            $file = $prodDoku->proddoc_name_lang;
+            $file = $prodDoku->proddoc_name;
             Storage::delete($prodDoku->proddoc_name_pfad);
             $prodDoku->delete();
-
         }
 
         $equipment->delete();
 
         return redirect()->route('equipMain');
-
     }
 
-    public function getEquipmentAjaxListe(Request $request) {
+    public function getEquipmentAjaxListe(Request $request)
+    {
         return DB::table('equipment')->select(
             'eq_inventar_nr',
             'equipment.id',
             'equipment.eq_serien_nr',
-            'prod_name_lang'
+            'prod_name'
         )
             ->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')
             ->where('eq_serien_nr', 'like', '%' . $request->term . '%')
             ->orWhere('eq_inventar_nr', 'like', '%' . $request->term . '%')
             ->orWhere('eq_uid', 'like', '%' . $request->term . '%')
             ->orWhere('prod_nummer', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_name_lang', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_name_kurz', 'like', '%' . $request->term . '%')
+            ->orWhere('prod_name', 'like', '%' . $request->term . '%')
+            ->orWhere('prod_label', 'like', '%' . $request->term . '%')
             ->orWhere('prod_name_text', 'like', '%' . $request->term . '%')
             ->get();
     }

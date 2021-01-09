@@ -14,7 +14,7 @@
 
 
 @section('content')
-    {{-- `user_id``adress_id``l_beschreibung``l_name_lang``l_name_kurz``l_benutzt`--}}
+    {{-- `user_id``adress_id``l_beschreibung``l_name``l_label``l_benutzt`--}}
     <div class="container mt-2">
         <h1 class="h3">{{__('Neues Gebäude anlegen')}}</h1>
         <form action="{{ route('building.store') }}" method="post" class=" needs-validation">
@@ -30,17 +30,17 @@
 
                     <x-selectfield id="location_id" label="{{ __('Das Gebäude befindet sich im Standort') }}">
                         @foreach (App\Location::all() as $loc)
-                            <option value="{{ $loc->id }}">{{ $loc->l_name_kurz }}</option>
+                            <option value="{{ $loc->id }}">{{ $loc->l_label }}</option>
                         @endforeach
                     </x-selectfield>
 
                     <h2 class="h5">Bezeichner</h2>
 
-                    <x-textfield id="b_name_kurz" label="{{ __('Kurzbezeichnung') }}" />
+                    <x-textfield id="b_label" label="{{ __('Kurzbezeichnung') }}" />
 
                     <x-textfield id="b_name_ort" label="{{ __('Ort') }}" />
 
-                    <x-textfield id="b_name_lang" label="{{ __('Bezeichnung') }}" />
+                    <x-textfield id="b_name" label="{{ __('Bezeichnung') }}" />
 
                     <x-textarea id="b_name_text" label="{{ __('Beschreibung') }}" />
 

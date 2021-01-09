@@ -17,8 +17,8 @@ class CreateStellplatzTypsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('spt_name_kurz', 20);
-            $table->string('spt_name_lang', 100)->nullable();
+            $table->string('spt_label', 20);
+            $table->string('spt_name', 100)->nullable();
             $table->text('spt_name_text')->nullable();
         });
     }

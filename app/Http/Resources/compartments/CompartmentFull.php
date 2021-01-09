@@ -20,9 +20,9 @@ class CompartmentFull extends JsonResource
             'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
-            'label' => $this->sp_name_kurz,
+            'label' => $this->sp_label,
             'type' => new CompartmentTypeShort($this->StellplatzTyp),
-            'name' => $this->sp_name_lang,
+            'name' => $this->sp_name,
             'description' => $this->sp_name_text,
             'room' => new RoomShort($this->Room),
             'objects' => new CompartmentStats($this)

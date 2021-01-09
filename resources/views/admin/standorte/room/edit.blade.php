@@ -26,9 +26,9 @@
                 <div class="modal-body">
                     <form action="{{ route('createRoomType') }}" method="POST" class="needs-validation" id="addNewRoomType" name="addNewRoomType">
                         @csrf
-                        <x-rtextfield id="rt_name_kurz" label="{{__('Kürzel')}}" />
+                        <x-rtextfield id="rt_label" label="{{__('Kürzel')}}" />
 
-                        <x-textfield id="rt_name_lang" label="{{__('Name')}} " />
+                        <x-textfield id="rt_name" label="{{__('Name')}} " />
 
                         <x-textarea id="rt_name_text" label="{{__('Beschreibung des Raumtyps')}}" />
 
@@ -57,7 +57,7 @@
                     <x-selectfield id="building_id" label="{{__('Raum befindet sich im Gebäude')}}">
                         @foreach (\App\Building::all() as $building)
                             <option value="{{ $building->id }}"
-                            @if($room->building_id == $building-id) selected @endif>{{ $building->b_name_kurz }}</option>
+                            @if($room->building_id == $building-id) selected @endif>{{ $building->b_label }}</option>
                         @endforeach
                     </x-selectfield>
                 </div>
@@ -69,7 +69,7 @@
                     >
                         @foreach (\App\RoomType::all() as $roomType)
                             <option value="{{ $roomType->id }}"
-                                    @if($room->room_type_id == $roomType->id) selected @endif>{{ $roomType->rt_name_kurz }}</option>
+                                    @if($room->room_type_id == $roomType->id) selected @endif>{{ $roomType->rt_label }}</option>
                         @endforeach
                     </x-selectModalgroup>
                 </div>
@@ -77,8 +77,8 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <x-rtextfield id="r_name_kurz" label="{{__('Nummer')}} value="{{ $room->r_name_kurz }}""/>
-                    <x-textfield id="r_name_lang" label="{{__('Name')}} value="{{ $room->r_name_lang }}""/>
+                    <x-rtextfield id="r_label" label="{{__('Nummer')}} value="{{ $room->r_label }}""/>
+                    <x-textfield id="r_name" label="{{__('Name')}} value="{{ $room->r_name }}""/>
                     <x-textarea id="r_name_text" label="{{__('Beschreibung')}} value="{{ $room->r_name_text }}"" />
                 </div>
             </div>

@@ -14,14 +14,14 @@ class Verordnung extends Model
 
     public $sortable = [
         'id',
-        'vo_name_kurz',
-        'vo_name_lang',
+        'vo_label',
+        'vo_name',
         'vo_nummer',
         'vo_stand',
         'vo_name_text',
         ''
 
-        ];
+    ];
 
 
     public function Anforderung()
@@ -29,13 +29,13 @@ class Verordnung extends Model
         return $this->hasMany(Anforderung::class);
     }
 
-    public function search($term) {
-        return Verordnung::where('vo_name_kurz', 'like', '%' . $term . '%')
-            ->orWhere('vo_name_lang', 'like', '%' . $term . '%')
+    public function search($term)
+    {
+        return Verordnung::where('vo_label', 'like', '%' . $term . '%')
+            ->orWhere('vo_name', 'like', '%' . $term . '%')
             ->orWhere('vo_nummer', 'like', '%' . $term . '%')
             ->orWhere('vo_stand', 'like', '%' . $term . '%')
             ->orWhere('vo_name_text', 'like', '%' . $term . '%')
             ->get();
     }
-
 }

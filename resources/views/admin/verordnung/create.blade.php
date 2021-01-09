@@ -25,9 +25,9 @@
                 <form action="{{ route('verordnung.store') }}" method="POST">
                     @csrf
 
-                    <x-rtextfield id="updt_vo_name_kurz" name="vo_name_kurz" label="Name - Kürzel"  />
+                    <x-rtextfield id="updt_vo_label" name="vo_label" label="Name - Kürzel"  />
 
-                    <x-textfield id="updt_vo_name_lang" name="vo_name_lang" label="Name"  />
+                    <x-textfield id="updt_vo_name" name="vo_name" label="Name"  />
 
                     <x-textfield id="updt_vo_nummer" name="vo_nummer" label="Nummer/Zeichen"  />
 

@@ -108,7 +108,7 @@
                                 <option value="{{ $equipmentState->id }}"
                                         class="text-{{ $equipmentState->estat_color }}"
                                 >
-                                    {{ $equipmentState->estat_name_lang }}
+                                    {{ $equipmentState->estat_name }}
                                 </option>
                             @endforeach
                         </x-selectfield>
@@ -206,7 +206,7 @@
                                 <option value="{{ $equipmentState->id }}"
                                         class="text-{{ $equipmentState->estat_color }}"
                                 >
-                                    {{ $equipmentState->estat_name_lang }}
+                                    {{ $equipmentState->estat_name }}
                                 </option>
                             @endforeach
                         </x-selectfield>
@@ -220,11 +220,11 @@
                                         @if ($ad->id === 2)
                                             selected
                                         @endif
-                                >{{ $ad->doctyp_name_kurz }}</option>
+                                >{{ $ad->doctyp_label }}</option>
                             @endforeach
                         </x-selectfield>
 
-                        <x-textfield id="eqdoc_name_kurz"
+                        <x-textfield id="eqdoc_label"
                                      required
                                      label="{{__('Bezeichnung')}}"
                         />
@@ -368,7 +368,7 @@
                         <dl class="row">
                             <dt class="col-lg-4">{{__('Gerät')}}</dt>
                             <dd class="col-lg-8">
-                                <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name_lang }}
+                                <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name }}
                                 </p>
                                 {{__('Inventar')}}-# {{ $event->equipment->eq_inventar_nr }}
                             </dd>
@@ -408,7 +408,7 @@
                     <dl class="row">
                         <dt class="col-sm-3">{{__('Gerät')}}</dt>
                         <dd class="col-sm-9">
-                            <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name_lang }}
+                            <p>  {{ App\Produkt::find($event->equipment->produkt_id)->prod_name }}
                             </p>
                             {{__('Inventar-#')}} {{ $event->equipment->eq_inventar_nr }}
                         </dd>
@@ -449,10 +449,10 @@
         $('#equipment_state_id_close').change(function () {
             const stateid = $('#equipment_state_id_close :selected').val();
            if(stateid==='3' || stateid==='4'){
-               $('#eqdoc_name_kurz').attr('required',false);
+               $('#eqdoc_label').attr('required',false);
                $('#equipDokumentFile').attr('required',false);
            } else {
-               $('#eqdoc_name_kurz').attr('required',true);
+               $('#eqdoc_label').attr('required',true);
                $('#equipDokumentFile').attr('required',true);
            }
         });

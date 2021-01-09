@@ -100,7 +100,7 @@
                         <div class="col-md-4">
                             <x-textfield id="setNewEquipmentFromProdukt"
                                          label="{{__('Import aus Produkt')}}"
-                                         value="{{ App\Produkt::find($produkt)->prod_name_lang  }}"
+                                         value="{{ App\Produkt::find($produkt)->prod_name  }}"
                             />
                         </div>
                         <div class="col-md-4">
@@ -169,7 +169,7 @@
                                     <option value="{{ $equipmentState->id }}"
                                             class="text-{{ $equipmentState->estat_color }}"
                                             @if($equipmentState->id===4) selected  @endif
-                                    >{{ $equipmentState->estat_name_kurz }}</option>
+                                    >{{ $equipmentState->estat_label }}</option>
                                 @endforeach
                             </x-selectfield>
                         </div>
@@ -235,7 +235,7 @@
                                     >
                                         <option value="void">{{__('bitte wählen')}}</option>
                                         @foreach(\App\Firma::all() as $firma)
-                                            <option value="{{ $firma->id }}">{{ $firma->fa_name_lang }}</option>
+                                            <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                                         @endforeach
                                     </x-selectfield>
                                 </div>
@@ -264,10 +264,10 @@
                                             @if( $ad->id==5 ?? old('document_type_id')==$ad->id)
                                             selected
                                         @endif
-                                    >{{ $ad->doctyp_name_kurz }}</option>
+                                    >{{ $ad->doctyp_label }}</option>
                                 @endforeach
                             </x-selectfield>
-                            <x-textfield id="eqdoc_name_kurz"
+                            <x-textfield id="eqdoc_label"
                                          label="{{__('Bezeichnung')}}"
                             />
 
@@ -317,9 +317,9 @@
                     success: function (data) {
                         let resp = $.map(data, function (obj) {
                             return {
-                                label: `(${obj.prod_nummer}) ${obj.pk_name_kurz} - ${obj.prod_name_lang}`,
+                                label: `(${obj.prod_nummer}) ${obj.pk_label} - ${obj.prod_name}`,
                                 id: obj.id,
-                                value: obj.prod_name_kurz
+                                value: obj.prod_label
                             };
                         });
                         response(resp);
@@ -462,7 +462,7 @@
 
         $('.function_control_pass').click(function () {
             const nd = $('#equipment_state_id');
-            const eqdoc_name_kurz = $('#eqdoc_name_kurz');
+            const eqdoc_label = $('#eqdoc_label');
             const equipDokumentFile = $('#equipDokumentFile');
 
             if ($('#controlEquipmentNotPassed').prop('checked')) {
@@ -473,18 +473,18 @@
                 nd.val(1)
             }
 
-            if (eqdoc_name_kurz.val() !== '' && equipDokumentFile.val() !== '') {
+            if (eqdoc_label.val() !== '' && equipDokumentFile.val() !== '') {
                 $('#btnAddNewEquipment').attr('disabled', false);
             }
 
         });
 
         $('#equipDokumentFile').change(function () {
-            if ($(this).val() !== '' && $('#eqdoc_name_kurz').val() !== '')
+            if ($(this).val() !== '' && $('#eqdoc_label').val() !== '')
                 $('#btnAddNewEquipment').attr('disabled', false);
         });
 
-        $('#eqdoc_name_kurz').change(function () {
+        $('#eqdoc_label').change(function () {
             if ($(this).val() !== '' && $('#equipDokumentFile').val() !== '')
                 $('#btnAddNewEquipment').attr('disabled', false);
         });

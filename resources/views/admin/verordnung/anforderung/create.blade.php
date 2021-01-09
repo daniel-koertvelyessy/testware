@@ -28,10 +28,10 @@
                           method="post" id="frmAddNewAnforderungsType"
                     >
                         @csrf
-                        <x-rtextfield id="at_name_kurz"
+                        <x-rtextfield id="at_label"
                                       label="Kürzel"
                         />
-                        <x-textfield id="at_name_lang"
+                        <x-textfield id="at_name"
                                      label="Name"
                         />
                         <x-textarea id="at_name_text"
@@ -60,7 +60,7 @@
                     @csrf
                     <x-selectfield id="verordnung_id" label="Gehört zu Verordnung">
                         @foreach (App\Verordnung::all() as $ad)
-                            <option value="{{ $ad->id }}">{{ $ad->vo_name_kurz }}</option>
+                            <option value="{{ $ad->id }}">{{ $ad->vo_label }}</option>
                         @endforeach
                     </x-selectfield>
 
@@ -69,7 +69,7 @@
                             <x-selectModalgroup id="anforderung_type_id" label="Anforderung Typ"
                                                 modalid="modalAddNewAnforderungType">
                                 @foreach(App\AnforderungType::all() as $anforderungType)
-                                    <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name_lang }}</option>
+                                    <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name }}</option>
                                 @endforeach
                             </x-selectModalgroup>
                         </div>
@@ -86,7 +86,7 @@
                                             selected
                                         @endif
                                     >
-                                        {{ $controlInterval->ci_name }}
+                                        {{ $controlInterval->ci_label }}
                                     </option>
                                 @endforeach
                             </x-selectfield>
@@ -96,9 +96,9 @@
 
 
 
-                    <x-rtextfield id="an_name_kurz" label="Name - Kürzel" value="{{ old('an_name_kurz')??'' }}" />
+                    <x-rtextfield id="an_label" label="Name - Kürzel" value="{{ old('an_label')??'' }}" />
 
-                    <x-textfield id="an_name_lang" label="Name" value="{{ old('an_name_lang')??'' }}" />
+                    <x-textfield id="an_name" label="Name" value="{{ old('an_name')??'' }}" />
 
                     <x-textarea id="an_name_text" label="Beschreibung" value="{{ old('an_name_text')??'' }}"  />
 

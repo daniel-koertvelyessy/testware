@@ -33,26 +33,26 @@
                 >
                     <thead>
                     <tr>
-                        <th>@sortablelink('prod_name_kurz', __('Bezeichung'))</th>
+                        <th>@sortablelink('prod_label', __('Bezeichung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('prod_nummer', __('Artikelnummer'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('ProduktKategorie.pk_name_kurz', __('Kategorie'))
+                        <th class="d-none d-md-table-cell">@sortablelink('ProduktKategorie.pk_label', __('Kategorie'))
                         </th>
                         <th>@sortablelink('prod_active', __('Aktiv'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ControlProdukt.id', __('Prüfmittel'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_name_kurz', __('Status'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_label', __('Status'))</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($produktList as $produkt)
                         <tr>
                             <td>
-                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name_kurz }}</a>
+                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_label }}</a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $produkt->prod_nummer }}</td>
-                            <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_name_kurz }}</td>
+                            <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_label }}</td>
                             <td>{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
                             <td class="d-none d-md-table-cell">{!! $produkt->ControlProdukt ? '<i class="far fa-check-circle text-success"></i>' : '' !!}</td>
-                            <td class="d-none d-md-table-cell">{{ $produkt->ProduktState->ps_name_kurz }} </td>
+                            <td class="d-none d-md-table-cell">{{ $produkt->ProduktState->ps_label }} </td>
                         </tr>
                     @empty
                         <tr>
@@ -63,9 +63,9 @@
                     @endforelse
                     </tbody>
                 </table>
-                @if($produktList->count() >10)
+                @if($produktList->count() >0)
                     <div class="d-flex justify-content-center">
-                        {!! $produktList->onEachSide(2)->links() !!}
+                        {!! $produktList->withQueryString()->onEachSide(2)->links() !!}
                     </div>
                 @endif
             </div>

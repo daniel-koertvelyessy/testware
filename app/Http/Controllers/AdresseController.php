@@ -32,7 +32,7 @@ class AdresseController extends Controller
     public function index()
     {
         $adresseList = Adresse::with('AddressType')->paginate(15);
-        return view('admin.organisation.adresse.index',['adresseList'=>$adresseList]);
+        return view('admin.organisation.adresse.index', ['adresseList' => $adresseList]);
     }
 
     /**
@@ -53,21 +53,19 @@ class AdresseController extends Controller
      */
     public function store(Request $request)
     {
-        $adresse= Adresse::create($this->validateNewAddress());
-        $text='';
+        $adresse = Adresse::create($this->validateNewAddress());
+        $text = '';
 
-        if (isset($request->setAdressAsNewMain)){
+        if (isset($request->setAdressAsNewMain)) {
 
             $location = Location::find($request->setAdressAsNewMain);
             $location->adresse_id = $adresse->id;
             $location->save();
-            $text=' und als neue Hauptadresse des Standort '.$location->l_name_kurz.' gesetzt';
-
+            $text = ' und als neue Hauptadresse des Standort ' . $location->l_label . ' gesetzt';
         }
 
-        $request->session()->flash('status', "Die Adresse <strong>{$request->ad_name_lang}</strong> wurde angelegt {$text}!");
+        $request->session()->flash('status', "Die Adresse <strong>{$request->ad_name}</strong> wurde angelegt {$text}!");
         return redirect()->back();
-
     }
 
     /**
@@ -78,7 +76,7 @@ class AdresseController extends Controller
      */
     public function show(Adresse $adresse)
     {
-        return view('admin.organisation.adresse.show',['adresse'=>$adresse]);
+        return view('admin.organisation.adresse.show', ['adresse' => $adresse]);
     }
 
     /**
@@ -102,7 +100,7 @@ class AdresseController extends Controller
     public function update(Request $request, Adresse $adresse)
     {
         $adresse->update($this->validateAddress());
-        $request->session()->flash('status', 'Die Adresse <strong>' . $adresse->ad_name_kurz . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Adresse <strong>' . $adresse->ad_label . '</strong> wurde aktualisiert!');
         return redirect()->back();
     }
 
@@ -125,19 +123,18 @@ class AdresseController extends Controller
             'ad_name_firma',
             'ad_anschrift_ort',
             'ad_anschrift_strasse',
-            'ad_name_lang',
-            'ad_name_kurz',
+            'ad_name',
+            'ad_label',
             'land_id',
             'ad_anschrift_plz'
         )
-            ->Where('ad_name_firma','like', '%'.$request->term . '%')
-            ->orWhere('ad_name_kurz','like', '%'.$request->term . '%')
-            ->orWhere('ad_name_lang','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_ort','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_plz','like', '%'.$request->term . '%')
-            ->orWhere('ad_anschrift_strasse','like', '%'.$request->term . '%')
+            ->Where('ad_name_firma', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_label', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_name', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_ort', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_plz', 'like', '%' . $request->term . '%')
+            ->orWhere('ad_anschrift_strasse', 'like', '%' . $request->term . '%')
             ->get();
-
     }
 
     public function getAddressDaten(Request $request)
@@ -148,8 +145,6 @@ class AdresseController extends Controller
         return [
             'adressListe' => $adresses
         ];
-
-
     }
 
     /**
@@ -158,8 +153,8 @@ class AdresseController extends Controller
     public function validateNewAddress(): array
     {
         return request()->validate([
-            'ad_name_kurz' => 'bail|required|unique:adresses,ad_name_kurz|max:20',
-            'ad_name_lang' => 'max:100',
+            'ad_label' => 'bail|required|unique:adresses,ad_label|max:20',
+            'ad_name' => 'max:100',
             'ad_name_firma' => 'max:100',
             'ad_name_firma_2' => 'max:100',
             'ad_name_firma_co' => 'max:100',
@@ -184,8 +179,8 @@ class AdresseController extends Controller
     {
 
         return request()->validate([
-            'ad_name_kurz' => 'required|max:20',
-            'ad_name_lang' => 'max:100',
+            'ad_label' => 'required|max:20',
+            'ad_name' => 'max:100',
             'ad_name_firma' => 'max:100',
             'ad_name_firma_2' => 'max:100',
             'ad_name_firma_co' => 'max:100',
@@ -203,5 +198,4 @@ class AdresseController extends Controller
 
         ]);
     }
-
 }

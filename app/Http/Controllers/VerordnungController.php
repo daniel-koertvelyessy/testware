@@ -20,17 +20,15 @@ class VerordnungController extends Controller
      */
     public function index()
     {
-        if (Verordnung::all()->count() > 10)
-        {
-            return view('admin.verordnung.index',[
+        if (Verordnung::all()->count() > 10) {
+            return view('admin.verordnung.index', [
                 'verordnungen' => Verordnung::with('anforderung')->sortable()->paginate(10)
             ]);
         } else {
-            return view('admin.verordnung.index',[
+            return view('admin.verordnung.index', [
                 'verordnungen' => Verordnung::with('anforderung')->sortable()->get()
             ]);
         }
-
     }
 
 
@@ -60,8 +58,8 @@ class VerordnungController extends Controller
     {
         $verordnung = Verordnung::create($this->validateNewVerordnug());
 
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_name_kurz') . '</strong> wurde angelegt!');
-        return view('admin.verordnung.show',['verordnung'=>$verordnung]);
+        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_label') . '</strong> wurde angelegt!');
+        return view('admin.verordnung.show', ['verordnung' => $verordnung]);
     }
 
     /**
@@ -72,7 +70,7 @@ class VerordnungController extends Controller
      */
     public function show(Verordnung $verordnung)
     {
-        return view('admin.verordnung.show',['verordnung'=>$verordnung]);
+        return view('admin.verordnung.show', ['verordnung' => $verordnung]);
     }
 
     /**
@@ -97,7 +95,7 @@ class VerordnungController extends Controller
     {
         $data = Verordnung::findOrFail($request->id);
         $data->update($this->validateVerordnug());
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_name_kurz') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_label') . '</strong> wurde aktualisiert!');
         return back();
     }
 
@@ -105,12 +103,11 @@ class VerordnungController extends Controller
      * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function destroy(Request $request, Verordnung $verordnung )
+    public function destroy(Request $request, Verordnung $verordnung)
     {
         $verordnung->delete();
         $request->session()->flash('status', 'Die Verordnung wurde gelöscht!');
         return back();
-
     }
 
     /**
@@ -119,8 +116,8 @@ class VerordnungController extends Controller
     public function validateVerordnug(): array
     {
         return request()->validate([
-            'vo_name_kurz' => 'bail|required|min:1|max:20',
-            'vo_name_lang' => 'bail|min:1|max:100',
+            'vo_label' => 'bail|required|min:1|max:20',
+            'vo_name' => 'bail|min:1|max:100',
             'vo_nummer' => 'bail|min:1|max:100',
             'vo_stand' => 'bail|min:1|max:100',
             'vo_name_text' => '',
@@ -133,8 +130,8 @@ class VerordnungController extends Controller
     public function validateNewVerordnug(): array
     {
         return request()->validate([
-            'vo_name_kurz' => 'bail|unique:verordnungs,vo_name_kurz|required|min:1|max:20',
-            'vo_name_lang' => 'bail|min:1|max:100',
+            'vo_label' => 'bail|unique:verordnungs,vo_label|required|min:1|max:20',
+            'vo_name' => 'bail|min:1|max:100',
             'vo_nummer' => 'bail|min:1|max:100',
             'vo_stand' => 'bail|min:1|max:100',
             'vo_name_text' => '',

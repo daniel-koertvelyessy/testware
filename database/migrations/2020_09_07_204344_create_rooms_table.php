@@ -17,8 +17,8 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->softDeletes();
             $table->timestamps();
-            $table->string('r_name_kurz', 20);
-            $table->string('r_name_lang', 100)->nullable();
+            $table->string('r_label', 20);
+            $table->string('r_name', 100)->nullable();
             $table->text('r_name_text')->nullable();
             $table->uuid('standort_id')->nullable();
             $table->unsignedBigInteger('building_id')->nullable();

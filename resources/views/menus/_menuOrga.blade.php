@@ -45,7 +45,7 @@
                 <li>
                     <a class="dropdown-item"
                        href="{{ route('firma.show',['firma' => $firma]) }}"
-                    >{{ $firma->fa_name_kurz }}</a>
+                    >{{ $firma->fa_label }}</a>
                 </li>
             @endforeach
 
@@ -83,7 +83,7 @@
                 <li>
                     <a class="dropdown-item"
                        href="{{ route('adresse.show',['adresse' => $adresse]) }}"
-                    >{{ $adresse->ad_name_kurz }}</a>
+                    >{{ $adresse->ad_label }}</a>
                 </li>
             @endforeach
 

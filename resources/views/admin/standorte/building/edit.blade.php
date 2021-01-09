@@ -14,7 +14,7 @@
 
 
 @section('content')
-    {{-- `user_id``adress_id``l_beschreibung``l_name_lang``l_name_kurz``l_benutzt`--}}
+    {{-- `user_id``adress_id``l_beschreibung``l_name``l_label``l_benutzt`--}}
     <div class="container mt-2">
         <h1 class="h3">Standort Stammdaten bearbeiten</h1>
         <div class="row">
@@ -23,12 +23,12 @@
                     @method('PUT')
                      @csrf
                     <div class="form-group">
-                        <label for="l_name_kurz">Kurzbezeichnung (max 10 Zeichen)</label>
-                        <input type="text" name="l_name_kurz" id="l_name_kurz" class="form-control {{ $errors->has('l_name_kurz') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $location->l_name_kurz }}">
+                        <label for="l_label">Kurzbezeichnung (max 10 Zeichen)</label>
+                        <input type="text" name="l_label" id="l_label" class="form-control {{ $errors->has('l_label') ? ' is-invalid ': '' }}" maxlength="10" value="{{ $location->l_label }}">
                     </div>
                     <div class="form-group">
-                        <label for="l_name_lang">Bezeichnung (max 100 Zeichen)</label>
-                        <input type="text" name="l_name_lang" id="l_name_lang" class="form-control" maxlength="100" value="{{ $location->l_name_lang ?? '' }}">
+                        <label for="l_name">Bezeichnung (max 100 Zeichen)</label>
+                        <input type="text" name="l_name" id="l_name" class="form-control" maxlength="100" value="{{ $location->l_name ?? '' }}">
                     </div>
                     <div class="form-group">
                         <label for="l_beschreibung">Beschreibung</label>

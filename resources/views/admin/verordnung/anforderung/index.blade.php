@@ -22,8 +22,8 @@
             <table class="table table-striped"  id="tabAnforderungListe">
                 <thead>
                 <tr>
-                    <th>@sortablelink('an_name_lang', __('Bezeichnung'))</th>
-                    <th class="d-none d-md-table-cell">@sortablelink('an_name_kurz', __('Kennung'))</th>
+                    <th>@sortablelink('an_name', __('Bezeichnung'))</th>
+                    <th class="d-none d-md-table-cell">@sortablelink('an_label', __('Kennung'))</th>
                     <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Bearbeitet'))</th>
                     <th class="d-none d-md-table-cell">@sortablelink('an_control_interval', __('Intervall'))</th>
                     <th class="text-center d-none d-md-table-cell">{{__('Vorgänge')}}</th>
@@ -33,10 +33,10 @@
                 <tbody>
                 @forelse ($anforderungen as $anforderung)
                     <tr>
-                        <td style="vertical-align: middle;">{{ $anforderung->an_name_lang }}</td>
+                        <td style="vertical-align: middle;">{{ $anforderung->an_name }}</td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
-                        >{{ $anforderung->an_name_kurz }}</td>
+                        >{{ $anforderung->an_label }}</td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
                         >
@@ -44,7 +44,7 @@
                         </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
-                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_name }}  </td>
+                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label }}  </td>
                         <td style="vertical-align: middle;"
                             class="text-center d-none d-md-table-cell"
                         >{{ $anforderung->AnforderungControlItem->count() }}</td>

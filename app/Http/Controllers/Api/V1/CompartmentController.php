@@ -19,7 +19,8 @@ use Illuminate\Support\Str;
 class CompartmentController extends Controller
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
@@ -32,10 +33,10 @@ class CompartmentController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('per_page')){
-            return Compartment::collection(Stellplatz::with('StellplatzTyp','Room')->paginate($request->input('per_page')));
+        if ($request->input('per_page')) {
+            return Compartment::collection(Stellplatz::with('StellplatzTyp', 'Room')->paginate($request->input('per_page')));
         }
-        return Compartment::collection(Stellplatz::with('StellplatzTyp','Room')->get());
+        return Compartment::collection(Stellplatz::with('StellplatzTyp', 'Room')->get());
     }
 
 
@@ -47,10 +48,10 @@ class CompartmentController extends Controller
      */
     public function full(Request $request)
     {
-        if ($request->input('per_page')){
-            return CompartmentFull::collection(Stellplatz::with('StellplatzTyp','Room')->paginate($request->input('per_page')));
+        if ($request->input('per_page')) {
+            return CompartmentFull::collection(Stellplatz::with('StellplatzTyp', 'Room')->paginate($request->input('per_page')));
         }
-        return CompartmentFull::collection(Stellplatz::with('StellplatzTyp','Room')->get());
+        return CompartmentFull::collection(Stellplatz::with('StellplatzTyp', 'Room')->get());
     }
 
     /**
@@ -62,7 +63,7 @@ class CompartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'label' => 'required|unique:stellplatzs,sp_name_kurz|max:20',
+            'label' => 'required|unique:stellplatzs,sp_label|max:20',
             'uid' => '',
             'name' => '',
             'description' => '',
@@ -76,13 +77,13 @@ class CompartmentController extends Controller
             ], 422);
 
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-        (new Standort)->add($uid,$request->label,'stellplatzs');
+        (new Standort)->add($uid, $request->label, 'stellplatzs');
 
         $compartment = new Stellplatz();
-        $compartment->sp_name_kurz = $request->label;
+        $compartment->sp_label = $request->label;
         $compartment->standort_id = $uid;
-        $compartment->sp_name_lang = (isset($request->name))?$request->name:null;
-        $compartment->sp_name_text = (isset($request->description))?$request->description:null;
+        $compartment->sp_name = (isset($request->name)) ? $request->name : null;
+        $compartment->sp_name_text = (isset($request->description)) ? $request->description : null;
         $compartment->room_id = $request->room_id;
         $compartment->stellplatz_typ_id = (new StellplatzTyp)->checkApiCompartmentType($request);
 
@@ -123,9 +124,9 @@ class CompartmentController extends Controller
 
         $compartment = Stellplatz::find($id);
 
-        if ($compartment){
-            $compartment->sp_name_kurz = (isset($request->label)) ? $request->label : $compartment->sp_name_kurz;
-            $compartment->sp_name_lang = (isset($request->name)) ? $request->name : $compartment->sp_name_lang;
+        if ($compartment) {
+            $compartment->sp_label = (isset($request->label)) ? $request->label : $compartment->sp_label;
+            $compartment->sp_name = (isset($request->name)) ? $request->name : $compartment->sp_name;
             $compartment->sp_name_text = (isset($request->description)) ? $request->description : $compartment->sp_name_text;
 
             /**
@@ -135,19 +136,16 @@ class CompartmentController extends Controller
             $compartment->standort_id = $uid;
             (new \App\Standort)->change($uid, $request->label, 'stellplatzs');
             $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
-            if(!$compartment->stellplatz_typ_id )
-               return response()->json([
+            if (!$compartment->stellplatz_typ_id)
+                return response()->json([
                     'error' => 'referenced compartment type could not be found'
                 ], 422);
             $compartment->save();
-
         } else {
-          return  $this->store($request);
+            return  $this->store($request);
         }
 
         return new Compartment($compartment);
-
-
     }
 
     /**
