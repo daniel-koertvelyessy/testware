@@ -66,9 +66,15 @@ Route::get('docs', function () {return view('docs.index');})->name('docs.start')
 Route::get('docs/modules', function () {return view('docs.modules');})->name('docs.modules');
 Route::get('docs/testware', function () {return view('docs.testware.index');})->name('docs.testware.index');
 Route::get('docs/backend', function () {return view('docs.backend.index');})->name('docs.backend.index');
-Route::get('docs/api', function () {return view('docs.api.index');})->name('docs.api.index');
-Route::get('docs/api/endpoints', function () {return view('docs.api.endpoints');})->name('docs.api.endpoints');
 Route::get('docs/backend/locations', function () {return view('docs.backend.locations');})->name('docs.backend.locations');
+Route::get('docs/api', function () {return view('docs.api.index');})->name('docs.api.index');
+Route::get('docs/api/endpoints', function () {return view('docs.api.endpoints.index');})->name('docs.api.endpoints');
+Route::get('docs/api/endpoints/backend', function () {return view('docs.api.endpoints.backend');})->name('docs.api.backend');
+Route::get('docs/api/endpoints/products', function () {return view('docs.api.endpoints.products');})->name('docs.api.products');
+Route::get('docs/api/endpoints/equipment', function () {return view('docs.api.endpoints.equipment');})->name('docs.api.equipment');
+Route::get('docs/api/endpoints/testing', function () {return view('docs.api.endpoints.testing');})->name('docs.api.testing');
+Route::get('docs/api/endpoints/requirements', function () {return view('docs.api.endpoints.requirements');})->name('docs.api.requirements');
+Route::get('docs/api/endpoints/events', function () {return view('docs.api.endpoints.events');})->name('docs.api.events');
 
 
 

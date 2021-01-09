@@ -18,5 +18,10 @@
     "section": "Einführung",
     "label": "API Zugriff",
     "url": "api#api-script-js"
+},{
+    "category": "testware",
+    "section": "Übersicht",
+    "label": "testware",
+    "url": "testware#testWare-Objekte-Start"
 }
 ]

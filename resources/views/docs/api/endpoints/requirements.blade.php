@@ -1,13 +1,19 @@
 @extends('layout.layout-documentation')
 
 @section('pagetitle')
-    {{ __('Prüfungen') }} &triangleright; {{__('Dokumentation')}} @ testWare
+    {{ __('Verordnungen') }} &triangleright; {{__('Dokumentation')}} @ testWare
 @endsection
 
 
 @section('doc-right-nav')
     <li class="duik-content-nav__item">
-        <a href="#locations">{{__('Standorte')}}</a>
+        <a href="#requirements">{{__('Verordnungen')}}</a>
+    </li>
+    <li class="duik-content-nav__item">
+        <a href="#conditions">{{__('Anforderungen')}}</a>
+    </li>
+    <li class="duik-content-nav__item">
+        <a href="#control_operations">{{__('Vorgänge')}}</a>
     </li>
 @endsection
 
@@ -16,13 +22,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1>{{__('Prüfungen')}}</h1>
+                <h1>{{__('Verordnungen')}}</h1>
                 <small class="text-muted">{{__('Stand')}} 2020.Dezember</small>
             </div>
         </div>
         <div class="row mt-lg-5 mt-sm-1">
             <div class="col">
-                <section id="locations">
+                <section id="requirements">
                     <p>Folgende Endpunkte sind verfügbar:</p>
                     <div class="list-group mb-6">
                         <a href="#endpoint-get-api-v1-location"

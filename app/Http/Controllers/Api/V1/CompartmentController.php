@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\compartments\Compartment;
+use App\Http\Resources\compartments\CompartmentFull;
+use App\Room;
+use App\Standort;
 use App\Stellplatz;
+use App\StellplatzTyp;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class CompartmentController extends Controller
 {
@@ -19,45 +27,127 @@ class CompartmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->input('per_page')){
+            return Compartment::collection(Stellplatz::with('StellplatzTyp','Room')->paginate($request->input('per_page')));
+        }
+        return Compartment::collection(Stellplatz::with('StellplatzTyp','Room')->get());
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function full(Request $request)
+    {
+        if ($request->input('per_page')){
+            return CompartmentFull::collection(Stellplatz::with('StellplatzTyp','Room')->paginate($request->input('per_page')));
+        }
+        return CompartmentFull::collection(Stellplatz::with('StellplatzTyp','Room')->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Compartment
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'label' => 'required|unique:stellplatzs,sp_name_kurz|max:20',
+            'uid' => '',
+            'name' => '',
+            'description' => '',
+            'compartment_type_id' => '',
+            'room_id' => '',
+        ]);
+
+        if (!Room::find($request->room_id))
+            return response()->json([
+                'error' => 'no room with given id found'
+            ], 422);
+
+        $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
+        (new Standort)->add($uid,$request->label,'stellplatzs');
+
+        $compartment = new Stellplatz();
+        $compartment->sp_name_kurz = $request->label;
+        $compartment->standort_id = $uid;
+        $compartment->sp_name_lang = (isset($request->name))?$request->name:null;
+        $compartment->sp_name_text = (isset($request->description))?$request->description:null;
+        $compartment->room_id = $request->room_id;
+        $compartment->stellplatz_typ_id = (new StellplatzTyp)->checkApiCompartmentType($request);
+
+        $compartment->save();
+
+        return new Compartment($compartment);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Stellplatz $compartment
+     * @return Compartment
      */
-    public function show($id)
+    public function show(Stellplatz $compartment)
     {
-        //
+        return new Compartment($compartment);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  int     $id
+     * @return Compartment
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'label' => 'required|max:20',
+            'uid' => '',
+            'name' => '',
+            'description' => '',
+            'compartment_type_id' => 'exclude_unless:type,true|required',
+            'type' => 'exclude_unless:compartment_type_id,true|required',
+            'room_id' => '',
+        ]);
+
+        $compartment = Stellplatz::find($id);
+
+        if ($compartment){
+            $compartment->sp_name_kurz = (isset($request->label)) ? $request->label : $compartment->sp_name_kurz;
+            $compartment->sp_name_lang = (isset($request->name)) ? $request->name : $compartment->sp_name_lang;
+            $compartment->sp_name_text = (isset($request->description)) ? $request->description : $compartment->sp_name_text;
+
+            /**
+             * Check if compartment-uid is given and update/add the table "standorts"
+             */
+            $uid = (isset($request->uid)) ? $request->uid : $compartment->standort_id;
+            $compartment->standort_id = $uid;
+            (new \App\Standort)->change($uid, $request->label, 'stellplatzs');
+            $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
+            if(!$compartment->stellplatz_typ_id )
+               return response()->json([
+                    'error' => 'referenced compartment type could not be found'
+                ], 422);
+            $compartment->save();
+
+        } else {
+          return  $this->store($request);
+        }
+
+        return new Compartment($compartment);
+
+
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\AddressType;
 use App\Adresse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AddressFull;
 use App\Location;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,9 +12,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use App\Http\Resources\Location as LocationResource;
-use App\Http\Resources\LocationFull as LocationFullResource;
-use App\Http\Resources\LocationShow as LocationShowResource;
+use App\Http\Resources\AddressFull;
+use App\Http\Resources\locations\Location as LocationResource;
+use App\Http\Resources\locations\LocationFull as LocationFullResource;
+use App\Http\Resources\locations\LocationShow as LocationShowResource;
 use Illuminate\Support\Str;
 
 class LocationController extends Controller
@@ -30,9 +30,13 @@ class LocationController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return LocationResource::collection(Location::with('Profile','Adresse','Building')->get());
+        if ($request->input('per_page')){
+            return LocationResource::collection(Location::with('Profile','Adresse','Product')
+                ->paginate($request->input('per_page')));
+        }
+        return LocationResource::collection(Location::with('Profile','Adresse','Product')->get());
     }
 
     /**
@@ -40,8 +44,12 @@ class LocationController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function full()
+    public function full(Request $request)
     {
+        if ($request->input('per_page')){
+        return LocationFullResource::collection(Location::with('Profile','Adresse','Product')
+            ->paginate($request->input('per_page')));
+    }
         return LocationFullResource::collection(
             Location::with('Adresse','Profile' )->get()
         );
@@ -60,10 +68,10 @@ class LocationController extends Controller
         $profile_id = (new \App\Profile)->addProfile($request);
 
         $standort_id = (!isset($request->uid)) ? Str::uuid() : $request->uid;
-        (new \App\Standort)->add($standort_id, $request->identifier, 'locations');
+        (new \App\Standort)->add($standort_id, $request->label, 'locations');
 
         $location = new Location();
-        $location->l_name_kurz = $request->identifier;
+        $location->l_name_kurz = $request->label;
         $location->l_name_lang = $request->name;
         $location->l_beschreibung = $request->description;
         $location->adresse_id = $adresse_id;
@@ -104,7 +112,7 @@ class LocationController extends Controller
     public function update(Location $location, Request $request)
     {
         $location->l_name_lang = (isset($request->name))? $request->name : $location->l_name_lang;
-        $location->l_name_kurz = (isset($request->identifier))? $request->identifier : $location->l_name_kurz;
+        $location->l_name_kurz = (isset($request->label))? $request->label : $location->l_name_kurz;
         $location->l_beschreibung = (isset($request->description))? $request->description : $location->l_beschreibung;
         $location->save();
 
@@ -132,7 +140,7 @@ class LocationController extends Controller
     function validateNewLocation(): array
     {
         return request()->validate([
-            'identifier' => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
+            'label' => 'bail|unique:locations,l_name_kurz|min:2|max:20|required',
             'name' => '',
             'description' => '',
             'uid' => 'unique:locations,standort_id',

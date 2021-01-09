@@ -5,7 +5,7 @@ namespace App\Http\Resources\compartments;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompartmentFull extends JsonResource
+class Compartment extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,12 +19,12 @@ class CompartmentFull extends JsonResource
             'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
-            'identifier' => $this->sp_name_kurz,
+            'label' => $this->sp_name_kurz,
             'uid' => $this->standort_id,
-            'type' => new CompartmentTypeShort($this->stellplatz_typ_id),
             'name' => $this->sp_name_lang,
             'description' => $this->sp_name_text,
-            'room' => new RoomShort($this->room_id),
+            'compartment_type_id' => $this->stellplatz_typ_id,
+            'room_id' => $this->room_id,
         ];
     }
 }

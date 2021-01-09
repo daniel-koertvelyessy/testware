@@ -7,13 +7,12 @@ use App\Building;
 use App\Location;
 use App\BuildingTypes;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BuildingFull as BuildingFullResource;
-use App\Http\Resources\Building as BuildingResource;
-use App\Http\Resources\BuildingShow as BuildingShowResource;
+use App\Http\Resources\buildings\ProductFull as BuildingFullResource;
+use App\Http\Resources\buildings\Product as BuildingResource;
+use App\Http\Resources\buildings\ProductShow as BuildingShowResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class BuildingController extends Controller {
@@ -27,7 +26,12 @@ class BuildingController extends Controller {
      *
      * @return AnonymousResourceCollection
      */
-    public function index() {
+    public function index(Request $request) {
+        if ($request->input('per_page')) {
+            return BuildingResource::collection(
+                Building::with('BuildingType', 'location')->paginate($request->input('per_page'))
+            );
+        }
         return BuildingResource::collection(
             Building::with('BuildingType', 'location')->get()
         );
@@ -38,10 +42,15 @@ class BuildingController extends Controller {
      *
      * @return AnonymousResourceCollection
      */
-    public function full() {
-        return BuildingFullResource::collection(
-            Building::all()
-        );
+    public function full(Request $request) {
+            if ($request->input('per_page')) {
+                return BuildingFullResource::collection(
+                    Building::with('BuildingType', 'location')->paginate($request->input('per_page'))
+                );
+            }
+            return BuildingFullResource::collection(
+                Building::all()
+            );
     }
 
     /**
@@ -51,39 +60,50 @@ class BuildingController extends Controller {
      * @return BuildingResource
      */
     public function store(Request $request) {
-        $request->validate([
-            'identifier'        => 'required|unique:buildings,b_name_kurz',
-            'goods_income_has'  => 'required|boolean',
-            'uid'               => 'uid|unique:buildings,standort_id',
-            'type_id'           => '',
-            'name'              => '',
-            'place'             => '',
-            'description'       => '',
-            'goods_income_name' => '',
-            'location_id'       => '',
-        ]);
+        $this->validateBuilding($request);
 
         if (!Location::find($request->location_id))
             return response()->json([
                 'error' => 'no location with given id found'
             ], 422);
 
-        if (!BuildingTypes::find($request->type_id))
-            return response()->json([
-                'error' => 'no valid building type with given id found'
-            ], 422);
+        $type_id = 1;
+
+        if (isset($request->type_id)) {
+            if (!BuildingTypes::find($request->type_id)) {
+                return response()->json([
+                    'error' => 'no valid building type with given id found'
+                ], 422);
+            } else {
+                $type_id = $request->type_id;
+            }
+        }
+
+        if (isset($request->type['label'])) {
+            $buildingType = \App\BuildingTypes::where('btname',$request->type['label'])->first();
+            if (!$buildingType) {
+               $newBuildingType = new BuildingTypes();
+                $newBuildingType->btname = $request->type['label'];
+                $newBuildingType->btbeschreibung = (isset($request->type['description'])) ? $request->type['description'] : null;
+                $newBuildingType->save();
+                $type_id = $newBuildingType->id;
+            } else {
+                $bt = $buildingType->get();
+                $type_id = $bt->id;
+            }
+        }
 
         $building = new Building();
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-        $building->b_name_kurz = $request->identifier;
+        $building->b_name_kurz = $request->label;
         $building->b_we_has = $request->goods_income_has;
         $building->standort_id = $uid;
-        (new \App\Standort)->add($uid, $request->identifier, 'buildings');
+        (new \App\Standort)->add($uid, $request->label, 'buildings');
         $building->b_name_lang = $request->name;
         $building->b_name_ort = $request->place;
         $building->b_name_lang = $request->description;
         $building->b_we_name = $request->goods_income_name;
-        $building->building_type_id = (isset($request->type_id)) ? $request->type_id : 1;
+        $building->building_type_id = $type_id;
         $building->location_id = (isset($request->location_id)) ? $request->location_id : 1;
         $building->save();
         return new BuildingResource($building);
@@ -108,7 +128,7 @@ class BuildingController extends Controller {
      */
     public function update(Request $request, $id) {
         $request->validate([
-            'identifier'        => 'required',
+            'label'        => 'required',
             'goods_income_has'  => 'required',
             'uid'               => '',
             'type_id'           => '',
@@ -124,40 +144,30 @@ class BuildingController extends Controller {
             if (isset($request->goods_income_has)) {
                 $goods_income_has = ($request->goods_income_has) ? 1 : 0;
             }
-            $building->b_name_kurz = (isset($request->identifier)) ? $request->identifier : $building->b_name_kurz;
+            $building->b_name_kurz = (isset($request->label)) ? $request->label : $building->b_name_kurz;
             $building->b_we_has = (isset($request->goods_income_has)) ? $goods_income_has : $building->b_we_has;
             $building->b_name_lang = (isset($request->name)) ? $request->name : $building->b_name_lang;
             $building->b_name_ort = (isset($request->place)) ? $request->place : $building->b_name_ort;
-            $building->b_name_lang = (isset($request->description)) ? $request->description : $building->b_name_lang;
+            $building->b_name_text = (isset($request->description)) ? $request->description : $building->b_name_lang;
             $building->b_we_name = (isset($request->goods_income_name)) ? $request->goods_income_name : $building->b_we_name;
             $uid = (isset($request->uid)) ? $request->uid : $building->standort_id;
             $building->standort_id = $uid;
-            (new \App\Standort)->change($uid, $request->identifier, 'buildings');
+            (new \App\Standort)->change($uid, $request->label, 'buildings');
             $building->building_type_id = (isset($request->type_id) && BuildingTypes::find($request->type_id)) ? $request->type_id : $building->building_type_id;
             $building->location_id = (isset($request->location_id) && Location::find($request->location_id)) ? $request->location_id : $building->location_id;
             $building->save();
             return new BuildingShowResource($building);
         } else {
-            $request->validate([
-                'identifier'        => 'required|unique:buildings,b_name_kurz',
-                'goods_income_has'  => 'required',
-                'uid'               => '',
-                'type_id'           => '',
-                'name'              => '',
-                'place'             => '',
-                'description'       => '',
-                'goods_income_name' => '',
-                'location_id'       => '',
-            ]);
+            $this->validateBuilding($request);
             $building = new Building();
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-            $building->b_name_kurz = $request->identifier;
+            $building->b_name_kurz = $request->label;
             $building->b_we_has = $request->goods_income_has;
             $building->standort_id = $uid;
-            (new \App\Standort)->add($uid, $request->identifier, 'buildings');
+            (new \App\Standort)->add($uid, $request->label, 'buildings');
             $building->b_name_lang = $request->name;
             $building->b_name_ort = $request->place;
-            $building->b_name_lang = $request->description;
+            $building->b_name_text = $request->description;
             $building->b_we_name = $request->goods_income_name;
             $building->building_type_id = (isset($request->type_id)) ? $request->type_id : 1;
             $building->location_id = (isset($request->location_id)) ? $request->location_id : 1;
@@ -177,6 +187,24 @@ class BuildingController extends Controller {
         $building->delete();
         return response()->json([
             'status' => 'building deleted'
+        ]);
+    }
+
+    /**
+     * @param  Request $request
+     */
+    public function validateBuilding(Request $request)
+    : void {
+        $request->validate([
+            'label'        => 'required|unique:buildings,b_name_kurz',
+            'goods_income_has'  => 'required|boolean',
+            'uid'               => 'unique:buildings,standort_id',
+            'type_id'           => '',
+            'name'              => '',
+            'place'             => '',
+            'description'       => '',
+            'goods_income_name' => '',
+            'location_id'       => '',
         ]);
     }
 }

@@ -277,7 +277,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Ende Building types
+     * Ende Product types
      */
 
 

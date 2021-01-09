@@ -12,5 +12,6 @@
 
     // Scroll to Active
     $('.js-scrollbar').mCustomScrollbar('scrollTo', '.js-scrollbar a.active');
+     $('.duik-content').mCustomScrollbar('scrollTo', window.location.hash);
   });
 })(jQuery);

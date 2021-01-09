@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
 
-class Room extends Model
-{
+class Room extends Model {
     use SoftDeletes, Sortable;
+
     //
 
     protected $guarded = [];
@@ -18,9 +18,11 @@ class Room extends Model
         parent::boot();
         static::saving(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
+            Cache::forget('countTotalEquipmentInRoom');
         });
         static::updating(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
+            Cache::forget('countTotalEquipmentInRoom');
         });
     }
 
@@ -31,24 +33,15 @@ class Room extends Model
             ->get();
     }
 
-
-    public function building()
-    {
-        return $this->belongsTo(Building::class);
-    }
-
-    public function path()
-    {
+    public function path() {
         return route('room.show', $this);
     }
 
-    public function RoomType()
-    {
+    public function RoomType() {
         return $this->belongsTo(RoomType::class);
     }
 
-    public function stellplatzs()
-    {
+    public function stellplatzs() {
         return $this->hasMany(Stellplatz::class);
     }
 
@@ -56,8 +49,28 @@ class Room extends Model
         return $this->building()->with('Location');
     }
 
+    public function building() {
+        return $this->belongsTo(Building::class);
+    }
+
     public function Standort() {
-        return $this->hasOne(Standort::class, 'std_id','standort_id');
+        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
+    }
+
+    public function countTotalEquipmentInRoom() {
+        Cache::remember(
+            'countTotalEquipmentInRoom',
+            now()->addSeconds(30),
+            function () {
+                $equipCounter = 0;
+                $equipCounter += $this->Standort->countReferencedEquipment();
+
+                $compartments = Stellplatz::where('room_id', $this->id)->get();
+                foreach ($compartments as $compartment) {
+                    $equipCounter += $compartment->Standort->countReferencedEquipment();
+                }
+                return $equipCounter;
+            });
     }
 
 }

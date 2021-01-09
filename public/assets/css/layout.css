@@ -340,7 +340,8 @@ h4:hover .duik-anchorjs-link {
 
 .duik-sidebar__link {
   color: #495057;
-  display: inline-block;
+  display: block;
+  /*display: inline-block;*/
   border-left: 4px solid transparent;
   padding: .3rem  1rem .5rem .7rem;
 }
@@ -352,7 +353,8 @@ h4:hover .duik-anchorjs-link {
 }
 
 .duik-sidebar__link:hover {
-  color: #343a40;
+  color: #18bc9c;
+    border-color: #c7d301;
   text-decoration: none;
 }
 
@@ -1375,8 +1377,12 @@ pre[class*="language-"] {
   white-space: pre-wrap !important;
 }
 
-.token.punctuation,
 .token.property,
+.token.punctuation {
+    color: #2f6f9f;
+    font-weight: bold;
+}
+
 .token.tag,
 .token.constant,
 .token.symbol,
@@ -1396,7 +1402,7 @@ pre[class*="language-"] {
 .token.atrule,
 .token.attr-value,
 .token.function {
-  color: #d44950;
+  color: #88090f;
 }
 
 div.code-toolbar > .toolbar {

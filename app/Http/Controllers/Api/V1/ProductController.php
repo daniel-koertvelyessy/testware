@@ -3,25 +3,88 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\products\Product as ProductResource;
+use App\Http\Resources\products\ProductFull as ProductFullResource;
+use App\Http\Resources\products\ProductShow as ProductShowResource;
+use App\Produkt;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth:api');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
-    {
+    public function index(Request $request) {
+        if ($request->input('per_page')){
+            return ProductResource::collection(Produkt::with(
+                'ProduktKategorie',
+                'ProduktState',
+                'ProduktParam',
+                'ProduktAnforderung',
+                'firma',
+                'Equipment',
+                'ControlProdukt')
+                ->paginate($request->input('per_page')));
+        }
+        return ProductResource::collection(Produkt::with(
+            'ProduktKategorie',
+            'ProduktState',
+            'ProduktParam',
+            'ProduktAnforderung',
+            'firma',
+            'Equipment',
+            'ControlProdukt'
+        )->get());
         //
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function full(Request $request)
+    {
+        if ($request->input('per_page')){
+            return ProductFullResource::collection(Produkt::with(
+                'ProduktKategorie',
+                'ProduktState',
+                'ProduktParam',
+                'ProduktAnforderung',
+                'firma',
+                'Equipment',
+                'ControlProdukt'
+            )->paginate($request->input('per_page')));
+        }
+        return ProductFullResource::collection(Produkt::with(
+            'ProduktKategorie',
+            'ProduktState',
+            'ProduktParam',
+            'ProduktAnforderung',
+            'firma',
+            'Equipment',
+            'ControlProdukt'
+        )->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -31,20 +94,20 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Produkt $product
+     * @return ProductFullResource
      */
-    public function show($id)
+    public function show(Produkt $product)
     {
-        //
+        return new ProductResource($product);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *a
+     * @param  Request $request
+     * @param  int     $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -54,11 +117,15 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Produkt $produkt
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(Produkt $produkt)
     {
-        //
+        $produkt->delete();
+        return response()->json([
+            'status' => 'product deleted'
+        ]);
     }
 }

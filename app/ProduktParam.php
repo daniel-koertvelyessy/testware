@@ -11,7 +11,7 @@ class ProduktParam extends Model
 
     protected $guarded = [];
 
-    public function Produkte()
+    public function Produkt()
     {
         return $this->belongsTo(Produkt::class);
     }

@@ -12,7 +12,7 @@
 >
 
     <span class="d-flex align-items-center justify-content-between mt-0">
-        <span>Menü fixieren</span>
+        <span>{{__('Menü fixieren')}}</span>
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" id="switchFixSidebar">
           <label class="custom-control-label" for="switchFixSidebar"></label>
@@ -22,22 +22,22 @@
     <p class="h3" style="color:#c7d301;">{{__('testWare')}}</p>
 
     <a href="{{ route('testware.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>Dashboard</span>
+        <span>{{__('Dashboard')}}</span>
         <span class="fas fa-desktop"></span>
     </a>
 
     <a href="{{ route('equipMain') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>Geräte</span>
+        <span>{{__('Geräte')}}</span>
         <span class="fas fa-boxes"></span>
     </a>
 
     <a href="{{ route('testing.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>Prüfungen</span>
+        <span>{{__('Prüfungen')}}</span>
         <span class="fas fa-stethoscope"></span>
     </a>
 
     <a href="{{ route('event.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>Ereignisse</span>
+        <span>{{__('Ereignisse')}}</span>
         <span class="fas fa-inbox"></span>
     </a>
     <div class="dropdown-divider"></div>
@@ -141,7 +141,7 @@
        role="button"
        aria-expanded="false"
        aria-controls="sideNavLocations"
-    >{{__('Standorte')}}</a>
+    >{{__('memStandorte')}}</a>
     <div class="collapse"
          id="sideNavLocations"
     >

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\rooms;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,7 +15,7 @@ class RoomTypeShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'identifier' => $this->rt_name_kurz,
+            'label' => $this->rt_name_kurz,
         ];
     }
 }

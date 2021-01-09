@@ -36,7 +36,7 @@ class Lizenz extends Model {
         );
 
         $numBuilding = Cache::remember(
-            'app-get-current-amount-Building',
+            'app-get-current-amount-Product',
             now()->addSeconds(30),
             function () {
                 return Building::all()->count();

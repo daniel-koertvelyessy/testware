@@ -20,7 +20,7 @@ class CreateProduktTable extends Migration
             $table->string('prod_name_kurz', 20);
             $table->string('prod_name_lang', 100)->nullable();
             $table->text('prod_name_text')->nullable();
-            $table->string('prod_nummer', 100)->nullable();
+            $table->string('prod_nummer', 100);
             $table->boolean('prod_active')->default(true);
 
             $table->unsignedBigInteger('produkt_kategorie_id')->nullable();

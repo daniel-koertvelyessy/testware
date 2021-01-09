@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\locations;
 
+use App\Http\Resources\AddressFull;
+use App\Http\Resources\ProfileFull;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,9 +21,9 @@ class LocationFull extends JsonResource
             'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
+            'label' => $this->l_name_kurz,
             'uid' => $this->standort_id,
             'name' => $this->l_name_lang,
-            'identifier' => $this->l_name_kurz,
             'description' => $this->l_beschreibung,
             'address'=> new AddressFull($this->Adresse),
             'manager' => new ProfileFull($this->Profile),

@@ -3,28 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Building;
-use App\Http\Resources\BuildingFull as BuildingFullResource;
+use App\Http\Resources\buildings\ProductFull;
 use App\Http\Resources\CompartmentFull;
-use App\Http\Resources\LocationFull;
-use App\Http\Resources\LocationFull as LocationFullResource;
+use App\Http\Resources\locations\LocationFull;
 use App\Http\Resources\RoomFull;
 use App\Location;
 use App\Room;
 use App\Stellplatz;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
+
 
 class ExportController extends Controller
 {
+
     public function __construct() {
         $this->middleware('auth');
     }
 
     public function locationsToJson() {
-        return response(LocationFullResource::collection(
+        return response(LocationFull::collection(
             Location::with('Adresse','Profile' )->get()
         ), 200)
             ->header('Cache-Control', 'public')
@@ -35,7 +31,7 @@ class ExportController extends Controller
     }
 
     public function buildingsToJson() {
-        return response(BuildingFullResource::collection(
+        return response(ProductFull::collection(
             Building::all()
         ), 200)
             ->header('Cache-Control', 'public')
@@ -55,7 +51,6 @@ class ExportController extends Controller
             ->header('Content-Transfer-Encoding', 'binary')
             ->header('Content-disposition', "attachment; filename=" . "testware_". __('Räume').'_' . time() . ".json");
     }
-
 
     public function compartmentsToJson() {
         return response(CompartmentFull::collection(

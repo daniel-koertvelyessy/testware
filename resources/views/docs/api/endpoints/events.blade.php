@@ -1,14 +1,14 @@
 @extends('layout.layout-documentation')
 
 @section('pagetitle')
-    {{ __('Verordnungen') }} &triangleright; {{__('Dokumentation')}} @ testWare
+    {{ __('Ereignisse') }} &triangleright; {{__('Dokumentation')}} @ testWare
 @endsection
 
 
 @section('doc-right-nav')
-    <li class="duik-content-nav__item">
+{{--    <li class="duik-content-nav__item">
         <a href="#locations">{{__('Standorte')}}</a>
-    </li>
+    </li>--}}
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1>{{__('Verordnungen')}}</h1>
+                <h1>{{__('Ereignisse')}}</h1>
                 <small class="text-muted">{{__('Stand')}} 2020.Dezember</small>
             </div>
         </div>

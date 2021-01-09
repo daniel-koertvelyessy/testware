@@ -31,12 +31,17 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
         'building'    => 'BuildingController',
         'room'        => 'RoomController',
         'compartment' => 'CompartmentController',
+        'product' => 'ProductController',
+        'product_parameter' => 'ProductParameterController',
+        'product_category' => 'ProductCategoryController',
+        'product_category_parameter' => 'ProductCategoryParameterController',
     ]);
 
     Route::get('/location_list_complete', 'LocationController@full')->name('location_list_complete');
     Route::get('/building_list_complete', 'BuildingController@full')->name('building_list_complete');
     Route::get('/room_list_complete', 'RoomController@full')->name('room_list_complete');
     Route::get('/compartment_list_complete', 'CompartmentController@full')->name('compartment_list_complete');
+    Route::get('/product_list_complete', 'ProductController@full')->name('product_list_complete');
 
 });
 

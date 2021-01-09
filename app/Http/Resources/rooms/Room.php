@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\rooms;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,10 +16,10 @@ class Room extends JsonResource
     public function toArray($request)
     {
         return [
-//            'id' => $this->id,
+            'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
-            'identifier' => $this->r_name_kurz,
+            'label' => $this->r_name_kurz,
             'uid' => $this->standort_id,
             'name' => $this->r_name_lang,
             'description' => $this->r_name_text,

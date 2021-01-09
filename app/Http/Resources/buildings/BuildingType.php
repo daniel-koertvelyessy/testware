@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\buildings;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,7 +15,7 @@ class BuildingType extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->btname,
+            'label' => $this->btname,
             'description' => $this->btbeschreibung,
         ];
     }

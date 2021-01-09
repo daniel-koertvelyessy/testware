@@ -23,10 +23,12 @@ class Building extends Model {
     public static function boot() {
         parent::boot();
         static::saving(function (Building $building) {
-            Cache::forget('app-get-current-amount-Building');
+            Cache::forget('app-get-current-amount-Product');
+            Cache::forget('countTotalEquipmentInBuilding');
         });
         static::updating(function (Building $building) {
-            Cache::forget('app-get-current-amount-Building');
+            Cache::forget('app-get-current-amount-Product');
+            Cache::forget('countTotalEquipmentInBuilding');
         });
     }
 
@@ -52,7 +54,7 @@ class Building extends Model {
     }
 
     public function rooms() {
-        return $this->hasMany(Room::class,'building_id');
+        return $this->hasMany(Room::class, 'building_id');
     }
 
     public function countStellPlatzs(Building $building) {
@@ -67,18 +69,23 @@ class Building extends Model {
         return $this->hasOne(Standort::class, 'std_id', 'standort_id');
     }
 
-    public function countTotalEquipmentInBuilding(){
-        $equipCounter = 0;
-        $equipCounter += $this->Standort->countReferencedEquipment();
-            $rooms = Room::where('building_id',$this->id)->get();
-            foreach($rooms as $room){
-                $equipCounter += $room->Standort->countReferencedEquipment();
-                $compartments = Stellplatz::where('room_id',$room->id)->get();
-                foreach($compartments as $compartment){
-                    $equipCounter += $compartment->Standort->countReferencedEquipment();
+    public function countTotalEquipmentInBuilding() {
+        Cache::remember(
+            'countTotalEquipmentInBuilding',
+            now()->addSeconds(30),
+            function () {
+                $equipCounter = 0;
+                $equipCounter += $this->Standort->countReferencedEquipment();
+                $rooms = Room::where('building_id', $this->id)->get();
+                foreach ($rooms as $room) {
+                    $equipCounter += $room->Standort->countReferencedEquipment();
+                    $compartments = Stellplatz::where('room_id', $room->id)->get();
+                    foreach ($compartments as $compartment) {
+                        $equipCounter += $compartment->Standort->countReferencedEquipment();
+                    }
                 }
-            }
-        return $equipCounter;
+                return $equipCounter;
+            });
     }
 
 }

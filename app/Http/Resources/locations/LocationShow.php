@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\locations;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Location as LocationResource;
-use App\Http\Resources\LocationShow as LocationShowResource;
+use App\Http\Resources\locations\Location as LocationResource;
+use App\Http\Resources\locations\LocationShow as LocationShowResource;
 
 class LocationShow extends JsonResource
 {
@@ -19,9 +19,9 @@ class LocationShow extends JsonResource
         return [
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
+            'label' => $this->l_name_kurz,
             'uid' => $this->standort_id,
             'name' => $this->l_name_lang,
-            'identifier' => $this->l_name_kurz,
             'description' => $this->l_beschreibung,
             'address_id' => $this->adresse_id,
             'employee_id' => $this->profile_id,

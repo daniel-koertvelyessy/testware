@@ -17,29 +17,45 @@ class Standort extends Model
         'std_id',
     ];
 
-    public function add($stid, $kurzel, $typ) {
-        $sd = new Standort();
-        $sd->std_objekt_typ = $typ;
-        $sd->std_id = $stid;
-        $sd->std_kurzel = $kurzel;
-        return $sd->save();
+    public function add($uid, $label, $type) {
+        $standortByLabel = Standort::where('std_kurzel',$label)->first();
+        if(!$standortByLabel){
+            $standortByUid = Standort::where('std_id',$uid)->first();
+            if (!$standortByUid){
+                $standort = new Standort();
+                $standort->std_objekt_typ = $type;
+                $standort->std_id = $uid;
+                $standort->std_kurzel = $label;
+                $standort->save();
+                return $standort->id;
+            } else {
+                $standortByUid->std_objekt_typ = $type;
+                $standortByUid->std_id = $uid;
+                $standortByUid->std_kurzel = $label;
+                $standortByUid->save();
+                return $standortByUid->id;
+            }
+        } else {
+            $standortByLabel->std_objekt_typ = $type;
+            $standortByLabel->std_id = $uid;
+            $standortByLabel->std_kurzel = $label;
+            $standortByLabel->save();
+            return $standortByLabel->id;
+        }
     }
 
-    public function change($stid, $kurzel, $typ) {
-        $sd = Standort::where('std_id',$stid)->first();
-        $sd->std_objekt_typ = $typ;
-        $sd->std_id = $stid;
-        $sd->std_kurzel = $kurzel;
-        return $sd->save();
-    }
-    public function remove($id) {
-        return Standort::find($id)->delete();
+    public function change($uid, $label, $type) {
+       return $this->add($uid, $label, $type);
     }
 
-    public static function getLocationPath($std_id)
+    public function remove() {
+        return $this->delete();
+    }
+
+    public static function getLocationPath($uid)
     {
         $path = '';
-        $stdid = Standort::find($std_id);
+        $stdid = Standort::find($uid);
 
         $table = $stdid->std_objekt_typ;
 

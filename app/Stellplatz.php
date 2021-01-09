@@ -25,6 +25,10 @@ class Stellplatz extends Model
             ->orWhere('sp_name_text', 'like', '%' . $term . '%')
             ->get();
     }
+    public function Room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 
     public function rooms()
     {
@@ -42,6 +46,14 @@ class Stellplatz extends Model
 
     public function Standort() {
         return $this->hasOne(Standort::class, 'std_id','standort_id');
+    }
+    public function countTotalEquipmentInCompartment() {
+        Cache::remember(
+            'countTotalEquipmentInCompartment',
+            now()->addSeconds(30),
+            function () {
+                return $this->Standort->countReferencedEquipment();
+            });
     }
 
 }

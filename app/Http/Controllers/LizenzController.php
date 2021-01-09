@@ -28,7 +28,7 @@ class LizenzController extends Controller
 
 
         Cache::forget('app-get-current-amount-Location');
-        Cache::forget('app-get-current-amount-Building');
+        Cache::forget('app-get-current-amount-Product');
         Cache::forget('app-get-current-amount-Room');
         Cache::forget('app-get-current-amount-Stellplatz');
         Cache::forget('app-get-current-amount-Equipment');

@@ -31,7 +31,9 @@
     <script type="text/javascript"
             src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet"
+          href="{{ mix('css/app.css') }}"
+    >
     <link
         rel="stylesheet"
         href="{{ asset('assets/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}"
@@ -97,16 +99,19 @@
         >
             <div class="d-flex justify-content-between mb-3">
                 <!-- Sidebar Search -->
-{{--                <form class="col form-inline input-group-sm pt-2">
-                    <label for="searchfield" class="sr-only">Suche in Dokumentation</label>
+                <form class="col form-inline input-group-sm pt-2 mt-1">
+                    <label for="searchfield"
+                           class="sr-only"
+                    >Suche in Dokumentation
+                    </label>
                     <input id="searchfield"
-                        class="js-search form-control form-control-sm w-100"
-                        type="text"
-                        placeholder="{{__('Suche')}}..."
-                        data-url="{{asset('assets/include/json/autocomplete-data-for-documentation-search.json')}}"
+                           class="js-search form-control form-control-sm w-100"
+                           type="text"
+                           placeholder="{{__('Suche')}}..."
+                           data-url="{{asset('assets/include/json/autocomplete-data-for-documentation-search.json')}}"
                     />
-                </form>--}}
-                <!-- End Sidebar Search -->
+                </form>
+            <!-- End Sidebar Search -->
 
                 <!-- Responsive Toggle Button -->
                 <button
@@ -201,15 +206,15 @@
                             </a>
                         </li>
                         <li class="duik-sidebar__item">
-                            <a class="duik-sidebar__link {{ Request::routeIs('docs.testware.testing') ? ' active ' : '' }}"
-                               href="#"
-                            >{{ __('Prüfungen') }}
-                            </a>
-                        </li>
-                        <li class="duik-sidebar__item">
                             <a class="duik-sidebar__link {{ Request::routeIs('docs.testware.equipment') ? ' active ' : '' }}"
                                href="#"
                             >{{ __('Geräte') }}
+                            </a>
+                        </li>
+                        <li class="duik-sidebar__item">
+                            <a class="duik-sidebar__link {{ Request::routeIs('docs.testware.testing') ? ' active ' : '' }}"
+                               href="#"
+                            >{{ __('Prüfungen') }}
                             </a>
                         </li>
                         <li class="duik-sidebar__item">
@@ -220,21 +225,63 @@
                         </li>
 
                     </ul>
-                    <h5 class="duik-sidebar__heading">{{__('API V1')}}</h5>
-                    <ul class="duik-sidebar__nav">
-                        <li class="duik-sidebar__item">
-                            <a class="duik-sidebar__link {{ Request::routeIs('docs.api.index') ? ' active ' : '' }}"
-                               href="{{ route('docs.api.index') }}"
-                            >{{ __('Einführung') }}
-                            </a>
-                        </li>
-                        <li class="duik-sidebar__item">
-                            <a class="duik-sidebar__link {{ Request::routeIs('docs.api.endpoints') ? ' active ' : '' }}"
-                               href="{{ route('docs.api.endpoints') }}"
-                            >{{ __('Endpunkte') }}
-                            </a>
-                        </li>
-                    </ul>
+                    <h5 class="h5 duik-sidebar__heading ">{{__('API V1')}}</h5>
+                        <ul class="duik-sidebar__nav">
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.index') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.index') }}"
+                                >{{ __('Einführung') }}
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.endpoints') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.endpoints') }}"
+                                >{{ __('Endpunkte') }}
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.backend') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.backend') }}"
+                                >
+                                    <span class="ml-3">{{ __('Verwaltung') }}</span>
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.products') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.products') }}"
+                                >
+                                    <span class="ml-3">{{ __('Produkte') }}</span>
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.equipment') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.equipment') }}"
+                                >
+                                    <span class="ml-3">{{ __('Geräte') }}</span>
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.testing') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.testing') }}"
+                                >
+                                    <span class="ml-3">{{ __('Prüfungen') }}</span>
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.requirements') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.requirements') }}"
+                                >
+                                    <span class="ml-3">{{ __('Verordnungen') }}</span>
+                                </a>
+                            </li>
+                            <li class="duik-sidebar__item">
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.events') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.events') }}"
+                                >
+                                    <span class="ml-3">{{ __('Ereignisse') }}</span>
+                                </a>
+                            </li>
+                        </ul>
                 </div>
             </div>
             <!-- End Sidebar Nav -->
@@ -245,14 +292,21 @@
             <div class="row pt-1">
                 <!-- Content Nav -->
                 <div class="col-xl-2 order-xl-2 d-none d-xl-inline-block">
-                    <ul class="js-scroll-nav duik-content-nav">
+                    <ul class="js-scroll-nav duik-content-nav"
+                        id="page_content_nav"
+                    >
                         @yield('doc-right-nav')
                     </ul>
                 </div>
                 <!-- End Content Nav -->
 
                 <!-- Content -->
-                <div class="col-xl-10 order-xl-1 duik-content border-bottom">
+                <div class="col-xl-10 order-xl-1 duik-content border-bottom"
+                     data-spy="scroll"
+                     data-target="#page_content_nav"
+                     data-offset="0"
+
+                >
                     @yield('content')
                 </div>
                 <!-- End Content -->

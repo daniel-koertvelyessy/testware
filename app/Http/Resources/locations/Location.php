@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\locations;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,9 +20,9 @@ class Location extends JsonResource
             'id' => $this->id,
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
+            'label' => $this->l_name_kurz,
             'uid' => $this->standort_id,
             'name' => $this->l_name_lang,
-            'identifier' => $this->l_name_kurz,
             'description' => $this->l_beschreibung,
             'address_id' => $this->adresse_id,
             'employee_id' => $this->profile_id,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\compartments;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,7 +16,8 @@ class CompartmentTypeShort extends JsonResource
     public function toArray($request)
     {
         return [
-            'identifier' => $this->spt_name_kurz,
+            'label' => $this->spt_name_kurz,
+            'id' => $this->id,
         ];
     }
 }

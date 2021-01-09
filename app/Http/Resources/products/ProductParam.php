@@ -5,22 +5,21 @@ namespace App\Http\Resources\products;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductState extends JsonResource
+class ProductParam extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'label' => $this->ps_name_kurz,
-            'name' => $this->ps_name_lang,
-            'description' => $this->ps_name_text,
-            'bs_color_class' => $this->ps_color,
-            'bs_icon_class' => $this->ps_icon,
+            'label' => $this->pp_label,
+            'name' => $this->pp_name,
+            'value' => $this->pp_value,
+//            'product_id' => $this->produkt_id,
         ];
     }
 }

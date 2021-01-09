@@ -13,7 +13,7 @@ $factory->define(Produkt::class, function (Faker $faker) {
         'prod_name_lang' => $faker->slug(3) ,
         'produkt_kategorie_id' => 1,
         'produkt_state_id' => random_int(1,2),
-        'prod_active' => random_int(1,2),
+        'prod_active' => random_int(0,1),
         'prod_nummer' => '920'.random_int(100000,999000),
     ];
 });
