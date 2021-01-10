@@ -17,7 +17,7 @@ class RoomShort extends JsonResource
     {
         return [
             'label' => $this->r_label,
-            'uid' => $this->standort_id,
+            'uid' => $this->storage_id,
         ];
     }
 }

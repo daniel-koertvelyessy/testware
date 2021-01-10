@@ -12,16 +12,16 @@
 
 @section('modals')
     <div class="modal"
-         id="modalSetStandort"
+         id="modalSetStorage"
          tabindex="-1"
-         aria-labelledby="modalSetStandortLabel"
+         aria-labelledby="modalSetStorageLabel"
          aria-hidden="true"
     >
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"
-                        id="modalSetStandortLabel"
+                        id="modalSetStorageLabel"
                     >{{__('Verfügbare Aufstellplätze / Standorte')}}</h5>
                     <button type="button"
                             class="close"
@@ -32,17 +32,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @forelse(App\Standort::all() as $standort)
+                    @forelse(App\Storage::all() as $storage)
                         <div class="custom-control custom-radio">
                             <input type="radio"
-                                   id="setStandort_{{ $standort->id }}"
-                                   name="setStandort[]"
-                                   class="custom-control-input setStandort"
-                                   value="{{ $standort->id }}"
+                                   id="setStorage_{{ $storage->id }}"
+                                   name="setStorage[]"
+                                   class="custom-control-input setStorage"
+                                   value="{{ $storage->id }}"
                             >
                             <label class="custom-control-label"
-                                   for="setStandort_{{ $standort->id }}"
-                            >{{ $standort->std_kurzel }}</label>
+                                   for="setStorage_{{ $storage->id }}"
+                            >{{ $storage->storage_label }}</label>
                         </div>
                     @empty
                         <x-notifyer>{{__('Es sind keine Standorte angelegt')}}</x-notifyer>
@@ -56,7 +56,7 @@
                     >{{__('Schließen')}}</button>
                     <button type="button"
                             class="btn btn-primary"
-                            id="btnSetStandortFromModal"
+                            id="btnSetStorageFromModal"
                     >{{__('Übernehmen')}}</button>
                 </div>
             </div>
@@ -92,9 +92,9 @@
                            value="{{ Str::uuid() }}"
                     >
                     <input type="hidden"
-                           name="standort_id"
-                           id="standort_id"
-                           value="{{ old('standort_id')??'' }}"
+                           name="storage_id"
+                           id="storage_id"
+                           value="{{ old('storage_id')??'' }}"
                     >
                     <div class="row">
                         <div class="col-md-4">
@@ -140,13 +140,13 @@
                                     <button type="button"
                                             class="btn btn-outline-primary ml-2"
                                             data-toggle="modal"
-                                            data-target="#modalSetStandort"
+                                            data-target="#modalSetStorage"
                                     >
                                         <span class="d-none d-md-inline">{{__('Suche')}}</span> <span class="fas fa-search ml-md-2"></span>
                                     </button>
                                 </div>
                                 <span class="text-warning small d-block"
-                                      id="standortStatus"
+                                      id="storageStatus"
                                 ></span>
                                 @error('setStandOrtId')
                                 <span class="text-danger small">{{ $message }}</span>
@@ -342,7 +342,7 @@
                     url: "{{ route('checkStandortValid') }}",
                     data: {name},
                     success: (res) => {
-                        const sts = $('#standortStatus');
+                        const sts = $('#storageStatus');
                         if (res === 0) {
                             sts.text('Dieser Standort existiert nicht');
                             nd.addClass('is-invalid').attr('title', 'Dieser Standort existiert nicht!');
@@ -359,7 +359,7 @@
         $("#setStandOrtId").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "{{ route('getStandortIdListAll') }}",
+                    url: "{{ route('getStorageIdListAll') }}",
                     type: 'GET',
                     dataType: "json",
                     data: {
@@ -373,9 +373,9 @@
 
 
                                 return {
-                                    label: `${res.std_kurzel} - ${res.name_lang}`,
+                                    label: `${res.storage_label} - ${res.name}`,
                                     id: res.id,
-                                    value: res.std_kurzel
+                                    value: res.storage_label
                                 };
 
 
@@ -390,7 +390,7 @@
                 });
             },
             select: function (event, ui) {
-                $('#standort_id').val(ui.item.id).removeClass('is-invalid');
+                $('#storage_id').val(ui.item.id).removeClass('is-invalid');
             }
         });
     </script>
@@ -432,7 +432,7 @@
         });
 
         $('#btnAddNewEquipment').click(function () {
-            const standort_id = $('#standort_id');
+            const storage_id = $('#storage_id');
             const eq_inventar_nr = $('#eq_inventar_nr');
             const setStandOrtId = $('#setStandOrtId');
 
@@ -444,7 +444,7 @@
 
             frmIsComplete = checkFunctionControl();
 
-            if (standort_id.val() === '')
+            if (storage_id.val() === '')
             {
                 setStandOrtId.addClass('is-invalid');
                 frmIsComplete = false;
@@ -489,11 +489,11 @@
                 $('#btnAddNewEquipment').attr('disabled', false);
         });
 
-        $('#btnSetStandortFromModal').click(function () {
-            const setStandortNd = $('input.setStandort');
-            $('#standort_id').val(setStandortNd.val());
-            $('#setStandOrtId').removeClass('is-invalid').val($('.setStandort').next('label').html());
-            $('#modalSetStandort').modal('hide');
+        $('#btnSetStorageFromModal').click(function () {
+            const setStorageNd = $('input.setStorage');
+            $('#storage_id').val(setStorageNd.val());
+            $('#setStandOrtId').removeClass('is-invalid').val($('.setStorage').next('label').html());
+            $('#modalSetStorage').modal('hide');
         });
 
     </script>

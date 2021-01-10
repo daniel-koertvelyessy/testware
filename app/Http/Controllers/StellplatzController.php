@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Standort;
+use App\Storage;
 use App\Stellplatz;
 use App\StellplatzTyp;
 use Illuminate\Contracts\Foundation\Application;
@@ -46,7 +46,7 @@ class StellplatzController extends Controller
         //        dump($request);
         //        dd($request->room_id);
         $sp = Stellplatz::create($this->validateNeuStellPlatz());
-        (new \App\Standort)->add($request->standort_id, $request->sp_label, 'stellplatzs');
+        (new \App\Storage)->add($request->storage_id, $request->sp_label, 'stellplatzs');
         $request->session()->flash('status', 'Der Stellplatzt <strong>' . request('sp_label') . '</strong> wurde angelegt!');
         return redirect()->back();
     }
@@ -60,7 +60,7 @@ class StellplatzController extends Controller
             'sp_label'      => 'bail|unique:stellplatzs,sp_label|required|min:1|max:20',
             'sp_name'      => 'max:100',
             'sp_name_text'      => '',
-            'standort_id'       => 'required',
+            'storage_id'       => 'required',
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);
@@ -116,9 +116,9 @@ class StellplatzController extends Controller
     public function update(Request $request, Stellplatz $stellplatz)
     {
         if ($stellplatz->sp_label !== $request->sp_label) {
-            $standort = Standort::where('std_id', $request->standort_id)->first();
-            $standort->std_kurzel = $request->sp_label;
-            $standort->save();
+            $storage = Storage::where('storage_uid', $request->storage_id)->first();
+            $storage->storage_label = $request->sp_label;
+            $storage->save();
         }
     }
 
@@ -166,9 +166,9 @@ class StellplatzController extends Controller
             $stellplatz = Stellplatz::find($request->id);
 
             if ($stellplatz->sp_label !== $request->sp_label) {
-                $standort = Standort::where('std_id', $request->standort_id)->first();
-                $standort->std_kurzel = $request->sp_label;
-                $standort->save();
+                $storage = Storage::where('storage_uid', $request->storage_id)->first();
+                $storage->storage_label = $request->sp_label;
+                $storage->save();
             }
 
             $stellplatz->sp_label = $request->sp_label;
@@ -190,10 +190,10 @@ class StellplatzController extends Controller
             $stellplatz->sp_name_text = $request->sp_name_text;
             $stellplatz->room_id = $request->room_id;
             $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
-            $stellplatz->standort_id = $request->standort_id;
+            $stellplatz->storage_id = $request->storage_id;
             $stellplatz->save();
 
-            $std = (new \App\Standort)->add($request->standort_id, $request->sp_label, 'stellplatzs');
+            $std = (new \App\Storage)->add($request->storage_id, $request->sp_label, 'stellplatzs');
             $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_label') . '</strong> wurde angelegt!');
         }
 

@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuStandort')
+    @include('menus._menuStorage')
 @endsection
 
 @section('breadcrumbs')
@@ -330,7 +330,7 @@
                     {{ $location->l_label }}
                 </h1>
                 {{--                <div class="visible-print text-center">
-                                    {!! QrCode::size(65)->generate($location->standort_id); !!}
+                                    {!! QrCode::size(65)->generate($location->storage_id); !!}
                                     <p class="text-muted small">Standort-ID</p>
                                 </div>--}}
             </div>
@@ -693,8 +693,8 @@
                                 >
                                     @csrf
                                     <input type="hidden"
-                                           name="standort_id"
-                                           id="standort_id"
+                                           name="storage_id"
+                                           id="storage_id"
                                            value="{{ Str::uuid() }}"
                                     >
                                     <input type="hidden"

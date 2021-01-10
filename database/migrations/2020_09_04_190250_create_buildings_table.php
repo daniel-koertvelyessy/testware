@@ -27,7 +27,7 @@ class CreateBuildingsTable extends Migration
             $table->unsignedBigInteger('building_type_id')->nullable();
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('set null');
             $table->foreign('building_type_id')->references('id')->on('building_types')->onDelete('set null');
-            $table->uuid('standort_id')->nullable();
+            $table->uuid('storage_id')->nullable();
         });
     }
 

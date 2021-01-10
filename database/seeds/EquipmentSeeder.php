@@ -12,11 +12,11 @@ class EquipmentSeeder extends Seeder
     public function run()
     {
         $produkt = factory(App\Produkt::class, 100)->create();
-        $standort = \App\Standort::all();
-        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $standort) {
+        $storage = \App\Storage::all();
+        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $storage) {
             $uid = \Illuminate\Support\Str::uuid();
             $equip->eq_uid = $uid;
-            $equip->standort_id =  $standort->random()->id;
+            $equip->storage_id =  $storage->random()->id;
             $equip->produkt_id = $produkt->random()->id;
             $equip->save();
 
@@ -116,7 +116,7 @@ class EquipmentSeeder extends Seeder
                 'eq_text' => NULL,
                 'equipment_state_id' => '1',
                 'produkt_id' => '31',
-                'standort_id' => '4',
+                'storage_id' => '4',
                 'eq_uid' => $uid,
             ]
         ]);

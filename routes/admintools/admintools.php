@@ -1,4 +1,5 @@
 <?php
+
 /**
  *   Admin Tool Routes
  *     Räume 29
@@ -18,7 +19,7 @@ Route::get('admin/user', 'AdminController@indexUser')->name('user.index');
 Route::get('admin/reports', 'AdminController@indexReports');
 Route::get('admin/reports/template', 'AdminController@indexReportsTemplate')->name('report.tempate');
 Route::get('admin/systems', 'AdminController@systems')->name('systems');
-Route::get('standortDataPort', 'AdminController@standortDataPort')->name('standortDataPort');
+Route::get('storageDataPort', 'AdminController@storageDataPort')->name('storageDataPort');
 Route::get('getLocationTree', 'LocationsController@getLocationTree')->name('getLocationTree');
 //    Route::get('registerphone', 'AdminController@systems')->name('registerphone');
 
@@ -108,7 +109,7 @@ Route::delete('deleteLocationAnforderung', 'LocationsController@deleteLocationAn
 Route::delete('location.destroyLocationAjax', 'LocationsController@destroyLocationAjax')->name('location.destroyLocationAjax');
 
 
-Route::get('getStandortIdListAll', 'AdminController@getStandortIdListAll')->name('getStandortIdListAll');
+Route::get('getStorageIdListAll', 'AdminController@getStorageIdListAll')->name('getStorageIdListAll');
 Route::get('acAdminLocations', 'SearchController@acAdminLocations')->name('acAdminLocations');
 
 Route::get('lexplorer', 'LocationsController@explorer')->name('lexplorer');
@@ -202,11 +203,8 @@ Route::delete('deleteDokumentType', 'AdminController@deleteDokumentType')->name(
 Route::get('getUsedDokumentType', 'AdminController@getUsedDokumentType')->name('getUsedDokumentType');
 
 
-Route::get('checkStandortValid', 'AdminController@checkStandortValid')->name('checkStandortValid');
+Route::get('checkStorageValid', 'AdminController@checkStorageValid')->name('checkStorageValid');
 
 
 Route::delete('deleteTypeLager', 'AdminController@deleteTypeLager')->name('deleteTypeLager');
 Route::delete('deleteTypeEquip', 'AdminController@deleteTypeEquip')->name('deleteTypeEquip');
-
-
-

@@ -46,9 +46,9 @@ class Stellplatz extends Model
         return $this->belongsTo(StellplatzTyp::class);
     }
 
-    public function Standort()
+    public function Storage()
     {
-        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
+        return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
     public function countTotalEquipmentInCompartment()
     {
@@ -56,7 +56,7 @@ class Stellplatz extends Model
             'countTotalEquipmentInCompartment',
             now()->addSeconds(30),
             function () {
-                return $this->Standort->countReferencedEquipment();
+                return $this->Storage->countReferencedEquipment();
             }
         );
     }

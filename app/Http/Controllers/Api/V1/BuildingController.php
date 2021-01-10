@@ -102,8 +102,8 @@ class BuildingController extends Controller
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
         $building->b_label = $request->label;
         $building->b_we_has = $request->goods_income_has;
-        $building->standort_id = $uid;
-        (new \App\Standort)->add($uid, $request->label, 'buildings');
+        $building->storage_id = $uid;
+        (new \App\Storage)->add($uid, $request->label, 'buildings');
         $building->b_name = $request->name;
         $building->b_name_ort = $request->place;
         $building->b_name = $request->description;
@@ -157,9 +157,9 @@ class BuildingController extends Controller
             $building->b_name_ort = (isset($request->place)) ? $request->place : $building->b_name_ort;
             $building->b_name_text = (isset($request->description)) ? $request->description : $building->b_name;
             $building->b_we_name = (isset($request->goods_income_name)) ? $request->goods_income_name : $building->b_we_name;
-            $uid = (isset($request->uid)) ? $request->uid : $building->standort_id;
-            $building->standort_id = $uid;
-            (new \App\Standort)->change($uid, $request->label, 'buildings');
+            $uid = (isset($request->uid)) ? $request->uid : $building->storage_id;
+            $building->storage_id = $uid;
+            (new \App\Storage)->change($uid, $request->label, 'buildings');
             $building->building_type_id = (isset($request->type_id) && BuildingTypes::find($request->type_id)) ? $request->type_id : $building->building_type_id;
             $building->location_id = (isset($request->location_id) && Location::find($request->location_id)) ? $request->location_id : $building->location_id;
             $building->save();
@@ -170,8 +170,8 @@ class BuildingController extends Controller
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
             $building->b_label = $request->label;
             $building->b_we_has = $request->goods_income_has;
-            $building->standort_id = $uid;
-            (new \App\Standort)->add($uid, $request->label, 'buildings');
+            $building->storage_id = $uid;
+            (new \App\Storage)->add($uid, $request->label, 'buildings');
             $building->b_name = $request->name;
             $building->b_name_ort = $request->place;
             $building->b_name_text = $request->description;
@@ -206,7 +206,7 @@ class BuildingController extends Controller
         $request->validate([
             'label'        => 'required|unique:buildings,b_label',
             'goods_income_has'  => 'required|boolean',
-            'uid'               => 'unique:buildings,standort_id',
+            'uid'               => 'unique:buildings,storage_id',
             'type_id'           => '',
             'name'              => '',
             'place'             => '',

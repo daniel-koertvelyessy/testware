@@ -47,7 +47,7 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 
         if ($equipment) {
             $edata = \App\Equipment::findOrFail($equipment->equipment_id);
-//            dd($edata);
+            //            dd($edata);
             return view('testware.app.reportdamage', ['edata' => $edata, 'ident' => $ident]);
         } else {
             $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
@@ -61,20 +61,46 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 
 /**
 Documentation-Routes
-*/
-Route::get('docs', function () {return view('docs.index');})->name('docs.start');
-Route::get('docs/modules', function () {return view('docs.modules');})->name('docs.modules');
-Route::get('docs/testware', function () {return view('docs.testware.index');})->name('docs.testware.index');
-Route::get('docs/backend', function () {return view('docs.backend.index');})->name('docs.backend.index');
-Route::get('docs/backend/locations', function () {return view('docs.backend.locations');})->name('docs.backend.locations');
-Route::get('docs/api', function () {return view('docs.api.index');})->name('docs.api.index');
-Route::get('docs/api/endpoints', function () {return view('docs.api.endpoints.index');})->name('docs.api.endpoints');
-Route::get('docs/api/endpoints/backend', function () {return view('docs.api.endpoints.backend');})->name('docs.api.backend');
-Route::get('docs/api/endpoints/products', function () {return view('docs.api.endpoints.products');})->name('docs.api.products');
-Route::get('docs/api/endpoints/equipment', function () {return view('docs.api.endpoints.equipment');})->name('docs.api.equipment');
-Route::get('docs/api/endpoints/testing', function () {return view('docs.api.endpoints.testing');})->name('docs.api.testing');
-Route::get('docs/api/endpoints/requirements', function () {return view('docs.api.endpoints.requirements');})->name('docs.api.requirements');
-Route::get('docs/api/endpoints/events', function () {return view('docs.api.endpoints.events');})->name('docs.api.events');
+ */
+Route::get('docs', function () {
+    return view('docs.index');
+})->name('docs.start');
+Route::get('docs/modules', function () {
+    return view('docs.modules');
+})->name('docs.modules');
+Route::get('docs/testware', function () {
+    return view('docs.testware.index');
+})->name('docs.testware.index');
+Route::get('docs/backend', function () {
+    return view('docs.backend.index');
+})->name('docs.backend.index');
+Route::get('docs/backend/locations', function () {
+    return view('docs.backend.locations');
+})->name('docs.backend.locations');
+Route::get('docs/api', function () {
+    return view('docs.api.index');
+})->name('docs.api.index');
+Route::get('docs/api/endpoints', function () {
+    return view('docs.api.endpoints.index');
+})->name('docs.api.endpoints');
+Route::get('docs/api/endpoints/backend', function () {
+    return view('docs.api.endpoints.backend');
+})->name('docs.api.backend');
+Route::get('docs/api/endpoints/products', function () {
+    return view('docs.api.endpoints.products');
+})->name('docs.api.products');
+Route::get('docs/api/endpoints/equipment', function () {
+    return view('docs.api.endpoints.equipment');
+})->name('docs.api.equipment');
+Route::get('docs/api/endpoints/testing', function () {
+    return view('docs.api.endpoints.testing');
+})->name('docs.api.testing');
+Route::get('docs/api/endpoints/requirements', function () {
+    return view('docs.api.endpoints.requirements');
+})->name('docs.api.requirements');
+Route::get('docs/api/endpoints/events', function () {
+    return view('docs.api.endpoints.events');
+})->name('docs.api.events');
 
 
 
@@ -142,7 +168,7 @@ Route::get('searchInDocumentation', 'SearchController@searchInDocumentation')->n
 PDF GENERATORS
 
 */
-Route::get('pdf.standortListe', 'PdfGenerator@standortListe')->name('pdf.standortListe');
+Route::get('pdf.storageListe', 'PdfGenerator@storageListe')->name('pdf.storageListe');
 
 Route::get('/makePDF/{view}/{title}', function ($view, $title) {
     return App\Http\Controllers\PdfGenerator::makePDF($view, $title);
@@ -175,20 +201,20 @@ Route::get('organisationMain', function () {
     ]);
 })->name('organisationMain')->middleware('auth');
 
-Route::get('standorteMain', function () {
-    return view('admin.standorte.index', [
+Route::get('storageeMain', function () {
+    return view('admin.storagee.index', [
         'locations' => App\Location::take(5)->latest()->get(),
         'buildings' => App\Building::take(5)->latest()->get(),
         'rooms' => App\Room::take(5)->latest()->get(),
     ]);
-})->name('standorteMain')->middleware('auth');
+})->name('storageeMain')->middleware('auth');
 
 Route::get('produktMain', function () {
     return view('admin.produkt.main', ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    $equipmentList = \App\Equipment::with('produkt', 'standort', 'EquipmentState', 'ControlEquipment')
+    $equipmentList = \App\Equipment::with('produkt', 'storage', 'EquipmentState', 'ControlEquipment')
         ->sortable()->paginate(10);
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
@@ -206,7 +232,7 @@ Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
 
-Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser' )->name('addApiTokenToUser')->middleware('auth');
+Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
 
 
 /*
@@ -226,9 +252,7 @@ Route::get('post/{wildcard}, function($wildcard){
 
 });
 
-$standorte = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
-$standorte = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
+$storagee = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
+$storagee = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
 
 */
-
-

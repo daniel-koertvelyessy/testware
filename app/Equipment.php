@@ -102,9 +102,9 @@ class Equipment extends Model
         return '<span class="' . $this->EquipmentState->estat_icon . ' text-' . $this->EquipmentState->estat_color . '"></span>';
     }
 
-    public function standort()
+    public function storage()
     {
-        return $this->belongsTo(Standort::class);
+        return $this->belongsTo(Storage::class);
     }
 
     public function control()

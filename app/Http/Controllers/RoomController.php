@@ -6,7 +6,7 @@ use App\Building;
 use App\Location;
 use App\Room;
 use App\RoomType;
-use App\Standort;
+use App\Storage;
 use App\Stellplatz;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -42,10 +42,10 @@ class RoomController extends Controller
         }
         if (Room::all()->count() > 20) {
             $roomList = Room::with('RoomType', 'location')->sortable()->paginate(20);
-            return view('admin.standorte.room.index', ['roomList' => $roomList]);
+            return view('admin.storagee.room.index', ['roomList' => $roomList]);
         } elseif (Room::all()->count() > 0) {
             $roomList = Room::with('RoomType', 'location')->sortable()->get();
-            return view('admin.standorte.room.index', ['roomList' => $roomList]);
+            return view('admin.storagee.room.index', ['roomList' => $roomList]);
         } else {
             session()->flash('status', __('Es existieren noch keine Räume!'));
             return redirect()->route('room.create');
@@ -66,7 +66,7 @@ class RoomController extends Controller
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        return view('admin.standorte.room.create');
+        return view('admin.storagee.room.create');
     }
 
     /**
@@ -78,7 +78,7 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $room =  Room::create($this->validateNewRoom());
-        (new Standort)->add($request->standort_id, $request->r_label, 'rooms');
+        (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
         $request->session()->flash(
             'status',
             __('Der Raum') . ' <strong>' . request('r_label') . '</strong> ' .  __('wurde angelegt!')
@@ -93,7 +93,7 @@ class RoomController extends Controller
     {
         return request()->validate([
             'r_label'  => 'bail|unique:rooms,r_label|max:20|required|',
-            'standort_id'  => 'unique:rooms,standort_id',
+            'storage_id'  => 'unique:rooms,storage_id',
             'r_name'  => 'max:100',
             'r_name_text'  => '',
             'building_id'  => 'required',
@@ -124,7 +124,7 @@ class RoomController extends Controller
             $copy->r_name = $bul->r_name;
             $copy->building_id = $bul->building_id;
             $copy->room_type_id = $bul->room_type_id;
-            $copy->standort_id = Str::uuid();
+            $copy->storage_id = Str::uuid();
             //            $copy->
             $validator = Validator::make([
                 $copy->r_label,
@@ -132,19 +132,19 @@ class RoomController extends Controller
                 $copy->r_name,
                 $copy->building_id,
                 $copy->room_type_id,
-                $copy->standort_id,
+                $copy->storage_id,
             ], [
                 'r_label'  => 'bail|required|unique:rooms,r_label|max:20',
                 'r_name_text'  => '',
                 'r_name'  => '',
                 'building_id'  => '',
                 'room_type_id' => '',
-                'standort_id'  => '',
+                'storage_id'  => '',
 
             ]);
             $copy->save();
 
-            $std = (new Standort)->add($copy->standort_id, $neuroom, 'rooms');
+            $std = (new Storage)->add($copy->storage_id, $neuroom, 'rooms');
 
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde kopiert!');
             return redirect()->back();
@@ -161,7 +161,7 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        return view('admin.standorte.room.show', ['room' => $room]);
+        return view('admin.storagee.room.show', ['room' => $room]);
     }
 
     /**
@@ -172,7 +172,7 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        return view('admin.standorte.room.edit', compact('room'));
+        return view('admin.storagee.room.edit', compact('room'));
     }
 
     /**
@@ -188,9 +188,9 @@ class RoomController extends Controller
         //        dd($room);
         $room->update($this->validateRoom());
         if ($room->r_label !== $request->r_label) {
-            $standort = Standort::where('std_id', $request->standort_id)->first();
-            $standort->std_kurzel = $request->r_label;
-            $standort->save();
+            $storage = Storage::where('storage_uid', $request->storage_id)->first();
+            $storage->storage_label = $request->r_label;
+            $storage->save();
         }
         $request->session()->flash('status', 'Der Raum <strong>' . $room->r_label . '</strong> wurde aktualisiert!');
         return redirect($room->path());
@@ -234,9 +234,9 @@ class RoomController extends Controller
     public function destroyRoomAjax(Request $request)
     {
 
-        $rm = Room::find($request->id)->standort_id;
+        $rm = Room::find($request->id)->storage_id;
 
-        $stnd = Standort::where('std_id', $rm)->first();
+        $stnd = Storage::where('storage_uid', $rm)->first();
 
         $stnd->delete();
 
@@ -289,9 +289,9 @@ class RoomController extends Controller
         if ($request->modalType === 'edit') {
             $room = Room::find($request->id);
             if ($room->r_label !== $request->r_label) {
-                $standort = Standort::where('std_id', $request->standort_id)->first();
-                $standort->std_kurzel = $request->r_label;
-                $standort->save();
+                $storage = Storage::where('storage_uid', $request->storage_id)->first();
+                $storage->storage_label = $request->r_label;
+                $storage->save();
             }
             $room->update($this->validateRoom());
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde aktualisiert!');
@@ -301,12 +301,12 @@ class RoomController extends Controller
             $room->r_label = $request->r_label;
             $room->r_name = $request->r_name;
             $room->r_name_text = $request->r_name_text;
-            $room->standort_id = $request->standort_id;
+            $room->storage_id = $request->storage_id;
             $room->building_id = $request->building_id;
             $room->room_type_id = $request->room_type_id;
             $room->save();
 
-            $std = (new Standort)->add($request->standort_id, $request->r_label, 'rooms');
+            $std = (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde angelegt!');
         }
 

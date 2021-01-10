@@ -181,7 +181,7 @@ class EquipmentController extends Controller
             'eq_text'            => '',
             'eq_ibm'             => 'date',
             'produkt_id'         => '',
-            'standort_id'        => 'required',
+            'storage_id'        => 'required',
             'equipment_state_id' => 'required'
         ]);
     }
@@ -272,11 +272,11 @@ class EquipmentController extends Controller
             ]) . ' | ';
             $flag = true;
         }
-        if ($upd->standort_id != $request->standort_id) {
+        if ($upd->storage_id != $request->storage_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
                 'fld' => __('Aufstellplatz / Standort'),
-                'old' => $upd->standort_id,
-                'new' => $request->standort_id,
+                'old' => $upd->storage_id,
+                'new' => $request->storage_id,
             ]) . ' | ';
             $flag = true;
         }
@@ -318,7 +318,7 @@ class EquipmentController extends Controller
             'eq_text'            => '',
             'eq_ibm'             => 'date',
             'produkt_id'         => '',
-            'standort_id'        => 'required',
+            'storage_id'        => 'required',
             'equipment_state_id' => 'required'
         ]);
     }

@@ -11,14 +11,15 @@ class ProductFull extends JsonResource
      * Transform the resource into an array.
      *
      * @param  Request $request
+     *
      * @return array
      */
     public function toArray($request)
+    : array
     {
         $productParams = [];
 
-        foreach ($this->ProduktParam as $params)
-            $productParams[] = new ProductParam($params);
+        foreach ($this->ProduktParam as $params) $productParams[] = new ProductParam($params);
 
         return [
             'id'            => $this->id,
@@ -29,20 +30,19 @@ class ProductFull extends JsonResource
             'description'   => $this->prod_name_text,
             'part_number'   => $this->prod_nummer,
             'status_active' => ($this->prod_active === 0) ? false : true,
-            'parameter'      => $productParams,
+            'parameter'     => $productParams,
             'category'      => new ProductCategory($this->ProduktKategorie),
             'product_state' => new ProductStateShort($this->ProduktState),
-            'object'  => new ProductStats($this)
+            'object'        => new ProductStats($this)
         ];
     }
 }
 /**
-ProduktKategorie
-ProduktState
-ProduktParam
-ProduktAnforderung
-firma
-Equipment
-ControlProdukt
- *
+ * ProduktKategorie
+ * ProduktState
+ * ProduktParam
+ * ProduktAnforderung
+ * firma
+ * Equipment
+ * ControlProdukt
  */

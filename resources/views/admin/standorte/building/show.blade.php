@@ -9,13 +9,13 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuStandort')
+    @include('menus._menuStorage')
 @endsection
 
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('standorteMain') }}">{{__('Portal')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('storageeMain') }}">{{__('Portal')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.index') }}">{{__('Standorte')}} <i class="fas fa-angle-right"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_label }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a></li>
@@ -117,7 +117,7 @@
             <div class="col d-flex justify-content-between">
                 <h1 class="h3"><span class="d-none d-md-inline">Übersicht Gebäude </span>{{ $building->b_label }}</h1>
 {{--                <div class="visible-print text-center">
-                    {!! QrCode::size(65)->generate($building->standort_id); !!}
+                    {!! QrCode::size(65)->generate($building->storage_id); !!}
                     <p class="text-muted small">Standort-ID</p>
                 </div>--}}
             </div>
@@ -210,8 +210,8 @@
                                 >
                                     @csrf
                                     <input type="hidden"
-                                           name="standort_id"
-                                           id="standort_id"
+                                           name="storage_id"
+                                           id="storage_id"
                                            value="{{ Str::uuid() }}"
                                     >
                                     <input type="hidden" name="building_id" id="building_id" value="{{ $building->id }}">

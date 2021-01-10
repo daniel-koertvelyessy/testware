@@ -109,7 +109,7 @@ class AnforderungsController extends Controller
     public function validateObjektAnforderung(): array
     {
         return request()->validate([
-            'std_id'         => 'required',
+            'storage_uid'         => 'required',
             'anforderung_id' => 'required',
         ]);
     }

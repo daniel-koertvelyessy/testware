@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-  @include('menus._menuStandort')
+  @include('menus._menuStorage')
 @endsection
 
 @section('modals')
@@ -48,8 +48,8 @@
         <form action="{{ route('room.store') }}" method="post" class="needs-validation">
             @csrf
             <input type="hidden"
-                   name="standort_id"
-                   id="standort_id"
+                   name="storage_id"
+                   id="storage_id"
                    value="{{ \Illuminate\Support\Str::uuid() }}"
             >
             <div class="row">

@@ -6,8 +6,8 @@
     @endphp
 @endif
 
-<li class="nav-item {{ Request::routeIs('standorteMain')  ? ' active ' : '' }}">
-    <a class="nav-link " href="{{ route('standorteMain') }}">
+<li class="nav-item {{ Request::routeIs('storageeMain')  ? ' active ' : '' }}">
+    <a class="nav-link " href="{{ route('storageeMain') }}">
         <i class="fas fa-desktop"></i> Start
     </a>
 </li>
@@ -90,8 +90,8 @@
              @endif
         </ul>
     </li>
-{{--<li class="nav-item {{ Request::routeIs('standortDataPort')  ? ' active ' : '' }}">--}}
-{{--    <a class="nav-link " href="{{ route('standortDataPort') }}">--}}
+{{--<li class="nav-item {{ Request::routeIs('storageDataPort')  ? ' active ' : '' }}">--}}
+{{--    <a class="nav-link " href="{{ route('storageDataPort') }}">--}}
 {{--        <i class="fas fa-file-import"></i> Export / Import--}}
 {{--    </a>--}}
 {{--</li>--}}

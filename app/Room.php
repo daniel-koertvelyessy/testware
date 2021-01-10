@@ -61,9 +61,9 @@ class Room extends Model
         return $this->belongsTo(Building::class);
     }
 
-    public function Standort()
+    public function Storage()
     {
-        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
+        return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
 
     public function countTotalEquipmentInRoom()
@@ -73,11 +73,11 @@ class Room extends Model
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
-                $equipCounter += $this->Standort->countReferencedEquipment();
+                $equipCounter += $this->Storage->countReferencedEquipment();
 
                 $compartments = Stellplatz::where('room_id', $this->id)->get();
                 foreach ($compartments as $compartment) {
-                    $equipCounter += $compartment->Standort->countReferencedEquipment();
+                    $equipCounter += $compartment->Storage->countReferencedEquipment();
                 }
                 return $equipCounter;
             }

@@ -17,7 +17,7 @@ class StorageSeeder extends Seeder
             factory(App\Storage::class)->create([
                 'storage_uid' => $loc->storage_id,
                 'storage_label' => $loc->l_label,
-                'storage_objekt_typ' => 'locations'
+                'storage_object_type' => 'locations'
             ]);
     }
 }

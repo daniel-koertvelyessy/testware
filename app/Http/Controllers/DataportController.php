@@ -25,7 +25,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_standorte_" . time() . ".json");
+            ->header('Content-disposition', "attachment; filename=" . "testware_storagee_" . time() . ".json");
     }
 
     public function importLocationJSON(Request $request)
@@ -57,7 +57,7 @@ class DataportController extends Controller
                         'l_beschreibung' => $jo->l_beschreibung,
                         'profile_id'     => $jo->profile_id,
                         'adresse_id'     => $jo->adresse_id,
-                        'standort_id'    => $jo->standort_id,
+                        'storage_id'    => $jo->storage_id,
                     ];
 
                     if ($request->handleImportData === 'append' && !$flagNoObjekt) {
@@ -208,7 +208,7 @@ class DataportController extends Controller
                         'b_we_name'        => $jo->b_we_name,
                         'location_id'      => $jo->location_id,
                         'building_type_id' => $jo->building_type_id,
-                        'standort_id'      => $jo->standort_id,
+                        'storage_id'      => $jo->storage_id,
                     ];
 
                     if ($request->handleImportData === 'append' && !$flagNoObjekt) {
@@ -300,7 +300,7 @@ class DataportController extends Controller
                         'r_name' => $jo->r_name,
                         'r_name_text' => $jo->r_name_text,
                         'building_id' => $jo->building_id,
-                        'standort_id' => $jo->standort_id,
+                        'storage_id' => $jo->storage_id,
                         'room_type_id' => $jo->room_type_id,
                     ];
 
@@ -388,7 +388,7 @@ class DataportController extends Controller
                         'sp_name' => $jo->sp_name,
                         'sp_name_text' => $jo->sp_name_text,
                         'room_id' => $jo->room_id,
-                        'standort_id' => $jo->standort_id,
+                        'storage_id' => $jo->storage_id,
                         'stellplatz_typ_id' => $jo->stellplatz_typ_id,
                     ];
 

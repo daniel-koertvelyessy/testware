@@ -45,7 +45,7 @@
                             @sortablelink('eq_inventar_nr', __('Inventarnummer'))
                         </th>
                         <th class="d-none d-md-table-cell ">
-                            @sortablelink('standort.std_kurzel', __('Stellplatz'))
+                            @sortablelink('storage.storage_label', __('Stellplatz'))
                         </th>
                         <th class="d-none d-lg-table-cell ">
                             @sortablelink('EquipmentState.estat_label', __('Status'))
@@ -65,7 +65,7 @@
                                 </a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
-                            <td class="d-none d-md-table-cell">{{ $equipment->standort->std_kurzel }}</td>
+                            <td class="d-none d-md-table-cell">{{ $equipment->storage->storage_label }}</td>
                             <td class="d-none d-lg-table-cell"
                                 style="vertical-align: middle;"
                             >

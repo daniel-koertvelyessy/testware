@@ -37,7 +37,7 @@
                     >
                         <section class="card-body text-dark">
                             <nav class="tiles-grid justify-content-center">
-                                <a href="{{ route('standorteMain') }}"
+                                <a href="{{ route('storageeMain') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"
                                    aria-label="{{__('memStandorte')}}"
@@ -113,7 +113,7 @@
                                 <a href="{{ route('app') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"
-                                   aria-label="Standorte"
+                                   aria-label="Storagee"
                                 >
                                     <div class="d-flex align-items-center justify-content-center">
                                         <img src="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
@@ -124,7 +124,7 @@
                                         <span class="branding-bar text-center">{{__('InfoSy')}}</span>
                                     </div>
                                 </a>
-                                {{--  <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Standorte">
+                                {{--  <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Storagee">
                                       <span class="icon"><i class="fas fa-mobile-alt"></i></span>
                                       <span class="branding-bar text-center">{{__('Registrieren')}}</span>
                                   </a>--}}

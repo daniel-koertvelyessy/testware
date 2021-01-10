@@ -19,7 +19,7 @@ class CompartmentStats extends JsonResource
     {
 
         return [
-            'equipment' => $this->Standort->countReferencedEquipment()
+            'equipment' => $this->Storage->countReferencedEquipment()
         ];
     }
 }

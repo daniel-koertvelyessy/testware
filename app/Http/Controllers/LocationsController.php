@@ -10,7 +10,7 @@ use App\Building;
 use App\LocationAnforderung;
 use App\Profile;
 use App\Room;
-use App\Standort;
+use App\Storage;
 use App\Stellplatz;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,7 +38,7 @@ class LocationsController extends Controller
         } else {
             if (isset($request->location))
                 $location = Location::find($request->location);
-            return view('admin.standorte.explorer', ['location' => $location]);
+            return view('admin.storagee.explorer', ['location' => $location]);
         }
     }
 
@@ -56,9 +56,9 @@ class LocationsController extends Controller
 
         if (Location::all()->count() > 6) {
             $locationList = Location::all()->sortable()->paginate(10);
-            return view('admin.standorte.location.index', ['locationList' => $locationList]);
+            return view('admin.storagee.location.index', ['locationList' => $locationList]);
         } else {
-            return view('admin.standorte.location.index');
+            return view('admin.storagee.location.index');
         }
     }
 
@@ -87,7 +87,7 @@ class LocationsController extends Controller
      */
     public function create()
     {
-        return view('admin.standorte.location.create');
+        return view('admin.storagee.location.create');
     }
 
     /**
@@ -129,7 +129,7 @@ class LocationsController extends Controller
         $location->l_beschreibung = $request->l_beschreibung;
         $location->profile_id = $request->profile_id;
         $location->adresse_id = $request->adresse_id;
-        $location->standort_id = $request->standort_id;
+        $location->storage_id = $request->storage_id;
         $location->save();
 
 
@@ -175,7 +175,7 @@ class LocationsController extends Controller
      */
     public function show(Location $location)
     {
-        return view('admin.standorte.location.show', ['location' => $location]);
+        return view('admin.storagee.location.show', ['location' => $location]);
     }
 
     /**
@@ -187,7 +187,7 @@ class LocationsController extends Controller
     public function edit(location $location)
     {
 
-        return view('admin.standorte.location.edit', compact('location'));
+        return view('admin.storagee.location.edit', compact('location'));
     }
 
     /**
@@ -212,7 +212,7 @@ class LocationsController extends Controller
     function validateLocation(): array
     {
         return request()->validate([
-            'standort_id'    => '',
+            'storage_id'    => '',
             'l_label'    => 'bail|min:2|max:20|required',
             'l_name'    => '',
             'l_beschreibung' => '',
@@ -444,7 +444,7 @@ class LocationsController extends Controller
             'l_label'    => 'bail|unique:locations,l_label|min:2|max:20|required',
             'l_name'    => '',
             'l_beschreibung' => '',
-            'standort_id'    => 'unique:locations,standort_id',
+            'storage_id'    => 'unique:locations,storage_id',
             'adresse_id'     => 'required',
             'profile_id'     => 'required'
         ]);

@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             InitialValueSeeder::class,
-            StandortSeeder::class,
+            StorageSeeder::class,
+            StorageSeeder::class,
             GebaeudeSeeder::class,
             RaumSeeder::class,
             ContactSeeder::class,
             EquipmentSeeder::class
         ]);
-
     }
 }

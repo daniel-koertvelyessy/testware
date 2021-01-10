@@ -16,7 +16,7 @@ class GebaeudeSeeder extends Seeder
             $geb->location_id = $location->random()->id;
             $geb->save();
 
-            factory(App\Standort::class)->create(['std_id' => $geb->standort_id, 'std_kurzel' => $geb->b_label, 'std_objekt_typ' => 'buildings']);
+            factory(App\Storage::class)->create(['storage_uid' => $geb->storage_id, 'storage_label' => $geb->b_label, 'storage_object_type' => 'buildings']);
         });
     }
 }

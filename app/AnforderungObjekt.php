@@ -9,15 +9,15 @@ class AnforderungObjekt extends Model
 {
     use SoftDeletes;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
 
-    public function Anforderung() {
+    public function Anforderung()
+    {
         return $this->belongsTo(Anforderung::class);
     }
-    public function Standort() {
-        return $this->hasMany(Standort::class);
+    public function Storage()
+    {
+        return $this->hasMany(Storage::class);
     }
-
-
 }

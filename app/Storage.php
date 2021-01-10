@@ -24,20 +24,20 @@ class Storage extends Model
             $storageByUid = Storage::where('storage_uid', $uid)->first();
             if (!$storageByUid) {
                 $storage = new Storage();
-                $storage->storage_objekt_typ = $type;
+                $storage->storage_object_type = $type;
                 $storage->storage_uid = $uid;
                 $storage->storage_label = $label;
                 $storage->save();
                 return $storage->id;
             } else {
-                $storageByUid->storage_objekt_typ = $type;
+                $storageByUid->storage_object_type = $type;
                 $storageByUid->storage_uid = $uid;
                 $storageByUid->storage_label = $label;
                 $storageByUid->save();
                 return $storageByUid->id;
             }
         } else {
-            $storageByLabel->storage_objekt_typ = $type;
+            $storageByLabel->storage_object_type = $type;
             $storageByLabel->storage_uid = $uid;
             $storageByLabel->storage_label = $label;
             $storageByLabel->save();
@@ -60,7 +60,7 @@ class Storage extends Model
         $path = '';
         $stdid = Storage::find($uid);
 
-        $table = $stdid->storage_objekt_typ;
+        $table = $stdid->storage_object_type;
 
         switch ($table) {
 

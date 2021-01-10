@@ -14,6 +14,6 @@ $factory->define(Location::class, function (Faker $faker) {
         'l_beschreibung' => $faker->paragraph(5),
         'adresse_id' => factory(App\Adresse::class),
         'profile_id' => factory(App\Profile::class),
-        'standort_id' => $faker->uuid,
+        'storage_id' => $faker->uuid,
     ];
 });

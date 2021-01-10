@@ -14,7 +14,7 @@
     </p>
 
     <p style="font-size: 9pt;">{{__('Standort')}}<br>
-        <span style="font-size: 16pt;">{{ App\Standort::getLocationPath($equipment->standort_id) }} </span>
+        <span style="font-size: 16pt;">{{ App\Storage::getLocationPath($equipment->storage_id) }} </span>
     </p>
 
     <p style="font-size: 9pt;">{{__('Inventarnummer')}}<br>

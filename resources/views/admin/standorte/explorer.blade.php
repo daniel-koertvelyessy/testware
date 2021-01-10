@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuStandort')
+    @include('menus._menuStorage')
 @endsection
 
 @section('modals')
@@ -55,8 +55,8 @@
                         >
                         @csrf
                         <input type="hidden"
-                               name="standort_id"
-                               id="standort_id_building"
+                               name="storage_id"
+                               id="storage_id_building"
                                value="{{ Str::uuid() }}"
                         >
 
@@ -184,8 +184,8 @@
                         >
                         @csrf
                         <input type="hidden"
-                               name="standort_id"
-                               id="standort_id_room"
+                               name="storage_id"
+                               id="storage_id_room"
                                value="{{ Str::uuid() }}"
                         >
                         <div class="row">
@@ -287,8 +287,8 @@
                         >
                         @csrf
                         <input type="hidden"
-                               name="standort_id"
-                               id="standort_id_stellplatz"
+                               name="storage_id"
+                               id="storage_id_stellplatz"
                                value="{{ Str::uuid() }}"
                         >
                         <div class="row">
@@ -758,7 +758,7 @@
                     dataType: 'json',
                     url: "{{ route('fetchUid') }}",
                     success: function (res) {
-                        form.find('#standort_id_building').val(res);
+                        form.find('#storage_id_building').val(res);
                         form.find('#modalType').val('new');
                         modalBuilding.modal('show');
                     }
@@ -772,7 +772,7 @@
                     data: {id},
                     success: (res) => {
                         form.find('#b_name_ort').val(res.b_name_ort);
-                        form.find('#standort_id_building').val(res.standort_id);
+                        form.find('#storage_id_building').val(res.storage_id);
                         form.find('#b_name').val(res.b_name);
                         form.find('#b_name_text').val(res.b_name_text);
                         if (res.b_we_has === 1)
@@ -794,7 +794,7 @@
                                 success: function (res) {
                                     $('#modalSetBuildingLabel').text('{{ __('Gebäude kopieren') }}');
                                     form.find('#b_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}');
-                                    form.find('#standort_id_building').val(res);
+                                    form.find('#storage_id_building').val(res);
                                     form.find('#modalType').val('copy');
                                     modalBuilding.modal('show');
                                 }
@@ -834,7 +834,7 @@
                     dataType: 'json',
                     url: "{{ route('fetchUid') }}",
                     success: function (res) {
-                        form.find('#standort_id_room').val(res);
+                        form.find('#storage_id_room').val(res);
                         form.find('#modalType_room').val('new');
                         // form.find('#building_id_room_modal').val(res.building_id);
                         modalRoom.modal('show');
@@ -849,7 +849,7 @@
                     data: {id},
                     success: (res) => {
                         form.find('#r_label').val(res.r_label);
-                        form.find('#standort_id_room').val(res.standort_id);
+                        form.find('#storage_id_room').val(res.storage_id);
                         form.find('#r_name').val(res.r_name);
                         form.find('#r_name_text').val(res.r_name_text);
                         form.find('#building_id_room_modal').val(res.building_id);
@@ -868,7 +868,7 @@
                                 success: function (res) {
                                     $('#modalSetRoomLabel').text('{{__('Raum kopieren')}}');
                                     form.find('#r_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
-                                    form.find('#standort_id_room').val(res);
+                                    form.find('#storage_id_room').val(res);
                                     form.find('#modalType_room').val('copy');
                                     modalRoom.modal('show');
                                 }
@@ -908,7 +908,7 @@
                     dataType: 'json',
                     url: "{{ route('fetchUid') }}",
                     success: function (res) {
-                        form.find('#standort_id_stellplatz').val(res);
+                        form.find('#storage_id_stellplatz').val(res);
                         form.find('#modalType_stellplatz').val('new');
                         // form.find('#room_id_stellplatz_modal').val(res.room_id);
                         modalStellplatz.modal('show');
@@ -923,7 +923,7 @@
                     data: {id},
                     success: (res) => {
                         form.find('#sp_label').val(res.sp_label);
-                        form.find('#standort_id_stellplatz').val(res.standort_id);
+                        form.find('#storage_id_stellplatz').val(res.storage_id);
                         form.find('#sp_name').val(res.sp_name);
                         form.find('#sp_name_text').val(res.sp_name_text);
                         form.find('#room_id_stellplatz_modal').val(res.room_id);
@@ -942,7 +942,7 @@
                                 success: function (res) {
                                     $('#modalSetStellplatzLabel').text('{{__('Stellplatz kopieren')}}');
                                     form.find('#sp_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
-                                    form.find('#standort_id_stellplatz').val(res);
+                                    form.find('#storage_id_stellplatz').val(res);
                                     form.find('#modalType_stellplatz').val('copy');
                                     modalStellplatz.modal('show');
                                 }

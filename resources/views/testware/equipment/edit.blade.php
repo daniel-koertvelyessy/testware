@@ -79,9 +79,9 @@
                            value="{{ $equipment->produkt_id }}"
                     >
                     <input type="hidden"
-                           name="standort_id"
-                           id="standort_id"
-                           value="{{ $equipment->standort_id }}"
+                           name="storage_id"
+                           id="storage_id"
+                           value="{{ $equipment->storage_id }}"
                     >
                     <div class="row">
 
@@ -109,7 +109,7 @@
                         <div class="col-md-4">
                             <x-rtextfield id="setStandOrtId"
                                           label="{{__('Aufstellplatz / Standort')}}"
-                                          value="{{ $equipment->standort->std_kurzel }}"
+                                          value="{{ $equipment->storage->storage_label }}"
                             />
                         </div>
                         <div class="col-md-4">
@@ -217,10 +217,10 @@
                 $.ajax({
                     type: "get",
                     dataType: 'json',
-                    url: "{{ route('checkStandortValid') }}",
+                    url: "{{ route('checkStorageValid') }}",
                     data: {name},
                     success: (res) => {
-                        const sts = $('#standortStatus');
+                        const sts = $('#storageStatus');
                         if (res === 0) {
                             let text = '{{__('Dieser Standort existiert nicht!')}}';
                             sts.text(text);
@@ -238,7 +238,7 @@
         $("#setStandOrtId").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "{{ route('getStandortIdListAll') }}",
+                    url: "{{ route('getStorageIdListAll') }}",
                     type: 'GET',
                     dataType: "json",
                     data: {
@@ -252,9 +252,9 @@
 
 
                                 return {
-                                    label: `${res.std_kurzel} - ${res.name_lang}`,
+                                    label: `${res.storage_label} - ${res.name}`,
                                     id: res.id,
-                                    value: res.std_kurzel
+                                    value: res.storage_label
                                 };
 
 
@@ -269,7 +269,7 @@
                 });
             },
             select: function (event, ui) {
-                $('#standort_id').val(ui.item.id).removeClass('is-invalid');
+                $('#storage_id').val(ui.item.id).removeClass('is-invalid');
             }
         });
 

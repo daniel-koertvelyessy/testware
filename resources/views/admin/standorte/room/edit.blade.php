@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuStandort')
+    @include('menus._menuStorage')
 @endsection
 
 @section('modals')
@@ -48,9 +48,9 @@
         <form action="{{ route('room.update',$room) }}" method="post" class="needs-validation">
             @csrf
             <input type="hidden"
-                   name="standort_id"
-                   id="standort_id"
-                   value="{{ $room->standort_id }}"
+                   name="storage_id"
+                   id="storage_id"
+                   value="{{ $room->storage_id }}"
             >
             <div class="row">
                 <div class="col-md-6">

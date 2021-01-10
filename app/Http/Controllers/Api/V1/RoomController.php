@@ -69,7 +69,7 @@ class RoomController extends Controller
     {
         $request->validate([
             'label'   => 'required|unique:rooms,r_label|max:20',
-            'uid'          => 'unique:rooms,standort_id',
+            'uid'          => 'unique:rooms,storage_id',
             'name'         => '',
             'description'  => '',
             'building_id'  => '',
@@ -89,7 +89,7 @@ class RoomController extends Controller
         $room = new Room();
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
         $room->r_label = $request->label;
-        $room->standort_id = $uid;
+        $room->storage_id = $uid;
         $room->r_name = $request->name;
         $room->r_name_text = $request->description;
         $room->building_id = $request->building_id;
@@ -136,11 +136,11 @@ class RoomController extends Controller
             $room->r_name_text = (isset($request->description)) ? $request->description : $room->r_name_text;
 
             /**
-             * Check if room-uid is given and update/add the table "standorts"
+             * Check if room-uid is given and update/add the table "storages"
              */
-            $uid = (isset($request->uid)) ? $request->uid : $room->standort_id;
-            $room->standort_id = $uid;
-            (new \App\Standort)->change($uid, $request->label, 'rooms');
+            $uid = (isset($request->uid)) ? $request->uid : $room->storage_id;
+            $room->storage_id = $uid;
+            (new \App\Storage)->change($uid, $request->label, 'rooms');
         } else {
             /**
              * Room was not found. Try to add as new room
@@ -151,11 +151,11 @@ class RoomController extends Controller
             $room->r_name_text = (isset($request->description)) ? $request->description : null;
 
             /**
-             * Check if room-uid is given and add the table "standorts"
+             * Check if room-uid is given and add the table "storages"
              */
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-            $room->standort_id = $uid;
-            (new \App\Standort)->add($uid, $request->label, 'rooms');
+            $room->storage_id = $uid;
+            (new \App\Storage)->add($uid, $request->label, 'rooms');
         }
 
         /**

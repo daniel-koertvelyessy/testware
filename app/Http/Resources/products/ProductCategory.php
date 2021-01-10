@@ -10,15 +10,16 @@ class ProductCategory extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'label' => $this->pk_label,
-            'name' => $this->pk_name,
-            'number' => $this->pk_name_nummer,
+            'label'       => $this->pk_label,
+            'name'        => $this->pk_name,
+            'number'      => $this->pk_name_nummer,
             'description' => $this->pk_name_text,
         ];
     }

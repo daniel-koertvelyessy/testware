@@ -15,7 +15,7 @@ $factory->define(Building::class, function (Faker $faker) {
         'b_name_text' => $faker->paragraph(5),
         'b_we_has' => $b_we_has,
         'b_we_name' => $b_we_name,
-        'standort_id' => $faker->uuid,
+        'storage_id' => $faker->uuid,
         'building_type_id' => 1
     ];
 });

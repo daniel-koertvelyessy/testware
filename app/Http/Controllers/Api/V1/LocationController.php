@@ -68,8 +68,8 @@ class LocationController extends Controller
         $adresse_id = (new \App\Adresse)->addAddress($request);
         $profile_id = (new \App\Profile)->addProfile($request);
 
-        $standort_id = (!isset($request->uid)) ? Str::uuid() : $request->uid;
-        (new \App\Standort)->add($standort_id, $request->label, 'locations');
+        $storage_id = (!isset($request->uid)) ? Str::uuid() : $request->uid;
+        (new \App\Storage)->add($storage_id, $request->label, 'locations');
 
         $location = new Location();
         $location->l_label = $request->label;
@@ -77,7 +77,7 @@ class LocationController extends Controller
         $location->l_beschreibung = $request->description;
         $location->adresse_id = $adresse_id;
         $location->profile_id = $profile_id;
-        $location->standort_id = $standort_id;
+        $location->storage_id = $storage_id;
         $location->save();
 
         $adresse_id = ($adresse_id === NULL) ? 'referenced id not found' : $adresse_id;
@@ -86,7 +86,7 @@ class LocationController extends Controller
         return [
             'status' => true,
             'id' => $location->id,
-            'uid' => $standort_id,
+            'uid' => $storage_id,
             'address' => $adresse_id,
             'employee' => $profile_id,
         ];
@@ -145,7 +145,7 @@ class LocationController extends Controller
             'label' => 'bail|unique:locations,l_label|min:2|max:20|required',
             'name' => '',
             'description' => '',
-            'uid' => 'unique:locations,standort_id',
+            'uid' => 'unique:locations,storage_id',
         ]);
     }
 }

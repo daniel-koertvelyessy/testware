@@ -6,7 +6,7 @@ use App\Building;
 use App\BuildingTypes;
 use App\Location;
 use App\Room;
-use App\Standort;
+use App\Storage;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -38,7 +38,7 @@ class BuildingsController extends Controller
         }
         if (Building::all()->count() > 0) {
             $buildingList = Building::with('BuildingType')->sortable()->paginate(10);
-            return view('admin.standorte.building.index', ['buildingList' => $buildingList]);
+            return view('admin.storagee.building.index', ['buildingList' => $buildingList]);
         } else {
             return redirect()->route('building.create');
         }
@@ -53,7 +53,7 @@ class BuildingsController extends Controller
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
             return redirect()->route('location.create');
         }
-        return view('admin.standorte.building.create');
+        return view('admin.storagee.building.create');
     }
 
     /**
@@ -68,7 +68,7 @@ class BuildingsController extends Controller
 
         $building = Building::create($this->validateNewBuilding());
 
-        $std = (new \App\Standort)->add($request->standort_id, $request->b_label, 'buildings');
+        $std = (new \App\Storage)->add($request->storage_id, $request->b_label, 'buildings');
 
         $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
         return redirect()->back();
@@ -85,7 +85,7 @@ class BuildingsController extends Controller
             'b_name'      => '',
             'b_name_text'      => '',
             'b_we_has'         => '',
-            'standort_id'      => '',
+            'storage_id'      => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
             'building_type_id' => 'required',
@@ -118,7 +118,7 @@ class BuildingsController extends Controller
             $copy->b_we_name = $bul->b_we_name;
             $copy->location_id = $bul->location_id;
             $copy->building_type_id = $bul->building_type_id;
-            $copy->standort_id = Str::uuid();
+            $copy->storage_id = Str::uuid();
             //            $copy->
             $validator = Validator::make([
                 $copy->b_label,
@@ -129,7 +129,7 @@ class BuildingsController extends Controller
                 $copy->b_we_name,
                 $copy->location_id,
                 $copy->building_type_id,
-                $copy->standort_id,
+                $copy->storage_id,
 
             ], [
                 'b_label'      => 'bail|required|unique:buildings,b_label|min:2|max:10',
@@ -143,7 +143,7 @@ class BuildingsController extends Controller
             ]);
             $copy->save();
 
-            $std = (new \App\Standort)->add($copy->standort_id, $neuname, 'buildings');
+            $std = (new \App\Storage)->add($copy->storage_id, $neuname, 'buildings');
 
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde kopiert!');
             return redirect()->back();
@@ -166,7 +166,7 @@ class BuildingsController extends Controller
      */
     public function show(Building $building)
     {
-        return view('admin.standorte.building.show', ['building' => $building]);
+        return view('admin.storagee.building.show', ['building' => $building]);
     }
 
     /**
@@ -177,7 +177,7 @@ class BuildingsController extends Controller
      */
     public function edit(building $building)
     {
-        return view('admin.standorte.building.edit', compact('building'));
+        return view('admin.storagee.building.edit', compact('building'));
     }
 
     /**
@@ -191,9 +191,9 @@ class BuildingsController extends Controller
     {
 
         if ($building->b_label !== $request->b_label) {
-            $standort = Standort::where('std_id', $request->standort_id)->first();
-            $standort->std_kurzel = $request->b_label;
-            $standort->save();
+            $storage = Storage::where('storage_uid', $request->storage_id)->first();
+            $storage->storage_label = $request->b_label;
+            $storage->save();
         }
         $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $building->update($this->validateBuilding());
@@ -256,9 +256,9 @@ class BuildingsController extends Controller
             $buildingOld = Building::find($request->id);
             $buildingOld->b_we_has = $request->has('b_we_has') ? 1 : 0;
             if ($buildingOld->b_label !== $request->b_label) {
-                $standort = Standort::where('std_id', $request->standort_id)->first();
-                $standort->std_kurzel = $request->b_label;
-                $standort->save();
+                $storage = Storage::where('storage_uid', $request->storage_id)->first();
+                $storage->storage_label = $request->b_label;
+                $storage->save();
             }
             $buildingOld->update($this->validateBuilding());
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
@@ -271,13 +271,13 @@ class BuildingsController extends Controller
             $building->b_name = $request->b_name;
             $building->b_name_text = $request->b_name_text;
             $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
-            $building->standort_id = $request->standort_id;
+            $building->storage_id = $request->storage_id;
             $building->b_we_name = $request->b_we_name;
             $building->location_id = $request->location_id;
             $building->building_type_id = $request->building_type_id;
             $building->save();
 
-            $std = (new \App\Standort)->add($request->standort_id, $request->b_label, 'buildings');
+            $std = (new \App\Storage)->add($request->storage_id, $request->b_label, 'buildings');
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
         }
         return redirect()->back();
@@ -292,8 +292,8 @@ class BuildingsController extends Controller
     public function destroyBuildingAjax(Request $request)
     {
 
-        $rm = Building::find($request->id)->standort_id;
-        $stnd = Standort::where('std_id', $rm)->first();
+        $rm = Building::find($request->id)->storage_id;
+        $stnd = Storage::where('storage_uid', $rm)->first();
 
         $stnd->delete();
         $rname = Building::find($request->id)->first()->b_name;

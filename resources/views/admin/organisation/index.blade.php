@@ -34,7 +34,7 @@
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
 
-                        <a href="{{ route('adresse.index') }}" class="tile-small rounded" data-role="tile" aria-label="Standorte">
+                        <a href="{{ route('adresse.index') }}" class="tile-small rounded" data-role="tile" aria-label="Storagee">
                             <span class="icon"><i class="far fa-address-card"></i></span>
                             <span class="branding-bar text-center">{{__('Adressen')}}</span>
                         </a>

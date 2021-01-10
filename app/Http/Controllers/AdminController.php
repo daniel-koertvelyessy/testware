@@ -78,12 +78,12 @@ class AdminController extends Controller
         return view('admin.registerphone');
     }
 
-    public function standortDataPort()
+    public function storageDataPort()
     {
-        return view('admin.standorte.dataport');
+        return view('admin.storagee.dataport');
     }
 
-    public function checkStandortValid(Request $request)
+    public function checkStorageValid(Request $request)
     {
         //
         $bul = DB::table('buildings')->select('id')
@@ -925,7 +925,7 @@ class AdminController extends Controller
 
     public function getUsedStellplatzByType(Equipment $equipment, Request $request)
     {
-        return $equipment->with('produkt')->where('standort_id', $request->id)->get();
+        return $equipment->with('produkt')->where('storage_id', $request->id)->get();
     }
 
     public function getUsedEquipmentByProdAnforderung(Produkt $room, Request $btid)
@@ -943,40 +943,40 @@ class AdminController extends Controller
         return false;
     }
 
-    public function getStandortIdListAll(Request $request)
+    public function getStorageIdListAll(Request $request)
     {
-        $loc = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,l_name as name_lang')
+        $loc = DB::table('storages')->select(
+            DB::raw('storages.id,storage_label,storages.storage_uid,l_name as name')
         )->distinct()
-            ->join('locations', 'standorts.std_id', '=', 'locations.standort_id')
-            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->join('locations', 'storages.storage_uid', '=', 'locations.storage_id')
+            ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('l_name', 'like', '%' . $request->term . '%')
             ->orWhere('l_beschreibung', 'like', '%' . $request->term . '%')
             ->get();
 
-        $bul = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,b_name as name_lang')
+        $bul = DB::table('storages')->select(
+            DB::raw('storages.id,storage_label,storages.storage_uid,b_name as name')
         )->distinct()
-            ->join('buildings', 'standorts.std_id', '=', 'buildings.standort_id')
-            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')
+            ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('b_name', 'like', '%' . $request->term . '%')
             ->orWhere('b_name_text', 'like', '%' . $request->term . '%')
             ->get();
 
-        $rom = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,r_name as name_lang')
+        $rom = DB::table('storages')->select(
+            DB::raw('storages.id,storage_label,storages.storage_uid,r_name as name')
         )->distinct()
-            ->join('rooms', 'standorts.std_id', '=', 'rooms.standort_id')
-            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')
+            ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('r_name', 'like', '%' . $request->term . '%')
             ->orWhere('r_name_text', 'like', '%' . $request->term . '%')
             ->get();
 
-        $stp = DB::table('standorts')->select(
-            DB::raw('standorts.id,std_kurzel,standorts.std_id,sp_name as name_lang')
+        $stp = DB::table('storages')->select(
+            DB::raw('storages.id,storage_label,storages.storage_uid,sp_name as name')
         )->distinct()
-            ->join('stellplatzs', 'standorts.std_id', '=', 'stellplatzs.standort_id')
-            ->where('std_kurzel', 'like', '%' . $request->term . '%')
+            ->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')
+            ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('sp_name', 'like', '%' . $request->term . '%')
             ->orWhere('sp_name_text', 'like', '%' . $request->term . '%')
             ->get();

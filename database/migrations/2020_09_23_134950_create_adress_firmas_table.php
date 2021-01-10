@@ -17,7 +17,7 @@ class CreateAdressFirmasTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('adfa_kurzel', 20)->nullable();
+            $table->string('adfa_label', 20)->nullable();
             $table->foreignId('firma_id');
             $table->foreignId('adresse_id');
         });

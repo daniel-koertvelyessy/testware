@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuStandort')
+    @include('menus._menuStorage')
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
-                        <a href="{{ route('building.index') }}" class="tile-small rounded" data-role="tile" aria-label="Standorte">
+                        <a href="{{ route('building.index') }}" class="tile-small rounded" data-role="tile" aria-label="Storagee">
                             <span class="icon"><i class="far fa-building"></i></span>
                             <span class="branding-bar text-center">{{__('Gebäude')}}</span>
                         </a>

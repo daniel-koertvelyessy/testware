@@ -37,7 +37,7 @@ class CreateEquipmentTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('set null');
 
-            $table->foreignId('standort_id')
+            $table->foreignId('storage_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')

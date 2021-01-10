@@ -7,7 +7,7 @@
 
 @section('doc-right-nav')
 {{--    <li class="duik-content-nav__item">
-        <a href="#locations">{{__('Standorte')}}</a>
+        <a href="#locations">{{__('Storagee')}}</a>
     </li>--}}
 @endsection
 

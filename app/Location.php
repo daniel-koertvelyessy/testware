@@ -120,9 +120,9 @@ class Location extends Model
         }
     }
 
-    public function Standort()
+    public function Storage()
     {
-        return $this->hasOne(Standort::class, 'std_id', 'standort_id');
+        return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
 
     public function countTotalEquipmentInLocation()
@@ -133,16 +133,16 @@ class Location extends Model
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
-                $equipCounter += $this->Standort->countReferencedEquipment();
+                $equipCounter += $this->Storage->countReferencedEquipment();
                 $buildings = \App\Building::where('location_id', $this->id)->get();
                 foreach ($buildings as $building) {
-                    $equipCounter += $building->Standort->countReferencedEquipment();
+                    $equipCounter += $building->Storage->countReferencedEquipment();
                     $rooms = Room::where('building_id', $building->id)->get();
                     foreach ($rooms as $room) {
-                        $equipCounter += $room->Standort->countReferencedEquipment();
+                        $equipCounter += $room->Storage->countReferencedEquipment();
                         $compartments = Stellplatz::where('room_id', $room->id)->get();
                         foreach ($compartments as $compartment) {
-                            $equipCounter += $compartment->Standort->countReferencedEquipment();
+                            $equipCounter += $compartment->Storage->countReferencedEquipment();
                         }
                     }
                 }

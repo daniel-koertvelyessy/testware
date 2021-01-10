@@ -14,12 +14,12 @@ class CreateStoragesTable extends Migration
     public function up()
     {
         Schema::create('storages', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('storage_uid');
             $table->string('storage_label');
-            $table->string('storage_objekt_typ');
+            $table->string('storage_object_type');
         });
     }
 

@@ -66,7 +66,7 @@
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-4">Standort</dt>
-                        <dd class="col-sm-8">{{ $edata->standort->std_kurzel }}</dd>
+                        <dd class="col-sm-8">{{ $edata->storage->storage_label }}</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-4">Inbetriebname</dt>

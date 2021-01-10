@@ -195,7 +195,6 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
-
         DB::table('address_types')->insert([
             [
                 'adt_name' => 'Heimadress',
@@ -243,7 +242,6 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
-
         DB::table('equipment_states')->insert([
             [
                 'estat_label' => 'freigegeben',
@@ -284,6 +282,7 @@ class InitialValueSeeder extends Seeder
             //            ],
 
         ]);
+
         DB::table('verordnungs')->insert([
             [
                 'created_at' => now(),
@@ -514,8 +513,6 @@ Entwicklungsinitiativen bereitstellt.',
             ],
         ]);
 
-
-
         DB::table('stellplatz_typs')->insert([
             [
                 'spt_label' => 'Regalfach',
@@ -530,7 +527,6 @@ Entwicklungsinitiativen bereitstellt.',
                 'spt_name' => 'Aufstellplatz in einem Raum',
             ],
         ]);
-
 
         DB::table('document_types')->insert([
             [
@@ -564,9 +560,6 @@ Entwicklungsinitiativen bereitstellt.',
                 'doctyp_mandatory' => '1',
             ],
         ]);
-
-
-
 
         //        factory(App\Profile::class, 6)->create();
     }

@@ -20,7 +20,7 @@ class Room extends JsonResource
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
             'label' => $this->r_label,
-            'uid' => $this->standort_id,
+            'uid' => $this->storage_id,
             'name' => $this->r_name,
             'description' => $this->r_name_text,
             'building_id' => $this->building_id,

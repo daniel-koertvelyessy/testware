@@ -27,7 +27,7 @@ class CreateLocationTable extends Migration
                 ->constrained()
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-            $table->uuid('standort_id')->nullable();
+            $table->uuid('storage_id')->nullable();
         });
     }
 

@@ -519,9 +519,9 @@
                                                label="{{__('Bezeichnung')}}:"
                                                value="{!! $equipment->produkt->prod_name !!}"
                                 />
-                                <x-staticfield id="Standort"
+                                <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
-                                               value="{!!  App\Standort::find($equipment->standort_id)->std_kurzel !!}"
+                                               value="{!!  App\Storage::find($equipment->storage_id)->storage_label !!}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
                                                label="{{__('Inventarnummer')}}:"

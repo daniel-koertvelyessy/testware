@@ -17,13 +17,12 @@ class CreateAnforderungObjektsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->uuid('std_id')->nullable();
+            $table->uuid('storage_uid')->nullable();
             $table->foreignId('anforderung_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-
         });
     }
 

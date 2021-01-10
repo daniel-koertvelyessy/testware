@@ -11,6 +11,6 @@ $factory->define(Room::class, function (Faker $faker) {
         'r_name' => $faker->slug(1),
         'r_name_text' => $faker->paragraph(5),
         'room_type_id' => rand(1, 3),
-        'standort_id' => $faker->uuid,
+        'storage_id' => $faker->uuid,
     ];
 });

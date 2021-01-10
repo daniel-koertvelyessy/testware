@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\compartments\Compartment;
 use App\Http\Resources\compartments\CompartmentFull;
 use App\Room;
-use App\Standort;
+use App\Storage;
 use App\Stellplatz;
 use App\StellplatzTyp;
 use Exception;
@@ -77,11 +77,11 @@ class CompartmentController extends Controller
             ], 422);
 
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
-        (new Standort)->add($uid, $request->label, 'stellplatzs');
+        (new Storage)->add($uid, $request->label, 'stellplatzs');
 
         $compartment = new Stellplatz();
         $compartment->sp_label = $request->label;
-        $compartment->standort_id = $uid;
+        $compartment->storage_id = $uid;
         $compartment->sp_name = (isset($request->name)) ? $request->name : null;
         $compartment->sp_name_text = (isset($request->description)) ? $request->description : null;
         $compartment->room_id = $request->room_id;
@@ -130,11 +130,11 @@ class CompartmentController extends Controller
             $compartment->sp_name_text = (isset($request->description)) ? $request->description : $compartment->sp_name_text;
 
             /**
-             * Check if compartment-uid is given and update/add the table "standorts"
+             * Check if compartment-uid is given and update/add the table "storages"
              */
-            $uid = (isset($request->uid)) ? $request->uid : $compartment->standort_id;
-            $compartment->standort_id = $uid;
-            (new \App\Standort)->change($uid, $request->label, 'stellplatzs');
+            $uid = (isset($request->uid)) ? $request->uid : $compartment->storage_id;
+            $compartment->storage_id = $uid;
+            (new \App\Storage)->change($uid, $request->label, 'stellplatzs');
             $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
             if (!$compartment->stellplatz_typ_id)
                 return response()->json([

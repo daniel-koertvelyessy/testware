@@ -10,16 +10,17 @@ class ProductShort extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'label' => $this->b_label,
-            'uid' => $this->standort_id,
-            'name' => $this->b_name,
-            'description' => $this->b_name_text,
+            'label'       => $this->prod_label,
+            'name'        => $this->prod_name,
+            'description' => $this->prod_name_text,
+            'number'      => $this->prod_nummer,
         ];
     }
 }

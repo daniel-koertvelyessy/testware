@@ -10,14 +10,15 @@ class ProductStateShort extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
             'label' => $this->ps_label,
-            'name' => $this->ps_name,
+            'name'  => $this->ps_name,
         ];
     }
 }

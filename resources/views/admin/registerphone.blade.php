@@ -18,7 +18,7 @@
         </div>
         <div class="row mt-5">
             <div class="col">
-                <p>Jetzt <a href="{{ route('makePDF',['standortliste',__('Standortbericht')]) }}" download="">aktivieren</a>!</p>
+                <p>Jetzt <a href="{{ route('makePDF',['storageliste',__('Standortbericht')]) }}" download="">aktivieren</a>!</p>
             </div>
         </div>
     </div>

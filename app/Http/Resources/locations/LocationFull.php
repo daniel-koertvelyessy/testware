@@ -22,7 +22,7 @@ class LocationFull extends JsonResource
             'created' => (string)$this->created_at,
             'updated' => (string)$this->updated_at,
             'label' => $this->l_label,
-            'uid' => $this->standort_id,
+            'uid' => $this->storage_id,
             'name' => $this->l_name,
             'description' => $this->l_beschreibung,
             'address' => new AddressFull($this->Adresse),
