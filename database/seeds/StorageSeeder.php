@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class StandortSeeder extends Seeder
+class StorageSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,10 +14,10 @@ class StandortSeeder extends Seeder
         $location = factory(App\Location::class, 2)->create();
 
         foreach ($location as $loc)
-            factory(App\Standort::class)->create([
-                'std_id' => $loc->standort_id,
-                'std_kurzel' => $loc->l_label,
-                'std_objekt_typ' => 'locations'
+            factory(App\Storage::class)->create([
+                'storage_uid' => $loc->storage_id,
+                'storage_label' => $loc->l_label,
+                'storage_objekt_typ' => 'locations'
             ]);
     }
 }

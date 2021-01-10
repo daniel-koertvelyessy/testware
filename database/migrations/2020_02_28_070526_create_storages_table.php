@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStandortsTable extends Migration
+class CreateStoragesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateStandortsTable extends Migration
      */
     public function up()
     {
-        Schema::create('standorts', function (Blueprint $table) {
+        Schema::create('storages', function (Blueprint $table) {
             $table->id('id');
             $table->timestamps();
             $table->softDeletes();
-            $table->uuid('std_id');
-            $table->string('std_kurzel');
-            $table->string('std_objekt_typ');
-
+            $table->uuid('storage_uid');
+            $table->string('storage_label');
+            $table->string('storage_objekt_typ');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateStandortsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('standorts');
+        Schema::dropIfExists('storages');
     }
 }

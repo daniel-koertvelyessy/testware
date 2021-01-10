@@ -7,41 +7,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Kyslik\ColumnSortable\Sortable;
 
-class Standort extends Model
+class Storage extends Model
 {
     use SoftDeletes, Sortable;
 
     public $sortable = [
         'id',
-        'std_kurzel',
-        'std_id',
+        'storage_label',
+        'storage_uid',
     ];
 
     public function add($uid, $label, $type)
     {
-        $standortByLabel = Standort::where('std_kurzel', $label)->first();
-        if (!$standortByLabel) {
-            $standortByUid = Standort::where('std_id', $uid)->first();
-            if (!$standortByUid) {
-                $standort = new Standort();
-                $standort->std_objekt_typ = $type;
-                $standort->std_id = $uid;
-                $standort->std_kurzel = $label;
-                $standort->save();
-                return $standort->id;
+        $storageByLabel = Storage::where('storage_label', $label)->first();
+        if (!$storageByLabel) {
+            $storageByUid = Storage::where('storage_uid', $uid)->first();
+            if (!$storageByUid) {
+                $storage = new Storage();
+                $storage->storage_objekt_typ = $type;
+                $storage->storage_uid = $uid;
+                $storage->storage_label = $label;
+                $storage->save();
+                return $storage->id;
             } else {
-                $standortByUid->std_objekt_typ = $type;
-                $standortByUid->std_id = $uid;
-                $standortByUid->std_kurzel = $label;
-                $standortByUid->save();
-                return $standortByUid->id;
+                $storageByUid->storage_objekt_typ = $type;
+                $storageByUid->storage_uid = $uid;
+                $storageByUid->storage_label = $label;
+                $storageByUid->save();
+                return $storageByUid->id;
             }
         } else {
-            $standortByLabel->std_objekt_typ = $type;
-            $standortByLabel->std_id = $uid;
-            $standortByLabel->std_kurzel = $label;
-            $standortByLabel->save();
-            return $standortByLabel->id;
+            $storageByLabel->storage_objekt_typ = $type;
+            $storageByLabel->storage_uid = $uid;
+            $storageByLabel->storage_label = $label;
+            $storageByLabel->save();
+            return $storageByLabel->id;
         }
     }
 
@@ -58,21 +58,21 @@ class Standort extends Model
     public static function getLocationPath($uid)
     {
         $path = '';
-        $stdid = Standort::find($uid);
+        $stdid = Storage::find($uid);
 
-        $table = $stdid->std_objekt_typ;
+        $table = $stdid->storage_objekt_typ;
 
         switch ($table) {
 
             case 'locations':
 
-                $loc = Location::where('standort_id', $stdid->std_id);
+                $loc = Location::where('storage_id', $stdid->storage_uid);
                 $path = __('Standort') . ': ' . $loc->l_label;
                 break;
 
             case 'buildings':
 
-                $bul = Building::where('standort_id', $stdid->std_id);
+                $bul = Building::where('storage_id', $stdid->storage_uid);
 
                 $loc = Location::where('id', $bul->location_id);
 
@@ -81,7 +81,7 @@ class Standort extends Model
 
             case 'rooms':
 
-                $rom = Room::where('standort_id', $stdid->std_id)->get();
+                $rom = Room::where('storage_id', $stdid->storage_uid)->get();
 
 
                 $bul = Building::find($rom[0]->building_id);
@@ -98,7 +98,7 @@ class Standort extends Model
 
             case 'stellplatzs':
 
-                $spl = Stellplatz::where('standort_id', $stdid->std_id)->get();
+                $spl = Stellplatz::where('storage_id', $stdid->storage_uid)->get();
 
                 $rom = Room::find($spl->id)->get();
 
@@ -126,7 +126,7 @@ class Standort extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class, 'standort_id');
+        return $this->belongsTo(Location::class, 'storage_id');
     }
 
     public function building()
@@ -146,6 +146,6 @@ class Standort extends Model
 
     public function countReferencedEquipment()
     {
-        return Equipment::where('standort_id', $this->id)->count();
+        return Equipment::where('storage_id', $this->id)->count();
     }
 }
