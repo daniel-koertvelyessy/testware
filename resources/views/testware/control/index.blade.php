@@ -54,7 +54,7 @@
                                 {!! $controlItem->checkDueDate($controlItem) !!}
                             </td>
                             <td>
-                                <a href="{{ route('testing.create',['test_id' => $controlItem]) }}"
+                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
                                    class="btn btn-sm btn-outline-primary">
                                     <span class="d-none d-md-inline">{{__('jetzt prüfen')}}</span>
                                     <span class="fas fa-stethoscope"></span>
@@ -73,7 +73,7 @@
                                     <blockquote class="d-md-none blockquote border-left border-warning pl-3">
                                             <span class="fas fa-exclamation-triangle text-warning"
                                                   aria-label="Symbol für unvollständige Prüfung"
-                                            ></span> => Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden.
+                                            ></span> => {{__('Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden.')}}
                                     </blockquote>
                                 </td>
                             </tr>
@@ -88,7 +88,7 @@
                     @endforelse
                     </tbody>
                 </table>
-                @if($controlItems->count()>10)
+                @if($controlItems->count()>1)
                     <div class="d-flex justify-content-center">
                         {!! $controlItems->withQueryString()->onEachSide(2)->links()??'' !!}
                     </div>

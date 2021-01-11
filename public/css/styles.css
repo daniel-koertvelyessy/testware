@@ -226,6 +226,13 @@ a.subnav {
     background-image: none;
 }
 
+input.decimal{
+    text-align: right!important;
+}
+
+input.datepicker{
+    text-align: center!important;
+}
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
     color: #2c3e50;

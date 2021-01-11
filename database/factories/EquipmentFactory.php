@@ -10,7 +10,7 @@ $factory->define(Equipment::class, function (Faker $faker) {
     return [
         'eq_inventar_nr' => 'inv20' . substr($uid, 0, 50),
         'eq_serien_nr' => $faker->unique()->bankAccountNumber,
-        'eq_ibm' => $faker->date('Y-m-d'),
+        'installed_at' => $faker->date('Y-m-d'),
         'eq_text' => $faker->text(100),
         'eq_uid' => $uid,
         'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),

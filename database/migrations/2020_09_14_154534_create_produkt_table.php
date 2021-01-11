@@ -22,7 +22,7 @@ class CreateProduktTable extends Migration
             $table->text('prod_name_text')->nullable();
             $table->string('prod_nummer', 100);
             $table->boolean('prod_active')->default(true);
-
+            $table->decimal('prod_price', 10)->nullable();
             $table->unsignedBigInteger('produkt_kategorie_id')->nullable();
             $table->foreign('produkt_kategorie_id')
                 ->references('id')

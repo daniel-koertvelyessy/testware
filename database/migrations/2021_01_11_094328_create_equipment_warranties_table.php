@@ -15,7 +15,13 @@ class CreateEquipmentWarrantiesTable extends Migration
     {
         Schema::create('equipment_warranties', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->timestamps();
+            $table->date('expires_at');
+            $table->foreignId('equipment_id')
+                ->nullable()
+                ->constrained('equipment')
+                ->onDelete('cascade');
         });
     }
 

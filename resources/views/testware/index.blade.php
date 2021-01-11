@@ -56,7 +56,7 @@
         <div class="row mt-4">
             <x-dashborarditem>
                 <h2 class="h5">{{__('Anstehende')}}
-                    <a href="{{ route('testing.index') }}">{{ __('Prüfungen') }}</a>
+                    <a href="{{ route('control.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
                 <nav>
                     <div class="nav nav-tabs"

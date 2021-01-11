@@ -97,35 +97,14 @@
                            value="{{ old('storage_id')??'' }}"
                     >
                     <div class="row">
-                        <div class="col-md-4">
-                            <x-textfield id="setNewEquipmentFromProdukt"
-                                         label="{{__('Import aus Produkt')}}"
+                        <div class="col-md-6">
+                            <x-textfield id="eq_name"
+                                         placeholder="{{ __('Eingabe startet Suche') }}"
+                                         label="{{__('Bezeichnung')}}"
                                          value="{{ App\Produkt::find($produkt)->prod_name  }}"
                             />
                         </div>
-                        <div class="col-md-4">
-                            <x-textfield id="eq_inventar_nr"
-                                         label="{{__('Inventarnummer')}}"
-                                         max="100"
-                                         required
-                                         class="checkLabel"
-                            />
-                        </div>
-                        <div class="col-md-2">
-                            <x-datepicker id="eq_ibm"
-                                          label="{{__('Inbetriebname')}}"
-                                          value="{{ date('Y-m-d') }}"
-                            />
-                        </div>
-                        <div class="col-md-2">
-                            <x-datepicker id="qe_control_date_last"
-                                          label="{{__('Letzte Prüfung')}}"
-                                          value="{{ date('Y-m-d') }}"
-                            />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="setStandOrtId">{{__('Aufstellplatz / Standort')}}</label>
                                 <div class="input-group">
@@ -155,6 +134,18 @@
                             </div>
 
                         </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <x-textfield id="eq_inventar_nr"
+                                         label="{{__('Inventarnummer')}}"
+                                         max="100"
+                                         required
+                                         class="checkLabel"
+                            />
+                        </div>
                         <div class="col-md-4">
                             <x-textfield id="eq_serien_nr"
                                          label="{{__('Seriennummer')}}"
@@ -168,10 +159,43 @@
                                 @foreach (App\EquipmentState::all() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}"
                                             class="text-{{ $equipmentState->estat_color }}"
-                                            @if($equipmentState->id===4) selected  @endif
+                                            @if($equipmentState->id===4) selected @endif
                                     >{{ $equipmentState->estat_label }}</option>
                                 @endforeach
                             </x-selectfield>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <x-textfield id="eq_price"
+                                         class="decimal"
+                                         label="{{__('Kaufpreis')}}"
+                                         value="{{ App\Produkt::find($produkt)->prod_price }}"
+                            />
+                        </div>
+                        <div class="col-md-2">
+                            <x-datepicker id="purchased_at"
+                                          label="{{__('Kaufdatum')}}"
+                                          value="{{ date('Y-m-d') }}"
+                            />
+                        </div>
+                        <div class="col-md-2">
+                            <x-datepicker id="installed_at"
+                                          label="{{__('Inbetriebname')}}"
+                                          value="{{ date('Y-m-d') }}"
+                            />
+                        </div>
+                        <div class="col-md-2">
+                            <x-datepicker id="qe_control_date_last"
+                                          label="{{__('Letzte Prüfung')}}"
+                                          value="{{ date('Y-m-d') }}"
+                            />
+                        </div>
+                        <div class="col-md-2">
+                            <x-datepicker id="warranty_expires_at"
+                                          label="{{__('Auslauf Gewährleistung')}}"
+                                          value="{{ now()->addYears(2)->toDateString() }}"
+                            />
                         </div>
                     </div>
                     <div class="row">
@@ -261,7 +285,7 @@
                             >
                                 @foreach (App\DocumentType::all() as $ad)
                                     <option value="{{ $ad->id }}"
-                                            @if( $ad->id==5 ?? old('document_type_id')==$ad->id)
+                                            @if( $ad->id==2 ?? old('document_type_id')==$ad->id)
                                             selected
                                         @endif
                                     >{{ $ad->doctyp_label }}</option>
@@ -269,6 +293,7 @@
                             </x-selectfield>
                             <x-textfield id="eqdoc_label"
                                          label="{{__('Bezeichnung')}}"
+                                         value="{{ __('Bericht Funktionsprüfung ').date('Y-m-d') }}"
                             />
 
                             <x-textarea id="eqdoc_name_text"
@@ -339,7 +364,7 @@
                 $.ajax({
                     type: "get",
                     dataType: 'json',
-                    url: "{{ route('checkStandortValid') }}",
+                    url: "{{ route('checkStorageValid') }}",
                     data: {name},
                     success: (res) => {
                         const sts = $('#storageStatus');
@@ -400,18 +425,18 @@
 
     <script>
 
-        function checkFunctionControl(){
+        function checkFunctionControl() {
             const function_control_profil = $('#function_control_profil');
             const function_control_firma = $('#function_control_firma');
 
-            let chekResult=false;
+            let chekResult = false;
 
-            if (function_control_firma.val()==='void' && function_control_profil.val()==='void' ) {
+            if (function_control_firma.val() === 'void' && function_control_profil.val() === 'void') {
                 function_control_profil.addClass('is-invalid');
                 function_control_firma.addClass('is-invalid');
             }
 
-            if (function_control_firma.val()!=='void' || function_control_profil.val()!=='void'){
+            if (function_control_firma.val() !== 'void' || function_control_profil.val() !== 'void') {
                 function_control_profil.removeClass('is-invalid');
                 function_control_firma.removeClass('is-invalid');
                 chekResult = true;
@@ -444,14 +469,12 @@
 
             frmIsComplete = checkFunctionControl();
 
-            if (storage_id.val() === '')
-            {
+            if (storage_id.val() === '') {
                 setStandOrtId.addClass('is-invalid');
                 frmIsComplete = false;
             }
 
-            if (eq_inventar_nr.val() === '')
-            {
+            if (eq_inventar_nr.val() === '') {
                 eq_inventar_nr.addClass('is-invalid');
                 frmIsComplete = false;
             }

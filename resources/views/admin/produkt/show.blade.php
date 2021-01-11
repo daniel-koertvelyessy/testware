@@ -1104,7 +1104,7 @@
                                     <tr>
                                         <th>@sortablelink('produktDetails.eq_inventar_nr', __('Inventarnummer'))</th>
                                         <th>@sortablelink('produktDetails.eq_serien_nr', __('Seriennummer'))</th>
-                                        <th>@sortablelink('produktDetails.eq_ibm', __('Inbetriebname'))</th>
+                                        <th>@sortablelink('produktDetails.installed_at', __('Inbetriebname'))</th>
                                         <th>@sortablelink('EquipmentState.estat_label', __('Status'))</th>
 
                                     </tr>
@@ -1119,7 +1119,7 @@
                                                 {{ $equipment->eq_serien_nr }}
                                             </td>
                                             <td>
-                                                {{ Carbon\Carbon::parse($equipment->eq_ibm)->DiffForHumans() }}
+                                                {{ Carbon\Carbon::parse($equipment->installed_at)->DiffForHumans() }}
                                             </td>
                                             <td class="d-flex align-items-center justify-content-between">
                                                 {{ $equipment->EquipmentState->estat_label }}

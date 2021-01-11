@@ -22,7 +22,7 @@
     </p>
 
     <p style="font-size: 9pt;">{{__('Inbetriebnahme am')}}<br>
-        <span style="font-size: 16pt;">{{ $equipment->eq_ibm }}</span>
+        <span style="font-size: 16pt;">{{ $equipment->installed_at }}</span>
     </p>
 
     <p style="font-size: 9pt;">{{__('Seriennummer')}}<br>

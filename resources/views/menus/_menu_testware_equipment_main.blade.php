@@ -21,7 +21,7 @@
 
         </ul>
     </li>
-    <li class="nav-item {{ Request::routeIs('testing.index') ? ' active ' : '' }} dropdown">
+    <li class="nav-item {{ Request::routeIs('control.index') ? ' active ' : '' }} dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAddProdukt" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-stethoscope"></i> Prüfungen</a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownAddProdukt">
             <li>

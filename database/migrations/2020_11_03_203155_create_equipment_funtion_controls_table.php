@@ -17,7 +17,7 @@ class CreateEquipmentFuntionControlsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('function_control_date');
+            $table->dateTime('controlled_at');
             $table->foreignId('function_control_firma')->nullable();
             $table->foreignId('function_control_profil')->nullable();
             $table->boolean('function_control_pass');

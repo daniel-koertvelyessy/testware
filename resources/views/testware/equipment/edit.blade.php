@@ -94,9 +94,9 @@
                         </div>
 
                         <div class="col-md-2">
-                            <x-datepicker id="eq_ibm"
+                            <x-datepicker id="installed_at"
                                           label="{{__('Inbetriebnahme am')}}"
-                                          value="{{ $equipment->eq_ibm }}"
+                                          value="{{ $equipment->installed_at }}"
                             />
                         </div>
 

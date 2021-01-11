@@ -20,8 +20,9 @@ class Equipment extends Model
         'id',
         'eq_inventar_nr',
         'eq_serien_nr',
-        'eq_ibm',
+        'installed_at',
         'eq_uid',
+        'eq_name',
         'produkt_id',
         'created_at',
         'updated_at'
@@ -43,6 +44,7 @@ class Equipment extends Model
         return \DB::table('equipment')->select(
             'equipment.eq_inventar_nr',
             'equipment.id',
+            'equipment.eq_name',
             'control_equipment.qe_control_date_due',
             'produkts.prod_label'
         )
@@ -59,6 +61,7 @@ class Equipment extends Model
             ->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')
             ->orWhere('eq_text', 'like', '%' . $term . '%')
             ->orWhere('eq_uid', 'like', '%' . $term . '%')
+            ->orWhere('eq_name', 'like', '%' . $term . '%')
             ->get();
     }
 

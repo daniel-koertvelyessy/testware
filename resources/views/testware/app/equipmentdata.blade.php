@@ -70,7 +70,7 @@
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-4">Inbetriebname</dt>
-                        <dd class="col-sm-8">{{ Carbon\Carbon::parse($edata->eq_ibm)->DiffForHumans() }}</dd>
+                        <dd class="col-sm-8">{{ Carbon\Carbon::parse($edata->installed_at)->DiffForHumans() }}</dd>
                     </dl>
                     <dl class="row">
                         <dt class="col-sm-4">zuletzt bearbeitet</dt>

@@ -77,7 +77,7 @@
 @section('content')
 
 
-    <form action="{{ route('testing.store') }}"
+    <form action="{{ route('control.store') }}"
           method="post"
           id="frmAddControlEvent"
           enctype="multipart/form-data"
@@ -341,7 +341,8 @@
                                                     @if($aci->aci_vaule_soll !== null)
                                                         <label for="control_item_read_{{ $aci->id }}"
                                                                class="sr-only"
-                                                        >Ist-Wert</label>
+                                                        >Ist-Wert
+                                                        </label>
                                                         <input type="text"
                                                                placeholder="Wert"
                                                                class="form-control decimal checkSollValue"
@@ -369,14 +370,17 @@
                                                                    value="1"
 
                                                             >
-                                                            JA </label> <label class="btn btn-outline-danger">
+                                                            JA
+                                                        </label>
+                                                        <label class="btn btn-outline-danger">
                                                             <input type="radio"
                                                                    id="aci_notPassed_{{ $aci->id }}"
                                                                    name="control_item_pass[{{ $aci->id }}][]"
                                                                    value="0"
 
                                                             >
-                                                            NEIN </label>
+                                                            NEIN
+                                                        </label>
                                                     </div>
 
                                                 </td>
@@ -566,7 +570,8 @@
                                                    name="control_event_pass"
                                                    value="1"
                                             > {{__('Bestanden')}}
-                                        </label> <label class="btn btn-outline-danger">
+                                        </label>
+                                        <label class="btn btn-outline-danger">
                                             <input type="radio"
                                                    id="controlEquipmentNotPassed"
                                                    name="control_event_pass"
@@ -577,12 +582,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p class="lead">{{__('Nächste Prüfung des Gerätes')}}</p>
-
                                     <x-datepicker id="control_event_next_due_date"
                                                   label="{{__('Fällig bis')}}"
-                                                  value="{{ now()
-->add($test->Anforderung->an_control_interval.$test->Anforderung->ControlInterval->ci_si)
-->toDateString() }}"
+                                                  value="{{ now()->add($test->Anforderung->an_control_interval,strtolower($test->Anforderung->ControlInterval->ci_delta))->toDateString() }}"
                                     />
 
                                 </div>
@@ -596,7 +598,7 @@
                         id="btnSubmitControlEvent"
                         class="btn btn-lg btn-primary"
                     >
-                        Prüfung erfassen <i class="fas fa-download ml-2"></i>
+                        {{__('Prüfung erfassen')}} <i class="fas fa-download ml-2"></i>
                     </button>
                 </div>
             </div>

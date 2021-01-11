@@ -31,7 +31,7 @@
         <span class="fas fa-boxes"></span>
     </a>
 
-    <a href="{{ route('testing.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
+    <a href="{{ route('control.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
         <span>{{__('Prüfungen')}}</span>
         <span class="fas fa-stethoscope"></span>
     </a>

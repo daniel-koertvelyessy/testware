@@ -22,32 +22,50 @@
         <ul class="dropdown-menu"
             aria-labelledby="navTargetAppAktionItems"
         >
-            <a class="dropdown-item d-flex justify-content-between align-items-center"
+            <a class="dropdown-item"
                href="{{ route('equipment.edit',['equipment'=>$equipment]) }}"
             >
-                {{__('Gerät bearbeiten')}} <i class="ml-2 far fa-edit"></i></a>
-            <a class="dropdown-item d-flex justify-content-between align-items-center"
+                <i class="ml-2 far fa-edit mr-2 fa-fw"></i>
+                {{__('Gerät bearbeiten')}}
+            </a>
+            <a class="dropdown-item"
                href="#"
                data-toggle="modal"
                data-target="#modalAddEquipDoc"
             >
-                {{__('Datei hinzufügen')}} <i class="ml-2 fas fa-upload"></i></a>
+                <i class="ml-2 fas fa-upload mr-2 fa-fw"></i>
+                {{__('Datei hinzufügen')}}
+            </a>
+            <a class="dropdown-item"
+               href="#"
+               data-toggle="modal"
+               data-target="#modalAddEquipFuncTest"
+            >
+                <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
+                {{__('Funktionstest erfassen')}}
+            </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item d-flex justify-content-between align-items-center"
+            <a class="dropdown-item"
                href="{{ route('makePDFEquipmentDataSheet',$equipment) }}"
                download
             >
-                {{__('Datenblatt Drucken')}} <i class="ml-2 fas fa-print"></i></a>
-            <a class="dropdown-item d-flex justify-content-between align-items-center"
+                <i class="ml-2 fas fa-print mr-2 fa-fw"></i>
+                {{__('Datenblatt Drucken')}}
+            </a>
+            <a class="dropdown-item"
                href="{{ route('makePDFEquipmentLabel',$equipment->id) }}"
                target="_blank"
             >
-                {{__('QR-Code Drucken')}} <i class="ml-2 fas fa-qrcode"></i></a>
+                <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
+                {{__('QR-Code Drucken')}}
+            </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item d-flex justify-content-between align-items-center"
+            <a class="dropdown-item"
                href="{{ route('produkt.show',['produkt'=>$equipment->produkt]) }}"
             >
-                {{__('Produkt bearbeiten')}} <i class="ml-2 far fa-edit"></i></a>
+                <i class="ml-2 far fa-edit mr-2 fa-fw"></i>
+                {{__('Produkt bearbeiten')}}
+            </a>
 
         </ul>
     </li>
@@ -168,7 +186,7 @@
                                 <td>{{ $controlItem->Anforderung->an_name }}</td>
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                 <td>
-                                    <a href="{{ route('testing.create',['test_id' => $controlItem]) }}"
+                                    <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
                                        class="btn btn-sm btn-outline-primary"
                                     > {{__('Prüfung starten')}}
                                     </a>
@@ -423,6 +441,145 @@
             </form>
         </div>
     </div>
+
+    <div class="modal fade"
+         id="modalAddEquipFuncTest"
+         tabindex="-1"
+         aria-labelledby="modalAddEquipFuncTestLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <form action="{{ route('addEquipmentFunctionControl') }}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  id="frmAddEquipmentFunctionTest"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="modalAddEquipFuncTestLabel"
+                        >{{__('Functionstest erfassen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden"
+                               name="equipment_id"
+                               id="AddEquipFuncTest_equipment_id"
+                               value="{{ $equipment->id }}"
+                        >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h2 class="h5">{{__('Funktionsprüfung')}}</h2>
+                                <div class="btn-group btn-group-toggle mb-3"
+                                     data-toggle="buttons"
+                                >
+                                    <label class="btn btn-outline-success active">
+                                        <input type="radio"
+                                               id="controlEquipmentPassed"
+                                               name="function_control_pass"
+                                               value="1"
+                                               class="function_control_pass"
+                                        > {{__('Bestanden')}}
+                                    </label>
+                                    <label class="btn btn-outline-danger">
+                                        <input type="radio"
+                                               id="controlEquipmentNotPassed"
+                                               name="function_control_pass"
+                                               value="0"
+                                               class="function_control_pass"
+                                               checked
+                                        > {{__('NICHT Bestanden')}}
+                                    </label>
+                                </div>
+                                <x-datepicker id="AddEquipFuncTest_controlled_at" name="controlled_at"
+                                              label="{{__('Die Prüfung erfolgte am')}}"
+                                              required
+                                              value="{{ date('Y-m-d') }}"
+                                />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <x-selectfield id="function_control_firma"
+                                                       label="{{__('durch Firma')}}"
+                                        >
+                                            <option value="void">{{__('bitte wählen')}}</option>
+                                            @foreach(\App\Firma::all() as $firma)
+                                                <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                            @endforeach
+                                        </x-selectfield>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <x-selectfield id="function_control_profil"
+                                                       label="{{__('durch befähigte Person')}}"
+                                        >
+                                            <option value="void">{{__('bitte wählen')}}</option>
+                                            @foreach(\App\User::all() as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </x-selectfield>
+                                    </div>
+                                </div>
+                                <x-textarea id="AddEquipFuncTest_function_control_text" name="function_control_text"
+                                            label="{{__('Bemerkungen zur Prüfung')}}"
+                                />
+                            </div>
+                            <div class="col-md-6">
+                                <h2 class="h5">{{__('Bericht')}}</h2>
+                                <x-selectfield id="AddEquipFuncTest_document_type_id" name="document_type_id"
+                                               class="document_type_id"
+                                               data-target="#frmAddEquipmentFunctionTest_eqdoc_label"
+                                               label="{{__('Dokument Typ')}}"
+                                >
+                                    @foreach (App\DocumentType::all() as $ad)
+                                        <option value="{{ $ad->id }}"
+                                                @if( $ad->id===2  ?? old('document_type_id')==$ad->id)
+                                                selected
+                                            @endif
+                                        >{{ $ad->doctyp_label }}</option>
+                                    @endforeach
+                                </x-selectfield>
+
+                                <x-textfield id="AddEquipFuncTest_eqdoc_label"
+                                             name="eqdoc_label"
+                                             label="{{__('Bezeichnung')}}"
+                                             value="{{ __('Bericht Funktionsprüfung ').date('Y-m-d') }}"
+                                />
+
+                                <x-textarea name="eqdoc_name_text"
+                                            id="AddEquipFuncTest_eqdoc_name_text"
+                                            label="{{__('Datei Informationen')}}"
+                                />
+
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file"
+                                               id="AddEquipFuncTest_equipDokumentFile"
+                                               name="equipDokumentFile"
+                                               data-browse="{{__('Datei')}}"
+                                               class="custom-file-input"
+                                               accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
+                                        >
+                                        <label class="custom-file-label"
+                                               for="equipDokumentFile"
+                                        >{{__('Datei wählen')}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">{{ __('Funktionsprüfung erfassen') }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -517,7 +674,7 @@
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{__('Bezeichnung')}}:"
-                                               value="{!! $equipment->produkt->prod_name !!}"
+                                               value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
                                 />
                                 <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
@@ -527,9 +684,9 @@
                                                label="{{__('Inventarnummer')}}:"
                                                value="{!!  $equipment->eq_inventar_nr !!}"
                                 />
-                                <x-staticfield id="eq_ibm"
+                                <x-staticfield id="installed_at"
                                                label="{{__('Inbetriebnahme am')}}:"
-                                               value="{!!  $equipment->eq_ibm !!}"
+                                               value="{!!  $equipment->installed_at !!}"
                                 />
                                 <x-staticfield id="eq_serien_nr"
                                                label="{{__('Seriennummer')}}:"
@@ -619,7 +776,15 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <span class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</span>
+                                        <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
+                                        <button class="btn btn-lg btn-warning"
+                                           data-toggle="modal"
+                                           data-target="#modalAddEquipFuncTest"
+                                        >
+                                            <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
+                                            {{__('Funktionstest erfassen')}}
+                                        </button>
+
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
                                 @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(5)->latest()->onlyTrashed()->get() as $bda)
@@ -882,24 +1047,16 @@
                                          aria-labelledby="equipDocuEquipment-tab"
                                     >
                                         @if (\App\EquipmentDoc::where('equipment_id',$equipment->id)->count()>0)
-                                            <table class="table table-striped table-sm">
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
                                                 <th style="text-align: right;">{{ __('Größe')}}</th>
                                                 <th></th>
-                                                <th></th>
                                                 </thead>
                                                 <tbody>
                                                 @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
                                                     <tr>
-                                                        <td>
-                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name }}</span>
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
-                                                        <td style="text-align: right;">
-                                                            {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
-                                                        </td>
                                                         <td>
                                                             <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                                   method="get"
@@ -912,12 +1069,14 @@
                                                                        value="{{ $equipDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
-                                                            >
-                                                                <span class="fas fa-download"></span>
-                                                            </button>
+                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();">
+                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
+                                                        <td style="text-align: right;">
+                                                            {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
                                                         </td>
                                                         <td>
                                                             <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
@@ -940,24 +1099,16 @@
                                          aria-labelledby="equipDocuFuntion-tab"
                                     >
                                         @if (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->count()>0)
-                                            <table class="table table-striped table-sm">
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
                                                 <th style="text-align: right;">{{ __('Größe')}}</th>
                                                 <th></th>
-                                                <th></th>
                                                 </thead>
                                                 <tbody>
                                                 @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
                                                     <tr>
-                                                        <td>
-                                                            <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_name }}</span>
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
-                                                        <td style="text-align: right;">
-                                                            {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
-                                                        </td>
                                                         <td>
                                                             <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
                                                                   method="get"
@@ -970,12 +1121,14 @@
                                                                        value="{{ $equipFunctionDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
-                                                            >
-                                                                <span class="fas fa-download"></span>
-                                                            </button>
+                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();">
+                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
+                                                        <td style="text-align: right;">
+                                                            {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                         </td>
                                                         <td>
                                                             <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#dokumente"
@@ -998,26 +1151,16 @@
                                          aria-labelledby="equipDocuProduct-tab"
                                     >
                                         @if (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->count()>0)
-                                            <table class="table table-striped table-sm">
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
                                                 <th style="text-align: right;">{{ __('Größe')}} kB</th>
-                                                <th></th>
+
                                                 </thead>
                                                 <tbody>
                                                 @foreach (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->get() as $produktDoc)
                                                     <tr>
-                                                        <td>
-                                                            <span class="d-md-none">{{ str_limit($produktDoc->proddoc_name,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_name }}</span>
-
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell">
-                                                            {{ $produktDoc->DocumentType->doctyp_label }}
-                                                        </td>
-                                                        <td style="text-align: right;">
-                                                            {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
-                                                        </td>
                                                         <td>
                                                             <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
                                                                   method="get"
@@ -1030,12 +1173,16 @@
                                                                        value="{{ $produktDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <button
-                                                                class="btn btn-sm btn-outline-secondary"
-                                                                onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
-                                                            >
-                                                                <span class="fas fa-download"></span>
-                                                            </button>
+                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();">
+                                                                <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span>
+                                                                <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell">
+                                                            {{ $produktDoc->DocumentType->doctyp_label }}
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -1185,8 +1332,8 @@
         );
 
         $('#document_type_id').change(()=>{
-            $('#eqdoc_label').val(
-                $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
+            $($(this).data('target')).val(
+                $('#document_type_id :selected').text() + ' ' + $(this).val()
             );
         });
 
@@ -1286,5 +1433,7 @@
                 ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
             }
         });
+
+
     </script>
 @endsection

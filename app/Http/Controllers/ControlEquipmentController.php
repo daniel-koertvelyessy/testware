@@ -13,6 +13,7 @@ use App\EquipmentHistory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -37,14 +38,10 @@ class ControlEquipmentController extends Controller
     public function index()
     {
         if (ControlEquipment::count() > 20) {
-            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')
-                ->sortable()
-                ->paginate(20);
+            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
             return view('testware.control.index', ['controlItems' => $controlItems]);
         } else {
-            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')
-                ->sortable()
-                ->get();
+            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->get();
             return view('testware.control.index', ['controlItems' => $controlItems]);
         }
     }
@@ -53,6 +50,7 @@ class ControlEquipmentController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  Request $request
+     *
      * @return Application|Factory|Response|View
      */
     public function create(Request $request)
@@ -67,7 +65,7 @@ class ControlEquipmentController extends Controller
         }
 
         return view('testware.control.create', [
-            'test'                    => $controlItem,
+            'test'                           => $controlItem,
             'aci_execution'                  => $aci_execution,
             'aci_control_equipment_required' => $aci_control_equipment_required,
         ]);
@@ -77,16 +75,13 @@ class ControlEquipmentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-
-
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
-
         $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
-
         $setNewControlEquipment = new ControlEquipment();
         $setNewControlEquipment->qe_control_date_last = $request->control_event_date;
         $setNewControlEquipment->qe_control_date_due = $request->control_event_next_due_date;
@@ -135,8 +130,9 @@ class ControlEquipmentController extends Controller
             $file = $request->file('controlDokumentFile');
 
             $validation = $request->validate([
-                'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240', // size:2048 => 2048kB
-                'eqdoc_label'     => 'required|unique:equipment_docs,eqdoc_label'
+                'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240',
+                // size:2048 => 2048kB
+                'eqdoc_label'         => 'required|unique:equipment_docs,eqdoc_label'
             ]);
 
             $eventHasDoku = true;
@@ -158,8 +154,7 @@ class ControlEquipmentController extends Controller
         $eh->eqh_eintrag_kurz = 'Prüfung am ' . $request->control_event_date . ' ausgeführt ';
 
         $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
-        if (isset($request->evenItem))
-            $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
+        if (isset($request->evenItem)) $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
         $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
         if ($eventHasDoku) {
             $text .= ' Das Dokument ' . $filename . ' wurde erfolgreich angefügt.';
@@ -176,7 +171,8 @@ class ControlEquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateNewControlEvent(): array
+    public function validateNewControlEvent()
+    : array
     {
         return request()->validate([
             'control_event_next_due_date'        => 'date|required',
@@ -197,6 +193,7 @@ class ControlEquipmentController extends Controller
      * Display the specified resource.
      *
      * @param  \App\ControlEvent $control
+     *
      * @return Response
      */
     public function show(ControlEvent $control)
@@ -214,6 +211,7 @@ class ControlEquipmentController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\ControlEvent $control
+     *
      * @return Response
      */
     public function edit(ControlEvent $control)
@@ -226,6 +224,7 @@ class ControlEquipmentController extends Controller
      *
      * @param  Request           $request
      * @param  \App\ControlEvent $control
+     *
      * @return Response
      */
     public function update(Request $request, ControlEvent $control)
@@ -237,6 +236,7 @@ class ControlEquipmentController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\ControlEvent $control
+     *
      * @return Response
      */
     public function destroy(ControlEvent $control)

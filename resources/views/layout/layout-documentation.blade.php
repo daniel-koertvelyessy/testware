@@ -212,7 +212,7 @@
                             </a>
                         </li>
                         <li class="duik-sidebar__item">
-                            <a class="duik-sidebar__link {{ Request::routeIs('docs.testware.testing') ? ' active ' : '' }}"
+                            <a class="duik-sidebar__link {{ Request::routeIs('docs.testware.control') ? ' active ' : '' }}"
                                href="#"
                             >{{ __('Prüfungen') }}
                             </a>
@@ -261,8 +261,8 @@
                                 </a>
                             </li>
                             <li class="duik-sidebar__item">
-                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.testing') ? ' active ' : '' }}"
-                                   href="{{ route('docs.api.testing') }}"
+                                <a class="duik-sidebar__link {{ Request::routeIs('docs.api.control') ? ' active ' : '' }}"
+                                   href="{{ route('docs.api.control') }}"
                                 >
                                     <span class="ml-3">{{ __('Prüfungen') }}</span>
                                 </a>

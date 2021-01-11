@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
+
 class EquipmentSeeder extends Seeder
 {
     /**
@@ -14,10 +15,17 @@ class EquipmentSeeder extends Seeder
         $produkt = factory(App\Produkt::class, 100)->create();
         $storage = \App\Storage::all();
         $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $storage) {
+            $id = $produkt->random()->id;
             $uid = \Illuminate\Support\Str::uuid();
+            $date = date('Y-m-d');
+
+            $equip->purchased_at = $date;
+            $equip->installed_at = $date;
+            $equip->eq_price = \App\Produkt::find($id)->prod_price;
+            $equip->eq_name = \App\Produkt::find($id)->prod_name;
             $equip->eq_uid = $uid;
             $equip->storage_id =  $storage->random()->id;
-            $equip->produkt_id = $produkt->random()->id;
+            $equip->produkt_id = $id;
             $equip->save();
 
             DB::table('equipment_uids')->insert([
@@ -112,7 +120,7 @@ class EquipmentSeeder extends Seeder
                 'eq_inventar_nr' => '323134',
                 'eq_serien_nr' => '654367',
                 'eq_qrcode' => NULL,
-                'eq_ibm' => '2020-09-24',
+                'installed_at' => '2020-09-24',
                 'eq_text' => NULL,
                 'equipment_state_id' => '1',
                 'produkt_id' => '31',
