@@ -6,8 +6,8 @@
     @endphp
 @endif
 
-<li class="nav-item {{ Request::routeIs('storageeMain')  ? ' active ' : '' }}">
-    <a class="nav-link " href="{{ route('storageeMain') }}">
+<li class="nav-item {{ Request::routeIs('storageMain')  ? ' active ' : '' }}">
+    <a class="nav-link " href="{{ route('storageMain') }}">
         <i class="fas fa-desktop"></i> Start
     </a>
 </li>
