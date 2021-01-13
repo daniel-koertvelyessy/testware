@@ -37,7 +37,7 @@
                     >
                         <section class="card-body text-dark">
                             <nav class="tiles-grid justify-content-center">
-                                <a href="{{ route('storageeMain') }}"
+                                <a href="{{ route('storageMain') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"
                                    aria-label="{{__('memStandorte')}}"

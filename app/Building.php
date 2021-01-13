@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Kyslik\ColumnSortable\Sortable;
 
 class Building extends Model
@@ -36,12 +37,7 @@ class Building extends Model
 
     public function search($term)
     {
-        return Building::where('b_label', 'like', '%' . $term . '%')
-            ->orWhere('b_name_ort', 'like', '%' . $term . '%')
-            ->orWhere('b_name', 'like', '%' . $term . '%')
-            ->orWhere('b_name_text', 'like', '%' . $term . '%')
-            ->orWhere('b_we_name', 'like', '%' . $term . '%')
-            ->get();
+        return Building::where('b_label', 'like', '%' . $term . '%')->orWhere('b_name_ort', 'like', '%' . $term . '%')->orWhere('b_name', 'like', '%' . $term . '%')->orWhere('b_name_text', 'like', '%' . $term . '%')->orWhere('b_we_name', 'like', '%' . $term . '%')->get();
     }
 
     public function path()
@@ -80,22 +76,32 @@ class Building extends Model
 
     public function countTotalEquipmentInBuilding()
     {
-        Cache::remember(
-            'countTotalEquipmentInBuilding',
-            now()->addSeconds(30),
-            function () {
-                $equipCounter = 0;
-                $equipCounter += $this->Storage->countReferencedEquipment();
-                $rooms = Room::where('building_id', $this->id)->get();
-                foreach ($rooms as $room) {
-                    $equipCounter += $room->Storage->countReferencedEquipment();
-                    $compartments = Stellplatz::where('room_id', $room->id)->get();
-                    foreach ($compartments as $compartment) {
-                        $equipCounter += $compartment->Storage->countReferencedEquipment();
-                    }
+        Cache::remember('countTotalEquipmentInBuilding'.$this->id, now()->addSeconds(30), function () {
+            $equipCounter = 0;
+            $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() :0;
+            $rooms = Room::where('building_id', $this->id)->get();
+            foreach ($rooms as $room) {
+                $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() :0;
+                $compartments = Stellplatz::where('room_id', $room->id)->get();
+                foreach ($compartments as $compartment) {
+                    $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() :0;
                 }
-                return $equipCounter;
             }
-        );
+            return $equipCounter;
+        });
+    }
+
+    public function add($data)
+    {
+        $this->b_label = $data['label'];
+        $this->b_name = (isset($data['name'])) ? $data['name'] : null;
+        $this->b_name_text = (isset($data['description'])) ? $data['description'] : null;
+        $uid = (isset($data['uid'])) ? $data['uid'] : Str::uuid();
+        (new Storage)->add($uid, $data['label'], 'buildings');
+        $this->storage_id = $uid;
+        $this->location_id = 1;
+        $this->building_type_id = 1;
+        $this->save();
+        return $this->id;
     }
 }

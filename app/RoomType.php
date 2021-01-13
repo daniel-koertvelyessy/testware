@@ -22,4 +22,15 @@ class RoomType extends Model
         $this->save();
         return $this->id;
     }
+
+    public function addNewType($data)
+    {
+        $this->rt_label = $data['label'];
+        $this->rt_name = (isset($data['name'])) ? $data['name'] : null;
+        $this->rt_name_text = (isset($data['description'])) ? $data['description'] : null;
+        $this->save();
+        return $this->id;
+    }
+
+
 }

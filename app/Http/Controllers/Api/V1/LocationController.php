@@ -34,8 +34,7 @@ class LocationController extends Controller
     public function index(Request $request)
     {
         if ($request->input('per_page')) {
-            return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')
-                ->paginate($request->input('per_page')));
+            return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')->paginate($request->input('per_page')));
         }
         return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')->get());
     }
@@ -48,18 +47,67 @@ class LocationController extends Controller
     public function full(Request $request)
     {
         if ($request->input('per_page')) {
-            return LocationFullResource::collection(Location::with('Profile', 'Adresse', 'Building')
-                ->paginate($request->input('per_page')));
+            return LocationFullResource::collection(Location::with('Profile', 'Adresse', 'Building')->paginate($request->input('per_page')));
         }
-        return LocationFullResource::collection(
-            Location::with('Adresse', 'Profile')->get()
-        );
+        return LocationFullResource::collection(Location::with('Adresse', 'Profile')->get());
     }
+
+    public function storemany(Request $request)
+    {
+        $jsondata = (object)$request->json()->all();
+        if (isset($jsondata->label)) {
+            return $this->store($request);
+        } else {
+            $idList = [];
+            $skippedObjectIdList = [];
+            $countNew = 0;
+            $countUpdate = 0;
+            $countSkipped = 0;
+            foreach ($jsondata as $data) {
+                /**
+                 *    label is a required field. Skipp this dataset
+                 */
+                if (!isset($data['label'])) {
+                    $skippedObjectIdList[] = ['error' => 'no required items found in given dataset (missing item [label])'];
+                    $countSkipped++;
+                    continue;
+                }
+
+                $location = new Location();
+                $location->l_label = $data['label'];
+                $location->l_name = $data['name'];
+                $location->l_beschreibung = $data['description'];
+                $location->storage_id = $data['uid'];
+
+          
+
+                $profile_id = 0;
+                $adresse_id = 0;
+
+
+
+            }
+            return response()->json([
+                'updated_objects' => $countUpdate,
+                'skipped_objects' => [
+                    'total'   => $countSkipped,
+                    'id_list' => $skippedObjectIdList
+                ],
+                'new_objects'     => [
+                    'total'   => $countNew,
+                    'id_list' => $idList
+                ],
+            ]);
+        }
+
+    }
+
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return array
      */
     public function store(Request $request)
@@ -84,18 +132,33 @@ class LocationController extends Controller
         $profile_id = ($profile_id === NULL) ? 'referenced id not found' : $profile_id;
 
         return [
-            'status' => true,
-            'id' => $location->id,
-            'uid' => $storage_id,
-            'address' => $adresse_id,
+            'status'   => true,
+            'id'       => $location->id,
+            'uid'      => $storage_id,
+            'address'  => $adresse_id,
             'employee' => $profile_id,
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function validateNewLocation()
+    : array
+    {
+        return request()->validate([
+            'label'       => 'bail|unique:locations,l_label|min:2|max:20|required',
+            'name'        => '',
+            'description' => '',
+            'uid'         => 'unique:locations,storage_id',
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  Location $location
+     *
      * @return LocationShowResource
      */
     public function show(Location $location)
@@ -108,6 +171,7 @@ class LocationController extends Controller
      *
      * @param  Location $location
      * @param  Request  $request
+     *
      * @return LocationResource
      */
     public function update(Location $location, Request $request)
@@ -124,6 +188,7 @@ class LocationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Location $location
+     *
      * @return JsonResponse
      * @throws Exception
      */
@@ -132,20 +197,6 @@ class LocationController extends Controller
         $location->delete();
         return response()->json([
             'status' => 'location deleted'
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public
-    function validateNewLocation(): array
-    {
-        return request()->validate([
-            'label' => 'bail|unique:locations,l_label|min:2|max:20|required',
-            'name' => '',
-            'description' => '',
-            'uid' => 'unique:locations,storage_id',
         ]);
     }
 }

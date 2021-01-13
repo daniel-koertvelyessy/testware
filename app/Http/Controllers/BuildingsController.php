@@ -38,7 +38,7 @@ class BuildingsController extends Controller
         }
         if (Building::all()->count() > 0) {
             $buildingList = Building::with('BuildingType')->sortable()->paginate(10);
-            return view('admin.storagee.building.index', ['buildingList' => $buildingList]);
+            return view('admin.standorte.building.index', ['buildingList' => $buildingList]);
         } else {
             return redirect()->route('building.create');
         }
@@ -53,7 +53,7 @@ class BuildingsController extends Controller
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
             return redirect()->route('location.create');
         }
-        return view('admin.storagee.building.create');
+        return view('admin.standorte.building.create');
     }
 
     /**
@@ -166,7 +166,7 @@ class BuildingsController extends Controller
      */
     public function show(Building $building)
     {
-        return view('admin.storagee.building.show', ['building' => $building]);
+        return view('admin.standorte.building.show', ['building' => $building]);
     }
 
     /**
@@ -177,7 +177,7 @@ class BuildingsController extends Controller
      */
     public function edit(building $building)
     {
-        return view('admin.storagee.building.edit', compact('building'));
+        return view('admin.standorte.building.edit', compact('building'));
     }
 
     /**

@@ -25,7 +25,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_storagee_" . time() . ".json");
+            ->header('Content-disposition', "attachment; filename=" . "testware_storage_" . time() . ".json");
     }
 
     public function importLocationJSON(Request $request)

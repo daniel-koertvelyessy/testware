@@ -127,22 +127,21 @@ class Location extends Model
 
     public function countTotalEquipmentInLocation()
     {
-
         return Cache::remember(
-            'countTotalEquipmentInLocation',
+            'countTotalEquipmentInLocation'.$this->id,
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
-                $equipCounter += $this->Storage->countReferencedEquipment();
+                $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
                 $buildings = \App\Building::where('location_id', $this->id)->get();
                 foreach ($buildings as $building) {
-                    $equipCounter += $building->Storage->countReferencedEquipment();
+                    $equipCounter += ($building->Storage) ? $building->Storage->countReferencedEquipment() : 0;
                     $rooms = Room::where('building_id', $building->id)->get();
                     foreach ($rooms as $room) {
-                        $equipCounter += $room->Storage->countReferencedEquipment();
+                        $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() :0;
                         $compartments = Stellplatz::where('room_id', $room->id)->get();
                         foreach ($compartments as $compartment) {
-                            $equipCounter += $compartment->Storage->countReferencedEquipment();
+                            $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                         }
                     }
                 }

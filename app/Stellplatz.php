@@ -53,7 +53,7 @@ class Stellplatz extends Model
     public function countTotalEquipmentInCompartment()
     {
         Cache::remember(
-            'countTotalEquipmentInCompartment',
+            'countTotalEquipmentInCompartment'.$this->id,
             now()->addSeconds(30),
             function () {
                 return $this->Storage->countReferencedEquipment();

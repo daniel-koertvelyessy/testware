@@ -206,13 +206,13 @@ Route::get('organisationMain', function () {
     ]);
 })->name('organisationMain')->middleware('auth');
 
-Route::get('storageeMain', function () {
-    return view('admin.storagee.index', [
+Route::get('storageMain', function () {
+    return view('admin.standorte.index', [
         'locations' => App\Location::take(5)->latest()->get(),
         'buildings' => App\Building::take(5)->latest()->get(),
         'rooms'     => App\Room::take(5)->latest()->get(),
     ]);
-})->name('storageeMain')->middleware('auth');
+})->name('storageMain')->middleware('auth');
 
 Route::post('addEquipmentFunctionControl', function (Request $request) {
 
@@ -248,7 +248,6 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
     $request->session()->flash('status', __('Die Funktionsprüfung wurde :msg angelegt!', ['msg' => $msg]));
 
     return back();
-
 })->name('addEquipmentFunctionControl')->middleware('auth');
 
 Route::get('produktMain', function () {
@@ -293,7 +292,7 @@ Route::get('post/{wildcard}, function($wildcard){
 
 });
 
-$storagee = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
-$storagee = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
+$storage = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
+$storage = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
 
 */

@@ -69,15 +69,14 @@ class Room extends Model
     public function countTotalEquipmentInRoom()
     {
         Cache::remember(
-            'countTotalEquipmentInRoom',
+            'countTotalEquipmentInRoom'.$this->id,
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
-                $equipCounter += $this->Storage->countReferencedEquipment();
-
+                $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
                 $compartments = Stellplatz::where('room_id', $this->id)->get();
                 foreach ($compartments as $compartment) {
-                    $equipCounter += $compartment->Storage->countReferencedEquipment();
+                    $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                 }
                 return $equipCounter;
             }

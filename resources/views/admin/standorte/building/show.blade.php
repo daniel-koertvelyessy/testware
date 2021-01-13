@@ -15,7 +15,7 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('storageeMain') }}">{{__('Portal')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('storageMain') }}">{{__('Portal')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.index') }}">{{__('Standorte')}} <i class="fas fa-angle-right"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('location.show', $building->location) }}">{{ $building->location->l_label }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a></li>

@@ -42,10 +42,10 @@ class RoomController extends Controller
         }
         if (Room::all()->count() > 20) {
             $roomList = Room::with('RoomType', 'location')->sortable()->paginate(20);
-            return view('admin.storagee.room.index', ['roomList' => $roomList]);
+            return view('admin.standorte.room.index', ['roomList' => $roomList]);
         } elseif (Room::all()->count() > 0) {
             $roomList = Room::with('RoomType', 'location')->sortable()->get();
-            return view('admin.storagee.room.index', ['roomList' => $roomList]);
+            return view('admin.standorte.room.index', ['roomList' => $roomList]);
         } else {
             session()->flash('status', __('Es existieren noch keine Räume!'));
             return redirect()->route('room.create');
@@ -66,7 +66,7 @@ class RoomController extends Controller
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        return view('admin.storagee.room.create');
+        return view('admin.standorte.room.create');
     }
 
     /**
@@ -161,7 +161,7 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        return view('admin.storagee.room.show', ['room' => $room]);
+        return view('admin.standorte.room.show', ['room' => $room]);
     }
 
     /**
@@ -172,7 +172,7 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        return view('admin.storagee.room.edit', compact('room'));
+        return view('admin.standorte.room.edit', compact('room'));
     }
 
     /**

@@ -148,4 +148,9 @@ class Storage extends Model
     {
         return Equipment::where('storage_id', $this->id)->count();
     }
+
+    public function checkUidExists($uid)
+    {
+         return Storage::where('storage_uid',$uid)->count() > 0;
+    }
 }

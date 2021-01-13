@@ -72,6 +72,28 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="noticeOfFailedItems" tabindex="-1" aria-labelledby="noticeOfFailedItemsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-warning">
+                <div class="modal-header list-group-item-warning">
+                    <h5 class="modal-title" id="noticeOfFailedItemsLabel">Achtung!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">{!! __('Es ist mindestens ein Prüfschritt mit <strong class="text-danger">nicht bestanden</strong> markiert!') !!}</p>
+                    <p>Bitte kontrollieren und wiederholen Sie gegebenfalls den jeweils beanstandeten Prüfschritt.</p>
+                    <p>Sie können diese Prüfung als <strong>bestanden</strong> abschließen, wenn die Leitung die Entscheidung entsprechend begründet und die Prüfung entsprechend signiert.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">{{ __('Hinweis schließen') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('content')
@@ -368,7 +390,7 @@
                                                                    id="aci_Passed_{{ $aci->id }}"
                                                                    name="control_item_pass[{{ $aci->id }}][]"
                                                                    value="1"
-
+                                                                   class="checkControlItem itemPassed"
                                                             >
                                                             JA
                                                         </label>
@@ -377,7 +399,7 @@
                                                                    id="aci_notPassed_{{ $aci->id }}"
                                                                    name="control_item_pass[{{ $aci->id }}][]"
                                                                    value="0"
-
+                                                                   class="checkControlItem itemFailed"
                                                             >
                                                             NEIN
                                                         </label>
@@ -584,9 +606,15 @@
                                     <p class="lead">{{__('Nächste Prüfung des Gerätes')}}</p>
                                     <x-datepicker id="control_event_next_due_date"
                                                   label="{{__('Fällig bis')}}"
-                                                  value="{{ now()->add($test->Anforderung->an_control_interval,strtolower($test->Anforderung->ControlInterval->ci_delta))->toDateString() }}"
+                                                  value="{{
+                                                            now()->
+                                                            add(
+                                                                $test->Anforderung->an_control_interval,
+                                                                strtolower($test->Anforderung->ControlInterval->ci_delta)
+                                                                )
+                                                            ->toDateString()
+                                                            }}"
                                     />
-
                                 </div>
                             </div>
                             <x-textarea id="control_event_text"
@@ -596,6 +624,7 @@
                     </div>
                     <button
                         id="btnSubmitControlEvent"
+                        type="button"
                         class="btn btn-lg btn-primary"
                     >
                         {{__('Prüfung erfassen')}} <i class="fas fa-download ml-2"></i>
@@ -610,6 +639,38 @@
 @section('scripts')
     <script src="{{ asset('js/signatures.js') }}"></script>
     <script>
+        function setcontrolEquipmentPassButton() {
+            if (checkControlItemsPassed()) {
+                $('#controlEquipmentNotPassed').prop('checked', false).parent('label').removeClass('active');
+                $('#controlEquipmentPassed').prop('checked', true).parent('label').addClass('active');
+                return true;
+            } else {
+                $('#controlEquipmentNotPassed').prop('checked', true).parent('label').addClass('active');
+                $('#controlEquipmentPassed').prop('checked', false).parent('label').removeClass('active');
+                return false;
+            }
+        }
+        function checkControlItemsPassed() {
+            var failedItems = 0;
+
+            $.each($('.itemFailed'), function () {
+                if ($(this).prop('checked')) failedItems++
+            })
+
+            return (failedItems <= 0);
+        }
+
+        $('#btnSubmitControlEvent').click(function () {
+            if (!checkControlItemsPassed() && !$('#control_event_supervisor_signature').val()){
+                $('#noticeOfFailedItems').modal('show');
+            } else {
+                $('#frmAddControlEvent').submit();
+            }
+        });
+
+        $('.checkControlItem').click(function (){
+            setcontrolEquipmentPassButton();
+        });
 
         $('.checkSollValue').change(function () {
             const val = parseFloat($(this).val());
@@ -649,33 +710,19 @@
                     $('#aci_notPassed_' + aci_id).prop('checked', true).parent('label').addClass('active');
                     $('#aci_Passed_' + aci_id).parent('label').removeClass('active');
                 }
-
             }
-
-
+            checkControlItemsPassed();
         });
-        /*
 
-                $('#btnSubmitControlEvent').click(function () {
-                    let flagControlEventHasError = false;
-                    let msg = [];
-                    if ($('.controlEquipmentListItem').length === 0) {
-                        $('#set_control_equipment').addClass('is-invalid').focus();
-                        flagControlEventHasError = true;
-                        msg.push('Es ist kein Prüfmittel ausgewählt!')
-                    }
+        $('#controlEquipmentPassed').click(function () {
+            if(!checkControlItemsPassed()){
+                $('#noticeOfFailedItems').modal('show');
+            }
+        });
 
-
-                    if (!flagControlEventHasError) {
-                        $('#frmAddControlEvent').submit();
-                    } else {
-                        console.log(msg);
-                    }
-
-
-                });
-        */
-
+        /**
+         *   Handle control equipments
+         */
         $('.btnAddControlEquipmentToList').click(function () {
             const nd = $('#set_control_equipment :selected');
             const equip_id = nd.val();
@@ -715,6 +762,10 @@
             }
         });
 
+
+        /**
+         *   Signatures
+         */
         $('.btnAddSiganture').click(function () {
             const typ = $(this).data('sig');
             signaturePad.clear();

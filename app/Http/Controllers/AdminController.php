@@ -80,7 +80,7 @@ class AdminController extends Controller
 
     public function storageDataPort()
     {
-        return view('admin.storagee.dataport');
+        return view('admin.standorte.dataport');
     }
 
     public function checkStorageValid(Request $request)

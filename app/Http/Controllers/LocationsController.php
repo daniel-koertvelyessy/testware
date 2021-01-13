@@ -38,7 +38,7 @@ class LocationsController extends Controller
         } else {
             if (isset($request->location))
                 $location = Location::find($request->location);
-            return view('admin.storagee.explorer', ['location' => $location]);
+            return view('admin.standorte.explorer', ['location' => $location]);
         }
     }
 
@@ -56,9 +56,9 @@ class LocationsController extends Controller
 
         if (Location::all()->count() > 6) {
             $locationList = Location::all()->sortable()->paginate(10);
-            return view('admin.storagee.location.index', ['locationList' => $locationList]);
+            return view('admin.standorte.location.index', ['locationList' => $locationList]);
         } else {
-            return view('admin.storagee.location.index');
+            return view('admin.standorte.location.index');
         }
     }
 
@@ -87,7 +87,7 @@ class LocationsController extends Controller
      */
     public function create()
     {
-        return view('admin.storagee.location.create');
+        return view('admin.standorte.location.create');
     }
 
     /**
@@ -175,7 +175,7 @@ class LocationsController extends Controller
      */
     public function show(Location $location)
     {
-        return view('admin.storagee.location.show', ['location' => $location]);
+        return view('admin.standorte.location.show', ['location' => $location]);
     }
 
     /**
@@ -187,7 +187,7 @@ class LocationsController extends Controller
     public function edit(location $location)
     {
 
-        return view('admin.storagee.location.edit', compact('location'));
+        return view('admin.standorte.location.edit', compact('location'));
     }
 
     /**

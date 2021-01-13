@@ -1229,6 +1229,7 @@
                                     </thead>
                                     <tbody>
                                     @forelse (\App\ControlEventItem::with('AnforderungControlItem')->where('equipment_id',$equipment->id)->get() as $controlItem)
+                                        @if($controlItem->AnforderungControlItem[0]->aci_vaule_soll !== NULL)
                                         <tr>
                                             <td>
                                                 {{ $controlItem->created_at->diffForHumans() }}
@@ -1253,6 +1254,7 @@
                                                 {!! $controlItem->control_item_pass ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-danger"></span>' !!}
                                             </td>
                                         </tr>
+                                        @endif
                                     @empty
 
                                     @endforelse
