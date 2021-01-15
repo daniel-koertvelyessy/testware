@@ -1,9 +1,9 @@
-#testWare
+# testWare
 
 Current version: 1.0
 
 ## Content
-<p>testWare enables you manage the testing and maintanace of your location and equipment.</p>
+testWare enables you manage the testing and maintanace of your location and equipment.
 
 ## Installation
 
@@ -22,12 +22,12 @@ DB_USERNAME=[root]
 DB_PASSWORD=[passworrd]
 ```
 
-Then run the migration of the database. 
-```bash
+Within your project folder run the migration of the database. 
+```php
 php artisan migrate
 ```
 
-If you want to use our sample data you can add a `--seed` flag.
+> If you want to use our sample data you can add a `--seed` flag. This will add some random locations, equipment and requirements
 
 ### Step 3: setup e-mail connection (optional)
 ```
@@ -40,8 +40,10 @@ MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=[yourmail@address.com]
 MAIL_FROM_NAME="${APP_NAME}"
 ```
+
 **Note:**
 If you do not want to use the e-mail features change the key `MAIL_MAILER=smtp` to `MAIL_MAILER=log` and leave the other keys blank.
+
 
 ***
 
