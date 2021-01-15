@@ -40,8 +40,8 @@ class RoomController extends Controller
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        if (Room::all()->count() > 20) {
-            $roomList = Room::with('RoomType', 'location')->sortable()->paginate(20);
+        if (Room::all()->count() > 10) {
+            $roomList = Room::with('RoomType', 'location')->sortable()->paginate(10);
             return view('admin.standorte.room.index', ['roomList' => $roomList]);
         } elseif (Room::all()->count() > 0) {
             $roomList = Room::with('RoomType', 'location')->sortable()->get();

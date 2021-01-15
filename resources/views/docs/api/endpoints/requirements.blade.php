@@ -117,7 +117,7 @@
         "updated": "2021-01-03 19:10:04",
         "uid": "784f64bc-735a-3d2f-8a06-fcf3d47621f3",
         "name": "HQbln153",
-        "identifier": "bln153",
+        "label": "bln153",
         "description": "Hauptsitz der Firma Testfirma GmbH",
         "address_id": 2,
         "employee_id": 4
@@ -191,14 +191,14 @@
         "updated": "2021-01-03 19:10:04",
         "uid": "784f64bc-735a-3d2f-8a06-fcf3d47621f3",
         "name": "HQbln153",
-        "identifier": "bln153",
+        "label": "bln153",
         "description": "Hauptsitz der Firma Testfirma GmbH",
         "address": {
             "type": {
                 "name": "Heimadress",
                 "description": "Standard Adresse"
             },
-            "identifier": "Gmb5423212",
+            "label": "Gmb5423212",
             "name": "Deckerweg 5/8 15868 Neukirchen-Vluyn",
             "company": "Testfirma GmbH",
             "company_2": null,
@@ -296,7 +296,7 @@
     "updated": "2021-01-03 19:10:04",
     "uid": "784f64bc-735a-3d2f-8a06-fcf3d47621f3",
     "name": "HQbln153",
-    "identifier": "bln153",
+    "label": "bln153",
     "description": "Hauptsitz der Firma Testfirma GmbH",
     "address_id": 2,
     "employee_id": 4
@@ -339,7 +339,7 @@
                                 <p>Erforderliche Felder</p>
                                 <ul class="list-group list-group-flush mb-3">
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>identifier</code> <span class="badge badge-dark-soft">STRING</span>
+                                        <code>label</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                 </ul>
                                 <a class="btn btn-sm btn-outline-dark-soft btn-pill"
@@ -374,7 +374,7 @@
                                 <p class="mt-3">Wird das Objekt <code>address</code> verwendet, sind folgende Felder erforderlich</p>
                                 <ul class="list-group list-group-flush mb-3">
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>address.identifier</code> <span class="badge badge-dark-soft">STRING</span>
+                                        <code>address.label</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
                                         <code>address.street</code> <span class="badge badge-dark-soft">STRING</span>
@@ -506,7 +506,7 @@
                                        <pre><code class="language-json">
 {
     "name": "Loc-bln153",
-    "identifier": "bln153",
+    "label": "bln153",
     "description": "Nihil aut qui nostrum ...",
     "address": {
         "street": "Christiane-Brandt-Platz",
@@ -516,7 +516,7 @@
         "address_type": {
             "name" : "Hausadresse"
         },
-        "identifier": "Gmb5423212",
+        "label": "Gmb5423212",
         "name": "Hausadresse Barth GmbH",
         "company": "Barth GmbH",
         "company_2": null,
@@ -591,7 +591,7 @@
                                 <p>Erforderliche Felder</p>
                                 <ul class="list-group list-group-flush mb-3">
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>identifier</code> <span class="badge badge-dark-soft">STRING</span>
+                                        <code>label</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                 </ul>
                                 <a class="btn btn-sm btn-outline-dark-soft btn-pill"
@@ -640,7 +640,7 @@
                                     <div class="tab-pane bg-light fade p-3 show active" id="api_put_location_id-docs-tab-scheme-content" role="tabpanel" aria-labelledby="api_put_location_id-docs-tab-scheme">
                                        <pre><code class="language-json">
 {
-    "identifier": "bln251",
+    "label": "bln251",
     "uid": "9f1cf9d5-370b-3413-a51c-c97c2308fe2b",
     "name": "quam-officiis-eligendi-veritatis",
     "description": "Minima maxime omnis cupiditate quas...",
@@ -655,7 +655,7 @@
     "id": 1,
     "created": "2021-01-06 12:26:19",
     "updated": "2021-01-06 18:41:57",
-    "identifier": "bln251",
+    "label": "bln251",
     "uid": "9f1cf9d5-370b-3413-a51c-c97c2308fe2b",
     "name": "quam-officiis-eligendi-veritatis",
     "description": "Minima maxime omnis cupiditate quas...",

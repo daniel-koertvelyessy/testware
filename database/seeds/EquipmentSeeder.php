@@ -17,7 +17,7 @@ class EquipmentSeeder extends Seeder
         $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $storage) {
             $id = $produkt->random()->id;
             $uid = \Illuminate\Support\Str::uuid();
-            $date = date('Y-m-d');
+            $date = now()->addYears(-1*random_int(1,6));
 
             $equip->purchased_at = $date;
             $equip->installed_at = $date;

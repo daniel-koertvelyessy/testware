@@ -68,7 +68,7 @@
                                 >
                                     <span class="icon"><i class="fas fa-user-cog"></i></span> <span class="branding-bar text-center">{{__('Admin')}}</span>
                                 </a>
-                                <a href="admin/reports"
+                                <a href="{{ route('report.index') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"
                                 >

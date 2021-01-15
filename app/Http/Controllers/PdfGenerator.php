@@ -7,6 +7,7 @@ use App\ControlEvent;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentUid;
+use App\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PDF;
@@ -204,5 +205,36 @@ class PdfGenerator extends Controller
         // D is the change of these two functions. Including D parameter will avoid
         // loading PDF in browser and allows downloading directly
         PDF::Output($title . '_Stand_' . date('Y-m-d') . '.pdf');
+    }
+
+    static function printReport($id){
+        $report = Report::find($id);
+        $title = $report->name;
+        $html = view('reports.view.' . $report->view)->render();
+
+        PDF::SetLineWidth(1);
+        PDF::setHeaderCallback(function ($pdf) use($report)  {
+            $pdf->SetTextColor(0);
+            $pdf->ln(5);
+            $pdf->SetFont('Helvetica', '', 11);
+            $pdf->Cell(100, 14, $report->label, 0, 0, 'L');
+            $pdf->Cell(0, 14, $report->name, 0, 1, 'R');
+            $pdf->SetFont('Helvetica', '', 8);
+            $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
+        });
+        PDF::setFooterCallback(function ($pdf) {
+            $pdf->SetY(-15);
+            $pdf->SetFont('Helvetica', '', 8);
+            //Page number
+            $pdf->Cell(0, 5, '(c)' . date('Y') . ' bitpack.io GmbH - testWare', 0, 0, 'L');
+            $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
+        });
+        PDF::startPageGroup();
+        PDF::SetTitle($title);
+        PDF::SetAutoPageBreak(true, 50);
+        PDF::SetMargins(24, 30, 10);
+        PDF::AddPage($report->orientation);
+        PDF::writeHTML($html, true, false, true, false, '');
+        PDF::Output($report->view . '_printed_' . date('Y-m-d') . '.pdf');
     }
 }

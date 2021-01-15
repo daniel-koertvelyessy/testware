@@ -48,11 +48,6 @@
                                name="id"
                                id="id_modal"
                         >
-                        <input type="hidden"
-                               name="location_id"
-                               id="location_id_modal"
-                               value="{{ $location->id }}"
-                        >
                         @csrf
                         <input type="hidden"
                                name="storage_id"
@@ -60,15 +55,30 @@
                                value="{{ Str::uuid() }}"
                         >
 
-                        <x-textfield id="b_label"
-                                     label="{{ __('Kurzbezeichnung') }}"
-                                     required
-                                     max="20"
-                        />
+                        <x-selectfield name="location_id"
+                                       id="location_id_modal"
+                                       label="{{ __('befindet sich in ') . __('Standort') }}"
+                        >
+                            @foreach(\App\Location::all() as $loc)
+                                <option value="{{ $loc->id }}" @if($loc->id === $location->id)selected @endif >{{ $loc->l_name }}</option>
+                            @endforeach
+                        </x-selectfield>
 
-                        <x-textfield id="b_name_ort"
-                                     label="{{ __('Ort') }}"
-                        />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <x-textfield id="b_label"
+                                             label="{{ __('Kurzbezeichnung') }}"
+                                             required
+                                             max="20"
+                                />
+                            </div>
+                            <div class="col-md-8">
+                                <x-textfield id="b_name_ort"
+                                             label="{{ __('Ort') }}"
+                                />
+                            </div>
+                        </div>
+
 
                         <x-textfield id="b_name"
                                      label="{{ __('Bezeichnung') }}"
@@ -177,17 +187,19 @@
                                id="id_modal_room"
                                placeholder="id_modal_room"
                         >
-                        <input type="hidden"
-                               name="building_id"
-                               id="building_id_room_modal"
-                               placeholder="building_id_room_modal"
-                        >
+
                         @csrf
                         <input type="hidden"
                                name="storage_id"
                                id="storage_id_room"
                                value="{{ Str::uuid() }}"
                         >
+                        <x-selectfield label="{{__('Befindet sich in Gebäude')}}" name="building_id"
+                                       id="building_id_room_modal">
+                            @foreach(App\Building::all() as $build)
+                                <option value="{{ $build->id }}" >{{ $build->b_label . ' - ' . $build->b_name }}</option>
+                            @endforeach
+                        </x-selectfield>
                         <div class="row">
                             <div class="col-md-6">
                                 <x-textfield id="r_label"
@@ -281,16 +293,20 @@
                                name="id"
                                id="id_modal_stellplatz"
                         >
-                        <input type="hidden"
-                               name="room_id"
-                               id="room_id_stellplatz_modal"
-                        >
+
                         @csrf
                         <input type="hidden"
                                name="storage_id"
                                id="storage_id_stellplatz"
                                value="{{ Str::uuid() }}"
                         >
+                        <x-selectfield name="room_id"
+                                       id="room_id_stellplatz_modal"
+                                       label="Befindet sich im Raum">
+                            @foreach(App\Room::all() as $room)
+                                <option value="{{ $room->id }}">{{ $room->r_label . ' ' . $room->r_name }}</option>
+                            @endforeach
+                        </x-selectfield>
                         <div class="row">
                             <div class="col-md-6">
                                 <x-textfield id="sp_label"
@@ -364,7 +380,10 @@
         </div>
         <div class="row mb-4">
             <div class="col-md-6 col-xl-4">
-                <form action="{{ route('lexplorer') }}" method="get" id="frmSetLocation">
+                <form action="{{ route('lexplorer') }}"
+                      method="get"
+                      id="frmSetLocation"
+                >
                     <label for="location">{{ __('Standort auswählen') }}</label>
                     <div class="input-group">
                         <select id="location"
@@ -410,7 +429,8 @@
                                 class="btn btn-sm btn-outline-primary btnBuilding"
                         >
                             <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
-                                class="fas fa-edit"></span>
+                                class="fas fa-edit"
+                            ></span>
                         </button>
                         <button type="button"
                                 data-type="copy"
@@ -423,7 +443,8 @@
                                 class="btn btn-sm btn-outline-primary btnBuildingDelete"
                         >
                             <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                class="far fa-trash-alt"></span></button>
+                                class="far fa-trash-alt"
+                            ></span></button>
 
                     </div>
                     <form id="frmDeleteBuilding">
@@ -479,7 +500,8 @@
                                 data-type="edit"
                         >
                             <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
-                                class="fas fa-edit"></span>
+                                class="fas fa-edit"
+                            ></span>
                         </button>
                         <button type="button"
                                 class="btn btn-sm btn-outline-primary btnRoom disabled"
@@ -493,7 +515,8 @@
                                 disabled
                         >
                             <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                class="far fa-trash-alt"></span>
+                                class="far fa-trash-alt"
+                            ></span>
                         </button>
                     </div>
                     <form id="frmDeleteRoom"
@@ -543,7 +566,8 @@
                                 disabled
                         >
                             <span class="d-none d-lg-inline">{{__('Bearbeiten')}}</span> <span
-                                class="fas fa-edit"></span>
+                                class="fas fa-edit"
+                            ></span>
                         </button>
                         <button type="button"
                                 class="btn btn-sm btn-outline-primary btnStellplatz disabled"
@@ -557,7 +581,8 @@
                                 disabled
                         >
                             <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                class="far fa-trash-alt"></span>
+                                class="far fa-trash-alt"
+                            ></span>
                         </button>
                     </div>
                     <form id="frmDeleteStellplatz">
@@ -599,7 +624,7 @@
                     $('#roomList').html(res.html);
                     setTimeout(function () {
                         buildingList.val(id)
-                    },400);
+                    }, 400);
                     let text = '{{__('Bitte erst Gebäude wählen')}}';
                     if (id === 'void')
                         $('#stellplatzList').html(`<option>${text}</option>`);
@@ -628,7 +653,7 @@
                     $('#stellplatzList').html(res.html);
                     setTimeout(function () {
                         roomList.val(id)
-                    },400);
+                    }, 400);
                 }
             });
         }
@@ -639,7 +664,7 @@
             $('#id_delete_Stellplatz').val(id);
             setTimeout(function () {
                 stellplatzList.val(id)
-            },400);
+            }, 400);
             if (id === 'void') {
                 $('.btnStellplatz').attr('disabled', true).addClass('disabled');
                 $('.btnStellplatzDelete').attr('disabled', true).addClass('disabled');

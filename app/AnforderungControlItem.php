@@ -30,6 +30,8 @@ class AnforderungControlItem extends Model
             ->get();
     }
 
+
+
     public function Anforderung()
     {
         return $this->belongsTo(Anforderung::class);

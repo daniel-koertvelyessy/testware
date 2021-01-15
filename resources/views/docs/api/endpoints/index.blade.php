@@ -46,7 +46,7 @@
             "id": 1,
             "created": "2021-01-06 22:23:44",
             "updated": "2021-01-06 22:23:44",
-            "identifier": "SP.7-ru0rxn",
+            "label": "SP.7-ru0rxn",
             "uid": "c9903a08-728a-3067-bf79-ec24ab757713",
             "name": "quos-repudiandae-et-quia-quas-ad-voluptatem-ratione",
             "description": null,

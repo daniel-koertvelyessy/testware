@@ -143,7 +143,8 @@ Route::resources([
     'EquipmentInstruction'   => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
     'lizenz'                 => 'LizenzController',
-    'search'                 => 'SearchController'
+    'report'                 => 'ReportController',
+    'search'                 => 'SearchController',
 ]);
 
 /**
@@ -178,19 +179,23 @@ PDF GENERATORS
 Route::get('pdf.storageListe', 'PdfGenerator@storageListe')->name('pdf.storageListe');
 
 Route::get('/makePDF/{view}/{title}', function ($view, $title) {
-    return App\Http\Controllers\PdfGenerator::makePDF($view, $title);
+    App\Http\Controllers\PdfGenerator::makePDF($view, $title);
 })->name('makePDF');
 
+Route::get('/report.print/{id}', function ($id) {
+    App\Http\Controllers\PdfGenerator::printReport($id);
+})->name('printReport');
+
 Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
-    return App\Http\Controllers\PdfGenerator::makePDFEquipmentLabel($equipment);
+    App\Http\Controllers\PdfGenerator::makePDFEquipmentLabel($equipment);
 })->name('makePDFEquipmentLabel');
 
 Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
-    return App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
+    App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
 })->name('makePDFEquipmentDataSheet');
 
 Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEvent) {
-    return App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
+    App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
 })->name('makePDFEquipmentControlReport');
 
 Auth::routes();
@@ -273,6 +278,9 @@ Route::get('getKategorieProducts', function () {
 })->name('getKategorieProducts')->middleware('auth');
 
 Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
+
+Route::get('report/template', 'ReportController@template')->name('report.template');
+
 
 
 /*

@@ -16,8 +16,12 @@
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{__('Räume')}}</li>
+            <li class="breadcrumb-item">
+                <a href="/">{{__('Portal')}}</a>
+            </li>
+            <li class="breadcrumb-item active"
+                aria-current="page"
+            >{{__('Räume')}}</li>
         </ol>
     </nav>
 
@@ -25,17 +29,17 @@
 
 @section('actionMenuItems')
 
-{{--
-        <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuRooms" role="button" data-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-bars"></i> {{__('Aktionen')}}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuRooms">
-                <li><a class="dropdown-item" href="/location">Übersicht</a></li>
-                <li><a class="dropdown-item" href="/location/create">Neu anlegen</a></li>
-            </ul>
-        </li>
---}}
+    {{--
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navTargetAppMenuRooms" role="button" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars"></i> {{__('Aktionen')}}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navTargetAppMenuRooms">
+                    <li><a class="dropdown-item" href="/location">Übersicht</a></li>
+                    <li><a class="dropdown-item" href="/location/create">Neu anlegen</a></li>
+                </ul>
+            </li>
+    --}}
 
 @endsection
 
@@ -47,44 +51,47 @@
                 <h1 class="h4">{{__('Übersicht Räume')}}</h1>
             </div>
         </div>
-            <div class="row">
-                <div class="col">
-                    <table class="table table-sm table-striped">
-                        <thead>
-                        <tr>
-                            <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>
-                            <th>@sortablelink('building.b_label', __('Gebäude'))</th>
-                            <th>@sortablelink('r_name', __('Raum (Name)'))</th>
-                            <th class="d-none d-md-table-cell">@sortablelink('r_label', __('Nummer'))</th>
-                            <th>@sortablelink('RoomType.rt_label', __('Typ'))</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-               @foreach ($roomList as $room)
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>
+                        <th>@sortablelink('building.b_label', __('Gebäude'))</th>
+                        <th>@sortablelink('r_name', __('Raum (Name)'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('r_label', __('Nummer'))</th>
+                        <th>@sortablelink('RoomType.rt_label', __('Typ'))</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($roomList as $room)
                         <tr>
                             <td class="d-none d-md-table-cell">
                                 <a href="/location/{{ $room->building->location->id??''  }}">
                                     {{ $room->building->location->l_label??''  }}
                                 </a>
                             </td>
-                            <td><a href="/building/{{ $room->building->id  }}">{{ $room->building->b_label  }}</a></td>
-                            <td><a href="{{$room->path()}}">
-                                {{ $room->r_name }}
+                            <td>
+                                <a href="/building/{{ $room->building->id  }}">{{ $room->building->b_label  }}</a>
+                            </td>
+                            <td>
+                                <a href="{{$room->path()}}">
+                                    {{ $room->r_name }}
                                 </a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $room->r_label }}</td>
                             <td>{{ $room->RoomType->rt_label }}</td>
                         </tr>
-               @endforeach
-                        </tbody>
-                    </table>
-                    @if($roomList->count()>20)
+                    @endforeach
+                    </tbody>
+                </table>
+                @if($roomList->count()>0)
                     <div class="d-flex justify-content-center">
-                        {!! $roomList->appends(['sort' => 'l_label'])->onEachSide(2)->links() !!}
+                        {!! $roomList->withQueryString()->onEachSide(2)->links() !!}
                     </div>
-                        @endif
-                </div>
+                @endif
             </div>
+        </div>
     </div>
 
 @endsection

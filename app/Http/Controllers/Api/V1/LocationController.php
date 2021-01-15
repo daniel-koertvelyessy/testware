@@ -6,6 +6,8 @@ use App\AddressType;
 use App\Adresse;
 use App\Http\Controllers\Controller;
 use App\Location;
+use App\Profile;
+use App\Storage;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -73,18 +75,98 @@ class LocationController extends Controller
                     continue;
                 }
 
-                $location = new Location();
-                $location->l_label = $data['label'];
-                $location->l_name = $data['name'];
-                $location->l_beschreibung = $data['description'];
-                $location->storage_id = $data['uid'];
+                /**
+                 *  Check given address data and
+                 *  assign to $location->adresse_id
+                 */
+                if (isset($data['address']['label'])) {
+                    if (Adresse::where('ad_label', $data['address']['label'])->count() === 0) {
+                        $address_id = (new Adresse)->addAddressArray($data['address']);
 
-          
+                    } else {
+                        $adresse = Adresse::where('ad_label', $data['address']['label'])->first();
+                        $address_id = $adresse->id;
+                    }
+                    $address_id_list[] = ['address_id' => $address_id];
+                } elseif (isset($data['address_id'])) {
+                    if (Adresse::find($data['address_id'])) {
+                        $address_id = $data['address_id'];
+                        $address_id_list[] = ['address_id' => $address_id];
+                    } else {
+                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [address_id])'];
+                        $countSkipped++;
+                        continue;
+                    }
+                } else {
+                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [address])'];
+                    $countSkipped++;
+                    continue;
+                }
 
-                $profile_id = 0;
-                $adresse_id = 0;
+                /**
+                 *   check given manager data and
+                 *   assign to $location->profile_id
+                 *             "first_name": "Swetlana",
+                 */
+                if (isset($data['manager']['name'])) {
+                    if (Profile::where('ma_name', $data['manager']['name'])->count() > 0) {
+                        $profile = Profile::where('ma_name', $data['manager']['name'])->first();
+                        $profile_id = $profile->id;
+                    } else {
+                        $profile_id = (new Profile)->addProfileData($data['manager']);
+                    }
+                } elseif (isset($data['profile_id'])) {
+                    if (Profile::find($data['profile_id'])) {
+                        $profile = Profile::find($data['profile_id']);
+                        $profile_id = $profile->id;
+                    } else {
+                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [profile_id])'];
+                        $countSkipped++;
+                        continue;
+                    }
+                } else {
+                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [manager/profile_id])'];
+                    $countSkipped++;
+                    continue;
+                }
 
+                /**
+                 *  Check if given location exists in database and decide to
+                 *  update or create new one
+                 */
+                if (Location::where('l_label', $data['label'])->count() > 0) {
+                    $location = Location::where('l_label', $data['label'])->first();
+                    $updateDataset = true;
+                    $countUpdate++;
+                } elseif (isset($data['id']) && Location::find($data['id'])) {
+                    $location = Location::find($data['id']);
+                    $updateDataset = true;
+                    $countUpdate++;
+                } else {
+                    $location = new Location();
+                    $updateDataset = false;
+                }
 
+                if ($updateDataset) {
+                    $location->l_label = (isset($data['label'])) ? $data['label'] : $location->l_label;
+                    $location->l_name = (isset($data['name'])) ? $data['name'] : $location->l_name;
+                    $location->l_beschreibung = (isset($data['description'])) ? $data['description'] : $location->l_beschreibung;
+                    $location->storage_id = ((new Storage)->checkUidExists($data['uid']) && $data['uid'] !== $location->storage_id) ? $data['uid'] : $location->storage_id;
+                } else {
+                    $location->l_label = $data['label'];
+                    $location->l_name = $data['name'];
+                    $location->l_beschreibung = $data['description'];
+                    $location->storage_id = Str::uuid();
+                }
+
+                $location->adresse_id = $address_id;
+                $location->profile_id = $profile_id;
+
+                $location->save();
+
+                $idList[] = [
+                    'location' => $location->id
+                ];
 
             }
             return response()->json([
@@ -94,8 +176,8 @@ class LocationController extends Controller
                     'id_list' => $skippedObjectIdList
                 ],
                 'new_objects'     => [
-                    'total'   => $countNew,
-                    'id_list' => $idList
+                    'total'       => $countNew,
+                    'location_id' => $idList
                 ],
             ]);
         }
@@ -128,8 +210,8 @@ class LocationController extends Controller
         $location->storage_id = $storage_id;
         $location->save();
 
-        $adresse_id = ($adresse_id === NULL) ? 'referenced id not found' : $adresse_id;
-        $profile_id = ($profile_id === NULL) ? 'referenced id not found' : $profile_id;
+        $adresse_id = ($adresse_id === null) ? 'referenced id not found' : $adresse_id;
+        $profile_id = ($profile_id === null) ? 'referenced id not found' : $profile_id;
 
         return [
             'status'   => true,

@@ -13,6 +13,14 @@ class Room extends Model
 
     //
 
+    public $sortable = [
+        'created_at',
+        'updated_at',
+        'r_label',
+        'r_name',
+        'r_name_text',
+    ];
+
     protected $guarded = [];
 
     public static function boot()
@@ -68,6 +76,7 @@ class Room extends Model
 
     public function countTotalEquipmentInRoom()
     {
+
         Cache::remember(
             'countTotalEquipmentInRoom'.$this->id,
             now()->addSeconds(30),

@@ -22,6 +22,12 @@ class Building extends Model
 
     protected $guarded = [];
 
+    public $sortable = [
+        'b_label',
+        'b_name',
+        'b_name_text',
+    ];
+
     public static function boot()
     {
         parent::boot();

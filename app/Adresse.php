@@ -73,9 +73,9 @@ class Adresse extends Model
 
     public function addAddress(Request $request)
     {
-        if (isset($request->address) && isset($request->address['identifier'])) {
+        if (isset($request->address) && isset($request->address['label'])) {
             $request->validate([
-                'address.identifier' => 'bail|required|unique:adresses,ad_label|max:20',
+                'address.label' => 'bail|required|unique:adresses,ad_label|max:20',
                 'address.name' => 'max:100',
                 'address.company' => 'max:100',
                 'address.company_2' => 'max:100',
@@ -91,7 +91,7 @@ class Adresse extends Model
                 'address.enterance' => 'max:100',
             ]);
             $adresse = new Adresse();
-            $adresse->ad_label = $request->address['identifier'];
+            $adresse->ad_label = $request->address['label'];
             $adresse->ad_anschrift_strasse = $request->address['street'];
             $adresse->ad_anschrift_hausnummer = $request->address['no'];
             $adresse->ad_anschrift_plz = $request->address['zip'];
@@ -118,6 +118,42 @@ class Adresse extends Model
             return $adresse->id;
         } elseif (isset($request->address_id)) {
             return (Adresse::find($request->address_id)) ? $request->address_id : NULL;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function addAddressArray($data)
+    {
+        if (isset($data) && isset($data['label'])) {
+            $adresse = new Adresse();
+            $adresse->ad_label = $data['label'];
+            $adresse->ad_anschrift_strasse = $data['street'];
+            $adresse->ad_anschrift_hausnummer = $data['no'];
+            $adresse->ad_anschrift_plz = $data['zip'];
+            $adresse->ad_anschrift_ort = $data['city'];
+            $adresse->land_id = (isset($data['country_id'])) ? $data['country_id'] :  1;
+
+            if (isset($data['address_type']['name'])) {
+                $st = AddressType::where('adt_name', $data['address_type'])->first();
+                if (!$st) {
+                    $address_type = new AddressType();
+                    $address_type->adt_name = $data['address_type']['name'];
+                    $address_type->adt_text_lang = (isset($data['address_type']['description'])) ? $data['address_type']['description'] : NULL;
+                    $address_type->save();
+                    $adresse->address_type_id = $address_type->id;
+                } else {
+                    $adresse->address_type_id = $st->id;
+                }
+            } elseif (isset($data['address_type_id'])) {
+                $adresse->address_type_id = (AddressType::find($data['address_type_id'])) ? $data['address_type_id'] : 1;
+            } else {
+                $adresse->address_type_id = 1;
+            }
+            $adresse->save();
+            return $adresse->id;
+        } elseif (isset($data['address_id'])) {
+            return (Adresse::find($data['address_id'])) ? $data['address_id'] : NULL;
         } else {
             return NULL;
         }

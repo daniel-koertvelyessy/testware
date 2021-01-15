@@ -180,7 +180,7 @@
                                     <input type="hidden"
                                            name="equipment_id"
                                            id="equipment_id"
-                                           value="{{ $test->equipment_id}}"
+                                           value="{{ $test->equipment_id }}"
                                     >
                                     <input type="hidden"
                                            name="control_equipment_id"
@@ -197,14 +197,49 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <h2 class="h5">{{__('Prüfling')}} </h2>
+                           @php(  $equipment = App\Equipment::find($test->equipment_id) )
+                            <x-staticfield label="{{ __('Name') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_name }}" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <x-staticfield label="{{ __('Seriennummer') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_serien_nr }}" />
+                                </div>
+                                <div class="col-md-6">
+                                    <x-staticfield label="{{ __('Inventarnummer') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_inventar_nr }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col mb-3">
                             <h2 class="h5">{{__('Prüfaufgabe')}} </h2>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col mb-3">
                             <p class="lead p-3 border">{{ $test->Anforderung->an_name }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <p class="lead">{{ __('Befähigte Personen für die Prüfung') }}</p>
+                            <ul class="list-unstyled">
+                                @foreach(\App\EquipmentQualifiedUser::where('equipment_id',$test->equipment_id)->get() as $qualifiedUser)
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        {{$qualifiedUser->user->name}}
+                                        @if($qualifiedUser->user->id === auth()->user()->id)
+                                            <span class="fas fa-check-circle text-success"></span>
+                                            @php($enabledUser[] = $qualifiedUser->user->id)
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+
                         </div>
                     </div>
 
@@ -242,11 +277,11 @@
                         >
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2 class="h5">Verwendete Prüfmittel</h2>
+                                    <h2 class="h5">{{__('Verwendete Prüfmittel')}}</h2>
                                     <x-selectgroup
                                         id="set_control_equipment"
-                                        label="Prüfmittel wählen"
-                                        btnL="hinzufügen"
+                                        label="{{__('Prüfmittel wählen')}}"
+                                        btnL="{{__('hinzufügen')}}"
                                         class="btnAddControlEquipmentToList"
                                     >
 
@@ -263,7 +298,7 @@
                                             <option value="void"
                                                     selected
                                                     disabled
-                                            >Keine Prüfmittel gefunden
+                                            >{{__('Keine Prüfmittel gefunden')}}
                                             </option>
                                         @endforelse
                                     </x-selectgroup>
@@ -276,7 +311,7 @@
                                         <li class="controlEquipmentListInitialItem list-group-item list-group-item-warning d-flex justify-content-between align-items-center"
                                             id="control_equipment_item_${equip_id}"
                                         >
-                                            <span>Keine Prüfmittel ausgewählt</span> <span class="fas fa-exclamation"></span>
+                                            <span>{{__('Keine Prüfmittel ausgewählt')}}</span> <span class="fas fa-exclamation ml-2"></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -300,10 +335,12 @@
                     >
                         <div class="row">
                             <div class="col">
+
                                 <table class="table table-borderless">
 
                                     @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->get() as $aci)
-                                        @if($aci->aci_contact_id === auth()->user()->id)
+
+                                        @if(in_array(auth()->user()->id,$enabledUser))
                                             <tr>
                                                 <td colspan="4"
                                                     class="m-0 p-0"

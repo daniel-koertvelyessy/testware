@@ -13,6 +13,7 @@ class Location extends Model
 {
 
     use SoftDeletes, Sortable;
+
     /*
  *
  *    Schütz nicht vor Injektionsangriffen!!!!
@@ -27,6 +28,13 @@ class Location extends Model
     ];
 
 */
+    public $sortable = [
+        'l_label',
+        'l_name',
+        'l_beschreibung',
+        'adress_id',
+        'profile_id'
+    ];
 
     protected $guarded = [];
 
@@ -43,16 +51,37 @@ class Location extends Model
         });
     }
 
+    static function checkStatus()
+    {
+        if (rand(1, 3) === 1) {
+            return '
+                    <span class="sectionStatus">
+                        Status <i class="fas fa-check-circle text-success"></i>
+                    </span>
+                    ';
+        } elseif (rand(1, 3) === 2) {
+            return '
+                    <span class="sectionStatus">
+                        Status <i class="fas fa-exclamation-circle text-warning"></i>
+                    </span>
+                    ';
+        } else {
+            return '
+                    <span class="sectionStatus">
+                        Status <i class="fas fa-times-circle text-danger"></i>
+                    </span>
+                    ';
+        }
+    }
+
     public function search($term)
     {
-        return Location::where('l_label', 'like', '%' . $term . '%')
-            ->orWhere('l_name', 'like', '%' . $term . '%')
-            ->orWhere('l_beschreibung', 'like', '%' . $term . '%')
-            ->get();
+        return Location::where('l_label', 'like', '%' . $term . '%')->orWhere('l_name', 'like', '%' . $term . '%')->orWhere('l_beschreibung', 'like', '%' . $term . '%')->get();
     }
 
     /**
      * Returns the path of the page
+     *
      * @return string
      */
     public function path()
@@ -97,29 +126,6 @@ class Location extends Model
         return $this->hasMany(LocationAnforderung::class);
     }
 
-    static function checkStatus()
-    {
-        if (rand(1, 3) === 1) {
-            return '
-                    <span class="sectionStatus">
-                        Status <i class="fas fa-check-circle text-success"></i>
-                    </span>
-                    ';
-        } elseif (rand(1, 3) === 2) {
-            return '
-                    <span class="sectionStatus">
-                        Status <i class="fas fa-exclamation-circle text-warning"></i>
-                    </span>
-                    ';
-        } else {
-            return '
-                    <span class="sectionStatus">
-                        Status <i class="fas fa-times-circle text-danger"></i>
-                    </span>
-                    ';
-        }
-    }
-
     public function Storage()
     {
         return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
@@ -127,26 +133,22 @@ class Location extends Model
 
     public function countTotalEquipmentInLocation()
     {
-        return Cache::remember(
-            'countTotalEquipmentInLocation'.$this->id,
-            now()->addSeconds(30),
-            function () {
-                $equipCounter = 0;
-                $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
-                $buildings = \App\Building::where('location_id', $this->id)->get();
-                foreach ($buildings as $building) {
-                    $equipCounter += ($building->Storage) ? $building->Storage->countReferencedEquipment() : 0;
-                    $rooms = Room::where('building_id', $building->id)->get();
-                    foreach ($rooms as $room) {
-                        $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() :0;
-                        $compartments = Stellplatz::where('room_id', $room->id)->get();
-                        foreach ($compartments as $compartment) {
-                            $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
-                        }
+        return Cache::remember('countTotalEquipmentInLocation' . $this->id, now()->addSeconds(30), function () {
+            $equipCounter = 0;
+            $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
+            $buildings = \App\Building::where('location_id', $this->id)->get();
+            foreach ($buildings as $building) {
+                $equipCounter += ($building->Storage) ? $building->Storage->countReferencedEquipment() : 0;
+                $rooms = Room::where('building_id', $building->id)->get();
+                foreach ($rooms as $room) {
+                    $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() : 0;
+                    $compartments = Stellplatz::where('room_id', $room->id)->get();
+                    foreach ($compartments as $compartment) {
+                        $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                     }
                 }
-                return $equipCounter;
             }
-        );
+            return $equipCounter;
+        });
     }
 }

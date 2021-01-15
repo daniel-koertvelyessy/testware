@@ -51,6 +51,7 @@ class RoomController extends Controller
             $countNew = 0;
             $countUpdate = 0;
             $countSkipped = 0;
+
             foreach ($jsondata as $data) {
                 /**
                  *    label is a required field. Skipp this dataset
@@ -123,37 +124,43 @@ class RoomController extends Controller
                 $storage_id = ((new Storage)->checkUidExists($data['uid'])) ? $data['uid'] : Str::uuid();
                 (new Storage)->add($storage_id, $data['label'], 'rooms');
 
-                if (isset($data['id']) && Room::find($data['id'])->r_label === $data['label']) {
-                    /**
-                     *   exact room with matching label AND id found => update!
-                     */
-                    $room = Room::find($data['id']);
-                    $r_label = (isset($data['label'])) ? $data['label'] : $room->r_label;
-                    $r_name = (isset($data['name'])) ? $data['name'] : $room->r_name;
-                    $storage_uid = (isset($data['uid'])) ? $data['uid'] : $room->storage_id;
-                    $r_name_text = (isset($data['description'])) ? $data['description'] : $room->r_name_text;
-                    $countUpdate++;
-                } elseif (isset($data['label']) && Room::where('r_label', $data['label'])->first()) {
+                if (Room::where('r_label', $data['label'])->count() > 0) {
                     /**
                      *   room with matching label found  => update!
                      */
                     $room = Room::where('r_label', $data['label'])->first();
-                    $r_label = (isset($data['label'])) ? $data['label'] : $room->r_label;
-                    $r_name = (isset($data['name'])) ? $data['name'] : $room->r_name;
-                    $storage_uid = (isset($data['uid'])) ? $data['uid'] : $room->storage_id;
-                    $r_name_text = (isset($data['description'])) ? $data['description'] : $room->r_name_text;
                     $countUpdate++;
+                    $updateRoom = true;
+
+                } elseif (isset($data['id']) && Room::find($data['id'])) {
+                    /**
+                     *   exact room with matching label AND id found => update!
+                     */
+                    $room = Room::find($data['id']);
+                    $countUpdate++;
+                    $updateRoom = true;
+
                 } else {
                     /**
                      *   no matching found => create new one!
                      */
                     $room = new Room();
+                    $countNew++;
+                    $updateRoom = false;
+                }
+
+                if ($updateRoom) {
+                    $r_label = (isset($data['label'])) ? $data['label'] : $room->r_label;
+                    $r_name = (isset($data['name'])) ? $data['name'] : $room->r_name;
+                    $storage_uid = (isset($data['uid'])) ? $data['uid'] : $room->storage_id;
+                    $r_name_text = (isset($data['description'])) ? $data['description'] : $room->r_name_text;
+                } else {
                     $r_label = $data['label'];
                     $r_name = (isset($data['name'])) ? $data['name'] : null;
                     $storage_uid = (isset($data['uid'])) ? $data['uid'] : $storage_id;
                     $r_name_text = (isset($data['description'])) ? $data['description'] : null;
-                    $countNew++;
                 }
+
 
                 $room->r_label = $r_label;
                 $room->r_name = $r_name;

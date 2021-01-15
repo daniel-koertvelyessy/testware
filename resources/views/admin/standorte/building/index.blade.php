@@ -27,6 +27,17 @@
     @include('menus._menuStorage')
 @endsection
 
+@section('actionMenuItems')
+    {{--    <li class="nav-item dropdown">--}}
+    {{--        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>--}}
+    {{--        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">--}}
+    {{--            <a class="dropdown-item" href="#">Drucke Übersicht</a>--}}
+    {{--            <a class="dropdown-item" href="#">Standortbericht</a>--}}
+    {{--            <a class="dropdown-item" href="#">Formularhilfe</a>--}}
+    {{--        </ul>--}}
+    {{--    </li>--}}
+@endsection()
+
 @section('content')
 
     <div class="container-fluid mt-2">
@@ -76,17 +87,4 @@
 
 @section('autocomplete')
 
-@stop
-
-
-@section('actionMenuItems')
-    {{--    <li class="nav-item dropdown">--}}
-    {{--        <a class="nav-link dropdown-toggle" href="#" id="navTargetAppAktionItems" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-bars"></i> Aktionen </a>--}}
-    {{--        <ul class="dropdown-menu" aria-labelledby="navTargetAppAktionItems">--}}
-    {{--            <a class="dropdown-item" href="#">Drucke Übersicht</a>--}}
-    {{--            <a class="dropdown-item" href="#">Standortbericht</a>--}}
-    {{--            <a class="dropdown-item" href="#">Formularhilfe</a>--}}
-    {{--        </ul>--}}
-    {{--    </li>--}}
-@endsection()
-
+@endsection
