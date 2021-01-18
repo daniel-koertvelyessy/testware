@@ -17,12 +17,15 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>{{__('Standortverwaltung')}}</h1>
+                <h1>
+                 <span class="d-none d-md-block">{{__('Standortverwaltung')}}</span>
+                 <span class="d-md-none">{{__('memStandorte')}}</span>
+                </h1>
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <section class="card-body text-dark">
 
                     <a href="{{ route('lexplorer') }}" class="tile-small rounded mb-3" data-role="tile">
@@ -30,8 +33,7 @@
                         <span class="branding-bar text-center">{{__('Explorer')}}</span>
                     </a>
 
-                    <nav class="tiles-grid ">
-
+                    <nav class="tiles-grid mb-3">
                         <a href="{{ route('location.index') }}" class="tile-small rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-industry"></i></span>
                             <span class="branding-bar text-center">{{__('Standorte')}}</span>
@@ -40,6 +42,8 @@
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
+                    </nav>
+                    <nav class="tiles-grid mb-3">
                         <a href="{{ route('building.index') }}" class="tile-small rounded" data-role="tile" aria-label="Storagee">
                             <span class="icon"><i class="far fa-building"></i></span>
                             <span class="branding-bar text-center">{{__('Gebäude')}}</span>
@@ -49,6 +53,8 @@
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
+                    </nav>
+                    <nav class="tiles-grid mb-3">
                         <a href="{{ route('room.index') }}" class="tile-small rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-door-open"></i></span>
                             <span class="branding-bar text-center">{{__('Räume')}}</span>
@@ -61,7 +67,7 @@
                     </nav>
                 </section>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <h3 class="h5">{{__('Kürzlich bearbeitete Standorte')}}</h3>
                 <table class="table table-striped">
                     <thead>

@@ -36,7 +36,7 @@
                          data-parent="#portalAuswahl"
                     >
                         <section class="card-body text-dark">
-                            <nav class="tiles-grid justify-content-center">
+                            <nav class="tiles-grid">
                                 <a href="{{ route('storageMain') }}"
                                    class="tile-medium rounded"
                                    data-role="tile"

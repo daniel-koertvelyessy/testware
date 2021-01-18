@@ -40,11 +40,11 @@ class AnforderungsController extends Controller
 
         if (Anforderung::all()->count() > 10) {
             return view('admin.verordnung.anforderung.index', [
-                'anforderungen' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
+                'requirements' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
             ]);
         } else {
             return view('admin.verordnung.anforderung.index', [
-                'anforderungen' => Anforderung::with('ControlInterval')->sortable()->get()
+                'requirements' => Anforderung::with('ControlInterval')->sortable()->get()
             ]);
         }
     }

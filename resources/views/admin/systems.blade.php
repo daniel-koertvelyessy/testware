@@ -131,7 +131,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">System Einstellungen</h1>
+                <h1 class="h3">{{__('System Einstellungen')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -174,7 +174,7 @@
                          aria-labelledby="Objekte-tab"
                     >
                         <div class="row">
-                            <div class="col-md-3  border-right">
+                            <div class="col-lg-2 col-md-3  border-right">
                                 <nav class="nav flex-column nav-pills"
                                      id="tab"
                                      role="tablist"
@@ -214,7 +214,7 @@
                                     >{{__('Stellplatz')}}</a>
                                 </nav>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-lg-10 col-md-9">
                                 <div class="tab-content"
                                      id="tabContent"
                                 >
@@ -680,7 +680,7 @@
                          aria-labelledby="Produkte-tab"
                     >
                         <div class="row">
-                            <div class="col-lg-3 col-md-2">
+                            <div class="col-lg-2 col-md-3">
                                 <nav class="nav flex-column nav-pills"
                                      id="tab"
                                      role="tablist"
@@ -699,12 +699,15 @@
                                     <a class="nav-link"
                                        id="prodAnforderungTyp-tab"
                                        data-toggle="pill"
-                                       data-helpertext="{{__('Anforderungen können verschiedene Aufgaben umfassen. Mit Hilfe von Anforderungstypen können Sie diese gruppieren.')}}"
+                                       data-helpertext="{{__('Anforderungen können verschiedene Aufgaben umfassen. Mit Hilfe von Anforderungs-typen können Sie diese gruppieren.')}}"
                                        href="#prodAnforderungTyp"
                                        role="tab"
                                        aria-controls="prodAnforderungTyp"
                                        aria-selected="false"
-                                    >{{__('Anforderungstyp')}}</a>
+                                    >
+                                        <span class="">{{ __('Anforderung Typ') }}</span>
+                                    </a>
+
                                     <a class="nav-link"
                                        id="doctypes-tab"
                                        data-helpertext="{{__('Erstellen Sie Dokumenttypen wie zum Beispiel Bedienungs-anleitungen, Zeichnugen oder Kataloge.')}}"
@@ -719,7 +722,7 @@
                                     {{__('Erstellen Sie allgemeine Produktypen unter der Sie die Produkte zusammenfassen können. Beispielsweise Computer, EDV, Werkzeug etc.')}}
                                 </div>
                             </div>
-                            <div class="col-lg-9 col-md-10">
+                            <div class="col-lg-10 col-md-9">
                                 <div class="tab-content"
                                      id="tabContent"
                                 >

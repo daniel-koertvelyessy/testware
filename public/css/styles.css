@@ -34,27 +34,29 @@ a.subnav {
 .tiles-grid {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, 70px);
-    grid-template-rows: repeat(auto-fit, 70px);
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    /*grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));*/
     grid-gap: 10px;
 }
 
-.tile-medium-disabled,
+/**/
 .tile-small-disabled,
-.tiles-grid .tile-medium,
-.tiles-grid .tile-small {
-    grid-column: span 2;
-    grid-row: span 2;
-}
 
+.tiles-grid .tile-small {
+    grid-column: span 1;
+    /*grid-row: span 2;*/
+}
+.tiles-grid .tile-medium,.tile-medium-disabled{
+    grid-column: span 2;
+}
 .tile-small-disabled,
 .tile-small {
-    width: 80px;
+    /*width: 80px;*/
     height: 80px;
 }
 .tile-medium-disabled,
 .tile-medium {
-    width: 150px;
+    /*width: 150px;*/
     height: 150px;
 }
 

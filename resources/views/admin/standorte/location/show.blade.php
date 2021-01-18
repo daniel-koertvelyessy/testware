@@ -345,11 +345,11 @@
                         role="presentation"
                     >
                         <a class="nav-link active"
-                           id="Stammdaten-tab"
+                           id="base_data-tab"
                            data-toggle="tab"
-                           href="#Stammdaten"
+                           href="#base_data"
                            role="tab"
-                           aria-controls="Stammdaten"
+                           aria-controls="base_data"
                            aria-selected="true"
                         >{{__('Stammdaten')}}
                         </a>
@@ -384,9 +384,9 @@
                      id="myTabContent"
                 >
                     <div class="tab-pane fade show active p-2 "
-                         id="Stammdaten"
+                         id="base_data"
                          role="tabpanel"
-                         aria-labelledby="Stammdaten-tab"
+                         aria-labelledby="base_data-tab"
                     >
                         <form action="{{ route('location.update',['location'=>$location->id]) }}"
                               method="post"

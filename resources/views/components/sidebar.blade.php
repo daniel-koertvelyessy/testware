@@ -1,11 +1,3 @@
-{{--<input data-function="swipe"--}}
-{{--       id="swipe"--}}
-{{--       type="checkbox"--}}
-{{-->--}}
-{{--<label class="sideIcon"--}}
-{{--       data-function="swipe"--}}
-{{--       for="swipe"--}}
-{{--><i class="fas fa-bars"></i></label>--}}
 <aside class="sidebar p-3"
        id="sideNav"
        style="display: flex; flex-direction: column;"
@@ -14,32 +6,50 @@
     <span class="d-flex align-items-center justify-content-between mt-0">
         <span>{{__('Menü fixieren')}}</span>
         <div class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="switchFixSidebar">
-          <label class="custom-control-label" for="switchFixSidebar"></label>
+          <input type="checkbox"
+                 class="custom-control-input"
+                 id="switchFixSidebar"
+          >
+          <label class="custom-control-label"
+                 for="switchFixSidebar"
+          ></label>
         </div>
     </span>
 
-    <p class="h3" style="color:#c7d301;">{{__('testWare')}}</p>
+    <p class="h3"
+       style="color:#c7d301;"
+    >{{__('testWare')}}</p>
 
-    <a href="{{ route('testware.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>{{__('Dashboard')}}</span>
-        <span class="fas fa-desktop"></span>
+    <a href="{{ route('testware.index') }}"
+       class=" my-2 d-flex align-items-center justify-content-between"
+    >
+        <span>{{__('Dashboard')}}</span> <span class="fas fa-desktop"></span>
     </a>
 
-    <a href="{{ route('equipMain') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>{{__('Geräte')}}</span>
-        <span class="fas fa-boxes"></span>
+    <a href="{{ route('equipMain') }}"
+       class=" my-2 d-flex align-items-center justify-content-between"
+    >
+        <span>{{__('Geräte')}}</span> <span class="fas fa-boxes"></span>
     </a>
 
-    <a href="{{ route('control.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>{{__('Prüfungen')}}</span>
-        <span class="fas fa-stethoscope"></span>
+    <a href="{{ route('control.index') }}"
+       class=" my-2 d-flex align-items-center justify-content-between"
+    >
+        <span>{{__('Prüfungen')}}</span> <span class="fas fa-stethoscope"></span>
     </a>
 
-    <a href="{{ route('event.index') }}" class=" my-2 d-flex align-items-center justify-content-between">
-        <span>{{__('Ereignisse')}}</span>
-        <span class="fas fa-inbox"></span>
+    <a href="{{ route('event.index') }}"
+       class=" my-2 d-flex align-items-center justify-content-between"
+    >
+        <span>{{__('Ereignisse')}}</span> <span class="fas fa-inbox"></span>
     </a>
+
+    <a href="{{ route('report.index') }}"
+       class=" my-2 d-flex align-items-center justify-content-between"
+    >
+        <span>{{__('Berichte')}}</span> <span class="fas fa-clipboard"></span>
+    </a>
+
     <div class="dropdown-divider"></div>
 
     <a href="#sideNavProdukt"

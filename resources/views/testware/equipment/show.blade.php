@@ -3,7 +3,7 @@
 @section('mainSection', 'testWare')
 
 @section('pagetitle')
-    {{__('Gerät')}} {{ $equipment->eq_inventar_nr }} bearbeiten &triangleright; {{__('Geräte')}}
+    {{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('menu')
@@ -600,11 +600,11 @@
                         role="presentation"
                     >
                         <a class="nav-link active"
-                           id="stammdaten-tab"
+                           id="base_data-tab"
                            data-toggle="tab"
-                           href="#stammdaten"
+                           href="#base_data"
                            role="tab"
-                           aria-controls="stammdaten"
+                           aria-controls="base_data"
                            aria-selected="true"
                         > {{ __('Stammdaten')}}
                         </a>
@@ -613,11 +613,11 @@
                         role="presentation"
                     >
                         <a class="nav-link"
-                           id="anforderungen-tab"
+                           id="requirements-tab"
                            data-toggle="tab"
-                           href="#anforderungen"
+                           href="#requirements"
                            role="tab"
-                           aria-controls="anforderungen"
+                           aria-controls="requirements"
                            aria-selected="false"
                         > {{ __('Anforderungen')}} </a>
                     </li>
@@ -665,9 +665,9 @@
                      id="myTabContent"
                 >
                     <div class="tab-pane fade show active p-2"
-                         id="stammdaten"
+                         id="base_data"
                          role="tabpanel"
-                         aria-labelledby="stammdaten-tab"
+                         aria-labelledby="base_data-tab"
                     >
                         <div class="row">
                             <div class="col-md-7 mb-3">
@@ -720,7 +720,10 @@
 
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->proddoc_label }}</span><br> <span class="lead">{{ str_limit($bda->proddoc_name,30) }}</span><br> <span class="text-muted small">
+                                            <span class="text-muted small">
+                                                {{ str_limit($bda->proddoc_name) }}</span>
+                                            <br>
+                                            <span class="lead">{{ str_limit($bda->proddoc_label,50) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -751,7 +754,7 @@
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-muted small">{{ $bda->eqdoc_label }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_name,30) }}</span><br> <span class="text-muted small">
+                                            <span class="text-muted small">{{ str_limit($bda->eqdoc_name) }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_label,50) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -819,9 +822,9 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-2"
-                         id="anforderungen"
+                         id="requirements"
                          role="tabpanel"
-                         aria-labelledby="anforderungen-tab"
+                         aria-labelledby="requirements-tab"
                     >
                         <div class="row">
                             <div class="col-md-6">
@@ -912,7 +915,7 @@
                                                 >
                                             </td>
                                             <td style="vertical-align: middle; text-align:right; padding:0">
-                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}#anforderungen"
+                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}#requirements"
                                                       method="post"
                                                 >
                                                     @csrf

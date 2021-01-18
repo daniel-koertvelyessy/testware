@@ -59,11 +59,11 @@
                                    aria-selected="true"
                                 >{{ __('Stammdaten') }}</a>
                                 <a class="nav-link"
-                                   id="new-prod-anforderungen-tab"
+                                   id="new-prod-requirements-tab"
                                    data-toggle="tab"
-                                   href="#new-prod-anforderungen"
+                                   href="#new-prod-requirements"
                                    role="tab"
-                                   aria-controls="new-prod-anforderungen"
+                                   aria-controls="new-prod-requirements"
                                    aria-selected="false"
                                 >{{ __('Anforderungen') }}</a>
                                 <a class="nav-link"
@@ -88,16 +88,16 @@
                                 <div class="border-top pt-2 mt-5 d-flex justify-content-end">
                                     <button type="button"
                                             class="btn btn-sm btn-primary bentNextTab"
-                                            data-showtab="#new-prod-anforderungen-tab"
+                                            data-showtab="#new-prod-requirements-tab"
                                             data-required="#prod_name,#prod_label"
 
                                     >{{__('weiter')}}</button>
                                 </div>
                             </div>
                             <div class="tab-pane fade"
-                                 id="new-prod-anforderungen"
+                                 id="new-prod-requirements"
                                  role="tabpanel"
-                                 aria-labelledby="new-prod-anforderungen-tab"
+                                 aria-labelledby="new-prod-requirements-tab"
                             >
                                 <div class="row">
                                     <div class="col-md-6">

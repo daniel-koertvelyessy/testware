@@ -17,7 +17,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">{{__('Verwaltung')}}</h1>
+                <h1 class="h3">{{__('Übersicht')}}</h1>
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
             </div>
         </div>
@@ -45,7 +45,7 @@
                             @sortablelink('eq_inventar_nr', __('Inventarnummer'))
                         </th>
                         <th class="d-none d-md-table-cell ">
-                            @sortablelink('storage.storage_label', __('Stellplatz'))
+                            @sortablelink('storage.storage_label', __('memStandort'))
                         </th>
                         <th class="d-none d-lg-table-cell ">
                             @sortablelink('EquipmentState.estat_label', __('Status'))

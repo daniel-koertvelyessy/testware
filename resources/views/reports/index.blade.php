@@ -48,49 +48,14 @@
                             <td class="d-none d-md-table-cell">{{ $report->description }}</td>
                             <td class="d-none d-md-table-cell">{{ $report->types->name }}</td>
                             <td>
-                                <span class="d-none d-md-block">
-                                <a class="btn btn-sm btn-outline-dark"
-                                   href="{{ route('report.show',$report) }}"
-                                   target="_blank"
-                                >
-                                    <span class="fas fa-external-link-alt"></span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-dark"
-                                   href="{{ route('printReport',$report) }}"
-                                   target="_blank"
-                                   download
-                                >
-                                    <span class="fas fa-download"></span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-dark"
-                                   href="{{ route('report.edit',$report) }}"
-                                >
-                                    <span class="fas fa-edit"></span>
-                                </a>
-                                </span>
-                                <span class="d-md-none">
-                                <a class="btn btn-sm btn-outline-dark btn-block d-flex align-items-center justify-content-between"
-                                   href="{{ route('report.show',$report) }}"
-                                   target="_blank"
-                                >
-                                    {{ __('öffnen') }}
-                                    <span class="fas fa-external-link-alt ml-1"></span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-dark btn-block d-flex align-items-center justify-content-between"
-                                   href="{{ route('printReport',$report) }}"
-                                   target="_blank"
-                                   download
-                                >
-                                    {{ __('download') }}
-                                    <span class="fas fa-download ml-1"></span>
-                                </a>
-                                <a class="btn btn-sm btn-outline-dark btn-block d-flex align-items-center justify-content-between"
-                                   href="{{ route('report.edit',$report) }}"
-                                >
-                                    {{ __('bearbeiten') }}
-                                    <span class="fas fa-edit ml-1"></span>
-                                </a>
-                                </span>
+                                <x-menu_context
+                                    :object="$report"
+                                    routeOpen="{{ route('report.edit',$report) }}"
+                                    routeCopy="#"
+                                    routeDestory="{{ route('report.destroy',$report) }}"
+                                    objectName="report"
+                                    objectVal="{{ $report->id }}"
+                                />
                             </td>
                         </tr>
                     @empty
@@ -102,6 +67,14 @@
                     @endforelse
                     </tbody>
                 </table>
+                @if(count($reports) >0)
+                    <div class="d-flex justify-content-center">
+                        {!! $reports->withQueryString()->onEachSide(2)->links() !!}
+                    </div>
+                @endif
+                <a href="{{ route('report.create') }}"
+                   class="btn btn-outline-primary my-3"
+                >{{ __('Neuen Bericht erstellen') }}</a>
             </div>
         </div>
     </div>

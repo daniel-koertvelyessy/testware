@@ -74,14 +74,14 @@
         <div class="row">
             <div class="col">
                 @php $produktKategories = App\ProduktKategorie::all(); @endphp
-                <nav class="d-flex justify-lg-content-start justify-sm-content-around">
+                <nav class="tiles-grid">
                     @foreach ($produktKategories as $produktKategorie)
                         <a href="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}"
                            class="tile-small rounded mr-lg-3 mr-sm-2"
                            data-role="tile"
                         >
-                            <span class="icon"><i class="fas fa-box"></i></span> <span
-                                class="branding-bar text-center">{{$produktKategorie->pk_label}}</span>
+                            <span class="icon"><i class="fas fa-box"></i></span>
+                            <span class="branding-bar text-center">{{$produktKategorie->pk_label}}</span>
                         </a>
                     @endforeach
                 </nav>

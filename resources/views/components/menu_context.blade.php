@@ -13,64 +13,68 @@
     >
         @if($routeOpen!=='#')
             <a href="{{ $routeOpen }}"
-               class="dropdown-item d-flex justify-content-between align-items-center"
+               class="dropdown-item"
             >
-                Öffnen <i class="fas fa-angle-right"></i>
+                <i class="fas fa-angle-right mr-2 fa-fw"></i>
+                {{__('Öffnen')}}
             </a>
         @endif
         @if($routeCopy!=='#')
             <a href="#"
-               class="dropdown-item d-flex justify-content-between align-items-center {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
+               class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
                onclick="event.preventDefault(); document.getElementById('frm_copy_object_{{ $object->id }}').submit();"
-            >Kopieren <i class="fas fa-copy"></i>
+            >
+                <i class="fas fa-copy mr-2 fa-fw"></i>
+                {{__('Kopieren')}}
             </a>
         @endif
         @if($routeDestory!=='#')
             <a href="#"
-               class="dropdown-item d-flex justify-content-between align-items-center"
+               class="dropdown-item"
                onclick="event.preventDefault(); document.getElementById('frm_delete_object_{{ $object->id }}').submit();"
             >
-                Löschen <i class="far fa-trash-alt"></i>
+                <i class="far fa-trash-alt mr-2 fa-fw"></i>
+                {{__('Löschen')}}
             </a>
         @endif
         @if($routeDestory!=='#')
-            <form action="{{ $routeCopy }}#{{$tabName}}"
+            <form action="{{ $routeDestory }}#{{$tabName??''}}"
+                  id="frm_delete_object_{{ $object->id }}"
+                  method="post"
+            >
+                @csrf
+                @method('DELETE')
+                <input type="hidden"
+                       name="id"
+                       id="id_delete_object_{{ $object->id }}"
+                       value="{{ $object->id }}"
+                >
+                <input type="hidden"
+                       name="{{ $objectName }}"
+                       id="{{ $objectName }}_delete_object_{{ $object->id }}"
+                       value="{{ $objectVal }}"
+                >
+            </form>
+        @endif
+        @if($routeCopy!=='#')
+            <form action="{{ $routeCopy }}#{{$tabName??''}}"
                   id="frm_copy_object_{{ $object->id }}"
                   method="post"
             >
                 @csrf
                 <input type="hidden"
                        name="id"
-                       id="id_copy_object_{{ $object->id }}"
-                       value="{{ $object->id }}"
-                >
-                <input type="hidden"
-                       name="{{ $objectName }}"
-                       id="{{ $objectName }}_copy_object_{{ $object->id }}"
-                       value="{{ $objectVal }}"
-                >
-            </form>
-        @endif
-        @if($routeCopy!=='#')
-            <form action="{{ $routeDestory }}#{{$tabName}}"
-                  id="frm_delete_object_{{ $object->id }}"
-                  method="post"
-            >
-                @csrf
-                @method('delete')
-                <input type="hidden"
-                       name="id"
-                       id="id_delete_object{{ $object->id }}"
+                       id="id_copy_object{{ $object->id }}"
                        value="{{ $object->id }}"
                 >
                 <input type="hidden"
                        name="frmOrigin"
                        id="frmOrigin_{{ $object->id }}"
-                       value="locaion"
+                       value="{{ $objectName }}"
                 >
                 <input type="hidden"
                        name="{{ $objectName }}"
-                       id="{{ $objectName }}_delete_object_{{ $object->id }}"
+                       id="{{ $objectName }}_copy_object_{{ $object->id }}"
                        value="{{ $objectVal }}"
                 >
             </form>

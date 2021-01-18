@@ -31,7 +31,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse ($anforderungen as $anforderung)
+                @forelse ($requirements as $anforderung)
                     <tr>
                         <td style="vertical-align: middle;">{{ $anforderung->an_name }}</td>
                         <td style="vertical-align: middle;"

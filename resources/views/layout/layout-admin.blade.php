@@ -60,7 +60,7 @@
             >
         </span>
         <a href="/"
-           class="ml-1 navbar-brand"
+           class="ml-1 navbar-brand d-lg-none"
            style="border-bottom: 2px solid transparent !important;"
         >
             {{--            <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="" height="30px" class="d-md-none">--}}

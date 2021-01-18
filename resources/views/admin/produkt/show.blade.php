@@ -283,11 +283,11 @@
                         role="presentation"
                     >
                         <a class="nav-link active"
-                           id="prodStammdaten-tab"
+                           id="prodbase_data-tab"
                            data-toggle="tab"
-                           href="#prodStammdaten"
+                           href="#prodbase_data"
                            role="tab"
-                           aria-controls="prodStammdaten"
+                           aria-controls="prodbase_data"
                            aria-selected="true"
                         >{{__('Stammdaten')}}</a>
                     </li>
@@ -347,9 +347,9 @@
                      id="myTabContent"
                 >
                     <div class="tab-pane fade show active"
-                         id="prodStammdaten"
+                         id="prodbase_data"
                          role="tabpanel"
-                         aria-labelledby="prodStammdaten-tab"
+                         aria-labelledby="prodbase_data-tab"
                     >
                         <div class="row">
                             <div class="col">

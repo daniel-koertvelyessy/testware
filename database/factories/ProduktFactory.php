@@ -7,9 +7,10 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Produkt::class, function (Faker $faker) {
+    $int = random_int(1,10);
     return [
-        'updated_at' => $faker->time('now'),
-        'created_at' => $faker->time('now'),
+        'updated_at' => now()->subMonths($int),
+        'created_at' => now()->subMonths($int),
         'prod_label' => 'pr.' . str_random(8),
         'prod_name' => $faker->slug(3),
         'produkt_kategorie_id' => 1,

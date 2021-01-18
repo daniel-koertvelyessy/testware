@@ -8,9 +8,11 @@
     @include('menus._menu_testware_main')
 @endsection
 
+@section('mainSection', __('testWare'))
+
 @section('content')
     <div class="container-fluid">
-        <h2 class="h5">{{ __('Status') }}
+        <h2 class="h5">
             <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
             <br> <span class="small">
                 {{ __('Anzahl') }}: <span class="badge badge-info">{{ App\Equipment::all()->count() }}</span>
@@ -55,7 +57,7 @@
         </div>
         <div class="row mt-4">
             <x-dashborarditem>
-                <h2 class="h5">{{__('Anstehende')}}
+                <h2 class="h5">
                     <a href="{{ route('control.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
                 <nav>
@@ -256,10 +258,9 @@
 
             <x-dashborarditem>
                 <h2 class="h5">
-                    {{__('Offene')}}
                     <a href="{{ route('event.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
-                @forelse(App\EquipmentEvent::where('read',NULL)->take(10)->latest()->get() as $equipmentEvent)
+                @forelse(App\EquipmentEvent::where('read',null)->take(10)->latest()->get() as $equipmentEvent)
                     <x-systemmessage
                         link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
                         linkText="{{__('zum Gerät')}}"
@@ -277,13 +278,13 @@
             </x-dashborarditem>
 
             <x-dashborarditem>
-                <div class="col-md-6">
-                    <h2 class="h5">{{ __('Status') }}
-                        <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
-                    </h2>
-                    <div id="myChart"
-                    ></div>
-                </div>
+                <h2 class="h5">{{ __('Status') }}
+                    <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
+                </h2>
+                <div id="myChart"
+                     style="max-width: 350px;"
+                ></div>
+
             </x-dashborarditem>
         </div>
         {{--        {!!  App\Testware::checkTWStatus() !!}--}}
