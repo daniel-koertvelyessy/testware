@@ -31,7 +31,7 @@ $countUsed = 0;
 <table cellspacing="0"
        cellpadding="3"
        border="1"
-       class="table table-striped"
+       class="table table-responsive-md table-striped"
 >
     <thead>
     <tr style="font-size: 11pt; font-weight: bold;">

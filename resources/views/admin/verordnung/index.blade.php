@@ -19,7 +19,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-striped "
+                <table class="table table-responsive-md table-striped "
                        id="tabVerordnungListe"
                 >
                     <thead>

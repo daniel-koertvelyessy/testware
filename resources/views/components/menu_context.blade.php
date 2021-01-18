@@ -15,7 +15,7 @@
             <a href="{{ $routeOpen }}"
                class="dropdown-item"
             >
-                <i class="fas fa-angle-right mr-2 fa-fw"></i>
+                <i class="fas fa-folder-open mr-2 fa-fw"></i>
                 {{__('Öffnen')}}
             </a>
         @endif

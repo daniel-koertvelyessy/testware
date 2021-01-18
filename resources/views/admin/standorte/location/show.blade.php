@@ -775,7 +775,7 @@
                                     </div>
                                 </form>
                                 @if ($location->Building->count()>0)
-                                    <table class="table table-striped"
+                                    <table class="table table-responsive-md table-striped"
                                            id="tabBuildingListe"
                                     >
                                         <thead>

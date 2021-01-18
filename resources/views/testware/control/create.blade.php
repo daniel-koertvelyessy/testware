@@ -336,7 +336,7 @@
                         <div class="row">
                             <div class="col">
 
-                                <table class="table table-borderless">
+                                <table class="table table-responsive-md table-borderless">
 
                                     @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->get() as $aci)
 

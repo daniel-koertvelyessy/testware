@@ -27,12 +27,14 @@
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
                          style="height: 8em;"
                     >
-                        <div class="d-none d-xl-inline-flex"
+                        <div class="d-none d-lg-inline-flex align-items-center"
                              style="display: flex; flex-direction: column;"
                         >
-                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_label) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,60) }}</span>
+                            <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_label) }}</strong>
+                            </span>
+                            <span class="mt-2 display-4 text-{{ $equipmentState->estat_color }}"><i class="{{ $equipmentState->estat_icon }}"></i></span>
                         </div>
-                        <div class="d-xl-none"
+                        <div class="d-lg-none"
                              style="display: flex; flex-direction: column;"
                         >
                             <span>{{__('Status')}}: <strong>{{ ucwords($equipmentState->estat_label) }}</strong></span> <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,40) }}</span>
@@ -111,7 +113,7 @@
                          role="tabpanel"
                          aria-labelledby="controlWeek-tab"
                     >
-                        <table class="table table-striped table-sm">
+                        <table class="table table-responsive-md table-striped table-sm">
                             <thead>
                             <tr>
                                 <th>{{__('Gerät')}}</th>
@@ -147,7 +149,7 @@
                          role="tabpanel"
                          aria-labelledby="controlMonth-tab"
                     >
-                        <table class="table table-striped table-sm">
+                        <table class="table table-responsive-md table-striped table-sm">
                             <thead>
                             <tr>
                                 <th>{{__('Gerät')}}</th>
@@ -184,7 +186,7 @@
                          aria-labelledby="controlYear-tab"
                     >
                         <h2 class="h5">{{__('Anstehende Prüfungen') .' '. date('Y')}} </h2>
-                        <table class="table table-striped table-sm">
+                        <table class="table table-responsive-md table-striped table-sm">
                             <thead>
                             <tr>
                                 <th>{{__('Gerät')}}</th>
@@ -220,7 +222,7 @@
                          role="tabpanel"
                          aria-labelledby="controlAll-tab"
                     >
-                        <table class="table table-striped table-sm">
+                        <table class="table table-responsive-md table-striped table-sm">
                             <thead>
                             <tr>
                                 <th>{{__('Gerät')}}</th>

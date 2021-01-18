@@ -65,18 +65,18 @@
                     >
                         @csrf
                         <x-rtextfield id="pk_label"
-                                      label="Kürzel"
+                                      label="{{__('Kürzel')}}"
                         />
 
                         <x-textfield id="pk_name"
-                                     label="Name"
+                                     label="{{__('Name')}}"
                         />
 
                         <x-textarea id="pk_name_text"
-                                    label="Beschreibung"
+                                    label="{{__('Beschreibung')}}"
                         />
 
-                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download"></span></x-btnMain>
+                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download ml-2"></span></x-btnMain>
 
                     </form>
                 </div>

@@ -24,13 +24,13 @@
             <div class="col-md-2">
                 <section class="card-body text-dark">
 
-                    <nav class="d-flex justify-content-around flex-lg-column">
+                    <nav class="tiles-grid">
 
-                        <a href="{{ route('verordnung.index') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('verordnung.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="fas fa-book"></i></span>
                             <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('verordnung.create') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('verordnung.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
@@ -39,13 +39,13 @@
                 </section>
             </div>
             <div class="col-md-10">
-                <h3 class="lead mt-md-3 mt-sm-1">Kürzlich erstellte Verordnungen</h3>
-                <table class="table table-striped">
+                <h3 class="lead mt-md-3 mt-sm-1">{{__('Kürzlich erstellte Verordnungen')}}</h3>
+                <table class="table table-responsive-md-md table-striped">
                     <thead>
                     <tr>
-                        <th>Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Kennung</th>
-                        <th class="d-none d-md-table-cell">Bearbeitet</th>
+                        <th class="w-md-50">{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,34 +67,34 @@
                 </table>
             </div>
         </div>
-        <h3 class="h4 mt-md-3 mt-sm-1">Anforderungen</h3>
+        <h3 class="h4 mt-md-3 mt-sm-1">{{__('Anforderungen')}}</h3>
         <div class="row">
-            <div class="col-lg-2 col-md-4">
+            <div class="col-md-2">
                 <section class="card-body text-dark">
 
-                    <nav class="d-flex justify-content-around flex-md-row flex-lg-column">
+                    <nav class="tiles-grid">
 
-                        <a href="{{ route('anforderung.index') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderung.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-list-alt"></i></span>
-                            <span class="branding-bar text-center">Übersicht</span>
+                            <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('anforderung.create') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderung.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">Neu</span>
+                            <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
 
                     </nav>
 
                 </section>
             </div>
-            <div class="col-lg-10 col-md-8">
-                <h3 class="lead mt-4">Kürzlich erstellte Anforderungen</h3>
-                <table class="table table-striped">
+            <div class="col-md-10">
+                <h3 class="lead mt-4">{{__('Kürzlich erstellte Anforderungen')}}</h3>
+                <table class="table table-responsive-md-md table-striped">
                     <thead>
                     <tr>
-                        <th class="col-5">Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Kennung</th>
-                        <th class="d-none d-md-table-cell">Bearbeitet</th>
+                        <th class="w-50">{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -119,14 +119,12 @@
         <div class="row">
             <div class="col-md-2">
                 <section class="card-body text-dark">
-
-                    <nav class="d-flex justify-content-around flex-lg-column">
-
-                        <a href="{{ route('anforderungcontrolitem.index') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                    <nav class="tiles-grid">
+                        <a href="{{ route('anforderungcontrolitem.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-list-alt"></i></span>
                             <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('anforderungcontrolitem.create') }}" class="tile-small rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderungcontrolitem.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
@@ -137,12 +135,12 @@
             </div>
             <div class="col-md-10">
                 <h3 class="lead mt-4">{{__('Kürzlich erstellte Prüfungen')}}</h3>
-                <table class="table table-striped">
+                <table class="table table-responsive-md-md table-striped">
                     <thead>
                     <tr>
-                        <th>Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Kennung</th>
-                        <th class="d-none d-md-table-cell">Bearbeitet</th>
+                        <th class="w-50">{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col">
-                <table class="table table-striped" id="tabControlListe">
+                <table class="table table-responsive-md table-striped" id="tabControlListe">
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">{{__('Gerät')}}</th>

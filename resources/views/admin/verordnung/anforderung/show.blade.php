@@ -111,7 +111,7 @@
             </div>
             <div class="col-md-6">
                 <h2 class="h4">Prüfungen zur Anforderung</h2>
-                <table class="table">
+                <table class="table table-responsive-md">
                     <thead>
                     <tr>
                         <th>Kürzel</th>

@@ -48,7 +48,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-striped">
+                <table class="table table-responsive-md table-striped">
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>

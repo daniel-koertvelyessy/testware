@@ -172,7 +172,7 @@
                 <div class="modal-body">
                     <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesegen. Bitte wählen Sie das entspechende aus.') }}</p>
 
-                    <table class="table">
+                    <table class="table table-responsive-md">
                         <thead>
                         <tr>
                             <th>{{__('Prüfung')}}</th>
@@ -839,7 +839,7 @@
                                     </button>
                                 </div>
 
-                                <table class="table">
+                                <table class="table table-responsive-md">
                                     <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
@@ -893,7 +893,7 @@
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
-                                <table class="table">
+                                <table class="table table-responsive-md">
                                     <thead>
                                     <tr>
                                         <th>{{__('Name')}}</th>
@@ -1050,7 +1050,7 @@
                                          aria-labelledby="equipDocuEquipment-tab"
                                     >
                                         @if (\App\EquipmentDoc::where('equipment_id',$equipment->id)->count()>0)
-                                            <table class="table table-striped">
+                                            <table class="table table-responsive-md table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
@@ -1102,7 +1102,7 @@
                                          aria-labelledby="equipDocuFuntion-tab"
                                     >
                                         @if (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->count()>0)
-                                            <table class="table table-striped">
+                                            <table class="table table-responsive-md table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
@@ -1154,7 +1154,7 @@
                                          aria-labelledby="equipDocuProduct-tab"
                                     >
                                         @if (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->count()>0)
-                                            <table class="table table-striped">
+                                            <table class="table table-responsive-md table-striped">
                                                 <thead>
                                                 <th>{{ __('Datei')}}</th>
                                                 <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>
@@ -1219,7 +1219,7 @@
                             </div>
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Logs')}}</h3>
-                                <table class="table">
+                                <table class="table table-responsive-md">
                                     <thead>
                                     <tr>
                                         <th>{{__('Zeit')}}</th>

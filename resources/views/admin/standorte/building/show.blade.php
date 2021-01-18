@@ -252,7 +252,7 @@
                                     </div>
                                 </form>
                                 @if ($building->rooms->count()>0)
-                                    <table class="table table-striped" id="tabRoomListe">
+                                    <table class="table table-responsive-md table-striped" id="tabRoomListe">
                                         <thead>
                                         <tr>
                                             <th>Nummer</th>

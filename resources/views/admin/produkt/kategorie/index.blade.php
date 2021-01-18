@@ -33,7 +33,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-sm table-striped table-hover">
+                <table class="table table-responsive-md table-sm table-striped table-hover">
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">Nummer</th>

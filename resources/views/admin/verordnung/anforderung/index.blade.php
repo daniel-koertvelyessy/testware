@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="table table-striped"  id="tabAnforderungListe">
+            <table class="table table-responsive-md table-striped"  id="tabAnforderungListe">
                 <thead>
                 <tr>
                     <th>@sortablelink('an_name', __('Bezeichnung'))</th>

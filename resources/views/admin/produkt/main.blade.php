@@ -25,14 +25,14 @@
             <div class="col-md-2">
                 <nav class="d-flex justify-content-around flex-md-column flex-sm-row mb-3">
                     <a href="{{ route('produkt.index') }}"
-                       class="tile-small rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-boxes"></i></span> <span
                             class="branding-bar text-center">{{__('Übersicht')}}</span>
                     </a>
                     <a href="{{ route('produkt.create') }}"
-                       class="tile-small rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-box"></i></span> <span
@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-10">
                 <h3 class="h5">{{__('Kürzlich erstellte Produkte')}}</h3>
-                <table class="table table-striped" id="tabProduktListe">
+                <table class="table table-responsive-md table-striped" id="tabProduktListe">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
@@ -77,7 +77,7 @@
                 <nav class="tiles-grid">
                     @foreach ($produktKategories as $produktKategorie)
                         <a href="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}"
-                           class="tile-small rounded mr-lg-3 mr-sm-2"
+                           class="tile-small btn-outline-primary rounded mr-lg-3 mr-sm-2"
                            data-role="tile"
                         >
                             <span class="icon"><i class="fas fa-box"></i></span>

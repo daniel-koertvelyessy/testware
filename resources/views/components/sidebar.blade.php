@@ -92,6 +92,12 @@
         <ul class="nav flex-column">
             <li class="nav-item  border-left ml-3">
                 <a class="nav-link "
+                   href="{{ route('verordnung.main') }}"
+                > {{__('Start')}}
+                </a>
+            </li>
+            <li class="nav-item  border-left ml-3">
+                <a class="nav-link "
                    href="{{ route('verordnung.index') }}"
                 > {{__('Verordnungen')}}
                 </a>

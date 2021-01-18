@@ -39,7 +39,7 @@
         @if (isset($locationList))
             <div class="row">
                 <div class="col">
-                    <table class="table table-sm table-striped">
+                    <table class="table table-responsive-md table-sm table-striped">
                         <thead>
                         <tr>
                             <th class="d-none d-md-table-cell">{{__('Standort')}}</th>

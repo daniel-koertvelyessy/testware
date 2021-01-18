@@ -242,7 +242,7 @@ class LocationsController extends Controller
     public function getLocationListeAsTable()
     {
         $html = '
-<table class="table table-sm table-striped">
+<table class="table table-responsive-md table-sm table-striped">
     <thead>
     <tr>
     <th>' . __('Standort') . '</th>

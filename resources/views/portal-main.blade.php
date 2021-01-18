@@ -38,38 +38,38 @@
                         <section class="card-body text-dark">
                             <nav class="tiles-grid">
                                 <a href="{{ route('storageMain') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                    aria-label="{{__('memStandorte')}}"
                                 >
                                     <span class="icon"><i class="fa fa-boxes"></i></span> <span class="branding-bar text-center">{{__('memStandorte')}}</span>
                                 </a>
                                 <a href="{{ route('organisationMain') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <span class="icon"><i class="fas fa-users"></i></span> <span class="branding-bar text-center">{{__('Organisation')}}</span>
                                 </a>
                                 <a href="{{ route('produktMain') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <span class="icon"><i class="fas fa-boxes"></i></span> <span class="branding-bar text-center">{{__('Produkte')}}</span>
                                 </a>
                                 <a href="{{ route('verordnung.main') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <span class="icon"><i class="fas fa-scroll"></i></span> <span class="branding-bar text-center">{{__('Vorschriften')}}</span>
                                 </a>
                                 <a href="/admin/"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <span class="icon"><i class="fas fa-user-cog"></i></span> <span class="branding-bar text-center">{{__('Admin')}}</span>
                                 </a>
                                 <a href="{{ route('report.index') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <span class="icon"><i class="far fa-clipboard"></i></span> <span class="branding-bar text-center">{{__('Berichte')}}</span>
@@ -98,7 +98,7 @@
                         <div class="card-body">
                             <div class="tiles-grid justify-content-center">
                                 <a href="{{ route('testware.index') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <div class=" d-flex align-items-center justify-content-center">
@@ -111,7 +111,7 @@
                                     </div>
                                 </a>
                                 <a href="{{ route('app') }}"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                    aria-label="Storagee"
                                 >
@@ -124,7 +124,7 @@
                                         <span class="branding-bar text-center">{{__('InfoSy')}}</span>
                                     </div>
                                 </a>
-                                {{--  <a href="registerphone" class="tile-medium rounded" data-role="tile" aria-label="Storagee">
+                                {{--  <a href="registerphone" class="tile-medium btn-primary rounded" data-role="tile" aria-label="Storagee">
                                       <span class="icon"><i class="fas fa-mobile-alt"></i></span>
                                       <span class="branding-bar text-center">{{__('Registrieren')}}</span>
                                   </a>--}}
@@ -156,7 +156,7 @@
                             <div class="tiles-grid">
 {{--
                                 <a href="https://mail02.thermo-control.com/webapp/"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <img src="{{ url('img/icon/icon_kopano.svg') }}"
@@ -167,7 +167,7 @@
                                     <span class="branding-bar text-center">Webmail</span>
                                 </a>
                                 <a href="https://dc01.bln.thermo-control.com/"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <img src="{{ url('img/icon/ucs_logo_gray.svg') }}"
@@ -178,7 +178,7 @@
                                     <span class="branding-bar text-center">UCS</span>
                                 </a>
                                 <a href="https://dc01.bln.thermo-control.com/nagios"
-                                   class="tile-medium rounded"
+                                   class="tile-medium btn-primary rounded"
                                    data-role="tile"
                                 >
                                     <img src="{{ url('img/icon/logofullsize.png') }}"

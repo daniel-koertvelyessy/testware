@@ -35,7 +35,7 @@
                 </section>
             </div>
             <div class="col-md-10">
-                <table class="table" id="tabEquipmentListe">
+                <table class="table table-responsive-md" id="tabEquipmentListe">
                     <thead>
                     <tr>
                         <th class="">

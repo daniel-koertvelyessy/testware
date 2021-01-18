@@ -114,7 +114,7 @@
                             <dt class="col-sm-2"><code>Feldtyp</code></dt>
                             <dd class="col-sm-10">
                                 <p>Felder werden für die Übertragung vom Clienten zur API verwendet. Diese können verschiedene Typen repräsentieren:</p>
-                                <table class="table table-responsive">
+                                <table class="table table-responsive-md">
                                     <tr>
                                         <th>Typ</th>
                                         <th>Name</th>

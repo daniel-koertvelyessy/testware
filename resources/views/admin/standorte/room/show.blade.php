@@ -305,7 +305,7 @@
                                     </div>
                                 </form>
                                 @if ($room->stellplatzs()->count()>0)
-                                    <table class="table table-striped"
+                                    <table class="table table-responsive-md table-striped"
                                            id="tabStellplatzListe"
                                     >
                                         <thead>

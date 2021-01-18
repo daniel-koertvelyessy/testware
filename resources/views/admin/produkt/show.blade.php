@@ -1012,7 +1012,7 @@
                             </div>
                             <div class="col-md-6">
                                 @if ($produkt->ProduktDoc->count()>0)
-                                    <table class="table table-striped table-sm">
+                                    <table class="table table-responsive-md table-striped table-sm">
                                         <thead>
                                         <th>Datei</th>
                                         <th>Typ</th>
@@ -1097,7 +1097,7 @@
                     >
                         <div class="row">
                             <div class="col">
-                                <table class="table table-striped"
+                                <table class="table table-responsive-md table-striped"
                                        id="tabProduktEquipmentListe"
                                 >
                                     <thead>

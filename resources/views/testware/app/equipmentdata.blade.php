@@ -78,7 +78,7 @@
                     </dl>
                     <h2 class="h5 mt-3">Dateien zum Gerät </h2>
                     @if (App\EquipmentDoc::where('equipment_id',$edata->id)->count()>0)
-                        <table class="table table-striped table-sm">
+                        <table class="table table-responsive-md table-striped table-sm">
                             <thead>
                             <th>{{ __('Datei')}}</th>
                             <th class="d-none d-md-table-cell">{{ __('Typ')}}</th>

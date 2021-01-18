@@ -17,7 +17,7 @@
                 <h1 class="h3">
                     {{ __('Übersicht') }}
                 </h1>
-                <table class="table" id="tableEventListe">
+                <table class="table table-responsive-md" id="tableEventListe">
                     <thead>
                     <tr>
                         <th>@sortablelink('created_at', __('Vom'))</th>

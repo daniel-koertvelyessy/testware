@@ -243,7 +243,7 @@
             </div>
             <div class="col-md-6 mb-2">
                 <h2 class="h4">V{{__('erfügbare Produkte')}}</h2>
-                <table class="table table-sm">
+                <table class="table table-responsive-md table-sm">
                     <thead>
                     <tr>
                         <th>@sortablelink('prod_nummer', __('Produktnummer'))</th>

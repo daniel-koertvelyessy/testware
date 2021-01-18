@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="table table-striped" id="tabAnforderungItemListe">
+            <table class="table table-responsive-md table-striped" id="tabAnforderungItemListe">
                 <thead>
                 <tr>
                     <th>@sortablelink('Anforderung.an_label', __('Bezeichnung'))</th>
