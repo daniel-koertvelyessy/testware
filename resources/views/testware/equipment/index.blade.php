@@ -33,11 +33,8 @@
                             <td>{{ $equipment->eq_inventar_nr }}</td>
                             <td>{{ $equipment->storage->storage_label }}</td>
                             <td style="vertical-align: middle;">
-                                @if ($equipment->equipment_state_id >1)
-                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
-                                @else
-                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_label }}</span>
-                                @endif
+                                <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-light">{{ $equipment->EquipmentState->estat_label }}</span>
+
                             </td>
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)

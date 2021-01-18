@@ -26,7 +26,7 @@
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
                         <a href="{{ route('equipment.maker') }}"
-                           class="tile-small rounded m-lg-3"
+                           class="tile-small rounded m-lg-3 btn-primary"
                            data-role="tile"
                         >
                             <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">{{__('Neu')}}</span>
@@ -69,11 +69,8 @@
                             <td class="d-none d-lg-table-cell"
                                 style="vertical-align: middle;"
                             >
-                                @if ($equipment->equipment_state_id >1)
-                                    <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
-                                @else
-                                    <span class="align-self-center">{{ $equipment->EquipmentState->estat_label }}</span>
-                                @endif
+                                <span class="p-1 w-100 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
+
                             </td>
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
