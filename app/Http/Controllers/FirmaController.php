@@ -114,7 +114,7 @@ class FirmaController extends Controller
         return request()->validate([
             'fa_label' => 'bail|unique:firmas,fa_label|max:20|required',
             'fa_name' => 'bail|string|max:100',
-            'fa_name_text' => '',
+            'fa_description' => '',
             'fa_kreditor_nr' => 'bail|unique:firmas,fa_kreditor_nr|max:100',
             'fa_debitor_nr' => 'max:100',
             'fa_vat' => 'max:30',
@@ -130,7 +130,7 @@ class FirmaController extends Controller
         return request()->validate([
             'fa_label' => 'bail|max:20|required',
             'fa_name' => 'bail|string|max:100',
-            'fa_name_text' => '',
+            'fa_description' => '',
             'fa_kreditor_nr' => 'bail|max:100',
             'fa_debitor_nr' => 'max:100',
             'fa_vat' => 'max:30',
@@ -161,7 +161,7 @@ class FirmaController extends Controller
             ->join('adresses', 'adresses.id', '=', 'firmas.adresse_id')
             ->where('fa_label', 'like', '%' . $request->term . '%')
             ->orWhere('fa_name', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('fa_description', 'like', '%' . $request->term . '%')
             ->orWhere('fa_kreditor_nr', 'like', '%' . $request->term . '%')
             ->orWhere('fa_debitor_nr', 'like', '%' . $request->term . '%')
             ->orWhere('fa_vat', 'like', '%' . $request->term . '%')

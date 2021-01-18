@@ -81,7 +81,7 @@ class AnforderungsController extends Controller
         return request()->validate([
             'an_label'        => 'bail|required|max:20',
             'an_name'        => 'bail|max:100',
-            'an_name_text'        => '',
+            'an_description'        => '',
             'an_control_interval' => 'integer',
             'control_interval_id' => '',
             'verordnung_id'       => '',

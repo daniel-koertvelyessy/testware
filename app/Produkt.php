@@ -25,7 +25,7 @@ class Produkt extends Model
     {
         return Produkt::where('prod_label', 'like', '%' . $term . '%')
             ->orWhere('prod_name', 'like', '%' . $term . '%')
-            ->orWhere('prod_name_text', 'like', '%' . $term . '%')
+            ->orWhere('prod_description', 'like', '%' . $term . '%')
             ->orWhere('prod_nummer', 'like', '%' . $term . '%')
             ->get();
     }

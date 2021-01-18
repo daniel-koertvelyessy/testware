@@ -19,7 +19,7 @@ class CreateDocumentTypesTable extends Migration
             $table->softDeletes();
             $table->string('doctyp_label', 20)->unique();
             $table->string('doctyp_name', 100)->nullable();
-            $table->text('doctyp_name_text')->nullable();
+            $table->text('doctyp_description')->nullable();
             $table->boolean('doctyp_mandatory')->default(false);
         });
     }

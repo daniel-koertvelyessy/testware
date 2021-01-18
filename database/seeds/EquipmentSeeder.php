@@ -17,7 +17,7 @@ class EquipmentSeeder extends Seeder
         $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $storage) {
             $id = $produkt->random()->id;
             $uid = \Illuminate\Support\Str::uuid();
-            $date = now()->addYears(-1*random_int(1,6));
+            $date = now()->addYears(-1 * random_int(1, 6));
 
             $equip->purchased_at = $date;
             $equip->installed_at = $date;
@@ -67,7 +67,7 @@ class EquipmentSeeder extends Seeder
                 'deleted_at' => NULL,
                 'prod_label' => 'MED-288-U',
                 'prod_name' => 'Medikamenten-Kühlschrank MED 288 ULTIMATE',
-                'prod_name_text' => NULL,
+                'prod_description' => NULL,
                 'prod_nummer' => '92002652',
                 'prod_active' => '1',
                 'produkt_kategorie_id' => '1',
@@ -84,7 +84,7 @@ class EquipmentSeeder extends Seeder
                 'proddoc_label' => 'Anleitung',
                 'proddoc_name' => 'MED_288_ULTIMATE.pdf',
                 'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
-                'proddoc_name_text' => NULL,
+                'proddoc_description' => NULL,
                 'produkt_id' => '31',
                 'document_type_id' => '1',
             ]

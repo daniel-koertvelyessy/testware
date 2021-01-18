@@ -131,12 +131,12 @@
             @endforeach
         @endif
         <div class="form-group">
-            <label for="prod_name_text">{{__('Beschreibung')}}</label>
-            <textarea name="prod_name_text"
-                      id="prod_name_text"
+            <label for="prod_description">{{__('Beschreibung')}}</label>
+            <textarea name="prod_description"
+                      id="prod_description"
                       class="form-control"
                       rows="3"
-            >{{ old('prod_name_text') }}</textarea>
+            >{{ old('prod_description') }}</textarea>
         </div>
     </div>
 </div>

@@ -19,7 +19,7 @@ class BuildingShort extends JsonResource
             'label'       => $this->b_label,
             'uid'         => $this->storage_id,
             'name'        => $this->b_name,
-            'description' => $this->b_name_text,
+            'description' => $this->b_description,
         ];
     }
 }

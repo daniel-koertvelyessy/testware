@@ -32,7 +32,7 @@
                         <x-textfield id="at_name"
                                      label="Name"
                         />
-                        <x-textarea id="at_name_text"
+                        <x-textarea id="at_description"
                                     label="Beschreibung"
                         />
 
@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <x-textarea id="updt_an_name_text" name="an_name_text" label="Beschreibung" value="{{ $anforderung->an_name_text }}" />
+                    <x-textarea id="updt_an_description" name="an_description" label="Beschreibung" value="{{ $anforderung->an_description }}" />
 
                     <x-btnMain>Anforderung aktualisieren <i class="fas fa-download"></i></x-btnMain>
 

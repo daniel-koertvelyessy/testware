@@ -30,7 +30,7 @@
 
                         <x-textfield id="rt_name" label="{{__('Name')}} " />
 
-                        <x-textarea id="rt_name_text" label="{{__('Beschreibung des Raumtyps')}}" />
+                        <x-textarea id="rt_description" label="{{__('Beschreibung des Raumtyps')}}" />
 
                         <x-btnMain>{{__('Neuen Raumtyp anlegen')}} <span class="fas fa-download"></span></x-btnMain>
 
@@ -78,7 +78,7 @@
                 <div class="col">
                     <x-rtextfield id="r_label" label="{{__('Raum Kürzel')}}"/>
                     <x-textfield id="r_name" label="{{__('Bezeichnung')}}"/>
-                    <x-textarea id="r_name_text" label="{{__('Beschreibung')}}" />
+                    <x-textarea id="r_description" label="{{__('Beschreibung')}}" />
                 </div>
             </div>
             <x-btnMain>{{__('Raum anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>

@@ -28,7 +28,7 @@ class Stellplatz extends Model
     {
         return Stellplatz::where('sp_label', 'like', '%' . $term . '%')
             ->orWhere('sp_name', 'like', '%' . $term . '%')
-            ->orWhere('sp_name_text', 'like', '%' . $term . '%')
+            ->orWhere('sp_description', 'like', '%' . $term . '%')
             ->get();
     }
     public function Room()
@@ -57,7 +57,7 @@ class Stellplatz extends Model
     public function countTotalEquipmentInCompartment()
     {
         Cache::remember(
-            'countTotalEquipmentInCompartment'.$this->id,
+            'countTotalEquipmentInCompartment' . $this->id,
             now()->addSeconds(30),
             function () {
                 return $this->Storage->countReferencedEquipment();

@@ -22,7 +22,7 @@ class Room extends JsonResource
             'label' => $this->r_label,
             'uid' => $this->storage_id,
             'name' => $this->r_name,
-            'description' => $this->r_name_text,
+            'description' => $this->r_description,
             'building_id' => $this->building_id,
             'room_type_id' => $this->room_type_id,
         ];

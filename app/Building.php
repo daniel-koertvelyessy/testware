@@ -25,7 +25,7 @@ class Building extends Model
     public $sortable = [
         'b_label',
         'b_name',
-        'b_name_text',
+        'b_description',
     ];
 
     public static function boot()
@@ -43,7 +43,7 @@ class Building extends Model
 
     public function search($term)
     {
-        return Building::where('b_label', 'like', '%' . $term . '%')->orWhere('b_name_ort', 'like', '%' . $term . '%')->orWhere('b_name', 'like', '%' . $term . '%')->orWhere('b_name_text', 'like', '%' . $term . '%')->orWhere('b_we_name', 'like', '%' . $term . '%')->get();
+        return Building::where('b_label', 'like', '%' . $term . '%')->orWhere('b_name_ort', 'like', '%' . $term . '%')->orWhere('b_name', 'like', '%' . $term . '%')->orWhere('b_description', 'like', '%' . $term . '%')->orWhere('b_we_name', 'like', '%' . $term . '%')->get();
     }
 
     public function path()
@@ -82,15 +82,15 @@ class Building extends Model
 
     public function countTotalEquipmentInBuilding()
     {
-        Cache::remember('countTotalEquipmentInBuilding'.$this->id, now()->addSeconds(30), function () {
+        Cache::remember('countTotalEquipmentInBuilding' . $this->id, now()->addSeconds(30), function () {
             $equipCounter = 0;
-            $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() :0;
+            $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
             $rooms = Room::where('building_id', $this->id)->get();
             foreach ($rooms as $room) {
-                $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() :0;
+                $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() : 0;
                 $compartments = Stellplatz::where('room_id', $room->id)->get();
                 foreach ($compartments as $compartment) {
-                    $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() :0;
+                    $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                 }
             }
             return $equipCounter;
@@ -101,7 +101,7 @@ class Building extends Model
     {
         $this->b_label = $data['label'];
         $this->b_name = (isset($data['name'])) ? $data['name'] : null;
-        $this->b_name_text = (isset($data['description'])) ? $data['description'] : null;
+        $this->b_description = (isset($data['description'])) ? $data['description'] : null;
         $uid = (isset($data['uid'])) ? $data['uid'] : Str::uuid();
         (new Storage)->add($uid, $data['label'], 'buildings');
         $this->storage_id = $uid;

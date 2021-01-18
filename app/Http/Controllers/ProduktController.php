@@ -148,7 +148,7 @@ class ProduktController extends Controller
         return request()->validate([
             'prod_label'       => 'bail|min:2|max:20|required',
             'prod_name'       => 'max:100',
-            'prod_name_text'       => '',
+            'prod_description'       => '',
             'prod_nummer'          => 'bail|required|min:2|max:100',
             'prod_active'          => '',
             'produkt_kategorie_id' => '',
@@ -196,7 +196,7 @@ class ProduktController extends Controller
         return request()->validate([
             'prod_label'       => 'bail|unique:produkts,prod_label|min:2|max:20|required',
             'prod_name'       => 'max:100',
-            'prod_name_text'       => '',
+            'prod_description'       => '',
             'prod_nummer'          => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
             'prod_active'          => '',
             'produkt_kategorie_id' => 'nullable',
@@ -221,7 +221,7 @@ class ProduktController extends Controller
         $produkt->produkt_state_id = $request->produkt_state_id;
         $produkt->prod_active = $request->prod_active;
         $produkt->prod_nummer = $request->prod_nummer;
-        $produkt->prod_name_text = $request->prod_name_text;
+        $produkt->prod_description = $request->prod_description;
         $produkt->produkt_kategorie_id = $produkt_kategorie_id;
         $produkt->save();
 
@@ -255,7 +255,7 @@ class ProduktController extends Controller
             $proDocFile->proddoc_name_pfad = $file->store('produkt_docu/' . $produkt_id);
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->produkt_id = $produkt_id;
-            $proDocFile->proddoc_name_text = request('proddoc_name_text');
+            $proDocFile->proddoc_description = request('proddoc_description');
             $proDocFile->proddoc_label = request('proddoc_label');
             $proDocFile->save();
         }
@@ -273,7 +273,7 @@ class ProduktController extends Controller
             'proddoc_name' => 'max:100',
             'proddoc_name_pfad' => 'max:150',
             'document_type_id'  => 'required',
-            'proddoc_name_text' => ''
+            'proddoc_description' => ''
         ]);
     }
 
@@ -454,7 +454,7 @@ class ProduktController extends Controller
             ->leftJoin('produkt_params', 'produkts.id', '=', 'produkt_params.produkt_id')
             ->where('prod_label', 'like', '%' . $request->term . '%')
             ->orWhere('prod_name', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('prod_description', 'like', '%' . $request->term . '%')
             ->orWhere('prod_nummer', 'like', '%' . $request->term . '%')
             ->orWhere('pp_name', 'like', '%' . $request->term . '%')
             ->orWhere('pp_label', 'like', '%' . $request->term . '%')
@@ -601,7 +601,7 @@ class ProduktController extends Controller
         return request()->validate([
             'prod_label'   => 'bail|unique:produkts,prod_label|min:2|max:20|required',
             'prod_name'   => 'bail|string|max:100',
-            'prod_name_text'   => '',
+            'prod_description'   => '',
             'prod_nummer'      => 'bail|unique:produkts,prod_nummer|required|min:2|max:100',
             'prod_active'      => '',
             'produkt_state_id' => 'required'
@@ -747,7 +747,7 @@ class ProduktController extends Controller
         return request()->validate([
             'prod_label'   => 'bail|unique:produkts,prod_label|min:2|max:20|required',
             'prod_name'   => 'bail|string|max:100',
-            'prod_name_text'   => '',
+            'prod_description'   => '',
             'prod_nummer'      => 'bail|unique:produkts,prod_nummer|required|min:2|max:100',
             'prod_active'      => '',
             'produkt_state_id' => 'required'

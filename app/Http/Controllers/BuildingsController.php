@@ -83,7 +83,7 @@ class BuildingsController extends Controller
             'b_label'      => 'bail|required|unique:buildings,b_label|min:2|max:20',
             'b_name_ort'       => '',
             'b_name'      => '',
-            'b_name_text'      => '',
+            'b_description'      => '',
             'b_we_has'         => '',
             'storage_id'      => '',
             'b_we_name'        => 'required_if:b_we_has,1',
@@ -113,7 +113,7 @@ class BuildingsController extends Controller
             $copy->b_label = $neuname;
             $copy->b_name_ort = $bul->b_name_ort;
             $copy->b_name = $bul->b_name;
-            $copy->b_name_text = $bul->b_name_text;
+            $copy->b_description = $bul->b_description;
             $copy->b_we_has = $bul->b_we_has;
             $copy->b_we_name = $bul->b_we_name;
             $copy->location_id = $bul->location_id;
@@ -124,7 +124,7 @@ class BuildingsController extends Controller
                 $copy->b_label,
                 $copy->b_name_ort,
                 $copy->b_name,
-                $copy->b_name_text,
+                $copy->b_description,
                 $copy->b_we_has,
                 $copy->b_we_name,
                 $copy->location_id,
@@ -135,7 +135,7 @@ class BuildingsController extends Controller
                 'b_label'      => 'bail|required|unique:buildings,b_label|min:2|max:10',
                 'b_name_ort'       => '',
                 'b_name'      => '',
-                'b_name_text'      => '',
+                'b_description'      => '',
                 'b_we_has'         => '',
                 'b_we_name'        => 'required_if:b_we_has,1',
                 'location_id'      => 'required',
@@ -211,7 +211,7 @@ class BuildingsController extends Controller
             'b_label'      => 'bail|required|min:2|max:20',
             'b_name_ort'       => '',
             'b_name'      => '',
-            'b_name_text'      => '',
+            'b_description'      => '',
             'b_we_has'         => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
@@ -269,7 +269,7 @@ class BuildingsController extends Controller
             $building->b_label = $request->b_label;
             $building->b_name_ort = $request->b_name_ort;
             $building->b_name = $request->b_name;
-            $building->b_name_text = $request->b_name_text;
+            $building->b_description = $request->b_description;
             $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
             $building->storage_id = $request->storage_id;
             $building->b_we_name = $request->b_we_name;
@@ -395,7 +395,7 @@ class BuildingsController extends Controller
                                     </p>
                                     <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
                                     <p class="mt-0" style="height:6em;">
-                                        ' . str_limit($building->b_name_text, 100) . '
+                                        ' . str_limit($building->b_description, 100) . '
                                     </p>
                                 </div>
                                 <div class="card-footer">

@@ -19,7 +19,7 @@ class CreateProduktTable extends Migration
             $table->softDeletes();
             $table->string('prod_label', 20);
             $table->string('prod_name', 100)->nullable();
-            $table->text('prod_name_text')->nullable();
+            $table->text('prod_description')->nullable();
             $table->string('prod_nummer', 100);
             $table->boolean('prod_active')->default(true);
             $table->decimal('prod_price', 10)->nullable();

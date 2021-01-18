@@ -17,7 +17,7 @@ class Anforderung extends Model
         'updated_at',
         'an_label',
         'an_name',
-        'an_name_text',
+        'an_description',
     ];
     protected $guarded = [];
 
@@ -25,7 +25,7 @@ class Anforderung extends Model
     {
         return Anforderung::where('an_label', 'like', '%' . $term . '%')
             ->orWhere('an_name', 'like', '%' . $term . '%')
-            ->orWhere('an_name_text', 'like', '%' . $term . '%')
+            ->orWhere('an_description', 'like', '%' . $term . '%')
             ->get();
     }
 

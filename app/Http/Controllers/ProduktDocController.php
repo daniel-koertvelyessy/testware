@@ -62,7 +62,7 @@ class ProduktDocController extends Controller
             $proDocFile->proddoc_name_pfad = $file->store('produkt_docu/' . \request('produkt_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->produkt_id = request('produkt_id');
-            $proDocFile->proddoc_name_text = request('proddoc_name_text');
+            $proDocFile->proddoc_description = request('proddoc_description');
             $proDocFile->proddoc_label = request('proddoc_label');
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
@@ -154,7 +154,7 @@ class ProduktDocController extends Controller
             'proddoc_name_pfad' => 'max:150',
             'produkt_id' => 'required',
             'document_type_id' => 'required',
-            'proddoc_name_text' => ''
+            'proddoc_description' => ''
         ]);
     }
 }

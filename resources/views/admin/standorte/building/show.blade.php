@@ -96,8 +96,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="rt_name_text">Beschreibung des Raumtyps</label>
-                            <textarea id="rt_name_text" name="rt_name_text" class="form-control">{{ old('rt_name_text') ?? '' }}</textarea>
+                            <label for="rt_description">Beschreibung des Raumtyps</label>
+                            <textarea id="rt_description" name="rt_description" class="form-control">{{ old('rt_description') ?? '' }}</textarea>
                         </div>
 
                     </div>
@@ -165,8 +165,8 @@
                                         <input type="text" name="b_name" id="b_name" class="form-control" maxlength="100" value="{{ $building->b_name ?? '' }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="b_name_text">Beschreibung</label>
-                                        <textarea name="b_name_text" id="b_name_text" class="form-control" rows="3">{{ $building->b_name_text ?? '' }}</textarea>
+                                        <label for="b_description">Beschreibung</label>
+                                        <textarea name="b_description" id="b_description" class="form-control" rows="3">{{ $building->b_description ?? '' }}</textarea>
                                     </div>
 
 

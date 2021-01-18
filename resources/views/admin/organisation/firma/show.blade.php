@@ -63,7 +63,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <x-textarea id="fa_name_text" label="Becshreibung" value="{{ $firma->fa_name_text }}"/>
+                    <x-textarea id="fa_description" label="Becshreibung" value="{{ $firma->fa_description }}"/>
                 </div>
             </div>
 

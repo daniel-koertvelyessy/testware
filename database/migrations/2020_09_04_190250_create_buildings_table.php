@@ -20,7 +20,7 @@ class CreateBuildingsTable extends Migration
             $table->string('b_label', 20)->unique();
             $table->string('b_name_ort', 100)->nullable();
             $table->string('b_name', 100)->nullable();
-            $table->text('b_name_text')->nullable();
+            $table->text('b_description')->nullable();
             $table->boolean('b_we_has')->default(false);
             $table->string('b_we_name', 100)->nullable();
             $table->unsignedBigInteger('location_id')->nullable();

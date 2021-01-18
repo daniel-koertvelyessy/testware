@@ -12,7 +12,7 @@ $factory->define(Building::class, function (Faker $faker) {
         'b_label' => substr('geb-' . rand(1000, 9999), 0, 9),
         'b_name_ort' => $faker->buildingNumber,
         'b_name' => $faker->slug(2),
-        'b_name_text' => $faker->paragraph(5),
+        'b_description' => $faker->paragraph(5),
         'b_we_has' => $b_we_has,
         'b_we_name' => $b_we_name,
         'storage_id' => $faker->uuid,

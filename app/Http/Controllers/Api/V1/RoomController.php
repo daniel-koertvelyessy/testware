@@ -105,7 +105,6 @@ class RoomController extends Controller
                         $countSkipped++;
                         continue;
                     }
-
                 } elseif (isset($data['building_id'])) {
                     $building = Building::find($data['building_id']);
                     if ($building) {
@@ -131,7 +130,6 @@ class RoomController extends Controller
                     $room = Room::where('r_label', $data['label'])->first();
                     $countUpdate++;
                     $updateRoom = true;
-
                 } elseif (isset($data['id']) && Room::find($data['id'])) {
                     /**
                      *   exact room with matching label AND id found => update!
@@ -139,7 +137,6 @@ class RoomController extends Controller
                     $room = Room::find($data['id']);
                     $countUpdate++;
                     $updateRoom = true;
-
                 } else {
                     /**
                      *   no matching found => create new one!
@@ -153,19 +150,19 @@ class RoomController extends Controller
                     $r_label = (isset($data['label'])) ? $data['label'] : $room->r_label;
                     $r_name = (isset($data['name'])) ? $data['name'] : $room->r_name;
                     $storage_uid = (isset($data['uid'])) ? $data['uid'] : $room->storage_id;
-                    $r_name_text = (isset($data['description'])) ? $data['description'] : $room->r_name_text;
+                    $r_description = (isset($data['description'])) ? $data['description'] : $room->r_description;
                 } else {
                     $r_label = $data['label'];
                     $r_name = (isset($data['name'])) ? $data['name'] : null;
                     $storage_uid = (isset($data['uid'])) ? $data['uid'] : $storage_id;
-                    $r_name_text = (isset($data['description'])) ? $data['description'] : null;
+                    $r_description = (isset($data['description'])) ? $data['description'] : null;
                 }
 
 
                 $room->r_label = $r_label;
                 $room->r_name = $r_name;
                 $room->storage_id = $storage_uid;
-                $room->r_name_text = $r_name_text;
+                $room->r_description = $r_description;
                 $room->room_type_id = $room_type_id;
                 $room->building_id = $building_id;
                 $room->save();
@@ -174,7 +171,6 @@ class RoomController extends Controller
                     'id'    => $room->id,
                     'label' => $r_label
                 ];
-
             }
 
             return response()->json([
@@ -188,7 +184,6 @@ class RoomController extends Controller
                 'id_list'         => $idList
             ]);
         }
-
     }
 
     /**
@@ -222,7 +217,7 @@ class RoomController extends Controller
         $room->r_label = $request->label;
         $room->storage_id = $uid;
         $room->r_name = $request->name;
-        $room->r_name_text = $request->description;
+        $room->r_description = $request->description;
         $room->building_id = $request->building_id;
         $room->room_type_id = $request->room_type_id;
         $room->save();
@@ -281,7 +276,7 @@ class RoomController extends Controller
         if ($room) {
             $room->r_label = (isset($request->label)) ? $request->label : $room->r_label;
             $room->r_name = (isset($request->name)) ? $request->name : $room->r_name;
-            $room->r_name_text = (isset($request->description)) ? $request->description : $room->r_name_text;
+            $room->r_description = (isset($request->description)) ? $request->description : $room->r_description;
 
             /**
              * Check if room-uid is given and update/add the table "storages"
@@ -296,7 +291,7 @@ class RoomController extends Controller
             $room = new Room();
             $room->r_label = $request->label;
             $room->r_name = (isset($request->name)) ? $request->name : null;
-            $room->r_name_text = (isset($request->description)) ? $request->description : null;
+            $room->r_description = (isset($request->description)) ? $request->description : null;
 
             /**
              * Check if room-uid is given and add the table "storages"

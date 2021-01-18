@@ -19,7 +19,7 @@ class CreateStellplatzsTable extends Migration
             $table->softDeletes();
             $table->string('sp_label', 20);
             $table->string('sp_name', 100)->nullable();
-            $table->text('sp_name_text')->nullable();
+            $table->text('sp_description')->nullable();
             $table->uuid('storage_id')->nullable();
             $table->unsignedBigInteger('room_id')->nullable();
             $table->unsignedBigInteger('stellplatz_typ_id')->nullable();

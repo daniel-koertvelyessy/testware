@@ -95,7 +95,7 @@ class RoomController extends Controller
             'r_label'  => 'bail|unique:rooms,r_label|max:20|required|',
             'storage_id'  => 'unique:rooms,storage_id',
             'r_name'  => 'max:100',
-            'r_name_text'  => '',
+            'r_description'  => '',
             'building_id'  => 'required',
             'room_type_id' => 'required'
         ]);
@@ -120,7 +120,7 @@ class RoomController extends Controller
             $bul->r_label = $neuroom;
             $copy = new Room();
             $copy->r_label = $neuroom;
-            $copy->r_name_text = $bul->r_name_text;
+            $copy->r_description = $bul->r_description;
             $copy->r_name = $bul->r_name;
             $copy->building_id = $bul->building_id;
             $copy->room_type_id = $bul->room_type_id;
@@ -128,14 +128,14 @@ class RoomController extends Controller
             //            $copy->
             $validator = Validator::make([
                 $copy->r_label,
-                $copy->r_name_text,
+                $copy->r_description,
                 $copy->r_name,
                 $copy->building_id,
                 $copy->room_type_id,
                 $copy->storage_id,
             ], [
                 'r_label'  => 'bail|required|unique:rooms,r_label|max:20',
-                'r_name_text'  => '',
+                'r_description'  => '',
                 'r_name'  => '',
                 'building_id'  => '',
                 'room_type_id' => '',
@@ -204,7 +204,7 @@ class RoomController extends Controller
         return request()->validate([
             'r_label' => 'bail|min:2|max:10|required|',
             'r_name' => 'bail|min:2|max:100',
-            'r_name_text' => '',
+            'r_description' => '',
             'building_id' => 'required'
         ]);
     }
@@ -300,7 +300,7 @@ class RoomController extends Controller
             $room = new Room();
             $room->r_label = $request->r_label;
             $room->r_name = $request->r_name;
-            $room->r_name_text = $request->r_name_text;
+            $room->r_description = $request->r_description;
             $room->storage_id = $request->storage_id;
             $room->building_id = $request->building_id;
             $room->room_type_id = $request->room_type_id;
@@ -370,7 +370,7 @@ class RoomController extends Controller
                                 <h5 class="card-title">' . $room->r_label . '</h5>
                                 <h6 class="card-subtitletext-muted">' . $room->r_name . '</h6>
                                 <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
-                                <p class="mt-0" style="height:6em;">' . str_limit($room->r_name_text, 100) . '</p>
+                                <p class="mt-0" style="height:6em;">' . str_limit($room->r_description, 100) . '</p>
                             </div>
                             <div class="card-footer">
                                 <a href="' . $room->path() . '" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>

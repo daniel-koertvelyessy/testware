@@ -20,7 +20,7 @@ class CreateProduktDocsTable extends Migration
             $table->string('proddoc_label', 150);
             $table->string('proddoc_name', 150)->nullable();
             $table->string('proddoc_name_pfad', 150)->nullable();
-            $table->text('proddoc_name_text')->nullable();
+            $table->text('proddoc_description')->nullable();
             $table->unsignedBigInteger('produkt_id')->nullable();
             $table->unsignedBigInteger('document_type_id')->nullable();
 

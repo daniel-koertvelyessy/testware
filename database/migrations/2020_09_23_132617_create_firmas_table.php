@@ -19,7 +19,7 @@ class CreateFirmasTable extends Migration
             $table->softDeletes();
             $table->string('fa_label', 20)->index();
             $table->string('fa_name', 100)->index()->nullable();
-            $table->text('fa_name_text')->nullable();
+            $table->text('fa_description')->nullable();
             $table->string('fa_kreditor_nr', 100)->index()->nullable();
             $table->string('fa_debitor_nr', 100)->index()->nullable();
             $table->string('fa_vat', 30)->nullable();

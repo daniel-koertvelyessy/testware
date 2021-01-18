@@ -168,7 +168,7 @@ class EquipmentController extends Controller
             }
         }
 
-        (new EquipmentFuntionControl())->addControlEvent($request,$equipment->id);
+        (new EquipmentFuntionControl())->addControlEvent($request, $equipment->id);
 
         if ($request->hasFile('equipDokumentFile')) {
             $proDocFile = new EquipmentDoc();
@@ -182,7 +182,7 @@ class EquipmentController extends Controller
             $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . $equipment->id);
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = $equipment->id;
-            $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
+            $proDocFile->eqdoc_description = request('eqdoc_description');
             $proDocFile->eqdoc_label = request('eqdoc_label');
             $proDocFile->save();
         } else {
@@ -263,58 +263,58 @@ class EquipmentController extends Controller
         $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ' => ';
         if ($upd->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Seriennummer'),
-                    'old' => $upd->eq_serien_nr,
-                    'new' => $request->eq_serien_nr,
-                ]) . ' | ';
+                'fld' => __('Seriennummer'),
+                'old' => $upd->eq_serien_nr,
+                'new' => $request->eq_serien_nr,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_qrcode != $request->eq_qrcode) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('QR Code'),
-                    'old' => $upd->eq_qrcode,
-                    'new' => $request->eq_qrcode,
-                ]) . ' | ';
+                'fld' => __('QR Code'),
+                'old' => $upd->eq_qrcode,
+                'new' => $request->eq_qrcode,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->installed_at != $request->installed_at) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Inbetriebnahme am'),
-                    'old' => $upd->installed_at,
-                    'new' => $request->installed_at,
-                ]) . ' | ';
+                'fld' => __('Inbetriebnahme am'),
+                'old' => $upd->installed_at,
+                'new' => $request->installed_at,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->eq_text != $request->eq_text) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Beschreibung'),
-                    'old' => $upd->eq_text,
-                    'new' => $request->eq_text,
-                ]) . ' | ';
+                'fld' => __('Beschreibung'),
+                'old' => $upd->eq_text,
+                'new' => $request->eq_text,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->equipment_state_id != $request->equipment_state_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Geräte Status'),
-                    'old' => $upd->equipment_state_id,
-                    'new' => $request->equipment_state_id,
-                ]) . ' | ';
+                'fld' => __('Geräte Status'),
+                'old' => $upd->equipment_state_id,
+                'new' => $request->equipment_state_id,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->storage_id != $request->storage_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Aufstellplatz / Standort'),
-                    'old' => $upd->storage_id,
-                    'new' => $request->storage_id,
-                ]) . ' | ';
+                'fld' => __('Aufstellplatz / Standort'),
+                'old' => $upd->storage_id,
+                'new' => $request->storage_id,
+            ]) . ' | ';
             $flag = true;
         }
         if ($upd->produkt_id != $request->produkt_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Produkt'),
-                    'old' => $upd->produkt_id,
-                    'new' => $request->produkt_id,
-                ]) . ' | ';
+                'fld' => __('Produkt'),
+                'old' => $upd->produkt_id,
+                'new' => $request->produkt_id,
+            ]) . ' | ';
             $flag = true;
         }
 
@@ -338,8 +338,7 @@ class EquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateEquipment()
-    : array
+    public function validateEquipment(): array
     {
         return request()->validate([
             'eq_inventar_nr'     => '',
@@ -357,8 +356,7 @@ class EquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateNewEquipment()
-    : array
+    public function validateNewEquipment(): array
     {
         return request()->validate([
             'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
@@ -401,6 +399,6 @@ class EquipmentController extends Controller
 
     public function getEquipmentAjaxListe(Request $request)
     {
-        return DB::table('equipment')->select('eq_inventar_nr', 'equipment.id', 'equipment.eq_serien_nr', 'prod_name')->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')->where('eq_serien_nr', 'like', '%' . $request->term . '%')->orWhere('eq_inventar_nr', 'like', '%' . $request->term . '%')->orWhere('eq_uid', 'like', '%' . $request->term . '%')->orWhere('prod_nummer', 'like', '%' . $request->term . '%')->orWhere('prod_name', 'like', '%' . $request->term . '%')->orWhere('prod_label', 'like', '%' . $request->term . '%')->orWhere('prod_name_text', 'like', '%' . $request->term . '%')->get();
+        return DB::table('equipment')->select('eq_inventar_nr', 'equipment.id', 'equipment.eq_serien_nr', 'prod_name')->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')->where('eq_serien_nr', 'like', '%' . $request->term . '%')->orWhere('eq_inventar_nr', 'like', '%' . $request->term . '%')->orWhere('eq_uid', 'like', '%' . $request->term . '%')->orWhere('prod_nummer', 'like', '%' . $request->term . '%')->orWhere('prod_name', 'like', '%' . $request->term . '%')->orWhere('prod_label', 'like', '%' . $request->term . '%')->orWhere('prod_description', 'like', '%' . $request->term . '%')->get();
     }
 }

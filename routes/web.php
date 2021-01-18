@@ -238,7 +238,7 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
         $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . $equipment_id);
         $proDocFile->document_type_id = request('document_type_id');
         $proDocFile->equipment_id = $equipment_id;
-        $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
+        $proDocFile->eqdoc_description = request('eqdoc_description');
         $proDocFile->eqdoc_label = request('eqdoc_label');
         $proDocFile->save();
         $msg = __(' ohne Fehler ');

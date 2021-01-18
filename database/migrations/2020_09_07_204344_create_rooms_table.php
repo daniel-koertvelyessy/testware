@@ -19,7 +19,7 @@ class CreateRoomsTable extends Migration
             $table->timestamps();
             $table->string('r_label', 20);
             $table->string('r_name', 100)->nullable();
-            $table->text('r_name_text')->nullable();
+            $table->text('r_description')->nullable();
             $table->uuid('storage_id')->nullable();
             $table->unsignedBigInteger('building_id')->nullable();
 

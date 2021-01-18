@@ -19,7 +19,7 @@ class ProductShort extends JsonResource
         return [
             'label'       => $this->prod_label,
             'name'        => $this->prod_name,
-            'description' => $this->prod_name_text,
+            'description' => $this->prod_description,
             'number'      => $this->prod_nummer,
         ];
     }

@@ -628,7 +628,7 @@
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">Beschreibung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">
@@ -906,7 +906,7 @@
                 url: "{{ route('getAnforderungData') }}",
                 data: {id: $('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const text = (res.an_name_text === null) ? '-' : res.an_name_text;
+                    const text = (res.an_description === null) ? '-' : res.an_description;
                     $('#name_anforderung').val(res.an_label);
                     $('#produktAnforderungText').html(`
                          <dl class="row">

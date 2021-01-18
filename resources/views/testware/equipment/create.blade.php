@@ -296,7 +296,7 @@
                                          value="{{ __('Bericht Funktionsprüfung ').date('Y-m-d') }}"
                             />
 
-                            <x-textarea id="eqdoc_name_text"
+                            <x-textarea id="eqdoc_description"
                                         label="{{__('Datei Informationen')}}"
                             />
 

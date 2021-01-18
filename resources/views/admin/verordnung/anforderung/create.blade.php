@@ -34,7 +34,7 @@
                         <x-textfield id="at_name"
                                      label="Name"
                         />
-                        <x-textarea id="at_name_text"
+                        <x-textarea id="at_description"
                                     label="Beschreibung"
                         />
 
@@ -100,7 +100,7 @@
 
                     <x-textfield id="an_name" label="Name" value="{{ old('an_name')??'' }}" />
 
-                    <x-textarea id="an_name_text" label="Beschreibung" value="{{ old('an_name_text')??'' }}"  />
+                    <x-textarea id="an_description" label="Beschreibung" value="{{ old('an_description')??'' }}"  />
 
                     <x-btnMain>Anforderung anlegen <i class="fas fa-download"></i></x-btnMain>
 

@@ -351,7 +351,7 @@ class SearchController extends Controller
         $dataRoom = Room::select('id', 'r_label', 'r_name')
             ->where('r_label', 'LIKE', "%$search%")
             ->orWhere('r_name', 'LIKE', "%$search%")
-            ->orWhere('r_name_text', 'LIKE', "%$search%")
+            ->orWhere('r_description', 'LIKE', "%$search%")
             ->get();
 
         foreach ($dataRoom as $item) {

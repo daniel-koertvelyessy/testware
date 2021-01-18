@@ -203,7 +203,7 @@ class DataportController extends Controller
                     $objekt = [
                         'b_name_ort'       => $jo->b_name_ort,
                         'b_name'      => $jo->b_name,
-                        'b_name_text'      => $jo->b_name_text,
+                        'b_description'      => $jo->b_description,
                         'b_we_has'         => $jo->b_we_has,
                         'b_we_name'        => $jo->b_we_name,
                         'location_id'      => $jo->location_id,
@@ -298,7 +298,7 @@ class DataportController extends Controller
 
                     $objekt = [
                         'r_name' => $jo->r_name,
-                        'r_name_text' => $jo->r_name_text,
+                        'r_description' => $jo->r_description,
                         'building_id' => $jo->building_id,
                         'storage_id' => $jo->storage_id,
                         'room_type_id' => $jo->room_type_id,
@@ -386,7 +386,7 @@ class DataportController extends Controller
 
                     $objekt = [
                         'sp_name' => $jo->sp_name,
-                        'sp_name_text' => $jo->sp_name_text,
+                        'sp_description' => $jo->sp_description,
                         'room_id' => $jo->room_id,
                         'storage_id' => $jo->storage_id,
                         'stellplatz_typ_id' => $jo->stellplatz_typ_id,

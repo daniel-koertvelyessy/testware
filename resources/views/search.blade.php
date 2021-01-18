@@ -148,7 +148,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->prod_name_text??'-') !!}</dd>
+                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->prod_description??'-') !!}</dd>
                                     </dl>
                                     <a href="{{ route('produkt.show',$objekt) }}">{{ __('Produkt') }} {{ __('öffnen') }}</a>
                                 </div>
@@ -183,7 +183,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->vo_name_text??'-') !!}</dd>
+                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->vo_description??'-') !!}</dd>
                                     </dl>
                                     <a href="{{ route('verordnung.show',$objekt) }}">{{ __('Verordnung') }} {{ __('öffnen') }}</a>
                                 </div>
@@ -210,7 +210,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->an_name_text??'-') !!}</dd>
+                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->an_description??'-') !!}</dd>
                                     </dl>
                                     <a href="{{ route('anforderung.show',$objekt) }}">{{ __('Anforderung') }} {{ __('öffnen') }}</a>
                                 </div>
@@ -395,7 +395,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->r_name_text??'-') !!}</dd>
+                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->r_description??'-') !!}</dd>
                                     </dl>
                                     <a href="{{ route('room.show',$objekt) }}">{{ __('Gebäude') }} {{ __('öffnen') }}</a>
                                 </div>
@@ -422,7 +422,7 @@
                                     </dl>
                                     <dl class="row">
                                         <dt class="col-md-4 col-lg-3">{{__('Text')}}:</dt>
-                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->sp_name_text??'-') !!}</dd>
+                                        <dd class="col-md-8 col-lg-9">{!! nl2br($objekt->sp_description??'-') !!}</dd>
                                     </dl>
                                     <a href="{{ route('stellplatz.show',$objekt) }}">{{ __('Spellplatz') }} {{ __('öffnen') }}</a>
                                 </div>

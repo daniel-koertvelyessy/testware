@@ -18,7 +18,7 @@ class Verordnung extends Model
         'vo_name',
         'vo_nummer',
         'vo_stand',
-        'vo_name_text',
+        'vo_description',
         ''
 
     ];
@@ -35,7 +35,7 @@ class Verordnung extends Model
             ->orWhere('vo_name', 'like', '%' . $term . '%')
             ->orWhere('vo_nummer', 'like', '%' . $term . '%')
             ->orWhere('vo_stand', 'like', '%' . $term . '%')
-            ->orWhere('vo_name_text', 'like', '%' . $term . '%')
+            ->orWhere('vo_description', 'like', '%' . $term . '%')
             ->get();
     }
 }

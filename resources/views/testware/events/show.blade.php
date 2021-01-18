@@ -229,7 +229,7 @@
                                      label="{{__('Bezeichnung')}}"
                         />
 
-                        <x-textarea id="eqdoc_name_text"
+                        <x-textarea id="eqdoc_description"
                                     label="{{__('Datei Informationen')}}"
                         />
                         <div class="form-group">

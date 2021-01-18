@@ -19,7 +19,7 @@ class CreateAnforderungTypesTable extends Migration
             $table->softDeletes();
             $table->string('at_label', 20)->unique();
             $table->string('at_name')->nullable();
-            $table->text('at_name_text')->nullable();
+            $table->text('at_description')->nullable();
         });
     }
 

@@ -83,7 +83,7 @@ class CompartmentController extends Controller
         $compartment->sp_label = $request->label;
         $compartment->storage_id = $uid;
         $compartment->sp_name = (isset($request->name)) ? $request->name : null;
-        $compartment->sp_name_text = (isset($request->description)) ? $request->description : null;
+        $compartment->sp_description = (isset($request->description)) ? $request->description : null;
         $compartment->room_id = $request->room_id;
         $compartment->stellplatz_typ_id = (new StellplatzTyp)->checkApiCompartmentType($request);
 
@@ -127,7 +127,7 @@ class CompartmentController extends Controller
         if ($compartment) {
             $compartment->sp_label = (isset($request->label)) ? $request->label : $compartment->sp_label;
             $compartment->sp_name = (isset($request->name)) ? $request->name : $compartment->sp_name;
-            $compartment->sp_name_text = (isset($request->description)) ? $request->description : $compartment->sp_name_text;
+            $compartment->sp_description = (isset($request->description)) ? $request->description : $compartment->sp_description;
 
             /**
              * Check if compartment-uid is given and update/add the table "storages"

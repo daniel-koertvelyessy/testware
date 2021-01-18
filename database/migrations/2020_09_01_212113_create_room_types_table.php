@@ -22,7 +22,7 @@ class CreateRoomTypesTable extends Migration
             $table->softDeletes();
             $table->string('rt_label', 20);
             $table->string('rt_name', 100)->nullable();
-            $table->text('rt_name_text')->nullable();
+            $table->text('rt_description')->nullable();
         });
     }
 

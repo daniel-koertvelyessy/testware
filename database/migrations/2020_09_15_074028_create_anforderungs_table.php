@@ -19,7 +19,7 @@ class CreateAnforderungsTable extends Migration
             $table->softDeletes();
             $table->string('an_label', 20)->unique();
             $table->string('an_name', 100)->nullable();
-            $table->text('an_name_text')->nullable();
+            $table->text('an_description')->nullable();
 
             $table->unsignedSmallInteger('an_control_interval')->nullable();
 

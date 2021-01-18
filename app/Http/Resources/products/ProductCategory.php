@@ -20,7 +20,7 @@ class ProductCategory extends JsonResource
             'label'       => $this->pk_label,
             'name'        => $this->pk_name,
             'number'      => $this->pk_name_nummer,
-            'description' => $this->pk_name_text,
+            'description' => $this->pk_description,
         ];
     }
 }

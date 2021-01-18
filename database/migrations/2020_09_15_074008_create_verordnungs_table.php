@@ -21,7 +21,7 @@ class CreateVerordnungsTable extends Migration
             $table->string('vo_name', 100)->nullable();
             $table->string('vo_nummer', 100)->nullable();
             $table->string('vo_stand', 100)->nullable();
-            $table->text('vo_name_text')->nullable();
+            $table->text('vo_description')->nullable();
         });
     }
 

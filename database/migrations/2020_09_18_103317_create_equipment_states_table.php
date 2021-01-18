@@ -21,7 +21,7 @@ class CreateEquipmentStatesTable extends Migration
             $table->string('estat_name', 100)->nullable();
             $table->string('estat_color', 100)->nullable();
             $table->string('estat_icon', 100)->nullable();
-            $table->text('estat_name_text')->nullable();
+            $table->text('estat_description')->nullable();
         });
     }
 

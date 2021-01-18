@@ -72,7 +72,7 @@
                                      label="{{__('Name')}}"
                         />
 
-                        <x-textarea id="pk_name_text"
+                        <x-textarea id="pk_description"
                                     label="{{__('Beschreibung')}}"
                         />
 

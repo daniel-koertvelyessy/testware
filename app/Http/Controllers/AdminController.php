@@ -90,20 +90,20 @@ class AdminController extends Controller
             ->where('b_label', 'like', '%' . $request->name . '%')
             ->orWhere('b_name_ort', 'like', '%' . $request->name . '%')
             ->orWhere('b_name', 'like', '%' . $request->name . '%')
-            ->orWhere('b_name_text', 'like', '%' . $request->name . '%')
+            ->orWhere('b_description', 'like', '%' . $request->name . '%')
             ->orWhere('b_we_name', 'like', '%' . $request->name . '%')
             ->get();
 
         $rom = DB::table('rooms')->select('id')
             ->where('r_label', 'like', '%' . $request->name . '%')
             ->orWhere('r_name', 'like', '%' . $request->name . '%')
-            ->orWhere('r_name_text', 'like', '%' . $request->name . '%')
+            ->orWhere('r_description', 'like', '%' . $request->name . '%')
             ->get();
 
         $spl = DB::table('stellplatzs')->select('id')
             ->where('sp_label', 'like', '%' . $request->name . '%')
             ->orWhere('sp_name', 'like', '%' . $request->name . '%')
-            ->orWhere('sp_name_text', 'like', '%' . $request->name . '%')
+            ->orWhere('sp_description', 'like', '%' . $request->name . '%')
             ->get();
 
         return ($bul->count() > 0 || $rom->count() > 0 || $spl->count() > 0) ? 1 : 0;
@@ -729,7 +729,7 @@ class AdminController extends Controller
         return request()->validate([
             'doctyp_label' => 'bail|required|min:1|max:20',
             'doctyp_name' => 'bail|min:1|max:100',
-            'doctyp_name_text' => '',
+            'doctyp_description' => '',
             'doctyp_mandatory' => 'required'
         ]);
     }
@@ -742,7 +742,7 @@ class AdminController extends Controller
         return request()->validate([
             'doctyp_label' => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
             'doctyp_name' => 'bail|min:1|max:100',
-            'doctyp_name_text' => '',
+            'doctyp_description' => '',
             'doctyp_mandatory' => 'required'
         ]);
     }
@@ -786,7 +786,7 @@ class AdminController extends Controller
         return request()->validate([
             'spt_label' => 'bail|unique:stellplatz_typs,spt_label|required|min:1|max:20',
             'spt_name' => 'max:100',
-            'spt_name_text' => ''
+            'spt_description' => ''
         ]);
     }
 
@@ -798,7 +798,7 @@ class AdminController extends Controller
         return request()->validate([
             'spt_label' => 'bail|required|min:1|max:20',
             'spt_name' => 'max:100',
-            'spt_name_text' => ''
+            'spt_description' => ''
         ]);
     }
 
@@ -832,7 +832,7 @@ class AdminController extends Controller
         return request()->validate([
             'rt_label' => 'bail|unique:room_types,rt_label|required|min:1|max:20',
             'rt_name' => 'max:100',
-            'rt_name_text' => ''
+            'rt_description' => ''
         ]);
     }
 
@@ -844,7 +844,7 @@ class AdminController extends Controller
         return request()->validate([
             'rt_label' => 'bail|required|min:1|max:20',
             'rt_name' => 'max:100',
-            'rt_name_text' => ''
+            'rt_description' => ''
         ]);
     }
 
@@ -856,7 +856,7 @@ class AdminController extends Controller
         return request()->validate([
             'pk_label' => 'bail|required|min:1|max:20',
             'pk_name' => 'bail|min:1|max:100',
-            'pk_name_text' => ''
+            'pk_description' => ''
         ]);
     }
 
@@ -869,7 +869,7 @@ class AdminController extends Controller
         return request()->validate([
             'at_label' => 'bail|required|unique:anforderung_types,at_label|max:20',
             'at_name' => 'bail|max:100',
-            'at_name_text' => '',
+            'at_description' => '',
         ]);
     }
 
@@ -881,7 +881,7 @@ class AdminController extends Controller
         return request()->validate([
             'at_label' => 'bail|required|max:20',
             'at_name' => 'bail|max:100',
-            'at_name_text' => '',
+            'at_description' => '',
         ]);
     }
 
@@ -960,7 +960,7 @@ class AdminController extends Controller
             ->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')
             ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('b_name', 'like', '%' . $request->term . '%')
-            ->orWhere('b_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('b_description', 'like', '%' . $request->term . '%')
             ->get();
 
         $rom = DB::table('storages')->select(
@@ -969,7 +969,7 @@ class AdminController extends Controller
             ->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')
             ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('r_name', 'like', '%' . $request->term . '%')
-            ->orWhere('r_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('r_description', 'like', '%' . $request->term . '%')
             ->get();
 
         $stp = DB::table('storages')->select(
@@ -978,7 +978,7 @@ class AdminController extends Controller
             ->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')
             ->where('storage_label', 'like', '%' . $request->term . '%')
             ->orWhere('sp_name', 'like', '%' . $request->term . '%')
-            ->orWhere('sp_name_text', 'like', '%' . $request->term . '%')
+            ->orWhere('sp_description', 'like', '%' . $request->term . '%')
             ->get();
 
         return ['loc' => $loc, 'bul' => $bul, 'rom' => $rom, 'stp' => $stp];

@@ -84,7 +84,7 @@
                                      label="{{ __('Bezeichnung') }}"
                         />
 
-                        <x-textarea id="b_name_text"
+                        <x-textarea id="b_description"
                                     label="{{ __('Beschreibung') }}"
                         />
 
@@ -237,7 +237,7 @@
                                      label="{{ __('Name lang') }}"
                         />
 
-                        <x-textarea id="r_name_text"
+                        <x-textarea id="r_description"
                                     label="{{ __('Beschreibung') }}"
                         />
 
@@ -344,7 +344,7 @@
                                      label="{{ __('Name lang') }}"
                         />
 
-                        <x-textarea id="sp_name_text"
+                        <x-textarea id="sp_description"
                                     label="{{ __('Beschreibung') }}"
                         />
 
@@ -799,7 +799,7 @@
                         form.find('#b_name_ort').val(res.b_name_ort);
                         form.find('#storage_id_building').val(res.storage_id);
                         form.find('#b_name').val(res.b_name);
-                        form.find('#b_name_text').val(res.b_name_text);
+                        form.find('#b_description').val(res.b_description);
                         if (res.b_we_has === 1)
                             form.find('#b_we_has').prop('checked', true);
                         form.find('#b_we_name').val(res.b_we_name);
@@ -876,7 +876,7 @@
                         form.find('#r_label').val(res.r_label);
                         form.find('#storage_id_room').val(res.storage_id);
                         form.find('#r_name').val(res.r_name);
-                        form.find('#r_name_text').val(res.r_name_text);
+                        form.find('#r_description').val(res.r_description);
                         form.find('#building_id_room_modal').val(res.building_id);
                         form.find('#room_type_id').val(res.room_type_id);
                         if (type === 'edit') {
@@ -950,7 +950,7 @@
                         form.find('#sp_label').val(res.sp_label);
                         form.find('#storage_id_stellplatz').val(res.storage_id);
                         form.find('#sp_name').val(res.sp_name);
-                        form.find('#sp_name_text').val(res.sp_name_text);
+                        form.find('#sp_description').val(res.sp_description);
                         form.find('#room_id_stellplatz_modal').val(res.room_id);
                         form.find('#stellplatz_typ_id').val(res.stellplatz_typ_id);
                         if (type === 'edit') {

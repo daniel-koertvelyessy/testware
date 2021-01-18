@@ -22,7 +22,7 @@ class BuildingShow extends JsonResource
             'uid'               => $this->storage_id,
             'name'              => $this->b_name,
             'place'             => $this->b_name_ort,
-            'description'       => $this->b_name_text,
+            'description'       => $this->b_description,
             'goods_income_has'  => ($this->b_we_has === 0) ? false : true,
             'goods_income_name' => $this->b_we_name,
             'type'              => new BuildingType($this->BuildingType),

@@ -59,7 +59,7 @@ class StellplatzController extends Controller
         return request()->validate([
             'sp_label'      => 'bail|unique:stellplatzs,sp_label|required|min:1|max:20',
             'sp_name'      => 'max:100',
-            'sp_name_text'      => '',
+            'sp_description'      => '',
             'storage_id'       => 'required',
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
@@ -173,7 +173,7 @@ class StellplatzController extends Controller
 
             $stellplatz->sp_label = $request->sp_label;
             $stellplatz->sp_name = $request->sp_name;
-            $stellplatz->sp_name_text = $request->sp_name_text;
+            $stellplatz->sp_description = $request->sp_description;
             $stellplatz->room_id = $request->room_id;
             $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
             $stellplatz->save();
@@ -187,7 +187,7 @@ class StellplatzController extends Controller
             $stellplatz = new Stellplatz();
             $stellplatz->sp_label = $request->sp_label;
             $stellplatz->sp_name = $request->sp_name;
-            $stellplatz->sp_name_text = $request->sp_name_text;
+            $stellplatz->sp_description = $request->sp_description;
             $stellplatz->room_id = $request->room_id;
             $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
             $stellplatz->storage_id = $request->storage_id;
@@ -213,7 +213,7 @@ class StellplatzController extends Controller
         return request()->validate([
             'sp_label'      => 'bail|required|min:1|max:20',
             'sp_name'      => 'max:100',
-            'sp_name_text'      => '',
+            'sp_description'      => '',
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);

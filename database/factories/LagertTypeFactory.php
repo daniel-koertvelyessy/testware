@@ -9,6 +9,6 @@ $factory->define(LagertType::class, function (Faker $faker) {
     return [
         'lt_label' => substr('LF' . $faker->buildingNumber, 0, 9),
         'lt_name' => $faker->slug(3),
-        'lt_name_text' => $faker->sentence(rand(5)),
+        'lt_description' => $faker->sentence(rand(5)),
     ];
 });

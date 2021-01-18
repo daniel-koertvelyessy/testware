@@ -19,7 +19,7 @@ class ProductState extends JsonResource
         return [
             'label'          => $this->ps_label,
             'name'           => $this->ps_name,
-            'description'    => $this->ps_name_text,
+            'description'    => $this->ps_description,
             'bs_color_class' => $this->ps_color,
             'bs_icon_class'  => $this->ps_icon,
         ];

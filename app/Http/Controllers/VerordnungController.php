@@ -120,7 +120,7 @@ class VerordnungController extends Controller
             'vo_name' => 'bail|min:1|max:100',
             'vo_nummer' => 'bail|min:1|max:100',
             'vo_stand' => 'bail|min:1|max:100',
-            'vo_name_text' => '',
+            'vo_description' => '',
         ]);
     }
 
@@ -134,7 +134,7 @@ class VerordnungController extends Controller
             'vo_name' => 'bail|min:1|max:100',
             'vo_nummer' => 'bail|min:1|max:100',
             'vo_stand' => 'bail|min:1|max:100',
-            'vo_name_text' => '',
+            'vo_description' => '',
         ]);
     }
 }

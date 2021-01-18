@@ -35,7 +35,7 @@
 
                     <x-textfield id="updt_vo_stand" name="vo_stand" label="Stand" value="{{ $verordnung->vo_stand }}" />
 
-                    <x-textarea id="updt_vo_name_text" name="vo_name_text" label="Beschreibung" value="{{ $verordnung->vo_name_text }}" />
+                    <x-textarea id="updt_vo_description" name="vo_description" label="Beschreibung" value="{{ $verordnung->vo_description }}" />
 
                     <x-btnMain>Verordnung aktualisieren</x-btnMain>
 

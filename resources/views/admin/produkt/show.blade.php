@@ -104,7 +104,7 @@
                                 <x-textfield id="doctyp_name"
                                              label="{{__('Bezeichnung')}}"
                                 />
-                                <x-textarea id="doctyp_name_text"
+                                <x-textarea id="doctyp_description"
                                             label="{{__('Beschreibung')}}"
                                 />
                                 <div class="form-group">
@@ -479,9 +479,9 @@
                                                          label="Nummer"
                                                          value="{!! $produkt->prod_nummer !!}"
                                             />
-                                            <x-textarea id="prod_name_text"
+                                            <x-textarea id="prod_description"
                                                         label="Beschreibung"
-                                                        value="{!! $produkt->prod_name_text !!}"
+                                                        value="{!! $produkt->prod_description !!}"
                                             />
                                         </div>
                                     </div>
@@ -569,7 +569,7 @@
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">{{__('Beschreibung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text }}</dd>
+                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4">
@@ -983,11 +983,11 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <label for="proddoc_name_text">Datei Informationen</label>
-                                        <textarea name="proddoc_name_text"
-                                                  id="proddoc_name_text"
+                                        <label for="proddoc_description">Datei Informationen</label>
+                                        <textarea name="proddoc_description"
+                                                  id="proddoc_description"
                                                   class="form-control"
-                                        >{{ old('proddoc_name_text') ?? '' }}</textarea>
+                                        >{{ old('proddoc_description') ?? '' }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <div class="custom-file">
@@ -1196,7 +1196,7 @@
                 url: "{{ route('getAnforderungData') }}",
                 data: {id: $('#anforderung_id :selected').val()},
                 success: (res) => {
-                    const text = (res.an_name_text === null) ? '-' : res.an_name_text;
+                    const text = (res.an_description === null) ? '-' : res.an_description;
                     $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>

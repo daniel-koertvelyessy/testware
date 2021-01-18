@@ -18,7 +18,7 @@ class Room extends Model
         'updated_at',
         'r_label',
         'r_name',
-        'r_name_text',
+        'r_description',
     ];
 
     protected $guarded = [];
@@ -40,7 +40,7 @@ class Room extends Model
     {
         return Room::where('r_label', 'like', '%' . $term . '%')
             ->orWhere('r_name', 'like', '%' . $term . '%')
-            ->orWhere('r_name_text', 'like', '%' . $term . '%')
+            ->orWhere('r_description', 'like', '%' . $term . '%')
             ->get();
     }
 
@@ -78,7 +78,7 @@ class Room extends Model
     {
 
         Cache::remember(
-            'countTotalEquipmentInRoom'.$this->id,
+            'countTotalEquipmentInRoom' . $this->id,
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;

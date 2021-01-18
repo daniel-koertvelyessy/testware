@@ -19,7 +19,7 @@ class CreateGroupsTable extends Migration
             $table->softDeletes();
             $table->string('grp_label', 20)->unique();
             $table->string('grp_name', 100)->nullable();
-            $table->text('grp_name_text')->nullable();
+            $table->text('grp_description')->nullable();
         });
     }
 

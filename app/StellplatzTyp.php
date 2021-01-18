@@ -43,7 +43,7 @@ class StellplatzTyp extends Model
     {
         $this->spt_label = $request->type['label'];
         $this->spt_name = (isset($request->type['name'])) ? $request->type['name'] : null;
-        $this->spt_name_text = (isset($request->type['description'])) ? $request->type['description'] : null;
+        $this->spt_description = (isset($request->type['description'])) ? $request->type['description'] : null;
         $this->save();
         return $this->id;
     }

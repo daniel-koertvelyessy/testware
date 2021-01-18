@@ -33,7 +33,7 @@
 
                     <x-textfield id="updt_vo_stand" name="vo_stand" label="Stand"  />
 
-                    <x-textarea id="updt_vo_name_text" name="vo_name_text" label="Beschreibung"  />
+                    <x-textarea id="updt_vo_description" name="vo_description" label="Beschreibung"  />
 
                     <x-btnMain>Verordnung anlegen <i class="fas fa-download"></i></x-btnMain>
 

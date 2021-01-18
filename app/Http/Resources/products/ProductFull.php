@@ -14,8 +14,7 @@ class ProductFull extends JsonResource
      *
      * @return array
      */
-    public function toArray($request)
-    : array
+    public function toArray($request): array
     {
         $productParams = [];
 
@@ -27,7 +26,7 @@ class ProductFull extends JsonResource
             'updated'       => (string)$this->updated_at,
             'label'         => $this->prod_label,
             'name'          => $this->prod_name,
-            'description'   => $this->prod_name_text,
+            'description'   => $this->prod_description,
             'part_number'   => $this->prod_nummer,
             'status_active' => ($this->prod_active === 0) ? false : true,
             'parameter'     => $productParams,

@@ -116,7 +116,7 @@
                                      label="{{__('Bezeichnung')}}"
                         />
 
-                        <x-textarea id="eqdoc_name_text"
+                        <x-textarea id="eqdoc_description"
                                     label="{{__('Datei Informationen')}}"
                         />
 
@@ -551,8 +551,8 @@
                                              value="{{ __('Bericht Funktionsprüfung ').date('Y-m-d') }}"
                                 />
 
-                                <x-textarea name="eqdoc_name_text"
-                                            id="AddEquipFuncTest_eqdoc_name_text"
+                                <x-textarea name="eqdoc_description"
+                                            id="AddEquipFuncTest_eqdoc_description"
                                             label="{{__('Datei Informationen')}}"
                                 />
 
@@ -971,7 +971,7 @@
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-md-5 col-lg-4">{{ __('Beschreibung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name_text ?? '-' }}</dd>
+                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description ?? '-' }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-md-5 col-lg-4">

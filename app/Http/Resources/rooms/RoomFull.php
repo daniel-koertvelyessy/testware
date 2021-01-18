@@ -24,7 +24,7 @@ class RoomFull extends JsonResource
             'label' => $this->r_label,
             'uid' => $this->storage_id,
             'name' => $this->r_name,
-            'description' => $this->r_name_text,
+            'description' => $this->r_description,
             'type' => new RoomTypeShort($this->RoomType),
             'building' => new BuildingShort($this->building),
             'room_objects' => new RoomStats($this)

@@ -42,7 +42,7 @@
 
                     <x-textfield id="b_name" label="{{ __('Bezeichnung') }}" />
 
-                    <x-textarea id="b_name_text" label="{{ __('Beschreibung') }}" />
+                    <x-textarea id="b_description" label="{{ __('Beschreibung') }}" />
 
 
                 </div>

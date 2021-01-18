@@ -20,7 +20,7 @@ class CreateProduktKategoriesTable extends Migration
             $table->string('pk_label', 20)->unique();
             $table->string('pk_name_nummer', 100)->nullable();
             $table->string('pk_name', 100)->nullable();
-            $table->text('pk_name_text')->nullable();
+            $table->text('pk_description')->nullable();
         });
     }
 

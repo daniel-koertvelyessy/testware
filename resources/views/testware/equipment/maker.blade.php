@@ -171,7 +171,7 @@
                                         <x-textfield id="proddoc_label"
                                                      label="{{ __('Bezeichnung') }}"
                                         />
-                                        <x-textarea id="proddoc_name_text"
+                                        <x-textarea id="proddoc_description"
                                                     label="{{ __('Datei Informationen') }}"
                                         />
                                     </div>

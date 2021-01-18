@@ -20,7 +20,7 @@ class CreateEquipmentDocsTable extends Migration
             $table->string('eqdoc_label', 150);
             $table->string('eqdoc_name', 150)->nullable();
             $table->string('eqdoc_name_pfad', 150)->nullable();
-            $table->text('eqdoc_name_text')->nullable();
+            $table->text('eqdoc_description')->nullable();
 
             $table->foreignId('equipment_id')
                 ->nullable()

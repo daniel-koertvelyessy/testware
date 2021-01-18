@@ -88,7 +88,7 @@
                         <x-textfield id="spt_name"
                                      label="{{__('Beschreibung')}}"
                         />
-                        <x-textarea id="spt_name_text"
+                        <x-textarea id="spt_description"
                                     label="{{__('Beschreibung des Typs')}}"
                         />
                     </div>
@@ -198,9 +198,9 @@
                                                  label="{{__('Bezeichnung')}}"
                                                  value="{{ $room->r_name }}"
                                     />
-                                    <x-textarea id="r_name_text"
+                                    <x-textarea id="r_description"
                                                 label="{{__('Beschreibung')}}"
-                                                value="{{ $room->r_name_text }}"
+                                                value="{{ $room->r_description }}"
                                     />
                                 </div>
                             </div>

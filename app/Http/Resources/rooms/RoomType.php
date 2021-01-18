@@ -18,7 +18,7 @@ class RoomType extends JsonResource
         return [
             'label' => $this->rt_label,
             'name' => $this->rt_name,
-            'description' => $this->rt_name_text,
+            'description' => $this->rt_description,
         ];
     }
 }

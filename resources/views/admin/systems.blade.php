@@ -452,7 +452,7 @@
                                                                  label="{{__('Name')}} "
                                                     />
 
-                                                    <x-textarea id="rt_name_text"
+                                                    <x-textarea id="rt_description"
                                                                 label="{{__('Beschreibung des Raumtyps')}}"
                                                     />
 
@@ -497,8 +497,8 @@
                                                                      label="{{__('Name')}}"
                                                         />
 
-                                                        <x-textarea id="upd_rt_name_text"
-                                                                    name="rt_name_text"
+                                                        <x-textarea id="upd_rt_description"
+                                                                    name="rt_description"
                                                                     label="{{__('Beschreibung des Raumtyps')}}"
                                                         />
 
@@ -571,7 +571,7 @@
                                                                  label="{{__('Name')}}"
                                                     />
 
-                                                    <x-textarea id="spt_name_text"
+                                                    <x-textarea id="spt_description"
                                                                 label="{{__('Beschreibung des Stellplatztyps')}}"
                                                     />
 
@@ -616,8 +616,8 @@
                                                                      label="{{__('Name')}}"
                                                         />
 
-                                                        <x-textarea id="updt_spt_name_text"
-                                                                    name="spt_name_text"
+                                                        <x-textarea id="updt_spt_description"
+                                                                    name="spt_description"
                                                                     label="{{__('Beschreibung des Stellplatztyps')}}"
                                                         />
 
@@ -750,7 +750,7 @@
                                                                  label="{{__('Name')}}"
                                                     />
 
-                                                    <x-textarea id="pk_name_text"
+                                                    <x-textarea id="pk_description"
                                                                 label="{{__('Beschreibung')}}"
                                                     />
 
@@ -800,8 +800,8 @@
                                                                      label="{{__('Name')}}"
                                                         />
 
-                                                        <x-textarea id="updt_pk_name_text"
-                                                                    name="pk_name_text"
+                                                        <x-textarea id="updt_pk_description"
+                                                                    name="pk_description"
                                                                     label="{{__('Beschreibung')}}"
                                                         />
 
@@ -900,7 +900,7 @@
                                             <x-textfield id="at_name"
                                                          label="Name"
                                             />
-                                            <x-textarea id="at_name_text"
+                                            <x-textarea id="at_description"
                                                         label="Beschreibung"
                                             />
 
@@ -936,8 +936,8 @@
                                                                  name="at_name"
                                                                  label="{{__('Name')}}"
                                                     />
-                                                    <x-textarea id="updt_at_name_text"
-                                                                name="at_name_text"
+                                                    <x-textarea id="updt_at_description"
+                                                                name="at_description"
                                                                 label="{{__('Beschreibung')}}"
                                                     />
                                                     <x-btnSave>{{__('Anforderungstyp speichern')}}</x-btnSave>
@@ -1016,7 +1016,7 @@
                                                                  max="100"
                                                     />
 
-                                                    <x-textarea id="doctyp_name_text"
+                                                    <x-textarea id="doctyp_description"
                                                                 label="{{ __('Beschreibung') }}"
                                                     />
 
@@ -1097,7 +1097,7 @@
                                                                      max="100"
                                                         />
 
-                                                        <x-textfield id="updt_doctyp_name_text"
+                                                        <x-textfield id="updt_doctyp_description"
                                                                      label="{{ __('Beschreibung') }}"
                                                         />
 
@@ -1258,7 +1258,7 @@
             }).done(function (jsn) {
                 frm.find('#updt_rt_label').val(jsn.rt_label);
                 frm.find('#updt_rt_name').val(jsn.rt_name);
-                frm.find('#upd_rt_name_text').val(jsn.rt_name_text);
+                frm.find('#upd_rt_description').val(jsn.rt_description);
             });
 
         });
@@ -1276,7 +1276,7 @@
             }).done(function (jsn) {
                 frm.find('#updt_spt_label').val(jsn.spt_label);
                 frm.find('#updt_spt_name').val(jsn.spt_name);
-                frm.find('#updt_spt_name_text').val(jsn.spt_name_text);
+                frm.find('#updt_spt_description').val(jsn.spt_description);
             });
 
         });
@@ -1294,7 +1294,7 @@
             }).done(function (jsn) {
                 frm.find('#upd_pk_label').val(jsn.pk_label);
                 frm.find('#updt_pk_name').val(jsn.pk_name);
-                frm.find('#updt_pk_name_text').val(jsn.pk_name_text);
+                frm.find('#updt_pk_description').val(jsn.pk_description);
             });
 
         });
@@ -1311,7 +1311,7 @@
             }).done(function (jsn) {
                 frm.find('#updt_at_label').val(jsn.at_label);
                 frm.find('#updt_at_name').val(jsn.at_name);
-                frm.find('#updt_at_name_text').val(jsn.at_name_text);
+                frm.find('#updt_at_description').val(jsn.at_description);
             });
 
         });
@@ -1331,7 +1331,7 @@
                 frm.find('#updt_vo_stand').val(jsn.vo_stand);
                 frm.find('#updt_vo_nummer').val(jsn.vo_nummer);
                 frm.find('#updt_vo_name').val(jsn.vo_name);
-                frm.find('#updt_vo_name_text').val(jsn.vo_name_text);
+                frm.find('#updt_vo_description').val(jsn.vo_description);
             });
 
         });
@@ -1350,7 +1350,7 @@
                 frm.find('#updt_an_label').val(jsn.an_label);
                 frm.find('#updt_anforderung_type_id').val(jsn.anforderung_type_id);
                 frm.find('#updt_an_name').val(jsn.an_name);
-                frm.find('#updt_an_name_text').val(jsn.an_name_text);
+                frm.find('#updt_an_description').val(jsn.an_description);
                 frm.find('#updt_an_control_interval').val(jsn.an_control_interval);
                 frm.find('#updt_control_interval_id').val(jsn.control_interval_id);
             });
@@ -1370,7 +1370,7 @@
             }).done(function (jsn) {
                 frm.find('#updt_doctyp_label').val(jsn.doctyp_label);
                 frm.find('#updt_doctyp_name').val(jsn.doctyp_name);
-                frm.find('#updt_doctyp_name_text').val(jsn.doctyp_name_text);
+                frm.find('#updt_doctyp_description').val(jsn.doctyp_description);
 
                 if (jsn.doctyp_mandatory === 1) {
                     frm.find('#updt_doctyp_mandatory_ja').prop('checked', true)

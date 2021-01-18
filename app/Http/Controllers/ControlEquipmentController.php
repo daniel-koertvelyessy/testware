@@ -142,7 +142,7 @@ class ControlEquipmentController extends Controller
             $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = request('equipment_id');
-            $proDocFile->eqdoc_name_text = request('eqdoc_name_text');
+            $proDocFile->eqdoc_description = request('eqdoc_description');
             $proDocFile->eqdoc_label = request('eqdoc_label');
             $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
             $proDocFile->save();
@@ -171,8 +171,7 @@ class ControlEquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateNewControlEvent()
-    : array
+    public function validateNewControlEvent(): array
     {
         return request()->validate([
             'control_event_next_due_date'        => 'date|required',

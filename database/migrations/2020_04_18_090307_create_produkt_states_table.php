@@ -21,7 +21,7 @@ class CreateProduktStatesTable extends Migration
             $table->string('ps_name', 100)->nullable();
             $table->string('ps_color', 100)->nullable();
             $table->string('ps_icon', 100)->nullable();
-            $table->text('ps_name_text')->nullable();
+            $table->text('ps_description')->nullable();
         });
     }
 

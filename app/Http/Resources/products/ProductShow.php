@@ -23,7 +23,7 @@ class ProductShow extends JsonResource
             'updated'          => (string)$this->updated_at,
             'label'            => $this->prod_label,
             'name'             => $this->prod_name,
-            'description'      => $this->prod_name_text,
+            'description'      => $this->prod_description,
             'part_number'      => $this->prod_nummer,
             'status_active'    => ($this->prod_active === 0) ? false : true,
             'category_id'      => $this->produkt_kategorie_id,

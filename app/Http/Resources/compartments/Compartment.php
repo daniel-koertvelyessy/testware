@@ -22,7 +22,7 @@ class Compartment extends JsonResource
             'label' => $this->sp_label,
             'uid' => $this->storage_id,
             'name' => $this->sp_name,
-            'description' => $this->sp_name_text,
+            'description' => $this->sp_description,
             'compartment_type_id' => $this->stellplatz_typ_id,
             'room_id' => $this->room_id,
         ];

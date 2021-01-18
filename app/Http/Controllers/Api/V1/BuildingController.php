@@ -155,7 +155,7 @@ class BuildingController extends Controller
             $building->b_we_has = (isset($request->goods_income_has)) ? $goods_income_has : $building->b_we_has;
             $building->b_name = (isset($request->name)) ? $request->name : $building->b_name;
             $building->b_name_ort = (isset($request->place)) ? $request->place : $building->b_name_ort;
-            $building->b_name_text = (isset($request->description)) ? $request->description : $building->b_name;
+            $building->b_description = (isset($request->description)) ? $request->description : $building->b_name;
             $building->b_we_name = (isset($request->goods_income_name)) ? $request->goods_income_name : $building->b_we_name;
             $uid = (isset($request->uid)) ? $request->uid : $building->storage_id;
             $building->storage_id = $uid;
@@ -174,7 +174,7 @@ class BuildingController extends Controller
             (new \App\Storage)->add($uid, $request->label, 'buildings');
             $building->b_name = $request->name;
             $building->b_name_ort = $request->place;
-            $building->b_name_text = $request->description;
+            $building->b_description = $request->description;
             $building->b_we_name = $request->goods_income_name;
             $building->building_type_id = (isset($request->type_id)) ? $request->type_id : 1;
             $building->location_id = (isset($request->location_id)) ? $request->location_id : 1;
