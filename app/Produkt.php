@@ -10,8 +10,6 @@ class Produkt extends Model
 {
     use SoftDeletes, Sortable;
 
-    protected $guarded = [];
-
     public $sortable = [
         'id',
         'prod_label',
@@ -20,14 +18,11 @@ class Produkt extends Model
         'prod_active',
 
     ];
+    protected $guarded = [];
 
     public function search($term)
     {
-        return Produkt::where('prod_label', 'like', '%' . $term . '%')
-            ->orWhere('prod_name', 'like', '%' . $term . '%')
-            ->orWhere('prod_description', 'like', '%' . $term . '%')
-            ->orWhere('prod_nummer', 'like', '%' . $term . '%')
-            ->get();
+        return Produkt::where('prod_label', 'like', '%' . $term . '%')->orWhere('prod_name', 'like', '%' . $term . '%')->orWhere('prod_description', 'like', '%' . $term . '%')->orWhere('prod_nummer', 'like', '%' . $term . '%')->get();
     }
 
     /**
@@ -53,6 +48,16 @@ class Produkt extends Model
     public function ProduktState()
     {
         return $this->belongsTo(ProduktState::class);
+    }
+
+    public function ProductQualifiedUser()
+    {
+        return $this->hasMany(ProductQualifiedUser::class);
+    }
+
+    public function ProductInstructedUser()
+    {
+        return $this->hasMany(ProductInstructedUser::class);
     }
 
     public function path()
@@ -88,5 +93,19 @@ class Produkt extends Model
     public function EquipmentDetails()
     {
         return $this->hasOne(Equipment::class);
+    }
+
+    public function hasRequirement(Anforderung $requirement)
+    {
+        return ProduktAnforderung::where([
+                [
+                    'anforderung_id',
+                    $requirement->id
+                ],
+                [
+                    'produkt_id',
+                    $this->id
+                ],
+            ])->count() > 0;
     }
 }

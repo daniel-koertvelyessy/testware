@@ -74,4 +74,40 @@ class User extends Authenticatable
     {
         return $this->hasMany(EquipmentInstruction::class);
     }
+
+    public function isInstructed($id)
+    : bool
+    {
+        return EquipmentInstruction::where([
+            ['equipment_instruction_trainee_id',$this->id],
+            ['equipment_id',$id]
+        ])->count() >0;
+    }
+
+    public function isQualified($id)
+    : bool
+    {
+        return EquipmentQualifiedUser::where([
+            ['user_id',$this->id],
+            ['equipment_id',$id]
+        ])->count() >0;
+    }
+
+    public function isInstructedForProduct($id)
+    : bool
+    {
+        return EquipmentInstruction::where([
+                ['equipment_instruction_trainee_id',$this->id],
+                ['equipment_id',$id]
+            ])->count() >0;
+    }
+
+    public function isQualifiedForProduct($id)
+    : bool
+    {
+        return ProductQualifiedUser::where([
+                ['user_id',$this->id],
+                ['produkt_id',$id]
+            ])->count() >0;
+    }
 }

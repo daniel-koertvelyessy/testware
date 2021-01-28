@@ -136,7 +136,12 @@
                     @empty
                         <tr>
                             <td colspan="3">
-                                <x-notifyer>Keine Prüfungen gefunden</x-notifyer>
+                                <div class="align-items-center justify-content-between d-flex">
+                                <span class="text-muted">Keine Prüfungen gefunden</span>
+
+                                <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}">{{ __('erstellen') }}</a>
+                                </div>
+
                             </td>
                         </tr>
                     @endforelse

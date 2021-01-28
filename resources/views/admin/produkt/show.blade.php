@@ -263,6 +263,212 @@
             </div>
         </div>
     </div>
+
+    <!-- Dialog addQualifiedUser  -->
+    <div class="modal fade"
+         id="addQualifiedUser"
+         tabindex="-1"
+         aria-labelledby="addQualifiedUserLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="addQualifiedUserLabel"
+                    >{{__('Befähigte Person hinzufügen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('ProductQualifiedUser.store') }}#productRequirements"
+                      method="post"
+                >
+                    <div class="modal-body">
+
+                        @csrf
+                        <input type="hidden"
+                               name="produkt_id"
+                               id="product_id_qualified_user"
+                               value="{{ $produkt->id }}"
+                        >
+                        <div class="row">
+                            <div class="col-md-4">
+                                <x-datepicker id="product_qualified_date"
+                                              label="{{ __('Befähigung erhalten am') }}"
+                                              value="{{ date('Y-m-d') }}"
+                                />
+                            </div>
+                            <div class="col-md-8">
+                                <x-selectfield id="product_qualified_firma"
+                                               label="{{__('durch Firma / Institution')}}"
+                                >
+                                    @forelse($produkt->firma as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                    @empty
+                                        @foreach(App\Firma::all() as $company)
+                                            <option value="{{ $company->id }}">{{ $company->fa_name }}</option>
+                                        @endforeach
+                                    @endforelse
+                                </x-selectfield>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <x-selectfield id="user_id"
+                                               label="{{__('Mitarbeiter')}}"
+                                >
+                                    @foreach(App\User::all() as $user)
+                                        @if(! $user->isQualifiedForProduct($produkt->id))
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            {{__('Befähigte Person anlegen')}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade"
+         id="addInstructedUser"
+         tabindex="-1"
+         aria-labelledby="addInstructedUserLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <form action="{{ route('ProductInstruction.store') }}"
+                  method="post"
+                  id="frmAddEquipmentInstruction"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="addInstructedUserLabel"
+                        >{{__('Unterwiesene Person hinzufügen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden"
+                               name="product_id"
+                               id="product_id_instructions_modal"
+                               value="{{ $produkt->id }}"
+                        >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-datepicker id="product_instruction_date"
+                                              label="{{__('Unterweisung erfolgte am')}}"
+                                              value="{{ date('Y-m-d') }}"
+                                              required
+                                />
+                                <x-selectfield id="product_instruction_trainee_id"
+                                               label="{{__('Unterwiesene Person')}}"
+                                >
+                                    @foreach(App\User::all() as $user)
+                                        @if(! $user->isInstructed($produkt->id))
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                            <div class="col-md-6">
+                                <x-selectfield id="product_instruction_instructor_profile_id"
+                                               label="{{__('Interne Unterweisung durch')}}"
+                                               required
+                                >
+                                    <option value="0">{{ __('bitte auswählen') }}</option>
+                                    @foreach(App\ProductQualifiedUser::where('produkt_id',$produkt->id)->with('user')->get() as $qualifiedUser)
+                                        <option value="{{ $qualifiedUser->user->id }}">{{ $qualifiedUser->user->name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                                <x-selectfield id="product_instruction_instructor_firma_id"
+                                               label="{{__('Externe Unterweisung durch')}}"
+                                >
+                                    <option value="0">{{__('bitte auswählen')}}</option>
+                                    @foreach($produkt->firma as $firma)
+                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                    @endforeach
+                                </x-selectfield>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label>{{__('Unterschrift Unterwiesener')}}</label>
+                                    <div>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnClearCanvas"
+                                                data-targetpad="trainee"
+                                        >{{__('Neu')}}</button>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnSignZuruck"
+                                                data-targetpad="trainee"
+                                        >{{__('Zurück')}}</button>
+                                    </div>
+                                </div>
+                                <input type="hidden"
+                                       name="product_instruction_trainee_signature"
+                                       id="product_instruction_trainee_signature"
+                                >
+                                <div class="wrapper">
+                                    <canvas id="signatureField_product_instruction_trainee_signature"
+                                            class="signature-pad"
+                                    ></canvas>
+                                </div>
+                                <span class="small text-primary">{{ __('erforderliches Feld') }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label>{{__('Unterschrift Einweiser')}}</label>
+                                    <div>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnClearCanvas"
+                                                data-targetpad="instructor"
+                                        >{{__('Neu')}}</button>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm btnSignZuruck"
+                                                data-targetpad="instructor"
+                                        >{{__('Zurück')}}</button>
+                                    </div>
+                                </div>
+                                <input type="hidden"
+                                       name="product_instruction_instructor_signature"
+                                       id="product_instruction_instructor_signature"
+                                >
+                                <div class="wrapper">
+                                    <canvas id="signatureField_product_instruction_instructor_signature"
+                                            class="signature-pad"
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">{{ __('Unterweisung erfassen') }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection
 
 @section('content')
@@ -295,14 +501,15 @@
                         role="presentation"
                     >
                         <a class="nav-link"
-                           id="prodAnfordrungen-tab"
+                           id="productRequirements-tab"
                            data-toggle="tab"
-                           href="#prodAnfordrungen"
+                           href="#productRequirements"
                            role="tab"
-                           aria-controls="prodAnfordrungen"
+                           aria-controls="productRequirements"
                            aria-selected="false"
                         >{{__('Anforderungen')}} <span
-                                class="badge badge-primary">{{ $produkt->ProduktAnforderung->count() }}</span></a>
+                                class="badge badge-primary"
+                            >{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -327,7 +534,8 @@
                            aria-controls="prodDoku"
                            aria-selected="false"
                         >{{__('Dokumente')}} <span
-                                class="badge badge-primary">{{ $produkt->ProduktDoc->count() }}</span></a>
+                                class="badge badge-primary"
+                            >{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -340,10 +548,11 @@
                            aria-controls="prodEquip"
                            aria-selected="false"
                         >{{__('Geräte')}} <span
-                                class="badge badge-primary">{{ $produkt->Equipment->count() }}</span></a>
+                                class="badge badge-primary"
+                            >{{ $produkt->Equipment->count() }}</span></a>
                     </li>
                 </ul>
-                <div class="tab-content p-2"
+                <div class="tab-content px-2 pt-4"
                      id="myTabContent"
                 >
                     <div class="tab-pane fade show active"
@@ -492,133 +701,147 @@
                         </div>
                     </div>
                     <div class="tab-pane fade"
-                         id="prodAnfordrungen"
+                         id="productRequirements"
                          role="tabpanel"
-                         aria-labelledby="prodAnfordrungen-tab"
+                         aria-labelledby="productRequirements-tab"
                     >
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <h2 class="h5">{{__('Anforderung auswählen')}}</h2>
-                                <form action="{{ route('addProduktAnforderung') }}#prodAnfordrungen"
-                                      method="post"
-                                >
-                                    @csrf
-                                    <input type="hidden"
-                                           name="produkt_id"
-                                           id="produkt_id_anforderung"
-                                           value="{{ $produkt->id }}"
+                            <div class="col-md-5 mb-3 border-md-right border-dark">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h2 class="h5">{{__('Anforderungen')}}</h2>
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#modalAddRequirement"
                                     >
-                                    <x-selectfield id="anforderung_id"
-                                                   label="Anforderung wählen"
-                                    >
-                                        <option value="">{{__('bitte wählen')}}</option>
-                                        @foreach (App\Anforderung::all() as $anforderung)
-                                            <option
-                                                value="{{ $anforderung->id }}">{{ $anforderung->an_label }}</option>
-                                        @endforeach
-                                    </x-selectfield>
-                                    <button
-                                        class="btn btn-primary btn-block mt-1">{{__('Anforderung zuordnen')}}</button>
-                                    <div class="card p-2 my-2"
-                                         id="produktAnforderungText"
-                                    >
-                                        <x-notifyer>{{__('Details zu Anforderung')}}</x-notifyer>
-                                    </div>
-                                </form>
-                                @error('anforderung_id')
-                                <div class="alert alert-dismissible fade show alert-info mt-5"
-                                     role="alert"
-                                >
-                                    {{__('Bitte eine Anforderung auswählen!')}}
-                                    <button type="button"
-                                            class="close"
-                                            data-dismiss="alert"
-                                            aria-label="Close"
-                                    >
-                                        <span aria-hidden="true">&times;</span>
+                                        {{ __('hinzufügen') }}
+                                        <span class="fas fa-plus"></span>
                                     </button>
                                 </div>
-                                @enderror
-                            </div>
-                            <div class="col-md-8">
-                                <h2 class="h5">{{__('Anforderungen')}}</h2>
                                 @php
-                                    $Anforderung = App\Anforderung::all();
+                                    $Anforderung = App\Anforderung::all()
                                 @endphp
-                                @forelse ($produkt->ProduktAnforderung as $produktAnforderung)
+                                @forelse (\App\ProduktAnforderung::where('produkt_id',$produkt->id)->get() as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)
-                                        <div class="card p-2 mb-2">
-                                            <dl class="row lead">
-                                                <dt class="col-sm-4">{{__('Verordnung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">{{__('Anforderung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">{{__('Bezeichnung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">{{__('Intervall')}}</dt>
-                                                <dd class="col-sm-8">
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
-                                                </dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">{{__('Beschreibung')}}</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">
-                                                    {{ ($produktAnforderung->Anforderung->AnforderungControlItem->count()>1) ? 'Vorgänge' : 'Vorgang' }}
-                                                </dt>
-                                                <dd class="col-sm-8">
-                                                    <ul class="list-group">
-
-                                                        @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
-                                                            <li class="list-group-item">{{ $aci->aci_name }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <nav class="border-top mt-2 pt-2 d-flex justify-content-end">
-                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen"
+                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung"
+                                                           :produkt="$produkt"
+                                        />
+                                    @endif
+                                @empty
+                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
+                                @endforelse
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="h5">{{__('Befähigte Personen')}}</h3>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#addQualifiedUser"
+                                    >
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                    </button>
+                                </div>
+                                <table class="table table-responsive-md">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Qualifiziert am') }}</th>
+                                        <th>{{ __('durch') }}</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse (\App\ProductQualifiedUser::where('produkt_id',$produkt->id)->get() as $qualifiedUser)
+                                        <tr>
+                                            <td>{{ $qualifiedUser->user->name }} </td>
+                                            <td>{{ $qualifiedUser->product_qualified_date }}</td>
+                                            <td>{{ $qualifiedUser->firma->fa_name ?? '-' }}</td>
+                                            <td style="padding: 0; vertical-align: middle; text-align: right;">
+                                                <form action="{{ route('ProductQualifiedUser.destroy',$qualifiedUser) }}"
                                                       method="post"
                                                 >
                                                     @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden"
-                                                           name="an_label"
-                                                           id="an_label_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}"
-                                                    >
+                                                    @method('delete')
                                                     <input type="hidden"
                                                            name="id"
-                                                           id="id_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $produktAnforderung->id }}"
+                                                           id="id_delete_Qualified_User_{{ $qualifiedUser->id }}"
+                                                           value="{{ $qualifiedUser->id }}"
                                                     >
-                                                    <input type="hidden"
-                                                           name="produkt_id"
-                                                           id="produkt_id_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $produkt->id }}"
-                                                    >
-                                                    <input type="hidden"
-                                                           name="anforderung_id"
-                                                           id="anforderung_id_delete_anforderung_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $produktAnforderung->anforderung_id }}"
-                                                    >
-                                                    <button
-                                                        class="btn btn-sm btn-outline-primary">{{__('löschen')}}</button>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
+                                                    </button>
                                                 </form>
-                                            </nav>
-                                        </div>
-                                    @endif
-                                @empty
-                                    <x-notifyer>{{__('Bislang sind keine Anforderungen verknüpft!')}}</x-notifyer>
-                                @endforelse
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3">
+                                                <p class="m-2">
+                                                    <x-notifyer>{{__('Keine befähigte Personen gefunden')}}</x-notifyer>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                                <div class="dropdown-divider my-4"></div>
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="h5">{{__('Unterwiesene Personen')}}</h3>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#addInstructedUser"
+                                    >
+                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                    </button>
+                                </div>
+                                <table class="table table-responsive-md">
+                                    <thead>
+                                    <tr>
+                                        <th>{{__('Name')}}</th>
+                                        <th>{{__('Unterwiesen am')}}</th>
+                                        <th>{{__('gez.')}}</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse (\App\ProductInstructedUser::where('produkt_id',$produkt->id)->get() as $instructedUser)
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $instructedUser->user->name }}</td>
+                                            <td style="vertical-align: middle;">{{ $instructedUser->product_instruction_date }}</td>
+                                            <td>
+                                                <img src="{{ $instructedUser->product_instruction_trainee_signature }}"
+                                                     class="img-fluid"
+                                                     style="max-height: 40px"
+                                                     alt="unterschrift"
+                                                >
+                                            </td>
+                                            <td style="vertical-align: middle; text-align:right; padding:0">
+                                                <form action="{{ route('ProductInstruction.destroy',$instructedUser) }}#requirements"
+                                                      method="post"
+                                                >
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           id="id_delete_ProductInstruction_{{ $instructedUser->id }}"
+                                                           value="{{ $instructedUser->id }}"
+                                                    >
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt ml-2"></span>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">
+                                                <x-notifyer>{{__('Keine unterwiesene Personen gefunden')}}</x-notifyer>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -657,10 +880,12 @@
                                                 aria-controls="sectionFirmaDetails"
                                         >
                                             <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                class="fas fa-angle-down"></span>
+                                                class="fas fa-angle-down"
+                                            ></span>
                                         </button>
                                         <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                class="fas fa-angle-right"></span></button>
+                                                class="fas fa-angle-right"
+                                            ></span></button>
                                     </div>
                                     <div class="collapse @if (count($errors)>0) show @endif "
                                          id="sectionFirmaDetails"
@@ -755,7 +980,8 @@
                                                     >
                                                         @foreach (App\AddressType::all() as $addressType)
                                                             <option
-                                                                value="{{ $addressType->id }}">{{ $addressType->adt_name }}</option>
+                                                                value="{{ $addressType->id }}"
+                                                            >{{ $addressType->adt_name }}</option>
                                                         @endforeach
                                                     </x-selectfield>
                                                 </div>
@@ -780,7 +1006,8 @@
                                                     >
                                                         @foreach (App\Land::all() as $country)
                                                             <option
-                                                                value="{{ $country->id }}">{{ $country->land_iso }}</option>
+                                                                value="{{ $country->id }}"
+                                                            >{{ $country->land_iso }}</option>
                                                         @endforeach
                                                     </x-selectfield>
                                                 </div>
@@ -831,7 +1058,8 @@
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
                                                     <span
-                                                        class="small text-primary @error('con_label') d-none @enderror ">
+                                                        class="small text-primary @error('con_label') d-none @enderror "
+                                                    >
                                                         erforderliches Feld, max 20 Zeichen
                                                     </span>
                                                 </div>
@@ -845,7 +1073,8 @@
                                                     >
                                                         @foreach (App\Anrede::all() as $anrede)
                                                             <option
-                                                                value="{{ $anrede->id }}">{{ $anrede->an_kurz }}</option>
+                                                                value="{{ $anrede->id }}"
+                                                            >{{ $anrede->an_kurz }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -865,7 +1094,8 @@
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
                                                     <span
-                                                        class="small text-primary @error('con_vorname') d-none @enderror ">max 100 Zeichen</span>
+                                                        class="small text-primary @error('con_vorname') d-none @enderror "
+                                                    >max 100 Zeichen</span>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <label for="con_name">Nachname</label>
@@ -881,7 +1111,8 @@
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
                                                     <span
-                                                        class="small text-primary @error('con_name') d-none @enderror ">max 100 Zeichen</span>
+                                                        class="small text-primary @error('con_name') d-none @enderror "
+                                                    >max 100 Zeichen</span>
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
@@ -899,7 +1130,8 @@
                                                     <span class="text-danger small">{{ $message }}</span>
                                                     @enderror
                                                     <span
-                                                        class="small text-primary @error('con_telefon') d-none @enderror ">max 100 Zeichen</span>
+                                                        class="small text-primary @error('con_telefon') d-none @enderror "
+                                                    >max 100 Zeichen</span>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <x-emailfield id="con_email"
@@ -1005,8 +1237,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues
-                                        Dokument an Produkt anhängen
+                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Produkt anhängen
                                     </button>
                                 </form>
                             </div>
@@ -1029,7 +1260,7 @@
                                             <tr>
                                                 <td>
                                                     <span title="{{ $produktDoc->proddoc_name }}">
-                                                    {{ str_limit($produktDoc->proddoc_name,25) }}
+                                                    {{ str_limit($produktDoc->proddoc_label,25) }}
                                                     </span>
                                                 </td>
                                                 <td>{{ $produktDoc->DocumentType->doctyp_label }}</td>

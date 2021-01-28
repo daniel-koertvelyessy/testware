@@ -1,16 +1,24 @@
+
+@php
+
+$requirementControlItems = $requirement->AnforderungControlItem;
+
+@endphp
 <dl class="row">
     <dt class="col-md-5 col-lg-4">
-        {{ (App\AnforderungControlItem::where('anforderung_id',$anforderung->anforderung_id)->count()>1) ? __('Vorgänge') : __('Vorgang') }}
+        {{ ($requirementControlItems->count()>1) ? __('Vorgänge') : __('Vorgang') }}
     </dt>
     <dd class="col-md-7 col-lg-8">
         <ul class="list-group">
-            @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->anforderung_id)->get() as $aci)
+            @forelse ($requirementControlItems as $requirementControlItem)
                 <li class="list-group-item">
-                    {{ $aci->aci_name }}
+                    {{ $requirementControlItem->aci_name }}
                 </li>
             @empty
-                <li class="list-group-item">
-                    <x-notifyer>{{__('Keine Daten gefunden!')}}</x-notifyer>
+                <li class="list-group-item list-group-item-warning">
+                    <span class="fas fa-exclamation-triangle"></span>
+                    {{__('Keine Daten gefunden!')}}
+                    <a href="{{ route('anforderungcontrolitem.create',['rid'=>$requirement]) }}">{{ __('erstellen') }}</a>
                 </li>
             @endforelse
         </ul>

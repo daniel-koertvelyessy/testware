@@ -35,7 +35,9 @@
                 </section>
             </div>
             <div class="col-md-10">
-                <table class="table table-responsive-md" id="tabEquipmentListe">
+                <table class="table "
+                       id="tabEquipmentListe"
+                >
                     <thead>
                     <tr>
                         <th class="">
@@ -50,8 +52,11 @@
                         <th class="d-none d-lg-table-cell ">
                             @sortablelink('EquipmentState.estat_label', __('Status'))
                         </th>
+                        <th class="d-none d-md-table-cell">
+                            {{__('Prüfmittel')}}
+                        </th>
                         <th class="">
-{{--                            @sortablelink('ControlEquipment.qe_control_date_due', __('Fällig'))--}}
+                            {{--                            @sortablelink('ControlEquipment.qe_control_date_due', __('Fällig'))--}}
                             {{__('Prüfung(en) fällig')}}
                         </th>
                     </tr>
@@ -69,8 +74,12 @@
                             <td class="d-none d-lg-table-cell"
                                 style="vertical-align: middle;"
                             >
-                                <span class="p-1 w-100 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
-
+                                <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
+                            </td>
+                            <td class="d-none d-md-table-cell"
+                                     style="text-align: center;"
+                            >
+                                {!! $equipment->isControlProduct() !!}
                             </td>
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
@@ -107,7 +116,12 @@
                 </table>
                 @if(count($equipmentList)>1)
                     <div class="d-flex justify-content-center">
-                        {!! $equipmentList->withQueryString()->onEachSide(2)->links() !!}
+                        <div class="d-none d-lg-block">
+                            {!! $equipmentList->withQueryString()->onEachSide(2)->links() !!}
+                        </div>
+                        <div class="d-lg-none">
+                            {!! $equipmentList->withQueryString()->onEachSide(0)->links() !!}
+                        </div>
                     </div>
                 @endif
             </div>

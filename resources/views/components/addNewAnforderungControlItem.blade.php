@@ -1,5 +1,4 @@
 
-
 <form action="{{ route('anforderungcontrolitem.store') }}" method="POST" name="frmAddNewAnforderungControlItem" id="frmAddNewAnforderungControlItem">
     @csrf
     <input type="hidden" name="anforderung_id" id="anforderung_id">
@@ -17,7 +16,7 @@
 
             <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
                 @foreach (App\Anforderung::all() as $anforderung)
-                    <option value="{{ $anforderung->id }}">{{ $anforderung->an_name }}</option>
+                    <option value="{{ $anforderung->id }}" @if($rid == $anforderung->id) selected @endif>{{ $anforderung->an_name }}</option>
                 @endforeach
             </x-selectfield>
 

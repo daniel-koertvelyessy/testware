@@ -16,6 +16,18 @@ class CreateProductQualifiedUsersTable extends Migration
         Schema::create('product_qualified_users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreignId('product_qualified_firma')->nullable();
+            $table->date('product_qualified_date')->nullable();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
+
+            $table->foreignId('produkt_id')
+                ->constrained()
+                ->onDelete('cascade');
         });
     }
 

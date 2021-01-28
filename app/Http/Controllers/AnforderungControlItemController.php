@@ -26,7 +26,7 @@ class AnforderungControlItemController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -44,11 +44,13 @@ class AnforderungControlItemController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|Response|View
+     * @param  Request $request
+     *
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('admin.verordnung.anforderungitem.create');
+        return view('admin.verordnung.anforderungitem.create',['rid'=> $request->input('rid')]);
     }
 
     /**

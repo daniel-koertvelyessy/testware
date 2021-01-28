@@ -16,15 +16,16 @@ class ControlEquipment extends Model
         'id',
         'qe_control_date_due',
     ];
+
     public function Equipment()
     {
         return $this->belongsTo(Equipment::class);
     }
 
-/*    public function Produkt()
-    {
-        return $this->hasOneThrough('App\Produkt','App\Equipment');
-    }*/
+    /*    public function Produkt()
+        {
+            return $this->hasOneThrough('App\Produkt','App\Equipment');
+        }*/
 
     public function Anforderung()
     {
@@ -56,7 +57,54 @@ class ControlEquipment extends Model
 
     }
 
+    public function checkControlRequirementsMet()
+    {
+        $controlItemMsg = '';
+        $hasQualifiedUsersMsg = '';
+        $hasTestItemMsg = '';
+
+        $hasControlItems =0;
+        if ($this->countControlItems() > 0) {
+            $hasControlItems = $this->countControlItems();
+        } else {
+            $controlItemMsg = '<span class="bg-warning p-1">'.__('Keine Kontrollvorgänge gefunden!').' </span><a href="'. route('anforderungcontrolitem.create',['anforderung_id'=>$this->Anforderung->id]) .'" class="btn btn-sm btn-outline-primary ml-2">'.__('Beheben').'</a>';
+        }
+
+        $hasQualifiedUsers =0;
+        if ($this->countQualifiedUser() > 0) {
+            $hasQualifiedUsers = $this->countQualifiedUser();
+        } else {
+            $hasQualifiedUsersMsg = '<span class="bg-warning p-1">'.__('Keine befähigte Person gefunden!').'</span>';
+        }
+
+        $hasTestItem = false;
+        $countControlProducts = ControlProdukt::all()->count();
+        foreach($this->Anforderung->AnforderungControlItem as $aci) {
+            if ($aci->aci_control_equipment_required === 1) {
+                if ($countControlProducts === 0){
+                    $hasTestItem = true;
+                    $hasTestItemMsg = '<span class="bg-warning p-1">'.__('Keine Prüfmittel vorhanden!').'</span><a href="'. route('produkt.index') .'" class="btn btn-sm btn-outline-primary ml-2">'.__('Beheben').'</a>';
+                }
+            }
+        }
+
+        if ($hasControlItems>0  && $hasQualifiedUsers>0 && ! $hasTestItem){
+            return null;
+        } else {
+            return $controlItemMsg.$hasQualifiedUsersMsg.$hasTestItemMsg;
+        }
 
 
+    }
+
+    public function countControlItems()
+    {
+        return $this->Anforderung->AnforderungControlItem->count();
+    }
+
+    public function countQualifiedUser()
+    {
+        return $this->Equipment->qualifiedUser()->count();
+    }
 
 }

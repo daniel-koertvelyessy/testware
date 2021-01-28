@@ -3,83 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\ProductInstructedUser;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ProductInstructedUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     *
+     * @return RedirectResponse
      */
     public function store(Request $request)
+    : RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ProductInstructedUser  $productInstructedUser
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ProductInstructedUser $productInstructedUser)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ProductInstructedUser  $productInstructedUser
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProductInstructedUser $productInstructedUser)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ProductInstructedUser  $productInstructedUser
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ProductInstructedUser $productInstructedUser)
-    {
-        //
+        ProductInstructedUser::create($this->validateProductInstructedUser());
+        $request->session()->flash('status', __('Die Unterweisung wurde angelegt!'));
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ProductInstructedUser  $productInstructedUser
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return RedirectResponse
      */
-    public function destroy(ProductInstructedUser $productInstructedUser)
+    public function destroy(Request $request)
+    : RedirectResponse
     {
-        //
+        $request->session()->flash('status', __('Die Unterweisung wurde gelöscht!'));
+        ProductInstructedUser::find($request->id)->delete();
+        return redirect()->back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProductInstructedUser()
+    : array {
+        return request()->validate([
+            'product_instruction_date'                  => 'bail|required|date',
+            'product_instruction_instructor_signature'  => '',
+            'product_instruction_instructor_profile_id' => '',
+            'product_instruction_instructor_firma_id'   => '',
+            'product_instruction_trainee_signature'     => '',
+            'product_instruction_trainee_id'            => 'required',
+            'product_id'                                => 'required'
+        ]);
     }
 }

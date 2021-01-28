@@ -57,7 +57,6 @@ class Anforderung extends Model
         return $this->hasMany(Equipment::class);
     }
 
-
     public function Verordnung()
     {
         return $this->belongsTo(Verordnung::class);

@@ -3,33 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\EquipmentInstruction;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class EquipmentInstructionController extends Controller {
+class EquipmentInstructionController extends Controller
+{
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return RedirectResponse
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    : RedirectResponse
+    {
         EquipmentInstruction::create($this->validateEquipmentInstruction());
         $request->session()->flash('status', __('Die Unterweisung wurde angelegt!'));
-        return redirect()->back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request $request
-     * @return RedirectResponse
-     */
-    public function destroy(Request $request) {
-        $request->session()->flash('status', __('Die Unterweisung wurde gelöscht!'));
-        EquipmentInstruction::find($request->id)->delete();
         return redirect()->back();
     }
 
@@ -37,7 +30,8 @@ class EquipmentInstructionController extends Controller {
      * @return array
      */
     public function validateEquipmentInstruction()
-    : array {
+    : array
+    {
         return request()->validate([
             'equipment_instruction_date'                  => 'bail|required|date',
             'equipment_instruction_instructor_signature'  => '',
@@ -47,5 +41,22 @@ class EquipmentInstructionController extends Controller {
             'equipment_instruction_trainee_id'            => 'required',
             'equipment_id'                                => 'required'
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  EquipmentInstruction $equipmentInstruction
+     * @param  Request              $request
+     *
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function destroy(EquipmentInstruction $equipmentInstruction, Request $request)
+    : RedirectResponse
+    {
+        $request->session()->flash('status', __('Die Unterweisung wurde gelöscht!'));
+        $equipmentInstruction->delete();
+        return redirect()->back();
     }
 }

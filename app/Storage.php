@@ -81,10 +81,10 @@ class Storage extends Model
 
             case 'rooms':
 
-                $rom = Room::where('storage_id', $stdid->storage_uid)->get();
+                $rom = Room::where('storage_id', $stdid->storage_uid)->first();
 
 
-                $bul = Building::find($rom[0]->building_id);
+                $bul = Building::find($rom->building_id);
 
 
                 $loc = Location::find($bul->location_id);
@@ -92,17 +92,17 @@ class Storage extends Model
 
                 $path = __('Standort') . ': ' . $loc->l_label .
                     ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
-                    ' > ' . __('Raum') . ':' . ' ' . $rom[0]->r_label;
+                    ' > ' . __('Raum') . ':' . ' ' . $rom->r_label;
 
                 break;
 
             case 'stellplatzs':
 
-                $spl = Stellplatz::where('storage_id', $stdid->storage_uid)->get();
+                $spl = Stellplatz::where('storage_id', $stdid->storage_uid)->first();
 
                 $rom = Room::find($spl->id)->get();
 
-                $bul = Building::find($rom[0]->building_id);
+                $bul = Building::find($rom->building_id);
 
 
                 $loc = Location::find($bul->location_id);
@@ -111,7 +111,7 @@ class Storage extends Model
                 $path = __('Standort') . ': ' . $loc->l_label .
                     ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
                     ' > ' . __('Raum') . ':' . ' ' . $rom->r_label .
-                    ' > ' . __('Stellplatz') . ':' . ' ' . $spl[0]->sp_label;
+                    ' > ' . __('Stellplatz') . ':' . ' ' . $spl->sp_label;
 
                 break;
         }

@@ -142,6 +142,8 @@ Route::resources([
     'eventitem'              => 'EquipmentEventItemController',
     'EquipmentInstruction'   => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
+    'ProductInstruction'     => 'ProductInstructedUserController',
+    'ProductQualifiedUser'   => 'ProductQualifiedUserController',
     'lizenz'                 => 'LizenzController',
     'report'                 => 'ReportController',
     'search'                 => 'SearchController',
@@ -150,12 +152,11 @@ Route::resources([
 /**
  * Verwaltung/Admin routes laden
  */
-require base_path() . '/routes/admintools/admintools.php';
-
+require __DIR__ . '/admintools/admintools.php';
 /**
  *  Produkt routes laden
  */
-require base_path() . '/routes/produkttools/produkttools.php';
+require __DIR__ . '/produkttools/produkttools.php';
 
 Route::post('user.setMsgRead', 'UserController@setMsgRead')->name('user.setMsgRead');
 Route::delete('user.deleteMsg', 'UserController@deleteMsg')->name('user.deleteMsg');

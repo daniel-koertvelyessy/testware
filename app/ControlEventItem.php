@@ -20,8 +20,12 @@ class ControlEventItem extends Model {
         return $this->belongsTo(ControlEquipment::class);
     }
 
-    public function AnforderungControlItem() {
+    public function AnforderungControlItems() {
         return $this->hasMany(AnforderungControlItem::class,'id','control_item_aci',);
+    }
+
+    public function AnforderungControlItem() {
+        return $this->hasOne(AnforderungControlItem::class,'id','control_item_aci',);
     }
 
 }

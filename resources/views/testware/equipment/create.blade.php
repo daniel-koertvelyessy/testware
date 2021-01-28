@@ -422,7 +422,6 @@
 @endsection
 
 @section('scripts')
-
     <script>
 
         function checkFunctionControl() {
@@ -456,6 +455,26 @@
             $('#function_control_profil').val('void');
         });
 
+        $('.function_control_pass').click(function () {
+            const nd = $('#equipment_state_id');
+            const eqdoc_label = $('#eqdoc_label');
+            const equipDokumentFile = $('#equipDokumentFile');
+
+            if ($('#controlEquipmentNotPassed').prop('checked')) {
+                nd.val(4);
+                $('#equipment_state_id > option').eq(0).attr('disabled', 'disabled');
+            } else {
+                $('#equipment_state_id > option').eq(0).attr('disabled', false);
+                nd.val(1)
+            }
+
+            if (eqdoc_label.val() !== '' && equipDokumentFile.val() !== '') {
+                $('#btnAddNewEquipment').attr('disabled', false);
+            }
+
+        });
+
+
         $('#btnAddNewEquipment').click(function () {
             const storage_id = $('#storage_id');
             const eq_inventar_nr = $('#eq_inventar_nr');
@@ -480,26 +499,6 @@
             }
 
             if (frmIsComplete) $('#frmAddNewEquipment').submit()
-        });
-
-
-        $('.function_control_pass').click(function () {
-            const nd = $('#equipment_state_id');
-            const eqdoc_label = $('#eqdoc_label');
-            const equipDokumentFile = $('#equipDokumentFile');
-
-            if ($('#controlEquipmentNotPassed').prop('checked')) {
-                nd.val(4);
-                $('#equipment_state_id > option').eq(0).attr('disabled', 'disabled');
-            } else {
-                $('#equipment_state_id > option').eq(0).attr('disabled', false);
-                nd.val(1)
-            }
-
-            if (eqdoc_label.val() !== '' && equipDokumentFile.val() !== '') {
-                $('#btnAddNewEquipment').attr('disabled', false);
-            }
-
         });
 
         $('#equipDokumentFile').change(function () {

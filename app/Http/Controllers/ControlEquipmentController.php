@@ -55,20 +55,44 @@ class ControlEquipmentController extends Controller
      */
     public function create(Request $request)
     {
+        $controlEquipmentIsComplete = true;
+        $controlEquipmentIsCompleteMsg = '<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>';
+        $controlEquipmentIsCompleteItem = '';
         $aci_execution = 0;
         $aci_control_equipment_required = 0;
         $controlItem = ControlEquipment::find($request->test_id);
-        $acidata = AnforderungControlItem::where('anforderung_id', $controlItem->anforderung_id)->get();
-        foreach ($acidata as $aci) {
-            $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
-            $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
+
+        if ($controlItem->countQualifiedUser()===0){
+            $controlEquipmentIsComplete = false;
+            $controlEquipmentIsCompleteItem .= __('- Keine befähigte Nutzer gefunden!').'<br>';
         }
 
-        return view('testware.control.create', [
-            'test'                           => $controlItem,
-            'aci_execution'                  => $aci_execution,
-            'aci_control_equipment_required' => $aci_control_equipment_required,
-        ]);
+        $acidata = AnforderungControlItem::where('anforderung_id', $controlItem->anforderung_id)->get();
+
+        if ($acidata->count() === 0 ){
+            $controlEquipmentIsComplete = false;
+            $controlEquipmentIsCompleteItem .= __('- Keine Kontrollvorgänge für die Anforderung gefunden!').'<br>';
+        }
+
+
+        if($controlEquipmentIsComplete) {
+            foreach ($acidata as $aci) {
+                $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
+                $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
+            }
+
+            return view('testware.control.create', [
+                'test'                           => $controlItem,
+                'aci_execution'                  => $aci_execution,
+                'aci_control_equipment_required' => $aci_control_equipment_required,
+            ]);
+        } else {
+            $controlEquipmentIsCompleteMsg .= $controlEquipmentIsCompleteItem;
+
+            $request->session()->flash('status', $controlEquipmentIsCompleteMsg);
+
+            return redirect()->back();
+        }
     }
 
     /**

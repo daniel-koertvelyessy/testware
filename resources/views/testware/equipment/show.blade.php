@@ -3,7 +3,7 @@
 @section('mainSection', 'testWare')
 
 @section('pagetitle')
-    {{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}
+{{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('menu')
@@ -182,14 +182,18 @@
                         </thead>
                         <tbody>
                         @forelse (App\ControlEquipment::where('equipment_id',$equipment->id)->orderBy('qe_control_date_due')->get() as $controlItem)
-                            <tr>
+                            <tr style="vertical-align: middle;">
                                 <td>{{ $controlItem->Anforderung->an_name }}</td>
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
-                                <td>
-                                    <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
-                                       class="btn btn-sm btn-outline-primary"
-                                    > {{__('Prüfung starten')}}
-                                    </a>
+                                <td class="d-flex align-items-center justify-content-between">
+                                    @if($controlItem->checkControlRequirementsMet()===null)
+                                        <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
+                                           class="btn btn-sm btn-outline-primary"
+                                        > {{__('Prüfung starten')}}
+                                        </a>
+                                    @else
+                                        {!! $controlItem->checkControlRequirementsMet() !!}
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -300,7 +304,9 @@
                                                label="{{__('Mitarbeiter')}}"
                                 >
                                     @foreach(App\User::all() as $user)
+                                        @if(! $user->isQualified($equipment->id))
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endif
                                     @endforeach
                                 </x-selectfield>
                             </div>
@@ -358,7 +364,9 @@
                                                label="{{__('Unterwiesene Person')}}"
                                 >
                                     @foreach(App\User::all() as $user)
+                                        @if(! $user->isInstructed($equipment->id))
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endif
                                     @endforeach
                                 </x-selectfield>
                             </div>
@@ -368,8 +376,8 @@
                                                required
                                 >
                                     <option value="0">{{ __('bitte auswählen') }}</option>
-                                    @foreach(App\User::all() as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @foreach(App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->with('user')->get() as $qualifiedUser)
+                                        <option value="{{ $qualifiedUser->user->id }}">{{ $qualifiedUser->user->name }}</option>
                                     @endforeach
                                 </x-selectfield>
                                 <x-selectfield id="equipment_instruction_instructor_firma_id"
@@ -458,7 +466,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title"
                             id="modalAddEquipFuncTestLabel"
-                        >{{__('Functionstest erfassen')}}</h5>
+                        >{{__('Funktionsprüfung erfassen')}}</h5>
                         <button type="button"
                                 class="close"
                                 data-dismiss="modal"
@@ -476,7 +484,6 @@
                         >
                         <div class="row">
                             <div class="col-md-6">
-                                <h2 class="h5">{{__('Funktionsprüfung')}}</h2>
                                 <div class="btn-group btn-group-toggle mb-3"
                                      data-toggle="buttons"
                                 >
@@ -498,7 +505,8 @@
                                         > {{__('NICHT Bestanden')}}
                                     </label>
                                 </div>
-                                <x-datepicker id="AddEquipFuncTest_controlled_at" name="controlled_at"
+                                <x-datepicker id="AddEquipFuncTest_controlled_at"
+                                              name="controlled_at"
                                               label="{{__('Die Prüfung erfolgte am')}}"
                                               required
                                               value="{{ date('Y-m-d') }}"
@@ -525,16 +533,19 @@
                                         </x-selectfield>
                                     </div>
                                 </div>
-                                <x-textarea id="AddEquipFuncTest_function_control_text" name="function_control_text"
+                                <x-textarea id="AddEquipFuncTest_function_control_text"
+                                            name="function_control_text"
                                             label="{{__('Bemerkungen zur Prüfung')}}"
                                 />
                             </div>
                             <div class="col-md-6">
                                 <h2 class="h5">{{__('Bericht')}}</h2>
-                                <x-selectfield id="AddEquipFuncTest_document_type_id" name="document_type_id"
+                                <x-selectfield id="AddEquipFuncTest_document_type_id"
+                                               name="document_type_id"
                                                class="document_type_id"
                                                data-target="#frmAddEquipmentFunctionTest_eqdoc_label"
                                                label="{{__('Dokument Typ')}}"
+                                               required
                                 >
                                     @foreach (App\DocumentType::all() as $ad)
                                         <option value="{{ $ad->id }}"
@@ -574,7 +585,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary">{{ __('Funktionsprüfung erfassen') }}</button>
+                        <button type="button" id="btnAddEquipmentFunctionTest" class="btn btn-primary">{{ __('Funktionsprüfung erfassen') }}</button>
                     </div>
                 </div>
             </form>
@@ -721,9 +732,7 @@
                                     <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
                                         <div>
                                             <span class="text-muted small">
-                                                {{ str_limit($bda->proddoc_name) }}</span>
-                                            <br>
-                                            <span class="lead">{{ str_limit($bda->proddoc_label,50) }}</span><br> <span class="text-muted small">
+                                                {{ str_limit($bda->proddoc_name) }}</span> <br> <span class="lead">{{ str_limit($bda->proddoc_label,50) }}</span><br> <span class="text-muted small">
                                                 {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
                                             </span>
                                         </div>
@@ -779,14 +788,14 @@
                                         </div>
                                     </div>
                                 @empty
-                                        <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
-                                        <button class="btn btn-lg btn-warning"
-                                           data-toggle="modal"
-                                           data-target="#modalAddEquipFuncTest"
-                                        >
-                                            <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
-                                            {{__('Funktionstest erfassen')}}
-                                        </button>
+                                    <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
+                                    <button class="btn btn-lg btn-warning"
+                                            data-toggle="modal"
+                                            data-target="#modalAddEquipFuncTest"
+                                    >
+                                        <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
+                                        {{__('Funktionstest erfassen')}}
+                                    </button>
 
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
@@ -803,10 +812,10 @@
                                             <div class="pr-2">
                                                 <button type="button"
                                                         class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
-                                                        data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$bda->id)->get()[0]->id  }}"
+                                                        data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$bda->id)->first()->id  }}"
                                                 ><i class="far fa-folder-open"></i></button>
-                                                <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$bda->id)->get()[0]->id ) }}"
-                                                   download
+                                                <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$bda->id)->first()->id ) }}"
+
                                                    class="btn btn-sm btn-outline-primary"
                                                    target="_blank"
                                                 ><i class="far fa-file-pdf"></i></a>
@@ -838,7 +847,6 @@
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
-
                                 <table class="table table-responsive-md">
                                     <thead>
                                     <tr>
@@ -849,7 +857,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse (\App\EquipmentQualifiedUser::all() as $equipmentUser)
+                                    @forelse (\App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $equipmentUser)
                                         <tr>
                                             <td>{{ $equipmentUser->user->name }}</td>
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
@@ -903,7 +911,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse (\App\EquipmentInstruction::all() as $instructedUser)
+                                    @forelse (\App\EquipmentInstruction::where('equipment_id',$equipment->id)->get() as $instructedUser)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $instructedUser->user->name }}</td>
                                             <td style="vertical-align: middle;">{{ $instructedUser->equipment_instruction_date }}</td>
@@ -942,56 +950,14 @@
                                 </table>
                             </div>
                             <div class="col-md-6">
+                                <h3 class="h5">{{__('Anforderungen')}}</h3>
+
                                 @php
                                     $Anforderung = App\Anforderung::all();
                                 @endphp
                                 @forelse (\App\ProduktAnforderung::where('produkt_id',$equipment->produkt->id)->get() as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)
-                                        <div class="card p-2 mb-2">
-                                            <dl class="row lead">
-                                                <dt class="col-md-5 col-lg-4">{{ __('Verordnung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-md-5 col-lg-4">{{__('Anforderung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8 ">
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}
-                                                </dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-md-5 col-lg-4">{{ __('Bezeichnung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-md-5 col-lg-4">{{ __('Intervall')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
-                                                </dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-md-5 col-lg-4">{{ __('Beschreibung')}}</dt>
-                                                <dd class="col-md-7 col-lg-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description ?? '-' }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-md-5 col-lg-4">
-                                                    {{ (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->count()>1) ? __('Vorgänge') : __('Vorgang') }}
-                                                </dt>
-                                                <dd class="col-md-7 col-lg-8">
-                                                    <ul class="list-group">
-                                                        @forelse (App\AnforderungControlItem::where('anforderung_id',$produktAnforderung->anforderung_id)->get() as $aci)
-                                                            <li class="list-group-item">
-                                                                {{ $aci->aci_name }}
-                                                            </li>
-                                                        @empty
-                                                            <li class="list-group-item">
-                                                                <x-notifyer>{{__('Keine Daten gefunden!')}}</x-notifyer>
-                                                            </li>
-                                                        @endforelse
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                        </div>
+                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung" isProduct="false" />
                                     @endif
                                 @empty
                                     <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
@@ -1072,9 +1038,10 @@
                                                                        value="{{ $equipDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();">
-                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                            <a href="#"
+                                                               onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
+                                                            >
+                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
                                                             </a>
                                                         </td>
                                                         <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
@@ -1124,9 +1091,10 @@
                                                                        value="{{ $equipFunctionDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();">
-                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                            <a href="#"
+                                                               onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
+                                                            >
+                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
                                                             </a>
                                                         </td>
                                                         <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
@@ -1176,9 +1144,10 @@
                                                                        value="{{ $produktDoc->id }}"
                                                                 >
                                                             </form>
-                                                            <a href="#" onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();">
-                                                                <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span>
-                                                                <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
+                                                            <a href="#"
+                                                               onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                            >
+                                                                <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
                                                             </a>
                                                         </td>
                                                         <td class="d-none d-md-table-cell">
@@ -1232,31 +1201,31 @@
                                     </thead>
                                     <tbody>
                                     @forelse (\App\ControlEventItem::with('AnforderungControlItem')->where('equipment_id',$equipment->id)->get() as $controlItem)
-                                        @if($controlItem->AnforderungControlItem[0]->aci_vaule_soll !== NULL)
-                                        <tr>
-                                            <td>
-                                                {{ $controlItem->created_at->diffForHumans() }}
-                                            </td>
-                                            <td style="text-align: right;">
+                                        @if($controlItem->AnforderungControlItem->aci_vaule_soll !== null)
+                                            <tr>
+                                                <td>
+                                                    {{ $controlItem->created_at->diffForHumans() }}
+                                                </td>
+                                                <td style="text-align: right;">
 
-                                                {{$controlItem->AnforderungControlItem[0]->aci_vaule_soll}}
+                                                    {{$controlItem->AnforderungControlItem->aci_vaule_soll}}
 
-                                            </td>
-                                            <td>
-                                                {{$controlItem->AnforderungControlItem[0]->aci_value_si}}
-                                            </td>
-                                            <td style="text-align: right; "
-                                                @if ($controlItem->AnforderungControlItem[0]->aci_vaule_soll)
-                                                class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
-                                                @endif
+                                                </td>
+                                                <td>
+                                                    {{$controlItem->AnforderungControlItem->aci_value_si}}
+                                                </td>
+                                                <td style="text-align: right; "
+                                                    @if ($controlItem->AnforderungControlItem->aci_vaule_soll)
+                                                    class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
+                                                    @endif
 
-                                            >
-                                                {{ $controlItem->control_item_read }}
-                                            </td>
-                                            <td style="text-align: center; ">
-                                                {!! $controlItem->control_item_pass ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-danger"></span>' !!}
-                                            </td>
-                                        </tr>
+                                                >
+                                                    {{ $controlItem->control_item_read }}
+                                                </td>
+                                                <td style="text-align: center; ">
+                                                    {!! $controlItem->control_item_pass ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-danger"></span>' !!}
+                                                </td>
+                                            </tr>
                                         @endif
                                     @empty
 
@@ -1332,11 +1301,71 @@
 
     <script>
 
+        function checkFunctionControl() {
+            const function_control_profil = $('#function_control_profil');
+            const function_control_firma = $('#function_control_firma');
+            const function_control_file = $('#AddEquipFuncTest_equipDokumentFile');
+
+            let chekResult = false;
+
+            if (function_control_firma.val() === 'void' && function_control_profil.val() === 'void') {
+                function_control_profil.addClass('is-invalid');
+                function_control_firma.addClass('is-invalid');
+            }
+
+            if (function_control_firma.val() !== 'void' || function_control_profil.val() !== 'void') {
+                function_control_profil.removeClass('is-invalid');
+                function_control_firma.removeClass('is-invalid');
+                chekResult = true;
+            }
+
+            if (function_control_file.val() === ''){
+                function_control_file.addClass('is-invalid');
+                chekResult = false;
+            }
+
+            return chekResult;
+
+        }
+
+        $('#function_control_profil').change(function () {
+            checkFunctionControl();
+            $('#function_control_firma').val('void');
+        });
+
+        $('#function_control_firma').change(function () {
+            checkFunctionControl();
+            $('#function_control_profil').val('void');
+        });
+
+        $('.function_control_pass').click(function () {
+            const nd = $('#equipment_state_id');
+            const eqdoc_label = $('#eqdoc_label');
+            const equipDokumentFile = $('#AddEquipFuncTest_equipDokumentFile');
+
+            if ($('#controlEquipmentNotPassed').prop('checked')) {
+                nd.val(4);
+                $('#equipment_state_id > option').eq(0).attr('disabled', 'disabled');
+            } else {
+                $('#equipment_state_id > option').eq(0).attr('disabled', false);
+                nd.val(1)
+            }
+
+            if (eqdoc_label.val() !== '' && equipDokumentFile.val() !== '') {
+                $('#btnAddEquipmentFunctionTest').attr('disabled', false);
+            }
+
+        });
+
+        $('#btnAddEquipmentFunctionTest').click(function () {
+            if (checkFunctionControl()) $('#frmAddEquipmentFunctionTest').submit();
+        });
+
         $('#eqdoc_label').val(
             $('#document_type_id :selected').text() + ' ' + $('#Bezeichnung').val()
         );
 
-        $('#document_type_id').change(()=>{
+        $('#document_type_id').change(() => {
             $($(this).data('target')).val(
                 $('#document_type_id :selected').text() + ' ' + $(this).val()
             );
@@ -1365,7 +1394,6 @@
                 success: function (res) {
                     $('#controlEventModalBody').html(res.html);
                     $('#controlEventModal').modal('show');
-
                 }
             });
         });
@@ -1416,8 +1444,7 @@
                 onEnd: function () {
                     $('#equipment_instruction_instructor_signature').val(this.toDataURL());
                 }
-            })
-        ;
+            });
 
         $('#addInstructedUser').on('shown.bs.modal', function () {
             resizeCanvas();
@@ -1426,7 +1453,6 @@
         // On mobile devices it might make more sense to listen to orientation change,
         // rather than window resize events.
         window.onresize = resizeCanvas;
-
 
         $('.btnClearCanvas').click(function () {
             ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
@@ -1438,7 +1464,6 @@
                 ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
             }
         });
-
 
     </script>
 @endsection

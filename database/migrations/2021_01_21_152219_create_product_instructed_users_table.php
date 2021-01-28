@@ -16,6 +16,24 @@ class CreateProductInstructedUsersTable extends Migration
         Schema::create('product_instructed_users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->date('product_instruction_date');
+
+            $table->text('product_instruction_instructor_signature')->nullable();
+            $table->foreignId('product_instruction_instructor_profile_id')->nullable();
+            $table->foreignId('product_instruction_instructor_firma_id')->nullable();
+
+            $table->text('product_instruction_trainee_signature');
+            $table->foreignId('product_instruction_trainee_id');
+            $table->foreign('product_instruction_trainee_id')
+                ->on('profiles')
+                ->references('id')
+                ->onDelete('cascade');
+
+            $table->foreignId('produkt_id')
+                ->constrained()
+                ->onDelete('cascade');
         });
     }
 

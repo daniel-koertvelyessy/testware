@@ -6,16 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 use Kyslik\ColumnSortable\Sortable;
 
 class Equipment extends Model
 {
-    protected $guarded = [];
-
-    //    protected $table = 'equipments';
-
-    use SoftDeletes, Sortable;
-
     public $sortable = [
         'id',
         'eq_inventar_nr',
@@ -27,6 +22,12 @@ class Equipment extends Model
         'created_at',
         'updated_at'
     ];
+
+    //    protected $table = 'equipments';
+
+    use SoftDeletes, Sortable;
+
+    protected $guarded = [];
 
     public static function boot()
     {
@@ -41,28 +42,12 @@ class Equipment extends Model
 
     static function getControlEquipmentList()
     {
-        return \DB::table('equipment')->select(
-            'equipment.eq_inventar_nr',
-            'equipment.id',
-            'equipment.eq_name',
-            'control_equipment.qe_control_date_due',
-            'produkts.prod_label'
-        )
-            ->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')
-            ->join('control_equipment', 'control_equipment.equipment_id', '=', 'equipment.id')
-            ->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')
-            ->get();
+        return \DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'control_equipment.qe_control_date_due', 'produkts.prod_label')->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')->join('control_equipment', 'control_equipment.equipment_id', '=', 'equipment.id')->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')->get();
     }
 
     public function search($term)
     {
-        return Equipment::where('eq_inventar_nr', 'like', '%' . $term . '%')
-            ->orWhere('eq_serien_nr', 'like', '%' . $term . '%')
-            ->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')
-            ->orWhere('eq_text', 'like', '%' . $term . '%')
-            ->orWhere('eq_uid', 'like', '%' . $term . '%')
-            ->orWhere('eq_name', 'like', '%' . $term . '%')
-            ->get();
+        return Equipment::where('eq_inventar_nr', 'like', '%' . $term . '%')->orWhere('eq_serien_nr', 'like', '%' . $term . '%')->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')->orWhere('eq_text', 'like', '%' . $term . '%')->orWhere('eq_uid', 'like', '%' . $term . '%')->orWhere('eq_name', 'like', '%' . $term . '%')->get();
     }
 
     /**
@@ -128,5 +113,30 @@ class Equipment extends Model
     public function hasUser()
     {
         return $this->hasManyThrough('User', 'EquipmentQualifiedUser');
+    }
+
+    public function qualifiedUser()
+    {
+        return $this->hasMany(EquipmentQualifiedUser::class);
+    }
+
+
+    public function addInstructedUser(Request $request)
+    {
+        return  EquipmentInstruction::create($request->validate([
+            'equipment_instruction_date'                  => 'bail|required|date',
+            'equipment_instruction_instructor_signature'  => '',
+            'equipment_instruction_instructor_profile_id' => '',
+            'equipment_instruction_instructor_firma_id'   => '',
+            'equipment_instruction_trainee_signature'     => '',
+            'equipment_instruction_trainee_id'            => 'required',
+            'equipment_id'                                => 'required'
+        ]));
+    }
+
+
+    public function isControlProduct()
+    {
+        return ($this->produkt->ControlProdukt) ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-muted"></i>';
     }
 }
