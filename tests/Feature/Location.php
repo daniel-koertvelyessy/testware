@@ -8,14 +8,11 @@ use Tests\TestCase;
 
 class Location extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    /** test */
+    public function testloggedInUsercanbrowselocations()
     {
-        $response = $this->get('/');
+
+        $response = $this->get('/location');
 
         $response->assertStatus(200);
     }

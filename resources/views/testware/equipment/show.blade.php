@@ -73,6 +73,92 @@
 
 @section('modals')
     <div class="modal fade"
+         id="modalAddNote"
+         tabindex="-1"
+         aria-labelledby="modalAddNoteLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{{ route('note.store') }}#notes"
+                      method="POST"
+                      enctype="multipart/form-data"
+                >
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="modalAddNoteLabel"
+                        >{{__('Notiz für anlegen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden"
+                               id="uid"
+                               value="{{ $equipment->uid }}"
+                        >
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <x-selectfield id="note_type_id"
+                                               label="{{__('Typ')}}"
+                                >
+                                    @foreach (App\NoteType::all() as $note_type)
+                                        <option value="{{ $note_type->id }}">{{ $note_type->label }}</option>
+                                    @endforeach
+                                    <option value="new">{{ __('neu') }}</option>
+                                </x-selectfield>
+                            </div>
+                            <div class="col-md-4">
+                                <x-textfield id="newNoteType" label="{{ __('Neuer Typ') }}" />
+                            </div>
+                        </div>
+
+                        <x-textfield id="label" label="Titel" />
+
+
+                        <x-textarea id="description"
+                                    label="{{__('Inhalt')}}"
+                        />
+
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file"
+                                       name="file_path"
+                                       id="file_path"
+                                       data-browse="{{__('Datei')}}"
+                                       class="custom-file-input"
+                                       accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
+                                       required
+                                >
+                                <label class="custom-file-label"
+                                       for="file_path"
+                                >{{__('Datei wählen')}}</label>
+                            </div>
+                        </div>
+
+                        <x-textfield id="file_name" label="{{ __('Datei Name') }}" />
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-dismiss="modal"
+                        >{{__('Abbruch')}}</button>
+                        <button class="btn btn-primary">{{__('Notiz anlegen')}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade"
          id="modalAddEquipDoc"
          tabindex="-1"
          aria-labelledby="modalAddEquipDocLabel"
@@ -591,6 +677,16 @@
             </form>
         </div>
     </div>
+
+    <x-modals.form_modal methode="DELETE"
+                         modalRoute="{{ route('equipment.destroy',$equipment) }}"
+                         modalId="modalDeleteThisEuipment"
+                         modalType="danger"
+                         title="{{ __('Vorsicht') }}"
+                         btnSubmit="{{ __('Gerät löschen') }}"
+    >
+        <p class="lead">Das Löschen des Gerätes kann nicht rückgängig gemacht werden.</p>
+    </x-modals.form_modal>
 @endsection
 
 @section('content')
@@ -669,6 +765,19 @@
                            aria-controls="events"
                            aria-selected="false"
                         > {{ __('Ereignisse')}}
+                        </a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="notes-tab"
+                           data-toggle="tab"
+                           href="#notes"
+                           role="tab"
+                           aria-controls="notes"
+                           aria-selected="false"
+                        > {{ __('Notizen')}}
                         </a>
                     </li>
                 </ul>
@@ -857,7 +966,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse (\App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $equipmentUser)
+                                    @forelse(\App\ProductQualifiedUser::where('produkt_id',$equipment->produkt->id)->get() as $qualifieduserOfProduct)
+                                    <tr>
+                                        <td>{{ $qualifieduserOfProduct->user->name }}</td>
+                                        <td>{{ $qualifieduserOfProduct->product_qualified_date }}</td>
+                                        <td colspan="2">{{ $qualifieduserOfProduct->firma->fa_name ?? '-' }}</td>
+                                    </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">
+                                                <p class="m-2">
+                                                    <x-notifyer>{{__('Keine befähigte Personen gefunden')}}</x-notifyer>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    @foreach (\App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $equipmentUser)
                                         <tr>
                                             <td>{{ $equipmentUser->user->name }}</td>
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
@@ -879,15 +1003,7 @@
                                                 </form>
                                             </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3">
-                                                <p class="m-2">
-                                                    <x-notifyer>{{__('Keine befähigte Personen gefunden')}}</x-notifyer>
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                     </tbody>
                                 </table>
                                 <div class="dropdown-divider my-4"></div>
@@ -964,8 +1080,6 @@
                                 @endforelse
                             </div>
                         </div>
-
-
                     </div>
                     <div class="tab-pane fade p-2"
                          id="dokumente"
@@ -1283,6 +1397,35 @@
                         @empty
                             <x-notifyer>{{__('Keine Meldungen zum Gerät gefunden!')}}</x-notifyer>
                         @endforelse
+                    </div>
+                    <div class="tab-pane fade p-2"
+                         id="notes"
+                         role="tabpanel"
+                         aria-labelledby="notes-tab"
+                    >
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="list-group">
+                                    @forelse(App\Note::where('uid',$equipment->eq_uid)->get() as $note)
+                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                                            <span>{{ $note->label }}</span>
+                                            <i class="fas fa-angle-right"></i>
+                                        </a>
+                                    @empty
+                                        <a href="#" class="list-group-item list-group-item-action disabled d-flex align-items-center justify-content-between" tabindex="-1" aria-disabled="true">
+                                            <span>{{__('Keine Notizen gefunden')}}</span> <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-primary mt-3" data-toggle="modal" data-target="#modalAddNote">
+                                            {{ __('neu anlegen') }}
+                                        </button>
+                                    @endforelse
+                                </div>
+                            </div>
+                            <div class="col-lg-9 pl-2 border-left border-light">
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

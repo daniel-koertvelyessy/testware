@@ -1,23 +1,93 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Firma {{ $firma->fa_label }} &triangleright; Organnisation @ bitpack GmbH
+{{__('Firma')}} {{ $firma->fa_label }} &triangleright; {{ __('Organisation') }}
 @endsection
 
 @section('mainSection')
-    Organisation
+    {{ __('Organisation') }}
 @endsection
 
 @section('menu')
     @include('menus._menuOrga')
 @endsection
 
+@section('modals')
+    <x-modals.form_modal methode="DELETE"
+                    modalRoute="{{ route('firma.destroy',$firma) }}"
+                    modalId="modalDeleteCompany"
+                    modalType="danger"
+                    modalSize="lg"
+                    title="{{ __('Vorsicht') }}"
+                    btnSubmit="{{ __('Firma löschen') }}"
+    >
+        <p class="lead">{{__('Das Löschen der Firma kann nicht rückgängig gemacht werden. Abhängige Objekte könnten dadurch ihre Zuordnung verlieren.')}}</p>
+
+        <p class="mt-3">{{ __('Betroffene Kontakte') }}</p>
+        <ul class="list-group list-group-horizontal">
+            @forelse(App\Contact::where('firma_id',$firma->id)->get() as $contact)
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                    {{ $contact->fullName() }}
+                </li>
+            @empty
+                <li class="list-group-item list-group-item-success">{{ __('Keine Kontakte der Firma gefunden!') }}</li>
+            @endforelse
+        </ul>
+
+        <p class="mt-3">{{ __('Betroffene Produkte') }}</p>
+        <ul class="list-group">
+            @forelse(App\FirmaProdukt::where('firma_id',$firma->id)->get() as $product)
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                    {{ $product->Produkt->prod_label }}
+                    <span>verknüpfte Geräte <span class="badge badge-danger">{{ $product->Produkt->Equipment->count() }}</span> </span>
+                </li>
+            @empty
+                <li class="list-group-item list-group-item-success">{{ __('Keine Produkte mit der Firma gefunden!') }}</li>
+            @endforelse
+        </ul>
+
+        <p class="mt-3">{{ __('Betroffene befähigte Personen') }}</p>
+        <ul class="list-group list-group-horizontal">
+            @forelse(App\ProductQualifiedUser::where('product_qualified_firma',$firma->id)->take(5)->get() as $user)
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                   {{ $user->user->name }}
+                </li>
+            @empty
+                <li class="list-group-item list-group-item-success">{{ __('Keine befähigte Person gefunden!') }}</li>
+            @endforelse
+        </ul>
+
+        <p class="mt-3">{{ __('Betroffene eingewiesne Personen') }}</p>
+        <ul class="list-group list-group-horizontal">
+            @forelse(App\ProductInstructedUser::where('product_instruction_instructor_firma_id',$firma->id)->take(5)->get() as $user)
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                    {{ $user->user->name }}
+                </li>
+            @empty
+                <li class="list-group-item list-group-item-success">{{ __('Keine eingewiesne Person gefunden!') }}</li>
+            @endforelse
+        </ul>
+
+        <p class="mt-3">{{ __('Betroffene Kontrollvorgänge') }}</p>
+        <ul class="list-group list-group-horizontal">
+            @forelse(App\AnforderungControlItem::where('firma_id',$firma->id)->take(5)->get() as $requirementControlItem)
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                    {{ $requirementControlItem->aci_name }}
+                </li>
+            @empty
+                <li class="list-group-item list-group-item-success">{{ __('Keine Kontrollvorgänge mit der Firma gefunden!') }}</li>
+            @endforelse
+        </ul>
+
+    </x-modals.form_modal>
+@endsection
+
 @section('content')
 
     <div class="container">
-        <div class="row">
+        <div class="row mb-lg-4 md-sm-2">
             <div class="col">
-                <h1>Firma bearbeiten</h1>
+                <h1 class="h3">{{__('Firma bearbeiten')}}</h1>
             </div>
         </div>
         <form action="{{ route('firma.update',['firma'=>$firma]) }}" method="post">
@@ -30,24 +100,24 @@
             >
             <div class="row">
                 <div class="col">
-                    <x-rtextfield id="fa_label" label="Kürzel" value="{{ $firma->fa_label }}"/>
+                    <x-rtextfield id="fa_label" label="{{__('Kürzel')}}" value="{{ $firma->fa_label }}"/>
                 </div>
                 <div class="col">
-                    <x-textfield id="fa_vat" label="U-St-ID" value="{{ $firma->fa_vat }}" max="30"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <x-textfield id="fa_name" label="Name" value="{{ $firma->fa_name }}"/>
+                    <x-textfield id="fa_vat" label="{{__('U-St-ID')}}" value="{{ $firma->fa_vat }}" max="30"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <x-selectfield id="adresse_id" label="Adresse">
+                    <x-textfield id="fa_name" label="{{__('Name')}}" value="{{ $firma->fa_name }}"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <x-selectfield id="adresse_id" label="{{__('Adresse')}}">
                         @foreach(App\Adresse::all() as $adresse)
                             <option value="{{ $adresse->id }}"
                                     @if($adresse->id === $firma->adresse_id) selected @endif >
-                                {{ $adresse->ad_name }}
+                                    {{ $adresse->postalAddress() }}
                             </option>
                         @endforeach
                     </x-selectfield>
@@ -55,19 +125,29 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <x-textfield id="fa_kreditor_nr" label="Liefranten Nummer" value="{{ $firma->fa_kreditor_nr }}"/>
+                    <x-textfield id="fa_kreditor_nr" label="{{__('Liefranten Nummer')}}" value="{{ $firma->fa_kreditor_nr }}"/>
                 </div>
                 <div class="col-md-6">
-                    <x-textfield id="fa_debitor_nr" label="Kundennummer bei Firma" value="{{ $firma->fa_debitor_nr }}"/>
+                    <x-textfield id="fa_debitor_nr" label="{{__('Kundennummer bei Firma')}}" value="{{ $firma->fa_debitor_nr }}"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <x-textarea id="fa_description" label="Becshreibung" value="{{ $firma->fa_description }}"/>
+                    <x-textarea id="fa_description" label="{{__('Beschreibung')}}" value="{{ $firma->fa_description }}"/>
                 </div>
             </div>
 
-            <x-btnMain>Firma speichern <span class="fas fa-download"></span></x-btnMain>
+            <button class="btn btn-primary mt-2">
+                {{__('Firma speichern ')}}<span class="fas fa-download ml-2"></span>
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline-danger mt-2 ml-2"
+                    data-toggle="modal"
+                    data-target="#modalDeleteCompany"
+            >
+                {{__('Firma löschen ')}} <i class="fas fa-trash-alt ml-2"></i>
+            </button>
         </form>
     </div>
 

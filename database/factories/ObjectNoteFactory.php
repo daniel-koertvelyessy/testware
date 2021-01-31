@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\ObjectNote;
+use App\Note;
 use Faker\Generator as Faker;
 
-$factory->define(ObjectNote::class, function (Faker $faker) {
+$factory->define(Note::class, function (Faker $faker) {
     return [
         //
     ];

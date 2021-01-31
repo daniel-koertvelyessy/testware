@@ -60,7 +60,7 @@ class User extends Authenticatable
         return $this->hasOne(AnforderungControlItem::class);
     }
 
-    public function qualifiedUser()
+    public function EquipmentQualifiedUser()
     {
         return $this->hasMany(EquipmentQualifiedUser::class);
     }

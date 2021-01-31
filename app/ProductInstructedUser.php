@@ -10,13 +10,13 @@ class ProductInstructedUser extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'equipment_instruction_date',
-        'equipment_instruction_instructor_signature',
-        'equipment_instruction_instructor_profile_id',
-        'equipment_instruction_instructor_firma_id',
-        'equipment_instruction_trainee_signature',
-        'equipment_instruction_trainee_id',
-        'equipment_id',
+        'product_instruction_date',
+        'product_instruction_instructor_signature',
+        'product_instruction_instructor_profile_id',
+        'product_instruction_instructor_firma_id',
+        'product_instruction_trainee_signature',
+        'product_instruction_trainee_id',
+        'produkt_id',
     ];
 
 

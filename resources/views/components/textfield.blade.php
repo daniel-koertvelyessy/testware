@@ -1,5 +1,8 @@
 <div class="form-group">
-    <label for="{{ $id }}">{{ $label }}</label>
+    <label for="{{ $id }}"
+           @if(isset($hideLabel)) class="sr-only" @endif>
+        {{ $label }}
+    </label>
     <input type="text"
            name="{{ $name??$id }}"
            id="{{ $id }}"
@@ -8,8 +11,10 @@
            @endif
            class="form-control {{ $class??'' }} @error($name??$id) is-invalid @enderror"
            value="{{ $value ?? old( $name??$id )  }}"
-           @if(isset($required)) required @endif
-    >
+           @if(isset($required))
+           required
+        @endif
+    />
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror

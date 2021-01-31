@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-md-4">
-        <x-rtextfield id="ad_label"
-                      label="Kürzel"
-                      value="{{ old('ad_label')??'' }}"
+        <x-textfield id="label_ad"
+                     name="ad_label"
+                     label="{{__('Kürzel')}}"
+                     class="checkLabel"
         />
     </div>
     <div class="col-md-4">
         <x-textfield id="ad_name"
                      label="Bezeichner"
-                     value="{{ old('ad_name')??'' }}"
         />
     </div>
     <div class="col-md-4">

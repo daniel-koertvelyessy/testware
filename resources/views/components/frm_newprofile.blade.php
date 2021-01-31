@@ -25,11 +25,13 @@
         <x-selectfield id="user_id"
                        label='Verknüpftung zu Benutzer</a>'
         >
+            <option value="">{{ __('ohne Zuordnung') }}</option>
             @foreach(App\User::all() as $user)
                 <option value="{{ $user->id }}">
                     {{ $user->username }}
                 </option>
             @endforeach
+
         </x-selectfield>
     </div>
     <div class="col-md-3">

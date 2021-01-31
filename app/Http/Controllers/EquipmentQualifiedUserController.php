@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 
+use App\EquipmentHistory;
 use App\EquipmentQualifiedUser;
+use App\Firma;
+use App\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -20,6 +24,14 @@ class EquipmentQualifiedUserController extends Controller
      */
     public function store(Request $request)
     {
+        $user = User::find($request->user_id);
+        $company = Firma::find($request->equipment_qualified_firma);
+        (new EquipmentHistory)->add(
+            __('Befähigte Person hinzugefügt'),
+            $user->name . __(' wurde am :inDate durch die Firma :companyName als befähigte Person qualifiziert.',['inDate'=> $request->equipment_qualified_date, 'companyName'=>$company->fa_name]),
+            $request->equipment_id
+        );
+
 //        dd($request);
         EquipmentQualifiedUser::create($this->validateQualifiedUser());
         return redirect()->back();
@@ -43,13 +55,21 @@ class EquipmentQualifiedUserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Request                $request
-     * @param  EquipmentQualifieduser $equipmentQualifieduser
+     * @param  EquipmentQualifiedUser $EquipmentQualifiedUser
      *
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Request $request, EquipmentQualifieduser $equipmentQualifieduser)
+    public function destroy(Request $request, EquipmentQualifieduser $EquipmentQualifiedUser)
+    : RedirectResponse
     {
-        EquipmentQualifieduser::find($request->id)->delete();
+        (new EquipmentHistory)->add(
+            __('Qualifizierung entzogen'),
+            $EquipmentQualifiedUser->user->name . __(' wurde am :inDate als befähigte Person entfernt.',['inDate'=> date('Y-m-d')]),
+            $EquipmentQualifiedUser->equipment_id
+        );
+
+        $EquipmentQualifiedUser->delete();
         $request->session()->flash('status', 'Die Zuordnung wurde gelöscht!');
         return redirect()->back();
     }

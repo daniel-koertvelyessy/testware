@@ -85,7 +85,7 @@
                     @endforeach
                     </tbody>
                 </table>
-                @if($roomList->count()>0)
+                @if($roomList->count()>1)
                     <div class="d-flex justify-content-center">
                         {!! $roomList->withQueryString()->onEachSide(2)->links() !!}
                     </div>

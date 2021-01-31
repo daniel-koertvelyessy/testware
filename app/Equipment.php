@@ -16,6 +16,8 @@ class Equipment extends Model
         'eq_inventar_nr',
         'eq_serien_nr',
         'installed_at',
+        'purchased_at',
+        'eq_price',
         'eq_uid',
         'eq_name',
         'produkt_id',
@@ -90,6 +92,12 @@ class Equipment extends Model
         return '<span class="' . $this->EquipmentState->estat_icon . ' text-' . $this->EquipmentState->estat_color . '"></span>';
     }
 
+    public function priceTag()
+    {
+//        return (float)$this->eq_price;
+        return number_format($this->eq_price,2,'.',' ');
+    }
+
     public function storage()
     {
         return $this->belongsTo(Storage::class);
@@ -115,11 +123,16 @@ class Equipment extends Model
         return $this->hasManyThrough('User', 'EquipmentQualifiedUser');
     }
 
-    public function qualifiedUser()
+    public function EquipmentQualifiedUser()
     {
         return $this->hasMany(EquipmentQualifiedUser::class);
     }
 
+
+    public function countQualifiedUser()
+    {
+        return $this->EquipmentQualifiedUser->count();
+    }
 
     public function addInstructedUser(Request $request)
     {

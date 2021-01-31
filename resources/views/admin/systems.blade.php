@@ -164,6 +164,15 @@
                        aria-controls="Belege"
                        aria-selected="false"
                     >{{__('Belege')}}</a>
+                    <a class="nav-link"
+                       id="notes-tab"
+                       data-toggle="tab"
+                       href="#notes"
+                       role="tab"
+                       aria-controls="notes"
+                       aria-selected="false"
+                    >{{__('Notizen')}}</a>
+
                 </nav>
                 <div class="tab-content"
                      id="myTabContent"
@@ -1190,6 +1199,91 @@
                          role="tabpanel"
                          aria-labelledby="Belege-tab"
                     ></div>
+                    <div class="tab-pane fade p-2"
+                         id="notes"
+                         role="tabpanel"
+                         aria-labelledby="notes-tab"
+                    >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="h5">{{ __('Typen') }}</h3>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('Kürzel') }}</th>
+                                        <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Beschreibung') }}</th>
+                                        <th></th>
+                                    </tr>
+                                    <form action="{{ route('note-type.store') }}#notes" method="post" id="formStoreNoteTyeData">@csrf
+                                    <tr>
+                                        <td>
+                                            <x-textfield class="form-control-sm" hideLabel label="Kürzel" id="note_type_label" name="label" />
+                                        </td>
+                                        <td>
+                                            <x-textfield class="form-control-sm" hideLabel label="Name" id="note_type_name" name="name" />
+                                        </td>
+                                        <td>
+                                            <x-textfield class="form-control-sm" hideLabel label="Kürzel" id="note_type_description" name="description" />
+                                        </td>
+                                        <td>
+                                            <input type="hidden"
+                                                   name="id"
+                                                   id="note_type_id"
+                                            >
+                                            <input type="hidden"
+                                                   name="_method"
+                                                   id="note_type_methode"
+                                            >
+                                            <button type="button" id="btnFormStoreNoteTyeData" class="btn btn-sm btn-outline-primary">speichern</button>
+                                        </td>
+                                    </tr>
+                                    </form>
+                                    </thead>
+                                    <tbody>
+                                    @forelse(App\NoteType::all() as $notetype)
+                                        <form action="{{ route('note-type.update',$notetype) }}" method="post">
+                                            @csrf
+                                            @method('put')
+                                        <tr>
+                                            <td>
+                                                {{ $notetype->label }}
+                                            </td>
+                                            <td>
+                                                {{ $notetype->name }}
+                                            </td>
+                                            <td>
+                                               {{ $notetype->description }}
+                                            </td>
+                                            <td>
+                                                <x-menu_context :object="$notetype"
+                                                                routeOpen="/note-type/{{ $notetype->id }}"
+                                                                routeCopy="{{ route('note-type.edit',$notetype) }}"
+                                                                routeDestory="{{ route('note-type.destroy',$notetype) }} "
+                                                                tabName="notes"
+                                                                objectName="label"
+                                                                objectVal="{{ $notetype->label }}"
+
+                                                />
+                                            </td>
+                                        </tr>
+                                        </form>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">
+                                                <x-notifyer>{{ __('Bislang sind keine Typen definiert') }}</x-notifyer>
+                                            </td>
+                                        </tr>
+
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="h5">{{ __('Tags') }}</h3>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -1207,6 +1301,40 @@
     @enderror
 
     <script>
+
+        $('#btnFormStoreNoteTyeData').click(function () {
+            let idNode=$('#note_type_id');
+           if (idNode.val()==='') {
+               $('#note_type_methode').val('post');
+               $('#formStoreNoteTyeData').attr('action','{{ route('note-type.store') }}#notes').submit();
+           } else {
+               $('#note_type_methode').val('put');
+               $('#formStoreNoteTyeData').attr('action','/note-type/'+idNode.val()+'#notes').submit();
+           }
+        });
+
+        $('.context_item_open').click(function (e) {
+            e.preventDefault();
+            let id = $(this).data('target-id');
+            $.ajax({
+                dataType: "json",
+                url: $(this).attr('href'),
+                success: function (data) {
+                    $('#note_type_id').val(data.id);
+                    $('#note_type_label').val(data.label);
+                    $('#note_type_name').val(data.name);
+                    $('#note_type_description').val(data.description);
+                }
+            });
+
+
+
+
+
+
+        })
+
+
         $('.nav-link').click(function () {
             $('.navTextHelper').html($(this).data('helpertext'));
         });

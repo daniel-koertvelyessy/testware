@@ -202,13 +202,13 @@
                         <div class="col mb-3">
                             <h2 class="h5">{{__('Prüfling')}} </h2>
                            @php(  $equipment = App\Equipment::find($test->equipment_id) )
-                            <x-staticfield label="{{ __('Name') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_name }}" />
+                            <x-staticfield label="{{ __('Name') }}" id="eq_name" value="{{ $equipment->eq_name }}" />
                             <div class="row">
                                 <div class="col-md-6">
-                                    <x-staticfield label="{{ __('Seriennummer') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_serien_nr }}" />
+                                    <x-staticfield label="{{ __('Seriennummer') }}" id="eq_serien_nr" value="{{ $equipment->eq_serien_nr }}" />
                                 </div>
                                 <div class="col-md-6">
-                                    <x-staticfield label="{{ __('Inventarnummer') }}" id="{{ $equipment->id }}" value="{{ $equipment->eq_inventar_nr }}" />
+                                    <x-staticfield label="{{ __('Inventarnummer') }}" id="eq_inventar_nr" value="{{ $equipment->eq_inventar_nr }}" />
                                 </div>
                             </div>
                         </div>
@@ -229,9 +229,24 @@
                         <div class="col mb-3">
                             <p class="lead">{{ __('Befähigte Personen für die Prüfung') }}</p>
                             <ul class="list-unstyled">
+                                @foreach(\App\ProductQualifiedUser::where('produkt_id',$test->equipment->produkt->id)->get() as $qualifiedUser)
+                                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                                       <span>
+                                           <span class="text-muted"><strong><abbr title="{{ __('Aus Produktdaten') }}">P</abbr></strong></span>
+                                           {{$qualifiedUser->user->name}}
+                                       </span>
+
+                                        @if($qualifiedUser->user->id === auth()->user()->id)
+                                            <span class="fas fa-check-circle text-success"></span>
+                                            @php($enabledUser[] = $qualifiedUser->user->id)
+                                        @endif
+                                    </li>
+                                @endforeach
                                 @foreach(\App\EquipmentQualifiedUser::where('equipment_id',$test->equipment_id)->get() as $qualifiedUser)
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
+                                        <span>
                                         {{$qualifiedUser->user->name}}
+                                        </span>
                                         @if($qualifiedUser->user->id === auth()->user()->id)
                                             <span class="fas fa-check-circle text-success"></span>
                                             @php($enabledUser[] = $qualifiedUser->user->id)

@@ -43,13 +43,13 @@ class ProductInstructedUserController extends Controller
     public function validateProductInstructedUser()
     : array {
         return request()->validate([
-            'product_instruction_date'                  => 'bail|required|date',
+            'product_instruction_date'                  => 'bail|required',
             'product_instruction_instructor_signature'  => '',
             'product_instruction_instructor_profile_id' => '',
             'product_instruction_instructor_firma_id'   => '',
             'product_instruction_trainee_signature'     => '',
             'product_instruction_trainee_id'            => 'required',
-            'product_id'                                => 'required'
+            'produkt_id'                                => 'required'
         ]);
     }
 }

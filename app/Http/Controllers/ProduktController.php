@@ -44,13 +44,8 @@ class ProduktController extends Controller
      */
     public function index()
     {
-        if (Produkt::all()->count() > 10) {
-            $produktList = Produkt::with('ProduktKategorie', 'ProduktState', 'ControlProdukt')->sortable()->paginate(10);
-            return view('admin.produkt.index', ['produktList' => $produktList]);
-        } else {
-            $produktList = Produkt::with('ProduktKategorie', 'ProduktState')->sortable()->get();
-            return view('admin.produkt.index', ['produktList' => $produktList]);
-        }
+        $produktList = Produkt::with('ProduktKategorie', 'ProduktState', 'ControlProdukt')->sortable()->paginate(10);
+        return view('admin.produkt.index', compact('produktList'));
     }
 
     /**

@@ -52,6 +52,13 @@ class Profile extends Model
         return route('profile.show', $this);
     }
 
+    public function fullName()
+    {
+        return $this->ma_vorname . ' ' . $this->ma_name . ' ' . $this->ma_name_2;
+    }
+
+
+
     public function getNextEmployeeNumber()
     {
         $em = DB::table('profiles')->orderBy('ma_nummer', 'desc')->first();

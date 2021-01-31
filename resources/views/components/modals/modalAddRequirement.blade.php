@@ -1,7 +1,8 @@
 @props([
     'route' => '',
     'tabTarget' => 'productRequirements',
-    'tabTarget' => 'productRequirements',
+    'objectIdLabel' => '',
+    'object'=>''
 ])
 
 
@@ -39,11 +40,11 @@
                                    label="{{ __('Anforderung wählen') }}"
                     >
                         <option value="">{{__('bitte wählen')}}</option>
-                        @foreach (App\Anforderung::all() as $anforderung)
+                        @foreach (App\Anforderung::all() as $requirement)
 
-                            <option value="{{ $anforderung->id }}"
-                                    @if($object->hasRequirement($anforderung)) disabled @endif
-                            >{{ $anforderung->an_label }} @if($produkt->hasRequirement($anforderung)) [{{ __('zugeordnet') }}] @endif
+                            <option value="{{ $requirement->id }}"
+                                    @if($object->hasRequirement($requirement)) disabled @endif
+                            >{{ $requirement->an_label }} @if($object->hasRequirement($requirement)) [{{ __('zugeordnet') }}] @endif
                             </option>
 
                         @endforeach

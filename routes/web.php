@@ -147,6 +147,9 @@ Route::resources([
     'lizenz'                 => 'LizenzController',
     'report'                 => 'ReportController',
     'search'                 => 'SearchController',
+    'tag'                    => 'TagController',
+    'note'                   => 'NoteController',
+    'note-type'              => 'NoteTypeController',
 ]);
 
 /**

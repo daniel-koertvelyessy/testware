@@ -15,4 +15,9 @@ class Contact extends Model
     {
         return $this->BelongsTo(Firma::class);
     }
+
+    public function fullName()
+    {
+        return $this->con_vorname . ' '. $this->con_name;
+    }
 }

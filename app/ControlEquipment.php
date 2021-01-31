@@ -104,7 +104,11 @@ class ControlEquipment extends Model
 
     public function countQualifiedUser()
     {
-        return $this->Equipment->qualifiedUser()->count();
+        $qualifiedUser = 0;
+        $qualifiedUser += $this->Equipment->produkt->ProductQualifiedUser()->count();
+        $qualifiedUser += $this->Equipment->countQualifiedUser();
+
+        return $qualifiedUser;
     }
 
 }

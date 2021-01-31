@@ -27,7 +27,7 @@
                 >
                     @csrf
                     <x-frm_AddAdresse/>
-                    <x-btnMain>Adresse speichern <span class="fas fa-download"></span></x-btnMain>
+                    <x-btnMain>{{__('Adresse speichern')}} <span class="fas fa-download ml-2"></span></x-btnMain>
                 </form>
             </div>
         </div>

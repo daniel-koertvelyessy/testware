@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Adresse;
 use App\Location;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -57,7 +59,6 @@ class AdresseController extends Controller
         $text = '';
 
         if (isset($request->setAdressAsNewMain)) {
-
             $location = Location::find($request->setAdressAsNewMain);
             $location->adresse_id = $adresse->id;
             $location->save();
@@ -107,12 +108,17 @@ class AdresseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request $request
      * @param  Adresse $adresse
-     * @return Response
+     *
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws Exception
      */
-    public function destroy(Adresse $adresse)
+    public function destroy(Request $request, Adresse $adresse)
     {
-        // getAddressenAjaxListe
+        $request->session()->flash('status', 'Die Adresse <strong>' . $adresse->ad_label . '</strong> wurde gelöscht!');
+        $adresse->delete();
+        return redirect(route('adresse.index'));
     }
 
     public function getAddressenAjaxListe(Request $request)

@@ -1,4 +1,3 @@
-
 <div class="d-flex align-items-center justify-content-between px-2 mt-3">
     @if($requirement->AnforderungControlItem->count()>0)
         <span>{{ $requirement->an_label }}</span>
@@ -57,23 +56,23 @@
                 @method('DELETE')
                 <input type="hidden"
                        name="an_label"
-                       id="an_label_delAnf_{{ $requirement->anforderung_id }}"
+                       id="an_label_delAnf_{{ $requirement->id }}"
                        value="{{ $requirement->an_label }}"
                 >
                 <input type="hidden"
                        name="id"
-                       id="id_delAnf_{{ $requirement->anforderung_id }}"
+                       id="id_delAnf_{{ $requirement->id }}"
                        value="{{ $requirement->id }}"
                 >
                 <input type="hidden"
                        name="produkt_id"
-                       id="produkt_id_delAnf_{{ $requirement->anforderung_id }}"
+                       id="produkt_id_delAnf_{{ $requirement->id }}"
                        value="{{ $produkt->id }}"
                 >
                 <input type="hidden"
                        name="anforderung_id"
-                       id="anforderung_id_delete_anforderung_{{ $requirement->anforderung_id }}"
-                       value="{{ $requirement->anforderung_id }}"
+                       id="anforderung_id_delete_anforderung_{{ $requirement->id }}"
+                       value="{{ $requirement->id }}"
                 >
                 <button
                     class="btn btn-sm btn-outline-primary"

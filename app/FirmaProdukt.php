@@ -11,9 +11,9 @@ class FirmaProdukt extends Model
     protected $fillable = ['firma_id', 'produkt_id'];
 
     public function Firma() {
-        return $this->belongsToMany(Firma::class);
+        return $this->belongsTo(Firma::class );
     }
     public function Produkt() {
-        return $this->belongsToMany(Produkt::class);
+        return $this->belongsTo(Produkt::class);
     }
 }

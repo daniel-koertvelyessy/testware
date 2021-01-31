@@ -368,7 +368,7 @@
                     <div class="modal-body">
                         @csrf
                         <input type="hidden"
-                               name="product_id"
+                               name="produkt_id"
                                id="product_id_instructions_modal"
                                value="{{ $produkt->id }}"
                         >
@@ -468,6 +468,12 @@
             </form>
         </div>
     </div>
+
+    <x-modals.modalAddRequirement route="{{ route('addProduktAnforderung') }}"
+                                  tabTarget="productRequirements"
+                                  objectIdLabel="produkt_id"
+                                  :object="$produkt"
+    />
 
 @endsection
 
@@ -969,7 +975,8 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
-                                                    <x-textfield id="ad_label"
+                                                    <x-textfield id="ad_labels"
+                                                                 name="ad_label"
                                                                  label="{{ __('Kürzel') }}"
                                                                  class="getAddress checkLabel"
                                                     />
@@ -1393,8 +1400,80 @@
     </script>
     @enderror
 
+    <script src="{{ asset('js/signatures.js') }}"></script>
     <script>
         $('.tooltips').tooltip();
+
+
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+            // This part causes the canvas to be cleared
+            trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
+            trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
+            trainee_pad_id.getContext("2d").scale(ratio, ratio);
+
+            // This part causes the canvas to be cleared
+            instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
+            instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
+            instructor_pad_id.getContext("2d").scale(ratio, ratio);
+
+            // This library does not listen for canvas changes, so after the canvas is automatically
+            // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+            // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+            // that the state of this library is consistent with visual state of the canvas, you
+            // have to clear it manually.
+            signaturePadTrainee.clear();
+            signaturePadInstructor.clear();
+        }
+
+        signatureField_product_instruction_trainee_signature
+        signatureField_product_instruction_instructor_signature
+
+        let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
+            signaturePadTrainee = new SignaturePad(trainee_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#product_instruction_trainee_signature').val(this.toDataURL());
+                }
+            }),
+            instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
+            signaturePadInstructor = new SignaturePad(instructor_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#product_instruction_instructor_signature').val(this.toDataURL());
+                }
+            });
+
+        $('#addInstructedUser').on('shown.bs.modal', function () {
+            resizeCanvas();
+        });
+
+        // On mobile devices it might make more sense to listen to orientation change,
+        // rather than window resize events.
+        window.onresize = resizeCanvas;
+
+        $('.btnClearCanvas').click(function () {
+            ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
+        });
+        $('.btnSignZuruck').click(function () {
+            let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
+            if (data) {
+                data.pop(); // remove the last dot or line\n'+
+                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
+            }
+        });
 
         $('#btnGetAnforderungsListe').click(() => {
             $.ajax({

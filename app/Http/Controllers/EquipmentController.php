@@ -78,7 +78,7 @@ class EquipmentController extends Controller
             'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
             'eq_serien_nr'       => 'bail|nullable|unique:equipment,eq_serien_nr|max:100',
             'eq_uid'             => 'bail|required|unique:equipment,eq_uid',
-            'eq_name'          => '',
+            'eq_name'            => '',
             'eq_qrcode'          => '',
             'eq_text'            => '',
             'eq_price'           => '',
@@ -195,7 +195,7 @@ class EquipmentController extends Controller
 
         if ($request->function_control_profil !== 'void') {
             $qualifiedUser = new EquipmentQualifiedUser();
-            $qualifiedUser->equipment_qualified_firma = NULL;
+            $qualifiedUser->equipment_qualified_firma = null;
             $qualifiedUser->equipment_qualified_date = date('Y-m-d');
             $qualifiedUser->user_id = $request->function_control_profil;
             $qualifiedUser->equipment_id = $equipment->id;
@@ -250,78 +250,106 @@ class EquipmentController extends Controller
 
         $feld = '';
         $flag = false;
-        $upd = Equipment::find($request->id);
+        $oldEquipment = Equipment::find($request->id);
 
-        if (!isset($request->setFieldReadWrite) && $upd->eq_inventar_nr === $request->eq_inventar_nr) {
+        if (!isset($request->setFieldReadWrite) && $oldEquipment->eq_inventar_nr === $request->eq_inventar_nr) {
             $equipment->update($this->validateEquipment());
-        } else if (isset($request->setFieldReadWrite) && $upd->eq_inventar_nr === $request->eq_inventar_nr) {
+        } elseif (isset($request->setFieldReadWrite) && $oldEquipment->eq_inventar_nr === $request->eq_inventar_nr) {
             $equipment->update($this->validateEquipment());
         } else {
             $equipment->update($this->validateNewEquipment());
         }
 
         $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ' => ';
-        if ($upd->eq_serien_nr != $request->eq_serien_nr) {
+        if ($oldEquipment->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Seriennummer'),
-                'old' => $upd->eq_serien_nr,
-                'new' => $request->eq_serien_nr,
-            ]) . ' | ';
+                    'fld' => __('Seriennummer'),
+                    'old' => $oldEquipment->eq_serien_nr,
+                    'new' => $request->eq_serien_nr,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->eq_qrcode != $request->eq_qrcode) {
+        if ($oldEquipment->eq_qrcode != $request->eq_qrcode) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('QR Code'),
-                'old' => $upd->eq_qrcode,
-                'new' => $request->eq_qrcode,
-            ]) . ' | ';
+                    'fld' => __('QR Code'),
+                    'old' => $oldEquipment->eq_qrcode,
+                    'new' => $request->eq_qrcode,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->installed_at != $request->installed_at) {
+
+        if ($oldEquipment->purchased_at != $request->purchased_at) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Inbetriebnahme am'),
-                'old' => $upd->installed_at,
-                'new' => $request->installed_at,
-            ]) . ' | ';
+                    'fld' => __('Kaufdatum'),
+                    'old' => $oldEquipment->purchased_at,
+                    'new' => $request->purchased_at,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->eq_text != $request->eq_text) {
+
+        if ($oldEquipment->installed_at != $request->installed_at) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Beschreibung'),
-                'old' => $upd->eq_text,
-                'new' => $request->eq_text,
-            ]) . ' | ';
+                    'fld' => __('Inbetriebnahme am'),
+                    'old' => $oldEquipment->installed_at,
+                    'new' => $request->installed_at,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->equipment_state_id != $request->equipment_state_id) {
+        if ($oldEquipment->eq_text != $request->eq_text) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Geräte Status'),
-                'old' => $upd->equipment_state_id,
-                'new' => $request->equipment_state_id,
-            ]) . ' | ';
+                    'fld' => __('Beschreibung'),
+                    'old' => $oldEquipment->eq_text,
+                    'new' => $request->eq_text,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->storage_id != $request->storage_id) {
+        if ($oldEquipment->equipment_state_id != $request->equipment_state_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Aufstellplatz / Standort'),
-                'old' => $upd->storage_id,
-                'new' => $request->storage_id,
-            ]) . ' | ';
+                    'fld' => __('Geräte Status'),
+                    'old' => $oldEquipment->equipment_state_id,
+                    'new' => $request->equipment_state_id,
+                ]) . ' | ';
             $flag = true;
         }
-        if ($upd->produkt_id != $request->produkt_id) {
+        if ($oldEquipment->storage_id != $request->storage_id) {
             $feld .= __('Feld :fld von :old in :new geändert', [
-                'fld' => __('Produkt'),
-                'old' => $upd->produkt_id,
-                'new' => $request->produkt_id,
-            ]) . ' | ';
+                    'fld' => __('Aufstellplatz / Standort'),
+                    'old' => $oldEquipment->storage_id,
+                    'new' => $request->storage_id,
+                ]) . ' | ';
             $flag = true;
         }
+        if ($oldEquipment->produkt_id != $request->produkt_id) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                    'fld' => __('Produkt'),
+                    'old' => $oldEquipment->produkt_id,
+                    'new' => $request->produkt_id,
+                ]) . ' | ';
+            $flag = true;
+        }
+
+        if ($oldEquipment->eq_price != $request->eq_price) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                    'fld' => __('Kaufpreis'),
+                    'old' => $oldEquipment->eq_price,
+                    'new' => $request->eq_price,
+                ]) . ' | ';
+            $flag = true;
+        }
+
+        if ($oldEquipment->eq_price != $request->eq_price) {
+            $feld .= __('Feld :fld von :old in :new geändert', [
+                    'fld' => __('Kaufpreis'),
+                    'old' => $oldEquipment->eq_price,
+                    'new' => $request->eq_price,
+                ]) . ' | ';
+            $flag = true;
+        }
+
 
         if ($flag) {
 
             $eh = new EquipmentHistory();
-
             $eh->eqh_eintrag_kurz = __('Gerät geändert');
             $eh->eqh_eintrag_text = $feld;
             $eh->equipment_id = $equipment->id;
@@ -338,7 +366,8 @@ class EquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateEquipment(): array
+    public function validateEquipment()
+    : array
     {
         return request()->validate([
             'eq_inventar_nr'     => '',
@@ -347,6 +376,7 @@ class EquipmentController extends Controller
             'eq_text'            => '',
             'installed_at'       => 'date',
             'purchased_at'       => 'date',
+            'eq_price'           => '',
             'produkt_id'         => '',
             'storage_id'         => 'required',
             'equipment_state_id' => 'required'
@@ -356,7 +386,8 @@ class EquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateNewEquipment(): array
+    public function validateNewEquipment()
+    : array
     {
         return request()->validate([
             'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',

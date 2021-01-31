@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Start &triangleright; {{__('Organisation')}} @ bitpack.io GmbH
+{{__('Organisation')}} &triangleright; {{__('Organisation')}}
 @endsection
 
 @section('mainSection')
-    Organisation
+    {{__('Organisation')}}
 @endsection
 
 @section('menu')
@@ -31,7 +31,7 @@
                         </a>
                         <a href="{{ route('firma.create') }}" class="tile-small btn-primary rounded" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Firma')}}</span>
                         </a>
 
                         <a href="{{ route('adresse.index') }}" class="tile-small btn-primary rounded" data-role="tile" aria-label="Storagee">
@@ -40,8 +40,8 @@
                         </a>
 
                         <a href="{{ route('adresse.create') }}" class="tile-small btn-primary rounded" data-role="tile">
-                            <span class="icon"><i class="far fa-folder"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="icon"><i class="far fa-plus-square"></i></span>
+                            <span class="branding-bar text-center">{{__('Adresse')}}</span>
                         </a>
                         <a href="{{ route('profile.index') }}" class="tile-small btn-primary rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-user-friends"></i></span>
@@ -49,7 +49,7 @@
                         </a>
                         <a href="{{ route('profile.create') }}" class="tile-small btn-primary rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-user-plus"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Mitarbeiter')}}</span>
                         </a>
                     </nav>
                 </section>

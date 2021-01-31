@@ -60,7 +60,12 @@ class ControlEquipmentController extends Controller
         $controlEquipmentIsCompleteItem = '';
         $aci_execution = 0;
         $aci_control_equipment_required = 0;
-        $controlItem = ControlEquipment::find($request->test_id);
+        $controlItem = ControlEquipment::find($request->test_id)->withTrashed()->first();
+        $qualifiedUser = 0;
+        $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
+        $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
+
+//dd($controlItem->Equipment);
 
         if ($controlItem->countQualifiedUser()===0){
             $controlEquipmentIsComplete = false;
@@ -73,7 +78,6 @@ class ControlEquipmentController extends Controller
             $controlEquipmentIsComplete = false;
             $controlEquipmentIsCompleteItem .= __('- Keine Kontrollvorgänge für die Anforderung gefunden!').'<br>';
         }
-
 
         if($controlEquipmentIsComplete) {
             foreach ($acidata as $aci) {
@@ -189,7 +193,7 @@ class ControlEquipmentController extends Controller
         $eh->save();
 
 
-        return redirect()->route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]);
+        return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
     }
 
     /**

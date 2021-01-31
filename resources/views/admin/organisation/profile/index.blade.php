@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Mitarbeiter')}} &triangleright; {{__('Organisation')}} @ bitpack GmbH
+{{__('Mitarbeiter')}} &triangleright; {{__('Organisation')}}
 @endsection
 
 @section('mainSection')
@@ -36,11 +36,11 @@
                     <tbody>
                     @forelse ($profileList as $profile)
                         <tr>
-                            <td><a href="{{ route('profile.show',['profile'=>$profile]) }}">{{ $profile->ma_vorname . ' ' . $profile->ma_name }}</a></td>
+                            <td><a href="{{ route('profile.show',['profile'=>$profile]) }}">{{ $profile->fullName() }}</a></td>
                             <td class="d-none d-md-table-cell">{{ $profile->ma_nummer }}</td>
                             <td class="d-none d-md-table-cell">{{ $profile->ma_eingetreten }}</td>
                             <td>{{ $profile->ma_telefon }}</td>
-                            <td class="d-none d-md-table-cell">{{ $profile->user->email }} </td>
+                            <td class="d-none d-md-table-cell">{{ $profile->user->email??'-' }} </td>
                         </tr>
                     @empty
 

@@ -11,45 +11,19 @@
 @endsection
 
 @section('modals')
-    <div class="modal"
-         id="modalDeleteEquipment"
-         tabindex="-1"
-         aria-labelledby="modalDeleteEquipmentLabel"
-         aria-hidden="true"
+    <x-modals.form_modal methode="DELETE"
+                         modalRoute="{{ route('equipment.destroy',$equipment) }}"
+                         modalId="modalDeleteEquipment"
+                         modalType="danger"
+                         title="{{ __('Vorsicht') }}"
+                         btnSubmit="{{ __('Gerät endgültig löschen') }}"
     >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"
-                        id="modalDeleteEquipmentLabel"
-                    >{{__('Gerät löschen')}}</h5>
-                    <button type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p class="lead">{{__('Bitte beachten Sie, dass <strong>alle</strong> Daten und Vorgänge zu diesem Gerät gelöscht werden. Das schließt hochgeladene oder generierte Dokumente ein.')}}</p>
-                    <p>{{__('Das Produkt bleibt davon unberührt.')}}</p>
-                    <p class="mx-3 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
-                    <form action="{{ route('equipment.destroy',$equipment) }}"
-                          method="post"
-                    >
-                        @csrf
-                        @method('delete')
-                        <input type="hidden"
-                               name="id"
-                               id="id_delete_equipment"
-                        >
-                        <button class="btn btn-outline-danger">{{__('Gerät löschen')}} <span class="ml-2 fas fa-times"></span></button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        <p class="lead">{!! __('Bitte beachten Sie, dass <strong>alle</strong> Daten und Vorgänge zu diesem Gerät gelöscht werden. Das schließt hochgeladene oder generierte Dokumente ein.') !!}</p>
+        <p>{{__('Das Produkt bleibt davon unberührt.')}}</p>
+        <p class="mx-3 mt-4 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
+    </x-modals.form_modal>
+
+
 @endsection
 
 @section('content')
@@ -57,10 +31,10 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h3">{{__('Gerät bearbeiten')}}</h1>
+                <h1 class="h3">{{__('Gerät Stammdaten bearbeiten')}}</h1>
             </div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-5 mt-3">
             <div class="col">
                 <form action="{{ route('equipment.update',$equipment) }}"
                       method="post"
@@ -100,9 +74,20 @@
                             />
                         </div>
 
-                        <div class="col-md-6">
-
+                        <div class="col-md-2">
+                            <x-datepicker id="purchased_at"
+                                          label="{{__('Gekauft am')}}"
+                                          value="{{ $equipment->purchased_at }}"
+                            />
                         </div>
+                        <div class="col-md-2">
+                            <x-textfield id="eq_price"
+                                         class="decimal price"
+                                         label="{{__('Kaufpreis')}}"
+                                         value="{{ $equipment->priceTag() }}"
+                            />
+                        </div>
+
 
                     </div>
                     <div class="row">
@@ -156,22 +141,51 @@
                             />
                         </div>
                     </div>
-                    <x-btnMain>{{__('Gerät speichern')}} <span class="ml-2 fas fa-download"></span></x-btnMain>
+                    <div class="d-md-none">
+                        <a role="button"
+                           class="btn btn-outline-secondary mt-2 btn-block"
+                           href="{{ route('equipment.show',$equipment) }}"
+                        >
+                            <span class="fas fa-angle-double-left"></span>
+                            {{ __('Abbruch') }}</a>
+
+                        <button class="btn btn-primary mt-2 btn-block">
+                            {{__('Gerät speichern ')}}<span class="fas fa-download ml-2"></span>
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-outline-danger mt-2 btn-block"
+                                data-toggle="modal"
+                                data-target="#modalDeleteEquipment"
+                        >
+                            {{__('Gerät löschen ')}} <i class="fas fa-trash-alt ml-2"></i>
+                        </button>
+                    </div>
+                    <div class="d-none d-md-inline-block">
+                        <a role="button"
+                           class="btn btn-outline-secondary mt-2"
+                           href="{{ route('equipment.show',$equipment) }}"
+                        >
+                            <span class="fas fa-angle-double-left"></span>
+                            {{ __('Abbruch') }}</a>
+
+                        <button class="btn btn-primary mt-2 ml-2">
+                            {{__('Gerät speichern ')}}<span class="fas fa-download ml-2"></span>
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-outline-danger mt-2 ml-2"
+                                data-toggle="modal"
+                                data-target="#modalDeleteEquipment"
+                        >
+                            {{__('Gerät löschen ')}} <i class="fas fa-trash-alt ml-2"></i>
+                        </button>
+                    </div>
+
                 </form>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col">
-                <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    data-toggle="modal"
-                    data-target="#modalDeleteEquipment"
-                >
-                    Gerät löschen <span class="ml-2 fas fa-times"></span>
-                </button>
-            </div>
-        </div>
+
     </div>
     {{--    {{ App\Produkt::find(request('produkt_id'))  }}--}}
 @endsection
@@ -224,7 +238,7 @@
                         if (res === 0) {
                             let text = '{{__('Dieser Standort existiert nicht!')}}';
                             sts.text(text);
-                            nd.addClass('is-invalid').attr('title',text );
+                            nd.addClass('is-invalid').attr('title', text);
                         } else {
                             sts.text('');
                             nd.removeClass('is-invalid')

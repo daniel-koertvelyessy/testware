@@ -158,4 +158,13 @@ class Adresse extends Model
             return NULL;
         }
     }
+
+    public function postalAddress()
+    {
+        return  $this->ad_label  .': '.
+                 $this->ad_anschrift_strasse . ' '.
+                 $this->ad_anschrift_hausnummer. ' /  '  .
+                 $this->ad_anschrift_plz . ' '.
+                 $this->ad_anschrift_ort ;
+    }
 }

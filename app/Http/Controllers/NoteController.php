@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\ObjectNote;
+use App\Note;
+use App\NoteType;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class ObjectNoteController extends Controller
+class NoteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -20,31 +29,68 @@ class ObjectNoteController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
         //
     }
 
+
+
+
+
+
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     *
+     * @return Response
      */
     public function store(Request $request)
     {
-        //
+
+
+
+        if($request->note_type_id === 'new' && !empty($request->newNoteType)){
+            (new NoteType)->addType($request);
+        }
+
+        dd();
+       if($request->hasFile('file_path')){
+           $request->validate([
+               'file_path' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240',
+               // size:2048 => 2048kB
+               'uid'       => 'required'
+           ]);
+           $file = $request->file('file_path');
+           $request->file_name = $file->getClientOriginalName();
+           $request->file_path = $file->store('notes/' .$request->uid .'/' );
+       }
+
+
+
+        Note::create(request()->validate([
+            'uid'       => 'required',
+            'label'        => 'required',
+            'description' => '',
+            'note_type_id' => '',
+            'is_intern' => '',
+            'file_path' => '',
+            'file_name' => '',
+        ]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ObjectNote  $objectNote
-     * @return \Illuminate\Http\Response
+     * @param  \App\Note $objectNote
+     *
+     * @return Response
      */
-    public function show(ObjectNote $objectNote)
+    public function show(Note $objectNote)
     {
         //
     }
@@ -52,10 +98,11 @@ class ObjectNoteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ObjectNote  $objectNote
-     * @return \Illuminate\Http\Response
+     * @param  \App\Note $objectNote
+     *
+     * @return Response
      */
-    public function edit(ObjectNote $objectNote)
+    public function edit(Note $objectNote)
     {
         //
     }
@@ -63,11 +110,12 @@ class ObjectNoteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ObjectNote  $objectNote
-     * @return \Illuminate\Http\Response
+     * @param  Request   $request
+     * @param  \App\Note $objectNote
+     *
+     * @return Response
      */
-    public function update(Request $request, ObjectNote $objectNote)
+    public function update(Request $request, Note $objectNote)
     {
         //
     }
@@ -75,10 +123,11 @@ class ObjectNoteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ObjectNote  $objectNote
-     * @return \Illuminate\Http\Response
+     * @param  \App\Note  $objectNote
+     *
+     * @return Response
      */
-    public function destroy(ObjectNote $objectNote)
+    public function destroy(Note $objectNote)
     {
         //
     }

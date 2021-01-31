@@ -13,7 +13,9 @@
     >
         @if($routeOpen!=='#')
             <a href="{{ $routeOpen }}"
-               class="dropdown-item"
+               id="context_item_open_{{ $object->id }}"
+               class="dropdown-item context_item_open"
+               data-target-id="{{ $object->id }}"
             >
                 <i class="fas fa-folder-open mr-2 fa-fw"></i>
                 {{__('Öffnen')}}
@@ -21,7 +23,9 @@
         @endif
         @if($routeCopy!=='#')
             <a href="#"
-               class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif--}}"
+               id="context_item_open_{{ $object->id }}"
+               class="dropdown-item context_item_copy"
+               data-target-id="{{ $object->id }}"
                onclick="event.preventDefault(); document.getElementById('frm_copy_object_{{ $object->id }}').submit();"
             >
                 <i class="fas fa-copy mr-2 fa-fw"></i>
@@ -30,7 +34,9 @@
         @endif
         @if($routeDestory!=='#')
             <a href="#"
-               class="dropdown-item"
+               id="context_item_open_{{ $object->id }}"
+               class="dropdown-item context_item_destroy"
+               data-target-id="{{ $object->id }}"
                onclick="event.preventDefault(); document.getElementById('frm_delete_object_{{ $object->id }}').submit();"
             >
                 <i class="far fa-trash-alt mr-2 fa-fw"></i>
@@ -81,3 +87,7 @@
         @endif
     </div>
 </div>
+
+<script>
+
+</script>

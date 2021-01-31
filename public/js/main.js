@@ -222,6 +222,21 @@ $("#btnaddNewGebtype").click(function () {
     // $('#addNewGebtype').toggle();
 });
 
+/*$(document).on('focus','.price',function () {
+    const rex = /[^0-9]/g;
+    let price =  $(this).val().trim().replace(rex, "");
+    $(this).val(price/100);
+});
+
+$(document).on('blur','.price',function () {
+    const formatter = new Intl.NumberFormat('de', {
+        style: 'currency',
+        currency: 'EUR'
+    })
+    let price = $(this).val().trim();
+    $(this).val(formatter.format(price));
+});*/
+
 $(document).on("blur", ".checkLabel", function () {
     let label = $(this)
         .val()
