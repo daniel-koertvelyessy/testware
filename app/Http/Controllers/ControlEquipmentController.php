@@ -37,13 +37,9 @@ class ControlEquipmentController extends Controller
      */
     public function index()
     {
-        if (ControlEquipment::count() > 20) {
-            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
-            return view('testware.control.index', ['controlItems' => $controlItems]);
-        } else {
-            $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->get();
-            return view('testware.control.index', ['controlItems' => $controlItems]);
-        }
+        $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
+        return view('testware.control.index', compact('controlItems'));
+
     }
 
     /**
@@ -55,31 +51,33 @@ class ControlEquipmentController extends Controller
      */
     public function create(Request $request)
     {
+
         $controlEquipmentIsComplete = true;
-        $controlEquipmentIsCompleteMsg = '<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>';
+        $controlEquipmentIsCompleteMsg = __('<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>');
         $controlEquipmentIsCompleteItem = '';
         $aci_execution = 0;
         $aci_control_equipment_required = 0;
-        $controlItem = ControlEquipment::find($request->test_id)->withTrashed()->first();
+        $controlItem = ControlEquipment::find($request->test_id);
         $qualifiedUser = 0;
         $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
 
+
 //dd($controlItem->Equipment);
 
-        if ($controlItem->countQualifiedUser()===0){
+        if ($controlItem->countQualifiedUser() === 0) {
             $controlEquipmentIsComplete = false;
-            $controlEquipmentIsCompleteItem .= __('- Keine befähigte Nutzer gefunden!').'<br>';
+            $controlEquipmentIsCompleteItem .= __('- Keine befähigte Nutzer gefunden!') . '<br>';
         }
 
         $acidata = AnforderungControlItem::where('anforderung_id', $controlItem->anforderung_id)->get();
 
-        if ($acidata->count() === 0 ){
+        if ($acidata->count() === 0) {
             $controlEquipmentIsComplete = false;
-            $controlEquipmentIsCompleteItem .= __('- Keine Kontrollvorgänge für die Anforderung gefunden!').'<br>';
+            $controlEquipmentIsCompleteItem .= __('- Keine Kontrollvorgänge für die Anforderung gefunden!') . '<br>';
         }
 
-        if($controlEquipmentIsComplete) {
+        if ($controlEquipmentIsComplete) {
             foreach ($acidata as $aci) {
                 $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
                 $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
@@ -95,7 +93,7 @@ class ControlEquipmentController extends Controller
 
             $request->session()->flash('status', $controlEquipmentIsCompleteMsg);
 
-            return redirect()->back();
+            return redirect(route('equipment.show', $controlItem->Equipment));
         }
     }
 
@@ -107,6 +105,7 @@ class ControlEquipmentController extends Controller
      * @return RedirectResponse
      */
     public function store(Request $request)
+    : RedirectResponse
     {
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
         $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
@@ -157,14 +156,12 @@ class ControlEquipmentController extends Controller
             $proDocFile = new EquipmentDoc();
             $file = $request->file('controlDokumentFile');
 
-            $validation = $request->validate([
+            $request->validate([
                 'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240',
-                // size:2048 => 2048kB
                 'eqdoc_label'         => 'required|unique:equipment_docs,eqdoc_label'
             ]);
 
             $eventHasDoku = true;
-            //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
             $proDocFile->eqdoc_name = $file->getClientOriginalName();
             $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
@@ -177,10 +174,9 @@ class ControlEquipmentController extends Controller
             $filename = $file->getClientOriginalName();
         }
 
-        $eh = new EquipmentHistory();
-
-        $eh->eqh_eintrag_kurz = 'Prüfung am ' . $request->control_event_date . ' ausgeführt ';
-
+        /**
+         * Add Data to History
+         */
         $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
         if (isset($request->evenItem)) $text .= $itempassed . ' von ' . count($request->evenItem) . ' Prüfungen wurden bestanden.';
         $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
@@ -188,10 +184,7 @@ class ControlEquipmentController extends Controller
             $text .= ' Das Dokument ' . $filename . ' wurde erfolgreich angefügt.';
         }
 
-        $eh->eqh_eintrag_text = $text;
-        $eh->equipment_id = $request->equipment_id;
-        $eh->save();
-
+        (new EquipmentHistory)->add(__('Prüfung am :conDate ausgeführt ', ['conDate' => $request->control_event_date]), $text, $request->equipment_id);
 
         return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
     }
@@ -199,7 +192,8 @@ class ControlEquipmentController extends Controller
     /**
      * @return array
      */
-    public function validateNewControlEvent(): array
+    public function validateNewControlEvent()
+    : array
     {
         return request()->validate([
             'control_event_next_due_date'        => 'date|required',
@@ -211,7 +205,7 @@ class ControlEquipmentController extends Controller
             'control_event_supervisor_name'      => '',
             'user_id'                            => '',
             'control_event_text'                 => '',
-            //            'controlDokumentFile'                => 'nullable|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240',
+            'controlDokumentFile'                => '',
             'control_equipment_id'               => 'required'
         ]);
     }

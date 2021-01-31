@@ -73,12 +73,23 @@
         </div>
     </div>
 
-    <div class="modal fade" id="noticeOfFailedItems" tabindex="-1" aria-labelledby="noticeOfFailedItemsLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="noticeOfFailedItems"
+         tabindex="-1"
+         aria-labelledby="noticeOfFailedItemsLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog">
             <div class="modal-content border-warning">
                 <div class="modal-header list-group-item-warning">
-                    <h5 class="modal-title" id="noticeOfFailedItemsLabel">Achtung!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title"
+                        id="noticeOfFailedItemsLabel"
+                    >Achtung!</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -88,7 +99,10 @@
                     <p>Sie können diese Prüfung als <strong>bestanden</strong> abschließen, wenn die Leitung die Entscheidung entsprechend begründet und die Prüfung entsprechend signiert.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">{{ __('Hinweis schließen') }}</button>
+                    <button type="button"
+                            class="btn btn-warning"
+                            data-dismiss="modal"
+                    >{{ __('Hinweis schließen') }}</button>
                 </div>
             </div>
         </div>
@@ -201,14 +215,23 @@
                     <div class="row">
                         <div class="col mb-3">
                             <h2 class="h5">{{__('Prüfling')}} </h2>
-                           @php(  $equipment = App\Equipment::find($test->equipment_id) )
-                            <x-staticfield label="{{ __('Name') }}" id="eq_name" value="{{ $equipment->eq_name }}" />
+                            @php(  $equipment = App\Equipment::find($test->equipment_id) )
+                            <x-staticfield label="{{ __('Name') }}"
+                                           id="eq_name"
+                                           value="{{ $equipment->eq_name }}"
+                            />
                             <div class="row">
                                 <div class="col-md-6">
-                                    <x-staticfield label="{{ __('Seriennummer') }}" id="eq_serien_nr" value="{{ $equipment->eq_serien_nr }}" />
+                                    <x-staticfield label="{{ __('Seriennummer') }}"
+                                                   id="eq_serien_nr"
+                                                   value="{{ $equipment->eq_serien_nr }}"
+                                    />
                                 </div>
                                 <div class="col-md-6">
-                                    <x-staticfield label="{{ __('Inventarnummer') }}" id="eq_inventar_nr" value="{{ $equipment->eq_inventar_nr }}" />
+                                    <x-staticfield label="{{ __('Inventarnummer') }}"
+                                                   id="eq_inventar_nr"
+                                                   value="{{ $equipment->eq_inventar_nr }}"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -300,14 +323,18 @@
                                         class="btnAddControlEquipmentToList"
                                     >
 
-                                        @forelse (App\Equipment::getControlEquipmentList() as $controlProdukt)
-                                            @if($controlProdukt->qe_control_date_due > now())
-                                                <option value="{{ $controlProdukt->id }}">{{ $controlProdukt->prod_label.' - '. $controlProdukt->eq_inventar_nr }}</option>
-                                            @else
-                                                <option value="{{ $controlProdukt->id }}"
-                                                        disabled
-                                                >{{ $controlProdukt->prod_label.' - '. $controlProdukt->eq_inventar_nr }} Prüfung überfällig!
-                                                </option>
+                                        @forelse (App\Equipment::all() as $controlEquipment)
+                                            @if($controlEquipment->getControlProductData() !== null)
+                                                @if($controlEquipment->ControlEquipment->first()->qe_control_date_due > now())
+                                                    <option value="{{ $controlEquipment->id }}">
+                                                        {{ $controlEquipment->eq_name  }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $controlEquipment->id }}"
+                                                            disabled
+                                                    >{{ $controlEquipment->eq_name.' - '. $controlEquipment->eq_inventar_nr }} {{__('Prüfung überfällig!')}}
+                                                    </option>
+                                                @endif
                                             @endif
                                         @empty
                                             <option value="void"
@@ -702,6 +729,7 @@
                 return false;
             }
         }
+
         function checkControlItemsPassed() {
             var failedItems = 0;
 
@@ -713,14 +741,14 @@
         }
 
         $('#btnSubmitControlEvent').click(function () {
-            if (!checkControlItemsPassed() && !$('#control_event_supervisor_signature').val()){
+            if (!checkControlItemsPassed() && !$('#control_event_supervisor_signature').val()) {
                 $('#noticeOfFailedItems').modal('show');
             } else {
                 $('#frmAddControlEvent').submit();
             }
         });
 
-        $('.checkControlItem').click(function (){
+        $('.checkControlItem').click(function () {
             setcontrolEquipmentPassButton();
         });
 
@@ -767,7 +795,7 @@
         });
 
         $('#controlEquipmentPassed').click(function () {
-            if(!checkControlItemsPassed()){
+            if (!checkControlItemsPassed()) {
                 $('#noticeOfFailedItems').modal('show');
             }
         });
@@ -789,7 +817,7 @@
                 >
                 <button type="button"
                         class="btn btn-sm m-0 btnDeleteControlEquipItem"
-                        data-targetid="#control_event_equipment_${equip_id}"
+                        data-targetid="#control_equipment_item_${equip_id}"
                 >
                     <i class="fas fa-times"></i>
                 </button>
@@ -801,9 +829,7 @@
 
         });
         $(document).on('click', '.btnDeleteControlEquipItem', function () {
-            $(
-                $(this).data('targetid')
-            ).remove();
+            $($(this).data('targetid')).remove();
             if ($('.controlEquipmentListItem').length === 0) {
                 $('#ControlEquipmentToList').append(`
                         <li class="controlEquipmentListInitialItem list-group-item list-group-item-warning d-flex justify-content-between align-items-center">

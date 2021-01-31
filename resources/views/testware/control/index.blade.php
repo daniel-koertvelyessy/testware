@@ -23,7 +23,7 @@
                 <table class="table table-responsive-md table-striped" id="tabControlListe">
                     <thead>
                     <tr>
-                        <th class="d-none d-md-table-cell">{{__('Gerät')}}</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
                         <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventar-Nr'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('qe_control_date_due', __('Fällig'))</th>
@@ -34,7 +34,7 @@
                     @forelse ($controlItems as $controlItem)
                         <tr>
                             <td class="d-none d-md-table-cell">
-                                {{ $controlItem->Equipment->Produkt->prod_label }}
+                                {{ $controlItem->Equipment->eq_name }}
                             </td>
                             <td>
                                 <span class="d-md-none">{!! $controlItem->checkDueDateIcon($controlItem) !!}</span>

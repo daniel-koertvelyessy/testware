@@ -44,7 +44,16 @@ class Equipment extends Model
 
     static function getControlEquipmentList()
     {
-        return \DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'control_equipment.qe_control_date_due', 'produkts.prod_label')->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')->join('control_equipment', 'control_equipment.equipment_id', '=', 'equipment.id')->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')->get();
+        return \DB::table('equipment')
+            ->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'produkts.prod_label')
+            ->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')
+            ->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')
+            ->get();
+    }
+
+    public function getControlProductData()
+    {
+        return $this->Produkt->ControlProdukt;
     }
 
     public function search($term)
