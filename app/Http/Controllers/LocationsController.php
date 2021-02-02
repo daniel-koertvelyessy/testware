@@ -38,7 +38,7 @@ class LocationsController extends Controller
         } else {
             if (isset($request->location))
                 $location = Location::find($request->location);
-            return view('admin.standorte.explorer', ['location' => $location]);
+            return view('admin.standorte.explorer', compact('location'));
         }
     }
 
@@ -419,18 +419,23 @@ class LocationsController extends Controller
 
     public function getBuildingListInLocation(Request $request)
     {
+        $n=0;
         $data['html'] = '';
         if ($request->id !== 'void') {
             foreach (Building::where('location_id', $request->id)->get() as $building) {
                 $data['html'] .= '
         <option value="' . $building->id . '">[' . $building->BuildingType->btname . '] ' . $building->b_label . ' / ' . $building->b_name . '</option>
 ';
+                $n++;
             }
+            $data['msg'] = $n . ' ' . __('Gebäude zur Auswahl gefunden');
         } else {
             $data['html'] .= '
-        <option value="void">Bitte Stellplatz auswählen</option>
+        <option value="void">'.__('Bitte Stellplatz auswählen').'</option>
 ';
+            $data['msg'] = $n . ' ' . __('Gebäude zur Auswahl gefunden');
         }
+
         return $data;
     }
 

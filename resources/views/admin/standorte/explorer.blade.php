@@ -60,7 +60,8 @@
                                        label="{{ __('befindet sich in ') . __('Standort') }}"
                         >
                             @foreach(\App\Location::all() as $loc)
-                                <option value="{{ $loc->id }}" @if($loc->id === $location->id)selected @endif >{{ $loc->l_name }}</option>
+                                <option value="{{ $loc->id }}"
+                                        @if($loc->id === $location->id)selected @endif >{{ $loc->l_name }}</option>
                             @endforeach
                         </x-selectfield>
 
@@ -194,10 +195,12 @@
                                id="storage_id_room"
                                value="{{ Str::uuid() }}"
                         >
-                        <x-selectfield label="{{__('Befindet sich in Gebäude')}}" name="building_id"
-                                       id="building_id_room_modal">
+                        <x-selectfield label="{{__('Befindet sich in Gebäude')}}"
+                                       name="building_id"
+                                       id="building_id_room_modal"
+                        >
                             @foreach(App\Building::all() as $build)
-                                <option value="{{ $build->id }}" >{{ $build->b_label . ' - ' . $build->b_name }}</option>
+                                <option value="{{ $build->id }}">{{ $build->b_label . ' - ' . $build->b_name }}</option>
                             @endforeach
                         </x-selectfield>
                         <div class="row">
@@ -302,7 +305,8 @@
                         >
                         <x-selectfield name="room_id"
                                        id="room_id_stellplatz_modal"
-                                       label="Befindet sich im Raum">
+                                       label="Befindet sich im Raum"
+                        >
                             @foreach(App\Room::all() as $room)
                                 <option value="{{ $room->id }}">{{ $room->r_label . ' ' . $room->r_name }}</option>
                             @endforeach
@@ -454,6 +458,8 @@
                         > @csrf @method('delete')</form>
                 </div>
                 <div id="buildingSection">
+                    @php($buildings = App\Building::with('BuildingType')->where('location_id',$location->id))
+                    <label class="d-md-none" id="labelBuildingSecton">{{ $buildings->count() }} {{ __('Gebäude zu Auswahl') }}</label>
                     <label for="buildingList"
                            class="sr-only"
                     >{{__('Gebäudeliste')}}</label>
@@ -462,7 +468,7 @@
                             multiple
                             size="10"
                     >
-                        @forelse(App\Building::with('BuildingType')->where('location_id',$location->id)->get() as $building)
+                        @forelse($buildings->get() as $building)
                             <option value="{{ $building->id }}">
                                 [{{ $building->BuildingType->btname }}]
                                 {{ $building->b_label }} /
@@ -528,6 +534,7 @@
                     </form>
                 </div>
                 <div id="roomSection">
+                    <label class="d-md-none" id="labelRoomSection">0 {{ __('Räume zu Auswahl') }}</label>
                     <label for="roomList"
                            class="sr-only"
                     >{{__('Gebäudeliste')}}</label>
@@ -592,6 +599,7 @@
                         > @csrf @method('delete')</form>
                 </div>
                 <div id="stellplatzSectionq">
+                    <label class="d-md-none" id="labelCompartmentSection">0 {{ __('Stellplätze zu Auswahl') }}</label>
                     <label for="stellplatzList"
                            class="sr-only"
                     >{{__('Gebäudeliste')}}</label>
@@ -611,6 +619,7 @@
 @endsection
 @section('scripts')
     <script>
+
         function setBuildingValues(id) {
             $('#building_id').val(id);
             $('#id_delete_Building').val(id);
@@ -622,6 +631,7 @@
                 data: {id},
                 success: (res) => {
                     $('#roomList').html(res.html);
+                    $('#labelRoomSection').html(res.msg);
                     setTimeout(function () {
                         buildingList.val(id)
                     }, 400);
@@ -651,6 +661,7 @@
                 data: {id},
                 success: (res) => {
                     $('#stellplatzList').html(res.html);
+                    $('#labelCompartmentSection').html(res.msg);
                     setTimeout(function () {
                         roomList.val(id)
                     }, 400);
@@ -714,6 +725,7 @@
                 data: {id: lid},
                 success: (res) => {
                     $('#buildingList').html(res.html);
+                    $('#labelBuildingSection').html(res.msg);
                     locationlist.val(lid);
                 }
             });

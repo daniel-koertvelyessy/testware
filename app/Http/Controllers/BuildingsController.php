@@ -60,6 +60,7 @@ class BuildingsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
@@ -77,15 +78,16 @@ class BuildingsController extends Controller
     /**
      * @return array
      */
-    public function validateNewBuilding(): array
+    public function validateNewBuilding()
+    : array
     {
         return request()->validate([
-            'b_label'      => 'bail|required|unique:buildings,b_label|min:2|max:20',
+            'b_label'          => 'bail|required|unique:buildings,b_label|min:2|max:20',
             'b_name_ort'       => '',
-            'b_name'      => '',
-            'b_description'      => '',
+            'b_name'           => '',
+            'b_description'    => '',
             'b_we_has'         => '',
-            'storage_id'      => '',
+            'storage_id'       => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
             'building_type_id' => 'required',
@@ -132,10 +134,10 @@ class BuildingsController extends Controller
                 $copy->storage_id,
 
             ], [
-                'b_label'      => 'bail|required|unique:buildings,b_label|min:2|max:10',
+                'b_label'          => 'bail|required|unique:buildings,b_label|min:2|max:10',
                 'b_name_ort'       => '',
-                'b_name'      => '',
-                'b_description'      => '',
+                'b_name'           => '',
+                'b_description'    => '',
                 'b_we_has'         => '',
                 'b_we_name'        => 'required_if:b_we_has,1',
                 'location_id'      => 'required',
@@ -162,6 +164,7 @@ class BuildingsController extends Controller
      * Display the specified resource.
      *
      * @param  Building $building
+     *
      * @return Application|Factory|Response|View
      */
     public function show(Building $building)
@@ -173,6 +176,7 @@ class BuildingsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Building $building
+     *
      * @return Application|Factory|View
      */
     public function edit(building $building)
@@ -185,6 +189,7 @@ class BuildingsController extends Controller
      *
      * @param  Request  $request
      * @param  Building $building
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Building $building)
@@ -205,13 +210,14 @@ class BuildingsController extends Controller
     /**
      * @return array
      */
-    public function validateBuilding(): array
+    public function validateBuilding()
+    : array
     {
         return request()->validate([
-            'b_label'      => 'bail|required|min:2|max:20',
+            'b_label'          => 'bail|required|min:2|max:20',
             'b_name_ort'       => '',
-            'b_name'      => '',
-            'b_description'      => '',
+            'b_name'           => '',
+            'b_description'    => '',
             'b_we_has'         => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
@@ -225,6 +231,7 @@ class BuildingsController extends Controller
      *
      * @param  Request  $request
      * @param  Building $building
+     *
      * @return RedirectResponse
      * @throws Exception
      */
@@ -287,6 +294,7 @@ class BuildingsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Request $request
+     *
      * @return bool
      */
     public function destroyBuildingAjax(Request $request)
@@ -311,20 +319,25 @@ class BuildingsController extends Controller
         $data['html'] = '';
         if ($request->id !== 'void') {
             if (Room::where('building_id', $request->id)->count() > 0) {
+                $n = 0;
                 foreach (Room::where('building_id', $request->id)->get() as $room) {
                     $data['html'] .= '
 <option value="' . $room->id . '">[' . $room->RoomType->rt_label . '] ' . $room->r_label . ' / ' . $room->r_name . '</option>
 ';
+                    $n++;
                 }
+                $data['msg'] = $n . ' ' . __('Räume im Gebäude vorhanden');
             } else {
                 $data['html'] .= '
-<option value="void">Keine Räume im Gebäude vorhanden</option>
+<option value="void">' . __('Keine Räume im Gebäude vorhanden') . '</option>
 ';
+                $data['msg'] = __('Keine Räume im Gebäude vorhanden');
             }
         } else {
             $data['html'] .= '
-<option value="void">Bitte Gebäude auswählen</option>
+<option value="void">' . __('Bitte Gebäude auswählen') . '</option>
 ';
+            $data['msg'] = __('Bitte Gebäude auswählen');
         }
         return $data;
     }

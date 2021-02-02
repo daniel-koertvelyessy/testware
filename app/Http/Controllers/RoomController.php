@@ -70,31 +70,30 @@ class RoomController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
     {
-        $room =  Room::create($this->validateNewRoom());
+        $room = Room::create($this->validateNewRoom());
         (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
-        $request->session()->flash(
-            'status',
-            __('Der Raum') . ' <strong>' . request('r_label') . '</strong> ' .  __('wurde angelegt!')
-        );
+        $request->session()->flash('status', __('Der Raum') . ' <strong>' . request('r_label') . '</strong> ' . __('wurde angelegt!'));
         return redirect()->route('room.show', $room);
     }
 
     /**
      * @return array
      */
-    public function validateNewRoom(): array
+    public function validateNewRoom()
+    : array
     {
         return request()->validate([
-            'r_label'  => 'bail|unique:rooms,r_label|max:20|required|',
-            'storage_id'  => 'unique:rooms,storage_id',
-            'r_name'  => 'max:100',
-            'r_description'  => '',
-            'building_id'  => 'required',
-            'room_type_id' => 'required'
+            'r_label'       => 'bail|unique:rooms,r_label|max:20|required|',
+            'storage_id'    => 'unique:rooms,storage_id',
+            'r_name'        => 'max:100',
+            'r_description' => '',
+            'building_id'   => 'required',
+            'room_type_id'  => 'required'
         ]);
     }
 
@@ -131,12 +130,12 @@ class RoomController extends Controller
                 $copy->room_type_id,
                 $copy->storage_id,
             ], [
-                'r_label'  => 'bail|required|unique:rooms,r_label|max:20',
-                'r_description'  => '',
-                'r_name'  => '',
-                'building_id'  => '',
-                'room_type_id' => '',
-                'storage_id'  => '',
+                'r_label'       => 'bail|required|unique:rooms,r_label|max:20',
+                'r_description' => '',
+                'r_name'        => '',
+                'building_id'   => '',
+                'room_type_id'  => '',
+                'storage_id'    => '',
 
             ]);
             $copy->save();
@@ -154,6 +153,7 @@ class RoomController extends Controller
      * Display the specified resource.
      *
      * @param  Room $room
+     *
      * @return Application|Factory|Response|View
      */
     public function show(Room $room)
@@ -165,6 +165,7 @@ class RoomController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Room $room
+     *
      * @return Application|Factory|Response|View
      */
     public function edit(Room $room)
@@ -177,6 +178,7 @@ class RoomController extends Controller
      *
      * @param  Request $request
      * @param  Room    $room
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Room $room)
@@ -196,13 +198,14 @@ class RoomController extends Controller
     /**
      * @return array
      */
-    public function validateRoom(): array
+    public function validateRoom()
+    : array
     {
         return request()->validate([
-            'r_label' => 'bail|min:2|max:10|required|',
-            'r_name' => 'bail|min:2|max:100',
+            'r_label'       => 'bail|min:2|max:10|required|',
+            'r_name'        => 'bail|min:2|max:100',
             'r_description' => '',
-            'building_id' => 'required'
+            'building_id'   => 'required'
         ]);
     }
 
@@ -211,6 +214,7 @@ class RoomController extends Controller
      *
      * @param  Room    $room
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      * @throws Exception
      */
@@ -226,6 +230,7 @@ class RoomController extends Controller
      * Lösche Raum aus GebäudeView über Ajax-Request.
      *
      * @param  Request $request
+     *
      * @return bool
      */
     public function destroyRoomAjax(Request $request)
@@ -255,20 +260,25 @@ class RoomController extends Controller
             //<option value="void">Stellplatz auswählen oder anlegen</option>
             //';
             if (Stellplatz::where('room_id', $request->id)->count() > 0) {
+                $n = 0;
                 foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz) {
                     $data['html'] .= '
 <option value="' . $stellplatz->id . '">[' . $stellplatz->StellplatzTyp->spt_label . '] ' . $stellplatz->sp_label . ' / ' . $stellplatz->sp_name . '</option>
 ';
+                    $n++;
                 }
+                $data['msg'] = $n . ' ' . __('Stellplätze gefunden');
             } else {
                 $data['html'] .= '
-<option value="void">Keine Stellplätze im Raum vorhanden</option>
+<option value="void">' . __('Keine Stellplätze im Raum vorhanden') . '</option>
 ';
+                $data['msg'] = __('Keine Stellplätze im Raum vorhanden');
             }
         } else {
             $data['html'] .= '
-<option value="void">Bitte Stellplatz auswählen</option>
+<option value="void">' . __('Bitte Stellplatz auswählen') . '</option>
 ';
+            $data['msg'] = __('Stellplätze gefunden');
         }
         return $data;
     }
@@ -315,6 +325,7 @@ class RoomController extends Controller
     {
         return Room::find($request->id);
     }
+
     public function getRoomListeAsTable()
     {
         $html = '<div class="col">
