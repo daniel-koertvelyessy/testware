@@ -21,13 +21,15 @@ class CreateRoomsTable extends Migration
             $table->string('r_name', 100)->nullable();
             $table->text('r_description')->nullable();
             $table->uuid('storage_id')->nullable();
-            $table->unsignedBigInteger('building_id')->nullable();
+            $table->foreignId('building_id')->constrained()->onDelete('cascade')
+                ->onUpdate('cascade');
+
+/*            $table->unsignedBigInteger('building_id')->nullable();
 
             $table->foreign('building_id')
                 ->references('id')
                 ->on('buildings')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
+                ;*/
 
 
             $table->unsignedBigInteger('room_type_id')->nullable();

@@ -226,56 +226,90 @@ class RoomController extends Controller
         return redirect()->back();
     }
 
+    public function getObjectsInRoom(Request $request)
+    {
+        $room = Room::find($request->id);
+        $data['html'] = '
+<p class="mt-3">' . __('Folgende Objekte werden von der Lösung betroffen sein.') . '</p>
+<ul class="list-group">';
+
+        $countEquipment = $room->countTotalEquipmentInRoom() ?? 0;
+        $countCompartment = $room->stellplatzs->count();
+
+        $bgEquipment = $countEquipment > 0 ? 'list-group-item-danger' : '';
+        $bgCompartments = $countCompartment > 0 ? 'list-group-item-danger' : '';
+
+
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgCompartments . ' ">' . __('Stellplätze') . '<span class="badge badge-primary badge-pill">' . $countCompartment . '</span></li>';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgEquipment . ' ">' . __('Geräte') . '<span class="badge badge-primary badge-pill">' . $countEquipment . '</span></li>';
+
+        return $data;
+    }
+
     /**
      * Lösche Raum aus GebäudeView über Ajax-Request.
      *
      * @param  Request $request
      *
-     * @return bool
+     * @return RedirectResponse
      */
     public function destroyRoomAjax(Request $request)
+    : RedirectResponse
     {
-
-        $rm = Room::find($request->id)->storage_id;
-
-        $stnd = Storage::where('storage_uid', $rm)->first();
-
+        $room = Room::find($request->id);
+        $room_label = $room->r_label;
+        $stnd = Storage::where('storage_uid', $room->storage_id)->first();
         $stnd->delete();
-
-        $rname = request('r_label');
-        if (Room::destroy($request->id)) {
-
-            $request->session()->flash('status', 'Der Raum <strong>' . $rname . '</strong> wurde gelöscht!');
-            return true;
-        } else {
-            return false;
-        }
+        Room::destroy($request->id);
+        $request->session()->flash('status', 'Der Raum <strong>' . $room_label . '</strong> wurde gelöscht!');
+        return redirect()->back();
     }
 
     public function getStellplatzListInRoom(Request $request)
     {
-        $data['html'] = '';
+        $data['select'] = '';
+        $data['radio'] = '';
         if ($request->id !== 'void') {
-            //            $data['html'] .= '
+            //            $data['select'] .= '
             //<option value="void">Stellplatz auswählen oder anlegen</option>
             //';
             if (Stellplatz::where('room_id', $request->id)->count() > 0) {
                 $n = 0;
                 foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz) {
-                    $data['html'] .= '
+                    $data['select'] .= '
 <option value="' . $stellplatz->id . '">[' . $stellplatz->StellplatzTyp->spt_label . '] ' . $stellplatz->sp_label . ' / ' . $stellplatz->sp_name . '</option>
 ';
+                    $data['radio'] .= '
+                <label class="btn btn-outline-primary"
+                       style="border-radius: 0!important; margin-top: 5px !important;"
+                >
+                    <input type="radio"
+                           name="radio_set_compartment_id"
+                           id="compartment_list_item_' . $stellplatz->id . '"
+                           class="radio_set_compartment_id"
+                           value="' . $stellplatz->id . '"
+                    >
+                    [' . $stellplatz->StellplatzTyp->spt_label . ']
+                    ' . $stellplatz->sp_label . ' /
+                    ' . $stellplatz->sp_name . '
+                </label>
+                ';
                     $n++;
                 }
                 $data['msg'] = $n . ' ' . __('Stellplätze gefunden');
             } else {
-                $data['html'] .= '
+                $data['select'] .= '
 <option value="void">' . __('Keine Stellplätze im Raum vorhanden') . '</option>
 ';
+                $data['radio'] .= '
+                <label class="btn btn-outline-primary">
+                    ' . __('Keine Stellplätze im Raum vorhanden') . '
+                </label>
+                ';
                 $data['msg'] = __('Keine Stellplätze im Raum vorhanden');
             }
         } else {
-            $data['html'] .= '
+            $data['select'] .= '
 <option value="void">' . __('Bitte Stellplatz auswählen') . '</option>
 ';
             $data['msg'] = __('Stellplätze gefunden');

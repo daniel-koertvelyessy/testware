@@ -36,8 +36,7 @@ class LocationsController extends Controller
             session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!');
             return redirect()->route('location.create');
         } else {
-            if (isset($request->location))
-                $location = Location::find($request->location);
+            if (isset($request->location)) $location = Location::find($request->location);
             return view('admin.standorte.explorer', compact('location'));
         }
     }
@@ -71,11 +70,7 @@ class LocationsController extends Controller
     public function autocomplete(Request $request)
     {
         $search = $request->input('query');
-        $locresults = Location::select("id", "l_label", 'l_name')
-            ->where('l_label', 'LIKE', "%$search%")
-            ->orWhere('l_name', 'LIKE', "%$search%")
-            ->orWhere('l_beschreibung', 'LIKE', "%$search%")
-            ->get();
+        $locresults = Location::select("id", "l_label", 'l_name')->where('l_label', 'LIKE', "%$search%")->orWhere('l_name', 'LIKE', "%$search%")->orWhere('l_beschreibung', 'LIKE', "%$search%")->get();
 
         return response()->json($locresults);
     }
@@ -94,12 +89,13 @@ class LocationsController extends Controller
      * Speichere neuen Standort
      *
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
     {
 
-        if ($request->adresse_id === NULL) {
+        if ($request->adresse_id === null) {
 
             $a = $this->validateInitialAdresse();
             $adresse = new Adresse();
@@ -111,7 +107,7 @@ class LocationsController extends Controller
             $request->adresse_id = $adresse->id;
         }
 
-        if ($request->profile_id === NULL) {
+        if ($request->profile_id === null) {
             $p = $this->validateInitialProfile();
             $profile = new Profile();
             $profile->ma_name = $request->ma_name;
@@ -143,11 +139,11 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public
-    function validateInitialAdresse(): array
+    public function validateInitialAdresse()
+    : array
     {
         return request()->validate([
-            'ad_label'         => 'bail|max:20|required|unique:adresses,ad_label',
+            'ad_label'             => 'bail|max:20|required|unique:adresses,ad_label',
             'ad_anschrift_strasse' => 'required',
             'ad_anschrift_plz'     => 'required',
             'ad_anschrift_ort'     => 'required'
@@ -157,8 +153,8 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public
-    function validateInitialProfile(): array
+    public function validateInitialProfile()
+    : array
     {
         return request()->validate([
             'ma_name'    => 'bail|max:20|required|unique:profiles,ma_name',
@@ -171,6 +167,7 @@ class LocationsController extends Controller
      * Display the specified resource.
      *
      * @param  Location $location
+     *
      * @return Application|Factory|Response|View
      */
     public function show(Location $location)
@@ -182,6 +179,7 @@ class LocationsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Location $location
+     *
      * @return Application|Factory|View
      */
     public function edit(location $location)
@@ -195,6 +193,7 @@ class LocationsController extends Controller
      *
      * @param  Request  $request
      * @param  Location $location
+     *
      * @return Response
      */
     public function update(Request $request, Location $location)
@@ -208,13 +207,13 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public
-    function validateLocation(): array
+    public function validateLocation()
+    : array
     {
         return request()->validate([
-            'storage_id'    => '',
-            'l_label'    => 'bail|min:2|max:20|required',
-            'l_name'    => '',
+            'storage_id'     => '',
+            'l_label'        => 'bail|min:2|max:20|required',
+            'l_name'         => '',
             'l_beschreibung' => '',
             'adresse_id'     => 'required',
             'profile_id'     => 'required'
@@ -225,6 +224,7 @@ class LocationsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Request $request
+     *
      * @return bool
      */
     public function destroyLocationAjax(Request $request)
@@ -299,6 +299,7 @@ class LocationsController extends Controller
      *
      * @param  Request  $request
      * @param  Location $location
+     *
      * @return RedirectResponse
      */
     public function addLocationAnforderung(Request $request, location $location)
@@ -322,8 +323,8 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public
-    function validateLocationAnforderung(): array
+    public function validateLocationAnforderung()
+    : array
     {
         return request()->validate([
             'anforderung_id' => 'required',
@@ -335,6 +336,7 @@ class LocationsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Location $location
+     *
      * @return Application|Factory|View
      */
     public function deleteLocationAnforderung(Request $request, location $location)
@@ -349,7 +351,10 @@ class LocationsController extends Controller
         $data = [
             'text' => $location->l_label,
             'href' => $location->id,
-            'tags' => [__('Gebäude'), Building::where('location_id', $location->id)->count()],
+            'tags' => [
+                __('Gebäude'),
+                Building::where('location_id', $location->id)->count()
+            ],
 
         ];
         if (Building::where('location_id', $location->id)->count() > 0) {
@@ -369,7 +374,10 @@ class LocationsController extends Controller
                                 'text'  => 'Raum ' . $room->r_label,
                                 'href'  => $room->id,
                                 'type'  => 'room',
-                                'tags'  => [__('Stellplätze'), Stellplatz::where('room_id', $room->id)->count()],
+                                'tags'  => [
+                                    __('Stellplätze'),
+                                    Stellplatz::where('room_id', $room->id)->count()
+                                ],
                                 'state' => [
                                     'expanded' => false,
                                     'selected' => false
@@ -381,7 +389,10 @@ class LocationsController extends Controller
                                 'text'  => 'Raum ' . $room->r_label,
                                 'href'  => $room->id,
                                 'type'  => 'room',
-                                'tags'  => [__('Stellplätze'), Stellplatz::where('room_id', $room->id)->count()],
+                                'tags'  => [
+                                    __('Stellplätze'),
+                                    Stellplatz::where('room_id', $room->id)->count()
+                                ],
                                 'state' => [
                                     'expanded' => false,
                                     'selected' => false
@@ -393,7 +404,10 @@ class LocationsController extends Controller
                         'text'  => 'Gebäude ' . $building->b_label,
                         'href'  => $building->id,
                         'type'  => 'building',
-                        'tags'  => [__('Räume'), Room::where('building_id', $building->id)->count()],
+                        'tags'  => [
+                            __('Räume'),
+                            Room::where('building_id', $building->id)->count()
+                        ],
                         'state' => [
                             'expanded' => false,
                             'selected' => false
@@ -405,7 +419,10 @@ class LocationsController extends Controller
                         'text'  => 'Gebäude ' . $building->b_label,
                         'href'  => $building->id,
                         'type'  => 'building',
-                        'tags'  => [__('Räume'), Room::where('building_id', $building->id)->count()],
+                        'tags'  => [
+                            __('Räume'),
+                            Room::where('building_id', $building->id)->count()
+                        ],
                         'state' => [
                             'expanded' => false,
                             'selected' => false
@@ -419,20 +436,44 @@ class LocationsController extends Controller
 
     public function getBuildingListInLocation(Request $request)
     {
-        $n=0;
-        $data['html'] = '';
+        $n = 0;
+        $data['select'] = '
+            <option value="void">' . __('Bitte Gebäude auswählen') . '</option>';
+        $data['radio'] = '';
         if ($request->id !== 'void') {
             foreach (Building::where('location_id', $request->id)->get() as $building) {
-                $data['html'] .= '
+                $data['select'] .= '
         <option value="' . $building->id . '">[' . $building->BuildingType->btname . '] ' . $building->b_label . ' / ' . $building->b_name . '</option>
 ';
+                $data['radio'] .= '
+                <label class="btn btn-outline-primary"
+                       style="border-radius: 0!important; margin-top: 5px !important;"
+                >
+                    <input type="radio"
+                           name="radio_set_building_id"
+                           id="building_list_item_' . $building->id . '"
+                           class="radio_set_building_id"
+                           value="' . $building->id . '"
+                    >
+                    [' . $building->BuildingType->btname . ']
+                    ' . $building->b_label . ' /
+                    ' . $building->b_name . '
+                </label>
+                ';
+
                 $n++;
             }
+
             $data['msg'] = $n . ' ' . __('Gebäude zur Auswahl gefunden');
         } else {
-            $data['html'] .= '
-        <option value="void">'.__('Bitte Stellplatz auswählen').'</option>
+            $data['select'] .= '
+        <option value="void">' . __('Bitte Stellplatz auswählen') . '</option>
 ';
+            $data['radio'] .= '
+                <label class="btn btn-outline-primary">
+                    ' . __('Bitte Stellplatz auswählen') . '
+                </label>
+                ';
             $data['msg'] = $n . ' ' . __('Gebäude zur Auswahl gefunden');
         }
 
@@ -442,14 +483,14 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public
-    function validateNewLocation(): array
+    public function validateNewLocation()
+    : array
     {
         return request()->validate([
-            'l_label'    => 'bail|unique:locations,l_label|min:2|max:20|required',
-            'l_name'    => '',
+            'l_label'        => 'bail|unique:locations,l_label|min:2|max:20|required',
+            'l_name'         => '',
             'l_beschreibung' => '',
-            'storage_id'    => 'unique:locations,storage_id',
+            'storage_id'     => 'unique:locations,storage_id',
             'adresse_id'     => 'required',
             'profile_id'     => 'required'
         ]);

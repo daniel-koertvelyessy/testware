@@ -256,7 +256,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesegen. Bitte wählen Sie das entspechende aus.') }}</p>
+                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende aus.') }}</p>
 
                     <table class="table table-responsive-md">
                         <thead>
@@ -796,9 +796,16 @@
                                                label="{{__('Bezeichnung')}}:"
                                                value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
                                 />
+                                <?php
+                                if(App\Storage::find($equipment->storage_id)){
+                                    $value=App\Storage::find($equipment->storage_id)->storage_label ;
+                                }else{
+                                    $value=__('nicht zugeordnet');
+                                }
+                                ?>
                                 <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
-                                               value="{!!  App\Storage::find($equipment->storage_id)->storage_label !!}"
+                                              value="{{ $value }}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
                                                label="{{__('Inventarnummer')}}:"

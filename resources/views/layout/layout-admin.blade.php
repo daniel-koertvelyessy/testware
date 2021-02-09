@@ -103,7 +103,7 @@
     </nav>
     @if (session()->has('status'))
         <div class=" fixed-top d-flex justify-content-end d-block">
-            <div class="toast bg-light"
+            <div class="toast bg-light d-sm-flex"
                  role="alert"
                  aria-live="assertive"
                  aria-atomic="true"

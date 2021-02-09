@@ -512,9 +512,10 @@
         });
 
         $('#btnSetStorageFromModal').click(function () {
-            const setStorageNd = $('input.setStorage');
+            const setStorageNd = $('input.setStorage:checked');
+            console.log(setStorageNd.val());
             $('#storage_id').val(setStorageNd.val());
-            $('#setStandOrtId').removeClass('is-invalid').val($('.setStorage').next('label').html());
+            $('#setStandOrtId').removeClass('is-invalid').val(setStorageNd.next('label').html());
             $('#modalSetStorage').modal('hide');
         });
 

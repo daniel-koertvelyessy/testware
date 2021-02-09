@@ -67,12 +67,20 @@
                     @foreach ($roomList as $room)
                         <tr>
                             <td class="d-none d-md-table-cell">
-                                <a href="/location/{{ $room->building->location->id??''  }}">
-                                    {{ $room->building->location->l_label??''  }}
-                                </a>
+                                @if($room->building)
+                                    <a href="/location/{{ $room->building->location->id??''  }}">
+                                        {{ $room->building->location->l_label??''  }}
+                                    </a>
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>
-                                <a href="/building/{{ $room->building->id  }}">{{ $room->building->b_label  }}</a>
+                                @if($room->building)
+                                    <a href="/building/{{ $room->building->id  }}">{{ $room->building->b_label  }}</a>
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>
                                 <a href="{{$room->path()}}">

@@ -17,6 +17,7 @@ use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
+use App\Stellplatz;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -312,10 +313,10 @@ class EquipmentController extends Controller
             $flag = true;
         }
         if ($oldEquipment->storage_id != $request->storage_id) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= __('Feld :fld von [:old] in [:new] geändert', [
                     'fld' => __('Aufstellplatz / Standort'),
-                    'old' => $oldEquipment->storage_id,
-                    'new' => $request->storage_id,
+                    'old' => $oldEquipment->storage->storage_label,
+                    'new' => \App\Storage::find($request->storage_id)->storage_label,
                 ]) . ' | ';
             $flag = true;
         }

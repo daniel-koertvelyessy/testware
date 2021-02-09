@@ -70,7 +70,7 @@
                                 </a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
-                            <td class="d-none d-md-table-cell">{{ $equipment->storage->storage_label }}</td>
+                            <td class="d-none d-md-table-cell">{!! ($equipment->storage) ? $equipment->storage->storage_label : '<span class="fas fa-exclamation-circle text-warning"></span> <span class="text-warning text-sm">keine Zuordnung</span>'!!}</td>
                             <td class="d-none d-lg-table-cell"
                                 style="vertical-align: middle;"
                             >

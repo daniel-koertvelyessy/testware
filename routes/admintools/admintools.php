@@ -38,6 +38,7 @@ Route::get('getUsedStellplatzByType', 'AdminController@getUsedStellplatzByType')
 Route::get('getStellplatzTypeList', 'AdminController@getStellplatzTypeList')->name('getStellplatzTypeList');
 Route::get('getStellplatzData', 'StellplatzController@getStellplatzData')->name('getStellplatzData');
 Route::get('getStellplatzList', 'StellplatzController@getStellplatzList')->name('getStellplatzList');
+Route::get('getObjectsInCompartment', 'StellplatzController@getObjectsInCompartment')->name('getObjectsInCompartment');
 
 Route::post('stellplatz.modal', 'StellplatzController@modal')->name('stellplatz.modal');
 Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAjax')->name('destroyStellplatzAjax');
@@ -64,6 +65,7 @@ Route::get('getRoomListeAsTable', 'RoomController@getRoomListeAsTable')->name('g
 Route::get('getRoomTypeList', 'RoomController@getRoomTypeList')->name('getRoomTypeList');
 Route::get('getRoomData', 'RoomController@getRoomData')->name('getRoomData');
 Route::get('getRoomList', 'RoomController@getRoomList')->name('getRoomList');
+Route::get('getObjectsInRoom', 'RoomController@getObjectsInRoom')->name('getObjectsInRoom');
 Route::get('getStellplatzListInRoom', 'RoomController@getStellplatzListInRoom')->name('getStellplatzListInRoom');
 
 Route::post('room.modal', 'RoomController@modal')->name('room.modal');
@@ -79,6 +81,7 @@ Route::get('exportjson.rooms', 'ExportController@roomsToJson')->name('exportjson
 
 Route::delete('destroyBuildingAjax', 'BuildingsController@destroyBuildingAjax')->name('destroyBuildingAjax');
 Route::post('createAjaxBuildingType', 'AdminController@createAjaxBuildingType')->name('createAjaxBuildingType');
+Route::get('getObjectsInBuilding', 'BuildingsController@getObjectsInBuilding')->name('getObjectsInBuilding');
 Route::post('createBuildingType', 'AdminController@createBuildingType')->name('createBuildingType');
 Route::post('getBuildingTypeData', 'AdminController@getBuildingTypeData')->name('getBuildingTypeData');
 Route::put('updateBuildingType', 'AdminController@updateBuildingType')->name('updateBuildingType');

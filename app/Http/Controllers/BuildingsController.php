@@ -295,50 +295,87 @@ class BuildingsController extends Controller
      *
      * @param  Request $request
      *
-     * @return bool
+     * @return RedirectResponse
      */
     public function destroyBuildingAjax(Request $request)
+    : RedirectResponse
     {
+        $building = Building::find($request->id)->first();
 
-        $rm = Building::find($request->id)->storage_id;
-        $stnd = Storage::where('storage_uid', $rm)->first();
+        $name = $building->b_name;
+        $storage_id = $building->storage_id;
 
+        $stnd = Storage::where('storage_uid', $storage_id)->first();
         $stnd->delete();
-        $rname = Building::find($request->id)->first()->b_name;
-        if (Building::destroy($request->id)) {
 
-            $request->session()->flash('status', 'Das Gebäude <strong>' . $rname . '</strong> wurde gelöscht!');
-            return true;
-        } else {
-            return false;
-        }
+        Building::destroy($request->id);
+        $request->session()->flash('status', 'Das Gebäude <strong>' . $name . '</strong> wurde gelöscht!');
+        return redirect()->back();
+
     }
 
     public function getRoomListInBuilding(Request $request)
     {
-        $data['html'] = '';
+        $data['select'] = '
+            <option value="void">' . __('Bitte Gebäude auswählen') . '</option>';
+
+        $data['radio'] = '';
         if ($request->id !== 'void') {
             if (Room::where('building_id', $request->id)->count() > 0) {
                 $n = 0;
                 foreach (Room::where('building_id', $request->id)->get() as $room) {
-                    $data['html'] .= '
+                    $data['select'] .= '
 <option value="' . $room->id . '">[' . $room->RoomType->rt_label . '] ' . $room->r_label . ' / ' . $room->r_name . '</option>
 ';
+                    $data['radio'] .= '
+                <label class="btn btn-outline-primary"
+                       style="border-radius: 0!important; margin-top: 5px !important;"
+                >
+                    <input type="radio"
+                           name="radio_set_room_id"
+                           id="room_list_item_' . $room->id . '"
+                           class="radio_set_room_id"
+                           value="' . $room->id . '"
+                    >[' . $room->RoomType->rt_label . '] ' . $room->r_label . ' / ' . $room->r_name . '
+                </label>
+                ';
+
                     $n++;
                 }
                 $data['msg'] = $n . ' ' . __('Räume im Gebäude vorhanden');
             } else {
-                $data['html'] .= '
+                $data['select'] .= '
 <option value="void">' . __('Keine Räume im Gebäude vorhanden') . '</option>
 ';
                 $data['msg'] = __('Keine Räume im Gebäude vorhanden');
             }
         } else {
-            $data['html'] .= '
+            $data['select'] .= '
 <option value="void">' . __('Bitte Gebäude auswählen') . '</option>
 ';
             $data['msg'] = __('Bitte Gebäude auswählen');
         }
+        return $data;
+    }
+
+    public function getObjectsInBuilding(Request $request)
+    {
+        $data['html'] = '
+<p class="mt-3">' . __('Folgende Objekte werden von der Lösung betroffen sein.') . '</p>
+<ul class="list-group">';
+        $building = Building::find($request->id);
+        $countRooms = $building->rooms->count();
+        $countEquipment = $building->countTotalEquipmentInBuilding() ?? 0;
+        $countCompartment = $building->countStellPlatzs($building);
+
+        $bgRooms = $countRooms > 0 ? 'list-group-item-danger' : '';
+        $bgEquipment = $countEquipment > 0 ? 'list-group-item-danger' : '';
+        $bgCompartments = $countCompartment > 0 ? 'list-group-item-danger' : '';
+
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgRooms . ' ">' . __('Räume') . '<span class="badge badge-primary badge-pill">' . $countRooms . '</span></li>';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgCompartments . ' ">' . __('Stellplätze') . '<span class="badge badge-primary badge-pill">' . $countCompartment . '</span></li>';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgEquipment . ' ">' . __('Geräte') . '<span class="badge badge-primary badge-pill">' . $countEquipment . '</span></li>';
+
         return $data;
     }
 

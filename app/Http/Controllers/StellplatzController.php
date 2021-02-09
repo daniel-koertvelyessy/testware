@@ -39,6 +39,7 @@ class StellplatzController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -54,13 +55,14 @@ class StellplatzController extends Controller
     /**
      * @return array
      */
-    public function validateNeuStellPlatz(): array
+    public function validateNeuStellPlatz()
+    : array
     {
         return request()->validate([
-            'sp_label'      => 'bail|unique:stellplatzs,sp_label|required|min:1|max:20',
-            'sp_name'      => 'max:100',
-            'sp_description'      => '',
-            'storage_id'       => 'required',
+            'sp_label'          => 'bail|unique:stellplatzs,sp_label|required|min:1|max:20',
+            'sp_name'           => 'max:100',
+            'sp_description'    => '',
+            'storage_id'        => 'required',
             'room_id'           => 'required',
             'stellplatz_typ_id' => 'required',
         ]);
@@ -68,6 +70,7 @@ class StellplatzController extends Controller
 
     /**
      * @param  Request $reuest
+     *
      * @return RedirectResponse
      */
     public function copyStellplatz(Request $reuest)
@@ -88,6 +91,7 @@ class StellplatzController extends Controller
      * Display the specified resource.
      *
      * @param  Stellplatz $stellplatz
+     *
      * @return Response
      */
     public function show(Stellplatz $stellplatz)
@@ -99,6 +103,7 @@ class StellplatzController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Stellplatz $stellplatz
+     *
      * @return Response
      */
     public function edit(Stellplatz $stellplatz)
@@ -111,6 +116,7 @@ class StellplatzController extends Controller
      *
      * @param  Request    $request
      * @param  Stellplatz $stellplatz
+     *
      * @return Response
      */
     public function update(Request $request, Stellplatz $stellplatz)
@@ -127,6 +133,7 @@ class StellplatzController extends Controller
      *
      * @param  Request    $request
      * @param  Stellplatz $stellplatz
+     *
      * @return RedirectResponse
      * @throws \Exception
      */
@@ -139,19 +146,20 @@ class StellplatzController extends Controller
 
     /**
      * @param  Request $request
-     * @return boolean
+     *
+     * @return RedirectResponse
      */
     public function destroyStellplatzAjax(Request $request)
+    : RedirectResponse
     {
-        if (Stellplatz::destroy($request->id)) {
-            $request->session()->flash('status', 'Der Stellplatz <strong>' . $request->sp_label . '</strong>  wurde gelöscht!');
-            return true;
-        } else {
-            return false;
-        }
+        $compartment = Stellplatz::find($request->id);
+        $request->session()->flash('status', __('Der Stellplatz <strong>:label</strong>  wurde gelöscht!', ['label' => $compartment->sp_label]));
+        $compartment->delete();
+        return back();
     }
 
     public function modal(Request $request)
+    : RedirectResponse
     {
 
         if ($request->stellplatz_typ_id === 'new' && isset($request->stellplatz_typ_id)) {
@@ -194,10 +202,25 @@ class StellplatzController extends Controller
             $stellplatz->save();
 
             $std = (new \App\Storage)->add($request->storage_id, $request->sp_label, 'stellplatzs');
-            $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_label') . '</strong> wurde angelegt!');
+            $request->session()->flash('status', __('Der Stellplatz <strong>:label</strong> wurde angelegt!', ['label' => request('sp_label')]));
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * @return array
+     */
+    public function validateStellPlatz()
+    : array
+    {
+        return request()->validate([
+            'sp_label'          => 'bail|required|min:1|max:20',
+            'sp_name'           => 'max:100',
+            'sp_description'    => '',
+            'room_id'           => 'required',
+            'stellplatz_typ_id' => 'required',
+        ]);
     }
 
     public function getStellplatzData(Request $request)
@@ -205,17 +228,16 @@ class StellplatzController extends Controller
         return Stellplatz::find($request->id);
     }
 
-    /**
-     * @return array
-     */
-    public function validateStellPlatz(): array
+    public function getObjectsInCompartment(Request $request)
     {
-        return request()->validate([
-            'sp_label'      => 'bail|required|min:1|max:20',
-            'sp_name'      => 'max:100',
-            'sp_description'      => '',
-            'room_id'           => 'required',
-            'stellplatz_typ_id' => 'required',
-        ]);
+        $compartment = Stellplatz::find($request->id);
+        $data['html'] = '
+<p class="mt-3">' . __('Folgende Objekte werden von der Lösung betroffen sein.') . '</p>
+<ul class="list-group">';
+        $countEquipment = $compartment->countTotalEquipmentInCompartment() ?? 0;
+        $bgEquipment = $countEquipment > 0 ? 'list-group-item-danger' : '';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgEquipment . ' ">' . __('Geräte') . '<span class="badge badge-primary badge-pill">' . $countEquipment . '</span></li>';
+
+        return $data;
     }
 }

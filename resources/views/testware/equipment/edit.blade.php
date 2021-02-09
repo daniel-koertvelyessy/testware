@@ -23,9 +23,59 @@
         <p class="mx-3 mt-4 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
     </x-modals.form_modal>
 
+    <div class="modal"
+         id="modalSetStorage"
+         tabindex="-1"
+         aria-labelledby="modalSetStorageLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="modalSetStorageLabel"
+                    >{{__('Verfügbare Aufstellplätze / Standorte')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @forelse(App\Storage::all() as $storage)
+                        <div class="custom-control custom-radio">
+                            <input type="radio"
+                                   id="setStorage_{{ $storage->id }}"
+                                   name="setStorage[]"
+                                   class="custom-control-input setStorage"
+                                   value="{{ $storage->id }}"
+                            >
+                            <label class="custom-control-label"
+                                   for="setStorage_{{ $storage->id }}"
+                            >{{ $storage->storage_label }}</label>
+                        </div>
+                    @empty
+                        <x-notifyer>{{__('Es sind keine Standorte angelegt')}}</x-notifyer>
+                    @endforelse
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                    >{{__('Schließen')}}</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            id="btnSetStorageFromModal"
+                    >{{__('Übernehmen')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
-
 @section('content')
 
     <div class="container">
@@ -55,8 +105,9 @@
                     <input type="hidden"
                            name="storage_id"
                            id="storage_id"
-                           value="{{ $equipment->storage_id }}"
+                           value="{{ $equipment->storage_id??'' }}"
                     >
+
                     <div class="row">
 
                         <div class="col-md-4">
@@ -91,11 +142,22 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <x-rtextfield id="setStandOrtId"
-                                          label="{{__('Aufstellplatz / Standort')}}"
-                                          value="{{ $equipment->storage->storage_label }}"
-                            />
+                        <div class="col-md-4" id="setStorageID">
+                            @if($equipment->storage)
+                                <x-rtextfield id="setStandOrtId"
+                                              label="{{__('Aufstellplatz / Standort')}}"
+                                              value="{{ $equipment->storage->storage_label }}"
+                                />
+                            @else
+                                    <label class="text-warning">{{ __('Es ist kein Standort für das Gerät festgelegt') }}</label>
+                                    <button type="button"
+                                            class="btn btn-outline-warning"
+                                            data-toggle="modal"
+                                            data-target="#modalSetStorage"
+                                    >
+                                        <span class="d-none d-md-inline">{{__('Standort festlegen')}}</span> <span class="fas fa-exclamation-triangle ml-md-2"></span>
+                                    </button>
+                            @endif
                         </div>
                         <div class="col-md-4">
                             <x-textfield id="eq_serien_nr"
@@ -189,7 +251,25 @@
     </div>
     {{--    {{ App\Produkt::find(request('produkt_id'))  }}--}}
 @endsection
+@section('scripts')
+    <script>
+        $('#btnSetStorageFromModal').click(function () {
+            const setStorageNd = $('input.setStorage:checked');
+            console.log(setStorageNd.val());
+            $('#storage_id').val(setStorageNd.val());
+            let storageLabel = setStorageNd.next('label').html();
+           let label="{{__('Aufstellplatz / Standort')}}";
+            $('#setStorageID').html(`
+        <div class="form-group">
+            <label for="setStandOrtId">${label}</span>
+            <input type="text" id="setStandOrtId" name="setStandOrtId" class="form-control" value="${storageLabel}">
+        </div>
+            `);
 
+            $('#modalSetStorage').modal('hide');
+        });
+    </script>
+@endsection
 @section('autocomplete')
 
     <link rel="stylesheet"
@@ -290,5 +370,7 @@
         $('.setFieldReadWrite').click(function () {
             ($(this).prop('checked')) ? $($(this).data('targetid')).attr('readonly', false) : $($(this).data('targetid')).attr('readonly', true)
         });
+
+
     </script>
 @endsection

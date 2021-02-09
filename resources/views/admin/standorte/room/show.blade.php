@@ -22,13 +22,21 @@
                 <a href="{{ route('location.index') }}">{{ __('Standorte') }} <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item">
+                @if($room->building)
                 <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_label }}</a>
+                @else
+                    -
+                @endif
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('building.index') }}">{{__('Gebäude')}} <i class="fas fa-angle-right"></i></a>
             </li>
             <li class="breadcrumb-item">
+                @if($room->building)
                 <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_label }}</a>
+                @else
+                -
+                    @endif
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('room.index') }}">{{__('Räume')}} <i class="fas fa-angle-right"></i></a>
@@ -61,7 +69,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title"
                             id="modalAddStellPlatzTypeLabel"
-                        >{{__('Neuen Stellplatztyp erstellen')}}</h5>
+                        >{{ __('Neuen Stellplatztyp erstellen')}}</h5>
                         <button type="button"
                                 class="close"
                                 data-dismiss="modal"
@@ -168,6 +176,9 @@
                                     <x-selectfield id="building_id"
                                                    label="{{__('Raum befindet sich im Gebäude')}}"
                                     >
+                                        @if(! $room->building)
+                                            <option value="void">{{ __('keine Zuordnung') }}</option>
+                                        @endif
                                         @foreach (App\Building::all() as $bul)
                                             <option value="{{ $bul->id }}" {{ ($bul->id === $room->building_id) ? ' selected ' : '' }}>{{ $bul->b_label }}</option>
                                         @endforeach
