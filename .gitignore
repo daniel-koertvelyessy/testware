@@ -15,3 +15,5 @@ yarn-error.log
 configs.txt
 layout_DIN.txt
 _ide_helper.php
+git_update.py
+update.py

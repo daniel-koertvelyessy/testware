@@ -307,7 +307,7 @@
                         >
                         <x-selectfield name="room_id"
                                        id="room_id_compartment_modal"
-                                       label="Befindet sich im Raum"
+                                       label="{{__('Befindet sich im Raum')}}"
                         >
                             @foreach(App\Room::all() as $room)
                                 <option value="{{ $room->id }}">{{ $room->r_label . ' ' . $room->r_name }}</option>
@@ -1112,12 +1112,13 @@
                     url: "{{ route('getStellplatzData') }}",
                     data: {id},
                     success: (res) => {
+                        console.log(res);
                         form.find('#sp_label').val(res.sp_label);
                         form.find('#storage_id_compartment').val(res.storage_id);
                         form.find('#sp_name').val(res.sp_name);
                         form.find('#sp_description').val(res.sp_description);
                         form.find('#room_id_compartment_modal').val(res.room_id);
-                        form.find('#compartment_typ_id').val(res.compartment_typ_id);
+                        form.find('#compartment_typ_id').val(res.stellplatz_typ_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
                             $('#modalSetStellplatzLabel').text('{{__('Stellplatz bearbeiten')}}');

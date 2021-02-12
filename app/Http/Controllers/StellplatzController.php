@@ -162,11 +162,11 @@ class StellplatzController extends Controller
     : RedirectResponse
     {
 
-        if ($request->stellplatz_typ_id === 'new' && isset($request->stellplatz_typ_id)) {
+        if ($request->compartment_typ_id === 'new' && isset($request->compartment_typ_id)) {
             $bt = new StellplatzTyp();
             $bt->spt_label = $request->newStellplatzType;
             $bt->save();
-            $request->stellplatz_typ_id = $bt->id;
+            $request->compartment_typ_id = $bt->id;
         }
 
         if ($request->modalType === 'edit') {
@@ -183,21 +183,28 @@ class StellplatzController extends Controller
             $stellplatz->sp_name = $request->sp_name;
             $stellplatz->sp_description = $request->sp_description;
             $stellplatz->room_id = $request->room_id;
-            $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
+            $stellplatz->stellplatz_typ_id = $request->compartment_typ_id;
             $stellplatz->save();
 
 
             $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_label') . '</strong> wurde aktualisiert!');
         } else {
 
-            $this->validateNeuStellPlatz();
+            request()->validate([
+                'sp_label'          => 'bail|unique:stellplatzs,sp_label|required|min:1|max:20',
+                'sp_name'           => 'max:100',
+                'sp_description'    => '',
+                'storage_id'        => 'required',
+                'room_id'           => 'required',
+                'compartment_typ_id' => 'required',
+            ]);
 
             $stellplatz = new Stellplatz();
             $stellplatz->sp_label = $request->sp_label;
             $stellplatz->sp_name = $request->sp_name;
             $stellplatz->sp_description = $request->sp_description;
             $stellplatz->room_id = $request->room_id;
-            $stellplatz->stellplatz_typ_id = $request->stellplatz_typ_id;
+            $stellplatz->stellplatz_typ_id = $request->compartment_typ_id;
             $stellplatz->storage_id = $request->storage_id;
             $stellplatz->save();
 
@@ -219,7 +226,7 @@ class StellplatzController extends Controller
             'sp_name'           => 'max:100',
             'sp_description'    => '',
             'room_id'           => 'required',
-            'stellplatz_typ_id' => 'required',
+            'compartment_typ_id' => 'required',
         ]);
     }
 

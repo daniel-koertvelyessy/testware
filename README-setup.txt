@@ -1,21 +1,31 @@
 
 # setup laravel environment on debian buster
 
-root@testware:~# adduser system
-root@testware:~# usermod -aG sudo system
-root@testware:~# su - system
+# IF inside a new debian / ubuntu container you may 
+# need to install wget / sudo first
+apt update
+apt install wget -y 
+apt insatll sudo -y 
 
-system@testware:~$ sudo apt update
-system@testware:~$ sudo apt install apache2
+# make new system user
+adduser system
+usermod -aG sudo system
+su - system
 
-system@testware:~$ sudo apt install lsb-release apt-transport-https ca-certificates
-system@testware:~$ sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-system@testware:~$ sudo echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php7.3.list
-system@testware:~$ sudo apt update
-system@testware:~$ sudo apt install php7.3 php7.3-cli php7.3-fpm php7.3-json php7.3-pdo php7.3-mysql php7.3-zip php7.3-gd  php7.3-mbstring php7.3-curl php7.3-xml php7.3-bcmath php7.3-json php7.3-zip
+# install Apache Server
+sudo apt update
+sudo apt install apache2
 
-system@testware:~$ sudo apt install mariadb-server mariadb-client
-system@testware:~$ sudo mysql_secure_installation
+# install PHP
+sudo apt install lsb-release apt-transport-https ca-certificates
+sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+sudo echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php7.3.list
+sudo apt update
+sudo apt install php7.3 php7.3-cli php7.3-fpm php7.3-json php7.3-pdo php7.3-mysql php7.3-zip php7.3-gd  php7.3-mbstring php7.3-curl php7.3-xml php7.3-bcmath php7.3-json php7.3-zip
+
+# install MariaDB
+sudo apt install mariadb-server mariadb-client
+sudo mysql_secure_installation
 
 Set root password? [Y/n] Y
 Remove anonymous users? [Y/n] Y
@@ -23,7 +33,7 @@ Disallow root login remotely? [Y/n] Y
 Remove test database and access to it? [Y/n] Y
 Reload privilege tables now? [Y/n] Y
 
-system@testware:~$ sudo mysql -u root
+sudo mysql -u root
 
 create database testware;
 GRANT USAGE ON *.* TO 'root'@localhost IDENTIFIED BY 'password';
@@ -38,9 +48,11 @@ SHOW GRANTS FOR 'root'@localhost;
 | GRANT PROXY ON ''@'%' TO 'root'@'localhost' WITH GRANT OPTION                                                                          |
 +----------------------------------------------------------------------------------------------------------------------------------------+
 
-system@testware:~$ mysql -u root -p
-system@testware:~$ sudo mkdir /var/www/hub.bitpack.io
-system@testware:~$ sudo vi /etc/apache2/sites-available/hub.bitpack.io.conf
+mysql -u root -p
+
+# setup apache server
+sudo mkdir /var/www/hub.bitpack.io
+sudo vi /etc/apache2/sites-available/hub.bitpack.io.conf
 
 <VirtualHost *:80>
 
@@ -59,12 +71,12 @@ CustomLog ${APACHE_LOG_DIR}/example.com_access.log combined
 
 </VirtualHost>
 
-system@testware:~$ sudo a2ensite hub.bitpack.io
-system@testware:~$ sudo a2enmod rewrite
-system@testware:~$ sudo service apache2 restart
+sudo a2ensite hub.bitpack.io
+sudo a2enmod rewrite
+sudo service apache2 restart
 
-system@testware:~$ sudo apt install git
-system@testware:~$ ssh-keygen
+sudo apt install git
+ssh-keygen
 
 system@testware:~$ cd /var/www/
 system@testware:/var/www$ sudo chown -R system:www-data /var/www/hub.bitpack.io
