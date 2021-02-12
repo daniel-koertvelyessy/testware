@@ -382,7 +382,7 @@
                name="id"
                id="modal_id_delete_Building"
         >
-        <p>{!! __('Bitte beachten Sie, dass die Löschung des Gebäude alle enthaltenen Räume und Geräte den Bezug verlieren.') !!}</p>
+        <p>{!! __('Bitte beachten Sie, dass die Löschung des Gebäudes alle enthaltenen Räume und Gerät den Bezug verlieren.') !!}</p>
 
         <div id="BuildingObjectList"></div>
 
