@@ -106,7 +106,7 @@
                                         @endforeach
                                         <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
-                                    <input type="hidden"
+                                    <input type="text"
                                            id="newBuildingType"
                                            name="newBuildingType"
                                            class="form-control d-none"
@@ -227,7 +227,7 @@
                                         @endforeach
                                         <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
-                                    <input type="hidden"
+                                    <input type="text"
                                            id="newRoomType"
                                            name="newRoomType"
                                            class="form-control d-none"
@@ -336,7 +336,7 @@
                                         @endforeach
                                         <option value="new">{{__('neu anlegen')}}</option>
                                     </select>
-                                    <input type="hidden"
+                                    <input type="text"
                                            id="newStellplatzType"
                                            name="newStellplatzType"
                                            class="form-control d-none"
