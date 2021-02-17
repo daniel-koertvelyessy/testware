@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -37,7 +38,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token'
     ];
 
     /**
@@ -110,4 +111,51 @@ class User extends Authenticatable
                 ['produkt_id',$id]
             ])->count() >0;
     }
+
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role');
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roleUser()
+    : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany('App\RoleUser');
+    }
+
+
+    public function addNew(Request $request)
+    {
+        $this->name = $request->name;
+        $this->email = $request->email;
+        $this->username = $request->username;
+        $this->role_id = $request->role_id;
+        $this->locale = $request->locales;
+        $this->password = password_hash($request->password, PASSWORD_DEFAULT);
+        $this->save();
+
+        $this->roles()->attach([$request->role_id]);
+
+        return $this->id;
+    }
+
+    public function removeUser(Request $request)
+    {
+        $user = User::find($request->id);
+
+      $deleteRoles =  $user->roles()->detach();
+
+      $deleteUser =   $user->delete();
+
+      return $deleteRoles && $deleteUser;
+
+    }
+
 }

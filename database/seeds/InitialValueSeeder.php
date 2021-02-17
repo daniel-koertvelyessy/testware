@@ -26,6 +26,7 @@ class InitialValueSeeder extends Seeder
             [
                 'name'              => 'Daniel Körtvélyessy',
                 'email'             => 'daniel.koertvelyessy@gmail.com',
+                'role_id'           => 1,
                 'email_verified_at' => now(),
                 'username'          => 'daniel',
                 'password'          => '$2y$10$QTYenoYuRpR6Kp5e2UjidOZ8xRDlxnQjtdxFed/ecvfSzE3UVezna',
@@ -34,6 +35,7 @@ class InitialValueSeeder extends Seeder
             [
                 'name'              => 'Martin Schubert',
                 'email'             => 'martin@bitpack.io',
+                'role_id'           => 1,
                 'email_verified_at' => now(),
                 'username'          => 'martin',
                 'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
@@ -43,6 +45,7 @@ class InitialValueSeeder extends Seeder
             [
                 'name'              => 'Matthias Roethig',
                 'email'             => 'matthias@bitpack.io',
+                'role_id'           => 1,
                 'email_verified_at' => now(),
                 'username'          => 'matthias',
                 'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
@@ -194,54 +197,54 @@ class InitialValueSeeder extends Seeder
         ]);
 
         DB::table('control_intervals')->insert([  // SELECT INTERVAL 1 DAY + '2008-12-31';    SELECT DATE_ADD('2010-12-31 23:59:59', INTERVAL 1 DAY);
-            [
-                'ci_label' => 'Sekunde',
-                'ci_name'  => 'Sekunden',
-                'ci_si'    => 's',
-                'ci_delta' => 'SECOND',
-            ],
-            [
-                'ci_label' => 'Minute',
-                'ci_name'  => 'Minuten',
-                'ci_si'    => 'min',
-                'ci_delta' => 'MINUTE',
-            ],
-            [
-                'ci_label' => 'Stunde',
-                'ci_name'  => 'Stunden',
-                'ci_si'    => 'h',
-                'ci_delta' => 'HOUR',
-            ],
-            [
-                'ci_label' => 'Tag',
-                'ci_name'  => 'Tage',
-                'ci_si'    => 'd',
-                'ci_delta' => 'DAY',
-            ],
-            [
-                'ci_label' => 'Woche',
-                'ci_name'  => 'Wochen',
-                'ci_si'    => 'w',
-                'ci_delta' => 'WEEK',
-            ],
-            [
-                'ci_label' => 'Monat',
-                'ci_name'  => 'Monate',
-                'ci_si'    => 'm',
-                'ci_delta' => 'MONTH',
-            ],
-            [
-                'ci_label' => 'Quartal',
-                'ci_name'  => 'Quartale',
-                'ci_si'    => '4m',
-                'ci_delta' => 'QUARTER',
-            ],
-            [
-                'ci_label' => 'Jahr',
-                'ci_name'  => 'Jahre',
-                'ci_si'    => 'Y',
-                'ci_delta' => 'YEAR',
-            ],
+                                                  [
+                                                      'ci_label' => 'Sekunde',
+                                                      'ci_name'  => 'Sekunden',
+                                                      'ci_si'    => 's',
+                                                      'ci_delta' => 'SECOND',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Minute',
+                                                      'ci_name'  => 'Minuten',
+                                                      'ci_si'    => 'min',
+                                                      'ci_delta' => 'MINUTE',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Stunde',
+                                                      'ci_name'  => 'Stunden',
+                                                      'ci_si'    => 'h',
+                                                      'ci_delta' => 'HOUR',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Tag',
+                                                      'ci_name'  => 'Tage',
+                                                      'ci_si'    => 'd',
+                                                      'ci_delta' => 'DAY',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Woche',
+                                                      'ci_name'  => 'Wochen',
+                                                      'ci_si'    => 'w',
+                                                      'ci_delta' => 'WEEK',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Monat',
+                                                      'ci_name'  => 'Monate',
+                                                      'ci_si'    => 'm',
+                                                      'ci_delta' => 'MONTH',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Quartal',
+                                                      'ci_name'  => 'Quartale',
+                                                      'ci_si'    => '4m',
+                                                      'ci_delta' => 'QUARTER',
+                                                  ],
+                                                  [
+                                                      'ci_label' => 'Jahr',
+                                                      'ci_name'  => 'Jahre',
+                                                      'ci_si'    => 'Y',
+                                                      'ci_delta' => 'YEAR',
+                                                  ],
         ]);
 
         DB::table('building_types')->insert([
@@ -261,7 +264,7 @@ class InitialValueSeeder extends Seeder
 
         DB::table('address_types')->insert([
             [
-                'adt_name'      => 'Heimadress',
+                'adt_name'      => 'Hausadresse',
                 'adt_text_lang' => 'Standard Adresse'
             ],
             [
@@ -274,7 +277,7 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
-        factory(App\Firma::class)->create();
+//        factory(App\Firma::class)->create();
 
         DB::table('report_types')->insert([
             [
@@ -282,12 +285,14 @@ class InitialValueSeeder extends Seeder
                 'updated_at' => now(),
                 'label'      => 'MGM',
                 'name'       => 'Berichte für die Leitung',
-            ], [
+            ],
+            [
                 'created_at' => now(),
                 'updated_at' => now(),
                 'label'      => 'QMS',
                 'name'       => 'Berichte für Qualitätsmanagement',
-            ], [
+            ],
+            [
                 'created_at' => now(),
                 'updated_at' => now(),
                 'label'      => 'COM',
@@ -298,21 +303,21 @@ class InitialValueSeeder extends Seeder
 
         DB::table('reports')->insert([
             [
-                'label' => 'Standorte',
-                'name' => 'Standortbericht allgemein',
-                'description' => 'Erstellt eine Übersicht aller Standorte mit entsprechender Stuktur',
-                'view' => 'locations',
+                'label'          => 'Standorte',
+                'name'           => 'Standortbericht allgemein',
+                'description'    => 'Erstellt eine Übersicht aller Standorte mit entsprechender Stuktur',
+                'view'           => 'locations',
                 'report_type_id' => '1',
-                'user_id' => '1',
+                'user_id'        => '1',
             ],
 
             [
-                'label' => 'Inventurbericht',
-                'name' => 'Liste aller Geräte',
-                'description' => 'Listet alle Geräte mit Status, Wert und dessen Abschreibung',
-                'view' => 'inventur',
+                'label'          => 'Inventurbericht',
+                'name'           => 'Liste aller Geräte',
+                'description'    => 'Listet alle Geräte mit Status, Wert und dessen Abschreibung',
+                'view'           => 'inventur',
                 'report_type_id' => '1',
-                'user_id' => '1',
+                'user_id'        => '1',
             ],
         ]);
 
@@ -389,39 +394,39 @@ class InitialValueSeeder extends Seeder
 
         DB::table('verordnungs')->insert([
             [
-                'created_at'   => now(),
-                'updated_at'   => now(),
-                'vo_label'     => 'VDE 0701-0702',
-                'vo_nummer'    => 'DIN VDE 0701-0702',
-                'vo_stand'     => '2016',
-                'vo_name'      => 'Erst- / Prüfung von elektrischen Geräten',
+                'created_at'     => now(),
+                'updated_at'     => now(),
+                'vo_label'       => 'VDE 0701-0702',
+                'vo_nummer'      => 'DIN VDE 0701-0702',
+                'vo_stand'       => '2016',
+                'vo_name'        => 'Erst- / Prüfung von elektrischen Geräten',
                 'vo_description' => 'Errichten von Niederspannungsanlagen - Teil 6: Prüfungen (IEC 60364-6:2016); Deutsche Übernahme HD 60364-6:2016 + A11:2017',
             ],
             [
-                'created_at'   => now(),
-                'updated_at'   => now(),
-                'vo_label'     => 'MPBetreibV',
-                'vo_nummer'    => 'MPBetreibV-2018',
-                'vo_stand'     => '29.11.2018 I 2034',
-                'vo_name'      => 'Medizinprodukte-Betreiberverordnung',
+                'created_at'     => now(),
+                'updated_at'     => now(),
+                'vo_label'       => 'MPBetreibV',
+                'vo_nummer'      => 'MPBetreibV-2018',
+                'vo_stand'       => '29.11.2018 I 2034',
+                'vo_name'        => 'Medizinprodukte-Betreiberverordnung',
                 'vo_description' => 'Verordnung über das Errichten, Betreiben und Anwenden von Medizinprodukten',
             ],
             [
-                'created_at'   => now(),
-                'updated_at'   => now(),
-                'vo_label'     => 'MPSV',
-                'vo_nummer'    => 'MPSV_2017',
-                'vo_stand'     => '01.1.2017',
-                'vo_name'      => 'Medizinprodukte-Sicherheitsplanverordnung',
+                'created_at'     => now(),
+                'updated_at'     => now(),
+                'vo_label'       => 'MPSV',
+                'vo_nummer'      => 'MPSV_2017',
+                'vo_stand'       => '01.1.2017',
+                'vo_name'        => 'Medizinprodukte-Sicherheitsplanverordnung',
                 'vo_description' => 'Verordnung über die Erfassung, Bewertung und Abwehr von Risiken bei Medizinprodukten',
             ],
             [
-                'created_at'   => now(),
-                'updated_at'   => now(),
-                'vo_label'     => 'iso9001',
-                'vo_nummer'    => '9001:2015',
-                'vo_stand'     => '2015',
-                'vo_name'      => 'Qualitätsmanagementsysteme –Anforderungen',
+                'created_at'     => now(),
+                'updated_at'     => now(),
+                'vo_label'       => 'iso9001',
+                'vo_nummer'      => '9001:2015',
+                'vo_stand'       => '2015',
+                'vo_name'        => 'Qualitätsmanagementsysteme –Anforderungen',
                 'vo_description' => 'Die Einführung eines Qualitätsmanagementsystems ist eine strategische Entscheidung einer Organisation, die helfen kann, ihre Gesamtleistung zu steigern und eine gute Basis für nachhaltige
 Entwicklungsinitiativen bereitstellt.',
             ],
@@ -430,18 +435,18 @@ Entwicklungsinitiativen bereitstellt.',
 
         DB::table('anforderung_types')->insert([
             [
-                'at_label'     => 'control',
-                'at_name'      => 'Prüfung',
+                'at_label'       => 'control',
+                'at_name'        => 'Prüfung',
                 'at_description' => 'Überprüfung eines Gerätes entsprechend den Vorgaben. Beispiel eine Aufnahme eines Kontrollwertes oder eine visuelle Prüfung',
             ],
             [
-                'at_label'     => 'wartung',
-                'at_name'      => 'Wartung',
+                'at_label'       => 'wartung',
+                'at_name'        => 'Wartung',
                 'at_description' => 'Die regelmäßige Wartung von Geräten ermöglicht deren sicheren Gebrauch.',
             ],
             [
-                'at_label'     => 'kalibrierung',
-                'at_name'      => 'Kalibrierung',
+                'at_label'       => 'kalibrierung',
+                'at_name'        => 'Kalibrierung',
                 'at_description' => 'Die regelmäßige Kalibrierung von Geräten ermöglicht eine genaue Bewertung der Messergebnisse.',
             ],
 

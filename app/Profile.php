@@ -137,4 +137,24 @@ class Profile extends Model
         }
         return 0;
     }
+
+    public function addNew(Request $request)
+    {
+        $this->ma_name = $request->ma_name;
+        $this->ma_vorname = $request->ma_vorname ?? null;
+        $this->ma_geburtsdatum = $request->ma_geburtsdatum ?? null;
+        $this->ma_nummer = $request->ma_nummer ?? null;
+        $this->ma_eingetreten = $request->ma_eingetreten ?? date('Y-m-d');
+        $this->ma_telefon = $request->ma_telefon ?? null;
+        $this->user_id = $request->user_id ?? 1;
+
+        $this->save();
+
+        return $this->id;
+    }
+
+    public function removeEmployee(Request $request)
+    {
+        return Profile::destroy($request->id)===1;
+    }
 }

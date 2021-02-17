@@ -71,7 +71,7 @@ class Adresse extends Model
         return $this->hasOne(Firma::class);
     }
 
-    public function addAddress(Request $request)
+    public function addAddress(Request $request, $model = false)
     {
         if (isset($request->address) && isset($request->address['label'])) {
             $request->validate([
@@ -115,7 +115,7 @@ class Adresse extends Model
                 $adresse->address_type_id = 1;
             }
             $adresse->save();
-            return $adresse->id;
+            return $model ? $adresse : $adresse->id;
         } elseif (isset($request->address_id)) {
             return (Adresse::find($request->address_id)) ? $request->address_id : NULL;
         } else {

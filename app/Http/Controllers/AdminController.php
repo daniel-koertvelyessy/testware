@@ -14,6 +14,7 @@ use App\BuildingTypes;
 use App\DocumentType;
 use App\Equipment;
 use App\Location;
+use App\Profile;
 use App\Verordnung;
 use App\ProduktKategorie;
 use App\Produkt;
@@ -988,4 +989,5 @@ class AdminController extends Controller
     {
         return  Str::uuid();
     }
+
 }

@@ -285,7 +285,9 @@ Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('
 
 Route::get('report/template', 'ReportController@template')->name('report.template');
 
-
+Route::get('/installer', 'InstallerController@index')->name('installer.company');
+Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
+Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
 
 /*
 

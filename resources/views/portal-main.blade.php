@@ -98,7 +98,7 @@
                         <div class="card-body">
                             <div class="tiles-grid justify-content-center">
                                 <a href="{{ route('testware.index') }}"
-                                   class="tile-medium btn-primary rounded"
+                                   class="tile-medium btn-outline-primary rounded"
                                    data-role="tile"
                                 >
                                     <div class=" d-flex align-items-center justify-content-center">
@@ -111,7 +111,7 @@
                                     </div>
                                 </a>
                                 <a href="{{ route('app') }}"
-                                   class="tile-medium btn-primary rounded"
+                                   class="tile-medium btn-outline-primary rounded"
                                    data-role="tile"
                                    aria-label="Storagee"
                                 >

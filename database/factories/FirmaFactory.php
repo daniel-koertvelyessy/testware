@@ -17,3 +17,7 @@ $factory->define(Firma::class, function (Faker $faker) {
         'adresse_id' => factory(Adresse::class),
     ];
 });
+
+/**
+ * 
+ */
