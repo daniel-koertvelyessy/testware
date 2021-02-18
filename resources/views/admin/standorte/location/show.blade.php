@@ -354,7 +354,7 @@
                         >{{__('Stammdaten')}}
                         </a>
                     </li>
-                    <li class="nav-item"
+{{--                    <li class="nav-item"
                         role="presentation"
                     >
                         <a class="nav-link"
@@ -366,7 +366,7 @@
                            aria-selected="false"
                         >{{__('Anforderungen')}}
                         </a>
-                    </li>
+                    </li>--}}
                     <li class="nav-item"
                         role="presentation"
                     >
@@ -547,6 +547,7 @@
                             <button class="btn btn-primary"> {{__('Stammdaten speichern')}} <i class="fas fa-download ml-3"></i></button>
                         </form>
                     </div>
+                    {{--
                     <div class="tab-pane fade p-2"
                          id="Anforderungen"
                          role="tabpanel"
@@ -560,13 +561,9 @@
                                 >
                                     @csrf
                                     <input type="hidden"
-                                           name="location_id"
-                                           id="id_location_anforderung"
-                                           value="{{ $location->id }}"
-                                    >
-                                    <input type="hidden"
-                                           name="an_label"
-                                           id="name_anforderung"
+                                           name="object_uid"
+                                           id="object_uid"
+                                           value="{{ $location->storage_id }}"
                                     >
                                     <x-selectfield id="anforderung_id"
                                                    label="Anforderung wählen"
@@ -604,80 +601,17 @@
                                     $Anforderung = App\Anforderung::all();
                                 @endphp
 
-                                @forelse (App\LocationAnforderung::where('location_id',$location->id)->get() as $produktAnforderung)
-                                    @if ($produktAnforderung->anforderung_id!=0)
-                                        <div class="card p-2 mb-2">
-                                            <dl class="row lead">
-                                                <dt class="col-sm-4">Verordnung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->Verordnung->vo_label }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Anforderung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Bezeichnung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_name }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Intervall</dt>
-                                                <dd class="col-sm-8">
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->an_control_interval }}
-                                                    {{ $Anforderung->find($produktAnforderung->anforderung_id)->ControlInterval->ci_label }}
-                                                </dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Beschreibung</dt>
-                                                <dd class="col-sm-8">{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_description }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4">
-                                                    {{ ($produktAnforderung->Anforderung->AnforderungControlItem->count()>1) ? 'Vorgänge' : 'Vorgang' }}
-                                                </dt>
-                                                <dd class="col-sm-8">
-                                                    <ul class="list-group">
+                                @forelse (App\ObjectRequirement::where('object_uid',$location->uid)->get() as $requirement)
+                                    @if ($requirement->anforderung_id!=0)
 
-                                                        @foreach ($produktAnforderung->Anforderung->AnforderungControlItem as $aci)
-                                                            <li class="list-group-item">{{ $aci->aci_name }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <nav class="border-top mt-2 pt-2 d-flex justify-content-end">
-                                                <form action="{{ route('deleteProduktAnfordrung') }}#prodAnfordrungen"
-                                                      method="post"
-                                                >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden"
-                                                           name="an_label"
-                                                           id="an_label_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $Anforderung->find($produktAnforderung->anforderung_id)->an_label }}"
-                                                    >
-                                                    <input type="hidden"
-                                                           name="id"
-                                                           id="id_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $produktAnforderung->id }}"
-                                                    >
-                                                    <input type="hidden"
-                                                           name="location_id"
-                                                           id="location_id_delAnf_{{ $produktAnforderung->anforderung_id }}"
-                                                           value="{{ $location->id }}"
-                                                    >
-                                                    <button class="btn btn-sm btn-outline-primary">löschen</button>
-                                                </form>
-                                            </nav>
-                                        </div>
                                     @endif
                                 @empty
                                     <x-notifyer>Bislang sind keine Anforderungen verknüpft!</x-notifyer>
                                 @endforelse
-
-
                             </div>
                         </div>
                     </div>
-
+--}}
                     <div class="tab-pane fade"
                          id="locGebauede"
                          role="tabpanel"

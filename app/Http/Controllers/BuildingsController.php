@@ -251,6 +251,8 @@ class BuildingsController extends Controller
     public function modal(Request $request)
     {
 
+        $this->validateBuilding();
+
         if ($request->building_type_id === 'new' && isset($request->newBuildingType)) {
             $bt = new BuildingTypes();
             $bt->btname = $request->newBuildingType;
@@ -260,33 +262,31 @@ class BuildingsController extends Controller
 
 
         if ($request->modalType === 'edit') {
-            $buildingOld = Building::find($request->id);
-            $buildingOld->b_we_has = $request->has('b_we_has') ? 1 : 0;
-            if ($buildingOld->b_label !== $request->b_label) {
+            $building = Building::find($request->id);
+            if ($building->b_label !== $request->b_label) {
                 $storage = Storage::where('storage_uid', $request->storage_id)->first();
                 $storage->storage_label = $request->b_label;
                 $storage->save();
             }
-            $buildingOld->update($this->validateBuilding());
-            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
+              $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
         } else {
 
             $this->validateNewBuilding();
             $building = new Building(); //::create();
             $building->b_label = $request->b_label;
-            $building->b_name_ort = $request->b_name_ort;
-            $building->b_name = $request->b_name;
-            $building->b_description = $request->b_description;
-            $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
-            $building->storage_id = $request->storage_id;
-            $building->b_we_name = $request->b_we_name;
-            $building->location_id = $request->location_id;
-            $building->building_type_id = $request->building_type_id;
-            $building->save();
-
             $std = (new \App\Storage)->add($request->storage_id, $request->b_label, 'buildings');
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
         }
+        $building->b_name_ort = $request->b_name_ort;
+        $building->b_name = $request->b_name;
+        $building->b_description = $request->b_description;
+        $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
+        $building->storage_id = $request->storage_id;
+        $building->b_we_name = $request->b_we_name;
+        $building->location_id = $request->location_id;
+        $building->building_type_id = $request->building_type_id;
+        $building->save();
+
         return redirect()->back();
     }
 
@@ -330,6 +330,7 @@ class BuildingsController extends Controller
                     $data['radio'] .= '
                 <label class="btn btn-outline-primary"
                        style="border-radius: 0!important; margin-top: 5px !important;"
+                       id="label_room_list_item_' . $room->id . '"
                 >
                     <input type="radio"
                            name="radio_set_room_id"

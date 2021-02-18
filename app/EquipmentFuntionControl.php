@@ -30,7 +30,7 @@ class EquipmentFuntionControl extends Model
             ($request->function_control_firma === 'void' && $request->function_control_profil === 'void')
         ) return false;
 
-        $this->controlled_at = $request->function_control_date;
+        $this->controlled_at = $request->function_control_date??$request->controlled_at;
         $this->function_control_firma = ($request->function_control_firma === 'void') ? NULL : $request->function_control_firma;
         $this->function_control_profil = ($request->function_control_profil === 'void') ? NULL : $request->function_control_profil;
         $this->function_control_pass = $request->function_control_pass;

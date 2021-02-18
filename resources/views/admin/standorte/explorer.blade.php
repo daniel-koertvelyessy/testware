@@ -765,7 +765,7 @@
             $('#id_delete_Building').val(id);
             $('#building_id_room_modal').val(id);
             $('#building_list_item_' + id).attr('checked', true);
-
+            localStorage.setItem('explorer_building', id);
             /**
              *  Disable Room and Compartment buttons
              */
@@ -782,7 +782,8 @@
                     $('#labelRoomSection').html(res.msg);
                     setTimeout(function () {
                         buildingList.val(id)
-                    }, 50);
+
+                    }, 100);
                     let text = '{{__('Bitte erst Gebäude wählen')}}';
                     if (id === 'void')
                         $('#compartment_select_list').html(`<option>${text}</option>`);
@@ -803,7 +804,8 @@
             $('#id_delete_Room').val(id);
             $('#id_modal_room').val(id);
             $('#room_id_compartment_modal').val(id);
-            $('#room_list_item_' + id).attr('checked', true);
+            localStorage.setItem('explorer_room', id);
+
             $.ajax({
                 type: "get",
                 dataType: 'json',
@@ -814,8 +816,10 @@
                     $('#radio_compartment_list').html(res.radio);
                     $('#labelCompartmentSection').html(res.msg);
                     setTimeout(function () {
-                        roomList.val(id)
-                    }, 50);
+                        roomList.val(id);
+                        $('#room_list_item_' + id).attr('checked', true);
+                        $('#label_room_list_item_' + id).addClass('active');
+                    }, 100);
                 }
             });
         }
@@ -825,10 +829,13 @@
             $('#compartment_id').val(id);
             $('#id_modal_compartment').val(id);
             $('#id_delete_Stellplatz').val(id);
-            $('#compartment_list_item_' + id).attr('checked', true);
+
+            localStorage.setItem('explorer_compartment', id);
             setTimeout(function () {
+                $('#compartment_list_item_' + id).attr('checked', true);
+                $('#label_compartment_list_item_' + id).addClass('active');
                 compartment_select_list.val(id)
-            }, 50);
+            }, 200);
             if (id === 'void') {
                 $('.btnStellplatz').attr('disabled', true).addClass('disabled');
                 $('.btnStellplatzDelete').attr('disabled', true).addClass('disabled');
@@ -853,19 +860,16 @@
 
         buildingList.change(function () {
             const id = $('#buildingList :selected').val();
-            localStorage.setItem('explorer_building', id);
             setBuildingValues(id);
         });
 
         roomList.change(function () {
             const id = $('#roomList :selected').val();
-            localStorage.setItem('explorer_room', id);
             setRoomValues(id);
         });
 
         compartment_select_list.change(function () {
             const id = $('#compartment_select_list :selected').val();
-            localStorage.setItem('explorer_compartment', id);
             setCompartmentValues(id)
         });
 
@@ -876,15 +880,15 @@
                 dataType: 'json',
                 url: "{{ route('getBuildingListInLocation') }}",
                 data: {id: lid},
-                success: (res) => {
+                success: function (res) {
                     $('#buildingList').html(res.select);
-
                     $('#labelBuildingSection').html(res.msg);
                     locationlist.val(lid);
-                    console.log(lid);
+                    // console.log(lid);
                 }
             });
         }
+
         if (localStorage.getItem('explorer_building') !== null) {
             const bid = (localStorage.getItem('explorer_building'));
             setBuildingValues(bid);
@@ -973,7 +977,7 @@
                 form = $('#frmModalSetBuilding');
 
             if (type === 'new') {
-                $('#modalSetBuildingLabel').text('{{__('Bitte erst Gebäude wählen')}}');
+                $('#modalSetBuildingLabel').text('{{__('Neues Gebäude anlegen')}}');
                 $.ajax({
                     type: "get",
                     dataType: 'json',

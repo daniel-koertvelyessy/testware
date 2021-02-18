@@ -63,8 +63,8 @@
                 <form action="{{ route('createStellPlatzType') }}"
                       method="POST"
                       class="needs-validation"
-                      id="frmCreateRoomType"
-                      name="frmCreateRoomType"
+                      id="frmCreateCompartmentType"
+                      name="frmCreateCompartmentType"
                 >
                     <div class="modal-header">
                         <h5 class="modal-title"
@@ -108,6 +108,58 @@
                         <button type="submit"
                                 class="btn btn-primary"
                         >{{__('Stellplatztyp speichern')}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal"
+         id="modalAddRaumTyp"
+         tabindex="-1"
+         aria-labelledby="modalAddRaumTypLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('createRoomType') }}"
+                      method="POST"
+                      class="needs-validation"
+                      id="frmCreateRoomType"
+                      name="frmCreateRoomType"
+                >
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="modalAddRaumTypLabel"
+                        >{{ __('Neuen Raumtyp erstellen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <x-rtextfield id="rt_label"
+                                      label="{{__('Kürzel')}}"
+                        />
+                        <x-textfield id="rt_name"
+                                     label="{{__('Beschreibung')}}"
+                        />
+                        <x-textarea id="rt_description"
+                                    label="{{__('Beschreibung des Typs')}}"
+                        />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                        >{{__('Abbruch')}}</button>
+                        <button type="submit"
+                                class="btn btn-primary"
+                        >{{__('Raumtyp speichern')}}</button>
                     </div>
                 </form>
             </div>

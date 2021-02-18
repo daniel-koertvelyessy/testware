@@ -316,6 +316,7 @@
                                                                 @endforeach
                                                             </select>
                                                             <x-btnDelete block="1"
+                                                                         type="submit"
                                                             >{{__('Adresstyp löschen')}}</x-btnDelete>
                                                         </div>
                                                         <p class="text-danger lead">{{__('Bitte beachten Sie, dass Adressen diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!')}}</p>
@@ -422,6 +423,7 @@
                                                                 @endforeach
                                                             </select>
                                                             <x-btnDelete block="1"
+                                                                         type="submit"
                                                             >{{__('Gebäudetyp löschen')}}</x-btnDelete>
                                                         </div>
                                                         <p class="text-danger lead">
@@ -540,6 +542,7 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <x-btnDelete block="1"
+                                                                             type="submit"
                                                                 >{{__('Raumtyp löschen')}}</x-btnDelete>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass Räume diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!')}}</p>
@@ -658,7 +661,9 @@
                                                                         >{{ $ad->spt_label }}</option>
                                                                     @endforeach
                                                                 </select>
-                                                                <x-btnDelete block="1">
+                                                                <x-btnDelete block="1"
+                                                                             type="submit"
+                                                                >
                                                                     {{__('Stellplatztyp löschen')}}
                                                                 </x-btnDelete>
                                                             </div>
@@ -843,6 +848,7 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <x-btnDelete block="1"
+                                                                             type="submit"
                                                                 >{{__('Kategorie löschen')}}</x-btnDelete>
                                                             </div>
                                                             <p class="text-danger lead">
@@ -1215,58 +1221,82 @@
                                         <th>{{ __('Beschreibung') }}</th>
                                         <th></th>
                                     </tr>
-                                    <form action="{{ route('note-type.store') }}#notes" method="post" id="formStoreNoteTyeData">@csrf
-                                    <tr>
-                                        <td>
-                                            <x-textfield class="form-control-sm" hideLabel label="Kürzel" id="note_type_label" name="label" />
-                                        </td>
-                                        <td>
-                                            <x-textfield class="form-control-sm" hideLabel label="Name" id="note_type_name" name="name" />
-                                        </td>
-                                        <td>
-                                            <x-textfield class="form-control-sm" hideLabel label="Kürzel" id="note_type_description" name="description" />
-                                        </td>
-                                        <td>
-                                            <input type="hidden"
-                                                   name="id"
-                                                   id="note_type_id"
-                                            >
-                                            <input type="hidden"
-                                                   name="_method"
-                                                   id="note_type_methode"
-                                            >
-                                            <button type="button" id="btnFormStoreNoteTyeData" class="btn btn-sm btn-outline-primary">speichern</button>
-                                        </td>
-                                    </tr>
+                                    <form action="{{ route('note-type.store') }}#notes"
+                                          method="post"
+                                          id="formStoreNoteTyeData"
+                                    >@csrf
+                                        <tr>
+                                            <td>
+                                                <x-textfield class="form-control-sm"
+                                                             hideLabel
+                                                             label="Kürzel"
+                                                             id="note_type_label"
+                                                             name="label"
+                                                />
+                                            </td>
+                                            <td>
+                                                <x-textfield class="form-control-sm"
+                                                             hideLabel
+                                                             label="Name"
+                                                             id="note_type_name"
+                                                             name="name"
+                                                />
+                                            </td>
+                                            <td>
+                                                <x-textfield class="form-control-sm"
+                                                             hideLabel
+                                                             label="Kürzel"
+                                                             id="note_type_description"
+                                                             name="description"
+                                                />
+                                            </td>
+                                            <td>
+                                                <input type="hidden"
+                                                       name="id"
+                                                       id="note_type_id"
+                                                >
+                                                <input type="hidden"
+                                                       name="_method"
+                                                       id="note_type_methode"
+                                                >
+                                                <button type="button"
+                                                        id="btnFormStoreNoteTyeData"
+                                                        class="btn btn-sm btn-outline-primary"
+                                                >speichern
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </form>
                                     </thead>
                                     <tbody>
                                     @forelse(App\NoteType::all() as $notetype)
-                                        <form action="{{ route('note-type.update',$notetype) }}" method="post">
+                                        <form action="{{ route('note-type.update',$notetype) }}"
+                                              method="post"
+                                        >
                                             @csrf
                                             @method('put')
-                                        <tr>
-                                            <td>
-                                                {{ $notetype->label }}
-                                            </td>
-                                            <td>
-                                                {{ $notetype->name }}
-                                            </td>
-                                            <td>
-                                               {{ $notetype->description }}
-                                            </td>
-                                            <td>
-                                                <x-menu_context :object="$notetype"
-                                                                routeOpen="/note-type/{{ $notetype->id }}"
-                                                                routeCopy="{{ route('note-type.edit',$notetype) }}"
-                                                                routeDestory="{{ route('note-type.destroy',$notetype) }} "
-                                                                tabName="notes"
-                                                                objectName="label"
-                                                                objectVal="{{ $notetype->label }}"
+                                            <tr>
+                                                <td>
+                                                    {{ $notetype->label }}
+                                                </td>
+                                                <td>
+                                                    {{ $notetype->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $notetype->description }}
+                                                </td>
+                                                <td>
+                                                    <x-menu_context :object="$notetype"
+                                                                    routeOpen="/note-type/{{ $notetype->id }}"
+                                                                    routeCopy="{{ route('note-type.edit',$notetype) }}"
+                                                                    routeDestory="{{ route('note-type.destroy',$notetype) }} "
+                                                                    tabName="notes"
+                                                                    objectName="label"
+                                                                    objectVal="{{ $notetype->label }}"
 
-                                                />
-                                            </td>
-                                        </tr>
+                                                    />
+                                                </td>
+                                            </tr>
                                         </form>
                                     @empty
                                         <tr>
@@ -1303,14 +1333,14 @@
     <script>
 
         $('#btnFormStoreNoteTyeData').click(function () {
-            let idNode=$('#note_type_id');
-           if (idNode.val()==='') {
-               $('#note_type_methode').val('post');
-               $('#formStoreNoteTyeData').attr('action','{{ route('note-type.store') }}#notes').submit();
-           } else {
-               $('#note_type_methode').val('put');
-               $('#formStoreNoteTyeData').attr('action','/note-type/'+idNode.val()+'#notes').submit();
-           }
+            let idNode = $('#note_type_id');
+            if (idNode.val() === '') {
+                $('#note_type_methode').val('post');
+                $('#formStoreNoteTyeData').attr('action', '{{ route('note-type.store') }}#notes').submit();
+            } else {
+                $('#note_type_methode').val('put');
+                $('#formStoreNoteTyeData').attr('action', '/note-type/' + idNode.val() + '#notes').submit();
+            }
         });
 
         $('.context_item_open').click(function (e) {
@@ -1328,17 +1358,11 @@
             });
 
 
-
-
-
-
         })
-
 
         $('.nav-link').click(function () {
             $('.navTextHelper').html($(this).data('helpertext'));
         });
-
 
         $('#loadAdressTypeItem').click(function () {
             $.ajax({
@@ -1426,6 +1450,7 @@
             });
 
         });
+
         $('#getAnforderungTypData').click(function () {
             const frm = $('#frmAnforderungsTypEdit');
             $.ajax({
@@ -1737,7 +1762,6 @@
                 }
             });
         });
-
 
         $('#getProduktKategorieParamListe').click(function () {
             const nd = $('#getProduktKategorieParams :selected');

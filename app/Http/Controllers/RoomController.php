@@ -282,6 +282,7 @@ class RoomController extends Controller
                     $data['radio'] .= '
                 <label class="btn btn-outline-primary"
                        style="border-radius: 0!important; margin-top: 5px !important;"
+                       id="label_compartment_list_item_' . $stellplatz->id . '"
                 >
                     <input type="radio"
                            name="radio_set_compartment_id"
@@ -319,6 +320,7 @@ class RoomController extends Controller
 
     public function modal(Request $request)
     {
+        $this->validateRoom();
 
         if ($request->room_type_id === 'new' && isset($request->newRoomType)) {
             $bt = new RoomType();
@@ -334,22 +336,20 @@ class RoomController extends Controller
                 $storage->storage_label = $request->r_label;
                 $storage->save();
             }
-            $room->update($this->validateRoom());
-            $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde aktualisiert!');
+            $request->session()->flash('status', __('Der Raum <strong>:label</strong> wurde aktualisiert!', ['label'=>request('r_label')]));
         } else {
-            $this->validateNewRoom();
             $room = new Room();
             $room->r_label = $request->r_label;
-            $room->r_name = $request->r_name;
-            $room->r_description = $request->r_description;
-            $room->storage_id = $request->storage_id;
-            $room->building_id = $request->building_id;
-            $room->room_type_id = $request->room_type_id;
-            $room->save();
-
-            $std = (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
+            (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde angelegt!');
         }
+
+        $room->r_name = $request->r_name;
+        $room->r_description = $request->r_description;
+        $room->storage_id = $request->storage_id;
+        $room->building_id = $request->building_id;
+        $room->room_type_id = $request->room_type_id;
+        $room->save();
 
         return redirect()->back();
     }

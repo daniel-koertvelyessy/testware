@@ -47,10 +47,6 @@ class Anforderung extends Model
         return $this->hasMany(ProduktAnforderung::class);
     }
 
-    public function LocationAnforderung()
-    {
-        return $this->hasMany(LocationAnforderung::class);
-    }
 
     public function Equipment()
     {

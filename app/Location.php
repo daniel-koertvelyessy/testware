@@ -121,11 +121,6 @@ class Location extends Model
         return $this->hasMany(Building::class);
     }
 
-    public function LocationAnforderung()
-    {
-        return $this->hasMany(LocationAnforderung::class);
-    }
-
     public function Storage()
     {
         return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');

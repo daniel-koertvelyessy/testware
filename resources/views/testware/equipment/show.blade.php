@@ -116,11 +116,15 @@
                                 </x-selectfield>
                             </div>
                             <div class="col-md-4">
-                                <x-textfield id="newNoteType" label="{{ __('Neuer Typ') }}" />
+                                <x-textfield id="newNoteType"
+                                             label="{{ __('Neuer Typ') }}"
+                                />
                             </div>
                         </div>
 
-                        <x-textfield id="label" label="Titel" />
+                        <x-textfield id="label"
+                                     label="Titel"
+                        />
 
 
                         <x-textarea id="description"
@@ -143,7 +147,9 @@
                             </div>
                         </div>
 
-                        <x-textfield id="file_name" label="{{ __('Datei Name') }}" />
+                        <x-textfield id="file_name"
+                                     label="{{ __('Datei Name') }}"
+                        />
 
                     </div>
                     <div class="modal-footer">
@@ -391,7 +397,7 @@
                                 >
                                     @foreach(App\User::all() as $user)
                                         @if(! $user->isQualified($equipment->id))
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endif
                                     @endforeach
                                 </x-selectfield>
@@ -451,7 +457,7 @@
                                 >
                                     @foreach(App\User::all() as $user)
                                         @if(! $user->isInstructed($equipment->id))
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endif
                                     @endforeach
                                 </x-selectfield>
@@ -671,7 +677,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btnAddEquipmentFunctionTest" class="btn btn-primary">{{ __('Funktionsprüfung erfassen') }}</button>
+                        <button type="button"
+                                id="btnAddEquipmentFunctionTest"
+                                class="btn btn-primary"
+                        >{{ __('Funktionsprüfung erfassen') }}</button>
                     </div>
                 </div>
             </form>
@@ -797,15 +806,15 @@
                                                value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
                                 />
                                 <?php
-                                if(App\Storage::find($equipment->storage_id)){
-                                    $value=App\Storage::find($equipment->storage_id)->storage_label ;
-                                }else{
-                                    $value=__('nicht zugeordnet');
+                                if (App\Storage::find($equipment->storage_id)) {
+                                    $value = App\Storage::find($equipment->storage_id)->storage_label;
+                                } else {
+                                    $value = __('nicht zugeordnet');
                                 }
                                 ?>
                                 <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
-                                              value="{{ $value }}"
+                                               value="{{ $value }}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
                                                label="{{__('Inventarnummer')}}:"
@@ -974,11 +983,11 @@
                                     </thead>
                                     <tbody>
                                     @forelse(\App\ProductQualifiedUser::where('produkt_id',$equipment->produkt->id)->get() as $qualifieduserOfProduct)
-                                    <tr>
-                                        <td>{{ $qualifieduserOfProduct->user->name }}</td>
-                                        <td>{{ $qualifieduserOfProduct->product_qualified_date }}</td>
-                                        <td colspan="2">{{ $qualifieduserOfProduct->firma->fa_name ?? '-' }}</td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $qualifieduserOfProduct->user->name }}</td>
+                                            <td>{{ $qualifieduserOfProduct->product_qualified_date }}</td>
+                                            <td colspan="2">{{ $qualifieduserOfProduct->firma->fa_name ?? '-' }}</td>
+                                        </tr>
                                     @empty
                                         <tr>
                                             <td colspan="4">
@@ -1080,7 +1089,9 @@
                                 @endphp
                                 @forelse (\App\ProduktAnforderung::where('produkt_id',$equipment->produkt->id)->get() as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)
-                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung" isProduct="false" />
+                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung"
+                                                           isProduct="false"
+                                        />
                                     @endif
                                 @empty
                                     <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
@@ -1414,15 +1425,23 @@
                             <div class="col-lg-3">
                                 <div class="list-group">
                                     @forelse(App\Note::where('uid',$equipment->eq_uid)->get() as $note)
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-                                            <span>{{ $note->label }}</span>
-                                            <i class="fas fa-angle-right"></i>
+                                        <a href="#"
+                                           class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                                        >
+                                            <span>{{ $note->label }}</span> <i class="fas fa-angle-right"></i>
                                         </a>
                                     @empty
-                                        <a href="#" class="list-group-item list-group-item-action disabled d-flex align-items-center justify-content-between" tabindex="-1" aria-disabled="true">
+                                        <a href="#"
+                                           class="list-group-item list-group-item-action disabled d-flex align-items-center justify-content-between"
+                                           tabindex="-1"
+                                           aria-disabled="true"
+                                        >
                                             <span>{{__('Keine Notizen gefunden')}}</span> <i class="fas fa-info-circle"></i>
                                         </a>
-                                        <button class="btn btn-sm btn-primary mt-3" data-toggle="modal" data-target="#modalAddNote">
+                                        <button class="btn btn-sm btn-primary mt-3"
+                                                data-toggle="modal"
+                                                data-target="#modalAddNote"
+                                        >
                                             {{ __('neu anlegen') }}
                                         </button>
                                     @endforelse
@@ -1469,7 +1488,7 @@
                 chekResult = true;
             }
 
-            if (function_control_file.val() === ''){
+            if (function_control_file.val() === '') {
                 function_control_file.addClass('is-invalid');
                 chekResult = false;
             }

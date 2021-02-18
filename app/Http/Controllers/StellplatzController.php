@@ -162,6 +162,8 @@ class StellplatzController extends Controller
     : RedirectResponse
     {
 
+        $this->validateStellPlatz();
+
         if ($request->compartment_typ_id === 'new' && isset($request->compartment_typ_id)) {
             $bt = new StellplatzTyp();
             $bt->spt_label = $request->newStellplatzType;
@@ -170,7 +172,6 @@ class StellplatzController extends Controller
         }
 
         if ($request->modalType === 'edit') {
-            $this->validateStellPlatz();
             $stellplatz = Stellplatz::find($request->id);
 
             if ($stellplatz->sp_label !== $request->sp_label) {
@@ -178,15 +179,7 @@ class StellplatzController extends Controller
                 $storage->storage_label = $request->sp_label;
                 $storage->save();
             }
-
             $stellplatz->sp_label = $request->sp_label;
-            $stellplatz->sp_name = $request->sp_name;
-            $stellplatz->sp_description = $request->sp_description;
-            $stellplatz->room_id = $request->room_id;
-            $stellplatz->stellplatz_typ_id = $request->compartment_typ_id;
-            $stellplatz->save();
-
-
             $request->session()->flash('status', 'Der Stellplatz <strong>' . request('sp_label') . '</strong> wurde aktualisiert!');
         } else {
 
@@ -201,16 +194,16 @@ class StellplatzController extends Controller
 
             $stellplatz = new Stellplatz();
             $stellplatz->sp_label = $request->sp_label;
-            $stellplatz->sp_name = $request->sp_name;
-            $stellplatz->sp_description = $request->sp_description;
-            $stellplatz->room_id = $request->room_id;
-            $stellplatz->stellplatz_typ_id = $request->compartment_typ_id;
-            $stellplatz->storage_id = $request->storage_id;
-            $stellplatz->save();
-
-            $std = (new \App\Storage)->add($request->storage_id, $request->sp_label, 'stellplatzs');
+            (new \App\Storage)->add($request->storage_id, $request->sp_label, 'stellplatzs');
             $request->session()->flash('status', __('Der Stellplatz <strong>:label</strong> wurde angelegt!', ['label' => request('sp_label')]));
         }
+
+        $stellplatz->storage_id = $request->storage_id;
+        $stellplatz->sp_name = $request->sp_name;
+        $stellplatz->sp_description = $request->sp_description;
+        $stellplatz->room_id = $request->room_id;
+        $stellplatz->stellplatz_typ_id = $request->compartment_typ_id;
+        $stellplatz->save();
 
         return redirect()->back();
     }

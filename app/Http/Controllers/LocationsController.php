@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\AddressType;
 use App\Adresse;
+use App\Anforderung;
 use App\AnforderungControlItem;
 use App\Location;
 use App\Building;
 use App\LocationAnforderung;
+use App\ObjectRequirement;
 use App\Profile;
 use App\Room;
 use App\Storage;
@@ -295,32 +297,6 @@ class LocationsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Request  $request
-     * @param  Location $location
-     *
-     * @return RedirectResponse
-     */
-    public function addLocationAnforderung(Request $request, location $location)
-    {
-
-
-        LocationAnforderung::create($this->validateLocationAnforderung());
-
-        //
-        //        if (AnforderungsController::getACI($request->anforderung_id)>0){
-        //
-        //        }
-
-
-        $request->session()->flash('status', 'Die Anforderung <strong>' . $request->an_label . '</strong> wurde dem Standort angefügt!');
-
-
-        return redirect()->back();
-    }
-
-    /**
      * @return array
      */
     public function validateLocationAnforderung()
@@ -448,6 +424,7 @@ class LocationsController extends Controller
                 $data['radio'] .= '
                 <label class="btn btn-outline-primary"
                        style="border-radius: 0!important; margin-top: 5px !important;"
+                       id="label_building_list_item_' . $building->id . '"
                 >
                     <input type="radio"
                            name="radio_set_building_id"
