@@ -6,8 +6,10 @@ use App\Stellplatz;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
 
 class Building extends Model
@@ -81,17 +83,13 @@ class Building extends Model
     }
 
     public function countTotalEquipmentInBuilding()
+        :int
     {
-        Cache::remember('countTotalEquipmentInBuilding' . $this->id, now()->addSeconds(30), function () {
+        return Cache::remember('countTotalEquipmentInBuilding' . $this->id, now()->addSeconds(30), function () {
             $equipCounter = 0;
             $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
-            $rooms = Room::where('building_id', $this->id)->get();
-            foreach ($rooms as $room) {
-                $equipCounter += ($room->Storage) ? $room->Storage->countReferencedEquipment() : 0;
-                $compartments = Stellplatz::where('room_id', $room->id)->get();
-                foreach ($compartments as $compartment) {
-                    $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
-                }
+           foreach ($this->rooms as $room) {
+                $equipCounter += $room->countTotalEquipmentInRoom();
             }
             return $equipCounter;
         });
@@ -109,5 +107,46 @@ class Building extends Model
         $this->building_type_id = 1;
         $this->save();
         return $this->id;
+    }
+
+    public function addNew(Request $request)
+    {
+        $this->validateBuilding();
+
+        $this->b_we_has = $request->has('b_we_has') ? 1 : 0;
+
+
+
+
+        Building::create();
+
+        (new Storage)->add($request->storage_id, $request->b_label, 'buildings');
+
+        return true;
+
+    }
+
+    /**
+     * @return array
+     */
+    public function validateBuilding()
+    : array
+    {
+        return request()->validate([
+            'b_label'          => [
+                'bail',
+                'required',
+                'min:2',
+                'max:20',
+                Rule::unique('buildings')->ignore(\request('id'))
+            ],
+            'b_name_ort'       => '',
+            'b_name'           => '',
+            'b_description'    => '',
+            'b_we_has'         => '',
+            'b_we_name'        => 'required_if:b_we_has,1',
+            'location_id'      => 'required',
+            'building_type_id' => '',
+        ]);
     }
 }

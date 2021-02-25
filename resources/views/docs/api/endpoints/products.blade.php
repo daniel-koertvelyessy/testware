@@ -339,10 +339,10 @@
                                         <code>label</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>prod_nummer</code> <span class="badge badge-dark-soft">STRING</span>
+                                        <code>number</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>status_active</code>
+                                        <code>active</code>
                                         <span>
                                             <span class="badge badge-dark-soft">DEFAULT</span>
                                             <code>1</code>
@@ -369,9 +369,6 @@
                                             <code>description</code> <span class="badge badge-dark-soft">STRING</span>
                                         </li>
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
-                                            <code>room_id</code> <span class="badge badge-dark-soft">INTEGER</span>
-                                        </li>
-                                        <li class="list-group-item d-flex align-items-center justify-content-between">
                                             <p><code>category_id</code> <span class="badge badge-dark-soft">INTEGER</span></p>
                                             <p>oder</p>
                                             <p><code>category</code> <span class="badge badge-dark-soft">OBJECT</span></p>
@@ -379,14 +376,14 @@
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
                                             <p><code>product_state_id</code> <span class="badge badge-dark-soft">INTEGER</span></p>
                                             <p>oder</p>
-                                            <p><code>product_state</code> <span class="badge badge-dark-soft">OBJECT</span></p>
+                                            <p><code>status</code> <span class="badge badge-dark-soft">OBJECT</span></p>
                                         </li>
                                     </ul>
                                 </div>
                                 <p class="mt-3">{!! __('Wird das Objekt <code>:object</code> verwendet, sind folgende Felder erforderlich',['object', 'category'])!!}</p>
                                 <ul class="list-group list-group-flush mb-3">
                                     <li class="list-group-item d-flex align-items-center justify-content-between">
-                                        <code>type.label</code> <span class="badge badge-dark-soft">STRING</span>
+                                        <code>status.label</code> <span class="badge badge-dark-soft">STRING</span>
                                     </li>
                                 </ul>
                                 <a class="btn btn-sm btn-outline-dark-soft btn-pill"
@@ -402,10 +399,16 @@
                                 >
                                     <ul class="list-group list-group-flush mb-3">
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
-                                            <code>type.name</code> <span class="badge badge-dark-soft">STRING</span>
+                                            <code>status.name</code> <span class="badge badge-dark-soft">STRING</span>
                                         </li>
                                         <li class="list-group-item d-flex align-items-center justify-content-between">
-                                            <code>type.description</code> <span class="badge badge-dark-soft">STRING</span>
+                                            <code>status.color</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>status.icon</code> <span class="badge badge-dark-soft">STRING</span>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                                            <code>status.description</code> <span class="badge badge-dark-soft">STRING</span>
                                         </li>
                                     </ul>
                                 </div>

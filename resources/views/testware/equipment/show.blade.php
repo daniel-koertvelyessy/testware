@@ -23,7 +23,7 @@
             aria-labelledby="navTargetAppAktionItems"
         >
             <a class="dropdown-item"
-               href="{{ route('equipment.edit',['equipment'=>$equipment]) }}"
+               href="{{ route('equipment.edit',$equipment) }}"
             >
                 <i class="ml-2 far fa-edit mr-2 fa-fw"></i>
                 {{__('Gerät bearbeiten')}}
@@ -172,7 +172,7 @@
     >
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('equipDoku.store') }}#dokumente"
+                <form action="{{ route('equipDoku.store') }}#documents"
                       method="POST"
                       enctype="multipart/form-data"
                 >
@@ -694,7 +694,7 @@
                          title="{{ __('Vorsicht') }}"
                          btnSubmit="{{ __('Gerät löschen') }}"
     >
-        <p class="lead">Das Löschen des Gerätes kann nicht rückgängig gemacht werden.</p>
+        <p class="lead">{{__('Das Löschen des Gerätes kann nicht rückgängig gemacht werden.')}}</p>
     </x-modals.form_modal>
 @endsection
 
@@ -703,7 +703,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col">
-                <h1 class="h3">{{ __('Geräteübersicht')}}</h1>
+                <h1 class="h4">{{ __('Geräteübersicht')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -741,11 +741,11 @@
                         role="presentation"
                     >
                         <a class="nav-link"
-                           id="dokumente-tab"
+                           id="documents-tab"
                            data-toggle="tab"
-                           href="#dokumente"
+                           href="#documents"
                            role="tab"
-                           aria-controls="dokumente"
+                           aria-controls="documents"
                            aria-selected="false"
                         > {{ __('Dokumente')}}
                         </a>
@@ -790,6 +790,7 @@
                         </a>
                     </li>
                 </ul>
+
                 <div class="tab-content"
                      id="myTabContent"
                 >
@@ -846,72 +847,30 @@
                                 @else
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class=" fas  fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
-
+                                    <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
+                                        <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    </div>
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)
-
-                                    <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <span class="text-muted small">
-                                                {{ str_limit($bda->proddoc_name) }}</span> <br> <span class="lead">{{ str_limit($bda->proddoc_label,50) }}</span><br> <span class="text-muted small">
-                                                {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->proddoc_name_pfad)) }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
-                                                  method="get"
-                                                  id="downloadBDA_{{ $bda->id }}"
-                                            >
-                                                @csrf
-                                                <input type="hidden"
-                                                       name="id"
-                                                       id="bda_{{ $bda->id }}"
-                                                       value="{{ $bda->id }}"
-                                                >
-                                            </form>
-                                            <button
-                                                class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $bda->id }}').submit();"
-                                            >
-                                                <span class="fas fa-download"></span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <x-filecard name="{{ $bda->proddoc_name }}"
+                                                label="{{ $bda->proddoc_label }}"
+                                                path="{{ $bda->proddoc_name_pfad }}"
+                                                id="{{ $bda->id }}"
+                                    />
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
-                                <h2 class="h4 mt-5">Funtionstest</h2>
+                                <h2 class="h4 mt-5">{{__('Funtionstest')}}</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
-                                    <div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <span class="text-muted small">{{ str_limit($bda->eqdoc_name) }}</span><br> <span class="lead">{{ str_limit($bda->eqdoc_label,50) }}</span><br> <span class="text-muted small">
-                                                {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($bda->eqdoc_name_pfad)) }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
-                                                  method="get"
-                                                  id="downloadFuntionsTest_{{ $bda->id }}"
-                                            >
-                                                @csrf
-                                                <input type="hidden"
-                                                       name="id"
-                                                       id="FuntionsTest_{{ $bda->id }}"
-                                                       value="{{ $bda->id }}"
-                                                >
-                                            </form>
-                                            <button
-                                                class="btn btn-lg btn-outline-primary"
-                                                onclick="event.preventDefault(); document.getElementById('downloadFuntionsTest_{{ $bda->id }}').submit();"
-                                            >
-                                                <span class="fas fa-download"></span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                        <x-filecard name="{{ $bda->eqdoc_name }}"
+                                                    label="{{ $bda->eqdoc_label }}"
+                                                    path="{{ $bda->eqdoc_name_pfad }}"
+                                                    id="{{ $bda->id }}"
+                                        />
                                 @empty
                                     <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
                                     <button class="btn btn-lg btn-warning"
@@ -924,31 +883,10 @@
 
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
-                                @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(5)->latest()->onlyTrashed()->get() as $bda)
-                                    @if (\App\ControlEvent::where('control_equipment_id',$bda->id)->count()>0)
-                                        <div class="border rounded p-1 mb-1 d-flex justify-content-between align-items-center">
-                                            <div class="d-flex flex-column">
-                                            <span class="small text-muted pl-2">
-                                                {{$bda->deleted_at->diffForHumans()}}
-                                            </span> <span class="p-2">
-                                                {{ str_limit($bda->Anforderung->an_name,20) }}
-                                            </span>
-                                            </div>
-                                            <div class="pr-2">
-                                                <button type="button"
-                                                        class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
-                                                        data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$bda->id)->first()->id  }}"
-                                                ><i class="far fa-folder-open"></i></button>
-                                                <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$bda->id)->first()->id ) }}"
-
-                                                   class="btn btn-sm btn-outline-primary"
-                                                   target="_blank"
-                                                ><i class="far fa-file-pdf"></i></a>
-                                            </div>
-                                        </div>
+                                @forelse(App\ControlEquipment::where('equipment_id',$equipment->id)->take(5)->latest()->onlyTrashed()->get() as $control_equipment_item)
+                                    @if (\App\ControlEvent::where('control_equipment_id',$control_equipment_item->id)->count()>0)
+                                        <x-equipment_control_card :cei="$control_equipment_item"/>
                                     @endif
-
-
                                 @empty
                                     <x-notifyer>{{__('keine Prüfberichte hinterlegt')}}</x-notifyer>
                                 @endforelse
@@ -961,7 +899,7 @@
                          aria-labelledby="requirements-tab"
                     >
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Befähigte Personen')}}</h3>
                                     <button type="button"
@@ -982,21 +920,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse(\App\ProductQualifiedUser::where('produkt_id',$equipment->produkt->id)->get() as $qualifieduserOfProduct)
-                                        <tr>
-                                            <td>{{ $qualifieduserOfProduct->user->name }}</td>
-                                            <td>{{ $qualifieduserOfProduct->product_qualified_date }}</td>
-                                            <td colspan="2">{{ $qualifieduserOfProduct->firma->fa_name ?? '-' }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4">
-                                                <p class="m-2">
-                                                    <x-notifyer>{{__('Keine befähigte Personen gefunden')}}</x-notifyer>
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    @endforelse
+
                                     @foreach (\App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $equipmentUser)
                                         <tr>
                                             <td>{{ $equipmentUser->user->name }}</td>
@@ -1081,7 +1005,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <h3 class="h5">{{__('Anforderungen')}}</h3>
 
                                 @php
@@ -1100,9 +1024,9 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-2"
-                         id="dokumente"
+                         id="documents"
                          role="tabpanel"
-                         aria-labelledby="dokumente-tab"
+                         aria-labelledby="documents-tab"
                     >
                         <div class="row">
                             <div class="col-md-3">
@@ -1159,7 +1083,7 @@
                                                 @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
                                                     <tr>
                                                         <td>
-                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
+                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
                                                                   method="get"
                                                                   id="downloadEquipmentDoku_{{ $equipDoc->id }}"
                                                             >
@@ -1182,7 +1106,7 @@
                                                         </td>
                                                         <td>
                                                             <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
-                                                                            tabtarget="dokumente"
+                                                                            tabtarget="documents"
                                                                             prefix="EquipmentDoku"
                                                                             id="{{ $equipDoc->id }}"
                                                             />
@@ -1212,7 +1136,7 @@
                                                 @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
                                                     <tr>
                                                         <td>
-                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#dokumente"
+                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
                                                                   method="get"
                                                                   id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
                                                             >
@@ -1234,8 +1158,8 @@
                                                             {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                         </td>
                                                         <td>
-                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#dokumente"
-                                                                            tabtarget="dokumente"
+                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
+                                                                            tabtarget="documents"
                                                                             prefix="EquipmentFunction"
                                                                             id="{{ $equipFunctionDoc->id }}"
                                                             />
@@ -1265,7 +1189,7 @@
                                                 @foreach (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->get() as $produktDoc)
                                                     <tr>
                                                         <td>
-                                                            <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
+                                                            <form action="{{ route('downloadProduktDokuFile') }}#documents"
                                                                   method="get"
                                                                   id="downloadProdDoku_{{ $produktDoc->id }}"
                                                             >

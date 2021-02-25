@@ -36,124 +36,37 @@
                 <h1 class="h4">{{__('Übersicht Standorte')}}</h1>
             </div>
         </div>
-        @if (isset($locationList))
-            <div class="row">
-                <div class="col">
-                    <table class="table table-responsive-md table-sm table-striped">
-                        <thead>
-                        <tr>
-                            <th class="d-none d-md-table-cell">{{__('Standort')}}</th>
-                            <th>{{__('Bezeichnung')}}</th>
-                            <th class="d-none d-md-table-cell">{{__('Gebäude')}}</th>
-                            <th class="d-none d-md-table-cell">{{__('Räume')}}</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($locationList as $location)
-                            <tr>
-                                <td class="d-none d-md-table-cell">
-                                    <a href="/location/{{$location->location->id}}">{{ $location->location->l_label  }}</a>
-                                </td>
-                                <td>{{ $location->l_name }}</td>
-                                <td>{{ $location->b_label }}</td>
-                                <td class="d-none d-md-table-cell">{{ $location->BuildingType->btname }}</td>
-                                <td>
-                                    <a href="{{$location->path()}}">
-                                        <i class="fas fa-chalkboard"></i> <span class="d-none d-md-table-cell">{{__('Übersicht')}}</span>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="d-flex justify-content-center">
-                        {!! $locationList->withQueryString()->onEachSide(2)->links() !!}
-                    </div>
-                </div>
-            </div>
-        @else
-            <nav class="d-flex justify-content-end align-items-center mb-2">
+        <nav class="d-flex justify-content-end align-items-center mb-2">
 
-                <button type="button"
-                        class="btn btn-sm btn-outline-secondary btnShowDataStyle"
-                        data-targetid="#locationListField"
-                        data-src="{{ route('getLocationListeAsTable') }}"
-                >
-                    <i class="fas fa-list"></i>
-                </button>
-
-                <button type="button"
-                        class="btn btn-sm btn-outline-secondary btnShowDataStyle"
-                        data-targetid="#locationListField"
-                        data-src="{{ route('getLocationListeAsKachel') }}"
-                >
-                    <i class="fas fa-th"></i>
-                </button>
-            </nav>
-            <div class="row"
-                 id="locationListField"
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary btnShowDataStyle"
+                    data-targetid="#locationListField"
+                    data-src="{{ route('getLocationListeAsTable') }}"
             >
-                @foreach (App\Location::all() as $location)
-                    <div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 "
-                         id="loc_id_{{$location->id}}"
-                    >
-                        <div class="card"
-                             style="height:21em;"
-                        >
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $location->l_label }}</h5>
-                                <h6 class="card-subtitletext-muted">{{ $location->l_name }}</h6>
-                                <p class="card-text mt-1 mb-0"><small><strong>{{__('Gebäude')}}:</strong> {{ $location->Building->count() }}</small></p>
-                                <p class="card-text mt-1 mb-0"><small><strong>{{__('Geräte')}}:</strong> {{ $location->countTotalEquipmentInLocation() }}</small></p>
-                                <p class="card-text mt-1 mb-0"><small><strong>{{__('Beschreibung')}}:</strong></small></p>
-                                <p class="mt-0"
-                                   style="height:6em;overflow-y: scroll"
-                                >{{ $location->l_beschreibung }}</p>
+                <i class="fas fa-list"></i>
+            </button>
 
-                            </div>
-                            <div class="card-footer d-flex align-items-center">
-
-                                <a href="{{$location->path()}}"
-                                   class="btn btn-link btn-sm mr-auto"
-                                ><i class="fas fa-chalkboard"></i> Übersicht
-                                </a>
-                                @if ($location->Building->count()===0)
-                                    <button type="button"
-                                            class="btn btn-link btn-sm btnDeleteLocation"
-                                            data-id="{{ $location->id }}"
-                                            title="Standort {{ $location->l_label }} löschen"
-                                    ><i class="far fa-trash-alt"></i></button>
-                                    <form action="{{ route('location.destroy',$location->id) }}"
-                                          id="frmDeleteLocation_{{ $location->id }}"
-                                          target="_blank"
-                                    >
-                                        @csrf
-                                        @method('delete')
-                                        <input type="hidden"
-                                               name="id"
-                                               id="id_{{ $location->id }}"
-                                               value="{{ $location->id }}"
-                                        >
-                                        <input type="hidden"
-                                               name="frmOrigin"
-                                               id="frmOrigin_{{ $location->id }}"
-                                               value="building"
-                                        >
-                                        <input type="hidden"
-                                               name="l_label"
-                                               id="l_label_{{ $location->id }}"
-                                               value="{{ $location->l_label }}"
-                                        >
-                                    </form>
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary btnShowDataStyle"
+                    data-targetid="#locationListField"
+                    data-src="{{ route('getLocationListeAsKachel') }}"
+            >
+                <i class="fas fa-th"></i>
+            </button>
+        </nav>
+        <div class="row"
+             id="locationListField"
+        >
+            @if(count($locationList)>=10)
+                <x-locations_table :locations="$locationList"/>
+            @else
+                @foreach($locationList as $location)
+                    <x-object_tile :object="$location"/>
                 @endforeach
-            </div>
-        @endif
+            @endif
+        </div>
+
+
     </div>
 
 @endsection

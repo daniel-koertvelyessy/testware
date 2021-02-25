@@ -19,13 +19,26 @@ class EquipmentInstruction extends Model
         'equipment_id',
     ];
 
-    public function Equipment() {
+    public function Equipment()
+    {
         return $this->belongsTo(Equipment::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'equipment_instruction_trainee_id');
+    }
+
+    public function addEquipment(ProductInstructedUser $productInstructedUser, $equipment_id)
+    {
+        $this->equipment_instruction_date = $productInstructedUser->product_instruction_date;
+        $this->equipment_instruction_instructor_signature = $productInstructedUser->product_instruction_instructor_signature;
+        $this->equipment_instruction_instructor_profile_id = $productInstructedUser->product_instruction_instructor_profile_id;
+        $this->equipment_instruction_instructor_firma_id = $productInstructedUser->product_instruction_instructor_firma_id;
+        $this->equipment_instruction_trainee_signature = $productInstructedUser->product_instruction_trainee_signature;
+        $this->equipment_instruction_trainee_id = $productInstructedUser->product_instruction_trainee_id;
+        $this->equipment_id = $equipment_id;
+        $this->save();
     }
 
 }

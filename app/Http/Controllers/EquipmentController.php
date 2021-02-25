@@ -9,10 +9,13 @@ use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
 use App\EquipmentHistory;
+use App\EquipmentInstruction;
 use App\EquipmentParam;
 use App\EquipmentQualifiedUser;
 use App\EquipmentUid;
 use App\EquipmentWarranty;
+use App\ProductInstructedUser;
+use App\ProductQualifiedUser;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktKategorieParam;
@@ -30,6 +33,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class EquipmentController extends Controller
@@ -76,9 +80,23 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
-            'eq_serien_nr'       => 'bail|nullable|unique:equipment,eq_serien_nr|max:100',
-            'eq_uid'             => 'bail|required|unique:equipment,eq_uid',
+            'eq_inventar_nr'     => [
+                'bail',
+                'max:100',
+                'required',
+                Rule::unique('equipment')->ignore($request->id)
+            ],
+            'eq_serien_nr'       => [
+                'bail',
+                'nullable',
+                'max:100',
+                Rule::unique('equipment')->ignore($request->id)
+            ],
+            'eq_uid'             => [
+                'bail',
+                'required',
+                Rule::unique('equipment')->ignore($request->id)
+            ],
             'eq_name'            => '',
             'eq_qrcode'          => '',
             'eq_text'            => '',
@@ -110,63 +128,36 @@ class EquipmentController extends Controller
 
         $equipment->save();
 
+        (new EquipmentUid)->addNew($request->eq_uid, $equipment->id);
 
-        $lastDate = $request->qe_control_date_last;
-
-
-        $euid = new EquipmentUid();
-        $euid->equipment_uid = $request->eq_uid;
-        $euid->equipment_id = $equipment->id;
-        $euid->save();
-
-        $eh = new EquipmentHistory();
-        $eh->eqh_eintrag_kurz = __('Gerät angelegt');
-        $eh->eqh_eintrag_text = __('Das Gerät mit der Inventar-Nr :invno wurde angelegt', ['invno' => request('eq_inventar_nr')]);
-        $eh->equipment_id = $equipment->id;
-        $eh->save();
+        (new EquipmentHistory)->add(__('Gerät angelegt'), __('Das Gerät mit der Inventar-Nr :invno wurde angelegt', ['invno' => request('eq_inventar_nr')]), $equipment->id);
 
         if (isset($request->warranty_expires_at)) {
-            $request->validate([
-                'warranty_expires_at' => 'date|date_format:Y-m-d'
-            ]);
-            $eq_warranty = new EquipmentWarranty();
-            $eq_warranty->expires_at = $request->warranty_expires_at;
-            $eq_warranty->equipment_id = $equipment->id;
-            $eq_warranty->save();
+            $request->validate(['warranty_expires_at' => 'after:today|date_format:Y-m-d']);
+            (new EquipmentWarranty)->addEquipment($request->warranty_expires_at, $equipment->id);
         }
 
         foreach (Produkt::find($request->produkt_id)->ProduktAnforderung as $prodAnforderung) {
-            $conEquip = new ControlEquipment();
-            $interval = $prodAnforderung->Anforderung->an_control_interval;
-            $conInt = $prodAnforderung->Anforderung->control_interval_id;
-            $zeit = ControlInterval::find($conInt);
-            $dueDate = date('Y-m-d', strtotime("+" . $interval . $zeit->ci_delta, strtotime($lastDate)));
-            $conEquip->qe_control_date_last = $lastDate;
-            $conEquip->qe_control_date_due = $dueDate;
-            $conEquip->anforderung_id = $prodAnforderung->anforderung_id;
-            $conEquip->equipment_id = $equipment->id;
-            $conEquip->save();
 
-            $eh = new EquipmentHistory();
-            $eh->eqh_eintrag_kurz = __('Anforderung angelegt');
-            $eh->eqh_eintrag_text = __('Für das Geräte wurde die Anforderung :anname angelegt, welche am :duedate zum ersten Mal fällig wird.', [
+            $dueDate = (new ControlEquipment)->addEquipment($prodAnforderung, $equipment->id, $request->qe_control_date_last);
+
+            (new EquipmentHistory)->add(__('Anforderung angelegt'), __('Für das Geräte wurde die Anforderung :anname angelegt, welche am :duedate zum ersten Mal fällig wird.', [
                 'anname'  => $prodAnforderung->Anforderung->an_name,
                 'duedate' => $dueDate
-            ]);
-            $eh->equipment_id = $equipment->id;
-            $eh->save();
+            ]), $equipment->id);
+
+        }
+
+        foreach (ProductQualifiedUser::where('produkt_id', $request->produkt_id)->get() as $productQualifiedUser) {
+            (new EquipmentQualifiedUser)->addEquipment($productQualifiedUser, $equipment->id);
+        }
+
+        foreach (ProductInstructedUser::where('produkt_id', $request->produkt_id)->get() as $productInstructedUser) {
+            (new EquipmentInstruction)->addEquipment($productInstructedUser, $equipment->id);
         }
 
         if (isset($request->pp_id) && count($request->pp_id) > 0) {
-            for ($i = 0; $i < count($request->pp_id); $i++) {
-                $pp = ProduktParam::find($request->pp_id[$i]);
-                $equipParam = new EquipmentParam();
-                $equipParam->ep_label = $pp->pp_label;
-                $equipParam->ep_name = $pp->ep_name;
-                $equipParam->ep_value = $request->ep_value[$i];
-                $equipParam->equipment_id = $equipment->id;
-                $equipParam->save();
-            }
+            for ($i = 0; $i < count($request->pp_id); $i++) (new EquipmentParam)->addEquipmnt($request->pp_id[$i], $request->ep_value[$i], $equipment->id);
         }
 
         (new EquipmentFuntionControl())->addControlEvent($request, $equipment->id);
@@ -187,14 +178,11 @@ class EquipmentController extends Controller
             $proDocFile->eqdoc_label = request('eqdoc_label');
             $proDocFile->save();
         } else {
-            $eh = new EquipmentHistory();
-            $eh->eqh_eintrag_kurz = __('Fehlende Angaben beim Anlegen');
-            $eh->eqh_eintrag_text = __('Das Geräte wurde ohne Prüfdokumente angelegt. Gerät erhält den Status "gesperrt"!');
-            $eh->equipment_id = $equipment->id;
-            $eh->save();
+            (new EquipmentHistory)->add(__('Fehlende Angaben beim Anlegen'), __('Das Geräte wurde ohne Prüfdokumente angelegt. Gerät erhält den Status "gesperrt"!'), $equipment->id);
         }
 
         if ($request->function_control_profil !== 'void') {
+
             $qualifiedUser = new EquipmentQualifiedUser();
             $qualifiedUser->equipment_qualified_firma = null;
             $qualifiedUser->equipment_qualified_date = date('Y-m-d');
@@ -202,16 +190,13 @@ class EquipmentController extends Controller
             $qualifiedUser->equipment_id = $equipment->id;
             $qualifiedUser->save();
 
-            $eh = new EquipmentHistory();
-            $eh->eqh_eintrag_kurz = __('Befähigte Person angelegt');
-            $eh->eqh_eintrag_text = User::find($request->function_control_profil)->name . __(' wurde als befähigte Person hinzugefügt.');
-            $eh->equipment_id = $equipment->id;
-            $eh->save();
+            (new EquipmentHistory)->add(__('Befähigte Person angelegt'), User::find($request->function_control_profil)->name . ' ' . __('wurde als befähigte Person hinzugefügt.'), $equipment->id);
+
         }
 
         $request->session()->flash('status', __('Das Gerät <strong>:eqname</strong> wurde angelegt!', ['eqname' => request('eq_name')]));
 
-        return redirect(route('equipment.show', ['equipment' => $equipment]));
+        return redirect(route('equipment.show', compact('equipment')));
     }
 
     /**
@@ -223,7 +208,7 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-        return view('testware.equipment.show', ['equipment' => $equipment]);
+        return view('testware.equipment.show', compact('equipment'));
     }
 
     /**
@@ -235,7 +220,7 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        return view('testware.equipment.edit', ['equipment' => $equipment]);
+        return view('testware.equipment.edit', compact('equipment'));
     }
 
     /**
@@ -258,7 +243,7 @@ class EquipmentController extends Controller
         } elseif (isset($request->setFieldReadWrite) && $oldEquipment->eq_inventar_nr === $request->eq_inventar_nr) {
             $equipment->update($this->validateEquipment());
         } else {
-            $equipment->update($this->validateNewEquipment());
+            $equipment->update($this->validateEquipment());
         }
 
         $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ' => ';
@@ -347,22 +332,17 @@ class EquipmentController extends Controller
             $flag = true;
         }
 
-
         if ($flag) {
-
-            $eh = new EquipmentHistory();
-            $eh->eqh_eintrag_kurz = __('Gerät geändert');
-            $eh->eqh_eintrag_text = $feld;
-            $eh->equipment_id = $equipment->id;
-            $eh->save();
+            (new EquipmentHistory)->add(__('Gerät geändert'), $feld, $equipment->id);
             $request->session()->flash('status', __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!', ['equipName' => request('eq_inventar_nr')]));
 
-            return view('testware.equipment.show', ['equipment' => $equipment]);
+            return view('testware.equipment.show', compact('equipment'));
         } else {
             $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
-            return view('testware.equipment.show', ['equipment' => $equipment]);
+            return view('testware.equipment.show', compact('equipment'));
         }
     }
+
 
     /**
      * @return array
@@ -371,29 +351,23 @@ class EquipmentController extends Controller
     : array
     {
         return request()->validate([
-            'eq_inventar_nr'     => '',
-            'eq_serien_nr'       => 'max:100',
-            'eq_qrcode'          => '',
-            'eq_text'            => '',
-            'installed_at'       => 'date',
-            'purchased_at'       => 'date',
-            'eq_price'           => '',
-            'produkt_id'         => '',
-            'storage_id'         => 'required',
-            'equipment_state_id' => 'required'
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateNewEquipment()
-    : array
-    {
-        return request()->validate([
-            'eq_inventar_nr'     => 'bail|unique:equipment,eq_inventar_nr|max:100|required',
-            'eq_serien_nr'       => 'bail|nullable|unique:equipment,eq_serien_nr|max:100',
-            'eq_uid'             => 'bail|required|unique:equipment,eq_uid',
+            'eq_inventar_nr'     => [
+                'bail',
+                'max:100',
+                'required',
+                Rule::unique('equipment')->ignore(request('id'))
+            ],
+            'eq_serien_nr'       => [
+                'bail',
+                'nullable',
+                'max:100',
+                Rule::unique('equipment')->ignore(request('id'))
+            ],
+            'eq_uid'             => [
+                'bail',
+                'required',
+                Rule::unique('equipment')->ignore(request('id'))
+            ],
             'eq_qrcode'          => '',
             'eq_text'            => '',
             'eq_price'           => '',

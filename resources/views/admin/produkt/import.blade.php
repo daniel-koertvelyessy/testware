@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuMaterial')
+    @include('menus._menuProducts')
 @endsection
 
 @section('breadcrumbs')

@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Systemeinstellungen')}} &triangleright;
+{{ __('Systemstatus') }} &triangleright; {{__('Systemeinstellungen')}}
 @endsection
 
 @section('mainSection')
@@ -16,233 +16,177 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="/">Portal</a>
+                <a href="/">{{__('Portal')}}</a>
             </li>
             <li class="breadcrumb-item active"
                 aria-current="page"
-            >Verwaltung
+            >{{__('Verwaltung')}}
             </li>
         </ol>
     </nav>
-@endsection
-
-@section('modals')
-
-    <div class="modal fade"
-         id="modalBuyObjects"
-         tabindex="-1"
-         aria-labelledby="modalBuyObjectsLabel"
-         aria-hidden="true"
-    >
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form action="{{ route('lizenz.store') }}"
-                      method="post"
-                      id="frmPurchaseNewObjects"
-                >
-                    @csrf
-                    <input type="hidden"
-                           name="lizenz_id"
-                           id="lizenz_id"
-                           value="{{ config('app.lizenzid') }}"
-                    >
-                    <div class="modal-header">
-                        <h5 class="modal-title"
-                            id="modalBuyObjectsLabel"
-                        >{{ __('Objekte kaufen') }} [DEMO!!]</h5>
-                        <button type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="lead">Sie können hier weitere Kontingente bequem einkaufen.</p>
-                        <p>Wähen Sie die Anzahl an zusätzlichen Objekten aus.</p>
-
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="buy100"
-                                   name="buyObjectAmount"
-                                   class="custom-control-input"
-                                   value="100"
-                                   checked
-                            >
-                            <label class="custom-control-label"
-                                   for="buy100"
-                            >100 Objekte
-                            </label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="buy500"
-                                   name="buyObjectAmount"
-                                   class="custom-control-input"
-                                   value="500"
-                            >
-                            <label class="custom-control-label"
-                                   for="buy500"
-                            >500 Objekte
-                            </label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="buy1000"
-                                   name="buyObjectAmount"
-                                   class="custom-control-input"
-                                   value="1000"
-                            >
-                            <label class="custom-control-label"
-                                   for="buy1000"
-                            >1000 Objekte
-                            </label>
-                        </div>
-
-                        <p class="lead mt-4">Zahlung</p>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="paybyPayPal"
-                                   name="paymentMethode"
-                                   class="custom-control-input"
-                                   checked
-                            >
-                            <label class="custom-control-label"
-                                   for="paybyPayPal"
-                            >via PayPal
-                            </label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="paybyDebitCard"
-                                   name="paymentMethode"
-                                   class="custom-control-input"
-                            >
-                            <label class="custom-control-label"
-                                   for="paybyDebitCard"
-                            >via Kreditkarte
-                            </label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"
-                                   id="paybyInvoice"
-                                   name="paymentMethode"
-                                   class="custom-control-input"
-                            >
-                            <label class="custom-control-label"
-                                   for="paybyInvoice"
-                            >via Rechnung
-                            </label>
-                        </div>
-                        <div id="purchaseStatus"  class=" d-none">
-                            <div class="my-5 d-flex align-items-center justify-content-center">
-                                <span class="lead mr-3">Arbeite</span>
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="my-5 alert alert-success p-3 d-none" id="purchaseResult">
-                            <p class="lead">Erfolg</p>
-                            <p>Ihre Zahlung wurde erfolgreich abgewickelt. Die Anzahl der Objekte wurde entsprechend erhöht.<br>Vielen Dank!</p>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-outline-secondary"
-                                data-dismiss="modal"
-                        >{{ __('Abbruch') }}
-                        </button>
-                        <button type="button"
-                                id="btnPurchaseObjects"
-                                class="btn btn-success"
-                        >{{ __('Zahlungspflichtig bestellen') }}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h3">{{__('Übersicht Systemverwaltung')}}</h1>
+                <h1 class="h4">{{__('Übersicht Systemstatus')}}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
+                <h2 class="h5">{{ __('memStandorte') }}</h2>
+                @if($system['storages']>0)
+                    <x-system-status-msg counter="{{ $system['storages'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Standorte/Abstellplätze sind erstellt') }}"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('location.create') }}"
+                                         type="danger"
+                                         msg="{{ __('Keine Standorte gefunden') }}"
+                    />
+                @endif
+
+                <h2 class="h5">{{ __('Produkte') }}</h2>
+                @if($system['products']>0)
+                    <x-system-status-msg counter="{{ $system['products'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Produkte sind erstellt') }}"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('produkt.create') }}"
+                                         type="danger"
+                                         msg="{{ __('Keine Produkte gefunden') }}"
+                    />
+                @endif
+
+                <h2 class="h5">{{ __('Prüfgeräte') }}</h2>
+                @if($system['control_products']>0)
+                    <x-system-status-msg counter="{{ $system['control_products'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Prüfprodukte sind definiert') }}"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('produkt.index') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine Prüfgeräte definiert') }}"
+                    />
+                @endif
+                <h2 class="h5">{{ __('Produkte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}</h2>
+                @if($system['product_qualified_user']>0)
+                    <x-system-status-msg counter="{{ $system['product_qualified_user'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Benutzer sind befähigt!') }}"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('produkt.index') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine befähigte Benutzer gefunden') }}"
+                    />
+                @endif
+
+                @if($system['equipment_qualified_user']>0 && $system['equipment']>0)
+                    <h2 class="h5">{{ __('Geräte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}</h2>
+                    <x-system-status-msg counter="{{ $system['equipment_qualified_user'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Benutzer sind befähigt!') }}"
+                    />
+                @elseif($system['equipment_qualified_user']===0 && $system['equipment']>0)
+                    <h2 class="h5">{{ __('Geräte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}</h2>
+                    <x-system-status-msg link="{{ route('equipMain') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine befähigte Benutzer gefunden') }}"
+                    />
+                @endif
+
+                @if($system['equipment']>0)
+                    <h2 class="h5">{{ __('Geräte') }}</h2>
+                    <x-system-status-msg counter="{{ $system['equipment'] }}"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Es sind Geräte angelegt') }}"
+                    />
+                    <h2 class="h5">{{ __('Geräte ohne Funktionsprüfung') }}</h2>
+                    @if($system['incomplete_equipment']>0 )
+                        <x-system-status-msg link="{{ route('equipMain') }}"
+                                             type="warning"
+                                             msg="{{ __('Es existieren Geräte ohne Funktionsprüfung') }}"
+                        />
+                    @else
+                        <x-system-status-msg counter="{{ $system['incomplete_equipment']  }}"
+                                             type="pass"
+                                             msg="{{ __('Sehr gut! Alle Geräte haben eine Funktionsprüfung') }}"
+                        />
+                    @endif
+                @endif
+                @if($system['products']>0 && $system['equipment']===0)
+                    <h2 class="h5">{{ __('Geräte') }}</h2>
+                    <x-system-status-msg link="{{ route('equipment.maker') }}"
+                                         type="info"
+                                         msg="{{ __('Es sind noch keine Geräte angelegt worden') }}"
+                                         labelBtn="{{ __('anlegen') }}"
+                    />
+                @endif
+
+
             </div>
             <div class="col-md-6">
-{{--                <h2 class="h4">Lizenzdaten</h2>
-                <ul class="list-unstyled">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Lizenznehmer</span> <span class="text-info">thermo-control Körtvélyessy GmbH</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Lizenznummer</span> <span class="text-info">{{ config('app.lizenzid') }}</span>
-                    </li>
-                </ul>--}}
-                <h3 class="h5">{{__('Objektliste')}}</h3>
-                <ul class="list-unstyled">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{__('Standorte')}}</span> <span>{{$countLocation =  \App\Location::all()->count() }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{__('Gebäude')}}</span> <span>{{$countBuilding =  \App\Building::all()->count() }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{__('Räume')}}</span> <span>{{ $countRoom = \App\Room::all()->count() }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{__('Stellplätze')}}</span> <span>{{$countStelplatz =  \App\Stellplatz::all()->count() }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>{{__('Geräte')}}</span> <span>{{$countEquipment =  \App\Equipment::all()->count() }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="lead">Gesamt</span> <span class="lead text-info">{{ App\Lizenz::getNumObjekte() }}</span>
-                    </li>
-{{--                    <li class="list-group-item d-flex justify-content-between align-items-center">--}}
-{{--                        <span>Kontingent</span> <span>{{ \App\Lizenz::getMaxObjects(config('app.lizenzid')) }}</span>--}}
-{{--                    </li>--}}
-{{--                    <li class="list-group-item d-flex justify-content-between align-items-center text-success">--}}
-{{--                        <span class="lead">Verfügbar</span> <span class="lead">{{ \App\Lizenz::getMaxObjects(config('app.lizenzid'))-App\Lizenz::getNumObjekte()}}</span>--}}
-{{--                    </li>--}}
-                </ul>
-{{--                <div class="d-flex justify-content-end">--}}
-{{--                    <button class="btn btn-sm btn-outline-primary"--}}
-{{--                            data-toggle="modal"--}}
-{{--                            data-target="#modalBuyObjects"--}}
-{{--                    >Objekte kaufen <i class="fas fa-shopping-cart"></i></button>--}}
+                <h2 class="h5">{{ __('Verordnungen') }}</h2>
+                @if($system['regulations']>0)
+                    <x-system-status-msg counter="{{ $system['regulations'] }}"
+                                         msg="{{ __('Sehr gut! Verordnungen sind angelegt') }}"
+                                         type="pass"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('verordnung.create') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine Verordnungen gefunden') }}"
+                    />
+                @endif
 
-{{--                </div>--}}
+                <h2 class="h5">{{ __('Anforderungen') }}</h2>
+                @if($system['requirements']>0)
+                    <x-system-status-msg counter="{{ $system['requirements'] }}"
+                                         msg="{{ __('Sehr gut! Anforderungen sind angelegt') }}"
+                                         type="pass"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('anforderung.create') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine Anforderungen gefunden') }}"
+                    />
+                @endif
+
+
+                <h2 class="h5">{{ __('Kontrollvorgänge') }}</h2>
+                @if($system['requirements_items']>0)
+                    <x-system-status-msg counter="{{ $system['requirements_items'] }}"
+                                         msg="{{ __('Sehr gut! Kontrollvorgänge sind angelegt') }}"
+                                         type="pass"
+                    />
+                @else
+                    <x-system-status-msg link="{{ route('anforderung.create') }}"
+                                         type="warning"
+                                         msg="{{ __('Keine Anforderungen gefunden') }}"
+                    />
+                @endif
+
+
+                @if($system['incomplete_requirement']>0 && $system['requirements']>0)
+                    <h2 class="h5">{{ __('Unvollständige Anforderungen') }}</h2>
+                    <x-system-status-msg link="{{ route('anforderung.index') }}"
+                                         msg="{{ $system['incomplete_requirement'] }} {{ __('Anforderungen haben keine Kontrollvorgänge') }}"
+                                         type="warning"
+                    />
+                @elseif($system['incomplete_requirement']===0 && $system['requirements']>0)
+                    <h2 class="h5">{{ __('Unvollständige Anforderungen') }}</h2>
+                    <x-system-status-msg counter="0"
+                                         type="pass"
+                                         msg="{{ __('Sehr gut! Keine Anforderungen sind unvollständig') }}"
+                    />
+                @endif
             </div>
         </div>
-
-
     </div>
-
-@endsection
-
-@section('scripts')
-
-    <script>
-        $('#btnPurchaseObjects').click(function () {
-            $('#purchaseStatus').removeClass('d-none');
-            setTimeout(function () {
-                $('#purchaseResult').removeClass('d-none');
-                $('#purchaseStatus').addClass('d-none');
-                setTimeout(function () {
-                    $('#frmPurchaseNewObjects').submit();
-                },1000)
-            },2000);
-        });
-    </script>
 
 @endsection

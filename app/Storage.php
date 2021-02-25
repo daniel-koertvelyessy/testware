@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -17,42 +18,19 @@ class Storage extends Model
         'storage_uid',
     ];
 
-    public function add($uid, $label, $type)
+    public static function boot()
     {
-        $storageByLabel = Storage::where('storage_label', $label)->first();
-        if (!$storageByLabel) {
-            $storageByUid = Storage::where('storage_uid', $uid)->first();
-            if (!$storageByUid) {
-                $storage = new Storage();
-                $storage->storage_object_type = $type;
-                $storage->storage_uid = $uid;
-                $storage->storage_label = $label;
-                $storage->save();
-                return $storage->id;
-            } else {
-                $storageByUid->storage_object_type = $type;
-                $storageByUid->storage_uid = $uid;
-                $storageByUid->storage_label = $label;
-                $storageByUid->save();
-                return $storageByUid->id;
-            }
-        } else {
-            $storageByLabel->storage_object_type = $type;
-            $storageByLabel->storage_uid = $uid;
-            $storageByLabel->storage_label = $label;
-            $storageByLabel->save();
-            return $storageByLabel->id;
-        }
-    }
-
-    public function change($uid, $label, $type)
-    {
-        return $this->add($uid, $label, $type);
-    }
-
-    public function remove()
-    {
-        return $this->delete();
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('app-get-current-amount-Location');
+            Cache::forget('countTotalEquipmentInLocation');
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('app-get-current-amount-Location');
+            Cache::forget('countTotalEquipmentInLocation');
+            Cache::forget('system-status-counter');
+        });
     }
 
     public static function getLocationPath($uid)
@@ -90,9 +68,7 @@ class Storage extends Model
                 $loc = Location::find($bul->location_id);
 
 
-                $path = __('Standort') . ': ' . $loc->l_label .
-                    ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
-                    ' > ' . __('Raum') . ':' . ' ' . $rom->r_label;
+                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label . ' > ' . __('Raum') . ':' . ' ' . $rom->r_label;
 
                 break;
 
@@ -108,15 +84,57 @@ class Storage extends Model
                 $loc = Location::find($bul->location_id);
 
 
-                $path = __('Standort') . ': ' . $loc->l_label .
-                    ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label .
-                    ' > ' . __('Raum') . ':' . ' ' . $rom->r_label .
-                    ' > ' . __('Stellplatz') . ':' . ' ' . $spl->sp_label;
+                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label . ' > ' . __('Raum') . ':' . ' ' . $rom->r_label . ' > ' . __('Stellplatz') . ':' . ' ' . $spl->sp_label;
 
                 break;
         }
 
         return $path;
+    }
+
+    public function checkUpdate($uid, $label)
+    {
+        $storage = Storage::where('storage_uid', $uid)->first();
+        $storage->storage_label = $label;
+        $storage->save();
+    }
+
+    public function change($uid, $label, $type)
+    {
+        return $this->add($uid, $label, $type);
+    }
+
+    public function add($uid, $label, $type)
+    {
+        $storageByLabel = Storage::where('storage_label', $label)->first();
+        if (!$storageByLabel) {
+            $storageByUid = Storage::where('storage_uid', $uid)->first();
+            if (!$storageByUid) {
+                $storage = new Storage();
+                $storage->storage_object_type = $type;
+                $storage->storage_uid = $uid;
+                $storage->storage_label = $label;
+                $storage->save();
+                return $storage->id;
+            } else {
+                $storageByUid->storage_object_type = $type;
+                $storageByUid->storage_uid = $uid;
+                $storageByUid->storage_label = $label;
+                $storageByUid->save();
+                return $storageByUid->id;
+            }
+        } else {
+            $storageByLabel->storage_object_type = $type;
+            $storageByLabel->storage_uid = $uid;
+            $storageByLabel->storage_label = $label;
+            $storageByLabel->save();
+            return $storageByLabel->id;
+        }
+    }
+
+    public function remove()
+    {
+        return $this->delete();
     }
 
     public function Equipment()
@@ -151,6 +169,6 @@ class Storage extends Model
 
     public function checkUidExists($uid)
     {
-         return Storage::where('storage_uid',$uid)->count() > 0;
+        return Storage::where('storage_uid', $uid)->count() > 0;
     }
 }

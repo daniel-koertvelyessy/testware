@@ -102,41 +102,25 @@
         />
         @if (isset($pk))
             @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
-                <div class="form-group">
-                    <input type="hidden"
-                           name="pp_label[]"
-                           id="pp_label{{ $pkpItem->id }}"
-                           value="{{ $pkpItem->pkp_label }}"
-                    >
-                    <input type="hidden"
-                           name="pp_name[]"
-                           id="pp_name_{{ $pkpItem->id }}"
-                           value="{{ $pkpItem->pkp_name }}"
-                    >
 
-                    <label for="{{ $pkpItem->pkp_label }}">{{ $pkpItem->pkp_name }}</label>
-                    <input type="text"
-                           class="form-control"
-                           maxlength="150"
-                           name="pp_value[]"
-                           id="{{ $pkpItem->pkp_label }}"
-                           value="{{ old($pkpItem->pkp_label)??'' }}"
-                    >
-                    @if ($errors->has($pkpItem->pkp_label))
-                        <span class="text-danger small">{{ $errors->first($pkpItem->pkp_label) }}</span>
-                    @else
-                        <span class="small text-primary">{{__('max 100 Zeichen')}}</span>
-                    @endif
-                </div>
+                <input type="hidden"
+                       name="pp_label[]"
+                       id="pp_label{{ $pkpItem->id }}"
+                       value="{{ $pkpItem->pkp_label }}"
+                >
+                <input type="hidden"
+                       name="pp_name[]"
+                       id="pp_name_{{ $pkpItem->id }}"
+                       value="{{ $pkpItem->pkp_name }}"
+                >
+                <x-textfield id="{{ $pkpItem->pkp_label }}"
+                             label="{{ $pkpItem->pkp_name }}"
+                />
+
             @endforeach
         @endif
-        <div class="form-group">
-            <label for="prod_description">{{__('Beschreibung')}}</label>
-            <textarea name="prod_description"
-                      id="prod_description"
-                      class="form-control"
-                      rows="3"
-            >{{ old('prod_description') }}</textarea>
-        </div>
+        <x-textarea id="prod_description"
+                    label="{{__('Beschreibung')}}"
+        />
     </div>
 </div>

@@ -194,7 +194,7 @@
         <x-sidebar/>
     </nav>
     <main id="app"
-          class="mt-3 "
+          class="mt-2"
           style="flex:1;"
     >
         <a id="content"></a>
@@ -276,9 +276,10 @@
 <!-- MODALS ENDE -->
 @if ($errors->any())
     <div class="alert alert-danger fixed-bottom alert-dismissible fade show">
-        <ul>
+        <p class="lead my-2">{{ __('Fehler') }}</p>
+        <ul class="list-group mb-4">
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li class="list-group-item list-group-item-warning">{{ $error }}</li>
             @endforeach
         </ul>
         <button type="button"
@@ -290,27 +291,7 @@
         </button>
     </div>
 @endif
-<footer class="page-footer fixed-bottom px-1">
-    <div class="row align-items-center justify-content-between">
-        <div class="col-auto small mr-auto pl-3">
-            <span class="text-dark">
-                © 2020
-            <a href="https://bitpack.io/"
-               title="bitpack.io"
-            >
-                <span style="color: #000;">bitpack</span>
-                <span style="color: #c7d301;">.io</span>
-            </a>
-            &nbsp; GmbH
-            </span>
-
-            <span>
-
-            </span>
-        </div>
-        {{--        <x-lizenzbar maxObj="{{ App\Lizenz::getMaxObjects(config('app.lizenzid')) }}" numObj="{{ App\Lizenz::getNumObjekte() }}" />--}}
-    </div>
-</footer>
+<x-section-footer/>
 @yield('autoloadscripts')
 
 <script type="text/javascript"

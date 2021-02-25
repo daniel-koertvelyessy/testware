@@ -29,10 +29,12 @@ class Room extends Model
         static::saving(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
+            Cache::forget('system-status-counter');
         });
         static::updating(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
+            Cache::forget('system-status-counter');
         });
     }
 
@@ -75,16 +77,15 @@ class Room extends Model
     }
 
     public function countTotalEquipmentInRoom()
+        :int
     {
-
-        Cache::remember(
+       return Cache::remember(
             'countTotalEquipmentInRoom' . $this->id,
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
                 $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
-                $compartments = Stellplatz::where('room_id', $this->id)->get();
-                foreach ($compartments as $compartment) {
+                foreach ($this->stellplatzs as $compartment) {
                     $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                 }
                 return $equipCounter;

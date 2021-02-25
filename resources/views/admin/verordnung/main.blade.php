@@ -26,13 +26,13 @@
 
                     <nav class="tiles-grid">
 
-                        <a href="{{ route('verordnung.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('verordnung.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="fas fa-book"></i></span>
                             <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('verordnung.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('verordnung.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Verordnung')}}</span>
                         </a>
 
                     </nav>
@@ -74,13 +74,13 @@
 
                     <nav class="tiles-grid">
 
-                        <a href="{{ route('anforderung.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderung.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-list-alt"></i></span>
                             <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('anforderung.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderung.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Anforderung')}}</span>
                         </a>
 
                     </nav>
@@ -120,13 +120,13 @@
             <div class="col-md-2">
                 <section class="card-body text-dark">
                     <nav class="tiles-grid">
-                        <a href="{{ route('anforderungcontrolitem.index') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderungcontrolitem.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-list-alt"></i></span>
                             <span class="branding-bar text-center">{{__('Übersicht')}}</span>
                         </a>
-                        <a href="{{ route('anforderungcontrolitem.create') }}" class="tile-small btn-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
+                        <a href="{{ route('anforderungcontrolitem.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Prüfung')}}</span>
                         </a>
 
                     </nav>

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
 use App\AnforderungControlItem;
 
@@ -27,6 +28,17 @@ class Anforderung extends Model
             ->orWhere('an_name', 'like', '%' . $term . '%')
             ->orWhere('an_description', 'like', '%' . $term . '%')
             ->get();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('system-status-counter');
+        });
     }
 
     public function checkControlItemListe(Anforderung $anforderung)

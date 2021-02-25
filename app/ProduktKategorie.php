@@ -21,5 +21,25 @@ class ProduktKategorie extends Model
         return $this->hasMany(ProduktKategorieParam::class);
     }
 
+    public function apiAdd(Array $data)
+        :int
+    {
+        if (ProduktKategorie::where('pk_label',$data['label'])->count() >0){
+            return ProduktKategorie::where('pk_label',$data['label'])->first()->id;
+        }
+        $this->pk_label = $data['label'];
+        $this->pk_name_nummer = $data['number'];
+        $this->pk_name = $data['name'];
+        $this->pk_description = $data['description'];
+        $this->save();
+        return $this->id;
+
+    }
+
+    public function apiCheck(int $id)
+    :int
+    {
+        return (ProduktKategorie::where('id',$id)->count() >0) ? $id : 0;
+    }
 
 }

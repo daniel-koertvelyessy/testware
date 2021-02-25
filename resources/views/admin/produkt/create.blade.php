@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuMaterial')
+    @include('menus._menuProducts')
 @endsection
 
 @section('breadcrumbs')
@@ -103,7 +103,7 @@
                     <x-frm_AddProdukt :pk="$pk"
                                       mkpk
                     />
-                    <button class="btn btn-primary btn-block">{{__('Produkt anlegen')}} <i class="fas fa-download ml-2"></i></button>
+                    <button class="btn btn-primary">{{__('Produkt anlegen')}} <i class="fas fa-download ml-2"></i></button>
                 </form>
             </div>
         </div>

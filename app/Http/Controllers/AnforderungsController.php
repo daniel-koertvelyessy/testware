@@ -37,16 +37,10 @@ class AnforderungsController extends Controller
      */
     public function index()
     {
+        return view('admin.verordnung.anforderung.index', [
+            'requirements' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
+        ]);
 
-        if (Anforderung::all()->count() > 10) {
-            return view('admin.verordnung.anforderung.index', [
-                'requirements' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
-            ]);
-        } else {
-            return view('admin.verordnung.anforderung.index', [
-                'requirements' => Anforderung::with('ControlInterval')->sortable()->get()
-            ]);
-        }
     }
 
     /**
@@ -63,6 +57,7 @@ class AnforderungsController extends Controller
      *  Speichere neue Anforderung
      *
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
@@ -76,12 +71,13 @@ class AnforderungsController extends Controller
     /**
      * @return array
      */
-    public function validateAnforderung(): array
+    public function validateAnforderung()
+    : array
     {
         return request()->validate([
-            'an_label'        => 'bail|required|max:20',
-            'an_name'        => 'bail|max:100',
-            'an_description'        => '',
+            'an_label'            => 'bail|required|max:20',
+            'an_name'             => 'bail|max:100',
+            'an_description'      => '',
             'an_control_interval' => 'integer',
             'control_interval_id' => '',
             'verordnung_id'       => '',
@@ -93,6 +89,7 @@ class AnforderungsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function storeAnObjekt(Request $request)
@@ -106,10 +103,11 @@ class AnforderungsController extends Controller
     /**
      * @return array
      */
-    public function validateObjektAnforderung(): array
+    public function validateObjektAnforderung()
+    : array
     {
         return request()->validate([
-            'storage_uid'         => 'required',
+            'storage_uid'    => 'required',
             'anforderung_id' => 'required',
         ]);
     }
@@ -118,6 +116,7 @@ class AnforderungsController extends Controller
      * Display the specified resource.
      *
      * @param  Anforderung $anforderung
+     *
      * @return Application|Factory|Response|View
      */
     public function show(Anforderung $anforderung)
@@ -130,6 +129,7 @@ class AnforderungsController extends Controller
      *
      * @param  Request     $request
      * @param  Anforderung $anforderung
+     *
      * @return RedirectResponse
      */
     public function update(Request $request, Anforderung $anforderung)
@@ -142,6 +142,7 @@ class AnforderungsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Anforderung $anforderung
+     *
      * @return RedirectResponse
      * @throws Exception
      */

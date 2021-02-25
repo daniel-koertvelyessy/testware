@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class ProductInstructedUser extends Model
 {
@@ -18,6 +19,18 @@ class ProductInstructedUser extends Model
         'product_instruction_trainee_id',
         'produkt_id',
     ];
+
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('system-status-counter');
+        });
+    }
 
 
     public function user()

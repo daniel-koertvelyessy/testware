@@ -32,8 +32,8 @@ class InstallerController extends Controller
     {
         if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
 
-        $company = Firma::find(1);
-        $address = Adresse::find(1);
+        $company = (Firma::count()>0) ? Firma::find(1) : NULL;
+        $address = (Adresse::count()>0) ?Adresse::find(1) : NULL;
         return view('admin.installer.company_data', [
             'company' => $company,
             'address' => $address
@@ -80,7 +80,7 @@ class InstallerController extends Controller
             $request->session()->flash(__('Die Adresse wurde aktualisiert'));
 
         } else {
-            $address = (new \App\Adresse)->addAddress($request, true);
+            $request->adresse_id = (new Adresse)->addNew($request);
             $request->session()->flash(__('Die Adresse wurde angeleget'));
         }
 
@@ -99,7 +99,7 @@ class InstallerController extends Controller
             $request->session()->flash(__('Die Firma wurde aktualisiert'));
 
         } else {
-            $company_id = (new \App\Firma)->addCompany($request);
+            (new Firma)->addCompany($request);
             $request->session()->flash(__('Die Firma wurde angeleget'));
 
         }

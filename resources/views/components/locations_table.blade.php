@@ -1,17 +1,29 @@
-
-<div class="col-lg-4 col-md-6 locationListItem mb-lg-4 mb-sm-2 " id="loc_id_{{ $object->id }}">
-    <div class="card" style="height:20em;">
-        <div class="card-body">
-            <h5 class="card-title">{{ $object->l_label }}</h5>
-            <h6 class="card-subtitletext-muted">{{ $object->l_name }}</h6>
-            <p class="card-text mt-1 mb-0"><small><strong>{{ __('Gebäude') }}:</strong> {{ $object->Building->count() }}</small></p>
-            <p class="card-text mt-1 mb-0"><small><strong>{{ __('Geräte') }}:</strong> {{ $object->countTotalEquipmentInLocation() }}</small></p>
-            <p class="card-text mt-1 mb-0"><small><strong>{{ __('Beschreibung') }}:</strong></small></p>
-            <p class="mt-0" style="height:6em;overflow-y: scroll">{{ $object->l_beschreibung }}</p>
-
+<div class="col">
+    <table class="table table-responsive-md table-striped">
+        <thead>
+        <tr>
+            <th>@sortablelink('l_label', __('Standort'))</th>
+            <th>@sortablelink('l_name', __('Name'))</th>
+            <th> {{__('Gebäude')}}</th>
+            <th> {{__('Geräte')}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach ($locations as $location)
+            <tr>
+                <td>
+                    <a href="/location/{{ $location->id }}">{{ $location->l_label }}</a>
+                </td>
+                <td>{{ $location->l_name }}</td>
+                <td>{{ $location->Building->count() }}</td>
+                <td>{{ $location->countTotalEquipmentInLocation() }}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    @if($locations->count()>1)
+        <div class="d-flex justify-content-center">
+            {!! $locations->withQueryString()->onEachSide(2)->links() !!}
         </div>
-        <div class="card-footer d-flex align-items-center">
-            <a href="{{ $object->path() }}" class="btn btn-link btn-sm mr-auto"><i class="fas fa-chalkboard"></i> {{ __('Übersicht') }}</a>
-        </div>
-    </div>
+    @endif
 </div>

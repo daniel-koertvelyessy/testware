@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuMaterial')
+    @include('menus._menuProducts')
 @endsection
 
 @section('modals')
@@ -52,7 +52,15 @@
                             <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_label }}</td>
                             <td>{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
                             <td class="d-none d-md-table-cell">{!! $produkt->ControlProdukt ? '<i class="far fa-check-circle text-success"></i>' : '' !!}</td>
-                            <td class="d-none d-md-table-cell">{{ $produkt->ProduktState->ps_label }} </td>
+                            <td class="d-none d-md-table-cell">
+                                <span class="p-1 bg-{{ $produkt->ProduktState->ps_color }} text-white mr-1">
+                                    {{ $produkt->ProduktState->ps_label }}
+                                </span>
+
+                                @if($produkt->ProductQualifiedUser->count()===0)
+                                    <span class="fas fa-exclamation-triangle text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>

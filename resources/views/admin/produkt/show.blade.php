@@ -1,25 +1,25 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Produkt {{ $produkt->prod_nummer }} bearbeiten &triangleright; Produkte
+{{ __('Produkt :label bearbeiten',['label'=>$produkt->prod_nummer]) }} &triangleright; {{__('Produkte')}}
 @endsection
 
 @section('mainSection')
-    Produkte
+    {{__('Produkte')}}
 @endsection
 
 @section('menu')
-    @include('menus._menuMaterial')
+    @include('menus._menuProducts')
 @endsection
 
 @section('breadcrumbs')
-    <nav aria-label="breadcrumb">
+  {{--  <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="/">Portal</a>
+                <a href="/">{{ __('Portal')}}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('produkt.index') }}">Produkte</a>
+                <a href="{{ route('produkt.index') }}">{{ __('Produkte')}}</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="/produkt/kategorie/{{ $produkt->ProduktKategorie->id }}">{{ $produkt->ProduktKategorie->pk_label }}</a>
@@ -28,7 +28,7 @@
                 aria-current="page"
             >{{ $produkt->prod_nummer }}</li>
         </ol>
-    </nav>
+    </nav>--}}
 @endsection
 
 @section('actionMenuItems')
@@ -58,6 +58,54 @@
 @endsection
 
 @section('modals')
+
+    <div class="modal fade"
+         id="modalAddProduktKategorie"
+         tabindex="-1"
+         aria-labelledby="modalAddProduktKategorieLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">{{__('Neue Produkt Kategorie anlegen')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('createProdKat') }}"
+                          method="POST"
+                          class="needs-validation"
+                          id="frmAddNewProduktKategorie"
+                          name="frmAddNewProduktKategorie"
+                    >
+                        @csrf
+                        <x-rtextfield id="pk_label"
+                                      label="{{__('Kürzel')}}"
+                        />
+
+                        <x-textfield id="pk_name"
+                                     label="{{__('Name')}}"
+                        />
+
+                        <x-textarea id="pk_description"
+                                    label="{{__('Beschreibung')}}"
+                        />
+
+                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download ml-2"></span></x-btnMain>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <div class="modal"
          id="modalAddDokumentType"
@@ -479,10 +527,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-2">
             <div class="col">
-                <h1 class="h4">Produkt <span class="badge badge-primary">{{ $produkt->prod_nummer }}</span> bearbeiten
-                </h1>
+                <h1 class="h4">{{ __('Produktübersicht') }}</h1>
             </div>
         </div>
         <div class="row">
@@ -568,7 +615,7 @@
                     >
                         <div class="row">
                             <div class="col">
-                                <form action="{{ route('produkt.update',['produkt'=>$produkt]) }}"
+                                <form action="{{ route('produkt.update',$produkt) }}"
                                       method="post"
                                       class="needs-validation"
                                 >
@@ -580,15 +627,17 @@
                                            value="{{ $produkt->id }}"
                                     >
                                     <div class="row">
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <x-textfield id="prod_name"
                                                          label="{{__('Bezeichnung')}}"
                                                          value="{!! $produkt->prod_name !!}"
                                             />
                                         </div>
-                                        <div class="col md-3">
-                                            <x-selectfield id="produkt_kategorie_id"
+                                        <div class="col md-4">
+                                            <div class="input-group">
+                                            <x-selectModalgroup id="produkt_kategorie_id"
                                                            label="{{__('Kategorie')}}"
+                                                                modalid="modalAddProduktKategorie"
                                             >
                                                 @foreach (App\ProduktKategorie::all() as $produktKategorie)
                                                     <option value="{{ $produktKategorie->id }}"
@@ -596,10 +645,11 @@
                                                             selected
                                                         @endif
                                                     >
-                                                        {{ $produktKategorie->pk_label }}
+                                                        {{ $produktKategorie->pk_name }}
                                                     </option>
                                                 @endforeach
-                                            </x-selectfield>
+                                            </x-selectModalgroup>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -700,7 +750,8 @@
                                             />
                                         </div>
                                     </div>
-                                    <x-btnMain>{{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span>
+                                    <x-btnMain>
+                                        {{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span>
                                     </x-btnMain>
                                 </form>
                             </div>
@@ -712,31 +763,8 @@
                          aria-labelledby="productRequirements-tab"
                     >
                         <div class="row">
-                            <div class="col-md-5 mb-3 border-md-right border-dark">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h2 class="h5">{{__('Anforderungen')}}</h2>
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-toggle="modal"
-                                            data-target="#modalAddRequirement"
-                                    >
-                                        {{ __('hinzufügen') }}
-                                        <span class="fas fa-plus"></span>
-                                    </button>
-                                </div>
-                                @php
-                                    $Anforderung = App\Anforderung::all()
-                                @endphp
-                                @forelse (\App\ProduktAnforderung::where('produkt_id',$produkt->id)->get() as $produktAnforderung)
-                                    @if ($produktAnforderung->anforderung_id!=0)
-                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung"
-                                                           :produkt="$produkt"
-                                        />
-                                    @endif
-                                @empty
-                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
-                                @endforelse
-                            </div>
-                            <div class="col-md-7 mb-3">
+
+                            <div class="col-md-7 mb-3 border-md-right border-dark">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Befähigte Personen')}}</h3>
                                     <button type="button"
@@ -848,6 +876,30 @@
                                     @endforelse
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h2 class="h5">{{__('Anforderungen')}}</h2>
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            data-toggle="modal"
+                                            data-target="#modalAddRequirement"
+                                    >
+                                        {{ __('hinzufügen') }}
+                                        <span class="fas fa-plus"></span>
+                                    </button>
+                                </div>
+                                @php
+                                    $Anforderung = App\Anforderung::all()
+                                @endphp
+                                @forelse (\App\ProduktAnforderung::where('produkt_id',$produkt->id)->get() as $produktAnforderung)
+                                    @if ($produktAnforderung->anforderung_id!=0)
+                                        <x-requirement_box :requirement="$produktAnforderung->Anforderung"
+                                                           :produkt="$produkt"
+                                        />
+                                    @endif
+                                @empty
+                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -1154,7 +1206,6 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="list-group">
-
                                     @foreach ($produkt->firma as $firma)
                                         <x-addresslabel
                                             firma="{!!  $firma->fa_name !!}"
@@ -1180,14 +1231,14 @@
                                       enctype="multipart/form-data"
                                 >
                                     @csrf
-                                    <h2 class="h5">Dokument an Produkt anhängen</h2>
+                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}}</h2>
                                     <input type="hidden"
                                            name="produkt_id"
                                            id="produkt_id_doku"
                                            value="{{ $produkt->id }}"
                                     >
                                     <div class="form-group">
-                                        <label for="document_type_id">Dokument Typ</label>
+                                        <label for="document_type_id">{{__('Dokument Typ')}}</label>
                                         <div class="input-group">
                                             <select name="document_type_id"
                                                     id="document_type_id"
@@ -1202,32 +1253,14 @@
                                                     data-toggle="modal"
                                                     data-target="#modalAddDokumentType"
                                             >
-                                                <span class="fas fa-plus"></span> neuen Typ anlegen
+                                                <span class="fas fa-plus"></span> {{__('neuen Typ anlegen')}}
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="proddoc_label">Bezeichnung</label>
-                                        <input type="text"
-                                               name="proddoc_label"
-                                               id="proddoc_label"
-                                               class="form-control @error('proddoc_label') is-invalid @enderror "
-                                               value="{{ old('proddoc_label') ?? '' }}"
-                                               required
-                                        >
-                                        @error('proddoc_label')
-                                        <span class="text-danger small">Error {{ $message }}</span>
-                                        @enderror
-                                        <span class="small text-primary @error('proddoc_label') d-none @enderror">max 20 Zeichen, erforderlichen Feld</span>
+                                    <x-textfield id="proddoc_label" label="{{__('Bezeichnung')}}" value="{{ $produkt->proddoc_label }}" />
 
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="proddoc_description">Datei Informationen</label>
-                                        <textarea name="proddoc_description"
-                                                  id="proddoc_description"
-                                                  class="form-control"
-                                        >{{ old('proddoc_description') ?? '' }}</textarea>
-                                    </div>
+                                    <x-textarea id="proddoc_description" label="Datei Informationen" value="{{ $produkt->proddoc_description }}"/>
+
                                     <div class="form-group">
                                         <div class="custom-file">
                                             <input type="file"
@@ -1240,11 +1273,11 @@
                                             >
                                             <label class="custom-file-label"
                                                    for="prodDokumentFile"
-                                            >Datei wählen
+                                            >{{__('Datei wählen')}}
                                             </label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block"><i class="fas fa-paperclip"></i> Neues Dokument an Produkt anhängen
+                                    <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i class="fas fa-paperclip ml-2"></i>
                                     </button>
                                 </form>
                             </div>
@@ -1252,54 +1285,26 @@
                                 @if ($produkt->ProduktDoc->count()>0)
                                     <table class="table table-responsive-md table-striped table-sm">
                                         <thead>
-                                        <th>Datei</th>
-                                        <th>Typ</th>
+                                        <th>{{__('Datei')}}</th>
+                                        <th>{{__('Typ')}}</th>
                                         <th class="d-none d-lg-table-cell"
                                             style="text-align: right;"
-                                        >Größe kB
+                                        >{{__('Größe kB')}}
                                         </th>
-                                        <th class="d-none d-lg-table-cell">Hochgeladen</th>
-                                        <th></th>
+                                        <th class="d-none d-lg-table-cell">{{__('Hochgeladen')}}</th>
                                         <th></th>
                                         </thead>
                                         <tbody>
                                         @foreach ($produkt->ProduktDoc as $produktDoc)
                                             <tr>
-                                                <td>
-                                                    <span title="{{ $produktDoc->proddoc_name }}">
+                                                <td style="vertical-align: middle;">
+                                                    <a href="#"
+                                                       onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                    >
+                                                        <span title="{{ $produktDoc->proddoc_name }}">
                                                     {{ str_limit($produktDoc->proddoc_label,25) }}
                                                     </span>
-                                                </td>
-                                                <td>{{ $produktDoc->DocumentType->doctyp_label }}</td>
-                                                <td class="d-none d-lg-table-cell"
-                                                    style="text-align: right;"
-                                                >{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
-                                                <td class="d-none d-lg-table-cell">{{ $produktDoc->created_at->DiffForHumans() }}</td>
-                                                <td>
-                                                    <x-deletebutton
-                                                        prefix="produktDoc"
-                                                        action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
-                                                        id="{{ $produktDoc->id }}"
-                                                    />
-
-
-                                                    {{--   <form action="{{ route('produktDoku.destroy',$produktDoc->id) }}#prodDoku" method="post" id="deleteProdDoku_{{ $produktDoc->id }}">
-                                                           @csrf
-                                                           @method('delete')
-                                                           <input type="hidden"
-                                                                  name="id"
-                                                                  id="delete_produktdoc_id_{{ $produktDoc->id }}"
-                                                                  value="{{ $produktDoc->id }}"
-                                                           >
-
-                                                       </form>
-                                                       <button
-                                                           class="btn btn-sm btn-outline-secondary"
-                                                           onclick="event.preventDefault(); document.getElementById('deleteProdDoku_{{ $produktDoc->id }}').submit();">
-                                                           <span class="far fa-trash-alt"></span>
-                                                       </button>--}}
-                                                </td>
-                                                <td>
+                                                    </a>
                                                     <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
                                                           method="get"
                                                           id="downloadProdDoku_{{ $produktDoc->id }}"
@@ -1311,12 +1316,20 @@
                                                                value="{{ $produktDoc->id }}"
                                                         >
                                                     </form>
-                                                    <button
-                                                        class="btn btn-sm btn-outline-secondary"
-                                                        onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
-                                                    >
-                                                        <span class="fas fa-download"></span>
-                                                    </button>
+                                                </td>
+                                                <td style="vertical-align: middle;">{{ $produktDoc->DocumentType->doctyp_label }}</td>
+                                                <td class="d-none d-lg-table-cell"
+                                                    style="text-align: right; vertical-align: middle;"
+                                                >{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
+                                                <td class="d-none d-lg-table-cell"
+                                                    style="vertical-align: middle;"
+                                                >{{ $produktDoc->created_at->DiffForHumans() }}</td>
+                                                <td>
+                                                    <x-deletebutton
+                                                        prefix="produktDoc"
+                                                        action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                        id="{{ $produktDoc->id }}"
+                                                    />
                                                 </td>
                                             </tr>
                                         @endforeach

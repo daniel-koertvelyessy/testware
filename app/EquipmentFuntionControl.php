@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class EquipmentFuntionControl extends Model
 {
@@ -17,6 +18,17 @@ class EquipmentFuntionControl extends Model
         'equipment_id',
         'controlled_at',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('system-status-counter');
+        });
+    }
 
     public function firma() {
         return $this->belongsTo(Firma::class,'function_control_firma');

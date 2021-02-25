@@ -106,15 +106,16 @@ class PdfGenerator extends Controller
         PDF::SetMargins(20, 25, 10);
         PDF::AddPage();
         PDF::writeHTML($html, true, false, true, false, '');
-        $y1 = PDF::GetY();
+        if($controlEvent->control_event_controller_signature) {
+            $y1 = PDF::GetY();
 
-        $img_base64_encoded = explode('data:image/png;base64,', $controlEvent->control_event_controller_signature);
+            $img_base64_encoded = explode('data:image/png;base64,', $controlEvent->control_event_controller_signature);
 
-        PDF::Image('@' . base64_decode($img_base64_encoded[1]), 10, $y1, 90, 40);
-        //
-        //        $pdf->SetAbsXY($pdf->GetX(),$y1+40);
-        //        $pdf->Cell(90, 5, $sig->sigName, 0, 0, 'L');
-
+            PDF::Image('@' . base64_decode($img_base64_encoded[1]), 10, $y1, 90, 40);
+            //
+            //        $pdf->SetAbsXY($pdf->GetX(),$y1+40);
+            //        $pdf->Cell(90, 5, $sig->sigName, 0, 0, 'L');
+        }
         EquipmentDoc::addReport(
             $controlEquipment->equipment_id,
             $reportNo . '.pdf',

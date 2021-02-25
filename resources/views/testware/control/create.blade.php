@@ -388,8 +388,8 @@
                                                     class="m-0 p-0"
                                                 >
                                                     <input type="hidden"
-                                                           name="evenItem[]"
-                                                           id="evenItem_{{ $aci->id }}"
+                                                           name="event_item[]"
+                                                           id="event_item_{{ $aci->id }}"
                                                            value="{{ $aci->id }}"
                                                     >
                                                     <input type="hidden"

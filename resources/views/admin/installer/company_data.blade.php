@@ -130,7 +130,7 @@
                             >
                                 @foreach(App\AddressType::all() as $addressType)
                                     <option value="{{ $addressType->id }}"
-                                            @if($address->address_type_id == $addressType->id) selected @endif >{{ $addressType->adt_name }}</option>
+                                            @if(isset($address->address_type_id) && $address->address_type_id == $addressType->id) selected @endif >{{ $addressType->adt_name }}</option>
                                 @endforeach
                             </x-selectfield>
                         </div>

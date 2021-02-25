@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class Adresse extends Model
 {
@@ -166,5 +167,40 @@ class Adresse extends Model
                  $this->ad_anschrift_hausnummer. ' /  '  .
                  $this->ad_anschrift_plz . ' '.
                  $this->ad_anschrift_ort ;
+    }
+
+    public function addNew(Request $request)
+    {
+        $this->ad_label = $request->ad_label;
+        $this->address_type_id = $request->address_type_id;
+        $this->ad_name = $request->ad_name;
+        $this->ad_anschrift_strasse = $request->ad_anschrift_strasse;
+        $this->ad_anschrift_hausnummer = $request->ad_anschrift_hausnummer;
+        $this->ad_anschrift_ort = $request->ad_anschrift_ort;
+        $this->ad_anschrift_plz = $request->ad_anschrift_plz;
+        $this->land_id = $request->land_id;
+        $this->ad_name_firma = $request->ad_name_firma;
+
+        $this->save();
+        return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public function validateAdresse()
+    : array
+    {
+        return request()->validate([
+            'ad_label'             => [
+                'bail',
+                'max:20',
+                'required',
+                Rule::unique('address')->ignore(\request('id'))
+            ],
+            'ad_anschrift_strasse' => 'required',
+            'ad_anschrift_plz'     => 'required',
+            'ad_anschrift_ort'     => 'required'
+        ]);
     }
 }

@@ -15,10 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class BuildingsController extends Controller
 {
@@ -32,15 +31,19 @@ class BuildingsController extends Controller
      */
     public function index()
     {
-        if (Location::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
-            return redirect()->route('location.create');
-        }
+        $this->checkLocation();
         if (Building::all()->count() > 0) {
-            $buildingList = Building::with('BuildingType')->sortable()->paginate(10);
-            return view('admin.standorte.building.index', ['buildingList' => $buildingList]);
+            return view('admin.standorte.building.index', ['buildingList' => Building::with('BuildingType')->sortable()->paginate(10)]);
         } else {
             return redirect()->route('building.create');
+        }
+    }
+
+    protected function checkLocation()
+    {
+        if (Location::all()->count() === 0) {
+            session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!'));
+            return redirect()->route('location.create')->with('status');
         }
     }
 
@@ -49,10 +52,7 @@ class BuildingsController extends Controller
      */
     public function create()
     {
-        if (Location::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!');
-            return redirect()->route('location.create');
-        }
+        $this->checkLocation();
         return view('admin.standorte.building.create');
     }
 
@@ -65,94 +65,36 @@ class BuildingsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->b_we_has = $request->has('b_we_has') ? 1 : 0;
-
-        $building = Building::create($this->validateNewBuilding());
-
-        $std = (new \App\Storage)->add($request->storage_id, $request->b_label, 'buildings');
-
-        $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
+        if ((new Building)->addNew($request)) {
+            $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
+        } else {
+            $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
+        }
         return redirect()->back();
     }
 
     /**
      * @return array
      */
-    public function validateNewBuilding()
+    public function validateBuilding()
     : array
     {
         return request()->validate([
-            'b_label'          => 'bail|required|unique:buildings,b_label|min:2|max:20',
+            'b_label'          => [
+                'bail',
+                'min:2',
+                'max:20',
+                'required',
+                Rule::unique('buildings')->ignore(\request('id'))
+            ],
             'b_name_ort'       => '',
             'b_name'           => '',
             'b_description'    => '',
             'b_we_has'         => '',
-            'storage_id'       => '',
             'b_we_name'        => 'required_if:b_we_has,1',
             'location_id'      => 'required',
-            'building_type_id' => 'required',
+            'building_type_id' => '',
         ]);
-    }
-
-    public function copyBuilding(Request $request)
-    {
-        if ($request->id) {
-
-            $bul = Building::find($request->id);
-            $neuname = '';
-            switch (true) {
-                case strlen($bul->b_label) <= 20 && strlen($bul->b_label) > 14:
-                    $neuname = substr($bul->b_label, 0, 13) . '_1';
-                    break;
-                case strlen($bul->b_label) <= 14:
-                    $neuname = $bul->b_label . '_1';
-                    break;
-            }
-
-
-            $bul->b_label = $neuname;
-            $copy = new Building();
-            $copy->b_label = $neuname;
-            $copy->b_name_ort = $bul->b_name_ort;
-            $copy->b_name = $bul->b_name;
-            $copy->b_description = $bul->b_description;
-            $copy->b_we_has = $bul->b_we_has;
-            $copy->b_we_name = $bul->b_we_name;
-            $copy->location_id = $bul->location_id;
-            $copy->building_type_id = $bul->building_type_id;
-            $copy->storage_id = Str::uuid();
-            //            $copy->
-            $validator = Validator::make([
-                $copy->b_label,
-                $copy->b_name_ort,
-                $copy->b_name,
-                $copy->b_description,
-                $copy->b_we_has,
-                $copy->b_we_name,
-                $copy->location_id,
-                $copy->building_type_id,
-                $copy->storage_id,
-
-            ], [
-                'b_label'          => 'bail|required|unique:buildings,b_label|min:2|max:10',
-                'b_name_ort'       => '',
-                'b_name'           => '',
-                'b_description'    => '',
-                'b_we_has'         => '',
-                'b_we_name'        => 'required_if:b_we_has,1',
-                'location_id'      => 'required',
-                'building_type_id' => 'required',
-            ]);
-            $copy->save();
-
-            $std = (new \App\Storage)->add($copy->storage_id, $neuname, 'buildings');
-
-            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde kopiert!');
-            return redirect()->back();
-        } else {
-            $request->session()->flash('status', '<p>Fehler!</p>Das Gebäude <strong>' . request('b_label') . '</strong> konnte nicht kopiert werden!');
-            return redirect()->back();
-        }
     }
 
     public function getBuildingList($id)
@@ -169,7 +111,8 @@ class BuildingsController extends Controller
      */
     public function show(Building $building)
     {
-        return view('admin.standorte.building.show', ['building' => $building]);
+        $this->checkLocation();
+        return view('admin.standorte.building.show', compact('building'));
     }
 
     /**
@@ -194,37 +137,12 @@ class BuildingsController extends Controller
      */
     public function update(Request $request, Building $building)
     {
-
-        if ($building->b_label !== $request->b_label) {
-            $storage = Storage::where('storage_uid', $request->storage_id)->first();
-            $storage->storage_label = $request->b_label;
-            $storage->save();
-        }
+        (new Storage)->checkUpdate($request->storage_id, $request->b_label);
         $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $building->update($this->validateBuilding());
-
-        $request->session()->flash('status', 'Das Gebäude <strong>' . $building->b_label . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde aktualisiert!', ['label' => $building->b_label]));
         return redirect($building->path());
     }
-
-    /**
-     * @return array
-     */
-    public function validateBuilding()
-    : array
-    {
-        return request()->validate([
-            'b_label'          => 'bail|required|min:2|max:20',
-            'b_name_ort'       => '',
-            'b_name'           => '',
-            'b_description'    => '',
-            'b_we_has'         => '',
-            'b_we_name'        => 'required_if:b_we_has,1',
-            'location_id'      => 'required',
-            'building_type_id' => '',
-        ]);
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -237,9 +155,8 @@ class BuildingsController extends Controller
      */
     public function destroy(Request $request, Building $building)
     {
-        $rname = request('b_label');
+        $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde gelöscht!', ['label' => $building->b_name]));
         $building->delete();
-        $request->session()->flash('status', 'Das Gebäude <strong>' . $rname . '</strong> wurde gelöscht!');
         return redirect()->back();
     }
 
@@ -260,23 +177,22 @@ class BuildingsController extends Controller
             $request->building_type_id = $bt->id;
         }
 
-
         if ($request->modalType === 'edit') {
+//            dd($request);
             $building = Building::find($request->id);
             if ($building->b_label !== $request->b_label) {
                 $storage = Storage::where('storage_uid', $request->storage_id)->first();
                 $storage->storage_label = $request->b_label;
                 $storage->save();
             }
-              $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
+            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
         } else {
-
-            $this->validateNewBuilding();
             $building = new Building(); //::create();
-            $building->b_label = $request->b_label;
-            $std = (new \App\Storage)->add($request->storage_id, $request->b_label, 'buildings');
+
+            $std = (new Storage)->add($request->storage_id, $request->b_label, 'buildings');
             $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
         }
+        $building->b_label = $request->b_label;
         $building->b_name_ort = $request->b_name_ort;
         $building->b_name = $request->b_name;
         $building->b_description = $request->b_description;

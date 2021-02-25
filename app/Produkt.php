@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
 
 class Produkt extends Model
@@ -19,6 +20,21 @@ class Produkt extends Model
 
     ];
     protected $guarded = [];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('app-get-current-amount-Location');
+            Cache::forget('countTotalEquipmentInLocation');
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('app-get-current-amount-Location');
+            Cache::forget('countTotalEquipmentInLocation');
+            Cache::forget('system-status-counter');
+        });
+    }
 
     public function search($term)
     {

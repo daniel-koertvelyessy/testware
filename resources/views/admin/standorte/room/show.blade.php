@@ -217,11 +217,16 @@
                          role="tabpanel"
                          aria-labelledby="roomStammDaten-tab"
                     >
-                        <form action="{{ route('room.update',['room'=>$room->id]) }}"
+                        <form action="{{ route('room.update',$room) }}"
                               method="post"
                         >
                             @method('PUT')
                             @csrf
+                            <input type="hidden"
+                                   name="id"
+                                   id="id"
+                                   value="{{ $room->id }}"
+                            >
 
                             <div class="row">
                                 <div class="col-md-6">

@@ -23,7 +23,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/';
     public const LOCA = '/location/index';
-    public const ADMI = '/admin/index';
+    public const TESTWARE = '/testware';
+    public const INSTALLER = '/installer';
 
     /**
      * Define your route model bindings, pattern filters, etc.

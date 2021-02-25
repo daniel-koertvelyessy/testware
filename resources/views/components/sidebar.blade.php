@@ -162,6 +162,12 @@
          id="sideNavLocations"
     >
         <ul class="nav flex-column">
+            <li class="nav-item  border-left ml-3">
+                <a class="nav-link "
+                   href="{{ route('storageMain') }}"
+                > {{__('Start')}}
+                </a>
+            </li>
             <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('lexplorer') }}"

@@ -19,13 +19,7 @@
 <main id="app">
     @yield('content')
 </main>
-<footer class="page-footer fixed-bottom py-2 px-1">
-    <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020
-            <span style="color: #000;">bitpack</span><span style="color: #aacb81;">.io</span>
-        </div>
-    </div>
-</footer>
+<x-section-footer/>
 <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 @yield('scripts')

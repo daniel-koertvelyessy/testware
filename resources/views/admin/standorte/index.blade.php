@@ -28,41 +28,41 @@
             <div class="col-md-3">
                 <section class="card-body text-dark">
 
-                    <a href="{{ route('lexplorer') }}" class="tile-small rounded mb-3" data-role="tile">
+                    <a href="{{ route('lexplorer') }}" class="tile-small btn-outline-primary rounded mb-3" data-role="tile">
                         <span class="icon"><i class="fas fa-project-diagram"></i></span>
                         <span class="branding-bar text-center">{{__('Explorer')}}</span>
                     </a>
 
                     <nav class="tiles-grid mb-3">
-                        <a href="{{ route('location.index') }}" class="tile-small rounded" data-role="tile">
+                        <a href="{{ route('location.index') }}" class="tile-small rounded btn-outline-primary" data-role="tile">
                             <span class="icon"><i class="fas fa-industry"></i></span>
                             <span class="branding-bar text-center">{{__('Standorte')}}</span>
                         </a>
-                        <a href="{{ route('location.create') }}" class="tile-small rounded" data-role="tile">
+                        <a href="{{ route('location.create') }}" class="tile-small rounded btn-outline-primary" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Standort')}}</span>
                         </a>
                     </nav>
                     <nav class="tiles-grid mb-3">
-                        <a href="{{ route('building.index') }}" class="tile-small rounded" data-role="tile" aria-label="Storagee">
+                        <a href="{{ route('building.index') }}" class="tile-small rounded btn-outline-primary" data-role="tile" aria-label="Storagee">
                             <span class="icon"><i class="far fa-building"></i></span>
                             <span class="branding-bar text-center">{{__('Gebäude')}}</span>
                         </a>
 
-                        <a href="{{ route('building.create') }}" class="tile-small rounded" data-role="tile">
+                        <a href="{{ route('building.create') }}" class="tile-small rounded btn-outline-primary" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Gebäude')}}</span>
                         </a>
                     </nav>
                     <nav class="tiles-grid mb-3">
-                        <a href="{{ route('room.index') }}" class="tile-small rounded" data-role="tile">
+                        <a href="{{ route('room.index') }}" class="tile-small rounded btn-outline-primary" data-role="tile">
                             <span class="icon"><i class="fas fa-door-open"></i></span>
                             <span class="branding-bar text-center">{{__('Räume')}}</span>
                         </a>
 
-                        <a href="{{ route('room.create') }}" class="tile-small rounded" data-role="tile">
+                        <a href="{{ route('room.create') }}" class="tile-small rounded btn-outline-primary" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="branding-bar text-center">{{__('Raum')}}</span>
                         </a>
                     </nav>
                 </section>

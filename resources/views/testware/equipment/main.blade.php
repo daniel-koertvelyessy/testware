@@ -26,7 +26,7 @@
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
                         <a href="{{ route('equipment.maker') }}"
-                           class="tile-small rounded m-lg-3 btn-primary"
+                           class="tile-small rounded m-lg-3 btn-outline-primary"
                            data-role="tile"
                         >
                             <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">{{__('Neu')}}</span>
@@ -71,13 +71,14 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
                             <td class="d-none d-md-table-cell">{!! ($equipment->storage) ? $equipment->storage->storage_label : '<span class="fas fa-exclamation-circle text-warning"></span> <span class="text-warning text-sm">keine Zuordnung</span>'!!}</td>
-                            <td class="d-none d-lg-table-cell"
-                                style="vertical-align: middle;"
-                            >
+                            <td class="d-none d-lg-table-cell">
                                 <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
+                                @if($equipment->EquipmentQualifiedUser->count()===0)
+                                    <span class="fas fa-exclamation-triangle text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
+                                @endif
                             </td>
                             <td class="d-none d-md-table-cell"
-                                     style="text-align: center;"
+                                style="text-align: center;"
                             >
                                 {!! $equipment->isControlProduct() !!}
                             </td>

@@ -1,30 +1,19 @@
-
-
-
-<div class="border rounded p-2 my-3 d-flex align-items-center justify-content-between">
-    <div>
-    <span class="text-muted small">
-        {{ str_limit($name) }}</span> <br> <span class="lead">{{ str_limit($label,50) }}</span><br> <span class="text-muted small">
-        {{ App\helpers::fileSizeForHumans(\Illuminate\Support\Facades\Storage::size($path)) }}
-    </span>
+<div class="border rounded p-1 mb-1 d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-column">
+        <span class="small text-muted pl-2">
+            {{$cei->deleted_at->diffForHumans()}}
+        </span> <span class="p-2">
+            {{ str_limit($cei->Anforderung->an_name,20) }}
+        </span>
     </div>
-    <div>
-        <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
-              method="get"
-              id="downloadBDA_{{ $id }}"
-        >
-            @csrf
-            <input type="hidden"
-                   name="id"
-                   id="bda_{{ $id }}"
-                   value="{{ $id }}"
-            >
-        </form>
-        <button
-            class="btn btn-lg btn-outline-primary"
-            onclick="event.preventDefault(); document.getElementById('downloadBDA_{{ $id }}').submit();"
-        >
-            <span class="fas fa-download"></span>
-        </button>
+    <div class="pr-2">
+        <button type="button"
+                class="btn btn-sm btn-outline-primary btnOpenControlEventModal"
+                data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$cei->id)->first()->id  }}"
+        ><i class="far fa-folder-open"></i></button>
+        <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$cei->id)->first()->id ) }}"
+           class="btn btn-sm btn-outline-primary"
+           target="_blank"
+        ><i class="far fa-file-pdf"></i></a>
     </div>
 </div>

@@ -2,12 +2,11 @@
 
 @section('content')
 
-    <h1>Prüfbericht PR{{ str_pad($controlEvent->id,5,'0',STR_PAD_LEFT) }}</h1>
+    <h1>{{__('Prüfbericht PR')}}{{ str_pad($controlEvent->id,5,'0',STR_PAD_LEFT) }}</h1>
 
+    <p>{{__('Die Prüfung erfolgte am')}} {{ $controlEvent->control_event_date }}</p>
 
-    <p>Die Prüfung erfolgte am {{ $controlEvent->control_event_date }}</p>
-
-    <h2>Gerät</h2>
+    <h2>{{__('Gerät')}}</h2>
 
     @php
         $ControlEquipment = App\ControlEquipment::withTrashed()->where('id',$controlEvent->control_equipment_id)->first();
@@ -15,7 +14,7 @@
         $aci_execution = App\AnforderungControlItem::where('anforderung_id',$ControlEquipment->Anforderung->id)->first()
     @endphp
 
-    <p>Folgendes Gerät wurde überprüft:</p>
+    <p>{{__('Folgendes Gerät wurde überprüft:')}}</p>
     <dl>
         <dt>{{ __('Bezeichnung')}}</dt>
         <dd style="font-size: 14px;">{{ $equipment->produkt->prod_name }}</dd>
@@ -30,11 +29,11 @@
         <dd style="font-size: 14px;">{{ $equipment->eq_serien_nr }}</dd>
     </dl>
 
-    <h2>Bemerkungen</h2>
+    <h2>{{__('Bemerkungen')}}</h2>
     <p>
         {!! nl2br($controlEvent->control_event_text??'') !!}
     </p>
-    <h2>Abschluss</h2>
+    <h2>{{ __('Abschluss ')}}</h2>
     <p>Basierend auf den Ergebnissen gilt die Prüfung als <strong>{{ $controlEvent->control_event_pass ? 'bestanden' : 'nicht bestanden' }}</strong></p>
     <p>Die nächste Prüfung wurde auf den <strong>{{ $controlEvent->control_event_next_due_date }}</strong> gesetzt.</p>
     <br>
@@ -43,12 +42,14 @@
         <table>
             <tr>
                 <td style="width: 50%">
+                    @if($controlEvent->control_event_controller_signature)
                     <img src="{{$controlEvent->control_event_controller_signature}}"
                          width="30%"
                          alt="Unterschrift Prüfer {{ $controlEvent->control_event_controller_name }}"
                     >
                     <br> <br>
-                    <p>Prüfer<br>{{ $controlEvent->control_event_controller_name }}</p>
+                    @endif
+                    <p>{{__('Prüfer')}}<br>{{ $controlEvent->control_event_controller_name??'-' }}</p>
                 </td>
                 <td>
                     @if ($controlEvent->control_event_supervisor_signature)
@@ -60,7 +61,7 @@
 
                         <br>
                         <br>
-                        <p>Leitung<br>{{ $controlEvent->control_event_supervisor_name }}</p>
+                        <p>{{__('Leitung')}}<br>{{ $controlEvent->control_event_supervisor_name??'-' }}</p>
                     @endif
                 </td>
             </tr>
@@ -69,11 +70,11 @@
         <table>
             <tr>
                 <td style="width: 50%">
-                    <p>Prüfer<br>{{ $controlEvent->control_event_controller_name }}</p>
+                    <p>{{ __('Prüfer') }}<br>{{ $controlEvent->control_event_controller_name }}</p>
                 </td>
                 <td>
                     @if ($controlEvent->control_event_supervisor_signature)
-                        <p>Leitung<br>{{ $controlEvent->control_event_supervisor_name }}</p>
+                        <p>{{ __('Leitung') }}<br>{{ $controlEvent->control_event_supervisor_name }}</p>
                     @endif
                 </td>
             </tr>
@@ -83,15 +84,15 @@
     {{--    {{ $ControlEquipment->Anforderung->id }}--}}
 
     @if (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->count()>0)
-        <h2>Prüfmittel</h2>
-        <p>Folgende Prüfmittel wurden verwendet:</p>
+        <h2>{{__('Prüfmittel')}}</h2>
+        <p>{{__('Folgende Prüfmittel wurden verwendet:')}}</p>
         <table>
             <thead>
             <tr>
-                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">Gerät</th>
-                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">Seriennummer</th>
-                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">Letzte Prüfung</th>
-                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">Nächste Prüfung</th>
+                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">{{__('Gerät')}}</th>
+                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">{{__('Seriennummer')}}</th>
+                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">{{__('Letzte Prüfung')}}</th>
+                <th style="font-size: 11px; font-weight: bold; border-bottom: 1px solid #777777;">{{__('Nächste Prüfung')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -112,7 +113,7 @@
     @endif
 
     @if ($aci_execution->aci_execution===0)
-        <h2 style="page-break-before:always; margin:0;">Pürfschritte  !!</h2>
+        <h2 style="page-break-before:always; margin:0;">{{__('Pürfschritte')}}</h2>
         @foreach (App\AnforderungControlItem::where('anforderung_id',$ControlEquipment->anforderung_id)->get() as $aci)
 
             @php($ceitem =  App\ControlEventItem::withTrashed()->where([['control_item_aci',$aci->id],['control_event_id',$controlEvent->id]])->first())
@@ -170,6 +171,8 @@
             </table>
         @endforeach
 
+    @else
+        <p>{{ __('Die Prüfung wurde extern durchgeführt.') }}</p>
     @endif
 
 @endsection

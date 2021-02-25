@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 class ProductQualifiedUser extends Model
 {
@@ -16,6 +17,17 @@ class ProductQualifiedUser extends Model
         'product_qualified_date',
         'product_qualified_firma',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('system-status-counter');
+        });
+    }
 
     public function user()
     {

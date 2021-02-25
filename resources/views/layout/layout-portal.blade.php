@@ -52,7 +52,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
             <a class="navbar-brand">
-                <img src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}"
+                <img src="{{ asset('img/icon/bitpack_logo.svg') }}"
                      alt="Icon bitpack"
                      height="30px"
                 >
@@ -110,14 +110,7 @@
     {{--    <x-sidebar/>--}}
     @yield('content')
 </main>
-<footer class="page-footer fixed-bottom px-1">
-    <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020 <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
-        </div>
-
-    </div>
-</footer>
-
+<x-section-footer/>
 
 <script type="text/javascript"
         src="{{ mix('js/app.js') }}"

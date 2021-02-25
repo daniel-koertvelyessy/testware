@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class EquipmentDoc extends Model
@@ -46,5 +47,10 @@ class EquipmentDoc extends Model
     public function url($pfad)
     {
         return Storage::url($pfad);
+    }
+
+    public function addDocument(Request $request)
+    {
+
     }
 }

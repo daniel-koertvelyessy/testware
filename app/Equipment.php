@@ -36,9 +36,13 @@ class Equipment extends Model
         parent::boot();
         static::saving(function (Equipment $equipment) {
             Cache::forget('app-get-current-amount-Equipment');
+            Cache::forget('system-status-counter');
+
         });
         static::updating(function (Equipment $equipment) {
             Cache::forget('app-get-current-amount-Equipment');
+            Cache::forget('system-status-counter');
+
         });
     }
 
@@ -160,5 +164,10 @@ class Equipment extends Model
     public function isControlProduct()
     {
         return ($this->produkt->ControlProdukt) ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-muted"></i>';
+    }
+
+    public function addNew(Request $request)
+    {
+
     }
 }

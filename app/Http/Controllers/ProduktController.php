@@ -26,6 +26,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use function Symfony\Component\VarDumper\Dumper\esc;
 
@@ -84,21 +85,17 @@ class ProduktController extends Controller
      * Display the specified resource.
      *
      * @param  Produkt $produkt
+     *
      * @return Application|Factory|Response|View
      */
     public function show(Produkt $produkt)
     {
-        if (Equipment::where('produkt_id', $produkt->id)->count() > 10) {
-            return view('admin.produkt.show', [
-                'produkt' => $produkt,
-                'equipLists' => Equipment::where('produkt_id', $produkt->id)->with('EquipmentState', 'produktDetails')->sortable()->paginate(10)
-            ]);
-        } else {
-            return view('admin.produkt.show', [
-                'produkt' => $produkt,
-                'equipLists' => Equipment::where('produkt_id', $produkt->id)->with('EquipmentState')->sortable()->get()
-            ]);
-        }
+
+        return view('admin.produkt.show', [
+            'produkt'    => $produkt,
+            'equipLists' => Equipment::where('produkt_id', $produkt->id)->with('EquipmentState', 'produktDetails')->sortable()->paginate(10)
+        ]);
+
     }
 
     /**
@@ -107,6 +104,7 @@ class ProduktController extends Controller
      * @param  Request $request
      * @param  Produkt $produkt
      * @param  ProduktParam ProduktParam
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Produkt $produkt)
@@ -135,31 +133,17 @@ class ProduktController extends Controller
         return redirect($produkt->path());
     }
 
-    /**
-     * @return array
-     */
-    public function validateProdukt(): array
-    {
-        return request()->validate([
-            'prod_label'       => 'bail|min:2|max:20|required',
-            'prod_name'       => 'max:100',
-            'prod_description'       => '',
-            'prod_nummer'          => 'bail|required|min:2|max:100',
-            'prod_active'          => '',
-            'produkt_kategorie_id' => '',
-            'produkt_state_id'     => 'required'
-        ]);
-    }
 
     /**
      * Speichere neuen Produktstamm
      *
      * @param  Request $request
+     *
      * @return Application|Response
      */
     public function store(Request $request)
     {
-        $produkt = Produkt::create($this->validateNewProdukt());
+        $produkt = Produkt::create($this->validateProdukt());
 
         if (isset($request->pp_label) && count($request->pp_label) > 0) {
             for ($i = 0; $i < count($request->pp_label); $i++) {
@@ -179,24 +163,8 @@ class ProduktController extends Controller
             $controlProduct->save();
         }
 
-        $request->session()->flash('status', 'Das Produkt <strong>' . request('prod_nummer') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', __('Das Produkt <strong>:label</strong> wurde angelegt!', ['label' => request('prod_nummer')]));
         return redirect($produkt->path());
-    }
-
-    /**
-     * @return array
-     */
-    public function validateNewProdukt(): array
-    {
-        return request()->validate([
-            'prod_label'       => 'bail|unique:produkts,prod_label|min:2|max:20|required',
-            'prod_name'       => 'max:100',
-            'prod_description'       => '',
-            'prod_nummer'          => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
-            'prod_active'          => '',
-            'produkt_kategorie_id' => 'nullable',
-            'produkt_state_id'     => 'required'
-        ]);
     }
 
     public function ajaxstore(Request $request)
@@ -209,7 +177,7 @@ class ProduktController extends Controller
         } else {
             $produkt_kategorie_id = $request->produkt_kategorie_id;
         }
-        $prodVal = $this->validateNewProdukt();
+        $prodVal = $this->validateProdukt();
         $produkt = new Produkt();
         $produkt->prod_label = $request->prod_label;
         $produkt->prod_name = $request->prod_name;
@@ -241,9 +209,10 @@ class ProduktController extends Controller
 
             $proDocFile = new ProduktDoc();
             $file = $request->file('prodDokumentFile');
-            $val = $this->validateNewProduktDokument();
+            $val = $this->validateProduktDokument();
             $validation = $request->validate([
-                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240' // size:2048 => 2048kB
+                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240'
+                // size:2048 => 2048kB
             ]);
 
             $proDocFile->proddoc_name = $file->getClientOriginalName();
@@ -259,23 +228,10 @@ class ProduktController extends Controller
     }
 
     /**
-     * @return array
-     */
-    public function validateNewProduktDokument(): array
-    {
-        return request()->validate([
-            'proddoc_label' => 'bail|required|max:150',
-            'proddoc_name' => 'max:100',
-            'proddoc_name_pfad' => 'max:150',
-            'document_type_id'  => 'required',
-            'proddoc_description' => ''
-        ]);
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  Request $request
+     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function destroy(Request $request)
@@ -371,57 +327,19 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-    public function validateAdresse()
-    {
-        return request()->validate([
-            'ad_label'            => 'bail|max:20|required|unique:adresses,ad_label',
-            'ad_anschrift_strasse'    => 'bail|required|max:100',
-            'ad_anschrift_plz'        => 'bail|required|max:100',
-            'ad_anschrift_ort'        => 'bail|required|max:100',
-            'ad_anschrift_hausnummer' => 'max:100',
-            'land_id'                 => 'max:100',
-            'address_type_id'         => '',
-        ]);
-    }
-
-    public function validateFirma()
-    {
-        return request()->validate([
-            'fa_label'   => 'bail|max:20|required|unique:firmas,fa_label',
-            'fa_name'   => 'max:100',
-            'fa_kreditor_nr' => 'max:100',
-            'fa_debitor_nr'  => 'max:100',
-            'fa_vat'         => 'max:30',
-            'adress_id'      => '',
-        ]);
-    }
-
-    public function validateFirmaProdukt()
-    {
-        return request()->validate([
-            'firma_id'   => 'required',
-            'produkt_id' => 'required',
-        ]);
-    }
-
-    public function validateContact()
-    {
-        return request()->validate([
-            'con_label' => 'bail|max:20|required|unique:contacts,con_label',
-            'con_vorname'   => 'max:100',
-            'con_name'      => 'max:100',
-            'con_telefon'   => 'max:100',
-            'con_email'     => 'max:100',
-            'anrede_id'     => '',
-        ]);
-    }
 
     public function removeFirmaFromProdukt(Request $request)
     {
 
         $faprod = FirmaProdukt::where([
-            ['produkt_id', request('produktid')],
-            ['firma_id', request('firmaid')],
+            [
+                'produkt_id',
+                request('produktid')
+            ],
+            [
+                'firma_id',
+                request('firmaid')
+            ],
         ])->delete();
 
         $request->session()->flash('status', 'Die Firma wurde vom Produkt entfernt!');
@@ -429,37 +347,26 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-    public function getKategorieProducts(Request $request)
+    public function getKategorieProducts($id)
     {
 
-        $prodList = Produkt::where('produkt_kategorie_id', $request->pk)->paginate(20);
-        return view('admin.produkt.kategorie.index', ['prodList' => $prodList, 'id' => $request]);
+        $prodList = Produkt::where('produkt_kategorie_id', $id)->sortable()->paginate(20);
+        return view('admin.produkt.kategorie.index', [
+            'prodList' => $prodList,
+            'id'       => $id
+        ]);
     }
 
     public function getProduktIdListAll(Request $request)
     {
-        return DB::table('produkts')->select(
-            'produkts.id',
-            'prod_nummer',
-            'prod_name',
-            'pk_label',
-            'prod_label'
-        )->distinct()
-            ->join('produkt_kategories', 'produkts.produkt_kategorie_id', '=', 'produkt_kategories.id')
-            ->leftJoin('produkt_params', 'produkts.id', '=', 'produkt_params.produkt_id')
-            ->where('prod_label', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_name', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_description', 'like', '%' . $request->term . '%')
-            ->orWhere('prod_nummer', 'like', '%' . $request->term . '%')
-            ->orWhere('pp_name', 'like', '%' . $request->term . '%')
-            ->orWhere('pp_label', 'like', '%' . $request->term . '%')
-            ->get();
+        return DB::table('produkts')->select('produkts.id', 'prod_nummer', 'prod_name', 'pk_label', 'prod_label')->distinct()->join('produkt_kategories', 'produkts.produkt_kategorie_id', '=', 'produkt_kategories.id')->leftJoin('produkt_params', 'produkts.id', '=', 'produkt_params.produkt_id')->where('prod_label', 'like', '%' . $request->term . '%')->orWhere('prod_name', 'like', '%' . $request->term . '%')->orWhere('prod_description', 'like', '%' . $request->term . '%')->orWhere('prod_nummer', 'like', '%' . $request->term . '%')->orWhere('pp_name', 'like', '%' . $request->term . '%')->orWhere('pp_label', 'like', '%' . $request->term . '%')->get();
     }
 
     /**
      *   Liefert die JSON-Daten für die Übersichtstablle in /produkt -> index.blade.php
      *
      * @param  Request $request
+     *
      * @return array JSON
      */
     public function getProduktListe(Request $request)
@@ -472,18 +379,17 @@ class ProduktController extends Controller
         $produkts = $prduktCache;
         foreach ($produkts as $produkt) {
             $icon = ($produkt->prod_active === 1) ? '<i class="fas fa-check text-success"  data-toggle="tooltip" data-placement="top" ></i>' : '<i class="fas fa-times text-danger"  data-toggle="tooltip" data-placement="top"></i>';
-            $data[] =
-                [
-                    'term'           => $request->id,
-                    'id'             => $produkt->id,
-                    'prod_kategorie' => $produkt->ProduktKategorie->pk_label,
-                    'created_at'     => date('d.m.Y H:s', strtotime($produkt->created_at)),
-                    'prod_nummer'    => $produkt->prod_nummer,
-                    'prod_label' => $produkt->prod_label,
-                    'prod_active'    => $icon,
-                    'prod_status'    => '<i class="' . $produkt->ProduktState->ps_icon . ' text-' . $produkt->ProduktState->ps_color . '"  data-toggle="tooltip" data-placement="top" title="' . $produkt->ProduktState->ps_name . '"></i>',
-                    'prod_link'      => '<a href="/produkt/' . $produkt->id . '" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>'
-                ];
+            $data[] = [
+                'term'           => $request->id,
+                'id'             => $produkt->id,
+                'prod_kategorie' => $produkt->ProduktKategorie->pk_label,
+                'created_at'     => date('d.m.Y H:s', strtotime($produkt->created_at)),
+                'prod_nummer'    => $produkt->prod_nummer,
+                'prod_label'     => $produkt->prod_label,
+                'prod_active'    => $icon,
+                'prod_status'    => '<i class="' . $produkt->ProduktState->ps_icon . ' text-' . $produkt->ProduktState->ps_color . '"  data-toggle="tooltip" data-placement="top" title="' . $produkt->ProduktState->ps_name . '"></i>',
+                'prod_link'      => '<a href="/produkt/' . $produkt->id . '" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>'
+            ];
         }
         //        dd(DB::getQueryLog());
         return $data;
@@ -502,6 +408,7 @@ class ProduktController extends Controller
     /**
      * @param  ProduktKategorieParam $produktKategorieParam
      * @param  Request               $request
+     *
      * @return bool
      */
     public function updateProduktKategorieParams(ProduktKategorieParam $produktKategorieParam, Request $request)
@@ -520,49 +427,26 @@ class ProduktController extends Controller
 
     }
 
-    /**
-     * @return array
-     */
-    public function validateProduktKategorieParam(): array
-    {
-        return request()->validate([
-            'pkp_label'            => 'bail|max:20|required',
-            'pkp_name'             => 'bail|string|max:150',
-            'pkp_value'            => 'bail|string|max:150',
-            'produkt_kategorie_id' => 'required'
-        ]);
-    }
 
     /**
      * Speichere neuen Produktstamm
      *
      * @param  Request $request
+     *
      * @return Application|Response
      */
     public function addProduktKategorieParam(Request $request)
     {
-        $pkp = ProduktKategorieParam::create($this->validateNewProduktKategorieParam());
+        $pkp = ProduktKategorieParam::create($this->validateProduktKategorieParam());
         $request->session()->flash('status', 'Das Datenfeld <strong>' . request('pkp_name') . '</strong> wurde angelegt!');
         return view('admin.systems');
-    }
-
-    /**
-     * @return array
-     */
-    public function validateNewProduktKategorieParam(): array
-    {
-        return request()->validate([
-            'pkp_label'            => 'bail|unique:produkts,prod_label|min:2|max:20|required',
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
-            'produkt_kategorie_id' => 'required'
-        ]);
     }
 
     /**
      *  Löscht den Param von der Produk-Kategorie
      *
      * @param  Request $request
+     *
      * @return Application|Response
      */
     public function deleteProduktKategorieParam(Request $request)
@@ -579,34 +463,22 @@ class ProduktController extends Controller
      * Fügt neue Kategorie für Produktstamm hinzu
      *
      * @param  Request $request
+     *
      * @return Application|Response
      */
     public function addProduktKategorie(Request $request)
     {
-        $produkt = ProduktKategorie::create($this->validateNewProduktKategorie());
+        $produkt = ProduktKategorie::create($this->validateProduktKategorie());
         $request->session()->flash('status', 'Die Produktkategorie  <strong>' . request('prod_nummer') . '</strong> wurde angelegt!');
         return view('admin.produkt.show', ['produkt' => $produkt]);
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewProduktKategorie(): array
-    {
-        return request()->validate([
-            'prod_label'   => 'bail|unique:produkts,prod_label|min:2|max:20|required',
-            'prod_name'   => 'bail|string|max:100',
-            'prod_description'   => '',
-            'prod_nummer'      => 'bail|unique:produkts,prod_nummer|required|min:2|max:100',
-            'prod_active'      => '',
-            'produkt_state_id' => 'required'
-        ]);
-    }
 
     /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *
      * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function addProduktParams(Request $request)
@@ -616,23 +488,12 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
-    public function validateProduktParam(): array
-    {
-        return request()->validate([
-            'pp_label'   => 'bail|unique:produkt_params,pp_label|max:20|required',
-            'pp_value'   => 'bail|max:150',
-            'pp_name'    => 'bail|string|max:150',
-            'produkt_id' => 'required'
-        ]);
-    }
 
     /**
      *  Löscht die Zuordnung der Anforderung vom Produkt
      *
      * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function deleteProduktAnfordrung(Request $request)
@@ -643,12 +504,8 @@ class ProduktController extends Controller
 
         foreach (Equipment::where('produkt_id', ProduktAnforderung::find($request->id)->produkt_id)->get() as $equipment) {
 
-            if (
-                ControlEquipment::where('anforderung_id', $request->anforderung_id)
-                ->where('equipment_id', $equipment->id)->count() > 0
-            ) {
-                ControlEquipment::where('anforderung_id', $request->anforderung_id)
-                    ->where('equipment_id', $equipment->id)->delete();
+            if (ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->count() > 0) {
+                ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->delete();
 
                 $equipHistory = new EquipmentHistory();
                 $equipHistory->eqh_eintrag_kurz = 'Anforderung gelöscht';
@@ -675,7 +532,7 @@ class ProduktController extends Controller
     public function addProduktAnforderung(Request $request)
     {
 
-        ProduktAnforderung::create($this->validateNewProduktAnforderung());
+        ProduktAnforderung::create($this->validateProduktAnforderung());
 
         $anforderung = Anforderung::find($request->anforderung_id);
         $euipUdate = '';
@@ -685,10 +542,7 @@ class ProduktController extends Controller
 
         foreach (Equipment::where('produkt_id', request('produkt_id'))->get() as $equipment) {
 
-            if (
-                ControlEquipment::where('anforderung_id', $request->anforderung_id)
-                ->where('equipment_id', $equipment->id)->count() === 0
-            ) {
+            if (ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->count() === 0) {
                 $equipControlItem = new ControlEquipment();
                 $equipControlItem->qe_control_date_last = now();
                 $equipControlItem->qe_control_date_due = now()->add('P' . $interval . $dateSting[0]);
@@ -716,16 +570,6 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewProduktAnforderung(): array
-    {
-        return request()->validate([
-            'produkt_id'     => 'required',
-            'anforderung_id' => 'required|gt:0'
-        ]);
-    }
 
     /**
      *
@@ -734,18 +578,131 @@ class ProduktController extends Controller
     {
     }
 
+
     /**
      * @return array
      */
-    public function validateProduktKategorie(): array
+    public function validateProdukt()
+    : array
     {
         return request()->validate([
-            'prod_label'   => 'bail|unique:produkts,prod_label|min:2|max:20|required',
-            'prod_name'   => 'bail|string|max:100',
-            'prod_description'   => '',
-            'prod_nummer'      => 'bail|unique:produkts,prod_nummer|required|min:2|max:100',
-            'prod_active'      => '',
-            'produkt_state_id' => 'required'
+            'prod_label'           => [
+                'bail',
+                'min:2',
+                'max:20',
+                'required',
+                Rule::unique('produkts')->ignore(\request('id'))
+            ],
+            'prod_name'            => '',
+            'prod_description'     => '',
+            'prod_nummer'          => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
+            'prod_active'          => '',
+            'produkt_kategorie_id' => 'nullable',
+            'produkt_state_id'     => 'required'
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProduktAnforderung()
+    : array
+    {
+        return request()->validate([
+            'produkt_id'     => 'required',
+            'anforderung_id' => 'required|gt:0'
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProduktParam()
+    : array
+    {
+        return request()->validate([
+            'pp_label'   => 'bail|unique:produkt_params,pp_label|max:20|required',
+            'pp_value'   => 'bail|max:150',
+            'pp_name'    => 'bail|string|max:150',
+            'produkt_id' => 'required'
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProduktKategorieParam()
+    : array
+    {
+        return request()->validate([
+            'pkp_label'            => 'bail|unique:produkts,prod_label|min:2|max:20|required',
+            'pkp_name'             => 'bail|string|max:100',
+            'pkp_value'            => '',
+            'produkt_kategorie_id' => 'required'
+        ]);
+    }
+
+    public function validateAdresse()
+    : array
+    {
+        return request()->validate([
+            'ad_label'                => 'bail|max:20|required|unique:adresses,ad_label',
+            'ad_anschrift_strasse'    => 'bail|required|max:100',
+            'ad_anschrift_plz'        => 'bail|required|max:100',
+            'ad_anschrift_ort'        => 'bail|required|max:100',
+            'ad_anschrift_hausnummer' => 'max:100',
+            'land_id'                 => 'max:100',
+            'address_type_id'         => '',
+        ]);
+    }
+
+    public function validateFirma()
+    : array
+    {
+        return request()->validate([
+            'fa_label'       => 'bail|max:20|required|unique:firmas,fa_label',
+            'fa_name'        => 'max:100',
+            'fa_kreditor_nr' => 'max:100',
+            'fa_debitor_nr'  => 'max:100',
+            'fa_vat'         => 'max:30',
+            'adress_id'      => '',
+        ]);
+    }
+
+    public function validateFirmaProdukt()
+    : array
+    {
+        return request()->validate([
+            'firma_id'   => 'required',
+            'produkt_id' => 'required',
+        ]);
+    }
+
+    public function validateContact()
+    : array
+    {
+        return request()->validate([
+            'con_label'   => 'bail|max:20|required|unique:contacts,con_label',
+            'con_vorname' => 'max:100',
+            'con_name'    => 'max:100',
+            'con_telefon' => 'max:100',
+            'con_email'   => 'max:100',
+            'anrede_id'   => '',
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProduktDokument()
+    : array
+    {
+        return request()->validate([
+            'proddoc_label'       => 'bail|required|max:150',
+            'proddoc_name'        => 'max:100',
+            'proddoc_name_pfad'   => 'max:150',
+            'document_type_id'    => 'required',
+            'proddoc_description' => ''
         ]);
     }
 }

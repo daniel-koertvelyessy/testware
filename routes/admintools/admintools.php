@@ -149,6 +149,7 @@ Route::get('getAnforderungControlItemData', 'AnforderungControlItemController@ge
  *   Benutzer Profil
  */
 Route::put('updateUserTheme', 'AdminController@updateUserTheme')->name('updateUserTheme');
+Route::get('/installer', 'InstallerController@index');
 Route::get('installer/getUserData', 'InstallerController@getUserData')->name('installer.getUserData');
 Route::post('installer/storeUserData', 'InstallerController@addUserData')->name('installer.storeuserData');
 Route::post('installer/deleteUserData', 'InstallerController@deleteUserData')->name('installer.deleteUserData');

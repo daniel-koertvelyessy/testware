@@ -25,29 +25,29 @@
             <div class="col-md-4">
                 <section class="card-body text-dark">
                     <nav class="tiles-grid justify-content-around">
-                        <a href="{{ route('firma.index') }}" class="tile-small btn-primary rounded" data-role="tile">
+                        <a href="{{ route('firma.index') }}" class="tile-small btn-outline-primary rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-industry"></i></span>
                             <span class="branding-bar text-center">{{__('Firmen')}}</span>
                         </a>
-                        <a href="{{ route('firma.create') }}" class="tile-small btn-primary rounded" data-role="tile">
+                        <a href="{{ route('firma.create') }}" class="tile-small btn-outline-primary rounded" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Firma')}}</span>
                         </a>
 
-                        <a href="{{ route('adresse.index') }}" class="tile-small btn-primary rounded" data-role="tile" aria-label="Storagee">
+                        <a href="{{ route('adresse.index') }}" class="tile-small btn-outline-primary rounded" data-role="tile" aria-label="Storagee">
                             <span class="icon"><i class="far fa-address-card"></i></span>
                             <span class="branding-bar text-center">{{__('Adressen')}}</span>
                         </a>
 
-                        <a href="{{ route('adresse.create') }}" class="tile-small btn-primary rounded" data-role="tile">
+                        <a href="{{ route('adresse.create') }}" class="tile-small btn-outline-primary rounded" data-role="tile">
                             <span class="icon"><i class="far fa-plus-square"></i></span>
                             <span class="branding-bar text-center">{{__('Adresse')}}</span>
                         </a>
-                        <a href="{{ route('profile.index') }}" class="tile-small btn-primary rounded" data-role="tile">
+                        <a href="{{ route('profile.index') }}" class="tile-small btn-outline-primary rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-user-friends"></i></span>
                             <span class="branding-bar text-center">{{__('Mitarbeiter')}}</span>
                         </a>
-                        <a href="{{ route('profile.create') }}" class="tile-small btn-primary rounded" data-role="tile">
+                        <a href="{{ route('profile.create') }}" class="tile-small btn-outline-primary rounded" data-role="tile">
                             <span class="icon"><i class="fas fa-user-plus"></i></span>
                             <span class="branding-bar text-center">{{__('Mitarbeiter')}}</span>
                         </a>

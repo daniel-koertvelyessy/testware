@@ -4,12 +4,24 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class ProduktAnforderung extends Model
 {
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+            Cache::forget('system-status-counter');
+        });
+        static::updating(function () {
+            Cache::forget('system-status-counter');
+        });
+    }
 
     public function Produkt()
     {

@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class Profile extends Model
 {
@@ -58,7 +60,6 @@ class Profile extends Model
     }
 
 
-
     public function getNextEmployeeNumber()
     {
         $em = DB::table('profiles')->orderBy('ma_nummer', 'desc')->first();
@@ -86,26 +87,26 @@ class Profile extends Model
                 ]);
                 $profile = new Profile();
                 $profile->ma_name = $request->employee['name'];
-                $profile->ma_vorname = (isset($request->employee['first_name'])) ? $request->employee['first_name'] : NULL;
-                $profile->ma_name_2 = (isset($request->employee['name_2'])) ? $request->employee['name_2'] : NULL;
-                $profile->ma_geburtsdatum = (isset($request->employee['date_birth'])) ? $request->employee['date_birth'] : NULL;
-                $profile->ma_nummer = (isset($request->employee['employee_number'])) ? $request->employee['employee_number'] : NULL;
+                $profile->ma_vorname = (isset($request->employee['first_name'])) ? $request->employee['first_name'] : null;
+                $profile->ma_name_2 = (isset($request->employee['name_2'])) ? $request->employee['name_2'] : null;
+                $profile->ma_geburtsdatum = (isset($request->employee['date_birth'])) ? $request->employee['date_birth'] : null;
+                $profile->ma_nummer = (isset($request->employee['employee_number'])) ? $request->employee['employee_number'] : null;
                 $profile->ma_eingetreten = (isset($request->employee['date_entry'])) ? $request->employee['date_entry'] : date('Y-m-d');
-                $profile->ma_ausgetreten = (isset($request->employee['date_leave'])) ? $request->employee['date_leave'] : NULL;
-                $profile->ma_telefon = (isset($request->employee['phone'])) ? $request->employee['phone'] : NULL;
-                $profile->ma_mobil = (isset($request->employee['mobile'])) ? $request->employee['mobile'] : NULL;
-                $profile->ma_fax = (isset($request->employee['fax'])) ? $request->employee['fax'] : NULL;
-                $profile->ma_com_1 = (isset($request->employee['com_1'])) ? $request->employee['com_1'] : NULL;
-                $profile->ma_com_2 = (isset($request->employee['com_2'])) ? $request->employee['com_2'] : NULL;
+                $profile->ma_ausgetreten = (isset($request->employee['date_leave'])) ? $request->employee['date_leave'] : null;
+                $profile->ma_telefon = (isset($request->employee['phone'])) ? $request->employee['phone'] : null;
+                $profile->ma_mobil = (isset($request->employee['mobile'])) ? $request->employee['mobile'] : null;
+                $profile->ma_fax = (isset($request->employee['fax'])) ? $request->employee['fax'] : null;
+                $profile->ma_com_1 = (isset($request->employee['com_1'])) ? $request->employee['com_1'] : null;
+                $profile->ma_com_2 = (isset($request->employee['com_2'])) ? $request->employee['com_2'] : null;
                 $profile->save();
                 return $profile->id;
             } else {
                 return $employee->id;
             }
         } elseif (isset($request->employee_id)) {
-            return (Profile::find($request->employee_id)) ? $request->employee_id : NULL;
+            return (Profile::find($request->employee_id)) ? $request->employee_id : null;
         }
-        return NULL;
+        return null;
     }
 
     public function addProfileData($data)
@@ -116,17 +117,17 @@ class Profile extends Model
             if (!$employee) {
                 $profile = new Profile();
                 $profile->ma_name = $data['name'];
-                $profile->ma_vorname = (isset($data['first_name'])) ? $data['first_name'] : NULL;
-                $profile->ma_name_2 = (isset($data['name_2'])) ? $data['name_2'] : NULL;
-                $profile->ma_geburtsdatum = (isset($data['date_birth'])) ? $data['date_birth'] : NULL;
-                $profile->ma_nummer = (isset($data['employee_number'])) ? $data['employee_number'] : NULL;
+                $profile->ma_vorname = (isset($data['first_name'])) ? $data['first_name'] : null;
+                $profile->ma_name_2 = (isset($data['name_2'])) ? $data['name_2'] : null;
+                $profile->ma_geburtsdatum = (isset($data['date_birth'])) ? $data['date_birth'] : null;
+                $profile->ma_nummer = (isset($data['employee_number'])) ? $data['employee_number'] : null;
                 $profile->ma_eingetreten = (isset($data['date_entry'])) ? $data['date_entry'] : date('Y-m-d');
-                $profile->ma_ausgetreten = (isset($data['date_leave'])) ? $data['date_leave'] : NULL;
-                $profile->ma_telefon = (isset($data['phone'])) ? $data['phone'] : NULL;
-                $profile->ma_mobil = (isset($data['mobile'])) ? $data['mobile'] : NULL;
-                $profile->ma_fax = (isset($data['fax'])) ? $data['fax'] : NULL;
-                $profile->ma_com_1 = (isset($data['com_1'])) ? $data['com_1'] : NULL;
-                $profile->ma_com_2 = (isset($data['com_2'])) ? $data['com_2'] : NULL;
+                $profile->ma_ausgetreten = (isset($data['date_leave'])) ? $data['date_leave'] : null;
+                $profile->ma_telefon = (isset($data['phone'])) ? $data['phone'] : null;
+                $profile->ma_mobil = (isset($data['mobile'])) ? $data['mobile'] : null;
+                $profile->ma_fax = (isset($data['fax'])) ? $data['fax'] : null;
+                $profile->ma_com_1 = (isset($data['com_1'])) ? $data['com_1'] : null;
+                $profile->ma_com_2 = (isset($data['com_2'])) ? $data['com_2'] : null;
                 $profile->save();
                 return $profile->id;
             } else {
@@ -146,7 +147,7 @@ class Profile extends Model
         $this->ma_nummer = $request->ma_nummer ?? null;
         $this->ma_eingetreten = $request->ma_eingetreten ?? date('Y-m-d');
         $this->ma_telefon = $request->ma_telefon ?? null;
-        $this->user_id = $request->user_id ?? 1;
+        $this->user_id = $request->user_id ?? Auth::user()->id;
 
         $this->save();
 
@@ -155,6 +156,35 @@ class Profile extends Model
 
     public function removeEmployee(Request $request)
     {
-        return Profile::destroy($request->id)===1;
+        return Profile::destroy($request->id) === 1;
     }
+
+    /**
+     * @return array
+     */
+    public function validateProfile()
+    : array
+    {
+        return request()->validate([
+            'ma_nummer'       => [
+                'bail',
+                'max:100',
+                Rule::unique('profiles')->ignore(\request('id'))
+            ],
+            'ma_vorname'      => 'max:100',
+            'user_id'         => 'nullable|interger',
+            'ma_name'         => 'bail|max:100|required',
+            'ma_name_2'       => '',
+            'ma_geburtsdatum' => '',
+            'ma_eingetreten'  => '',
+            'ma_ausgetreten'  => '',
+            'ma_telefon'      => '',
+            'ma_mobil'        => '',
+            'ma_fax'          => '',
+            'ma_com_1'        => '',
+            'ma_com_2'        => '',
+            'group_id'        => '',
+        ]);
+    }
+
 }

@@ -47,7 +47,11 @@
                         >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label }}  </td>
                         <td style="vertical-align: middle;"
                             class="text-center d-none d-md-table-cell"
-                        >{{ $anforderung->AnforderungControlItem->count() }}</td>
+                        >
+                            <span class="{{ $anforderung->AnforderungControlItem->count()>0 ? '' : 'px-2 py-1 btn-warning' }}">
+                                {{ $anforderung->AnforderungControlItem->count() }}
+                            </span>
+                        </td>
                         <td style="vertical-align: middle; text-align: right;">
                             <div class="btn-group dropleft">
                                 <button type="button"
@@ -93,6 +97,14 @@
                 @endforelse
                 </tbody>
             </table>
+                <div class="d-flex justify-content-center">
+                    <div class="d-none d-lg-block">
+                        {!! $requirements->withQueryString()->onEachSide(2)->links() !!}
+                    </div>
+                    <div class="d-lg-none">
+                        {!! $requirements->withQueryString()->onEachSide(0)->links() !!}
+                    </div>
+                </div>
         </div>
 
     </div>

@@ -55,8 +55,15 @@ class EquipmentQualifiedUser extends Model
                 $equipment->id
             ],
         ])->delete();
+    }
 
-
+    public function addEquipment(ProductQualifiedUser $productQualifiedUser, $equipment_id)
+    {
+        $this->user_id = $productQualifiedUser->user_id;
+        $this->equipment_id = $equipment_id;
+        $this->equipment_qualified_date = $productQualifiedUser->product_qualified_date;
+        $this->equipment_qualified_firma = $productQualifiedUser->product_qualified_firma;
+        $this->save();
     }
 
 }

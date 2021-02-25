@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Start &triangleright; {{__('Produkte')}}
+{{__('Start')}} &triangleright; {{__('Produkte')}}
 @endsection
 
 @section('mainSection')
@@ -9,7 +9,7 @@
 @endsection
 
 @section('menu')
-    @include('menus._menuMaterial')
+    @include('menus._menuProducts')
 @endsection
 
 @section('content')
@@ -25,14 +25,14 @@
             <div class="col-md-2">
                 <nav class="d-flex justify-content-around flex-md-column flex-sm-row mb-3">
                     <a href="{{ route('produkt.index') }}"
-                       class="tile-small btn-primary rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-boxes"></i></span> <span
                             class="branding-bar text-center">{{__('Übersicht')}}</span>
                     </a>
                     <a href="{{ route('produkt.create') }}"
-                       class="tile-small btn-primary rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-box"></i></span> <span

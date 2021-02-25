@@ -656,13 +656,13 @@
                                         @if ($errors->has('b_label'))
                                             <span class="text-danger small">{{ $errors->first('b_label') }}</span>
                                         @else
-                                            <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
+                                            <span class="small text-primary">{{__('erforderlich, maximal 20 Zeichen')}}</span>
                                         @endif
                                     </div>
                                     <div class="col-auto">
                                         <label class="sr-only"
                                                for="b_name_ort"
-                                        >Gebäudeort
+                                        >{{__('Gebäudeort')}}
                                         </label>
                                         <input type="text"
                                                class="form-control"
@@ -674,14 +674,14 @@
                                         @if ($errors->has('b_name_ort'))
                                             <span class="text-danger small">{{ $errors->first('b_name_ort') }}</span>
                                         @else
-                                            <span class="small text-primary">maximal 100 Zeichen</span>
+                                            <span class="small text-primary">{{__('maximal 100 Zeichen')}}</span>
                                         @endif
                                     </div>
                                     <div class="col-auto">
                                         <div class="input-group">
                                             <label for="building_type_id"
                                                    class="sr-only"
-                                            >Gebäudetyp angeben
+                                            >{{__('Gebäudetyp angeben')}}
                                             </label>
                                             <select name="building_type_id"
                                                     id="building_type_id"
@@ -699,31 +699,31 @@
                                                     data-target="#modalAddBuildingType"
                                             ><i class="fas fa-plus"></i></button>
                                         </div>
-                                        <span class="small text-primary">Gebäudetyp</span>
+                                        <span class="small text-primary">{{__('Gebäudetyp')}}</span>
                                     </div>
                                     <div class="col-auto">
                                         <button type="submit"
                                                 class="btn btn-primary"
-                                        >Neues Gebäude anlegen
+                                        >{{__('Neues Gebäude anlegen')}}
                                         </button>
                                     </div>
                                 </form>
-                                @if ($location->Building->count()>0)
+                                @if (count($buildings)>0)
                                     <table class="table table-responsive-md table-striped"
                                            id="tabBuildingListe"
                                     >
                                         <thead>
                                         <tr>
-                                            <th>Nummer / ID</th>
-                                            <th>Ort</th>
-                                            <th class="d-none d-md-table-cell">Typ</th>
+                                            <th>@sortablelink('b_label', __('Nummer'))</th>
+                                            <th>@sortablelink('b_name_ort', __('Ort'))</th>
+                                            <th class="d-none d-md-table-cell">@sortablelink('BuildingType.btname', __('Typ'))</th>
                                             <th class="d-none d-md-table-cell text-center">Räume</th>
                                             <th class="d-none d-md-table-cell">WE</th>
                                             <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ( $location->Building as $building)
+                                        @foreach ( $buildings as $building)
                                             <tr>
                                                 <td>
                                                     {{$building->b_label}}
@@ -759,11 +759,17 @@
                                         @endforeach
                                         </tbody>
                                     </table>
+                                    @if($buildings->count()>0)
+                                        <div class="d-flex justify-content-center">
+                                            {!! $buildings->withQueryString()->fragment('locGebauede')->onEachSide(2)->links() !!}
+                                        </div>
+                                    @endif
+                                @else
+                                    <x-notifyer>{{ __('Keine Gebäude gefunden') }}</x-notifyer>
                                 @endif
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -808,32 +814,9 @@
         </script>
     @endif
 
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css"
-    >
-
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"
-    ></script>
-
-    <script src="{{ asset('js/bootstrap-treeview.js') }}"></script>
-
     <script>
 
-        $('#tabBuildingListe').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 5}
-            ],
-            "dom": 't'
-        });
-
         $('#anforderung_id').change(() => {
-
             $.ajax({
                 type: "get",
                 dataType: 'json',
@@ -877,7 +860,6 @@
                 data: $('#frmDeleteBuildig_' + buildingId).serialize(),
                 success: function (res) {
                     if (res) location.reload();
-
                 }
             });
         });

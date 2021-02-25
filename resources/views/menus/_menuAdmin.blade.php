@@ -1,6 +1,6 @@
 
 <li class="nav-item {{ Request::routeIs('admin.index') ? ' active ' : '' }}">
-    <a class="nav-link" href="{{ route('admin.index') }}"><i class="fas fa-clipboard-list"></i> {{__('Übersicht')}} </a>
+    <a class="nav-link" href="{{ route('admin.index') }}"><i class="fas fa-clipboard-list"></i> {{__('Systemstatus')}} </a>
 </li>
 <li class="nav-item dropdown {{ Request::routeIs('user.*') ? ' active ' : '' }}">
     <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false">

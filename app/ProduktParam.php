@@ -15,4 +15,6 @@ class ProduktParam extends Model
     {
         return $this->belongsTo(Produkt::class);
     }
+
+
 }
