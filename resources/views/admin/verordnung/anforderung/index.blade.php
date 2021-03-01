@@ -33,14 +33,19 @@
                 <tbody>
                 @forelse ($requirements as $anforderung)
                     <tr>
-                        <td style="vertical-align: middle;">{{ $anforderung->an_name }}</td>
+                        <td style="vertical-align: middle;">
+                            <a href="{{ route('anforderung.show',$anforderung) }}">
+                                {{ $anforderung->an_name }}
+                            </a>
+
+                        </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
                         >{{ $anforderung->an_label }}</td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
                         >
-                            {{ ($anforderung->updated_at!==NULL)? $anforderung->updated_at->diffForHumans() :'-' }}
+                            {{ ($anforderung->updated_at!==null)? $anforderung->updated_at->diffForHumans() :'-' }}
                         </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"

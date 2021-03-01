@@ -28,14 +28,17 @@ class Stellplatz extends Model
 
     public function search($term)
     {
-        return Stellplatz::where('sp_label', 'like', '%' . $term . '%')
-            ->orWhere('sp_name', 'like', '%' . $term . '%')
-            ->orWhere('sp_description', 'like', '%' . $term . '%')
-            ->get();
+        return Stellplatz::where('sp_label', 'like', '%' . $term . '%')->orWhere('sp_name', 'like', '%' . $term . '%')->orWhere('sp_description', 'like', '%' . $term . '%')->get();
     }
+
     public function Room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function path()
+    {
+        return route('stellplatz.show', $this);
     }
 
     public function rooms()

@@ -32,26 +32,32 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @forelse(App\Storage::all() as $storage)
-                        <div class="custom-control custom-radio">
-                            <input type="radio"
-                                   id="setStorage_{{ $storage->id }}"
-                                   name="setStorage[]"
-                                   class="custom-control-input setStorage"
-                                   value="{{ $storage->id }}"
+                    <div class="btn-group-toggle d-flex flex-column"
+                         data-toggle="buttons"
+                         id="radio_building_list"
+                    >
+                        @forelse(App\Storage::all() as $storage)
+                            <label class="btn btn-outline-primary my-0"
+                                   style="border-radius: 0!important; margin-top: 5px !important;"
                             >
-                            <label class="custom-control-label"
-                                   for="setStorage_{{ $storage->id }}"
-                            >{{ $storage->storage_label }}</label>
-                        </div>
-                    @empty
-                        <x-notifyer>{{__('Es sind keine Standorte angelegt')}}</x-notifyer>
-                    @endforelse
-
+                                <input type="radio"
+                                       id="setStorage_{{ $storage->id }}"
+                                       name="setStorage[]"
+                                       class="custom-control-input setStorage"
+                                       value="{{ $storage->id }}"
+                                >
+                                <span id="storage_label_{{ $storage->id }}">{{ $storage->storage_label }}</span>
+                            </label>
+                        @empty
+                            <label class="btn btn-outline-info">
+                                {{__('Es sind keine Standorte angelegt')}}
+                            </label>
+                        @endforelse
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-secondary"
                             data-dismiss="modal"
                     >{{__('Schließen')}}</button>
                     <button type="button"
@@ -513,9 +519,10 @@
 
         $('#btnSetStorageFromModal').click(function () {
             const setStorageNd = $('input.setStorage:checked');
-            console.log(setStorageNd.val());
             $('#storage_id').val(setStorageNd.val());
-            $('#setStandOrtId').removeClass('is-invalid').val(setStorageNd.next('label').html());
+            $('#setStandOrtId').removeClass('is-invalid').val(
+                $('#storage_label_' + setStorageNd.val()).html()
+            );
             $('#modalSetStorage').modal('hide');
         });
 

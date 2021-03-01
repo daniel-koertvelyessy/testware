@@ -322,14 +322,14 @@
                                 />
                             </div>
                             <div class="col-md-6">
-                                <label for="compartment_typ_id">{{__('Stellplatztyp festlegen')}}</label>
+                                <label for="stellplatz_typ_id">{{__('Stellplatztyp festlegen')}}</label>
                                 <label for="newStellplatzType"
                                        class="sr-only"
                                 >{{__('neuer Stellplatztyp')}}</label>
                                 <div class="input-group">
-                                    <select name="compartment_typ_id"
+                                    <select name="stellplatz_typ_id"
                                             class="custom-select"
-                                            id="compartment_typ_id"
+                                            id="stellplatz_typ_id"
                                     >
                                         @foreach (App\StellplatzTyp::all() as $bty)
                                             <option value="{{ $bty->id }}">{{ $bty->spt_label }}</option>
@@ -918,9 +918,9 @@
                 nBtNod.addClass('d-none');
         });
 
-        $('#compartment_typ_id').change(function () {
+        $('#stellplatz_typ_id').change(function () {
             const nBtNod = $('#newStellplatzType');
-            ($('#compartment_typ_id :selected').val() === 'new') ?
+            ($('#stellplatz_typ_id :selected').val() === 'new') ?
                 nBtNod.removeClass('d-none') :
                 nBtNod.addClass('d-none');
         });
@@ -1122,7 +1122,7 @@
                         form.find('#sp_name').val(res.sp_name);
                         form.find('#sp_description').val(res.sp_description);
                         form.find('#room_id_compartment_modal').val(res.room_id);
-                        form.find('#compartment_typ_id').val(res.stellplatz_typ_id);
+                        form.find('#stellplatz_typ_id').val(res.stellplatz_typ_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
                             $('#modalSetStellplatzLabel').text('{{__('Stellplatz bearbeiten')}}');

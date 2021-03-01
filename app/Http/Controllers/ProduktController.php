@@ -11,24 +11,22 @@ use App\Equipment;
 use App\EquipmentHistory;
 use App\Firma;
 use App\FirmaProdukt;
+use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktDoc;
 use App\ProduktKategorie;
-use App\Produkt;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
+use Cache;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use function Symfony\Component\VarDumper\Dumper\esc;
 
 class ProduktController extends Controller
 {
@@ -133,6 +131,33 @@ class ProduktController extends Controller
         return redirect($produkt->path());
     }
 
+    /**
+     * @return array
+     */
+    public function validateProdukt()
+    : array
+    {
+        return request()->validate([
+            'prod_label'           => [
+                'bail',
+                'min:2',
+                'max:20',
+                'required',
+                Rule::unique('produkts')->ignore(\request('id'))
+            ],
+            'prod_name'            => '',
+            'prod_description'     => '',
+            'prod_nummer'          => [
+                'bail',
+                'alpha_dash',
+                'max:100',
+                Rule::unique('produkts')->ignore(\request('id'))
+            ],
+            'prod_active'          => '',
+            'produkt_kategorie_id' => 'nullable',
+            'produkt_state_id'     => 'required'
+        ]);
+    }
 
     /**
      * Speichere neuen Produktstamm
@@ -225,6 +250,21 @@ class ProduktController extends Controller
         }
 
         return redirect()->route('equipment.create', ['produkt_id' => $produkt->id]);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateProduktDokument()
+    : array
+    {
+        return request()->validate([
+            'proddoc_label'       => 'bail|required|max:150',
+            'proddoc_name'        => 'max:100',
+            'proddoc_name_pfad'   => 'max:150',
+            'document_type_id'    => 'required',
+            'proddoc_description' => ''
+        ]);
     }
 
     /**
@@ -327,6 +367,54 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
+    public function validateAdresse()
+    : array
+    {
+        return request()->validate([
+            'ad_label'                => 'bail|max:20|required|unique:adresses,ad_label',
+            'ad_anschrift_strasse'    => 'bail|required|max:100',
+            'ad_anschrift_plz'        => 'bail|required|max:100',
+            'ad_anschrift_ort'        => 'bail|required|max:100',
+            'ad_anschrift_hausnummer' => 'max:100',
+            'land_id'                 => 'max:100',
+            'address_type_id'         => '',
+        ]);
+    }
+
+    public function validateFirma()
+    : array
+    {
+        return request()->validate([
+            'fa_label'       => 'bail|max:20|required|unique:firmas,fa_label',
+            'fa_name'        => 'max:100',
+            'fa_kreditor_nr' => 'max:100',
+            'fa_debitor_nr'  => 'max:100',
+            'fa_vat'         => 'max:30',
+            'adress_id'      => '',
+        ]);
+    }
+
+    public function validateFirmaProdukt()
+    : array
+    {
+        return request()->validate([
+            'firma_id'   => 'required',
+            'produkt_id' => 'required',
+        ]);
+    }
+
+    public function validateContact()
+    : array
+    {
+        return request()->validate([
+            'con_label'   => 'bail|max:20|required|unique:contacts,con_label',
+            'con_vorname' => 'max:100',
+            'con_name'    => 'max:100',
+            'con_telefon' => 'max:100',
+            'con_email'   => 'max:100',
+            'anrede_id'   => '',
+        ]);
+    }
 
     public function removeFirmaFromProdukt(Request $request)
     {
@@ -373,7 +461,7 @@ class ProduktController extends Controller
     {
         $data = [];
         //        DB::connection()->enableQueryLog();
-        $prduktCache = \Cache::remember('produkt-liste-kat-' . $request->id, now()->addSeconds(2), function () use ($request) {
+        $prduktCache = Cache::remember('produkt-liste-kat-' . $request->id, now()->addSeconds(2), function () use ($request) {
             return Produkt::with('ProduktKategorie', 'ProduktState')->where('produkt_kategorie_id', $request->id)->get();
         });
         $produkts = $prduktCache;
@@ -427,6 +515,19 @@ class ProduktController extends Controller
 
     }
 
+    /**
+     * @return array
+     */
+    public function validateProduktKategorieParam()
+    : array
+    {
+        return request()->validate([
+            'pkp_label'            => 'bail|unique:produkts,prod_label|min:2|max:20|required',
+            'pkp_name'             => 'bail|string|max:100',
+            'pkp_value'            => '',
+            'produkt_kategorie_id' => 'required'
+        ]);
+    }
 
     /**
      * Speichere neuen Produktstamm
@@ -473,7 +574,6 @@ class ProduktController extends Controller
         return view('admin.produkt.show', ['produkt' => $produkt]);
     }
 
-
     /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *
@@ -488,6 +588,19 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @return array
+     */
+    public function validateProduktParam()
+    : array
+    {
+        return request()->validate([
+            'pp_label'   => 'bail|unique:produkt_params,pp_label|max:20|required',
+            'pp_value'   => 'bail|max:150',
+            'pp_name'    => 'bail|string|max:150',
+            'produkt_id' => 'required'
+        ]);
+    }
 
     /**
      *  Löscht die Zuordnung der Anforderung vom Produkt
@@ -570,38 +683,6 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-
-    /**
-     *
-     */
-    public function updateParams($label, $pid, $value)
-    {
-    }
-
-
-    /**
-     * @return array
-     */
-    public function validateProdukt()
-    : array
-    {
-        return request()->validate([
-            'prod_label'           => [
-                'bail',
-                'min:2',
-                'max:20',
-                'required',
-                Rule::unique('produkts')->ignore(\request('id'))
-            ],
-            'prod_name'            => '',
-            'prod_description'     => '',
-            'prod_nummer'          => 'bail|unique:produkts,prod_nummer|alpha_dash|max:100',
-            'prod_active'          => '',
-            'produkt_kategorie_id' => 'nullable',
-            'produkt_state_id'     => 'required'
-        ]);
-    }
-
     /**
      * @return array
      */
@@ -615,94 +696,9 @@ class ProduktController extends Controller
     }
 
     /**
-     * @return array
+     *
      */
-    public function validateProduktParam()
-    : array
+    public function updateParams($label, $pid, $value)
     {
-        return request()->validate([
-            'pp_label'   => 'bail|unique:produkt_params,pp_label|max:20|required',
-            'pp_value'   => 'bail|max:150',
-            'pp_name'    => 'bail|string|max:150',
-            'produkt_id' => 'required'
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateProduktKategorieParam()
-    : array
-    {
-        return request()->validate([
-            'pkp_label'            => 'bail|unique:produkts,prod_label|min:2|max:20|required',
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
-            'produkt_kategorie_id' => 'required'
-        ]);
-    }
-
-    public function validateAdresse()
-    : array
-    {
-        return request()->validate([
-            'ad_label'                => 'bail|max:20|required|unique:adresses,ad_label',
-            'ad_anschrift_strasse'    => 'bail|required|max:100',
-            'ad_anschrift_plz'        => 'bail|required|max:100',
-            'ad_anschrift_ort'        => 'bail|required|max:100',
-            'ad_anschrift_hausnummer' => 'max:100',
-            'land_id'                 => 'max:100',
-            'address_type_id'         => '',
-        ]);
-    }
-
-    public function validateFirma()
-    : array
-    {
-        return request()->validate([
-            'fa_label'       => 'bail|max:20|required|unique:firmas,fa_label',
-            'fa_name'        => 'max:100',
-            'fa_kreditor_nr' => 'max:100',
-            'fa_debitor_nr'  => 'max:100',
-            'fa_vat'         => 'max:30',
-            'adress_id'      => '',
-        ]);
-    }
-
-    public function validateFirmaProdukt()
-    : array
-    {
-        return request()->validate([
-            'firma_id'   => 'required',
-            'produkt_id' => 'required',
-        ]);
-    }
-
-    public function validateContact()
-    : array
-    {
-        return request()->validate([
-            'con_label'   => 'bail|max:20|required|unique:contacts,con_label',
-            'con_vorname' => 'max:100',
-            'con_name'    => 'max:100',
-            'con_telefon' => 'max:100',
-            'con_email'   => 'max:100',
-            'anrede_id'   => '',
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateProduktDokument()
-    : array
-    {
-        return request()->validate([
-            'proddoc_label'       => 'bail|required|max:150',
-            'proddoc_name'        => 'max:100',
-            'proddoc_name_pfad'   => 'max:150',
-            'document_type_id'    => 'required',
-            'proddoc_description' => ''
-        ]);
     }
 }
