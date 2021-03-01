@@ -169,7 +169,6 @@ class StellplatzController extends Controller
     : RedirectResponse
     {
 
-
         if ($request->stellplatz_typ_id === 'new' && isset($request->stellplatz_typ_id)) {
             $bt = new StellplatzTyp();
             $bt->spt_label = $request->newStellplatzType;
