@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AnforderungControlItem;
 use App\ControlEquipment;
-use App\ControlInterval;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
@@ -17,15 +15,10 @@ use App\EquipmentWarranty;
 use App\ProductInstructedUser;
 use App\ProductQualifiedUser;
 use App\Produkt;
-use App\ProduktAnforderung;
-use App\ProduktKategorieParam;
-use App\ProduktParam;
-use App\Stellplatz;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -166,7 +159,7 @@ class EquipmentController extends Controller
             $proDocFile = new EquipmentDoc();
             $file = $request->file('equipDokumentFile');
             $validation = $request->validate([
-                'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240',
+                'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
                 // size:2048 => 2048kB
                 'eqdoc_label'       => 'required|max:150'
             ]);
