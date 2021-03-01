@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -48,11 +48,7 @@ class Equipment extends Model
 
     static function getControlEquipmentList()
     {
-        return \DB::table('equipment')
-            ->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'produkts.prod_label')
-            ->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')
-            ->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')
-            ->get();
+        return DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'produkts.prod_label')->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')->get();
     }
 
     public function getControlProductData()
@@ -108,7 +104,7 @@ class Equipment extends Model
     public function priceTag()
     {
 //        return (float)$this->eq_price;
-        return number_format($this->eq_price,2,'.',' ');
+        return number_format($this->eq_price, 2, '.', '');
     }
 
     public function storage()

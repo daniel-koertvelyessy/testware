@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Adresse;
 use App\AddressType;
-use App\Admin;
+use App\Adresse;
 use App\Anforderung;
 use App\AnforderungControlItem;
 use App\AnforderungType;
 use App\Building;
-
-//use App\BuildingType;
 use App\BuildingTypes;
 use App\ControlProdukt;
 use App\DocumentType;
 use App\Equipment;
 use App\EquipmentFuntionControl;
 use App\EquipmentQualifiedUser;
-use App\Location;
 use App\ProductQualifiedUser;
-use App\Profile;
-use App\Storage;
-use App\Verordnung;
-use App\ProduktKategorie;
 use App\Produkt;
+use App\ProduktKategorie;
 use App\Room;
 use App\RoomType;
-use App\Stellplatz;
 use App\StellplatzTyp;
+use App\Storage;
 use App\User;
+use App\Verordnung;
+use Cache;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -39,6 +34,9 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
+//use App\BuildingType;
 
 class AdminController extends Controller
 {
@@ -72,10 +70,10 @@ class AdminController extends Controller
 
         if ($countEquipment > 0) {
             $countEquipmentFunctionTest = EquipmentFuntionControl::all()->count();
-            $incomplete_equipment = $countEquipment - $countEquipmentFunctionTest ;
+            $incomplete_equipment = $countEquipment - $countEquipmentFunctionTest;
         }
 
-        return \Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($incomplete_requirement, $countEquipment, $incomplete_equipment) {
+        return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($incomplete_requirement, $countEquipment, $incomplete_equipment) {
             return [
                 'products'                 => Produkt::all()->count(),
                 'equipment'                => $countEquipment,
@@ -476,17 +474,23 @@ class AdminController extends Controller
 
         $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_label') . '</strong> wurde angelegt!');
 
-        return (isset($request->frmOrigin) && $request->frmOrigin === 'room') ? redirect(route('room.show', $request->room_id)) : back();
+        return back();
     }
 
     /**
      * @return array
      */
-    public function validateNewStellPlatzTypes()
+    public function validateStellPlatzTypes()
     : array
     {
         return request()->validate([
-            'spt_label'       => 'bail|unique:stellplatz_typs,spt_label|required|min:1|max:20',
+            'spt_label'       => [
+                'bail',
+                'required',
+                'min:1',
+                'max:20',
+                Rule::unique('stellplatz_typs')->ignore(\request('id'))
+            ],
             'spt_name'        => 'max:100',
             'spt_description' => ''
         ]);
@@ -495,8 +499,8 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request            $request
-     * @param  \App\StellplatzTyp $StellPlatzTyp
+     * @param  Request       $request
+     * @param  StellplatzTyp $StellPlatzTyp
      *
      * @return Response
      */
@@ -525,23 +529,6 @@ class AdminController extends Controller
         *
         *
         */
-
-    /**
-     * @return array
-     */
-    public function validateStellPlatzTypes()
-    : array
-    {
-        return request()->validate([
-            'spt_label'       => 'bail|required|min:1|max:20',
-            'spt_name'        => 'max:100',
-            'spt_description' => ''
-        ]);
-    }
-
-
-
-
 
 
 
