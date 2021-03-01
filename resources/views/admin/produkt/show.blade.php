@@ -1231,7 +1231,8 @@
                                       enctype="multipart/form-data"
                                 >
                                     @csrf
-                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}}</h2>
+                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span class="small text-muted">max 20MB</span></h2>
+
                                     <input type="hidden"
                                            name="produkt_id"
                                            id="produkt_id_doku"

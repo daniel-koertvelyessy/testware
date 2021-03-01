@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Produkt;
 use App\ProduktDoc;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,10 +10,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ProduktDocController extends Controller
 {
-    //    public function __construct()
-    //    {
-    //        $this->middleware('auth');
-    //    }
+    public function __construct()
+    {
+        $this->middleware('auth')->except([
+            'downloadProduktDokuFile',
+            'index'
+        ]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -53,7 +54,8 @@ class ProduktDocController extends Controller
             $val = $this->validateNewProduktDokument();
 
             $validation = $request->validate([
-                'prodDokumentFile'  =>  'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:10240' // size:2048 => 2048kB
+                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:20480'
+                // size:2048 => 2048kB
             ]);
 
             //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());

@@ -234,9 +234,9 @@ class ProduktController extends Controller
 
             $proDocFile = new ProduktDoc();
             $file = $request->file('prodDokumentFile');
-            $val = $this->validateProduktDokument();
-            $validation = $request->validate([
-                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:20480'
+            $this->validateProduktDokument();
+            $request->validate([
+                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg'
                 // size:2048 => 2048kB
             ]);
 

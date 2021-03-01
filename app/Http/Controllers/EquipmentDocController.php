@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 
 class EquipmentDocController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except([
+            'downloadEquipmentDokuFile',
+            'index'
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
