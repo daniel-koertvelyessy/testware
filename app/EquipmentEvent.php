@@ -21,6 +21,7 @@ class EquipmentEvent extends Model
         'id',
         'created_at',
         'updated_at',
+        'deleted_at',
         'equipment_event_user',
         'equipment_event_text',
         'equipment_id',

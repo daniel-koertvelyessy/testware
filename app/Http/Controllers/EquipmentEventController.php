@@ -56,7 +56,8 @@ class EquipmentEventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -69,19 +70,21 @@ class EquipmentEventController extends Controller
     /**
      * @return array
      */
-    public function validateNewEquipmentEvent(): array
+    public function validateNewEquipmentEvent()
+    : array
     {
         return request()->validate([
             'equipment_event_text' => '',
             'equipment_event_user' => '',
-            'equipment_id' => 'required',
+            'equipment_id'         => 'required',
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request $request
+     *
      * @return RedirectResponse
      */
     public function accept(Request $request)
@@ -91,11 +94,8 @@ class EquipmentEventController extends Controller
         $event = EquipmentEvent::find($request->equipment_event_id);
         $event->read = now();
         $event->update();
-        $eeitem = new EquipmentEventItem();
-        $eeitem->equipment_event_item_text = $request->equipment_event_item_text;
-        $eeitem->user_id = (isset($request->user_id)) ? $request->user_id : Auth()->user()->id;
-        $eeitem->equipment_event_id = $request->equipment_event_id;
-        $eeitem->save();
+
+        (new EquipmentEventItem)->addItem($request);
 
         $equipment = Equipment::find($request->equipment_id)->first();
         $euipStatIsNotChanged = ($equipment->equipment_state_id == $request->equipment_state_id);
@@ -124,35 +124,36 @@ class EquipmentEventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param EquipmentEvent $event
+     * @param  EquipmentEvent $event
+     *
      * @return Application|Factory|Response|View
      */
     public function show(EquipmentEvent $event)
     {
-        /*    $event->updated_at = now();
-            $event->update();*/
-        return view('testware.events.show', ['event' => $event]);
+        return view('testware.events.show', compact('event'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param EquipmentEvent $equipmentEvent
+     * @param  EquipmentEvent $event
+     *
      * @return Response
      */
-    public function edit(EquipmentEvent $equipmentEvent)
+    public function edit(EquipmentEvent $event)
     {
-        //
+        dd($event);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param EquipmentEvent $equipmentEvent
+     * @param  Request        $request
+     * @param  EquipmentEvent $event
+     *
      * @return Response
      */
-    public function update(Request $request, EquipmentEvent $equipmentEvent)
+    public function update(Request $request, EquipmentEvent $event)
     {
         //
     }
@@ -160,74 +161,71 @@ class EquipmentEventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param EquipmentEvent $event
-     * @param Request $request
+     * @param  EquipmentEvent $event
+     * @param  Request        $request
+     *
      * @return RedirectResponse
      * @throws Exception
      */
     public function destroy(EquipmentEvent $event, Request $request)
+    : RedirectResponse
     {
-        $event->delete();
 
-        $eh = new EquipmentHistory();
         if (isset($request->event_decline_text)) {
-            $eh->eqh_eintrag_kurz = __('Schadensmeldung - Abgelehnt');
-            $eh->eqh_eintrag_text = 'Die Schadensmeldung wurde abgelehnt. Begründung: ' . request('event_decline_text');
+            $eqh_eintrag_kurz = __('Schadensmeldung - Abgelehnt');
+            $eqh_eintrag_text = __('Die Schadensmeldung wurde abgelehnt. Begründung: ') . request('event_decline_text');
         } else {
-            $eh->eqh_eintrag_kurz = __('Schadensmeldung - Abgeschlossen');
-            $eh->eqh_eintrag_text = 'Die Schadensmeldung wurde geschlossen. Bemerkung: ' . request('equipment_event_item_text');
+            $eqh_eintrag_kurz = __('Schadensmeldung - Abgeschlossen');
+            $eqh_eintrag_text = __('Die Schadensmeldung wurde geschlossen. Bemerkung: ') . request('equipment_event_item_text');
         }
-        $eh->equipment_id = $event->equipment->id;
-        $eh->save();
+
+        (new EquipmentEventItem)->addItem($request);
+
+        (new EquipmentHistory)->add($eqh_eintrag_kurz, $eqh_eintrag_text, $event->equipment->id);
 
         if (isset($request->equipment_state_id)) {
-            $equipment = Equipment::find($eh->equipment_id);
+            $equipment = Equipment::find($event->equipment->id);
             $equipment->equipment_state_id = $request->equipment_state_id;
             $equipment->save();
+
             $stat = EquipmentState::find($request->equipment_state_id)->first();
 
-            $eh = new EquipmentHistory();
-            $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
-            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
-            $eh->equipment_id = $event->equipment->id;
-            $eh->save();
+            (new EquipmentHistory)->add(__('Gerätestatus geändert'), __('Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf :label geändert', ['label' => $stat->estat_label]), $event->equipment->id);
+
         }
 
+        $event->delete();
         return redirect()->route('testware.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param EquipmentEvent $event
-     * @param Request $request
+     * @param  EquipmentEvent $event
+     * @param  Request        $request
+     *
      * @return RedirectResponse
      * @throws Exception
      */
-    public function close(EquipmentEvent $event, Request $request)
+    public function close(Request $request)
+    : RedirectResponse
     {
-        //dd($request);
-        $event->delete();
 
-        $eh = new EquipmentHistory();
-        $eh->eqh_eintrag_kurz = __('Schadensmeldung - Abgeschlossen');
-        $eh->eqh_eintrag_text = 'Die Schadensmeldung wurde geschlossen. Bemerkung: ' . request('equipment_event_item_text');
-        $eh->equipment_id = $request->equipment_id;
-        $eh->save();
+        EquipmentEvent::destroy($request->equipment_event_id);
+
+        (new EquipmentEventItem)->addItem($request);
+
+        (new EquipmentHistory)->add(__('Schadensmeldung - Abgeschlossen'), __('Die Schadensmeldung wurde geschlossen. Bemerkung: :text', ['text' => request('equipment_event_item_text')]), $request->equipment_id);
 
         $equipment = Equipment::find($request->equipment_id);
         $equipment->equipment_state_id = $request->equipment_state_id;
         $equipment->save();
 
-        $eh = new EquipmentHistory();
-        $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
         $stat = EquipmentState::find($request->equipment_state_id)->first();
-        $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
-        $eh->equipment_id = $request->equipment_id;
-        $eh->save();
 
-        $doc = new EquipmentDocController();
-        $doc->store($request);
+        (new EquipmentHistory)->add(__('Gerätestatus geändert'), __('Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf :label geändert', ['label' => $stat->estat_label]), $request->equipment_id);
+
+        (new EquipmentDocController)->store($request);
 
         return redirect()->route('testware.index');
     }

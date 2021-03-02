@@ -116,13 +116,7 @@
 >
     @yield('content')
 </main>
-<footer class="page-footer fixed-bottom px-1">
-    <div class="row align-items-center">
-        <div class="col-auto small mr-auto pl-3">© 2020 <span style="color: #000;">bitpack</span><span style="color: #c7d301;">.io</span>
-        </div>
-
-    </div>
-</footer>
+<x-section-footer/>
 
 
 <script type="text/javascript"

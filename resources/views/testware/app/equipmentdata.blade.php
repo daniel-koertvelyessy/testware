@@ -9,44 +9,18 @@
     <div class="container">
         <div class="row mt-md-5 mt-sm-1">
             <div class="col">
-                <span class="h5">Gerät</span>
+                <span class="h5">{{ __('Gerät') }}</span>
                 <h1 class="h3">{{ $edata->produkt->prod_name }}</h1>
 
                 <h2 class="h5 mt-3">{{__('Dokumente')}}</h2>
                 @if (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->count()>0)
 
                     @foreach (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->get() as $produktDoc)
-                        <div class="card p-2 col-md-4 col-lg-3">
-                            <dl class="row">
-                                <dt class="col-md-4">{{ __(' Typ') }}:</dt>
-                                <dd class="col-md-8">{{ $produktDoc->DocumentType->doctyp_name }}</dd>
-                            </dl>
-                            <dl class="row">
-                                <dt class="col-md-4">{{ __(' Name') }}:</dt>
-                                <dd class="col-md-8">{{ $produktDoc->proddoc_label }}</dd>
-                            </dl>
-
-                            <dl class="row">
-                                <dt class="col-md-4">{{ __(' Größe') }}:</dt>
-                                <dd class="col-md-8">{{ number_format(\Illuminate\Support\Facades\Storage::size($produktDoc->proddoc_name_pfad)/1028,1) }}kB</dd>
-                            </dl>
-                            <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
-                                  method="get"
-                                  id="downloadProdDoku_{{ $produktDoc->id }}"
-                            >
-                                @csrf
-                                <input type="hidden"
-                                       name="id"
-                                       id="download_produktdoc_id_{{ $produktDoc->id }}"
-                                       value="{{ $produktDoc->id }}"
-                                >
-                            </form>
-                            <button
-                                class="btn btn-primary btn-block mb-2"
-                                onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
-                            >{{ __('Öffnen') }} <span class="fas fa-download ml-3"></span>
-                            </button>
-                        </div>
+                        <x-filecard name="{{ $produktDoc->DocumentType->doctyp_name }}"
+                                    label="{{ $produktDoc->proddoc_label }}"
+                                    path="{{ $produktDoc->proddoc_name_pfad }}"
+                                    id="{{ $produktDoc->id }}"
+                        />
                     @endforeach
 
                 @else

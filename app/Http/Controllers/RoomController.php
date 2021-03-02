@@ -339,11 +339,11 @@ class RoomController extends Controller
             $request->session()->flash('status', __('Der Raum <strong>:label</strong> wurde aktualisiert!', ['label'=>request('r_label')]));
         } else {
             $room = new Room();
-            $room->r_label = $request->r_label;
+
             (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
             $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde angelegt!');
         }
-
+        $room->r_label = $request->r_label;
         $room->r_name = $request->r_name;
         $room->r_description = $request->r_description;
         $room->storage_id = $request->storage_id;
