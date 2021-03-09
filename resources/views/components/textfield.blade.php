@@ -12,7 +12,7 @@
            class="form-control {{ $class??'' }} @error($name??$id) is-invalid @enderror"
            value="{{ $value ?? old( $name??$id )  }}"
            @if(isset($max))
-           max="{{ $max }}"
+           maxlength="{{ $max }}"
            @endif
            @if(isset($required))
            required

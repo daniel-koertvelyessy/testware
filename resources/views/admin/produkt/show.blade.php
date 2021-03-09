@@ -13,22 +13,22 @@
 @endsection
 
 @section('breadcrumbs')
-  {{--  <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/">{{ __('Portal')}}</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('produkt.index') }}">{{ __('Produkte')}}</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/produkt/kategorie/{{ $produkt->ProduktKategorie->id }}">{{ $produkt->ProduktKategorie->pk_label }}</a>
-            </li>
-            <li class="breadcrumb-item active"
-                aria-current="page"
-            >{{ $produkt->prod_nummer }}</li>
-        </ol>
-    </nav>--}}
+    {{--  <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                  <a href="/">{{ __('Portal')}}</a>
+              </li>
+              <li class="breadcrumb-item">
+                  <a href="{{ route('produkt.index') }}">{{ __('Produkte')}}</a>
+              </li>
+              <li class="breadcrumb-item">
+                  <a href="/produkt/kategorie/{{ $produkt->ProduktKategorie->id }}">{{ $produkt->ProduktKategorie->pk_label }}</a>
+              </li>
+              <li class="breadcrumb-item active"
+                  aria-current="page"
+              >{{ $produkt->prod_nummer }}</li>
+          </ol>
+      </nav>--}}
 @endsection
 
 @section('actionMenuItems')
@@ -568,11 +568,11 @@
                         role="presentation"
                     >
                         <a class="nav-link"
-                           id="prodFirmen-tab"
+                           id="prodCompany-tab"
                            data-toggle="tab"
-                           href="#prodFirmen"
+                           href="#prodCompany"
                            role="tab"
-                           aria-controls="prodFirmen"
+                           aria-controls="prodCompany"
                            aria-selected="false"
                         >{{__('Firmen')}} <span class="badge badge-primary">{{  $produkt->firma->count() }}</span></a>
                     </li>
@@ -635,20 +635,20 @@
                                         </div>
                                         <div class="col md-4">
                                             <div class="input-group">
-                                            <x-selectModalgroup id="produkt_kategorie_id"
-                                                           label="{{__('Kategorie')}}"
-                                                                modalid="modalAddProduktKategorie"
-                                            >
-                                                @foreach (App\ProduktKategorie::all() as $produktKategorie)
-                                                    <option value="{{ $produktKategorie->id }}"
-                                                            @if($produktKategorie->id === $produkt->produkt_kategorie_id)
-                                                            selected
-                                                        @endif
-                                                    >
-                                                        {{ $produktKategorie->pk_name }}
-                                                    </option>
-                                                @endforeach
-                                            </x-selectModalgroup>
+                                                <x-selectModalgroup id="produkt_kategorie_id"
+                                                                    label="{{__('Kategorie')}}"
+                                                                    modalid="modalAddProduktKategorie"
+                                                >
+                                                    @foreach (App\ProduktKategorie::all() as $produktKategorie)
+                                                        <option value="{{ $produktKategorie->id }}"
+                                                                @if($produktKategorie->id === $produkt->produkt_kategorie_id)
+                                                                selected
+                                                            @endif
+                                                        >
+                                                            {{ $produktKategorie->pk_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </x-selectModalgroup>
                                             </div>
                                         </div>
                                     </div>
@@ -904,13 +904,13 @@
                         </div>
                     </div>
                     <div class="tab-pane fade"
-                         id="prodFirmen"
+                         id="prodCompany"
                          role="tabpanel"
-                         aria-labelledby="prodFirmen-tab"
+                         aria-labelledby="prodCompany-tab"
                     >
                         <div class="row">
                             <div class="col-md-8">
-                                <form action="{{ route('addProduktFirma') }}#prodFirmen"
+                                <form action="{{ route('addProduktFirma') }}#prodCompany"
                                       id="frmAddProduktFirma"
                                       method="post"
                                       autocomplete="off"
@@ -981,6 +981,7 @@
                                                                  label="{{__('Kürzel')}}"
                                                                  class="getFirma checkLabel"
                                                                  required
+                                                                 max="20"
                                                     />
                                                     <span class="small text-primary getFirmaRes"></span>
                                                 </div>
@@ -988,6 +989,7 @@
                                                     <x-textfield id="fa_name"
                                                                  label="{{__('Name')}}"
                                                                  class="getFirma"
+                                                                 max="100"
                                                     />
                                                 </div>
                                             </div>
@@ -1031,6 +1033,7 @@
                                                                  name="ad_label"
                                                                  label="{{ __('Kürzel') }}"
                                                                  class="getAddress checkLabel"
+                                                                 max="20"
                                                     />
                                                 </div>
                                                 <div class="col-md-7">
@@ -1083,11 +1086,10 @@
                                                     />
                                                 </div>
                                             </div>
-
                                         </div><!-- Adress Details -->
                                         <div class="card p-3 mb-2">
                                             <div class="d-flex justify-content-md-between">
-                                                <h3 class="h5">Kontakt-Daten</h3>
+                                                <h3 class="h5">{{__('Kontakt - Daten')}}</h3>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox"
                                                            class="custom-control-input"
@@ -1097,111 +1099,61 @@
                                                     >
                                                     <label class="custom-control-label"
                                                            for="ckAddNewContact"
-                                                    >Kontakt neu anlegen
+                                                    >{{__('Kontakt neu anlegen')}}
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-md-5">
-                                                    <label for="con_label">Kürzel</label>
-                                                    <input type="text"
-                                                           name="con_label"
-                                                           id="con_label"
-                                                           aria-label="Suche"
-                                                           autocomplete="off"
-                                                           class="form-control getAddress @error('con_label') is-invalid @enderror"
-                                                           value="{{ old('con_label') ?? '' }}"
-                                                           required
-                                                    >
-                                                    @error('con_label')
-                                                    <span class="text-danger small">{{ $message }}</span>
-                                                    @enderror
-                                                    <span
-                                                        class="small text-primary @error('con_label') d-none @enderror "
-                                                    >
-                                                        erforderliches Feld, max 20 Zeichen
-                                                    </span>
+                                                    <x-textfield id="con_label"
+                                                                 label="{{ __('Kürzel') }}"
+                                                                 max="20"
+                                                    />
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <label for="anrede_id">Anrede</label>
-                                                    <select name="anrede_id"
-                                                            id="anrede_id"
-                                                            aria-label="Suche"
-                                                            autocomplete="off"
-                                                            class="custom-select @error('anrede_id') is-invalid @enderror"
+                                                    <x-selectfield id="anrede_id"
+                                                                   label="{{ __('Anrede') }}"
                                                     >
                                                         @foreach (App\Anrede::all() as $anrede)
                                                             <option
                                                                 value="{{ $anrede->id }}"
                                                             >{{ $anrede->an_kurz }}</option>
                                                         @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-5">
-                                                    <label for="con_vorname">Vorname</label>
-                                                    <input type="text"
-                                                           name="con_vorname"
-                                                           id="con_vorname"
-                                                           aria-label="Suche"
-                                                           autocomplete="off"
-                                                           class="form-control @error('con_vorname') is-invalid @enderror"
-                                                           value="{{ old('con_vorname') ?? '' }}"
-                                                    >
-                                                    @error('con_vorname')
-                                                    <span class="text-danger small">{{ $message }}</span>
-                                                    @enderror
-                                                    <span
-                                                        class="small text-primary @error('con_vorname') d-none @enderror "
-                                                    >max 100 Zeichen</span>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <label for="con_name">Nachname</label>
-                                                    <input type="text"
-                                                           name="con_name"
-                                                           id="con_name"
-                                                           aria-label="Suche"
-                                                           autocomplete="off"
-                                                           class="form-control @error('con_name') is-invalid @enderror"
-                                                           value="{{ old('con_name') ?? '' }}"
-                                                    >
-                                                    @error('con_name')
-                                                    <span class="text-danger small">{{ $message }}</span>
-                                                    @enderror
-                                                    <span
-                                                        class="small text-primary @error('con_name') d-none @enderror "
-                                                    >max 100 Zeichen</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-5">
-                                                    <label for="con_telefon">Telefon</label>
-                                                    <input type="text"
-                                                           name="con_telefon"
-                                                           id="con_telefon"
-                                                           aria-label="Suche"
-                                                           autocomplete="off"
-                                                           class="form-control @error('con_telefon') is-invalid @enderror"
-                                                           value="{{ old('con_telefon') ?? '' }}"
-                                                    >
-                                                    @error('con_telefon')
-                                                    <span class="text-danger small">{{ $message }}</span>
-                                                    @enderror
-                                                    <span
-                                                        class="small text-primary @error('con_telefon') d-none @enderror "
-                                                    >max 100 Zeichen</span>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <x-emailfield id="con_email"
-                                                                  name="con_email"
-                                                                  label="E-Mail Adresse"
-                                                    />
+                                                    </x-selectfield>
+
                                                 </div>
                                             </div>
 
-                                        </div><!-- Kontakt Details -->
-                                    </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-5">
+                                                <x-textfield id="con_vorname"
+                                                             label="{{ __('Vorname') }}"
+                                                             max="100"
+                                                />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <x-textfield id="con_name"
+                                                             label="{{ __('Nachname') }}"
+                                                             max="100"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-5">
+                                                <x-textfield id="con_telefon"
+                                                             label="{{ __('Telefon') }}"
+                                                             max="100"
+                                                />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <x-emailfield id="con_email"
+                                                              name="con_email"
+                                                              label="E-Mail Adresse"
+                                                />
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div><!-- Kontakt Details -->
                                 </form>
                             </div>
                             <div class="col-md-4">
@@ -1258,9 +1210,15 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <x-textfield id="proddoc_label" label="{{__('Bezeichnung')}}" value="{{ $produkt->proddoc_label }}" />
+                                    <x-textfield id="proddoc_label"
+                                                 label="{{__('Bezeichnung')}}"
+                                                 value="{{ $produkt->proddoc_label }}"
+                                    />
 
-                                    <x-textarea id="proddoc_description" label="Datei Informationen" value="{{ $produkt->proddoc_description }}"/>
+                                    <x-textarea id="proddoc_description"
+                                                label="Datei Informationen"
+                                                value="{{ $produkt->proddoc_description }}"
+                                    />
 
                                     <div class="form-group">
                                         <div class="custom-file">
@@ -1399,129 +1357,129 @@
             </div>
         </div>
     </div>
-@endsection
+        @endsection
 
-@section('scripts')
-    @error('doctyp_label')
-    <script>
-        $('#modalAddDokumentType').modal('show');
-    </script>
-    @enderror
+        @section('scripts')
+            @error('doctyp_label')
+            <script>
+                $('#modalAddDokumentType').modal('show');
+            </script>
+            @enderror
 
-    @error('pp_label')
-    <script>
-        $('#modalAddParameter').modal('show');
-    </script>
-    @enderror
+            @error('pp_label')
+            <script>
+                $('#modalAddParameter').modal('show');
+            </script>
+            @enderror
 
-    <script src="{{ asset('js/signatures.js') }}"></script>
-    <script>
-        $('.tooltips').tooltip();
+            <script src="{{ asset('js/signatures.js') }}"></script>
+            <script>
+                $('.tooltips').tooltip();
 
 
-        function resizeCanvas() {
-            // When zoomed out to less than 100%, for some very strange reason,
-            // some browsers report devicePixelRatio as less than 1
-            // and only part of the canvas is cleared then.
-            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+                function resizeCanvas() {
+                    // When zoomed out to less than 100%, for some very strange reason,
+                    // some browsers report devicePixelRatio as less than 1
+                    // and only part of the canvas is cleared then.
+                    var ratio = Math.max(window.devicePixelRatio || 1, 1);
 
-            // This part causes the canvas to be cleared
-            trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
-            trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
-            trainee_pad_id.getContext("2d").scale(ratio, ratio);
+                    // This part causes the canvas to be cleared
+                    trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
+                    trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
+                    trainee_pad_id.getContext("2d").scale(ratio, ratio);
 
-            // This part causes the canvas to be cleared
-            instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
-            instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
-            instructor_pad_id.getContext("2d").scale(ratio, ratio);
+                    // This part causes the canvas to be cleared
+                    instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
+                    instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
+                    instructor_pad_id.getContext("2d").scale(ratio, ratio);
 
-            // This library does not listen for canvas changes, so after the canvas is automatically
-            // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
-            // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
-            // that the state of this library is consistent with visual state of the canvas, you
-            // have to clear it manually.
-            signaturePadTrainee.clear();
-            signaturePadInstructor.clear();
-        }
-
-        signatureField_product_instruction_trainee_signature
-        signatureField_product_instruction_instructor_signature
-
-        let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
-            signaturePadTrainee = new SignaturePad(trainee_pad_id, {
-                velocityFilterWeight: 0.5,
-                minWidth: 0.8,
-                maxWidth: 1.2,
-                backgroundColor: 'rgba(255, 255, 255)',
-                penColor: 'rgb(8, 139, 216)',
-                onEnd: function () {
-                    $('#product_instruction_trainee_signature').val(this.toDataURL());
+                    // This library does not listen for canvas changes, so after the canvas is automatically
+                    // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+                    // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+                    // that the state of this library is consistent with visual state of the canvas, you
+                    // have to clear it manually.
+                    signaturePadTrainee.clear();
+                    signaturePadInstructor.clear();
                 }
-            }),
-            instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
-            signaturePadInstructor = new SignaturePad(instructor_pad_id, {
-                velocityFilterWeight: 0.5,
-                minWidth: 0.8,
-                maxWidth: 1.2,
-                backgroundColor: 'rgba(255, 255, 255)',
-                penColor: 'rgb(8, 139, 216)',
-                onEnd: function () {
-                    $('#product_instruction_instructor_signature').val(this.toDataURL());
-                }
-            });
 
-        $('#addInstructedUser').on('shown.bs.modal', function () {
-            resizeCanvas();
-        });
+                signatureField_product_instruction_trainee_signature
+                signatureField_product_instruction_instructor_signature
 
-        // On mobile devices it might make more sense to listen to orientation change,
-        // rather than window resize events.
-        window.onresize = resizeCanvas;
+                let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
+                    signaturePadTrainee = new SignaturePad(trainee_pad_id, {
+                        velocityFilterWeight: 0.5,
+                        minWidth: 0.8,
+                        maxWidth: 1.2,
+                        backgroundColor: 'rgba(255, 255, 255)',
+                        penColor: 'rgb(8, 139, 216)',
+                        onEnd: function () {
+                            $('#product_instruction_trainee_signature').val(this.toDataURL());
+                        }
+                    }),
+                    instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
+                    signaturePadInstructor = new SignaturePad(instructor_pad_id, {
+                        velocityFilterWeight: 0.5,
+                        minWidth: 0.8,
+                        maxWidth: 1.2,
+                        backgroundColor: 'rgba(255, 255, 255)',
+                        penColor: 'rgb(8, 139, 216)',
+                        onEnd: function () {
+                            $('#product_instruction_instructor_signature').val(this.toDataURL());
+                        }
+                    });
 
-        $('.btnClearCanvas').click(function () {
-            ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
-        });
-        $('.btnSignZuruck').click(function () {
-            let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
-            if (data) {
-                data.pop(); // remove the last dot or line\n'+
-                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
-            }
-        });
+                $('#addInstructedUser').on('shown.bs.modal', function () {
+                    resizeCanvas();
+                });
 
-        $('#btnGetAnforderungsListe').click(() => {
-            $.ajax({
-                type: "get",
-                dataType: 'json',
-                url: "{{ route('getAnforderungByVerordnungListe') }}",
-                data: {id: $('#setAnforderung :selected').val()},
-                success: function (res) {
-                    $('#anforderung_id').html(res.html);
-                }
-            });
-        });
+                // On mobile devices it might make more sense to listen to orientation change,
+                // rather than window resize events.
+                window.onresize = resizeCanvas;
 
-        $('#proddoc_label').val(
-            $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
-        );
+                $('.btnClearCanvas').click(function () {
+                    ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
+                });
+                $('.btnSignZuruck').click(function () {
+                    let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
+                    if (data) {
+                        data.pop(); // remove the last dot or line\n'+
+                        ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
+                    }
+                });
 
-        $('#document_type_id').change(() => {
-            $('#proddoc_label').val(
-                $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
-            );
-        });
+                $('#btnGetAnforderungsListe').click(() => {
+                    $.ajax({
+                        type: "get",
+                        dataType: 'json',
+                        url: "{{ route('getAnforderungByVerordnungListe') }}",
+                        data: {id: $('#setAnforderung :selected').val()},
+                        success: function (res) {
+                            $('#anforderung_id').html(res.html);
+                        }
+                    });
+                });
+
+                $('#proddoc_label').val(
+                    $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
+                );
+
+                $('#document_type_id').change(() => {
+                    $('#proddoc_label').val(
+                        $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
+                    );
+                });
 
 
-        $('#anforderung_id').change(() => {
+                $('#anforderung_id').change(() => {
 
-            $.ajax({
-                type: "get",
-                dataType: 'json',
-                url: "{{ route('getAnforderungData') }}",
-                data: {id: $('#anforderung_id :selected').val()},
-                success: (res) => {
-                    const text = (res.an_description === null) ? '-' : res.an_description;
-                    $('#produktAnforderungText').html(`
+                    $.ajax({
+                        type: "get",
+                        dataType: 'json',
+                        url: "{{ route('getAnforderungData') }}",
+                        data: {id: $('#anforderung_id :selected').val()},
+                        success: (res) => {
+                            const text = (res.an_description === null) ? '-' : res.an_description;
+                            $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
                             <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
@@ -1543,76 +1501,76 @@
                             <dd class="col-sm-8">${text}</dd>
                         </dl>
             `);
-                }
-            });
-        });
-    </script>
-@endsection
+                        }
+                    });
+                });
+            </script>
+        @endsection
 
-@section('autocomplete')
+        @section('autocomplete')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-        $(".getFirma").autocomplete({
-            // position: { my : "right top", at: "right bottom" },
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{ route('getFirmenAjaxListe') }}",
-                    type: 'GET',
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
+            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+            <script>
+                $(".getFirma").autocomplete({
+                    // position: { my : "right top", at: "right bottom" },
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "{{ route('getFirmenAjaxListe') }}",
+                            type: 'GET',
+                            dataType: "json",
+                            data: {
+                                term: request.term
+                            },
+                            success: function (data) {
 
-                        let resp = $.map(data, function (obj) {
-                            return {
-                                label: `(${obj.fa_label}) ${obj.fa_name} `,
-                                id: obj.id
-                            };
+                                let resp = $.map(data, function (obj) {
+                                    return {
+                                        label: `(${obj.fa_label}) ${obj.fa_name} `,
+                                        id: obj.id
+                                    };
+                                });
+                                response(resp);
+                            }
                         });
-                        response(resp);
+                    },
+                    select: function (event, ui) {
+                        $('#btnMakeNewFirma').text('bearbeiten');
+                        $.ajax({
+                            type: "get",
+                            dataType: 'json',
+                            url: "{{ route('getFirmenDaten') }}",
+                            data: {id: ui.item.id},
+                            success: function (res) {
+
+                                $('#adress_id').val(res.adresse.id);
+                                $('#ad_labels').val(res.adresse.ad_label);
+                                $('#address_type_id').val(res.adresse.address_type_id);
+                                $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
+                                $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
+                                $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
+                                $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
+                                $('#land_id').val(res.adresse.land_id);
+
+                                $('#firma_id').val(res.firma.id);
+                                $('#firma_id_tabfp').val(res.firma.id);
+                                $('#fa_label').val(res.firma.fa_label);
+                                $('#fa_name').val(res.firma.fa_name);
+                                $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
+                                $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
+                                $('#fa_vat').val(res.firma.fa_vat);
+
+                                $('#anrede_id').val(res.contact.anrede_id);
+                                $('#con_label').val(res.contact.con_label);
+                                $('#con_vorname').val(res.contact.con_vorname);
+                                $('#con_name').val(res.contact.con_name);
+                                $('#con_telefon').val(res.contact.con_telefon);
+                                $('#con_email').val(res.contact.con_email);
+
+                            }
+                        });
+
                     }
                 });
-            },
-            select: function (event, ui) {
-                $('#btnMakeNewFirma').text('bearbeiten');
-                $.ajax({
-                    type: "get",
-                    dataType: 'json',
-                    url: "{{ route('getFirmenDaten') }}",
-                    data: {id: ui.item.id},
-                    success: function (res) {
-
-                        $('#adress_id').val(res.adresse.id);
-                        $('#ad_label').val(res.adresse.ad_label);
-                        $('#address_type_id').val(res.adresse.address_type_id);
-                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
-                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
-                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
-                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
-                        $('#land_id').val(res.adresse.land_id);
-
-                        $('#firma_id').val(res.firma.id);
-                        $('#firma_id_tabfp').val(res.firma.id);
-                        $('#fa_label').val(res.firma.fa_label);
-                        $('#fa_name').val(res.firma.fa_name);
-                        $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
-                        $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
-                        $('#fa_vat').val(res.firma.fa_vat);
-
-                        $('#anrede_id').val(res.contact.anrede_id);
-                        $('#con_label').val(res.contact.con_label);
-                        $('#con_vorname').val(res.contact.con_vorname);
-                        $('#con_name').val(res.contact.con_name);
-                        $('#con_telefon').val(res.contact.con_telefon);
-                        $('#con_email').val(res.contact.con_email);
-
-                    }
-                });
-
-            }
-        });
-    </script>
+            </script>
 
 @endsection
