@@ -11,9 +11,12 @@
            @endif
            class="form-control {{ $class??'' }} @error($name??$id) is-invalid @enderror"
            value="{{ $value ?? old( $name??$id )  }}"
+           @if(isset($max))
+           max="{{ $max }}"
+           @endif
            @if(isset($required))
            required
-        @endif
+            @endif
     />
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Adresse;
 use App\Contact;
 use App\Firma;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class FirmaController extends Controller
@@ -48,20 +51,54 @@ class FirmaController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
      * @return Application|Factory|Response|View
      */
     public function store(Request $request)
     {
-        $firma = Firma::create($this->validateNewFirma());
-        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_label . '</strong> wurde angelegt!');
-        return view('admin.organisation.firma.show', ['firma' => $firma]);
+        if ($request->adresse_id === 'new') $request->adresse_id = (new Adresse)->addNew($request);
+
+        $firma_id = (new Firma)->addCompany($request);
+
+        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde angelegt!', ['label' => $request->fa_label]));
+        return view('admin.organisation.firma.show', ['firma' => Firma::find($firma_id)]);
     }
 
+    /**
+     * @return array
+     */
+    public function validateFirma()
+    : array
+    {
+        return request()->validate([
+            'fa_label'       => [
+                'bail',
+                'max:20',
+                'required',
+                Rule::unique('firmas')->ignore(\request('id'))
+            ],
+            'fa_name'        => [
+                'bail',
+                'string',
+                'max:100'
+            ],
+            'fa_description' => '',
+            'fa_kreditor_nr' => [
+                'bail',
+                'max:100',
+                Rule::unique('firmas')->ignore(\request('id'))
+            ],
+            'fa_debitor_nr'  => 'max:100',
+            'fa_vat'         => 'max:30',
+            'adresse_id'      => '',
+        ]);
+    }
 
     /**
      * Display the specified resource.
      *
      * @param  Firma $firma
+     *
      * @return Application
      */
     public function show(Firma $firma)
@@ -70,73 +107,36 @@ class FirmaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Firma $firma
-     * @return Response
-     */
-    public function edit(Firma $firma)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request $request
      * @param  Firma   $firma
+     *
      * @return RedirectResponse
      */
     public function update(Request $request, Firma $firma)
     {
         $firma->update($this->validateFirma());
-        $request->session()->flash('status', 'Die Firma <strong>' . $firma->fa_label . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde aktualisiert!', ['label' => $firma->fa_label]));
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Firma $firma
-     * @return Response
+     * @param  Firma   $firma
+     * @param  Request $request
+     *
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws Exception
      */
-    public function destroy(Firma $firma)
+    public function destroy(Firma $firma, Request $request)
     {
-        //
+        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde gelöscht!', ['label' => $firma->fa_label]));
+        $firma->delete();
+        return redirect(route('firma.index'));
     }
 
-
-    /**
-     * @return array
-     */
-    public function validateNewFirma(): array
-    {
-        return request()->validate([
-            'fa_label' => 'bail|unique:firmas,fa_label|max:20|required',
-            'fa_name' => 'bail|string|max:100',
-            'fa_description' => '',
-            'fa_kreditor_nr' => 'bail|unique:firmas,fa_kreditor_nr|max:100',
-            'fa_debitor_nr' => 'max:100',
-            'fa_vat' => 'max:30',
-            'adress_id' => '',
-        ]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateFirma(): array
-    {
-        return request()->validate([
-            'fa_label' => 'bail|max:20|required',
-            'fa_name' => 'bail|string|max:100',
-            'fa_description' => '',
-            'fa_kreditor_nr' => 'bail|max:100',
-            'fa_debitor_nr' => 'max:100',
-            'fa_vat' => 'max:30',
-            'adresse_id' => '',
-        ]);
-    }
     /*
  *
  *
@@ -148,28 +148,7 @@ class FirmaController extends Controller
 
     public function getFirmenAjaxListe(Request $request)
     {
-        return   DB::table('firmas')->select(
-            'fa_label',
-            'firmas.id',
-            'firmas.fa_name',
-            'ad_name_firma',
-            'ad_anschrift_ort',
-            'ad_anschrift_strasse',
-            'fa_kreditor_nr',
-            'fa_debitor_nr'
-        )
-            ->join('adresses', 'adresses.id', '=', 'firmas.adresse_id')
-            ->where('fa_label', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_name', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_description', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_kreditor_nr', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_debitor_nr', 'like', '%' . $request->term . '%')
-            ->orWhere('fa_vat', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_name_firma', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_ort', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_plz', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_strasse', 'like', '%' . $request->term . '%')
-            ->get();
+        return DB::table('firmas')->select('fa_label', 'firmas.id', 'firmas.fa_name', 'ad_name_firma', 'ad_anschrift_ort', 'ad_anschrift_strasse', 'fa_kreditor_nr', 'fa_debitor_nr')->join('adresses', 'adresses.id', '=', 'firmas.adresse_id')->where('fa_label', 'like', '%' . $request->term . '%')->orWhere('fa_name', 'like', '%' . $request->term . '%')->orWhere('fa_description', 'like', '%' . $request->term . '%')->orWhere('fa_kreditor_nr', 'like', '%' . $request->term . '%')->orWhere('fa_debitor_nr', 'like', '%' . $request->term . '%')->orWhere('fa_vat', 'like', '%' . $request->term . '%')->orWhere('ad_name_firma', 'like', '%' . $request->term . '%')->orWhere('ad_anschrift_ort', 'like', '%' . $request->term . '%')->orWhere('ad_anschrift_plz', 'like', '%' . $request->term . '%')->orWhere('ad_anschrift_strasse', 'like', '%' . $request->term . '%')->get();
     }
 
     public function getFirmaData(Request $request)
@@ -190,9 +169,35 @@ class FirmaController extends Controller
         $contact = Contact::where('firma_id', $request->id)->first();
 
         return [
-            'firma' => $firma,
+            'firma'   => $firma,
             'adresse' => $adresses,
             'contact' => $contact
         ];
+    }
+
+    /**
+     *  Checks if a company exists with such a label
+     *
+     * @param  Request $request
+     *
+     * @return bool
+     */
+    public function checkCompanyLabel(Request $request)
+    : bool
+    {
+        return json_encode(Firma::where('fa_label',$request->label)->count() > 0);
+    }
+
+    /**
+     *  Checks if a company exists with such a label
+     *
+     * @param  Request $request
+     *
+     * @return bool
+     */
+    public function checkCompanyKreditor(Request $request)
+    : bool
+    {
+        return json_encode(Firma::where('fa_kreditor_nr',$request->kreditor)->count() > 0);
     }
 }

@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Firmen &triangleright; Organnisation @ bitpack GmbH
+{{__('Firmen')}} &triangleright; {{__('Organnisation')}} @ bitpack GmbH
 @endsection
 
 @section('mainSection')
-    Organisation
+{{__('Organisation')}}
 @endsection
 
 @section('menu')
@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Firma anlegen</h1>
+                <h1>{{__('Firma anlegen')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -42,11 +42,15 @@
                             <x-selectfield id="adresse_id" label="Adresse">
                                 @foreach(App\Adresse::all() as $adresse)
                                     <option value="{{ $adresse->id }}">
-                                        {{ $adresse->ad_name }}
+                                        {{ $adresse->postalAddress() }}
                                     </option>
                                 @endforeach
+                                    <option value="new">{{ __('neu anlegen') }}</option>
                             </x-selectfield>
                         </div>
+                    </div>
+                    <div id="createNewAddress" class="d-none">
+                        <x-frm_AddAdresse />
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -62,11 +66,62 @@
                         </div>
                     </div>
 
-                    <x-btnMain>Firma speichern <span class="fas fa-download"></span></x-btnMain>
+                    <x-btnMain>{{ __('Firma speichern ')}}<span class="fas fa-download ml-2"></span></x-btnMain>
 
                 </form>
             </div>
         </div>
     </div>
+
+@endsection
+
+@section('scripts')
+
+    <script>
+        $('#adresse_id').change(function () {
+            const node = $('#createNewAddress');
+           if ($('#adresse_id :selected').val() === 'new'){
+               node.removeClass('d-none').addClass('d-block');
+           } else {
+               node.removeClass('d-block').addClass('d-none');
+           }
+        });
+
+        $(document).on('blur','#fa_kreditor_nr',function () {
+            const kreditorNoNode = $('#fa_kreditor_nr');
+
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('firma.checkCompanyKreditor') }}",
+                data: {kreditor: kreditorNoNode.val()},
+                success: function (res) {
+                    if (kreditorNoNode.val() ==='') {
+                        kreditorNoNode.removeClass('is-valid').removeClass('is-invalid')
+                    } else {
+                        (res === true) ? kreditorNoNode.removeClass('is-valid').addClass('in-valid') : kreditorNoNode.removeClass('is-invalid').addClass('is-valid');
+                    }
+
+                }
+            });
+        });
+        $(document).on('blur','#fa_label',function () {
+            const labelNode =  $('#fa_label');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('firma.checkCompanyLabel') }}",
+                data: {label:labelNode.val()},
+                success: function(res) {
+                    if (labelNode.val() ==='') {
+                        labelNode.removeClass('is-valid').removeClass('is-invalid');
+                    } else {
+                        (res === true) ? labelNode.removeClass('is-valid').addClass('in-valid') : labelNode.removeClass('is-invalid').addClass('is-valid');
+                    }
+
+                }
+            });
+        });
+    </script>
 
 @endsection

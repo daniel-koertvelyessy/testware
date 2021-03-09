@@ -44,6 +44,7 @@ class Firma extends Model
 
     public function addCompany(Request $request)
     {
+
         $request->validate([
             'fa_label' => 'required|max:20',
             'fa_name' => 'max:100',
@@ -51,8 +52,10 @@ class Firma extends Model
             'fa_kreditor_nr' => '',
             'fa_debitor_nr' => '',
             'fa_vat' => 'max:30',
-            'adresse_id' => 'integer',
+            'adresse_id' => '',
         ]);
+
+
 
         $this->fa_label = $request->fa_label;
         $this->fa_name = $request->fa_name;

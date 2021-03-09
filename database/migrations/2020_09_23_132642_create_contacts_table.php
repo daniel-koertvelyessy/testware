@@ -17,11 +17,16 @@ class CreateContactsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+            $table->unique([
+                'firma_id',
+                'con_vorname',
+                'con_name'
+            ]);
             $table->string('con_label', 20)->nullable()->index();
             $table->string('con_name', 100)->index();
             $table->string('con_name_2', 100)->nullable();
             $table->string('con_vorname', 100)->nullable();
-            $table->date('con_position')->nullable();
+            $table->text('con_position')->nullable();
             $table->string('con_email', 100)->nullable();
             $table->string('con_telefon', 100)->nullable();
             $table->string('con_mobil', 100)->nullable();

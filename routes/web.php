@@ -124,6 +124,7 @@ Route::resources([
     'location'               => 'LocationsController',
     'building'               => 'BuildingsController',
     'room'                   => 'RoomController',
+    'contact'                => 'ContactController',
     'profile'                => 'ProfileController',
     'produkt'                => 'ProduktController',
     'produktDoku'            => 'ProduktDocController',
@@ -212,6 +213,7 @@ Route::get('organisationMain', function () {
         'firmas'   => App\Firma::take(5)->latest()->get(),
         'adresses' => App\Adresse::take(5)->latest()->get(),
         'profiles' => App\Profile::take(5)->latest()->get(),
+        'contacts' => App\Contact::take(5)->latest()->get(),
     ]);
 })->name('organisationMain')->middleware('auth');
 
@@ -282,6 +284,9 @@ Route::get('verordnung.main', function () {
 Route::get('getKategorieProducts', function () {
     return view('admin.produkt.kategorie.index');
 })->name('getKategorieProducts')->middleware('auth');
+
+Route::get('firma.checkCompanyLabel', 'FirmaController@checkCompanyLabel')->name('firma.checkCompanyLabel')->middleware('auth');
+Route::get('firma.checkCompanyKreditor', 'FirmaController@checkCompanyKreditor')->name('firma.checkCompanyKreditor')->middleware('auth');
 
 Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
 

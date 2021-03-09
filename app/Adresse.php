@@ -169,6 +169,15 @@ class Adresse extends Model
                  $this->ad_anschrift_ort ;
     }
 
+    public function fullAddress()
+    {
+        return  $this->ad_label  .': '.
+            $this->ad_anschrift_strasse . ' '.
+            $this->ad_anschrift_hausnummer. ' /  '  .
+            $this->ad_anschrift_plz . ' '.
+            $this->ad_anschrift_ort ;
+    }
+
     public function addNew(Request $request)
     {
         $this->ad_label = $request->ad_label;

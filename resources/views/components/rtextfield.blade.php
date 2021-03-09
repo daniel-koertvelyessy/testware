@@ -6,6 +6,9 @@
            class="form-control @error($name??$id) is-invalid @enderror"
            value="{{ $value ?? old( $name??$id )  }}"
            required
+       @if(isset($max))
+           max="{{ $max }}"
+       @endif
     >
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>

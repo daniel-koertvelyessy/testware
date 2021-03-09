@@ -53,12 +53,14 @@
     <div class="dropdown-divider"></div>
 
     <a href="#sideNavProdukt"
-       class="lead  "
+       class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
        aria-expanded="true"
        aria-controls="sideNavProdukt"
-    >{{__('Produkte')}}</a>
+    >
+        <span class="">{{__('Produkte')}}</span> <span class="fas fa-ellipsis-v"></span>
+    </a>
     <div class="collapse show"
          id="sideNavProdukt"
     >
@@ -80,13 +82,14 @@
     </div>
 
     <a href="#sideNavVorschrfiten"
-       class="lead  "
+       class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="true"
+       aria-expanded="false"
        aria-controls="sideNavVorschrfiten"
-    >{{__('Vorschriften')}}</a>
-    <div class="collapse show"
+    ><span class="">{{__('Vorschriften')}}</span> <span class="fas fa-ellipsis-v"></span>
+    </a>
+    <div class="collapse"
          id="sideNavVorschrfiten"
     >
         <ul class="nav flex-column">
@@ -116,13 +119,16 @@
             </li>
         </ul>
     </div>
+
     <a href="#sideNavOrganisation"
-       class="lead  "
+       class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
        aria-expanded="false"
        aria-controls="sideNavOrganisation"
-    >{{__('Organisation')}}</a>
+    >
+        <span class="">{{__('Organisation')}}</span> <span class="fas fa-ellipsis-v"></span>
+    </a>
     <div class="collapse"
          id="sideNavOrganisation"
     >
@@ -138,7 +144,11 @@
                    href="{{ route('firma.index') }}"
                 >{{__('Firmen')}}</a>
             </li>
-
+            <li class="nav-item border-left ml-3">
+                <a class="nav-link"
+                   href="{{ route('contact.index') }}"
+                >{{__('Kontakte')}}</a>
+            </li>
             <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('adresse.index') }}"
@@ -151,13 +161,16 @@
             </li>
         </ul>
     </div>
+
     <a href="#sideNavLocations"
-       class="lead  "
+       class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
        aria-expanded="false"
        aria-controls="sideNavLocations"
-    >{{__('memStandorte')}}</a>
+    >
+        <span class="">{{__('memStandorte')}}</span> <span class="fas fa-ellipsis-v"></span>
+    </a>
     <div class="collapse"
          id="sideNavLocations"
     >
@@ -188,16 +201,24 @@
                    href="{{ route('room.index') }}"
                 >{{__('Räume')}}</a>
             </li>
+            <li class="nav-item border-left ml-3">
+                <a class="nav-link"
+                   href="{{ route('stellplatz.index') }}"
+                >{{__('Stellplätze')}}</a>
+            </li>
+
         </ul>
     </div>
 
     <a href="#sideNavSystem"
-       class="lead  "
+       class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
        aria-expanded="false"
        aria-controls="sideNavSystem"
-    >{{__('System')}}</a>
+    >
+        <span class="">{{__('System')}}</span> <span class="fas fa-ellipsis-v"></span>
+    </a>
     <div class="collapse"
          id="sideNavSystem"
     >

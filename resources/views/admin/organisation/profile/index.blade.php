@@ -47,7 +47,11 @@
                     @endforelse
                     </tbody>
                 </table>
-                @if(count($profileList)>0) {{ $profileList->links() }}  @endif
+                @if($profileList->count() >0)
+                    <div class="d-flex justify-content-center">
+                        {!! $profileList->withQueryString()->onEachSide(2)->links() !!}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
