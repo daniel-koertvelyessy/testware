@@ -110,15 +110,15 @@ class ControlEquipmentController extends Controller
     {
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
 
-
         $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
+
         $setNewControlEquipment = new ControlEquipment();
         $setNewControlEquipment->qe_control_date_last = $request->control_event_date;
         $setNewControlEquipment->qe_control_date_due = $request->control_event_next_due_date;
         $setNewControlEquipment->qe_control_date_warn = $ControlEquipment->qe_control_date_warn;
         $setNewControlEquipment->anforderung_id = $ControlEquipment->anforderung_id;
         $setNewControlEquipment->equipment_id = $ControlEquipment->equipment_id;
-//        $setNewControlEquipment->save();
+        $setNewControlEquipment->save();
 
         $controlevent = ControlEvent::create($this->validateControlEvent());
         $itempassed = 0;
@@ -153,14 +153,12 @@ class ControlEquipmentController extends Controller
         }
 
         if ($request->hasFile('controlDokumentFile')) {
-
-
             $eventHasDoku = true;
             $filename = (new ControlDoc)->addDocument($request);
             $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!',['name'=>$filename]));
         }
 
-        dd();
+//        dd();
 
         /**
          * Add Data to History
