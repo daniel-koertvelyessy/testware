@@ -172,7 +172,16 @@
                        aria-controls="notes"
                        aria-selected="false"
                     >{{__('Notizen')}}</a>
-
+                    @if(Auth::user()->role_id===1)
+                        <a class="nav-link"
+                           id="userRoles-tab"
+                           data-toggle="tab"
+                           href="#userRoles"
+                           role="tab"
+                           aria-controls="userRoles"
+                           aria-selected="false"
+                        >{{__('Benutzerrolen')}}</a>
+                    @endif
                 </nav>
                 <div class="tab-content"
                      id="myTabContent"
@@ -1314,7 +1323,105 @@
                             </div>
                         </div>
                     </div>
+                    @can('isSysAdmin')
+                        <div class="tab-pane fade p-2"
+                             id="userRoles"
+                             role="tabpanel"
+                             aria-labelledby="userRoles-tab"
+                        >
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="h5">{{ __('Benutzerrollen') }}</h3>
+                                    <form method="post"
+                                          action="{{ route('role.store') }}#userRoles"
+                                          id="frmSetUserRole"
+                                    >
+                                        @csrf
 
+                                        <input type="hidden"
+                                               name="_method"
+                                               id="_method"
+                                        >
+
+                                        <input type="hidden"
+                                               name="id"
+                                               id="role_id"
+                                        >
+                                        <x-textfield id="role_label" name="label"
+                                                     label="{{ __('Label') }}"
+                                                     required
+                                        />
+                                        <x-textfield id="role_name" name="name"
+                                                     label="{{ __('Name') }}"
+                                        />
+                                        <div class="custom-control custom-switch mb-4">
+                                            <input type="checkbox"
+                                                   class="custom-control-input"
+                                                   id="is_super_user"
+                                                   name="is_super_user"
+                                                   value="1"
+                                            >
+                                            <label class="custom-control-label"
+                                                   for="is_super_user"
+                                            >{{ __('Super-Benutzer') }}</label>
+                                        </div>
+                                        <x-btnSave>{{ __('Benutzerrolle speichern') }}</x-btnSave>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="h5">{{ __('Übersicht') }}</h3>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>{{ __('Label') }}</th>
+                                            <th>{{ __('Name') }}</th>
+                                            <th>{{ __('SuperUser') }}</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @forelse(\App\Role::all() as $role)
+                                            <tr>
+                                                <td>
+                                                    {{ $role->label }}
+                                                </td>
+                                                <td>
+                                                    {{ $role->name }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {!!  $role->is_super_user === true ? '<i class="fas fa-check"></i>' : '' !!}
+                                                </td>
+                                                <td>
+                                                    <form method="post"
+                                                          action="{{ route('role.destroy',$role) }}#userRoles"
+                                                    >
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-primary btnLoadRoleData"
+                                                                data-id="{{ $role->id }}"
+                                                        >
+                                                            <span class="fas fa-edit"></span>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-danger">
+                                                            <span class="far fa-trash-alt"></span>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">
+                                                    <x-notifyer>{{ __('Keine Benutzerrollen gefunden!') }}</x-notifyer>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -1331,6 +1438,25 @@
     @enderror
 
     <script>
+
+        $('.btnLoadRoleData').click(function () {
+           const id = $(this).data('id');
+           $.ajax({
+               type: "get",
+               dataType: 'json',
+               url: `/role/${id}`,
+               success: function (res) {
+                   $('#role_id').val(id);
+                   $('#role_label').val(res.label);
+                   $('#role_name').val(res.name);
+                   $('#_method').val('put');
+                   $('#frmSetUserRole').attr('action',`/role/${id}#userRoles`);
+                   const setSuperUser = $('#is_super_user');
+                   res.is_super_user=== true ?  setSuperUser.attr('checked',true): setSuperUser.attr('checked',false);
+
+              }
+           });
+        });
 
         $('#btnFormStoreNoteTyeData').click(function () {
             let idNode = $('#note_type_id');

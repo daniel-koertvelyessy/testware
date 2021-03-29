@@ -10,6 +10,14 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
+    public function isSysAdmin()
+    : Response
+    {
+        return \Auth::user()->role_id === 1
+            ? Response::allow()
+            : Response::deny('nope, you cannot do that!');
+    }
+
     /**
      * Determine whether the user can view any models.
      *

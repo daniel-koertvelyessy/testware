@@ -135,6 +135,7 @@ Route::resources([
     'equipment'              => 'EquipmentController',
     'control'                => 'ControlEquipmentController',
     'user'                   => 'UserController',
+    'role'                   => 'RoleController',
     'stellplatz'             => 'StellplatzController',
     'anforderung'            => 'AnforderungsController',
     'verordnung'             => 'VerordnungController',

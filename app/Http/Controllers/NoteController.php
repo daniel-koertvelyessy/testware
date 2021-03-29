@@ -147,8 +147,6 @@ class NoteController extends Controller
     {
 
         $note = Note::findOrFail($request->id);
-
-
         return response(Storage::disk('local')->get($note->file_path), 200)
             ->header('Cache-Control', 'public')
             ->header('Content-Description', 'File Transfer')
