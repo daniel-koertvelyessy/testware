@@ -96,11 +96,6 @@ class AdminController extends Controller
         return view('admin.systems');
     }
 
-    public function indexUser()
-    {
-        return view('admin.user.index');
-    }
-
     public function indexReports()
     {
         return view('admin.reports.index');
@@ -149,7 +144,7 @@ class AdminController extends Controller
         // $data->update($request->systemTheme);
 
         $request->session()->flash('status', 'Das Theme wurde aktualisiert!');
-        return redirect()->back();
+        return back();
     }
 
     public function addObjektAnforderung(Request $request)
@@ -245,7 +240,7 @@ class AdminController extends Controller
         BuildingTypes::create($this->validateNewBuldingTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde angelegt!');
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -349,7 +344,7 @@ class AdminController extends Controller
         $rt = RoomType::create($this->validateRoomTypes());
 
         $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('rt_label') . '</strong> wurde angelegt!');
-        return redirect()->back();
+        return back();
     }
 
 
@@ -599,7 +594,7 @@ class AdminController extends Controller
         ProduktKategorie::create($this->validateProduktKategorie());
 
         $request->session()->flash('status', __('Die Produktkategorie') . ' <strong>' . request('pk_label') . '</strong> ' . __('wurde angelegt!'));
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -820,7 +815,7 @@ class AdminController extends Controller
         DocumentType::create($this->validateNewDokumentType());
         $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde angelegt!');
 
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -850,7 +845,7 @@ class AdminController extends Controller
         $data = DocumentType::findOrFail($request->id);
         $data->update($this->validateDokumentType());
         $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde aktualisiert!');
-        return redirect()->back();
+        return back();
     }
 
     /**

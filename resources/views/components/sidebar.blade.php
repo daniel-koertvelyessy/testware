@@ -181,11 +181,13 @@
                 > {{__('Start')}}
                 </a>
             </li>
+            @can('isAdmin', Auth::user())
             <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('lexplorer') }}"
                 >{{__('Explorer')}}</a>
             </li>
+            @endcan
             <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('location.index') }}"

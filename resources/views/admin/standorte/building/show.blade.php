@@ -196,6 +196,10 @@
             </div>
         </div>
     </div>
+
+    <x-modal-add-note objectname="{{ $building->b_label }}"
+                      uid="{{ $building->storage_id }}"
+    />
 @endsection
 
 @section('content')
@@ -239,6 +243,18 @@
                            aria-controls="gebRooms"
                            aria-selected="false"
                         >{{  ('Räume')}} <span class="badge {{ ($building->rooms->count()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $building->rooms->count() }}</span></a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locNotes-tab"
+                           data-toggle="tab"
+                           href="#notes"
+                           role="tab"
+                           aria-controls="locNotes"
+                           aria-selected="false"
+                        >{{__('Notizen')}}</a>
                     </li>
                 </ul>
                 <div class="tab-content"
@@ -481,7 +497,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <x-tab-note uid="{{ $building->storage_id }}"/>
                 </div>
             </div>
         </div>

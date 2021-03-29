@@ -111,7 +111,7 @@ Route::get('docs/api/endpoints/events', function () {
 })->name('docs.api.events');
 
 
-Route::get('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
+Route::put('user.resetPassword', 'UserController@resetPassword')->name('user.resetPassword');
 Route::post('event.restore', 'EquipmentEventController@restore')->name('event.restore');
 Route::delete('event.close', 'EquipmentEventController@close')->name('event.close');
 
@@ -164,6 +164,10 @@ require __DIR__ . '/produkttools/produkttools.php';
 
 Route::post('user.setMsgRead', 'UserController@setMsgRead')->name('user.setMsgRead');
 Route::delete('user.deleteMsg', 'UserController@deleteMsg')->name('user.deleteMsg');
+Route::delete('user.revokerole', 'UserController@revokerole')->name('user.revokerole');
+Route::post('user.grantrole', 'UserController@grantrole')->name('user.grantrole');
+Route::delete('user.revokeSysAdmin/{user}', 'UserController@revokeSysAdmin')->name('user.revokeSysAdmin');
+Route::post('user.grantSysAdmin/{user}', 'UserController@grantSysAdmin')->name('user.grantSysAdmin');
 
 Route::get('getFirmenAjaxListe', 'FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
 Route::get('getFirmenDaten', 'FirmaController@getFirmenDaten')->name('getFirmenDaten');
@@ -219,9 +223,10 @@ Route::get('organisationMain', function () {
 
 Route::get('storageMain', function () {
     return view('admin.standorte.index', [
-        'locations' => App\Location::take(5)->latest()->get(),
-        'buildings' => App\Building::take(5)->latest()->get(),
-        'rooms'     => App\Room::take(5)->latest()->get(),
+        'locations'    => App\Location::take(5)->latest()->get(),
+        'buildings'    => App\Building::take(5)->latest()->get(),
+        'rooms'        => App\Room::take(5)->latest()->get(),
+        'compartments' => App\Stellplatz::take(5)->latest()->get(),
     ]);
 })->name('storageMain')->middleware('auth');
 
@@ -290,11 +295,13 @@ Route::get('firma.checkCompanyKreditor', 'FirmaController@checkCompanyKreditor')
 
 Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
 
-Route::get('report/template', 'ReportController@template')->name('report.template');
+Route::get('/report/template', 'ReportController@template')->name('report.template');
 
 Route::get('/installer', 'InstallerController@index')->name('installer.company');
 Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
 Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
+
+Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
 /*
 

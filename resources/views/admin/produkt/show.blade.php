@@ -48,11 +48,13 @@
                data-toggle="modal"
                data-target="#modalAddParameter"
             ><i class="fas fa-table"></i> {{__('Datenfeld hinzufügen')}}</a>
-            <a class="dropdown-item"
-               href="#"
-               data-toggle="modal"
-               data-target="#modalDeleteProdukt"
-            ><i class="far fa-trash-alt"></i> {{__('Produkt löschen')}}</a>
+            @can('isAdmin', Auth::user())
+                <a class="dropdown-item"
+                   href="#"
+                   data-toggle="modal"
+                   data-target="#modalDeleteProdukt"
+                ><i class="far fa-trash-alt"></i> {{__('Produkt löschen')}}</a>
+            @endcan
         </ul>
     </li>
 @endsection
@@ -731,8 +733,8 @@
                                                                  max="150"
                                                     />
                                                 @empty
-                                                    <x-notifyer>{{__('Es wurden bislang keine Datenfelder angelegt')}}
-                                                        .
+                                                    <x-notifyer>
+                                                        {{__('Es wurden bislang keine Datenfelder angelegt')}}
                                                     </x-notifyer>
                                                 @endforelse
                                             @endforelse
@@ -909,266 +911,283 @@
                          aria-labelledby="prodCompany-tab"
                     >
                         <div class="row">
-                            <div class="col-md-8">
-                                <form action="{{ route('addProduktFirma') }}#prodCompany"
-                                      id="frmAddProduktFirma"
-                                      method="post"
-                                      autocomplete="off"
-                                >
-                                    @csrf
-                                    <input type="hidden"
-                                           name="produkt_id"
-                                           id="produkt_id_toFirma"
-                                           value="{{ $produkt->id }}"
+                            @can('isAdmin', Auth::user())
+                                <div class="col-md-8">
+                                    <form action="{{ route('addProduktFirma') }}#prodCompany"
+                                          id="frmAddProduktFirma"
+                                          method="post"
+                                          autocomplete="off"
                                     >
-                                    <div class="input-group mb-2">
-                                        <input type="text"
-                                               name="searchFirma"
-                                               id="searchFirma"
-                                               aria-label="Suche nach Firma"
-                                               autocomplete="off"
-                                               class="form-control getFirma"
-                                               placeholder="Firma suchen ..."
+                                        @csrf
+                                        <input type="hidden"
+                                               name="produkt_id"
+                                               id="produkt_id_toFirma"
+                                               value="{{ $produkt->id }}"
                                         >
-                                        <button class="btn btn-outline-primary ml-1"
-                                                type="button"
-                                                data-toggle="collapse"
-                                                data-target="#sectionFirmaDetails"
-                                                aria-expanded="false"
-                                                aria-controls="sectionFirmaDetails"
+                                        <div class="input-group mb-2">
+                                            <input type="text"
+                                                   name="searchFirma"
+                                                   id="searchFirma"
+                                                   aria-label="Suche nach Firma"
+                                                   autocomplete="off"
+                                                   class="form-control getFirma"
+                                                   placeholder="Firma suchen ..."
+                                            >
+                                            <button class="btn btn-outline-primary ml-1"
+                                                    type="button"
+                                                    data-toggle="collapse"
+                                                    data-target="#sectionFirmaDetails"
+                                                    aria-expanded="false"
+                                                    aria-controls="sectionFirmaDetails"
+                                            >
+                                                <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
+                                                    class="fas fa-angle-down"
+                                                ></span>
+                                            </button>
+                                            <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
+                                                    class="fas fa-angle-right"
+                                                ></span></button>
+                                        </div>
+                                        <div class="collapse @if (count($errors)>0) show @endif "
+                                             id="sectionFirmaDetails"
                                         >
-                                            <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                class="fas fa-angle-down"
-                                            ></span>
-                                        </button>
-                                        <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                class="fas fa-angle-right"
-                                            ></span></button>
-                                    </div>
-                                    <div class="collapse @if (count($errors)>0) show @endif "
-                                         id="sectionFirmaDetails"
-                                    >
-                                        <div class="card p-3 mb-2">
-                                            <div class="d-flex justify-content-md-between">
-                                                <h3 class="h5">{{__('Firmen-Daten')}}</h3>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="ckAddNewFirma"
-                                                           name="ckAddNewFirma"
-                                                           value="1"
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="ckAddNewFirma"
-                                                    >{{__('Firma neu anlegen')}}</label>
+                                            <div class="card p-3 mb-2">
+                                                <div class="d-flex justify-content-md-between">
+                                                    <h3 class="h5">{{__('Firmen-Daten')}}</h3>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="ckAddNewFirma"
+                                                               name="ckAddNewFirma"
+                                                               value="1"
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="ckAddNewFirma"
+                                                        >{{__('Firma neu anlegen')}}</label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <input type="hidden"
-                                                   name="adress_id"
-                                                   id="adress_id"
-                                            >
-                                            <input type="hidden"
-                                                   name="id"
-                                                   id="firma_id"
-                                            >
-                                            <input type="hidden"
-                                                   name="firma_id"
-                                                   id="firma_id_tabfp"
-                                            >
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <x-textfield id="fa_label"
-                                                                 label="{{__('Kürzel')}}"
-                                                                 class="getFirma checkLabel"
-                                                                 required
-                                                                 max="20"
-                                                    />
-                                                    <span class="small text-primary getFirmaRes"></span>
+                                                <input type="hidden"
+                                                       name="adress_id"
+                                                       id="adress_id"
+                                                >
+                                                <input type="hidden"
+                                                       name="id"
+                                                       id="firma_id"
+                                                >
+                                                <input type="hidden"
+                                                       name="firma_id"
+                                                       id="firma_id_tabfp"
+                                                >
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <x-textfield id="fa_label"
+                                                                     label="{{__('Kürzel')}}"
+                                                                     class="getFirma checkLabel"
+                                                                     required
+                                                                     max="20"
+                                                        />
+                                                        <span class="small text-primary getFirmaRes"></span>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <x-textfield id="fa_name"
+                                                                     label="{{__('Name')}}"
+                                                                     class="getFirma"
+                                                                     max="100"
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-8">
-                                                    <x-textfield id="fa_name"
-                                                                 label="{{__('Name')}}"
-                                                                 class="getFirma"
-                                                                 max="100"
-                                                    />
+                                                <div class="row mt-3">
+                                                    <div class="col-md-4">
+                                                        <x-textfield id="fa_kreditor_nr"
+                                                                     label="{{__('Kreditor Nr.')}}"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <x-textfield id="fa_debitor_nr"
+                                                                     label="{{__('Debitor Nr.')}}"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <x-textfield id="fa_vat"
+                                                                     label="{{__('USt-Id.')}}"
+                                                                     max="30"
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-4">
-                                                    <x-textfield id="fa_kreditor_nr"
-                                                                 label="{{__('Kreditor Nr.')}}"
-                                                    />
+                                            </div> <!-- Firma Details -->
+                                            <div class="card p-3 mb-2">
+                                                <div class="d-flex justify-content-md-between">
+                                                    <h3 class="h5">{{__('Adress-Daten')}}</h3>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="ckAddNewAddress"
+                                                               name="ckAddNewAddress"
+                                                               value="1"
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="ckAddNewAddress"
+                                                        >{{__('Adresse neu anlegen')}}</label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <x-textfield id="fa_debitor_nr"
-                                                                 label="{{__('Debitor Nr.')}}"
-                                                    />
+                                                <div class="row mt-3">
+                                                    <div class="col-md-5">
+                                                        <x-textfield id="ad_labels"
+                                                                     name="ad_label"
+                                                                     label="{{ __('Kürzel') }}"
+                                                                     class="getAddress checkLabel"
+                                                                     max="20"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <x-selectfield id="address_type_id"
+                                                                       label="{{__('Adresse Typ')}}"
+                                                        >
+                                                            @foreach (App\AddressType::all() as $addressType)
+                                                                <option
+                                                                    value="{{ $addressType->id }}"
+                                                                >{{ $addressType->adt_name }}</option>
+                                                            @endforeach
+                                                        </x-selectfield>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <x-textfield id="fa_vat"
-                                                                 label="{{__('USt-Id.')}}"
-                                                                 max="30"
-                                                    />
+                                                <div class="row mt-2">
+                                                    <div class="col-md-9">
+                                                        <x-textfield id="ad_anschrift_strasse"
+                                                                     label="{{__('Straße')}}"
+                                                                     required
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <x-textfield id="ad_anschrift_hausnummer"
+                                                                     label="{{__('Nr')}}"
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div> <!-- Firma Details -->
-                                        <div class="card p-3 mb-2">
-                                            <div class="d-flex justify-content-md-between">
-                                                <h3 class="h5">{{__('Adress-Daten')}}</h3>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="ckAddNewAddress"
-                                                           name="ckAddNewAddress"
-                                                           value="1"
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="ckAddNewAddress"
-                                                    >{{__('Adresse neu anlegen')}}</label>
+                                                <div class="row mt-2">
+                                                    <div class="col-md-2">
+                                                        <x-selectfield id="land_id"
+                                                                       label="{{__('Land')}}"
+                                                        >
+                                                            @foreach (App\Land::all() as $country)
+                                                                <option
+                                                                    value="{{ $country->id }}"
+                                                                >{{ $country->land_iso }}</option>
+                                                            @endforeach
+                                                        </x-selectfield>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <x-textfield id="ad_anschrift_ort"
+                                                                     label="{{__('Ort')}}"
+                                                                     required
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <x-textfield id="ad_anschrift_plz"
+                                                                     label="{{__('PLZ')}}"
+                                                                     required
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-5">
-                                                    <x-textfield id="ad_labels"
-                                                                 name="ad_label"
-                                                                 label="{{ __('Kürzel') }}"
-                                                                 class="getAddress checkLabel"
-                                                                 max="20"
-                                                    />
+                                            </div><!-- Adress Details -->
+                                            <div class="card p-3 mb-2">
+                                                <div class="d-flex justify-content-md-between">
+                                                    <h3 class="h5">{{__('Kontakt - Daten')}}</h3>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="ckAddNewContact"
+                                                               name="ckAddNewContact"
+                                                               value="1"
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="ckAddNewContact"
+                                                        >{{__('Kontakt neu anlegen')}}
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-7">
-                                                    <x-selectfield id="address_type_id"
-                                                                   label="{{__('Adresse Typ')}}"
-                                                    >
-                                                        @foreach (App\AddressType::all() as $addressType)
-                                                            <option
-                                                                value="{{ $addressType->id }}"
-                                                            >{{ $addressType->adt_name }}</option>
-                                                        @endforeach
-                                                    </x-selectfield>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-md-9">
-                                                    <x-textfield id="ad_anschrift_strasse"
-                                                                 label="{{__('Straße')}}"
-                                                                 required
-                                                    />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <x-textfield id="ad_anschrift_hausnummer"
-                                                                 label="{{__('Nr')}}"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="col-md-2">
-                                                    <x-selectfield id="land_id"
-                                                                   label="{{__('Land')}}"
-                                                    >
-                                                        @foreach (App\Land::all() as $country)
-                                                            <option
-                                                                value="{{ $country->id }}"
-                                                            >{{ $country->land_iso }}</option>
-                                                        @endforeach
-                                                    </x-selectfield>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <x-textfield id="ad_anschrift_ort"
-                                                                 label="{{__('Ort')}}"
-                                                                 required
-                                                    />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <x-textfield id="ad_anschrift_plz"
-                                                                 label="{{__('PLZ')}}"
-                                                                 required
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div><!-- Adress Details -->
-                                        <div class="card p-3 mb-2">
-                                            <div class="d-flex justify-content-md-between">
-                                                <h3 class="h5">{{__('Kontakt - Daten')}}</h3>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="ckAddNewContact"
-                                                           name="ckAddNewContact"
-                                                           value="1"
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="ckAddNewContact"
-                                                    >{{__('Kontakt neu anlegen')}}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-5">
-                                                    <x-textfield id="con_label"
-                                                                 label="{{ __('Kürzel') }}"
-                                                                 max="20"
-                                                    />
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <x-selectfield id="anrede_id"
-                                                                   label="{{ __('Anrede') }}"
-                                                    >
-                                                        @foreach (App\Anrede::all() as $anrede)
-                                                            <option
-                                                                value="{{ $anrede->id }}"
-                                                            >{{ $anrede->an_kurz }}</option>
-                                                        @endforeach
-                                                    </x-selectfield>
+                                                <div class="row mt-3">
+                                                    <div class="col-md-5">
+                                                        <x-textfield id="con_label"
+                                                                     label="{{ __('Kürzel') }}"
+                                                                     max="20"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <x-selectfield id="anrede_id"
+                                                                       label="{{ __('Anrede') }}"
+                                                        >
+                                                            @foreach (App\Anrede::all() as $anrede)
+                                                                <option
+                                                                    value="{{ $anrede->id }}"
+                                                                >{{ $anrede->an_kurz }}</option>
+                                                            @endforeach
+                                                        </x-selectfield>
 
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-md-5">
+                                                        <x-textfield id="con_vorname"
+                                                                     label="{{ __('Vorname') }}"
+                                                                     max="100"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <x-textfield id="con_name"
+                                                                     label="{{ __('Nachname') }}"
+                                                                     max="100"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-md-5">
+                                                        <x-textfield id="con_telefon"
+                                                                     label="{{ __('Telefon') }}"
+                                                                     max="100"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <x-emailfield id="con_email"
+                                                                      name="con_email"
+                                                                      label="E-Mail Adresse"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                        <div class="row mt-3">
-                                            <div class="col-md-5">
-                                                <x-textfield id="con_vorname"
-                                                             label="{{ __('Vorname') }}"
-                                                             max="100"
-                                                />
-                                            </div>
-                                            <div class="col-md-7">
-                                                <x-textfield id="con_name"
-                                                             label="{{ __('Nachname') }}"
-                                                             max="100"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-5">
-                                                <x-textfield id="con_telefon"
-                                                             label="{{ __('Telefon') }}"
-                                                             max="100"
-                                                />
-                                            </div>
-                                            <div class="col-md-7">
-                                                <x-emailfield id="con_email"
-                                                              name="con_email"
-                                                              label="E-Mail Adresse"
-                                                />
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div><!-- Kontakt Details -->
-                                </form>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="list-group">
-                                    @foreach ($produkt->firma as $firma)
-                                        <x-addresslabel
-                                            firma="{!!  $firma->fa_name !!}"
-                                            address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                            firmaid="{{ $firma->id }}"
-                                            produktid="{{ $produkt->id }}"
-                                        ></x-addresslabel>
-                                    @endforeach
-
+                                        </div><!-- Kontakt Details -->
+                                    </form>
                                 </div>
-                            </div>
+                                <div class="col-md-4">
+                                    <div class="list-group">
+                                        @foreach ($produkt->firma as $firma)
+                                            <x-addresslabel
+                                                firma="{!!  $firma->fa_name !!}"
+                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                firmaid="{{ $firma->id }}"
+                                                produktid="{{ $produkt->id }}"
+                                            ></x-addresslabel>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+
+                            @else
+                                <div class="col">
+                                    <div class="list-group">
+                                        @foreach ($produkt->firma as $firma)
+                                            <x-addresslabel
+                                                firma="{!!  $firma->fa_name !!}"
+                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                firmaid="{{ $firma->id }}"
+                                                produktid="{{ $produkt->id }}"
+                                            ></x-addresslabel>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                            @endcan
                         </div>
                     </div>
                     <div class="tab-pane fade"
@@ -1201,13 +1220,15 @@
                                                     <option value="{{ $ad->id }}">{{ $ad->doctyp_label }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="button"
-                                                    class="btn-outline-primary btn ml-2"
-                                                    data-toggle="modal"
-                                                    data-target="#modalAddDokumentType"
-                                            >
-                                                <span class="fas fa-plus"></span> {{__('neuen Typ anlegen')}}
-                                            </button>
+                                            @can('isAdmin', Auth::user())
+                                                <button type="button"
+                                                        class="btn-outline-primary btn ml-2"
+                                                        data-toggle="modal"
+                                                        data-target="#modalAddDokumentType"
+                                                >
+                                                    <span class="fas fa-plus"></span> {{__('neuen Typ anlegen')}}
+                                                </button>
+                                            @endcan
                                         </div>
                                     </div>
                                     <x-textfield id="proddoc_label"
@@ -1357,129 +1378,129 @@
             </div>
         </div>
     </div>
-        @endsection
+@endsection
 
-        @section('scripts')
-            @error('doctyp_label')
-            <script>
-                $('#modalAddDokumentType').modal('show');
-            </script>
-            @enderror
+@section('scripts')
+    @error('doctyp_label')
+    <script>
+        $('#modalAddDokumentType').modal('show');
+    </script>
+    @enderror
 
-            @error('pp_label')
-            <script>
-                $('#modalAddParameter').modal('show');
-            </script>
-            @enderror
+    @error('pp_label')
+    <script>
+        $('#modalAddParameter').modal('show');
+    </script>
+    @enderror
 
-            <script src="{{ asset('js/signatures.js') }}"></script>
-            <script>
-                $('.tooltips').tooltip();
+    <script src="{{ asset('js/signatures.js') }}"></script>
+    <script>
+        $('.tooltips').tooltip();
 
 
-                function resizeCanvas() {
-                    // When zoomed out to less than 100%, for some very strange reason,
-                    // some browsers report devicePixelRatio as less than 1
-                    // and only part of the canvas is cleared then.
-                    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
 
-                    // This part causes the canvas to be cleared
-                    trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
-                    trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
-                    trainee_pad_id.getContext("2d").scale(ratio, ratio);
+            // This part causes the canvas to be cleared
+            trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
+            trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
+            trainee_pad_id.getContext("2d").scale(ratio, ratio);
 
-                    // This part causes the canvas to be cleared
-                    instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
-                    instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
-                    instructor_pad_id.getContext("2d").scale(ratio, ratio);
+            // This part causes the canvas to be cleared
+            instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
+            instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
+            instructor_pad_id.getContext("2d").scale(ratio, ratio);
 
-                    // This library does not listen for canvas changes, so after the canvas is automatically
-                    // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
-                    // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
-                    // that the state of this library is consistent with visual state of the canvas, you
-                    // have to clear it manually.
-                    signaturePadTrainee.clear();
-                    signaturePadInstructor.clear();
+            // This library does not listen for canvas changes, so after the canvas is automatically
+            // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+            // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+            // that the state of this library is consistent with visual state of the canvas, you
+            // have to clear it manually.
+            signaturePadTrainee.clear();
+            signaturePadInstructor.clear();
+        }
+
+        signatureField_product_instruction_trainee_signature
+        signatureField_product_instruction_instructor_signature
+
+        let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
+            signaturePadTrainee = new SignaturePad(trainee_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#product_instruction_trainee_signature').val(this.toDataURL());
                 }
+            }),
+            instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
+            signaturePadInstructor = new SignaturePad(instructor_pad_id, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)',
+                onEnd: function () {
+                    $('#product_instruction_instructor_signature').val(this.toDataURL());
+                }
+            });
 
-                signatureField_product_instruction_trainee_signature
-                signatureField_product_instruction_instructor_signature
+        $('#addInstructedUser').on('shown.bs.modal', function () {
+            resizeCanvas();
+        });
 
-                let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
-                    signaturePadTrainee = new SignaturePad(trainee_pad_id, {
-                        velocityFilterWeight: 0.5,
-                        minWidth: 0.8,
-                        maxWidth: 1.2,
-                        backgroundColor: 'rgba(255, 255, 255)',
-                        penColor: 'rgb(8, 139, 216)',
-                        onEnd: function () {
-                            $('#product_instruction_trainee_signature').val(this.toDataURL());
-                        }
-                    }),
-                    instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
-                    signaturePadInstructor = new SignaturePad(instructor_pad_id, {
-                        velocityFilterWeight: 0.5,
-                        minWidth: 0.8,
-                        maxWidth: 1.2,
-                        backgroundColor: 'rgba(255, 255, 255)',
-                        penColor: 'rgb(8, 139, 216)',
-                        onEnd: function () {
-                            $('#product_instruction_instructor_signature').val(this.toDataURL());
-                        }
-                    });
+        // On mobile devices it might make more sense to listen to orientation change,
+        // rather than window resize events.
+        window.onresize = resizeCanvas;
 
-                $('#addInstructedUser').on('shown.bs.modal', function () {
-                    resizeCanvas();
-                });
+        $('.btnClearCanvas').click(function () {
+            ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
+        });
+        $('.btnSignZuruck').click(function () {
+            let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
+            if (data) {
+                data.pop(); // remove the last dot or line\n'+
+                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
+            }
+        });
 
-                // On mobile devices it might make more sense to listen to orientation change,
-                // rather than window resize events.
-                window.onresize = resizeCanvas;
+        $('#btnGetAnforderungsListe').click(() => {
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getAnforderungByVerordnungListe') }}",
+                data: {id: $('#setAnforderung :selected').val()},
+                success: function (res) {
+                    $('#anforderung_id').html(res.html);
+                }
+            });
+        });
 
-                $('.btnClearCanvas').click(function () {
-                    ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
-                });
-                $('.btnSignZuruck').click(function () {
-                    let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
-                    if (data) {
-                        data.pop(); // remove the last dot or line\n'+
-                        ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
-                    }
-                });
+        $('#proddoc_label').val(
+            $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
+        );
 
-                $('#btnGetAnforderungsListe').click(() => {
-                    $.ajax({
-                        type: "get",
-                        dataType: 'json',
-                        url: "{{ route('getAnforderungByVerordnungListe') }}",
-                        data: {id: $('#setAnforderung :selected').val()},
-                        success: function (res) {
-                            $('#anforderung_id').html(res.html);
-                        }
-                    });
-                });
-
-                $('#proddoc_label').val(
-                    $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
-                );
-
-                $('#document_type_id').change(() => {
-                    $('#proddoc_label').val(
-                        $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
-                    );
-                });
+        $('#document_type_id').change(() => {
+            $('#proddoc_label').val(
+                $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
+            );
+        });
 
 
-                $('#anforderung_id').change(() => {
+        $('#anforderung_id').change(() => {
 
-                    $.ajax({
-                        type: "get",
-                        dataType: 'json',
-                        url: "{{ route('getAnforderungData') }}",
-                        data: {id: $('#anforderung_id :selected').val()},
-                        success: (res) => {
-                            const text = (res.an_description === null) ? '-' : res.an_description;
-                            $('#produktAnforderungText').html(`
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getAnforderungData') }}",
+                data: {id: $('#anforderung_id :selected').val()},
+                success: (res) => {
+                    const text = (res.an_description === null) ? '-' : res.an_description;
+                    $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">Verordnung</dt>
                             <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
@@ -1501,76 +1522,76 @@
                             <dd class="col-sm-8">${text}</dd>
                         </dl>
             `);
-                        }
-                    });
-                });
-            </script>
-        @endsection
+                }
+            });
+        });
+    </script>
+@endsection
 
-        @section('autocomplete')
+@section('autocomplete')
 
-            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-            <script>
-                $(".getFirma").autocomplete({
-                    // position: { my : "right top", at: "right bottom" },
-                    source: function (request, response) {
-                        $.ajax({
-                            url: "{{ route('getFirmenAjaxListe') }}",
-                            type: 'GET',
-                            dataType: "json",
-                            data: {
-                                term: request.term
-                            },
-                            success: function (data) {
-
-                                let resp = $.map(data, function (obj) {
-                                    return {
-                                        label: `(${obj.fa_label}) ${obj.fa_name} `,
-                                        id: obj.id
-                                    };
-                                });
-                                response(resp);
-                            }
-                        });
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(".getFirma").autocomplete({
+            // position: { my : "right top", at: "right bottom" },
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('getFirmenAjaxListe') }}",
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        term: request.term
                     },
-                    select: function (event, ui) {
-                        $('#btnMakeNewFirma').text('bearbeiten');
-                        $.ajax({
-                            type: "get",
-                            dataType: 'json',
-                            url: "{{ route('getFirmenDaten') }}",
-                            data: {id: ui.item.id},
-                            success: function (res) {
+                    success: function (data) {
 
-                                $('#adress_id').val(res.adresse.id);
-                                $('#ad_labels').val(res.adresse.ad_label);
-                                $('#address_type_id').val(res.adresse.address_type_id);
-                                $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
-                                $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
-                                $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
-                                $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
-                                $('#land_id').val(res.adresse.land_id);
-
-                                $('#firma_id').val(res.firma.id);
-                                $('#firma_id_tabfp').val(res.firma.id);
-                                $('#fa_label').val(res.firma.fa_label);
-                                $('#fa_name').val(res.firma.fa_name);
-                                $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
-                                $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
-                                $('#fa_vat').val(res.firma.fa_vat);
-
-                                $('#anrede_id').val(res.contact.anrede_id);
-                                $('#con_label').val(res.contact.con_label);
-                                $('#con_vorname').val(res.contact.con_vorname);
-                                $('#con_name').val(res.contact.con_name);
-                                $('#con_telefon').val(res.contact.con_telefon);
-                                $('#con_email').val(res.contact.con_email);
-
-                            }
+                        let resp = $.map(data, function (obj) {
+                            return {
+                                label: `(${obj.fa_label}) ${obj.fa_name} `,
+                                id: obj.id
+                            };
                         });
+                        response(resp);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $('#btnMakeNewFirma').text('bearbeiten');
+                $.ajax({
+                    type: "get",
+                    dataType: 'json',
+                    url: "{{ route('getFirmenDaten') }}",
+                    data: {id: ui.item.id},
+                    success: function (res) {
+
+                        $('#adress_id').val(res.adresse.id);
+                        $('#ad_labels').val(res.adresse.ad_label);
+                        $('#address_type_id').val(res.adresse.address_type_id);
+                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
+                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
+                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
+                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
+                        $('#land_id').val(res.adresse.land_id);
+
+                        $('#firma_id').val(res.firma.id);
+                        $('#firma_id_tabfp').val(res.firma.id);
+                        $('#fa_label').val(res.firma.fa_label);
+                        $('#fa_name').val(res.firma.fa_name);
+                        $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
+                        $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
+                        $('#fa_vat').val(res.firma.fa_vat);
+
+                        $('#anrede_id').val(res.contact.anrede_id);
+                        $('#con_label').val(res.contact.con_label);
+                        $('#con_vorname').val(res.contact.con_vorname);
+                        $('#con_name').val(res.contact.con_name);
+                        $('#con_telefon').val(res.contact.con_telefon);
+                        $('#con_email').val(res.contact.con_email);
 
                     }
                 });
-            </script>
+
+            }
+        });
+    </script>
 
 @endsection

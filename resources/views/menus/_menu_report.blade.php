@@ -5,5 +5,5 @@
     </a>
 </li>
 <li class="nav-item {{ Request::routeIs('report.template')  ? ' active ' : '' }}">
-    <a class="nav-link" href="{{ route('report.tempate') }}"><i class="fas fa-file-code"></i> {{__('Vorlagen')}} </a>
+    <a class="nav-link" href="{{ route('report.template') }}"><i class="fas fa-file-code"></i> {{__('Vorlagen')}} </a>
 </li>

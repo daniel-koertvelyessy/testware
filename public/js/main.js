@@ -238,7 +238,7 @@ $(document).on('blur','.price',function () {
 });*/
 
 $(document).on("blur", ".checkLabel", function () {
-    if ($(this).val()!=='') {
+    if ($(this).val() !== '') {
         let label = $(this)
             .val()
             // .toLowerCase()
@@ -348,7 +348,7 @@ $(document).on('blur', 'input.is-invalid', function () {
 const sidebarNode = $('#sidebar');
 const switchFixSidebarNode = $('#switchFixSidebar');
 
-if (localStorage.getItem('testWare_sideBar_Fixed') === '1'){
+if (localStorage.getItem('testWare_sideBar_Fixed') === '1') {
     switchFixSidebarNode.prop('checked', true);
     (localStorage.getItem('testWare_sideBar_Aktive') === '1') ? sidebarNode.addClass('active') : sidebarNode.removeClass('active');
 } else {
@@ -356,7 +356,7 @@ if (localStorage.getItem('testWare_sideBar_Fixed') === '1'){
 }
 
 $('#sidebarCollapse').on('click', function () {
-    if (localStorage.getItem('testWare_sideBar_Fixed') === '1'){
+    if (localStorage.getItem('testWare_sideBar_Fixed') === '1') {
         if (sidebarNode.hasClass('active')) {
             localStorage.setItem('testWare_sideBar_Aktive', '0');
             sidebarNode.removeClass('active')
@@ -373,4 +373,74 @@ switchFixSidebarNode.click(function () {
     (switchFixSidebarNode.prop('checked')) ?
         localStorage.setItem('testWare_sideBar_Fixed', '1') :
         localStorage.setItem('testWare_sideBar_Fixed', '0')
+});
+
+$('.getNoteData').click(function () {
+    const id = $(this).data('note_id');
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/note/" + id,
+        success: function (res) {
+            $('#note_details').html(res.html);
+        }
+    });
+});
+$('#btnAddNoteTag').click(function () {
+    $.ajax({
+        type: "post",
+        dataType: 'json',
+        url: "/tag",
+        data: {
+            label: $('#setNewTagLabel').val(),
+            name: $('#setNewTagName').val(),
+            color: $('#setNewTagColor').val(),
+            _token: $('input[name="_token"]').val(),
+        },
+        success: function (res) {
+            $('#taglist').append(res.html);
+
+        }
+    });
+});
+
+$('#btnAddTag').click(function () {
+    const setTag = $('#setTag :selected');
+    const color = setTag.data('color');
+    const tagid = setTag.val();
+    const label = setTag.data('label');
+    $('#taglist').append(`
+        <div class="alert alert-${color} alert-dismissible fade show" role="alert">
+          ${label}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input type="hidden" name="tag[]" id="note_tag_${tagid}" value="${tagid}">
+        </div>
+            `);
+});
+
+$(document).on('click','.editNote',function (){
+   const id=$(this).data('id');
+   $.ajax({
+       type: "get",
+       dataType: 'json',
+       url: "/note",
+       data: {id},
+       success: function (res) {
+           $('#model_note_id').val(id);
+           $('#frmStoreNoteData').attr('action','/note/'+id);
+           $('#modal_method').val('put');
+           $('#note_object_uid').val(res.data.uid);
+           $('#modal_addnote_user_id').val(res.data.user_id);
+           $('#note_type_id').val(res.data.note_type_id);
+           $('#label').val(res.data.label);
+           $('#description').val(res.data.description);
+           $('#file_name').val(res.data.file_name);
+           $('#modalAddNoteLabel').text(res.title);
+            $('#taglist').html(res.tags);
+           $('#modalAddNote').modal('show');
+
+      }
+   });
 });

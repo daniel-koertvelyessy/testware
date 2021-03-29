@@ -165,6 +165,11 @@
             </div>
         </div>
     </div>
+
+    <x-modal-add-note
+        objectname="{{ $room->r_label }}"
+        uid="{{ $room->storage_id }}"
+    />
 @endsection
 
 @section('content')
@@ -204,6 +209,18 @@
                            aria-controls="roomStellPlatze"
                            aria-selected="false"
                         >{{__('Stellplätze')}} <span class="badge {{ ($room->stellplatzs()->count()>0)? ' badge-info ' : '' }} ">{{ $room->stellplatzs()->count() }}</span></a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locNotes-tab"
+                           data-toggle="tab"
+                           href="#notes"
+                           role="tab"
+                           aria-controls="locNotes"
+                           aria-selected="false"
+                        >{{__('Notizen')}}</a>
                     </li>
                     {{--                    <li class="nav-item" role="presentation">
                                             <a class="nav-link" id="roomEquip-tab" data-toggle="tab" href="#roomEquip" role="tab" aria-controls="roomEquip" aria-selected="false">Geräte</a>
@@ -417,6 +434,7 @@
                             </div>
                         </div>
                     </div>--}}
+                    <x-tab-note uid="{{ $room->storage_id }}"/>
                 </div>
             </div>
         </div>

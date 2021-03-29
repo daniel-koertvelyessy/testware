@@ -318,6 +318,9 @@
             </div>
         </div>
     </div>
+
+    <x-modal-add-note objectname="{{ $location->l_label }}"
+                      uid="{{ $location->storage_id }}" />
 @endsection
 
 
@@ -354,19 +357,19 @@
                         >{{__('Stammdaten')}}
                         </a>
                     </li>
-{{--                    <li class="nav-item"
-                        role="presentation"
-                    >
-                        <a class="nav-link"
-                           id="Anforderungen-tab"
-                           data-toggle="tab"
-                           href="#Anforderungen"
-                           role="tab"
-                           aria-controls="Anforderungen"
-                           aria-selected="false"
-                        >{{__('Anforderungen')}}
-                        </a>
-                    </li>--}}
+                    {{--                    <li class="nav-item"
+                                            role="presentation"
+                                        >
+                                            <a class="nav-link"
+                                               id="Anforderungen-tab"
+                                               data-toggle="tab"
+                                               href="#Anforderungen"
+                                               role="tab"
+                                               aria-controls="Anforderungen"
+                                               aria-selected="false"
+                                            >{{__('Anforderungen')}}
+                                            </a>
+                                        </li>--}}
                     <li class="nav-item"
                         role="presentation"
                     >
@@ -378,6 +381,18 @@
                            aria-controls="locGebauede"
                            aria-selected="false"
                         >{{__('Gebäude')}} <span class="badge badge-info">{{ $location->Building->count() }}</span></a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locNotes-tab"
+                           data-toggle="tab"
+                           href="#notes"
+                           role="tab"
+                           aria-controls="locNotes"
+                           aria-selected="false"
+                        >{{__('Notizen')}}</a>
                     </li>
                 </ul>
                 <div class="tab-content pt-3"
@@ -434,32 +449,36 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <h2 class="h5">{{__('Anschrift')}}</h2>
-                                    <div class="input-group mb-2">
-                                        <label for="adresse_id"
-                                               class="sr-only"
-                                        >{{__('Die Adresse des Standortes festlegen')}}
-                                        </label>
-                                        <select class="custom-select"
-                                                aria-label="{{__('Adresse des Standortes festlegen')}}"
-                                                name="adresse_id"
-                                                id="adresse_id"
-                                        >
-                                            @foreach (App\Adresse::all() as $addItem)
-                                                <option value="{{$addItem->id}}"
-                                                        @if ($addItem->id == $location->adresse_id)
-                                                        selected
-                                                    @endif>
-                                                    {{ $addItem->ad_anschrift_ort }}, {{ $addItem->ad_anschrift_strasse }} - {{ $addItem->ad_anschrift_hausnummer }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <button type="button"
-                                                class="btn btn-outline-primary ml-2"
-                                                data-toggle="modal"
-                                                data-target="#modalAddAdresse"
-                                        >neu
-                                        </button>
-                                    </div>
+                                    @can('isAdmin', Auth()->user())
+                                        <div class="input-group mb-2">
+                                            <label for="adresse_id"
+                                                   class="sr-only"
+                                            >{{__('Die Adresse des Standortes festlegen')}}
+                                            </label>
+                                            <select class="custom-select"
+                                                    aria-label="{{__('Adresse des Standortes festlegen')}}"
+                                                    name="adresse_id"
+                                                    id="adresse_id"
+                                            >
+                                                @foreach (App\Adresse::all() as $addItem)
+                                                    <option value="{{$addItem->id}}"
+                                                            @if ($addItem->id == $location->adresse_id)
+                                                            selected
+                                                        @endif>
+                                                        {{ $addItem->ad_anschrift_ort }}, {{ $addItem->ad_anschrift_strasse }} - {{ $addItem->ad_anschrift_hausnummer }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ml-2"
+                                                    data-toggle="modal"
+                                                    data-target="#modalAddAdresse"
+                                            >{{ __('neu') }}
+                                            </button>
+
+                                        </div>
+                                    @endcan
                                     <div class="border-top pt-2">
                                         <div class="d-flex justify-content-md-between">
                                             <h5 class="card-title">{{__('Kürzel')}}: {{ $location->Adresse->ad_label }}</h5>
@@ -492,30 +511,33 @@
                                            class="sr-only"
                                     >{{__('Leitung des Standortes hat')}}
                                     </label>
-                                    <div class="input-group mb-2">
-                                        <select class="custom-select"
-                                                aria-label="Default select example"
-                                                name="profile_id"
-                                                id="profile_id"
-                                        >
-                                            @forelse (App\Profile::all() as $profileItem)
-                                                <option value="{{$profileItem->id}}"
-                                                        @if ($profileItem->id == $location->profile_id)
-                                                        selected
-                                                    @endif>{{ $profileItem->ma_vorname }} {{ $profileItem->ma_name }}
-                                                </option>
-                                            @empty
-                                                <option value="void">Kein Mitabreiter angelegt</option>
-                                            @endforelse
-                                        </select>
-                                        <button type="button"
-                                                class="btn btn-outline-primary ml-2"
-                                                data-toggle="modal"
-                                                data-target="#modalAddProfile"
-                                        >
-                                            {{__('neu')}}
-                                        </button>
-                                    </div>
+                                    @can('isAdmin', Auth()->user())
+                                        <div class="input-group mb-2">
+                                            <select class="custom-select"
+                                                    aria-label="Default select example"
+                                                    name="profile_id"
+                                                    id="profile_id"
+                                            >
+                                                @forelse (App\Profile::all() as $profileItem)
+                                                    <option value="{{$profileItem->id}}"
+                                                            @if ($profileItem->id == $location->profile_id)
+                                                            selected
+                                                        @endif>{{ $profileItem->ma_vorname }} {{ $profileItem->ma_name }}
+                                                    </option>
+                                                @empty
+                                                    <option value="void">Kein Mitabreiter angelegt</option>
+                                                @endforelse
+                                            </select>
+
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ml-2"
+                                                    data-toggle="modal"
+                                                    data-target="#modalAddProfile"
+                                            >
+                                                {{__('neu')}}
+                                            </button>
+
+                                        </div>@endcan
                                     <div class="border-top pt-2">
                                         <div class="d-flex justify-content-md-between">
                                             <h5 class="card-title">{{__('Kontaktdaten')}}</h5>
@@ -544,7 +566,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-primary"> {{__('Stammdaten speichern')}} <i class="fas fa-download ml-3"></i></button>
+                            @can('isAdmin', Auth()->user())
+                                <button class="btn btn-primary"> {{__('Stammdaten speichern')}} <i class="fas fa-download ml-3"></i></button>
+                            @endcan
                         </form>
                     </div>
                     {{--
@@ -619,157 +643,158 @@
                     >
                         <div class="row">
                             <div class="col">
-                                <form class="row gy-2 gx-3  my-3"
-                                      action="{{ route('building.store') }}#locGebauede"
-                                      method="post"
-                                      name="frmAddNewBuilding"
-                                      id="frmAddNewBuilding"
-                                >
-                                    @csrf
-                                    <input type="hidden"
-                                           name="storage_id"
-                                           id="storage_id"
-                                           value="{{ Str::uuid() }}"
+                                @can('isAdmin', Auth()->user())
+                                    <form class="row gy-2 gx-3  my-3"
+                                          action="{{ route('building.store') }}#locGebauede"
+                                          method="post"
+                                          name="frmAddNewBuilding"
+                                          id="frmAddNewBuilding"
                                     >
-                                    <input type="hidden"
-                                           name="location_id"
-                                           id="location_id"
-                                           value="{{ $location->id }}"
-                                    >
-                                    <input type="hidden"
-                                           name="frmOrigin"
-                                           id="frmOriginAddNewBuilding"
-                                           value="location"
-                                    >
-                                    <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="b_label"
-                                        ></label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="b_label"
-                                               name="b_label"
-                                               required
-                                               placeholder="Gebäudename kurz"
-                                               value="{{ old('b_label')??'' }}"
+                                        @csrf
+                                        <input type="hidden"
+                                               name="storage_id"
+                                               id="storage_id"
+                                               value="{{ Str::uuid() }}"
                                         >
-                                        @if ($errors->has('b_label'))
-                                            <span class="text-danger small">{{ $errors->first('b_label') }}</span>
-                                        @else
-                                            <span class="small text-primary">{{__('erforderlich, maximal 20 Zeichen')}}</span>
-                                        @endif
-                                    </div>
-                                    <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="b_name_ort"
-                                        >{{__('Gebäudeort')}}
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="b_name_ort"
-                                               name="b_name_ort"
-                                               placeholder="Gebäudeort"
-                                               value="{{ old('b_name_ort')??'' }}"
+                                        <input type="hidden"
+                                               name="location_id"
+                                               id="location_id"
+                                               value="{{ $location->id }}"
                                         >
-                                        @if ($errors->has('b_name_ort'))
-                                            <span class="text-danger small">{{ $errors->first('b_name_ort') }}</span>
-                                        @else
-                                            <span class="small text-primary">{{__('maximal 100 Zeichen')}}</span>
-                                        @endif
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="input-group">
-                                            <label for="building_type_id"
-                                                   class="sr-only"
-                                            >{{__('Gebäudetyp angeben')}}
-                                            </label>
-                                            <select name="building_type_id"
-                                                    id="building_type_id"
-                                                    class="custom-select"
+                                        <input type="hidden"
+                                               name="frmOrigin"
+                                               id="frmOriginAddNewBuilding"
+                                               value="location"
+                                        >
+                                        <div class="col-auto">
+                                            <label class="sr-only"
+                                                   for="b_label"
+                                            ></label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="b_label"
+                                                   name="b_label"
+                                                   required
+                                                   placeholder="Gebäudename kurz"
+                                                   value="{{ old('b_label')??'' }}"
                                             >
-                                                @foreach (\App\BuildingTypes::all() as $roomType)
-                                                    <option value="{{ $roomType->id }}"
-                                                            title="{{ $roomType->btbeschreibung  }}"
-                                                    >{{ $roomType->btname  }}</option>
-                                                @endforeach
-                                            </select>
-                                            <button type="button"
-                                                    class="btn btn-outline-secondary"
-                                                    data-toggle="modal"
-                                                    data-target="#modalAddBuildingType"
-                                            ><i class="fas fa-plus"></i></button>
+                                            @if ($errors->has('b_label'))
+                                                <span class="text-danger small">{{ $errors->first('b_label') }}</span>
+                                            @else
+                                                <span class="small text-primary">{{__('erforderlich, maximal 20 Zeichen')}}</span>
+                                            @endif
                                         </div>
-                                        <span class="small text-primary">{{__('Gebäudetyp')}}</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="submit"
-                                                class="btn btn-primary"
-                                        >{{__('Neues Gebäude anlegen')}}
-                                        </button>
-                                    </div>
-                                </form>
-                                @if (count($buildings)>0)
-                                    <table class="table table-responsive-md table-striped"
-                                           id="tabBuildingListe"
-                                    >
-                                        <thead>
+                                        <div class="col-auto">
+                                            <label class="sr-only"
+                                                   for="b_name_ort"
+                                            >{{__('Gebäudeort')}}
+                                            </label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="b_name_ort"
+                                                   name="b_name_ort"
+                                                   placeholder="Gebäudeort"
+                                                   value="{{ old('b_name_ort')??'' }}"
+                                            >
+                                            @if ($errors->has('b_name_ort'))
+                                                <span class="text-danger small">{{ $errors->first('b_name_ort') }}</span>
+                                            @else
+                                                <span class="small text-primary">{{__('maximal 100 Zeichen')}}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="input-group">
+                                                <label for="building_type_id"
+                                                       class="sr-only"
+                                                >{{__('Gebäudetyp angeben')}}
+                                                </label>
+                                                <select name="building_type_id"
+                                                        id="building_type_id"
+                                                        class="custom-select"
+                                                >
+                                                    @foreach (\App\BuildingTypes::all() as $roomType)
+                                                        <option value="{{ $roomType->id }}"
+                                                                title="{{ $roomType->btbeschreibung  }}"
+                                                        >{{ $roomType->btname  }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button"
+                                                        class="btn btn-outline-secondary"
+                                                        data-toggle="modal"
+                                                        data-target="#modalAddBuildingType"
+                                                ><i class="fas fa-plus"></i></button>
+                                            </div>
+                                            <span class="small text-primary">{{__('Gebäudetyp')}}</span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit"
+                                                    class="btn btn-primary"
+                                            >{{__('Neues Gebäude anlegen')}}
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endcan
+
+                                <table class="table table-responsive-md table-striped"
+                                       id="tabBuildingListe"
+                                >
+                                    <thead>
+                                    <tr>
+                                        <th>@sortablelink('b_label', __('Nummer'))</th>
+                                        <th>@sortablelink('b_name_ort', __('Ort'))</th>
+                                        <th class="d-none d-md-table-cell">@sortablelink('BuildingType.btname', __('Typ'))</th>
+                                        <th class="d-none d-md-table-cell text-center">Räume</th>
+                                        <th class="d-none d-md-table-cell">WE</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ( $buildings as $building)
                                         <tr>
-                                            <th>@sortablelink('b_label', __('Nummer'))</th>
-                                            <th>@sortablelink('b_name_ort', __('Ort'))</th>
-                                            <th class="d-none d-md-table-cell">@sortablelink('BuildingType.btname', __('Typ'))</th>
-                                            <th class="d-none d-md-table-cell text-center">Räume</th>
-                                            <th class="d-none d-md-table-cell">WE</th>
-                                            <th></th>
+                                            <td>
+                                                {{$building->b_label}}
+                                            </td>
+                                            <td>
+                                                {{$building->b_name_ort}}
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                {{ $building->BuildingType->btname }}
+                                            </td>
+                                            <td class="d-none d-md-table-cell text-center">
+                                                {{ $building->rooms()->count() }}
+                                            </td>
+                                            <td class="d-none d-md-table-cell text-center">
+                                                @if ($building->b_we_has === 1)
+                                                    {{$building->b_we_name}}
+                                                @else
+                                                    <span class="fas fa-times"></span>
+                                                @endif
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <x-menu_context
+                                                    :object="$building"
+                                                    routeOpen="{{ route('building.show',$building) }}"
+                                                    routeCopy="{{ route('copyBuilding',$building) }}"
+                                                    routeDestory="{{ route('building.destroy',$building) }}"
+                                                    tabName="locGebauede"
+                                                    objectVal="{{$building->b_label}}"
+                                                    objectName="b_label"
+                                                />
+                                            </td>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ( $buildings as $building)
-                                            <tr>
-                                                <td>
-                                                    {{$building->b_label}}
-                                                </td>
-                                                <td>
-                                                    {{$building->b_name_ort}}
-                                                </td>
-                                                <td class="d-none d-md-table-cell">
-                                                    {{ $building->BuildingType->btname }}
-                                                </td>
-                                                <td class="d-none d-md-table-cell text-center">
-                                                    {{ $building->rooms()->count() }}
-                                                </td>
-                                                <td class="d-none d-md-table-cell text-center">
-                                                    @if ($building->b_we_has === 1)
-                                                        {{$building->b_we_name}}
-                                                    @else
-                                                        <span class="fas fa-times"></span>
-                                                    @endif
-                                                </td>
-                                                <td style="text-align: right;">
-                                                    <x-menu_context
-                                                        :object="$building"
-                                                        routeOpen="{{ route('building.show',$building) }}"
-                                                        routeCopy="{{ route('copyBuilding',$building) }}"
-                                                        routeDestory="{{ route('building.destroy',$building) }}"
-                                                        tabName="locGebauede"
-                                                        objectVal="{{$building->b_label}}"
-                                                        objectName="b_label"
-                                                    />
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                    @if($buildings->count()>0)
-                                        <div class="d-flex justify-content-center">
-                                            {!! $buildings->withQueryString()->fragment('locGebauede')->onEachSide(2)->links() !!}
-                                        </div>
-                                    @endif
-                                @else
-                                    <x-notifyer>{{ __('Keine Gebäude gefunden') }}</x-notifyer>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                @if($buildings->count()>0)
+                                    <div class="d-flex justify-content-center">
+                                        {!! $buildings->withQueryString()->fragment('locGebauede')->onEachSide(2)->links() !!}
+                                    </div>
                                 @endif
+
                             </div>
                         </div>
                     </div>
+                    <x-tab-note uid="{{ $location->storage_id }}"/>
                 </div>
             </div>
         </div>
@@ -778,33 +803,33 @@
 
 
 @section('actionMenuItems')
-{{--
+    {{--
 
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle"
-           href="#"
-           id="navTargetAppAktionItems"
-           role="button"
-           data-toggle="dropdown"
-           aria-expanded="false"
-        ><i class="fas fa-bars"></i> Aktionen
-        </a>
-        <ul class="dropdown-menu"
-            aria-labelledby="navTargetAppAktionItems"
-        >
-            <a class="dropdown-item"
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
                href="#"
-            ><i class="fas fa-print"></i> Drucke Übersicht
+               id="navTargetAppAktionItems"
+               role="button"
+               data-toggle="dropdown"
+               aria-expanded="false"
+            ><i class="fas fa-bars"></i> Aktionen
             </a>
-            <a class="dropdown-item"
-               href="#"
-            ><i class="far fa-file-pdf"></i> Standortbericht
-            </a>
+            <ul class="dropdown-menu"
+                aria-labelledby="navTargetAppAktionItems"
+            >
+                <a class="dropdown-item"
+                   href="#"
+                ><i class="fas fa-print"></i> Drucke Übersicht
+                </a>
+                <a class="dropdown-item"
+                   href="#"
+                ><i class="far fa-file-pdf"></i> Standortbericht
+                </a>
 
-        </ul>
-    </li>
+            </ul>
+        </li>
 
---}}
+    --}}
 @endsection()
 
 @section('scripts')

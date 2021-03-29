@@ -8,6 +8,7 @@ use App\Location;
 use App\Room;
 use App\Storage;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -32,16 +33,16 @@ class BuildingsController extends Controller
     public function index()
     {
         $this->checkLocation();
-        if (Building::all()->count() > 0) {
-            return view('admin.standorte.building.index', ['buildingList' => Building::with('BuildingType')->sortable()->paginate(10)]);
-        } else {
+        if (Building::all()->count() === 0 && \Auth::user()->isAdmin()) {
             return redirect()->route('building.create');
+        } else {
+            return view('admin.standorte.building.index', ['buildingList' => Building::with('BuildingType')->sortable()->paginate(10)]);
         }
     }
 
     protected function checkLocation()
     {
-        if (Location::all()->count() === 0) {
+        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!'));
             return redirect()->route('location.create')->with('status');
         }
@@ -62,39 +63,14 @@ class BuildingsController extends Controller
      * @param  Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
-        if ((new Building)->addNew($request)) {
-            $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
-        } else {
-            $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
-        }
-        return redirect()->back();
-    }
-
-    /**
-     * @return array
-     */
-    public function validateBuilding()
-    : array
-    {
-        return request()->validate([
-            'b_label'          => [
-                'bail',
-                'min:2',
-                'max:20',
-                'required',
-                Rule::unique('buildings')->ignore(\request('id'))
-            ],
-            'b_name_ort'       => '',
-            'b_name'           => '',
-            'b_description'    => '',
-            'b_we_has'         => '',
-            'b_we_name'        => 'required_if:b_we_has,1',
-            'location_id'      => 'required',
-            'building_type_id' => '',
-        ]);
+        $this->authorize('isAdmin', Auth()->user());
+        (new Building)->addNew($request);
+        $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
+        return back();
     }
 
     public function getBuildingList($id)
@@ -124,6 +100,7 @@ class BuildingsController extends Controller
      */
     public function edit(building $building)
     {
+        $this->authorize('isAdmin', Auth()->user());
         return view('admin.standorte.building.edit', compact('building'));
     }
 
@@ -137,11 +114,36 @@ class BuildingsController extends Controller
      */
     public function update(Request $request, Building $building)
     {
+        $this->authorize('isAdmin', Auth()->user());
         (new Storage)->checkUpdate($request->storage_id, $request->b_label);
         $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $building->update($this->validateBuilding());
         $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde aktualisiert!', ['label' => $building->b_label]));
         return redirect($building->path());
+    }
+
+    /**
+     * @return array
+     */
+    public function validateBuilding()
+    : array
+    {
+        return request()->validate([
+            'b_label'          => [
+                'bail',
+                'min:2',
+                'max:20',
+                'required',
+                Rule::unique('buildings')->ignore(\request('id'))
+            ],
+            'b_name_ort'       => '',
+            'b_name'           => '',
+            'b_description'    => '',
+            'b_we_has'         => '',
+            'b_we_name'        => 'required_if:b_we_has,1',
+            'location_id'      => 'required',
+            'building_type_id' => '',
+        ]);
     }
 
     /**
@@ -155,6 +157,7 @@ class BuildingsController extends Controller
      */
     public function destroy(Request $request, Building $building)
     {
+        $this->authorize('isAdmin', Auth()->user());
         $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde gelöscht!', ['label' => $building->b_name]));
         $building->delete();
         return redirect()->back();

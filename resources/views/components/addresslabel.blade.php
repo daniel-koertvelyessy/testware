@@ -18,9 +18,16 @@
                id="produktid_{{ $firmaid }}"
                value="{{ $produktid }}"
         >
+        <a href="{{ route('firma.show',$firmaid) }}"
+           class="btn btn-sm btn-outline-secondary"
+        >
+            <span class="fas fa-chevron-right"></span>
+        </a>
+        @can('isAdmin',Auth::user())
     <button class="btn btn-sm btn-outline-secondary btnRemoveFirmaFromProdukt">
         <span class="far fa-trash-alt"></span>
     </button>
+            @endcan
     </form>
 </section>
 

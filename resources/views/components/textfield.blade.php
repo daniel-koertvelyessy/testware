@@ -3,7 +3,7 @@
            @if(isset($hideLabel)) class="sr-only" @endif>
         {{ $label }}
     </label>
-    <input type="text"
+    <input type="{{ $type??'text' }}"
            name="{{ $name??$id }}"
            id="{{ $id }}"
            @if(isset($placeholder))
@@ -16,15 +16,17 @@
            @endif
            @if(isset($required))
            required
-            @endif
+        @endif
     />
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror
+    @if(isset($hideLabel))
     <span class="small text-primary @error( $name??$id) d-none @enderror ">
-     @if(isset($required)) {{__('erforderliches Feld')}}, @endif
+        @if(isset($required)) {{__('erforderliches Feld')}}, @endif
         @if(isset($class) && !str_contains($class,'decimal'))
             {{ __('max :max Zeichen', ['max' => $max??'100']) }}
         @endif
     </span>
+    @endif
 </div>

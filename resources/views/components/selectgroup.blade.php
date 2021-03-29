@@ -9,7 +9,7 @@
     <x-btnLoad id="{{ $btnT??'' }}"
                class="{{ $class??'' }}"
                block
-    >{{ $btnL??$label }}</x-btnLoad>
+    >{!! $btnL??$label !!}</x-btnLoad>
 </div>
 
 

@@ -30,12 +30,15 @@ class LocationsController extends Controller
 
     public function explorer(Request $request, Location $location)
     {
-        if (Location::all()->count() === 0) {
+        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!'));
             return redirect()->route('location.create');
-        } else {
+        }
+        if (\Auth::user()->isAdmin()){
             if (isset($request->location)) $location = Location::find($request->location);
             return view('admin.standorte.explorer', compact('location'));
+        } else {
+            return redirect(route('storageMain'));
         }
     }
 
@@ -46,7 +49,9 @@ class LocationsController extends Controller
      */
     public function index()
     {
-        if (Location::all()->count() === 0) {
+
+
+        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!'));
             return redirect()->route('location.create');
         }
@@ -88,6 +93,7 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdmin', Auth()->user());
         $this->validateLocation();
 
         $adresse_id = isset($request->adresse_id) ? $request->adresse_id : (new Adresse)->addNew($request);

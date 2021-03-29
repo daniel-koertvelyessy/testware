@@ -18,8 +18,6 @@ use Illuminate\View\View;
 class AdresseController extends Controller
 {
 
-    use SoftDeletes;
-
     public function __construct()
     {
         $this->middleware('auth');

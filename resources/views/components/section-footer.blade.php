@@ -52,8 +52,7 @@
            target="_blank"
         >
             <span style="color: #000000;">bitpack</span>
-            <span style="color: #aacb81;">.io</span>
-{{--                <span style="color: #c7d301;">.io</span>--}}
+                <span style="color: #c7d301;">.io</span>
         </a>
         &nbsp; GmbH
         </span>

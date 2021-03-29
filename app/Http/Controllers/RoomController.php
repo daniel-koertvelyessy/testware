@@ -32,20 +32,20 @@ class RoomController extends Controller
      */
     public function index()
     {
-        if (Location::all()->count() === 0) {
+        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Standorte!') . '</span> <br>' . __('Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!'));
             return redirect()->route('location.create');
         }
-        if (Building::all()->count() === 0) {
+        if (Building::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        if (Room::all()->count() > 0) {
-            $roomList = Room::with('RoomType', 'location')->sortable()->paginate(10);
-            return view('admin.standorte.room.index', ['roomList' => $roomList]);
-        } else {
+        if (Room::all()->count() === 0 && \Auth::user()->isAdmin()) {
             session()->flash('status', __('Es existieren noch keine Räume!'));
             return redirect()->route('room.create');
+        } else {
+            $roomList = Room::with('RoomType', 'location')->sortable()->paginate(10);
+            return view('admin.standorte.room.index', ['roomList' => $roomList]);
         }
     }
 
@@ -54,7 +54,6 @@ class RoomController extends Controller
      */
     public function create()
     {
-
         if (Location::all()->count() === 0) {
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Standorte!') . '</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
             return redirect()->route('location.create');
@@ -336,7 +335,7 @@ class RoomController extends Controller
                 $storage->storage_label = $request->r_label;
                 $storage->save();
             }
-            $request->session()->flash('status', __('Der Raum <strong>:label</strong> wurde aktualisiert!', ['label'=>request('r_label')]));
+            $request->session()->flash('status', __('Der Raum <strong>:label</strong> wurde aktualisiert!', ['label' => request('r_label')]));
         } else {
             $room = new Room();
 

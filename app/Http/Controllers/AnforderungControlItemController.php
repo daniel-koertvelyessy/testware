@@ -16,8 +16,6 @@ use Illuminate\View\View;
 class AnforderungControlItemController extends Controller
 {
 
-    use SoftDeletes;
-
     public function __construct()
     {
         $this->middleware('auth');

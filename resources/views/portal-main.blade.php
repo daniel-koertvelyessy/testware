@@ -80,12 +80,14 @@
                         >
                             <span class="icon"><i class="fas fa-scroll"></i></span> <span class="branding-bar text-center">{{__('Vorschriften')}}</span>
                         </a>
+                        @can('isAdmin',Auth::user())
                         <a href="/admin/"
                            class="tile-small btn-outline-primary rounded"
                            data-role="tile"
                         >
                             <span class="icon"><i class="fas fa-user-cog"></i></span> <span class="branding-bar text-center">{{__('Admin')}}</span>
                         </a>
+                        @endcan
                         <a href="{{ route('report.index') }}"
                            class="tile-small btn-outline-primary rounded"
                            data-role="tile"

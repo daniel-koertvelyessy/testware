@@ -196,6 +196,11 @@
             </div>
         </div>
     </div>
+
+    <x-modal-add-note
+        objectname="{{ $stellplatz->sp_label }}"
+        uid="{{ $stellplatz->storage_id }}"
+    />
 @endsection
 
 @section('content')
@@ -239,6 +244,18 @@
                            aria-controls="equipment"
                            aria-selected="false"
                         >{{  ('Geräte')}} <span class="badge {{ ($stellplatz->countTotalEquipmentInCompartment()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $stellplatz->countTotalEquipmentInCompartment() }}</span></a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
+                           id="locNotes-tab"
+                           data-toggle="tab"
+                           href="#notes"
+                           role="tab"
+                           aria-controls="locNotes"
+                           aria-selected="false"
+                        >{{__('Notizen')}}</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -324,7 +341,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <x-tab-note uid="{{ $stellplatz->storage_id }}"/>
                 </div>
             </div>
         </div>

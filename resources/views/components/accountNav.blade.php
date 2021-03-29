@@ -13,7 +13,8 @@
                        title="{{ Auth::user()->unreadNotifications()->count() }} {{ __(' neue Nachrichten') }}"
                     ></i>
                 @else
-                    <i class="fas fa-user"></i>
+                    {!! Auth::user()->isSysAdmin() ? '<i class="fas fa-user-shield" title="SysAdmin-User"></i>' : '<i class="fas fa-user"></i>' !!}
+
                 @endif
                 {{ Auth::user()->username ?? Auth::user()->name }}
             </a>

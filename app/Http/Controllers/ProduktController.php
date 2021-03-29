@@ -18,6 +18,7 @@ use App\ProduktKategorie;
 use App\ProduktKategorieParam;
 use App\ProduktParam;
 use Cache;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -64,7 +65,7 @@ class ProduktController extends Controller
      */
     public function importProdukt()
     {
-
+        $this->authorize('isAdmin', Auth()->user());
         return view('admin.produkt.import');
     }
 
@@ -75,7 +76,7 @@ class ProduktController extends Controller
      */
     public function exportProdukt()
     {
-
+//        $this->authorize('isAdmin', Auth()->user());
         return view('admin.produkt.export');
     }
 
@@ -107,9 +108,9 @@ class ProduktController extends Controller
      */
     public function update(Request $request, Produkt $produkt)
     {
-
+        $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
-            $con = ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
+            ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
         }
 
         $produkt->prod_active = $request->has('prod_active') ? 1 : 0;
@@ -165,9 +166,12 @@ class ProduktController extends Controller
      * @param  Request $request
      *
      * @return Application|Response
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdmin', Auth()->user());
+
         $produkt = Produkt::create($this->validateProdukt());
 
         if (isset($request->pp_label) && count($request->pp_label) > 0) {
@@ -194,6 +198,7 @@ class ProduktController extends Controller
 
     public function ajaxstore(Request $request)
     {
+
         if (isset($request->produkt_kategorie_id) && $request->produkt_kategorie_id === 'new') {
             $prodKat = new ProduktKategorie();
             $prodKat->pk_label = $request->newProduktKategorie;
@@ -202,7 +207,7 @@ class ProduktController extends Controller
         } else {
             $produkt_kategorie_id = $request->produkt_kategorie_id;
         }
-        $prodVal = $this->validateProdukt();
+        $this->validateProdukt();
         $produkt = new Produkt();
         $produkt->prod_label = $request->prod_label;
         $produkt->prod_name = $request->prod_name;
@@ -273,11 +278,13 @@ class ProduktController extends Controller
      * @param  Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
+     * @throws AuthorizationException
      */
     public function destroy(Request $request)
     {
+        $this->authorize('isAdmin', Auth()->user());
         Produkt::find($request->produkt_id)->delete();
-        $request->session()->flash('status', 'Das Produkt wurde gelöscht!');
+        $request->session()->flash('status', __('Das Produkt wurde gelöscht!'));
         return redirect(route('produkt.index'));
     }
 
@@ -344,7 +351,7 @@ class ProduktController extends Controller
         if (isset($request->ckAddNewContact)) {
             if ($firma_id) {
                 $st['contact'] = 'Baue neuen Kontakt mit neuer Firma';
-                $valContact = $this->validateContact();
+                $this->validateContact();
 
                 $con = new Contact();
 
@@ -418,7 +425,7 @@ class ProduktController extends Controller
 
     public function removeFirmaFromProdukt(Request $request)
     {
-
+        $this->authorize('isAdmin', Auth()->user());
         $faprod = FirmaProdukt::where([
             [
                 'produkt_id',
@@ -430,7 +437,7 @@ class ProduktController extends Controller
             ],
         ])->delete();
 
-        $request->session()->flash('status', 'Die Firma wurde vom Produkt entfernt!');
+        $request->session()->flash('status', __('Die Firma wurde vom Produkt entfernt!'));
 
         return redirect()->back();
     }
@@ -502,7 +509,7 @@ class ProduktController extends Controller
     public function updateProduktKategorieParams(ProduktKategorieParam $produktKategorieParam, Request $request)
     {
 
-        $val = $this->validateProduktKategorieParam();
+        $this->validateProduktKategorieParam();
 
         $param = ProduktKategorieParam::find($request->id);
 
@@ -522,7 +529,20 @@ class ProduktController extends Controller
     : array
     {
         return request()->validate([
-            'pkp_label'            => 'bail|unique:produkts,prod_label|min:2|max:20|required',
+            'pkp_label'            => ['bail','unique:produkts,prod_label','min:2','max:20','required'],
+            'pkp_name'             => 'bail|string|max:100',
+            'pkp_value'            => '',
+            'produkt_kategorie_id' => 'required'
+        ]);
+    }
+    /**
+     * @return array
+     */
+    public function validateProduktKategorie()
+    : array
+    {
+        return request()->validate([
+            'pkp_label'            => ['bail','unique:produkts,prod_label','min:2','max:20','required'],
             'pkp_name'             => 'bail|string|max:100',
             'pkp_value'            => '',
             'produkt_kategorie_id' => 'required'
@@ -535,11 +555,13 @@ class ProduktController extends Controller
      * @param  Request $request
      *
      * @return Application|Response
+     * @throws AuthorizationException
      */
     public function addProduktKategorieParam(Request $request)
     {
-        $pkp = ProduktKategorieParam::create($this->validateProduktKategorieParam());
-        $request->session()->flash('status', 'Das Datenfeld <strong>' . request('pkp_name') . '</strong> wurde angelegt!');
+        $this->authorize('isAdmin', Auth()->user());
+        ProduktKategorieParam::create($this->validateProduktKategorieParam());
+        $request->session()->flash('status', __('Das Datenfeld <strong>:label</strong> wurde angelegt!', ['label' => request('pkp_name')]));
         return view('admin.systems');
     }
 
@@ -548,16 +570,15 @@ class ProduktController extends Controller
      *
      * @param  Request $request
      *
-     * @return Application|Response
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function deleteProduktKategorieParam(Request $request)
     {
-
+        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::find($request->id)->delete();
-
-        $request->session()->flash('status', 'Das Datenfeld  <strong>' . request('pkp_label') . '</strong> wurde gelöscht!');
-
-        return redirect(route('systems'));
+        $request->session()->flash('status', __('Das Datenfeld <strong>:label</strong> wurde gelöscht!', ['label' => request('pkp_name')]));
+        return back();
     }
 
     /**
@@ -695,10 +716,12 @@ class ProduktController extends Controller
         ]);
     }
 
+
     /**
      *
      */
     public function updateParams($label, $pid, $value)
     {
+
     }
 }

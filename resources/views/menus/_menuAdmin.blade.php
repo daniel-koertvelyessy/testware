@@ -2,6 +2,7 @@
 <li class="nav-item {{ Request::routeIs('admin.index') ? ' active ' : '' }}">
     <a class="nav-link" href="{{ route('admin.index') }}"><i class="fas fa-clipboard-list"></i> {{__('Systemstatus')}} </a>
 </li>
+@can('isAdmin', Auth::user())
 <li class="nav-item dropdown {{ Request::routeIs('user.*') ? ' active ' : '' }}">
     <a class="nav-link dropdown-toggle " href="#" id="navTargetAppMenuLocations" role="button" data-toggle="dropdown" aria-expanded="false">
         <i class="fas fa-users"></i> {{__('Benutzer')}}
@@ -18,4 +19,4 @@
 <li class="nav-item {{ Request::routeIs('systems') ? ' active ' : '' }}">
     <a class="nav-link" href="{{ route('systems') }}"><i class="fas fa-tools"></i> {{__('Einstellungen')}} </a>
 </li>
-
+@endcan

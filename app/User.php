@@ -22,6 +22,10 @@ class User extends Authenticatable
         'fr' => 'French'
     ];
 
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
 
 
     /**
@@ -30,7 +34,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'locale'
+        'name',
+        'email',
+        'password',
+        'username',
+        'locale'
     ];
 
     /**
@@ -39,7 +47,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token'
+        'password',
+        'remember_token',
+        'role_id'
     ];
 
     /**
@@ -80,7 +90,7 @@ class User extends Authenticatable
 
     public function hasEquipment()
     {
-        return $this->hasManyThrough('Equipment','EquipmentQualifiedUser');
+        return $this->hasManyThrough('Equipment', 'EquipmentQualifiedUser');
     }
 
     public function instructedOnEquipment()
@@ -92,45 +102,60 @@ class User extends Authenticatable
     : bool
     {
         return EquipmentInstruction::where([
-            ['equipment_instruction_trainee_id',$this->id],
-            ['equipment_id',$id]
-        ])->count() >0;
+                [
+                    'equipment_instruction_trainee_id',
+                    $this->id
+                ],
+                [
+                    'equipment_id',
+                    $id
+                ]
+            ])->count() > 0;
     }
 
     public function isQualified($id)
     : bool
     {
         return EquipmentQualifiedUser::where([
-            ['user_id',$this->id],
-            ['equipment_id',$id]
-        ])->count() >0;
+                [
+                    'user_id',
+                    $this->id
+                ],
+                [
+                    'equipment_id',
+                    $id
+                ]
+            ])->count() > 0;
     }
 
     public function isInstructedForProduct($id)
     : bool
     {
         return EquipmentInstruction::where([
-                ['equipment_instruction_trainee_id',$this->id],
-                ['equipment_id',$id]
-            ])->count() >0;
+                [
+                    'equipment_instruction_trainee_id',
+                    $this->id
+                ],
+                [
+                    'equipment_id',
+                    $id
+                ]
+            ])->count() > 0;
     }
 
     public function isQualifiedForProduct($id)
     : bool
     {
         return ProductQualifiedUser::where([
-                ['user_id',$this->id],
-                ['produkt_id',$id]
-            ])->count() >0;
-    }
-
-
-    /**
-     * The roles that belong to the user.
-     */
-    public function roles()
-    {
-        return $this->belongsToMany('App\Role');
+                [
+                    'user_id',
+                    $this->id
+                ],
+                [
+                    'produkt_id',
+                    $id
+                ]
+            ])->count() > 0;
     }
 
     /**
@@ -141,7 +166,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\RoleUser');
     }
-
 
     public function addNew(Request $request)
     {
@@ -158,16 +182,46 @@ class User extends Authenticatable
         return $this->id;
     }
 
-    public function removeUser(Request $request)
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
     {
+        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withTimestamps();
+    }
+
+    public function removeUser(Request $request)
+    : bool
+    {
+        $this->authorize('isAdmin', Auth()->user());
+
         $user = User::find($request->id);
+        $deleteRoles = $user->roles()->detach();
+        $deleteUser = $user->delete();
 
-      $deleteRoles =  $user->roles()->detach();
+        return $deleteRoles && $deleteUser;
 
-      $deleteUser =   $user->delete();
+    }
 
-      return $deleteRoles && $deleteUser;
+    public function isAdmin()
+    {
+        foreach ($this->roles as $role) {
+            if ($role->id === 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public function isSysAdmin()
+    {
+        return $this->role_id === 1;
+    }
+
+    public function updatePassword($newPassword, User $user)
+    {
+        $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $user->update();
     }
 
 }

@@ -39,6 +39,7 @@ class ReportController extends Controller
      */
     public function template()
     {
+        dd('nop');
         return view('reports.template');
     }
 
@@ -46,7 +47,7 @@ class ReportController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
     public function create()
     {

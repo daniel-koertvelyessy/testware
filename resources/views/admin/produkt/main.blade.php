@@ -31,6 +31,7 @@
                         <span class="icon"><i class="fas fa-boxes"></i></span> <span
                             class="branding-bar text-center">{{__('Übersicht')}}</span>
                     </a>
+                    @can('isAdmin', Auth::user())
                     <a href="{{ route('produkt.create') }}"
                        class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
@@ -38,6 +39,7 @@
                         <span class="icon"><i class="fas fa-box"></i></span> <span
                             class="branding-bar text-center">{{__('Neu')}}</span>
                     </a>
+                    @endcan
                 </nav>
             </div>
             <div class="col-md-10">
@@ -70,6 +72,7 @@
                 </table>
             </div>
         </div>
+        @can('isAdmin', Auth::user())
         <h3 class="h4">{{__('Neues Produkt aus Kategorie erstellen')}}</h3>
         <div class="row">
             <div class="col">
@@ -87,6 +90,7 @@
                 </nav>
             </div>
         </div>
+        @endcan
     </div>
 
 @endsection

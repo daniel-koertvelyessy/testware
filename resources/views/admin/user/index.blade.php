@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Benutzer &triangleright;  Systemeinstellungen | Start @ bitpack GmbH
+{{__('Benutzer')}} &triangleright;  {{__('Systemeinstellungen')}} | {{__('Start')}}
 @endsection
 
 @section('mainSection')
-    Admin
+{{__('Admin')}}
 @endsection
 
 @section('menu')
@@ -15,41 +15,46 @@
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Portal</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Verwaltung</li>
+            <li class="breadcrumb-item"><a href="/">{{__('Portal')}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{__('Verwaltung')}}</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h3">Übersicht Benutzer</h1>
+                <h1 class="h3">{{__('Übersicht Benutzer')}}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-sm">
+                <table class="table">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Benutzername</th>
-                        <th>Status</th>
-                        <th>Erstellt</th>
-                        <th>Rolle</th>
-                        <th></th>
+                        <th>{{__('Name')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Benutzername')}}</th>
+                        <th>{{__('Rolle(n)')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Erstellt')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('API token')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('SysAdmin')}}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\User::all() as $user)
+                    @forelse ($users as $user)
                         <tr>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->created_at }}</td>
-                            <td>{{ $user->created_at }}</td>
-                            <td>{{ $user->role_id }}</td>
-                            <td><a href="{{ route('user.show',$user->id) }}">bearbeiten</a></td>
+                            <td><a href="{{ route('user.show',$user->id) }}">{{ $user->name }}</a></td>
+                            <td class="d-none d-md-table-cell">{{ $user->username }}</td>
+                            <td>
+                            @foreach($user->roles as $role)
+                                {{ $role->name }}
+                                    @if (!$loop->last) / @endif
+                            @endforeach
+                            </td>
+                            <td class="d-none d-md-table-cell">{{ $user->created_at }}</td>
+                            <td class="d-none d-md-table-cell">{!! $user->api_token !== null ? '<i class="fas fa-check-circle text-success"></i>' : '' !!}</td>
+                            <td class="d-none d-md-table-cell">{!! $user->role_id===1 ? '<i class="fas fa-check-circle text-success"></i>' : '' !!}</td>
                         </tr>
                     @empty
                         <tr>

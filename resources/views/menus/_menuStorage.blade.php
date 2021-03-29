@@ -1,5 +1,5 @@
 @php
-    $locations= App\Location::take(5)->latest()->get();
+    $locations = App\Location::take(5)->latest()->get();
     $buildings =  App\Building::take(5)->latest()->get();
     $rooms =  App\Room::take(5)->latest()->get();
     $compartments =  App\Stellplatz::take(5)->latest()->get()
@@ -12,13 +12,15 @@
     </a>
 </li>
 
-<li class="nav-item {{ Request::routeIs('lexplorer')  ? ' active ' : '' }}">
-    <a class="nav-link "
-       href="{{ route('lexplorer') }}"
-    >
-        <i class="fas fa-project-diagram"></i> Explorer
-    </a>
-</li>
+@can('isAdmin', Auth()->user())
+    <li class="nav-item {{ Request::routeIs('lexplorer')  ? ' active ' : '' }}">
+        <a class="nav-link "
+           href="{{ route('lexplorer') }}"
+        >
+            <i class="fas fa-project-diagram"></i> Explorer
+        </a>
+    </li>
+@endcan
 
 <li class="nav-item dropdown {{ Request::routeIs('location.*') ? ' active ' : '' }}">
     <a class="nav-link dropdown-toggle "
@@ -39,36 +41,40 @@
                 {{__('Übersicht')}}
             </a>
         </li>
-        <li>
-            <a class="dropdown-item "
-               href="{{ route('location.create') }}"
-            >
-                <i class="far fa-file mr-2 fa-fw"></i>
-                {{__('Neu anlegen')}}
-            </a>
-        </li>
+        @can('isAdmin', Auth()->user())
+            <li>
+                <a class="dropdown-item "
+                   href="{{ route('location.create') }}"
+                >
+                    <i class="far fa-file mr-2 fa-fw"></i>
+                    {{__('Neu anlegen')}}
+                </a>
+            </li>
+        @endcan
         <li>
             <hr class="dropdown-divider">
         </li>
-        @if(count($locations)>0)
-            <li>
-                <a class="dropdown-item "
-                   href="{{ route('exportjson.locations') }}"
-                >
-                    <i class="fas fa-file-export mr-2 fa-fw"></i>
-                    {{__('Standorte')}} {{ __('exportieren') }}
-                </a>
-            </li>
-            <h6 class="dropdown-header">Zuletzt angelegt</h6>
-            @foreach( $locations as $locItem)
+        @can('isAdmin', Auth()->user())
+            @if(count($locations)>0)
                 <li>
-                    <a class="dropdown-item @if ( isset($location) && $locItem->id === $location->id) active @endif"
-                       href="{{ route('location.show',$locItem)  }}"
-                    >{{  $locItem->l_label  }}</a>
+                    <a class="dropdown-item "
+                       href="{{ route('exportjson.locations') }}"
+                    >
+                        <i class="fas fa-file-export mr-2 fa-fw"></i>
+                        {{__('Standorte')}} {{ __('exportieren') }}
+                    </a>
                 </li>
-            @endforeach()
+            @endif
+        @endcan
+        <h6 class="dropdown-header">Zuletzt angelegt</h6>
+        @foreach( $locations as $locItem)
+            <li>
+                <a class="dropdown-item @if ( isset($location) && $locItem->id === $location->id) active @endif"
+                   href="{{ route('location.show',$locItem)  }}"
+                >{{  $locItem->l_label  }}</a>
+            </li>
+        @endforeach()
 
-        @endif
     </ul>
 </li>
 <li class="nav-item dropdown {{ Request::routeIs('building.*')  ? ' active ' : '' }}">
@@ -87,25 +93,31 @@
                href="{{ route('building.index') }}"
             >{{__('Übersicht')}}</a>
         </li>
-        <li>
-            <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} "
-               href="{{ route('building.create') }}"
-            >{{__('Neu anlegen')}}</a>
-        </li>
-        <li>
-            <hr class="dropdown-divider">
-        </li>
+        @can('isAdmin', Auth()->user())
+            <li>
+                <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}} "
+                   href="{{ route('building.create') }}"
+                >{{__('Neu anlegen')}}</a>
+            </li>
+        @endcan
 
         @if(count($buildings)>0)
             <li>
-                <a class="dropdown-item "
-                   href="{{ route('exportjson.buildings') }}"
-                >
-                    <i class="fas fa-file-export mr-2 fa-fw"></i>
-                    {{__('Gebäude')}} {{ __('exportieren') }}
-                </a>
+                <hr class="dropdown-divider">
             </li>
+            @can('isAdmin', Auth()->user())
+                <li>
+                    <a class="dropdown-item "
+                       href="{{ route('exportjson.buildings') }}"
+                    >
+                        <i class="fas fa-file-export mr-2 fa-fw"></i>
+                        {{__('Gebäude')}} {{ __('exportieren') }}
+                    </a>
+                </li>
+            @endcan
+
             <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
+
             @foreach( $buildings as $gebItem)
                 <li>
                     <a class="dropdown-item @if (isset($building) && $gebItem->id === $building->id) active @endif"
@@ -113,6 +125,11 @@
                     >{{  $gebItem->b_label  }}</a>
                 </li>
             @endforeach()
+
+        @else
+            <li>
+                <span class="dropdown-header">{{  __('Keine Gebäude angelegt')  }}</span>
+            </li>
         @endif
     </ul>
 </li>
@@ -132,23 +149,30 @@
                href="{{ route('room.index') }}"
             >{{__('Übersicht')}}</a>
         </li>
-        <li>
-            <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}"
-               href="{{ route('room.create') }}"
-            >{{__('Neu anlegen')}}</a>
-        </li>
-        <li>
-            <hr class="dropdown-divider">
-        </li>
+        @can('isAdmin', Auth()->user())
+            <li>
+                <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}"
+                   href="{{ route('room.create') }}"
+                >{{__('Neu anlegen')}}</a>
+            </li>
+        @endcan
+
         @if(count($rooms)>0)
             <li>
-                <a class="dropdown-item "
-                   href="{{ route('exportjson.rooms') }}"
-                >
-                    <i class="fas fa-file-export mr-2 fa-fw"></i>
-                    {{__('Räume')}} {{ __('exportieren') }}
-                </a>
+                <hr class="dropdown-divider">
             </li>
+
+            @can('isAdmin', Auth()->user())
+                <li>
+                    <a class="dropdown-item "
+                       href="{{ route('exportjson.rooms') }}"
+                    >
+                        <i class="fas fa-file-export mr-2 fa-fw"></i>
+                        {{__('Räume')}} {{ __('exportieren') }}
+                    </a>
+                </li>
+            @endcan
+
             <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
             @foreach( $rooms as $roomItem)
                 <li>
@@ -157,7 +181,13 @@
                     >{{  $roomItem->r_label  }}</a>
                 </li>
             @endforeach()
+
+        @else
+            <li>
+                <span class="dropdown-header">{{  __('Keine Räume angelegt')  }}</span>
+            </li>
         @endif
+
     </ul>
 </li>
 <li class="nav-item dropdown {{ Request::routeIs('stellplatz.*')  ? ' active ' : '' }}">
@@ -176,24 +206,32 @@
                href="{{ route('stellplatz.index') }}"
             >{{__('Übersicht')}}</a>
         </li>
-        <li>
-            <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}"
-               href="{{ route('stellplatz.create') }}"
-            >{{__('Neu anlegen')}}</a>
-        </li>
-        <li>
-            <hr class="dropdown-divider">
-        </li>
+        @can('isAdmin', Auth()->user())
+            <li>
+                <a class="dropdown-item {{--@if (!env('app.makeobjekte') ) disabled @endif --}}"
+                   href="{{ route('stellplatz.create') }}"
+                >{{__('Neu anlegen')}}</a>
+            </li>
+        @endcan
+
         @if(count($compartments)>0)
             <li>
-                <a class="dropdown-item "
-                   href="{{ route('exportjson.compartments') }}"
-                >
-                    <i class="fas fa-file-export mr-2 fa-fw"></i>
-                    {{__('Stellplätze')}} {{ __('exportieren') }}
-                </a>
+                <hr class="dropdown-divider">
             </li>
+
+            @can('isAdmin', Auth()->user())
+                <li>
+                    <a class="dropdown-item "
+                       href="{{ route('exportjson.compartments') }}"
+                    >
+                        <i class="fas fa-file-export mr-2 fa-fw"></i>
+                        {{__('Stellplätze')}} {{ __('exportieren') }}
+                    </a>
+                </li>
+            @endcan
+
             <h6 class="dropdown-header">{{__('Zuletzt angelegt')}}</h6>
+
             @foreach( $compartments as $compartment)
                 <li>
                     <a class="dropdown-item @if (isset($stellplatz) && $compartment->id === $stellplatz->id) active @endif"
@@ -201,6 +239,11 @@
                     >{{  $compartment->sp_label  }}</a>
                 </li>
             @endforeach()
+        @else
+            <li>
+                <span class="dropdown-header">{{  __('Keine Stellplätze angelegt')  }}</span>
+            </li>
+
         @endif
     </ul>
 </li>

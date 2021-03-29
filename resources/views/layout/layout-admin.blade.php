@@ -295,7 +295,7 @@
 @yield('autoloadscripts')
 
 <script type="text/javascript"
-        src="{{ mix('js/app.js') }}"
+        src="{{ asset('js/app.js') }}"
 ></script>
 <script type="text/javascript"
         src="{{ asset('js/main.js') }}"

@@ -72,97 +72,10 @@
 @endsection
 
 @section('modals')
-    <div class="modal fade"
-         id="modalAddNote"
-         tabindex="-1"
-         aria-labelledby="modalAddNoteLabel"
-         aria-hidden="true"
-    >
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form action="{{ route('note.store') }}#notes"
-                      method="POST"
-                      enctype="multipart/form-data"
-                >
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title"
-                            id="modalAddNoteLabel"
-                        >{{__('Notiz für anlegen')}}</h5>
-                        <button type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <input type="hidden"
-                               id="uid"
-                               value="{{ $equipment->uid }}"
-                        >
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <x-selectfield id="note_type_id"
-                                               label="{{__('Typ')}}"
-                                >
-                                    @foreach (App\NoteType::all() as $note_type)
-                                        <option value="{{ $note_type->id }}">{{ $note_type->label }}</option>
-                                    @endforeach
-                                    <option value="new">{{ __('neu') }}</option>
-                                </x-selectfield>
-                            </div>
-                            <div class="col-md-4">
-                                <x-textfield id="newNoteType"
-                                             label="{{ __('Neuer Typ') }}"
-                                />
-                            </div>
-                        </div>
-
-                        <x-textfield id="label"
-                                     label="Titel"
-                        />
-
-
-                        <x-textarea id="description"
-                                    label="{{__('Inhalt')}}"
-                        />
-
-                        <div class="form-group">
-                            <div class="custom-file">
-                                <input type="file"
-                                       name="file_path"
-                                       id="file_path"
-                                       data-browse="{{__('Datei')}}"
-                                       class="custom-file-input"
-                                       accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
-                                       required
-                                >
-                                <label class="custom-file-label"
-                                       for="file_path"
-                                >{{__('Datei wählen')}}</label>
-                            </div>
-                        </div>
-
-                        <x-textfield id="file_name"
-                                     label="{{ __('Datei Name') }}"
-                        />
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-outline-secondary"
-                                data-dismiss="modal"
-                        >{{__('Abbruch')}}</button>
-                        <button class="btn btn-primary">{{__('Notiz anlegen')}}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-modal-add-note
+        objectname="{{ $equipment->eq_inventar_nr }}"
+        uid="{{ $equipment->eq_uid }}"
+    />
 
     <div class="modal fade"
          id="modalAddEquipDoc"
@@ -850,9 +763,9 @@
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
                                     <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
-                                    <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                        <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
-                                    </div>
+                                <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                </div>
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)
@@ -866,11 +779,11 @@
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Funtionstest')}}</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
-                                        <x-filecard name="{{ $bda->eqdoc_name }}"
-                                                    label="{{ $bda->eqdoc_label }}"
-                                                    path="{{ $bda->eqdoc_name_pfad }}"
-                                                    id="{{ $bda->id }}"
-                                        />
+                                    <x-filecard name="{{ $bda->eqdoc_name }}"
+                                                label="{{ $bda->eqdoc_label }}"
+                                                path="{{ $bda->eqdoc_name_pfad }}"
+                                                id="{{ $bda->id }}"
+                                    />
                                 @empty
                                     <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
                                     <button class="btn btn-lg btn-warning"
@@ -1340,43 +1253,7 @@
                             <x-notifyer>{{__('Keine Meldungen zum Gerät gefunden!')}}</x-notifyer>
                         @endforelse
                     </div>
-                    <div class="tab-pane fade p-2"
-                         id="notes"
-                         role="tabpanel"
-                         aria-labelledby="notes-tab"
-                    >
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="list-group">
-                                    @forelse(App\Note::where('uid',$equipment->eq_uid)->get() as $note)
-                                        <a href="#"
-                                           class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
-                                        >
-                                            <span>{{ $note->label }}</span> <i class="fas fa-angle-right"></i>
-                                        </a>
-                                    @empty
-                                        <a href="#"
-                                           class="list-group-item list-group-item-action disabled d-flex align-items-center justify-content-between"
-                                           tabindex="-1"
-                                           aria-disabled="true"
-                                        >
-                                            <span>{{__('Keine Notizen gefunden')}}</span> <i class="fas fa-info-circle"></i>
-                                        </a>
-                                        <button class="btn btn-sm btn-primary mt-3"
-                                                data-toggle="modal"
-                                                data-target="#modalAddNote"
-                                        >
-                                            {{ __('neu anlegen') }}
-                                        </button>
-                                    @endforelse
-                                </div>
-                            </div>
-                            <div class="col-lg-9 pl-2 border-left border-light">
-
-                            </div>
-                        </div>
-
-                    </div>
+                    <x-tab-note uid="{{ $equipment->eq_uid }}"/>
                 </div>
             </div>
         </div>
