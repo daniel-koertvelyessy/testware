@@ -26,7 +26,7 @@
 ])
 
 
-<div class="{{ $bgcolor[$type] }} d-flex align-items-center justify-content-between p-2 mb-4">
+<div class="{{ $bgcolor[$type] }} d-flex align-items-center justify-content-between p-1 mb-3">
     <div>
         <span class="{{ $icon[$type] }}  mr-2"></span> <span>{{ $msg }}</span>
     </div>

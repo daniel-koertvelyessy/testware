@@ -213,6 +213,42 @@ class InitialValueSeeder extends Seeder
             ],
         ]);
 
+        DB::table('address_types')->insert([
+            [
+                'adt_name'      => 'Hausadresse',
+                'adt_text_lang' => 'Standard Adresse'
+            ],
+            [
+                'adt_name'      => 'RG-Adresse',
+                'adt_text_lang' => 'Rechnungsadresse'
+            ],
+            [
+                'adt_name'      => 'LS-Adresse',
+                'adt_text_lang' => 'Lieferadresse'
+            ]
+        ]);
+
+        DB::table('adresses')->insert([
+            [
+                'ad_name'              => 'TC-Grünspechtweg19-Berlin',
+                'ad_label'             => 'grp-019a',
+                'ad_anschrift_strasse' => 'Grünspechtweg 19',
+                'ad_anschrift_plz'     => '13469',
+                'ad_anschrift_ort'     => 'Berlin',
+            ]
+        ]);
+
+        DB::table('firmas')->insert([
+            [
+                'fa_label'       => 'tc',
+                'fa_name'        => 'thermo-control Körtvélyessy GmbH',
+                'fa_kreditor_nr' => '11001',
+                'fa_debitor_nr'  => '71001',
+                'fa_vat'         => 'DE120051020',
+                'adresse_id'     => 1,
+            ]
+        ]);
+
         // SELECT INTERVAL 1 DAY + '2008-12-31';    SELECT DATE_ADD('2010-12-31 23:59:59', INTERVAL 1 DAY);
         DB::table('control_intervals')->insert([
             [
@@ -280,22 +316,8 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
-        DB::table('address_types')->insert([
-            [
-                'adt_name'      => 'Hausadresse',
-                'adt_text_lang' => 'Standard Adresse'
-            ],
-            [
-                'adt_name'      => 'RG-Adresse',
-                'adt_text_lang' => 'Rechnungsadresse'
-            ],
-            [
-                'adt_name'      => 'LS-Adresse',
-                'adt_text_lang' => 'Lieferadresse'
-            ]
-        ]);
 
-        factory(App\Firma::class)->create();
+        //    factory(App\Firma::class)->create();
 
         DB::table('report_types')->insert([
             [

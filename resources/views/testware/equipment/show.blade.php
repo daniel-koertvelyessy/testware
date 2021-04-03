@@ -271,7 +271,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('EquipmentQualifiedUser.store') }}"
+                <form action="{{ route('EquipmentQualifiedUser.store') }}#requirements"
                       method="post"
                 >
                     <div class="modal-body">
@@ -334,7 +334,7 @@
          aria-hidden="true"
     >
         <div class="modal-dialog modal-xl">
-            <form action="{{ route('EquipmentInstruction.store') }}"
+            <form action="{{ route('EquipmentInstruction.store') }}#requirements"
                   method="post"
                   id="frmAddEquipmentInstruction"
             >
@@ -922,7 +922,7 @@
                                 <h3 class="h5">{{__('Anforderungen')}}</h3>
 
                                 @php
-                                    $Anforderung = App\Anforderung::all();
+                                    $Anforderung = App\Anforderung::all()
                                 @endphp
                                 @forelse (\App\ProduktAnforderung::where('produkt_id',$equipment->produkt->id)->get() as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)

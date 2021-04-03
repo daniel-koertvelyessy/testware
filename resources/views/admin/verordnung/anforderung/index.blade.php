@@ -19,7 +19,9 @@
             </div>
         </div>
         <div class="row">
-            <table class="table table-responsive-md table-striped"  id="tabAnforderungListe">
+            <table class="table table-responsive-md table-striped"
+                   id="tabAnforderungListe"
+            >
                 <thead>
                 <tr>
                     <th>@sortablelink('an_name', __('Bezeichnung'))</th>
@@ -34,6 +36,9 @@
                 @forelse ($requirements as $anforderung)
                     <tr>
                         <td style="vertical-align: middle;">
+                            @if ($anforderung->AnforderungControlItem->count()===0)
+                                <span class="fas fa-exclamation-triangle text-warning mr-1 d-md-none"></span>
+                            @endif
                             <a href="{{ route('anforderung.show',$anforderung) }}">
                                 {{ $anforderung->an_name }}
                             </a>
@@ -102,14 +107,14 @@
                 @endforelse
                 </tbody>
             </table>
-                <div class="d-flex justify-content-center">
-                    <div class="d-none d-lg-block">
-                        {!! $requirements->withQueryString()->onEachSide(2)->links() !!}
-                    </div>
-                    <div class="d-lg-none">
-                        {!! $requirements->withQueryString()->onEachSide(0)->links() !!}
-                    </div>
+            <div class="d-flex justify-content-center">
+                <div class="d-none d-lg-block">
+                    {!! $requirements->withQueryString()->onEachSide(2)->links() !!}
                 </div>
+                <div class="d-lg-none">
+                    {!! $requirements->withQueryString()->onEachSide(0)->links() !!}
+                </div>
+            </div>
         </div>
 
     </div>

@@ -67,17 +67,20 @@ class AdminController extends Controller
         }
 
         $countEquipment = Equipment::all()->count();
-
         if ($countEquipment > 0) {
             $countEquipmentFunctionTest = EquipmentFuntionControl::all()->count();
             $incomplete_equipment = $countEquipment - $countEquipmentFunctionTest;
         }
 
-        return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($incomplete_requirement, $countEquipment, $incomplete_equipment) {
+        $countControlEquipment = Equipment::with('produkt')->get()->map(function ($value, $item) {
+            return $value->produkt->ControlProdukt === null ? 1 : 0;
+        })->sum();
+        return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($incomplete_requirement, $countEquipment, $incomplete_equipment, $countControlEquipment) {
             return [
                 'products'                 => Produkt::all()->count(),
                 'equipment'                => $countEquipment,
                 'control_products'         => ControlProdukt::all()->count(),
+                'control_equipment'        => $countControlEquipment,
                 'storages'                 => Storage::all()->count(),
                 'equipment_qualified_user' => EquipmentQualifiedUser::all()->count(),
                 'product_qualified_user'   => ProductQualifiedUser::all()->count(),

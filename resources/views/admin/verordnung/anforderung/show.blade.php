@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-3">
                 <form action="{{ route('anforderung.update',$anforderung) }}" method="POST" id="frmEditVerordnungen" name="frmEditVerordnungen">
                     @csrf
                     @method('PUT')
@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <x-textarea id="updt_an_description" name="an_description" label="Beschreibung" value="{{ $anforderung->an_description }}" />
+                    <x-textarea id="updt_an_description" name="an_description" label="Beschreibung" value="{{ $anforderung->an_description }}"/>
 
                     <x-btnMain>Anforderung aktualisieren <i class="fas fa-download"></i></x-btnMain>
 
@@ -111,7 +111,7 @@
             </div>
             <div class="col-md-6">
                 <h2 class="h4">Prüfungen zur Anforderung</h2>
-                <table class="table table-responsive-md">
+                <table class="table">
                     <thead>
                     <tr>
                         <th>Kürzel</th>
