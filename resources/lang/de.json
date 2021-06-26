@@ -667,5 +667,6 @@
     "<span class=\"lead\">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!": "<span class=\"lead\">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!",
     "Der Standort <strong>:label</strong> wurde angelegt!": "Der Standort <strong>:label</strong> wurde angelegt!",
     "stand-api-docs": "Dezember 2020",
-    "Bitte beachten Sie, dass die Löschung des Gebäudes alle enthaltenen Räume und Gerät den Bezug verlieren.": "Bitte beachten Sie, dass die Löschung des Gebäudes alle enthaltenen Räume und Gerät den Bezug verlieren."
+    "Bitte beachten Sie, dass die Löschung des Gebäudes alle enthaltenen Räume und Gerät den Bezug verlieren.": "Bitte beachten Sie, dass die Löschung des Gebäudes alle enthaltenen Räume und Gerät den Bezug verlieren.",
+    "Ihr persönlicher API Token lautet:" : "Ihr persönlicher API Token lautet:"
 }
