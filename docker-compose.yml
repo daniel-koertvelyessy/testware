@@ -1,0 +1,32 @@
+version: "3.1"
+
+services:
+  app:
+    image: bitpackio/testware
+    container_name: testware-dev-app
+    ports:
+      - ${APP_PORT}:80
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8085:8080
+
+  db:
+    image: postgres:11
+    restart: always
+    environment:
+      - POSTGRES_DB=testware
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    container_name: testware-dev-db
+    working_dir: /data/pgsql
+    volumes:
+      - //c/xampp/htdocs/db/testware_db:/var/lib/postgresql/data
