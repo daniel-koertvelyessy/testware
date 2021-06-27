@@ -54,6 +54,18 @@ class InstallerController extends Controller
     }
 
     /**
+     * Display the systems page to set system variables
+     *
+     * @return Application|Factory|Response|View
+     */
+    public function seed()
+    {
+        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+        return view('admin.installer.system_seed');
+
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @param  Request $request

@@ -46,7 +46,7 @@
 <footer class="page-footer d-flex fixed-bottom align-items-center justify-content-between small">
     <div class="p-1">
         <span class="text-dark">
-            © 2020
+            © 2020 - {{ date('Y') }}
         <a href="https://bitpack.io/"
            title="bitpack.io"
            target="_blank"

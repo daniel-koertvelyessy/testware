@@ -1,4 +1,4 @@
-<div class="bg-info d-flex align-items-center justify-content-between text-white py-1 px-2 small mb-2">
+<div class="bg-info d-flex align-items-center rounded justify-content-between text-white py-1 px-2 small mb-2">
     <span>{{ $slot }}</span>
     <form method="post" action="{{ route('user.revokerole') }}">
         @method('DELETE')

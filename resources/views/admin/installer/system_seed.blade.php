@@ -1,7 +1,7 @@
 @extends('layout.layout-login')
 
 @section('pagetitle')
-{{__('Firmierung')}} &triangleright; {{__('Installation')}} &triangleright; testWare
+{{__('Initialdaten')}} &triangleright; {{__('Installation')}} &triangleright; testWare
 @endsection
 
 @section('content')
@@ -44,6 +44,13 @@
                        aria-disabled="true"
                     >{{ __('System') }}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled"
+                       href="#"
+                       tabindex="-1"
+                       aria-disabled="true"
+                    >{{ __('Initialdaten') }}</a>
+                </li>
             </ul>
             <div class="navbar-nav">
                 <a class="btn btn-sm btn-outline-warning"
@@ -51,7 +58,7 @@
                 >{{ __('Abbruch') }}</a>
             </div>
             <a class="btn btn-sm btn-primary ml-4"
-               onclick="event.preventDefault(); document.getElementById('frmSetCompanyData').submit();"
+               onclick="event.preventDefault(); document.getElementById('frmSetSeederData').submit();"
                href="#"
             >{{ __('weiter') }}</a>
         </div>
@@ -60,7 +67,7 @@
     <div class="container">
         <form method="POST"
               action="{{ route('installer.user') }}"
-              id="frmSetCompanyData"
+              id="frmSetSeederData"
         >
             @method('get')
             @csrf
@@ -192,7 +199,6 @@
                 </div>
 
             </div>
-{{--            <button class="btn btn-lg btn-primary">{{ __('Daten speichern und weiter zu Benutzer') }} <i class="fas fa-angle-double-right ml-2"></i></button>--}}
         </form>
     </div>
     @if ($errors->any())

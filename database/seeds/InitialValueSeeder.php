@@ -13,15 +13,13 @@ class InitialValueSeeder extends Seeder
      */
     public function run()
     {
-        //
-        //        DB::table('lizenz')->insert([
-        //            'lizenz_id' => '228a7111-c27a-44c2-8a30-13da26eb079f',
-        //            'lizenz_user' => 'thermo-control Körtvélyessy GmbH',
-        //            'lizenz_order' => 'O0001415',
-        //            'lizenz_max_objects' => 100,
-        //        ]);
 
         DB::table('roles')->insert([
+            [
+                'label'         => 'installer',
+                'name'          => 'Installer',
+                'is_super_user' => false,
+            ],
             [
                 'label'         => 'admin',
                 'name'          => 'Administrator',
@@ -33,97 +31,10 @@ class InitialValueSeeder extends Seeder
                 'is_super_user' => false,
             ],
             [
-                'label'         => 'visior',
-                'name'          => 'Visior',
+                'label'         => 'revisor',
+                'name'          => 'Revisor',
                 'is_super_user' => false,
             ],
-        ]);
-
-        DB::table('users')->insert([
-            [
-                'name'              => 'Daniel Körtvélyessy',
-                'email'             => 'daniel.koertvelyessy@gmail.com',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'daniel',
-                'password'          => '$2y$10$QTYenoYuRpR6Kp5e2UjidOZ8xRDlxnQjtdxFed/ecvfSzE3UVezna',
-                'api_token'         => 'gMJtXnxgwWgQaIYGP5SVGGEzelWh6wBB9PvjJpMiomOQNpLOVc57Cw0QS40ejFCnV23u33DFM8yHilIi'
-            ],
-            [
-                'name'              => 'Martin Schubert',
-                'email'             => 'martin@bitpack.io',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'martin',
-                'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
-                'api_token'         => null
-
-            ],
-            [
-                'name'              => 'Matthias Roethig',
-                'email'             => 'matthias@bitpack.io',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'matthias',
-                'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
-                'api_token'         => null
-
-            ],
-        ]);
-
-        DB::table('profiles')->insert([
-            [
-                'created_at'      => now(),
-                'updated_at'      => now(),
-                'user_id'         => 3,
-                'ma_nummer'       => random_int(1000, 2000),
-                'ma_name'         => 'Roethig',
-                'ma_name_2'       => '',
-                'ma_vorname'      => 'Matthias',
-                'ma_geburtsdatum' => now()->addYears(-38),
-                'ma_eingetreten'  => now()->addYears(-5),
-                'ma_telefon'      => '',
-                'ma_mobil'        => '',
-            ],
-            [
-                'created_at'      => now(),
-                'updated_at'      => now(),
-                'user_id'         => 2,
-                'ma_nummer'       => random_int(1000, 2000),
-                'ma_name'         => 'Schubert',
-                'ma_name_2'       => '',
-                'ma_vorname'      => 'Martin',
-                'ma_geburtsdatum' => now()->addYears(-42),
-                'ma_eingetreten'  => now()->addYears(-13),
-                'ma_telefon'      => '',
-                'ma_mobil'        => '',
-            ],
-            [
-                'created_at'      => now(),
-                'updated_at'      => now(),
-                'user_id'         => 1,
-                'ma_nummer'       => random_int(1000, 2000),
-                'ma_name'         => 'Körtvélyessy',
-                'ma_name_2'       => '',
-                'ma_vorname'      => 'Daniel',
-                'ma_geburtsdatum' => now()->addYears(-46),
-                'ma_eingetreten'  => now()->addYears(-15),
-                'ma_telefon'      => '03040586940',
-                'ma_mobil'        => '',
-            ],
-        ]);
-
-        DB::table('anredes')->insert([
-            [
-                'an_kurz'   => 'Hr',
-                'an_formal' => 'Herr',
-                'an_greet'  => 'Sehr geehrter Herr',
-            ],
-            [
-                'an_kurz'   => 'Fr',
-                'an_formal' => 'Frau',
-                'an_greet'  => 'Sehr geehrte Frau',
-            ]
         ]);
 
         DB::table('lands')->insert([
@@ -230,26 +141,122 @@ class InitialValueSeeder extends Seeder
 
         DB::table('adresses')->insert([
             [
-                'ad_name'              => 'TC-Grünspechtweg19-Berlin',
-                'ad_label'             => 'grp-019a',
-                'ad_anschrift_strasse' => 'Grünspechtweg 19',
-                'ad_anschrift_plz'     => '13469',
-                'ad_anschrift_ort'     => 'Berlin',
+                'ad_label'                => 'tc-bln019',
+                'ad_name'                 => 'HA-thermo-control',
+                'ad_name_firma'           => 'thermo-control Körtvélyessy GmbH',
+                'ad_anschrift_strasse'    => 'Grünspechtweg',
+                'ad_anschrift_hausnummer' => '19',
+                'ad_anschrift_plz'        => '13469',
+                'ad_anschrift_ort'        => 'Berlin',
+
             ]
         ]);
 
         DB::table('firmas')->insert([
             [
-                'fa_label'       => 'tc',
-                'fa_name'        => 'thermo-control Körtvélyessy GmbH',
-                'fa_kreditor_nr' => '11001',
-                'fa_debitor_nr'  => '71001',
-                'fa_vat'         => 'DE120051020',
+                'fa_label'       => 'fa_schwuz',
+                'fa_name'        => 'fa_name',
+                'fa_description' => 'fa_description',
+                'fa_kreditor_nr' => 'fa_kreditor_nr',
+                'fa_debitor_nr'  => 'fa_debitor_nr',
+                'fa_vat'         => 'fa_vat',
                 'adresse_id'     => 1,
             ]
         ]);
 
-        // SELECT INTERVAL 1 DAY + '2008-12-31';    SELECT DATE_ADD('2010-12-31 23:59:59', INTERVAL 1 DAY);
+        DB::table('users')->insert([
+            [
+                'created_at'        => now(),
+                'updated_at'        => now(),
+                'name'              => 'InstallerUser',
+                'email'             => 'install@bitpack.io',
+                'role_id'           => 1,
+                'email_verified_at' => now(),
+                'username'          => 'Installer',
+                'password'          => password_hash('sp7RSzSLZ6kC3kS', PASSWORD_DEFAULT),
+                'api_token'         => null
+            ],
+            /*[
+                'created_at'        => now(),
+                'updated_at'        => now(),
+                'name'              => 'Martin Schubert',
+                'email'             => 'martin@bitpack.io',
+                'role_id'           => 1,
+                'email_verified_at' => now(),
+                'username'          => 'martin',
+                'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
+                'api_token'         => null
+
+            ],
+            [
+                'created_at'        => now(),
+                'updated_at'        => now(),
+                'name'              => 'Matthias Roethig',
+                'email'             => 'matthias@bitpack.io',
+                'role_id'           => 1,
+                'email_verified_at' => now(),
+                'username'          => 'matthias',
+                'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
+                'api_token'         => null
+
+            ],*/
+        ]);
+
+        /*   DB::table('profiles')->insert([
+               [
+                   'created_at'      => now(),
+                   'updated_at'      => now(),
+                   'user_id'         => 3,
+                   'ma_nummer'       => random_int(1000, 2000),
+                   'ma_name'         => 'Roethig',
+                   'ma_name_2'       => '',
+                   'ma_vorname'      => 'Matthias',
+                   'ma_geburtsdatum' => now()->addYears(-38),
+                   'ma_eingetreten'  => now()->addYears(-5),
+                   'ma_telefon'      => '',
+                   'ma_mobil'        => '',
+               ],
+               [
+                   'created_at'      => now(),
+                   'updated_at'      => now(),
+                   'user_id'         => 2,
+                   'ma_nummer'       => random_int(1000, 2000),
+                   'ma_name'         => 'Schubert',
+                   'ma_name_2'       => '',
+                   'ma_vorname'      => 'Martin',
+                   'ma_geburtsdatum' => now()->addYears(-42),
+                   'ma_eingetreten'  => now()->addYears(-13),
+                   'ma_telefon'      => '',
+                   'ma_mobil'        => '',
+               ],
+               [
+                   'created_at'      => now(),
+                   'updated_at'      => now(),
+                   'user_id'         => 1,
+                   'ma_nummer'       => random_int(1000, 2000),
+                   'ma_name'         => 'Körtvélyessy',
+                   'ma_name_2'       => '',
+                   'ma_vorname'      => 'Daniel',
+                   'ma_geburtsdatum' => now()->addYears(-46),
+                   'ma_eingetreten'  => now()->addYears(-15),
+                   'ma_telefon'      => '03040586940',
+                   'ma_mobil'        => '',
+               ],
+           ]);*/
+
+        DB::table('anredes')->insert([
+            [
+                'an_kurz'   => 'Hr',
+                'an_formal' => 'Herr',
+                'an_greet'  => 'Sehr geehrter Herr',
+            ],
+            [
+                'an_kurz'   => 'Fr',
+                'an_formal' => 'Frau',
+                'an_greet'  => 'Sehr geehrte Frau',
+            ]
+        ]);
+
         DB::table('control_intervals')->insert([
             [
                 'ci_label' => 'Sekunde',
@@ -315,9 +322,6 @@ class InitialValueSeeder extends Seeder
                 'btbeschreibung' => 'Gebäude mit reiner Lagernutzung'
             ]
         ]);
-
-
-        //    factory(App\Firma::class)->create();
 
         DB::table('report_types')->insert([
             [
@@ -518,76 +522,76 @@ Entwicklungsinitiativen bereitstellt.',
                 'an_control_interval' => 1,
                 'control_interval_id' => 8,
             ],
-            [
-                'created_at'          => now(),
-                'updated_at'          => now(),
-                'an_label'            => 'VDE Klasse 3',
-                'an_name'             => 'Einstufung VDE Schutzklasse 3',
-                'verordnung_id'       => 1,
-                'anforderung_type_id' => 1,
-                'an_control_interval' => 1,
-                'control_interval_id' => 8,
-            ],
-            [
-                'created_at'          => now(),
-                'updated_at'          => now(),
-                'an_label'            => 'VDE Leitungen',
-                'an_name'             => 'Einstufung VDE Schutzklasse Leitungen',
-                'verordnung_id'       => 1,
-                'anforderung_type_id' => 1,
-                'an_control_interval' => 1,
-                'control_interval_id' => 8,
-            ],
-            /*                [
-                                'created_at'          => now(),
-                                'updated_at'          => now(),
-                                'an_label'            => 'MedProdUnkr',
-                                'an_name'             => 'Unkritischen Medizinprodukt',
-                                'verordnung_id'       => 2,
-                                'anforderung_type_id' => 1,
-                                'an_control_interval' => 1,
-                                'control_interval_id' => 8,
-                            ],
-                            [
-                                'created_at'          => now(),
-                                'updated_at'          => now(),
-                                'an_label'            => 'MedProdSK-A',
-                                'an_name'             => 'Semikritisches Medizinprodukt Typ A',
-                                'verordnung_id'       => 2,
-                                'anforderung_type_id' => 1,
-                                'an_control_interval' => 1,
-                                'control_interval_id' => 8,
-                            ],
-                            [
-                                'created_at'          => now(),
-                                'updated_at'          => now(),
-                                'an_label'            => 'MedProdSK-B',
-                                'an_name'             => 'Semikritisches Medizinprodukt Typ B',
-                                'verordnung_id'       => 2,
-                                'anforderung_type_id' => 1,
-                                'an_control_interval' => 1,
-                                'control_interval_id' => 8,
-                            ],
-                            [
-                                'created_at'          => now(),
-                                'updated_at'          => now(),
-                                'an_label'            => 'MedProdKR-A',
-                                'an_name'             => 'Kritisches Medizinprodukt Typ A',
-                                'verordnung_id'       => 2,
-                                'anforderung_type_id' => 1,
-                                'an_control_interval' => 1,
-                                'control_interval_id' => 8,
-                            ],
-                            [
-                                'created_at'          => now(),
-                                'updated_at'          => now(),
-                                'an_label'            => 'MedProdKR-B',
-                                'an_name'             => 'Kritisches Medizinprodukt Typ B',
-                                'verordnung_id'       => 2,
-                                'anforderung_type_id' => 1,
-                                'an_control_interval' => 1,
-                                'control_interval_id' => 8,
-                            ],*/
+            /*            [
+                         'created_at'          => now(),
+                         'updated_at'          => now(),
+                         'an_label'            => 'VDE Klasse 3',
+                         'an_name'             => 'Einstufung VDE Schutzklasse 3',
+                         'verordnung_id'       => 1,
+                         'anforderung_type_id' => 1,
+                         'an_control_interval' => 1,
+                         'control_interval_id' => 8,
+                     ],
+                     [
+                         'created_at'          => now(),
+                         'updated_at'          => now(),
+                         'an_label'            => 'VDE Leitungen',
+                         'an_name'             => 'Einstufung VDE Schutzklasse Leitungen',
+                         'verordnung_id'       => 1,
+                      nforderung_type_id' => 1,
+                         'an_control_interval' => 1,
+                         'control_interval_id' => 8,
+                     ],
+                                [
+                                         'created_at'          => now(),
+                                         'updated_at'          => now(),
+                                         'an_label'            => 'MedProdUnkr',
+                                         'an_name'             => 'Unkritischen Medizinprodukt',
+                                         'verordnung_id'       => 2,
+                                         'anforderung_type_id' => 1,
+                                         'an_control_interval' => 1,
+                                         'control_interval_id' => 8,
+                                     ],
+                                     [
+                                         'created_at'          => now(),
+                                         'updated_at'          => now(),
+                                         'an_label'            => 'MedProdSK-A',
+                                         'an_name'             => 'Semikritisches Medizinprodukt Typ A',
+                                         'verordnung_id'       => 2,
+                                         'anforderung_type_id' => 1,
+                                         'an_control_interval' => 1,
+                                         'control_interval_id' => 8,
+                                     ],
+                                     [
+                                         'created_at'          => now(),
+                                         'updated_at'          => now(),
+                                         'an_label'            => 'MedProdSK-B',
+                                         'an_name'             => 'Semikritisches Medizinprodukt Typ B',
+                                         'verordnung_id'       => 2,
+                                         'anforderung_type_id' => 1,
+                                         'an_control_interval' => 1,
+                                         'control_interval_id' => 8,
+                                     ],
+                                     [
+                                         'created_at'          => now(),
+                                         'updated_at'          => now(),
+                                         'an_label'            => 'MedProdKR-A',
+                                         'an_name'             => 'Kritisches Medizinprodukt Typ A',
+                                         'verordnung_id'       => 2,
+                                         'anforderung_type_id' => 1,
+                                         'an_control_interval' => 1,
+                                         'control_interval_id' => 8,
+                                     ],
+                                     [
+                                         'created_at'          => now(),
+                                         'updated_at'          => now(),
+                                         'an_label'            => 'MedProdKR-B',
+                                         'an_name'             => 'Kritisches Medizinprodukt Typ B',
+                                         'verordnung_id'       => 2,
+                                         'anforderung_type_id' => 1,
+                                         'an_control_interval' => 1,
+                                         'control_interval_id' => 8,
+                                     ],
             [
                 'created_at'          => now(),
                 'updated_at'          => now(),
@@ -598,6 +602,7 @@ Entwicklungsinitiativen bereitstellt.',
                 'an_control_interval' => 1,
                 'control_interval_id' => 8,
             ],
+            */
         ]);
 
         DB::table('anforderung_control_items')->insert([
@@ -792,6 +797,5 @@ Entwicklungsinitiativen bereitstellt.',
             ],
         ]);
 
-        //        factory(App\Profile::class, 6)->create();
     }
 }

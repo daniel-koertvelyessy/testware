@@ -301,6 +301,7 @@ Route::get('/report/template', 'ReportController@template')->name('report.templa
 Route::get('/installer', 'InstallerController@index')->name('installer.company');
 Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
 Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
+Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
 
 Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 

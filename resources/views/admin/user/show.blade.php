@@ -304,7 +304,7 @@
                   method="POST"
             >
                 <div class="row">
-                    <div class="col-md-8 mb-3">
+                    <div class="col mb-3">
                         <h2 class="h4">{{__('Darstellung Farben')}}</h2>
 
                         @csrf
@@ -322,18 +322,22 @@
                             >
                                 <option value="css/sand.css"
                                         data-asset="{{ asset('css/sand.css') }}"
+                                        {{ $user->user_theme=='css/sand.css'? ' selected ' : '' }}
                                 >Sandstone
                                 </option>
                                 <option value="css/minty.css"
                                         data-asset="{{ asset('css/minty.css') }}"
+                                        {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
                                 >Mint
                                 </option>
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
+                                        {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
                                 >Dunkel blau
                                 </option>
                                 <option value="css/hero.css"
                                         data-asset="{{ asset('css/hero.css') }}"
+                                        {{ $user->user_theme=='css/hero.css'? ' selected ' : '' }}
                                 >Hero blau
                                 </option>
                                 <option value="css/materia.css"
@@ -348,6 +352,7 @@
                         >{{__('Vorschau')}}</button>
 
                     </div>
+                    {{--
                     <div class="col-md-4">
                         <h2 class="h4">{{__('Darstellung Eingabemasken')}}</h2>
                         <div class="custom-control custom-switch ml-3">
@@ -372,6 +377,7 @@
                             >{{__('Hilfetexte anzeigen')}}</label>
                         </div>
                     </div>
+                    --}}
                 </div>
                 @if(Auth::user()->id === $user->id)
                     <x-btnSave>{{__('Einstellungen für Benutzer speichern')}}</x-btnSave>
