@@ -16,11 +16,6 @@ class InitialValueSeeder extends Seeder
 
         DB::table('roles')->insert([
             [
-                'label'         => 'installer',
-                'name'          => 'Installer',
-                'is_super_user' => false,
-            ],
-            [
                 'label'         => 'admin',
                 'name'          => 'Administrator',
                 'is_super_user' => true,
@@ -34,6 +29,11 @@ class InitialValueSeeder extends Seeder
                 'label'         => 'revisor',
                 'name'          => 'Revisor',
                 'is_super_user' => false,
+            ],
+            [
+                'label'         => 'system',
+                'name'          => 'System',
+                'is_super_user' => true,
             ],
         ]);
 
@@ -141,25 +141,29 @@ class InitialValueSeeder extends Seeder
 
         DB::table('adresses')->insert([
             [
-                'ad_label'                => 'tc-bln019',
-                'ad_name'                 => 'HA-thermo-control',
-                'ad_name_firma'           => 'thermo-control Körtvélyessy GmbH',
-                'ad_anschrift_strasse'    => 'Grünspechtweg',
+                'created_at'              => now(),
+                'updated_at'              => now(),
+                'ad_label'                => 'ad_label',
+                'ad_name'                 => 'HA-firma',
+                'ad_name_firma'           => 'Name',
+                'ad_anschrift_strasse'    => 'Weg',
                 'ad_anschrift_hausnummer' => '19',
-                'ad_anschrift_plz'        => '13469',
-                'ad_anschrift_ort'        => 'Berlin',
+                'ad_anschrift_plz'        => '12345',
+                'ad_anschrift_ort'        => 'Stadt',
 
             ]
         ]);
 
         DB::table('firmas')->insert([
             [
-                'fa_label'       => 'fa_schwuz',
+                'created_at'     => now(),
+                'updated_at'     => now(),
+                'fa_label'       => 'fa_label',
                 'fa_name'        => 'fa_name',
                 'fa_description' => 'fa_description',
-                'fa_kreditor_nr' => 'fa_kreditor_nr',
-                'fa_debitor_nr'  => 'fa_debitor_nr',
-                'fa_vat'         => 'fa_vat',
+                'fa_kreditor_nr' => null,
+                'fa_debitor_nr'  => null,
+                'fa_vat'         => null,
                 'adresse_id'     => 1,
             ]
         ]);
@@ -168,11 +172,11 @@ class InitialValueSeeder extends Seeder
             [
                 'created_at'        => now(),
                 'updated_at'        => now(),
-                'name'              => 'InstallerUser',
-                'email'             => 'install@bitpack.io',
+                'name'              => 'testware',
+                'email'             => 'testware@bitpack.io',
                 'role_id'           => 1,
                 'email_verified_at' => now(),
-                'username'          => 'Installer',
+                'username'          => 'Testware User',
                 'password'          => password_hash('sp7RSzSLZ6kC3kS', PASSWORD_DEFAULT),
                 'api_token'         => null
             ],
@@ -200,6 +204,21 @@ class InitialValueSeeder extends Seeder
                 'api_token'         => null
 
             ],*/
+        ]);
+
+        DB::table('role_user')->insert([
+            [
+                'created_at' => now(),
+                'updated_at' => now(),
+                'role_id'    => 1,
+                'user_id'    => 1,
+            ],
+            [
+                'created_at' => now(),
+                'updated_at' => now(),
+                'role_id'    => 2,
+                'user_id'    => 1,
+            ],
         ]);
 
         /*   DB::table('profiles')->insert([
@@ -357,7 +376,7 @@ class InitialValueSeeder extends Seeder
 
             [
                 'label'          => 'Inventurbericht',
-                'name'           => 'Liste aller Geräte',
+                'name'           => 'Inventurliste',
                 'description'    => 'Listet alle Geräte mit Status, Wert und dessen Abschreibung',
                 'view'           => 'inventur',
                 'report_type_id' => '1',

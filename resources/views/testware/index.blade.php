@@ -11,6 +11,28 @@
 @section('mainSection', __('testWare'))
 
 @section('content')
+    @if($initialiseApp)
+
+        <div class="alert alert-info alert-dismissible fade show my-4 w-75 ml-auto mr-auto"
+             role="alert"
+        >
+            <h2 class="h5">Initialisierung</h2>
+            <p>Sie sind noch als <span class="badge badge-dark">testware</span> Benutzer angemeldet.</p>
+            <p>Ergänzen Sie Ihre Firmierung und Benutzerdaten. Dies können Sie entweder über die jeweilgen Seiten vornehemen oder einfach den Installer aufrufen.</p>
+            <a href="{{ route('installer.company') }}"
+               class="btn btn-outline-primary"
+            >Installation abschließen
+            </a>
+
+            <button type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <div class="container-fluid">
         <h2 class="h5">
             <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
@@ -21,7 +43,7 @@
         <div class="row">
             @foreach (App\EquipmentState::all() as $equipmentState)
                 @php
-                    $equipments = App\Equipment::where('equipment_state_id',$equipmentState->id)->get();
+                    $equipments = App\Equipment::where('equipment_state_id',$equipmentState->id)->get()
                 @endphp
                 <div class="col-lg-3 col-md-6">
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
@@ -105,7 +127,7 @@
                      id="nav-tabContent"
                 >
                     @php
-                        $controls = \App\ControlEquipment::take(10);
+                        $controls = \App\ControlEquipment::take(10)
                     @endphp
 
                     <div class="tab-pane fade"

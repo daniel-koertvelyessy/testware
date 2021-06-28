@@ -3,6 +3,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/db-data
+/testware-files
 .idea
 .env
 .env.backup
@@ -17,3 +19,4 @@ layout_DIN.txt
 _ide_helper.php
 git_update.py
 update.py
+

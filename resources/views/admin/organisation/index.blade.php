@@ -100,7 +100,7 @@
                                 <a href="{{ route('firma.show',$loc) }}">{{ $loc->fa_name }}</a>
                             </td>
                             <td>{{ $loc->fa_label }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at? $loc->updated_at->DiffForHumans():'-' }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -128,7 +128,7 @@
                                 <a href="{{ route('contact.show',$contact) }}">{{ $contact->fullName() }}</a>
                             </td>
                             <td>{{ $contact->firma->fa_label }}</td>
-                            <td class="d-none d-md-table-cell">{{ $contact->updated_at->DiffForHumans() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $contact->updated_at? $contact->updated_at->DiffForHumans:'-' }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -157,7 +157,7 @@
                                 <a href="{{ route('adresse.show',$loc) }}">{{ $loc->ad_name }}</a>
                             </td>
                             <td>{{ $loc->ad_label }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at ? $loc->updated_at->DiffForHumans():'-' }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -185,7 +185,7 @@
                                 <a href="{{ route('adresse.show',$loc) }}">{{ $loc->ma_name }}, {{ $loc->ma_vorname }}</a>
                             </td>
                             <td>{{ $loc->ma_nummer }}</td>
-                            <td class="d-none d-md-table-cell">{{ $loc->updated_at->DiffForHumans() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $loc->updated_at? $loc->updated_at->DiffForHumans():'-' }}</td>
                         </tr>
                     @empty
                         <tr>

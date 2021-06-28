@@ -2,11 +2,11 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
@@ -162,7 +162,7 @@ class User extends Authenticatable
      * The roles that belong to the user.
      */
     public function roleUser()
-    : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    : BelongsToMany
     {
         return $this->belongsToMany('App\RoleUser');
     }
@@ -205,8 +205,16 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
+        /**
+         * check if user is a SysAdmin. If so skip further checks
+         */
+        if ($this->role_id === 1) return true;
+
+        /**
+         * check if user has a role of Administrator
+         */
         foreach ($this->roles as $role) {
-            if ($role->id === 1) {
+            if ($role->is_super_user) {
                 return true;
             }
         }

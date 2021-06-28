@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Building;
-use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -51,6 +50,19 @@ class Location extends Model
             Cache::forget('countTotalEquipmentInLocation');
             Cache::forget('system-status-counter');
         });
+    }
+
+    public function add(Request $request, int $adresse_id, int $profile_id)
+    {
+        $this->l_benutzt = $request->l_benutzt;
+        $this->l_label = $request->l_label;
+        $this->l_name = $request->l_name;
+        $this->l_beschreibung = $request->l_beschreibung;
+        $this->profile_id = $profile_id;
+        $this->adresse_id = $adresse_id;
+        $this->storage_id = $request->storage_id;
+        $this->save();
+        return $this->id;
     }
 
     static function checkStatus()

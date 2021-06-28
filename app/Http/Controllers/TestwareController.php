@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Produkt;
+use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TestwareController extends Controller
@@ -24,7 +25,8 @@ class TestwareController extends Controller
      */
     public function index()
     {
-        return view('testware.index');
+        $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
+        return view('testware.index', compact('initialiseApp'));
     }
 
     /**
@@ -40,7 +42,8 @@ class TestwareController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
+     *
      * @return Response
      */
     public function store(Request $request)
@@ -73,8 +76,9 @@ class TestwareController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int     $id
+     *
      * @return Response
      */
     public function update(Request $request, $id)

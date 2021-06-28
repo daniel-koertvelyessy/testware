@@ -1,7 +1,7 @@
 @extends('layout.layout-portal')
 
 @section('pagetitle')
-    {{__('Willkommen')}}
+    {{__('testWare')}}
 @endsection
 
 @section('navigation')
@@ -42,13 +42,13 @@
                                 <span class="branding-bar text-center">{{__('InfoSy')}}</span>
                             </div>
                         </a>
-                        <a href="registerphone"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                           aria-label="Storagee"
-                        >
-                            <span class="icon"><i class="fas fa-mobile-alt"></i></span> <span class="branding-bar text-center">{{__('Registrieren')}}</span>
-                        </a>
+                        {{--                      <a href="registerphone"
+                                                 class="tile-small btn-outline-primary rounded"
+                                                 data-role="tile"
+                                                 aria-label="Storagee"
+                                              >
+                                                  <span class="icon"><i class="fas fa-mobile-alt"></i></span> <span class="branding-bar text-center">{{__('Registrieren')}}</span>
+                                              </a>--}}
                     </nav>
                 </section>
 

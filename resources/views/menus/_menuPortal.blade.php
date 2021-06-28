@@ -14,11 +14,11 @@
            href="/support"
         ><i class="fas fa-phone-square"></i> {{__('Hilfe anfordern')}}</a>
     </li>
-    <li class="nav-item {{ Request::path() === 'registerphone' ? ' active ' : '' }}">
+   {{-- <li class="nav-item {{ Request::path() === 'registerphone' ? ' active ' : '' }}">
         <a class="nav-link"
            href="/registerphone"
         ><i class="fas fa-qrcode"></i> {{__('App aktivieren')}}</a>
-    </li>
+    </li>--}}
 </ul>
 
 {{--<form class="form-inline"

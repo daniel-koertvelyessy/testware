@@ -44,7 +44,7 @@ class InstallerController extends Controller
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
     public function system()
     {
@@ -56,12 +56,31 @@ class InstallerController extends Controller
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     */
+    public function location()
+    {
+        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+
+        $location = \App\Location::find(1);
+
+        return view('admin.installer.location_data', compact('location'));
+
+    }
+
+    /**
+     * Display the systems page to set system variables
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
     public function seed()
     {
         if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
-        return view('admin.installer.system_seed');
+
+        $company = Firma::find(1);
+        $address = Adresse::find(1);
+
+        return view('admin.installer.location_data', compact('company', 'address'));
 
     }
 
@@ -134,6 +153,7 @@ class InstallerController extends Controller
 
         return back();
     }
+
 
     public function getUserData(Request $request)
     : array

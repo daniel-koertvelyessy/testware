@@ -2,10 +2,8 @@
 
 namespace App;
 
-use App\Stellplatz;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -63,9 +61,9 @@ class Building extends Model
         return $this->belongsTo(BuildingTypes::class);
     }
 
-    public function rooms()
+    public function room()
     {
-        return $this->hasMany(Room::class, 'building_id');
+        return $this->hasMany(Room::class);
     }
 
     public function countStellPlatzs(Building $building)

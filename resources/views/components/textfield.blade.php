@@ -21,7 +21,7 @@
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror
-    @if(isset($hideLabel))
+    @if(!isset($hideLabel))
     <span class="small text-primary @error( $name??$id) d-none @enderror ">
         @if(isset($required)) {{__('erforderliches Feld')}}, @endif
         @if(isset($class) && !str_contains($class,'decimal'))

@@ -1,9 +1,12 @@
 <?php
 
+use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
-use Illuminate\Support\Facades\Route;
+use App\EquipmentUid;
+use App\Produkt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
@@ -24,9 +27,9 @@ Route::get('edata/{ident}', function ($ident, Request $request) {
         $e = explode(env('APP_HSKEY'), $ident);
         $uid = $e[1];
 
-        $equipment = \App\EquipmentUid::where('equipment_uid', $uid)->first();
+        $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
         if ($equipment) {
-            $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+            $edata = Equipment::findOrFail($equipment->equipment_id);
             return view('testware.app.equipmentdata', [
                 'edata' => $edata,
                 'ident' => $ident
@@ -47,11 +50,11 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
     if ($str[0] === env('APP_HSKEY')) {
         $e = explode(env('APP_HSKEY'), $ident);
         $uid = $e[1];
-        $equipment = \App\EquipmentUid::where('equipment_uid', $uid)->first();
+        $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
 
 
         if ($equipment) {
-            $edata = \App\Equipment::findOrFail($equipment->equipment_id);
+            $edata = Equipment::findOrFail($equipment->equipment_id);
             //            dd($edata);
             return view('testware.app.reportdamage', [
                 'edata' => $edata,
@@ -234,7 +237,7 @@ Route::get('storageMain', function () {
 Route::post('addEquipmentFunctionControl', function (Request $request) {
 
     $equipment_id = $request->equipment_id;
-    $equipment = \App\Equipment::find($equipment_id);
+    $equipment = Equipment::find($equipment_id);
 
     (new EquipmentFuntionControl())->addControlEvent($request, $equipment_id);
 
@@ -274,12 +277,12 @@ Route::get('produktMain', function () {
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    $equipmentList = \App\Equipment::with('produkt', 'storage', 'EquipmentState', 'ControlEquipment')->sortable()->paginate(10);
+    $equipmentList = Equipment::with('produkt', 'storage', 'EquipmentState', 'ControlEquipment')->sortable()->paginate(10);
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 
 Route::get('equipment.maker', function () {
-    $produktList = \App\Produkt::sortable()->paginate(10);
+    $produktList = Produkt::sortable()->paginate(10);
     return view('testware.equipment.maker', ['produktList' => $produktList]);
 })->name('equipment.maker')->middleware('auth');
 
@@ -301,8 +304,9 @@ Route::get('/report/template', 'ReportController@template')->name('report.templa
 Route::get('/installer', 'InstallerController@index')->name('installer.company');
 Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
 Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
+Route::get('/installer/location', 'InstallerController@location')->name('installer.location');
 Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
-
+Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.seed');
 Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
 /*

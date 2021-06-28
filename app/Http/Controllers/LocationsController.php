@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Adresse;
-use App\Location;
 use App\Building;
+use App\Location;
 use App\Profile;
 use App\Room;
-use App\Storage;
 use App\Stellplatz;
+use App\Storage;
+use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -30,11 +30,12 @@ class LocationsController extends Controller
 
     public function explorer(Request $request, Location $location)
     {
-        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
+
+        if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!'));
             return redirect()->route('location.create');
         }
-        if (\Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin()) {
             if (isset($request->location)) $location = Location::find($request->location);
             return view('admin.standorte.explorer', compact('location'));
         } else {
@@ -51,7 +52,7 @@ class LocationsController extends Controller
     {
 
 
-        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!'));
             return redirect()->route('location.create');
         }
@@ -95,23 +96,24 @@ class LocationsController extends Controller
     {
         $this->authorize('isAdmin', Auth()->user());
         $this->validateLocation();
+        $adresse_id = $request->adresse_id ?? (new Adresse)->addNew($request);
+        $profile_id = $request->profile_id ?? (new Profile)->addNew($request);
+        (new Storage)->add($request->storage_id, $request->l_label, 'locations');
 
-        $adresse_id = isset($request->adresse_id) ? $request->adresse_id : (new Adresse)->addNew($request);
-        $profile_id = isset($request->profile_id) ? $request->profile_id : (new Profile)->addNew($request);
-        (new Storage)->add($request->storage_id,$request->l_label,'locations');
+        if (isset($request->id)) {
+            $location = Location::find($request->id);
+            $this->update($request, $location);
+            $request->session()->flash('status', __('Der Standort <strong>:label</strong> wurde angelegt!', ['label' => $request->l_label]));
+        } else {
+            $location = (new Location())->add($request, $adresse_id, $profile_id);
+            $request->session()->flash('status', __('Der Standort <strong>:label</strong> wurde aktualisiert!', ['label' => $request->l_label]));
+        }
 
-        $location = new Location();
-        $location->l_benutzt = $request->l_benutzt;
-        $location->l_label = $request->l_label;
-        $location->l_name = $request->l_name;
-        $location->l_beschreibung = $request->l_beschreibung;
-        $location->profile_id = $profile_id;
-        $location->adresse_id = $adresse_id;
-        $location->storage_id = $request->storage_id;
-        $location->save();
-
-        $request->session()->flash('status', __('Der Standort <strong>:label</strong> wurde angelegt!', ['label' => $request->l_label]));
-        return redirect(route('location.show', compact('location')));
+        if (isset($request->continueExplorer)) {
+            return redirect(route('lexplorer'));
+        } else {
+            return redirect(route('location.show', compact('location')));
+        }
     }
 
     /**

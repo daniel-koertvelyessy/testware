@@ -8,24 +8,23 @@ services:
       - ${APP_PORT}:80
     volumes:
       - ./testware-files:/var/www/html/storage/app
+      - //c/xampp/htdocs/medtestware/:/var/www/html
     depends_on:
       - db
 
-  #
-  #  adminer:
-  #    image: adminer
-  #    restart: always
-  #    ports:
-  #      - 8085:8080
-  #
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8085:8080
 
   db:
     image: postgres:11
     restart: always
     environment:
-      - POSTGRES_DB=${DB_DATABASE}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB="${DB_DATABASE}"
+      - POSTGRES_USER="${DB_USERNAME}"
+      - POSTGRES_PASSWORD="${DB_PASSWORD}"
     ports:
       - ${DB_PORT}:5432
     container_name: testware-db

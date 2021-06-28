@@ -28,32 +28,33 @@
                        href="{{ route('installer.company') }}"
                        tabindex="-1"
                        aria-disabled="true"
-                    >{{ __('Firmierung') }} </a>
+                    >{{ __('Firmierung') }} <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled"
                        href="#"
                        tabindex="-1"
                        aria-disabled="true"
-                    >{{ __('Benutzer') }}<span class="sr-only">(current)</span></a>
+                    >{{ __('Benutzer') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled"
                        href="#"
                        tabindex="-1"
                        aria-disabled="true"
-                    >{{ __('System') }}</a>
+                    >{{ __('memStandort') }}</a>
                 </li>
             </ul>
             <div class="navbar-nav">
                 <a class="btn btn-sm btn-outline-warning"
                    href="/"
                 >{{ __('Abbruch') }}</a>
+                <a class="btn btn-sm btn-primary ml-2"
+                   onclick="event.preventDefault(); document.getElementById('frmSetCompanyData').submit();"
+                   href="#"
+                >{{ __('weiter') }}</a>
             </div>
-            <a class="btn btn-sm btn-primary ml-4"
-               onclick="event.preventDefault(); document.getElementById('frmSetCompanyData').submit();"
-               href="#"
-            >{{ __('weiter') }}</a>
+
         </div>
     </nav>
 

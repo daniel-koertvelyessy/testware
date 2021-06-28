@@ -30,7 +30,7 @@
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link disabled"
-                       href="#"
+                       href="{{ route('installer.user') }}"
                        tabindex="-1"
                        aria-disabled="true"
                     >{{ __('Benutzer') }}<span class="sr-only">(current)</span></a>
@@ -40,15 +40,15 @@
                        href="#"
                        tabindex="-1"
                        aria-disabled="true"
-                    >{{ __('System') }}</a>
+                    >{{ __('memStandort') }}</a>
                 </li>
             </ul>
             <div class="navbar-nav">
                 <a class="btn btn-sm btn-outline-warning"
                    href="{{ route('installer.company') }}"
                 >{{ __('Abbruch') }}</a>
-                <a class="btn btn-sm btn-primary ml-4"
-                   href="{{ route('installer.system') }}"
+                <a class="btn btn-sm btn-primary ml-2"
+                   href="{{ route('installer.location') }}"
                 >{{ __('weiter') }}</a>
             </div>
         </div>
