@@ -34,10 +34,10 @@
                     <p class="lead">Hirarchie</p>
                     <div class="row">
                         <div class="col">
-                            <p>Das zentrale Objekt in der testWare ist das Gerät. Es stellt reale Geräte in dem Betrieb dar.</p>
-                            <p>Damit das Gerät mit Informationen gefüllt werden kann sind weitere Objekte benötigt.</p>
+                            <p>Das zentrale Objekt in der testWare sind Geräte. Sie stellen reale Geräte in einem Betrieb dar.</p>
+                            <p>Damit das Gerät mit Informationen angereichert werden kann sind weitere Objekte nötig.</p>
                             <p>Der Aufbau der einzelnen Objekte ist im Schaubild dargestellt.</p>
-                            <p><code>Geräte</code> sind im Wesentlichen durch zwei Objekte denifiert:</p>
+                            <p><code>Geräte</code> sind im wesentlichen durch zwei Objekte definiert:</p>
                             <ol>
                                 <li><span class="lead">Produkt</span></li>
                                 <li><span class="lead">Stellplatz</span></li>
