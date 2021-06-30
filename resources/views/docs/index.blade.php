@@ -30,7 +30,7 @@
                 </ul>
                 <p>Die Verwaltung ist über das
                     <a href="/">Portal</a>
-                   in den Register <code>Verwaltung</code> zu finden.
+                   in dem Register <code>Verwaltung</code> zu finden.
                 </p>
 
                 <img src="{{ asset('img/media/textware_docs_Verwaltung_oeffnen.gif') }}"
