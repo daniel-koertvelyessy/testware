@@ -22,7 +22,7 @@
         </div>
         <div class="row mt-lg-5 mt-sm-1">
             <div class="col">
-                <p>{{__('Hier finden Sie die Dokumentation zu den verfügbaren Applikationen')}}</p>
+                <p>{{__('Hier finden Sie die Dokumentation zu den verfügbaren Applikationen.')}}</p>
                 <p>Die Objekte in der testware werden in zwei Bereichen gepflegt:</p>
                 <ul>
                     <li>Verwaltung</li>
