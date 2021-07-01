@@ -298,7 +298,7 @@ Response response = client.newCall(request).execute();</code></pre>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-6">
-                        <p>In der Kontoübersicht finden die den Abschnitt
+                        <p>In der Kontoübersicht finden Sie den Abschnitt
                             <strong>Token für API-Zugang</strong>. Wenn Sie noch keinen Token erstellt haben, wird ein Schalter
                             <span class="badge badge-dark">Token für API erzeugen</span> gezeigt. Mit einem Klick auf diesem Schalter wird der Token erstellt und dem Konto zugeordnet.</p>
                     </div>
