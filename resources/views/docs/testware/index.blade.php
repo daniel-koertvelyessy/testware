@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col">
                             <p>Das zentrale Objekt in der testWare sind Geräte. Sie stellen reale Geräte in einem Betrieb dar.</p>
-                            <p>Damit das Gerät mit Informationen angereichert werden kann sind weitere Objekte nötig.</p>
+                            <p>Damit das Gerät mit Informationen angereichert werden kann, sind weitere Objekte nötig.</p>
                             <p>Der Aufbau der einzelnen Objekte ist im Schaubild dargestellt.</p>
                             <p><code>Geräte</code> sind im wesentlichen durch zwei Objekte definiert:</p>
                             <ol>
