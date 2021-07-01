@@ -312,7 +312,7 @@ Response response = client.newCall(request).execute();</code></pre>
                 <div class="row my-3">
                     <div class="col-md-6">
                         <p>Den Token können Sie aus dem Textfeld herauskopieren und für ihre jeweilige Anwendung verwenden.</p>
-                        <p>Sollte es erforderlich sein, den Token neu ausstellen zu lassen können Sie dies mit einem Klick auf den Schalter <span class="badge badge-dark"><i class="fas fa-redo-alt"></i></span> erreichen.</p>
+                        <p>Sollte es erforderlich sein, den Token neu ausstellen zu lassen, können Sie dies mit einem Klick auf den Schalter <span class="badge badge-dark"><i class="fas fa-redo-alt"></i></span> erreichen.</p>
                         <div class="duik-callout duik-callout-warning mb-5">
                             <h4 class="h5">Wichtiger Hinweis!</h4>
                             <p class="mb-0">Bitte beachten Sie, dass mit der Ausstellung eines neuen Tokens alle Zugriffe auf die testWare API mit dem neuen Token erfolgen müssen. Zugriffe mit dem alten Token werden abgewiesen. Der alte Token ist nicht mehr reproduzierbar.</p>
