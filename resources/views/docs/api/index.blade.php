@@ -41,7 +41,7 @@
                 <p>Im Gegensatz zu der Weboberfläche, welche eine einmalige Authentifizierung eines Benutzers erfordert, muss die Authentifizierung mit jedem Aufruf erfolgen. Die API der testware verwendet hierzu eine 80 Zeichen lange Kette von Zahlen und Buchstaben, die auch <code>Token</code> genannt wird. Dieser Token kann für jeden registrierten Benutzer der testware in der Account-Oberfläche generiert werden.</p>
                 <p>Für einen Zugriff muss dieser als <code>Bearer</code> im Request angegeben werden. Im Beispiel unten wird ein Zugriff auf die API mit <code>jQuery</code> hergestellt, um einen neuen Betrieb mit Adresse anzulegen.</p>
                 <h2 id="api-endpoint">Endpunkte</h2>
-                <p>Im Gegensatz zur Darstellung der tesware im Browser, besitzt die API keine Navigation, welche man über Links erreichen kann. Die API benutzt hierzu sogenannte Endpunkte.</p>
+                <p>Im Gegensatz zur Darstellung der testware im Browser, besitzt die API keine Navigation, welche man über Links erreichen kann. Die API benutzt hierzu sogenannte Endpunkte.</p>
                 <p>Diese Endpunkte bestehen aus der Kombination einer Webadresse und einer Übertragungsart (engl. <code>method</code>). Die Webadresse stellt sich aus der Domäne z.B.  <span class="badge badge-dark">testware.io</span>, einem sogenannten Präfix und dem Namen zusammen. Die aktuelle Version der testware API ist V1, das entsprechende Präfix lautet <span class="badge badge-dark">api/v1/</span>  und der Name z.B. <span class="badge badge-dark">locations</span>. Die Webadresse lautet demnach <span class="badge badge-dark">testware.io/api/v1/locations</span> </p>
                 <p>Die Übertragungsart bezieht sich auf die verschiedene http Request Arten beispielsweise
                     <code>GET</code>,
@@ -298,7 +298,7 @@ Response response = client.newCall(request).execute();</code></pre>
                 </div>
                 <div class="row my-3">
                     <div class="col-md-6">
-                        <p>In der Kontoübersicht finden die den Abschnitt
+                        <p>In der Kontoübersicht finden Sie den Abschnitt
                             <strong>Token für API-Zugang</strong>. Wenn Sie noch keinen Token erstellt haben, wird ein Schalter
                             <span class="badge badge-dark">Token für API erzeugen</span> gezeigt. Mit einem Klick auf diesem Schalter wird der Token erstellt und dem Konto zugeordnet.</p>
                     </div>
@@ -312,7 +312,7 @@ Response response = client.newCall(request).execute();</code></pre>
                 <div class="row my-3">
                     <div class="col-md-6">
                         <p>Den Token können Sie aus dem Textfeld herauskopieren und für ihre jeweilige Anwendung verwenden.</p>
-                        <p>Sollte es erforderlich sein, den Token neu ausstellen zu lassen können Sie dies mit einem Klick auf den Schalter <span class="badge badge-dark"><i class="fas fa-redo-alt"></i></span> erreichen.</p>
+                        <p>Sollte es erforderlich sein, den Token neu ausstellen zu lassen, können Sie dies mit einem Klick auf den Schalter <span class="badge badge-dark"><i class="fas fa-redo-alt"></i></span> erreichen.</p>
                         <div class="duik-callout duik-callout-warning mb-5">
                             <h4 class="h5">Wichtiger Hinweis!</h4>
                             <p class="mb-0">Bitte beachten Sie, dass mit der Ausstellung eines neuen Tokens alle Zugriffe auf die testWare API mit dem neuen Token erfolgen müssen. Zugriffe mit dem alten Token werden abgewiesen. Der alte Token ist nicht mehr reproduzierbar.</p>
