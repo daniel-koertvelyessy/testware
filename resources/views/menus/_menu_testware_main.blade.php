@@ -27,7 +27,7 @@
                href="{{ route('equipment.maker') }}"
             >{{__('Neu')}}</a>
             <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">{{__('Neuesten Geräte')}}</h6>
+            <h6 class="dropdown-header">{{__('Neueste Geräte')}}</h6>
             @foreach (\App\Equipment::take(5)->latest()->get() as $equipMen)
                 <a class="dropdown-item"
                    href="{{ route('equipment.show',$equipMen) }}"
@@ -63,7 +63,7 @@
                href="{{ route('event.create') }}"
             >{{__('Neu')}}</a>
             <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">{{__('Letzen Ereignisse')}}</h6>
+            <h6 class="dropdown-header">{{__('Letze Ereignisse')}}</h6>
             @foreach (\App\EquipmentEvent::where('read','<>',NULL)->take(5)->latest()->get() as $equipMen)
                 <a class="dropdown-item"
                    href="{{ route('event.show',$equipMen) }}"

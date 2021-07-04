@@ -208,8 +208,13 @@ class InstallerController extends Controller
     <td>';
         foreach($user->roles as $role) {
             $data['html'] .= $role->name;
-            $data['html'] .= ($role->is_super_user === 1) ? ' <span class="text-muted small" title="' . __('Rolle ist ein SuperUser') . '">SU</span>' : '';
         }
+        $data['html'] .='</td>
+    <td>';
+        $data['html'] .= ($user->profile) ? '<span class="fas fa-check"></span>' : '';
+        $data['html'] .='</td>
+    <td>';
+        $data['html'] .= ($user->role_id === 1) ? '<span class="fas fa-check"></span>' : '';
    $data['html'] .= ' </td>
     <td>
         <button type="button"
@@ -229,9 +234,40 @@ class InstallerController extends Controller
 
     public function deleteUserData(Request $request)
     {
-        $data['user'] = (new User)->removeUser($request);
-        $data['employee'] = (new Profile)->removeEmployee($request);
+        $data['user'] = User::find($request->id)->delete();
+        $data['employee'] = Profile::where('user_id',$request->id)->delete();
         return $data;
     }
+
+    /**
+     * @param  Request $request
+     *
+     * @return false|string
+     */
+    public function checkEmail(Request $request)
+    {
+        return json_encode(User::where('email',$request->email)->count()>0);
+    }
+
+    /**
+     * @param  Request $request
+     *
+     * @return false|string
+     */
+    public function checkUserName(Request $request)
+    {
+        return json_encode(User::where('username',$request->username)->count()>0);
+    }
+
+    /**
+     * @param  Request $request
+     *
+     * @return false|string
+     */
+    public function checkName(Request $request)
+    {
+        return json_encode(User::where('name',$request->name)->count()>0);
+    }
+
 
 }

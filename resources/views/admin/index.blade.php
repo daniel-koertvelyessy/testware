@@ -98,7 +98,7 @@
                     <h2 class="h5">{{ __('Unvollständige Anforderungen') }}</h2>
                     <x-system-status-msg counter="0"
                                          type="pass"
-                                         msg="{{ __('Sehr gut! Keine Anforderungen sind unvollständig') }}"
+                                         msg="{{ __('Sehr gut! Alle Anforderungen sind vollständig') }}"
                     />
                 @endif
             </div>
@@ -138,7 +138,7 @@
                 @else
                     <x-system-status-msg link="{{ route('produkt.index') }}"
                                          type="warning"
-                                         msg="{{ __('Keine befähigte Benutzer gefunden') }}"
+                                         msg="{{ __('Keine befähigten Benutzer gefunden') }}"
                     />
                 @endif
             </div>
@@ -175,7 +175,7 @@
                 @if($system['control_equipment']>0)
                     <x-system-status-msg counter="{{ $system['control_equipment'] }}"
                                          type="pass"
-                                         msg="{{ __('Sehr gut! prüfgeräte sind angelegt') }}"
+                                         msg="{{ __('Sehr gut! Prüfgeräte sind angelegt') }}"
                     />
                 @else
                     <x-system-status-msg link="{{ route('equipment.index') }}"
@@ -193,7 +193,7 @@
                     <h2 class="h5">{{ __('Geräte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}</h2>
                     <x-system-status-msg link="{{ route('equipMain') }}"
                                          type="warning"
-                                         msg="{{ __('Keine befähigte Benutzer gefunden') }}"
+                                         msg="{{ __('Keine befähigten Benutzer gefunden') }}"
                     />
                 @endif
             </div>

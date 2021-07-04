@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -183,11 +184,39 @@ class User extends Authenticatable
     }
 
     /**
+     * @param  Request $request
+     *
+     * @return mixed
+     */
+    public function addInstallerUser(array $details)
+    {
+        if ($this->checkUserExists($details['username'], $details['email'])) return 0;
+        $this->name = $details['name'];
+        $this->email = $details['email'];
+        $this->username = $details['username'];
+        $this->role_id = 1;
+        $this->locale = $details['locales'];
+        $this->password =Hash::make($details['password']);
+        $this->save();
+
+        $this->roles()->attach([1]);
+        $this->roles()->attach([4]);
+
+        return $this->id;
+    }
+
+    /**
      * The roles that belong to the user.
      */
     public function roles()
     {
         return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withTimestamps();
+    }
+
+    public function checkUserExists($username, $email):bool{
+
+        return User::where('username',$username)->count() >0 || User::where('email',$email)->count() >0;
+
     }
 
     public function removeUser(Request $request)

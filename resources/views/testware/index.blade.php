@@ -10,6 +10,16 @@
 
 @section('mainSection', __('testWare'))
 
+@section('modals')
+    <x-modals.form_modal
+        title="Übersicht Prüfungen"
+        modalId="modalShowTestingList"
+        btnSubmit=""
+        btnClose="ok"
+        modalSize="lg"
+    />
+@endsection
+
 @section('content')
     @if($initialiseApp)
 
@@ -41,6 +51,7 @@
             </span>
         </h2>
         <div class="row">
+            <h1 style="color:#{{ env('APP_Color') }}">Hallo !!!</h1>
             @foreach (App\EquipmentState::all() as $equipmentState)
                 @php
                     $equipments = App\Equipment::where('equipment_state_id',$equipmentState->id)->get()
@@ -84,7 +95,9 @@
                 <h2 class="h5">
                     <a href="{{ route('control.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
-                <nav>
+                <x-testcalendar />
+
+          {{--      <nav>
                     <div class="nav nav-tabs"
                          id="nav-tab"
                          role="tablist"
@@ -275,7 +288,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div>--}}
 
 
             </x-dashborarditem>
@@ -301,7 +314,7 @@
                 @endforelse
             </x-dashborarditem>
 
-            <x-dashborarditem>
+{{--            <x-dashborarditem>
                 <h2 class="h5">{{ __('Status') }}
                     <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
                 </h2>
@@ -309,7 +322,7 @@
                      style="max-width: 350px;"
                 ></div>
 
-            </x-dashborarditem>
+            </x-dashborarditem>--}}
         </div>
         {{--        {!!  App\Testware::checkTWStatus() !!}--}}
     </div>
@@ -318,9 +331,9 @@
 
 @section('scripts')
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+{{--    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>--}}
     <script>
-
+/*
         let equipmentStateNumbers = [
             @foreach(App\EquipmentState::all() as $eqs)
             {{ App\Equipment::where('equipment_state_id',$eqs->id)->count() }},  // freigegeben
@@ -357,7 +370,25 @@
 
         var chart = new ApexCharts(document.querySelector("#myChart"), options);
 
-        chart.render();
+        chart.render();*/
+
+        $('#datepicker').datepicker({
+            format: "yyyy-mm-dd",
+            language: "de-DE",
+            // calendarWeeks: true
+        }).on('changeDate', function() {
+            $('#my_hidden_input').val(
+                $('#datepicker').datepicker('getFormattedDate')
+            );
+        });
+
+        $('.btnOpenTestListeOfDate').click(function () {
+            let testingdate = $(this).data('testingdate');
+            $('.modal-title').html(`<p>Übersicht der Prüfung vom ${testingdate}</p>`);
+            $('.modal-body').html(`
+            `);
+            $('#modalShowTestingList').modal('show');
+        });
     </script>
 
 @endsection

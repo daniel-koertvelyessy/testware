@@ -8,4 +8,9 @@
 @endsection
 @section('buttons')
     <a href="/" class="btn btn-lg btn-primary">{{__('zum Portal')}}</a>
+
+    <pre>
+        <?php print_r($_SERVER); ?>
+    </pre>
+
 @endsection

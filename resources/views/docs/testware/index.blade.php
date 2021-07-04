@@ -16,7 +16,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1>{{__('tesWare')}}</h1>
+                <h1>{{__('testWare')}}</h1>
                 <small class="text-muted">{{__('Stand')}} 2020.Oktober</small>
             </div>
         </div>

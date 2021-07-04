@@ -156,7 +156,7 @@ class Profile extends Model
 
     public function removeEmployee(Request $request)
     {
-        return Profile::destroy($request->id) === 1;
+        return Profile::destroy($request->id) ;
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
+@section('mainSection', __('Geräte'))
 
 @section('menu')
     @include('menus._menu_testware_main')
@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h4">{{__('Übersicht aller Geräte')}}</h1>
+                <h1 class="h4 d-md-block d-none">{{__('Übersicht aller Geräte')}}</h1>
             </div>
         </div>
         <div class="row">

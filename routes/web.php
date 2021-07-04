@@ -301,12 +301,6 @@ Route::post('addApiTokenToUser/{user}', 'UserController@addTokenToUser')->name('
 
 Route::get('/report/template', 'ReportController@template')->name('report.template');
 
-Route::get('/installer', 'InstallerController@index')->name('installer.company');
-Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
-Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
-Route::get('/installer/location', 'InstallerController@location')->name('installer.location');
-Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
-Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.seed');
 Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
 /*

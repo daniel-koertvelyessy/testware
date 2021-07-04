@@ -15,14 +15,15 @@
 @section('content')
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h3">{{__('Übersicht')}}</h1>
+                <h1 class="h4">{{__('Übersicht')}}</h1>
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-2">
+                {{ env('SESSION_LIFETIME') }}
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
                         <a href="{{ route('equipment.maker') }}"

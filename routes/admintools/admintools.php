@@ -145,15 +145,28 @@ Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'Anforderung
 //Route::put('updateAnforderungControlItem', 'AdminController@updateAnforderungControlItem')->name('updateAnforderungControlItem');
 //Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderungControlItem')->name('deleteAnforderungControlItem');
 
+/**
+ *   INSTALLER
+ */
+Route::get('/installer', 'InstallerController@index')->name('installer.company');
+Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
+Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
+Route::get('/installer/location', 'InstallerController@location')->name('installer.location');
+Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
+Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.seed');
+Route::get('/installer/checkemail', 'InstallerController@checkEmail')->name('installer.checkemail');
+Route::get('/installer/checkname', 'InstallerController@checkName')->name('installer.checkname');
+Route::get('/installer/checkusername', 'InstallerController@checkUserName')->name('installer.checkusername');
+Route::get('installer/getUserData', 'InstallerController@getUserData')->name('installer.getUserData');
+Route::post('installer/storeUserData', 'InstallerController@addUserData')->name('installer.storeuserData');
+Route::post('installer/deleteUserData', 'InstallerController@deleteUserData')->name('installer.deleteUserData');
+
+
 
 /**
  *   Benutzer Profil
  */
 Route::put('updateUserTheme', 'AdminController@updateUserTheme')->name('updateUserTheme');
-Route::get('/installer', 'InstallerController@index');
-Route::get('installer/getUserData', 'InstallerController@getUserData')->name('installer.getUserData');
-Route::post('installer/storeUserData', 'InstallerController@addUserData')->name('installer.storeuserData');
-Route::post('installer/deleteUserData', 'InstallerController@deleteUserData')->name('installer.deleteUserData');
 
 
 /**

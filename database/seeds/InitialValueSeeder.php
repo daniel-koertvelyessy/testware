@@ -167,102 +167,102 @@ class InitialValueSeeder extends Seeder
                 'adresse_id'     => 1,
             ]
         ]);
+        /*
+              DB::table('users')->insert([
+                [
+                          'created_at'        => now(),
+                          'updated_at'        => now(),
+                          'name'              => 'testware',
+                          'email'             => 'testware@bitpack.io',
+                          'role_id'           => 1,
+                          'email_verified_at' => now(),
+                          'username'          => 'Testware User',
+                          'password'          => password_hash('sp7RSzSLZ6kC3kS', PASSWORD_DEFAULT),
+                          'api_token'        > null
+                      ],
+                    [
+                          'created_at'        => now(),
+                          'updated_at'        => now(),
+                          'name'              => 'Martin Schubert',
+                          'email'             => 'martin@bitpack.io',
+                          'role_id'           => 1,
+                          'email_verified_at' => now(),
+                          'username'          => 'martin',
+                          'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
+                          'api_token'         => null
 
-        DB::table('users')->insert([
-            [
-                'created_at'        => now(),
-                'updated_at'        => now(),
-                'name'              => 'testware',
-                'email'             => 'testware@bitpack.io',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'Testware User',
-                'password'          => password_hash('sp7RSzSLZ6kC3kS', PASSWORD_DEFAULT),
-                'api_token'         => null
-            ],
-            /*[
-                'created_at'        => now(),
-                'updated_at'        => now(),
-                'name'              => 'Martin Schubert',
-                'email'             => 'martin@bitpack.io',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'martin',
-                'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
-                'api_token'         => null
+                      ],
+                      [
+                          'created_at'        => now(),
+                          'updated_at'        => now(),
+                          'name'              => 'Matthias Roethig',
+                          'email'             => 'matthias@bitpack.io',
+                          'role_id'           => 1,
+                          'email_verified_at' => now(),
+                          'username'          => 'matthias',
+                          'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
+                          'api_token'         => null
 
-            ],
-            [
-                'created_at'        => now(),
-                'updated_at'        => now(),
-                'name'              => 'Matthias Roethig',
-                'email'             => 'matthias@bitpack.io',
-                'role_id'           => 1,
-                'email_verified_at' => now(),
-                'username'          => 'matthias',
-                'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
-                'api_token'         => null
-
-            ],*/
+                      ],
         ]);
 
-        DB::table('role_user')->insert([
-            [
-                'created_at' => now(),
-                'updated_at' => now(),
-                'role_id'    => 1,
-                'user_id'    => 1,
-            ],
-            [
-                'created_at' => now(),
-                'updated_at' => now(),
-                'role_id'    => 2,
-                'user_id'    => 1,
-            ],
-        ]);
+              DB::table('role_user')->insert([
+                  [
+                      'created_at' => now(),
+                      'updated_at' => now(),
+                      'role_id'    => 1,
+                      'user_id'    => 1,
+                  ],
+                  [
+                      'created_at' => now(),
+                      'updated_at' => now(),
+                      'role_id'    => 2,
+                 'user_id'    => 1,
+                  ],
+              ]);
 
-        /*   DB::table('profiles')->insert([
-               [
-                   'created_at'      => now(),
-                   'updated_at'      => now(),
-                   'user_id'         => 3,
-                   'ma_nummer'       => random_int(1000, 2000),
-                   'ma_name'         => 'Roethig',
-                   'ma_name_2'       => '',
-                   'ma_vorname'      => 'Matthias',
-                   'ma_geburtsdatum' => now()->addYears(-38),
-                   'ma_eingetreten'  => now()->addYears(-5),
-                   'ma_telefon'      => '',
-                   'ma_mobil'        => '',
-               ],
-               [
-                   'created_at'      => now(),
-                   'updated_at'      => now(),
-                   'user_id'         => 2,
-                   'ma_nummer'       => random_int(1000, 2000),
-                   'ma_name'         => 'Schubert',
-                   'ma_name_2'       => '',
-                   'ma_vorname'      => 'Martin',
-                   'ma_geburtsdatum' => now()->addYears(-42),
-                   'ma_eingetreten'  => now()->addYears(-13),
-                   'ma_telefon'      => '',
-                   'ma_mobil'        => '',
-               ],
-               [
-                   'created_at'      => now(),
-                   'updated_at'      => now(),
-                   'user_id'         => 1,
-                   'ma_nummer'       => random_int(1000, 2000),
-                   'ma_name'         => 'Körtvélyessy',
-                   'ma_name_2'       => '',
-                   'ma_vorname'      => 'Daniel',
-                   'ma_geburtsdatum' => now()->addYears(-46),
-                   'ma_eingetreten'  => now()->addYears(-15),
-                   'ma_telefon'      => '03040586940',
-                   'ma_mobil'        => '',
-               ],
-           ]);*/
-
+         DB::table('profiles')->insert([
+                     [
+                         'created_at'      => now(),
+                         'updated_at'      => now(),
+                         'user_id'         => 3,
+                         'ma_nummer'       => random_int(1000, 2000),
+                         'ma_name'         => 'Roethig',
+                         'ma_name_2'       => '',
+                         'ma_vorname'      => 'Matthias',
+                         'ma_geburtsdatum' => now()->addYears(-38),
+                         'ma_eingetreten'  => now()->addYears(-5),
+                         'ma_telefon'      => '',
+                         'ma_mobil'        => '',
+                     ],
+                     [
+                         'created_at'      => now(),
+                         'updated_at'      => now(),
+                         'user_id'         => 2,
+                         'ma_nummer'       => random_int(1000, 2000),
+                         'ma_name'         => 'Schubert',
+                         'ma_name_2'       => '',
+                         'ma_vorname'      => 'Martin',
+                         'ma_geburtsdatum' => now()->addYears(-42),
+                         'ma_eingetreten'  => now()->addYears(-13),
+                         'ma_telefon'      => '',
+                         'ma_mobil'        => '',
+                     ],
+                     [
+                         'created_at'      => now(),
+                         'updated_at'      => now(),
+                         'user_id'         => 1,
+                         'ma_nummer'       => random_int(1000, 2000),
+                         'ma_name'         => 'Körtvélyessy',
+                         'ma_name_2'       => '',
+                         'ma_vorname'      => 'Daniel',
+                         'ma_geburtsdatum' => now()->addYears(-46),
+                         'ma_eingetreten'  => now()->addYears(-15),
+                         'ma_telefon'      => '03040586940',
+                         'ma_mobil'        => '',
+                     ],
+                 ]);
+        */
         DB::table('anredes')->insert([
             [
                 'an_kurz'   => 'Hr',
@@ -353,7 +353,7 @@ class InitialValueSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'label'      => 'QMS',
-                'name'       => 'Berichte für Qualitätsmanagement',
+                'name'       => 'Berichte für das Qualitätsmanagement',
             ],
             [
                 'created_at' => now(),
@@ -364,25 +364,7 @@ class InitialValueSeeder extends Seeder
 
         ]);
 
-        DB::table('reports')->insert([
-            [
-                'label'          => 'Standorte',
-                'name'           => 'Standortbericht allgemein',
-                'description'    => 'Erstellt eine Übersicht aller Standorte mit entsprechender Stuktur',
-                'view'           => 'locations',
-                'report_type_id' => '1',
-                'user_id'        => '1',
-            ],
 
-            [
-                'label'          => 'Inventurbericht',
-                'name'           => 'Inventurliste',
-                'description'    => 'Listet alle Geräte mit Status, Wert und dessen Abschreibung',
-                'view'           => 'inventur',
-                'report_type_id' => '1',
-                'user_id'        => '1',
-            ],
-        ]);
 
         DB::table('room_types')->insert([
             [

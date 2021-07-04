@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
+@section('mainSection', __('Prüfungen'))
 
 @section('pagetitle')
     {{__('Übersicht Prüfungen')}}
@@ -14,13 +14,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h1 class="h4">{{__('Übersicht')}}</h1>
+                <h1 class="h4 d-md-block d-none">{{__('Übersicht')}}</h1>
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-striped" id="tabControlListe">
+                <table class="table table-striped" id="tabControlListe">
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
@@ -73,7 +73,7 @@
                                     <blockquote class="d-md-none blockquote border-left border-warning pl-3">
                                             <span class="fas fa-exclamation-triangle text-warning"
                                                   aria-label="Symbol für unvollständige Prüfung"
-                                            ></span> => {{__('Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden.')}}
+                                            ></span> {{__('Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden.')}}
                                     </blockquote>
                                 </td>
                             </tr>

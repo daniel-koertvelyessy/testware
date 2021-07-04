@@ -10,11 +10,13 @@
             'warning' => 'bg-warning',
             'danger' => 'bg-danger text-white',
             'info' => 'bg-info',
+            'sd'=>'',
     ],
     'typeBtnColor'=>[
             'warning' => 'btn-warning',
             'danger' => 'btn-danger',
             'info' => 'btn-info',
+            'sd'=> 'btn-primary',
     ],
     'modalSize' => 'sd',
     'sizeClass' =>[
@@ -57,13 +59,17 @@
                     {{ $slot }}
                 </div>
                 <div class="modal-footer">
+                    @if($btnClose)
                     <button type="button"
                             class="btn btn-outline-secondary"
                             data-dismiss="modal"
                     >{{ $btnClose }}</button>
+                    @endif
+                    @if($btnSubmit)
                     <button type="submit"
                             class="btn {{ $typeBtnColor[$modalType] }}"
                     >{{ $btnSubmit }}</button>
+                    @endif
                 </div>
             </form>
         </div>

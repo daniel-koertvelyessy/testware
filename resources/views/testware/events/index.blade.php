@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
+@section('mainSection', __('Ereignisse'))
 
 @section('pagetitle')
     {{__('Ereignisse von Geräten')}}
@@ -14,10 +14,10 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h3">
+                <h1 class="h4 d-md-block d-none">
                     {{ __('Übersicht') }}
                 </h1>
-                <table class="table table-responsive-md" id="tableEventListe">
+                <table class="table" id="tableEventListe">
                     <thead>
                     <tr>
                         <th>@sortablelink('created_at', __('Vom'))</th>
