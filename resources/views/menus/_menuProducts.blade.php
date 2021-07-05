@@ -1,4 +1,4 @@
-<div class="modal fade"
+{{--<div class="modal fade"
      id="modalAddNewProductCategory"
      tabindex="-1"
      aria-labelledby="modalAddNewProductCategoryLabel"
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 <ul class="navbar-nav mr-auto">
     <li class="nav-item {{ Request::routeIs('produktMain')  ? ' active ' : '' }}">
         <a class="nav-link "

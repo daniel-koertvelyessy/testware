@@ -32,7 +32,7 @@
                             <td>
                                 <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? 'offen' }}</td>
+                            <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? __('offen') }}</td>
                             <td>
                                 {{ $equipmentEvent->equipment->produkt->prod_label }} /
                                 {{ $equipmentEvent->equipment->eq_inventar_nr }}
@@ -42,7 +42,7 @@
                         @empty
                         <tr>
                             <td colspan="4">
-                                <x-notifyer>Keine aktiven Ereignisse gefunden</x-notifyer>
+                                <x-notifyer>{{__('Keine aktiven Ereignisse gefunden')}}</x-notifyer>
                             </td>
                         </tr>
                     @endforelse

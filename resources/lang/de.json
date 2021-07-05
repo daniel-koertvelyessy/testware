@@ -682,7 +682,7 @@
     "Keine Anforderungen gefunden": "Keine Anforderungen gefunden",
     "Anforderungen haben keine Kontrollvorgänge": "Anforderungen haben keine Kontrollvorgänge",
     "Unvollständige Anforderungen": "Unvollständige Anforderungen",
-    "Sehr gut! Alle Anforderungen sind vollständig": "Sehr gut! Alle Anforderungen sind vollständig'",
+    "Sehr gut! Alle Anforderungen sind vollständig": "Sehr gut! Alle Anforderungen sind vollständig",
     "Sehr gut! Produkte sind erstellt": "Sehr gut! Produkte sind erstellt",
     "Sehr gut! Prüfprodukte sind definiert": "Sehr gut! Prüfprodukte sind definiert",
     "Keine Produkte als Prüfmittel definiert": "Keine Produkte als Prüfmittel definiert",
@@ -696,5 +696,14 @@
     "Es sind noch keine Geräte angelegt worden": "Es sind noch keine Geräte angelegt worden",
     "Sehr gut! Prüfgeräte sind angelegt": "Sehr gut! Prüfgeräte sind angelegt",
     "Keine Prüfgeräte definiert": "Keine Prüfgeräte definiert",
+    "#####": "######",
+    "Die Passwörter stimmen nicht überein!": "Die Passwörter stimmen nicht überein!",
+    "offen": "offen",
+    "Keine aktiven Ereignisse gefunden": "Keine aktiven Ereignisse gefunden",
+    "Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden": "Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden",
+    "Es sind bislang keine Prüfungen angelegt worden": "Es sind bislang keine Prüfungen angelegt worden",
+    "#####": "######",
+    "#####": "######",
+
     "##ENDE###": "###ENDE###"
 }

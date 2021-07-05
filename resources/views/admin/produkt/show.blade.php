@@ -939,6 +939,7 @@
                                                     data-target="#sectionFirmaDetails"
                                                     aria-expanded="false"
                                                     aria-controls="sectionFirmaDetails"
+                                                    id="btnSectionFirmaDetails"
                                             >
                                                 <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
                                                     class="fas fa-angle-down"
@@ -1488,6 +1489,12 @@
             $('#proddoc_label').val(
                 $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
             );
+        });
+
+        $('#btnSectionFirmaDetails').click(function (){
+            $('#ckAddNewFirma, #ckAddNewAddress, #ckAddNewContact').prop('checked',true);
+
+
         });
 
 

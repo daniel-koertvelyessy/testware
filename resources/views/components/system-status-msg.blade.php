@@ -30,11 +30,16 @@
     <div>
         <span class="{{ $icon[$type] }}  mr-2"></span> <span>{{ $msg }}</span>
     </div>
-    @if($link!=='')
+    @if($counter===0)
         <a href="{{ $link }}"
            class="btn btn-sm {{ $btnclass[$type] }}"
         >{{ $labelBtn }}</a>
-    @else
-        <span class="btn btn-success btn-sm">{{ $counter }}</span>
+    @endif
+    @if($counter>0)
+        <a href="{{ $link }}"
+           class="btn btn-sm {{ $btnclass[$type] }}"
+        >
+            <span class="small">{{ $counter }}</span>
+        </a>
     @endif
 </div>

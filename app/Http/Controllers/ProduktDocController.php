@@ -48,7 +48,7 @@ class ProduktDocController extends Controller
     {
 
         if ($request->hasFile('prodDokumentFile')) {
-
+//mkdir('/var/www/html/storage/app/product_files/');
             $proDocFile = new ProduktDoc();
             $file = $request->file('prodDokumentFile');
             $val = $this->validateNewProduktDokument();
@@ -61,7 +61,8 @@ class ProduktDocController extends Controller
             //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
             $proDocFile->proddoc_name = $file->getClientOriginalName();
-            $proDocFile->proddoc_name_pfad = $file->store('produkt_docu/' . \request('produkt_id'));
+            $proDocFile->proddoc_name_pfad = $file->store('/product_files/'. \request('produkt_id'));
+//            $proDocFile->proddoc_name_pfad = $file->storeAs('product_docu/' . \request('produkt_id'),$file->getClientOriginalName());
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->produkt_id = request('produkt_id');
             $proDocFile->proddoc_description = request('proddoc_description');

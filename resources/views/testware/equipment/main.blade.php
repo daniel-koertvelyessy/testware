@@ -23,7 +23,6 @@
         </div>
         <div class="row">
             <div class="col-md-2">
-                {{ env('SESSION_LIFETIME') }}
                 <section class="card-body text-dark">
                     <nav class="d-felx justify-content-around">
                         <a href="{{ route('equipment.maker') }}"

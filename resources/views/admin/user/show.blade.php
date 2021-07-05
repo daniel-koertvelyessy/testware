@@ -320,7 +320,7 @@
                                     id="systemTheme"
                                     class="custom-select"
                             >
-                                <option value="css/sand.css"
+                               {{-- <option value="css/sand.css"
                                         data-asset="{{ asset('css/sand.css') }}"
                                         {{ $user->user_theme=='css/sand.css'? ' selected ' : '' }}
                                 >Sandstone
@@ -329,16 +329,16 @@
                                         data-asset="{{ asset('css/minty.css') }}"
                                         {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
                                 >Mint
-                                </option>
+                                </option>--}}
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
                                         {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
-                                >Dunkel blau
+                                >Light
                                 </option>
                                 <option value="css/hero.css"
                                         data-asset="{{ asset('css/hero.css') }}"
                                         {{ $user->user_theme=='css/hero.css'? ' selected ' : '' }}
-                                >Hero blau
+                                >Dark
                                 </option>
                                 <option value="css/materia.css"
                                         data-asset="{{ asset('css/materia.css') }}"
