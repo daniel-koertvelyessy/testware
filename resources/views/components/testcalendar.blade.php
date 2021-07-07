@@ -1,24 +1,34 @@
 <?php
+
+use App\ControlEquipment;
+
+$setdate = (isset($setdate)) ? $setdate : date('Y-m-d');
 //		return "$month, $year, $monat, $jahr";
+$month = (int)date('n', strtotime($setdate));
+$year = (int)date('Y', strtotime($setdate));
+$prevMonth = ($month - 1 < 1) ? 12 : $month - 1;
+$prevYear = ($month - 1 < 1) ? $year-- : $year;
+$nextMonth = ($month + 1 > 12) ? 1 : $month + 1;
+$nextYear = ($month + 1 > 12) ? $year++ : $year;
+
 
 /* draw table */
 $calendar = '
 <div class="d-flex justify-content-between align-items-center">
-<button class="btn btn-sm btn-outline-primary">
+<button class="btn btn-sm btn-outline-primary setTestingCalenderDate" data-nextmonth="' . $prevMonth . '" data-nextyear="' . $prevYear . '">
     <span class="fas fa-angle-left"></span>
 </button>
 <span>
-    ' . date('F Y') . '
+    ' . date('F Y', strtotime($setdate)) . '
 </span>
-<button class="btn btn-sm btn-outline-primary">
+<button class="btn btn-sm btn-outline-primary setTestingCalenderDate" data-nextmonth="' . $nextMonth . '" data-nextyear="' . $nextYear . '">
     <span class="fas fa-angle-right"></span>
 </button>
 </div>
 ';
 
 $calendar .= '<table class="table">';
-$month = date('m');
-$year = date('Y');
+
 /* table headings */
 //	$headings = array('Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag');
 $calendar .= '<tr class="table-secondary">
@@ -74,7 +84,7 @@ for ($list_day = 1; $list_day <= $days_in_month; $list_day++):
 
     //		$calendar.= ($daytoday == $list_day ) ? '<p>heute</p>' : '<p></p>';
     //		$calendar.= '<div data-datum="'.$datum.'" class="TagDiv">';
-    $n = \App\ControlEquipment::where('qe_control_date_due', date('Y-m-' . $list_day))->count();
+    $n = ControlEquipment::where('qe_control_date_due', date('Y-m-' . $list_day))->count();
     if ($n > 0) {
         $calendar .= '
 <button class="btn btn-sm btn-primary btnOpenTestListeOfDate" data-testingdate="' . date('Y-m-' . $list_day) . ' ">

@@ -303,6 +303,12 @@ Route::get('/report/template', 'ReportController@template')->name('report.templa
 
 Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
+Route::get('getTestingCalender/{setdate}', function ($setdate) {
+    $data['html'] = view('components.testcalendar', compact('setdate'))->render();
+    return json_encode($data);
+
+});
+
 /*
 
 Übergabe von GET Variablen an Route
