@@ -93,7 +93,7 @@ $.ajax(settings).done(function (response) {
   console.log(response);
 });</code></pre>
 
-                <p>Die Antwort der API packt die Daten in ein <code>data</code> Objekt (erkennbar duch die Einfassung der Schlüssel:Wert Paare mit <code>{}</code> Klammern.</p>
+                <p>Die Antwort der API packt die Daten in ein <code>data</code> Objekt (erkennbar duch die Einfassung der Schlüssel: Wert Paare mit <code>{}</code> Klammern.</p>
 
 <pre><code class="language-json">{
     "id": 1,
