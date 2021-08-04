@@ -65,14 +65,14 @@ class EquipmentDocController extends Controller
             $proDocFile->equipment_id = request('equipment_id');
             $proDocFile->eqdoc_description = request('eqdoc_description');
             $proDocFile->eqdoc_label = request('eqdoc_label');
-            $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
+            $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!',['name'=>$file->getClientOriginalName()]));
             $proDocFile->save();
             // $file->storeAs($pfad, $Dateiname->guessExtention() ); => Storage::disk('local')->putFileAs($pfad, $file, $Dateiname->guessExtention());
             // $file->store($pfad) => Storage::disk('local')->putFile($pfad, $file);
             // 'local' oder 'public' oder default, wenn nicht angegeben
 
         } else {
-            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_label') . '</strong> konnte nicht hochgeladen werden!');
+            $request->session()->flash('status', __('Das Dokument <strong>:label</strong> konnte nicht hochgeladen werden!',['label'=>request('doctyp_label')]));
         }
         //
         return redirect()->back();
@@ -137,7 +137,7 @@ class EquipmentDocController extends Controller
         $file = $prodDoku->eqdoc_name;
         Storage::delete($prodDoku->eqdoc_name_pfad);
         $prodDoku->delete();
-        session()->flash('status', 'Das Dokument <strong>' . $file . '</strong> wurde gelöscht!');
+        session()->flash('status', __('Das Dokument <strong>:name</strong> wurde gelöscht!',['name'=>$file]));
         return redirect()->back();
     }
 

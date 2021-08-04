@@ -679,7 +679,7 @@
                                                            name="prod_active"
                                                            id="prod_active"
                                                            value="1"
-                                                        {{ ($produkt->prod_active===1)? ' checked ' : ''  }}
+                                                        {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="prod_active"

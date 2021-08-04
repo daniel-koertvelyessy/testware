@@ -532,6 +532,7 @@
     "Betroffene Anordnungen anzeigen": "Betroffene Anordnungen anzeigen",
     "Verordnungen regeln die Einteilung der Produkte->Geräte in Risikogruppen und bestimmen den Umfang der Prüfungen": "Verordnungen regeln die Einteilung der Produkte->Geräte in Risikogruppen und bestimmen den Umfang der Prüfungen",
     "Anforderung-Typen": "Anforderung-Typen",
+    "Prüfinterval": "Prüfinterval",
     "Anforderungstyp anlegen": "Anforderungstyp anlegen",
     "Anforderungen gefunden!": "Anforderungen gefunden!",
     "Es sind keine Anforderungen mit diesem Typ verknüpft!": "Es sind keine Anforderungen mit diesem Typ verknüpft!",
@@ -696,14 +697,11 @@
     "Es sind noch keine Geräte angelegt worden": "Es sind noch keine Geräte angelegt worden",
     "Sehr gut! Prüfgeräte sind angelegt": "Sehr gut! Prüfgeräte sind angelegt",
     "Keine Prüfgeräte definiert": "Keine Prüfgeräte definiert",
-    "#####": "######",
     "Die Passwörter stimmen nicht überein!": "Die Passwörter stimmen nicht überein!",
     "offen": "offen",
     "Keine aktiven Ereignisse gefunden": "Keine aktiven Ereignisse gefunden",
     "Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden": "Prüfung ist unvollständig. Vor dem Start der Prüfung muss diese ergänzt werden",
     "Es sind bislang keine Prüfungen angelegt worden": "Es sind bislang keine Prüfungen angelegt worden",
-    "#####": "######",
-    "#####": "######",
-
-    "##ENDE###": "###ENDE###"
+    "Das Dokument <strong>:label</strong> konnte nicht hochgeladen werden!": "Das Dokument <strong>:label</strong> konnte nicht hochgeladen werden!",
+    "Das Dokument <strong>:name</strong> wurde gelöscht!": "Das Dokument <strong>:name</strong> wurde gelöscht!"
 }

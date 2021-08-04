@@ -50,7 +50,7 @@
                             </td>
                             <td class="d-none d-md-table-cell">{{ $produkt->prod_nummer }}</td>
                             <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_label }}</td>
-                            <td>{!!  ($produkt->prod_active === 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
+                            <td>{!!  ($produkt->prod_active == 1) ? '<i class="far fa-check-circle text-success"></i>' : '<i class="far fa-times-circle text-danger"></i>' !!}</td>
                             <td class="d-none d-md-table-cell">{!! $produkt->ControlProdukt ? '<i class="far fa-check-circle text-success"></i>' : '' !!}</td>
                             <td class="d-none d-md-table-cell">
                                 <span class="p-1 bg-{{ $produkt->ProduktState->ps_color }} text-white mr-1">

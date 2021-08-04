@@ -108,6 +108,9 @@ class ProduktController extends Controller
      */
     public function update(Request $request, Produkt $produkt)
     {
+
+//        dd($request);
+
         $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
             ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
