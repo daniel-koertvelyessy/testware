@@ -28,6 +28,7 @@ class UserPolicy
     public function isAdmin(User $user)
     : Response
     {
+
         if ($user->role_id===1){
             return Response::allow();
         }

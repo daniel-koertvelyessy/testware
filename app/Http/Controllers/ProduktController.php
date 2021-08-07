@@ -65,7 +65,7 @@ class ProduktController extends Controller
      */
     public function importProdukt()
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         return view('admin.produkt.import');
     }
 
@@ -111,7 +111,7 @@ class ProduktController extends Controller
 
 //        dd($request);
 
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
             ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
         }
@@ -173,7 +173,7 @@ class ProduktController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
 
         $produkt = Produkt::create($this->validateProdukt());
 
@@ -285,7 +285,7 @@ class ProduktController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         Produkt::find($request->produkt_id)->delete();
         $request->session()->flash('status', __('Das Produkt wurde gelöscht!'));
         return redirect(route('produkt.index'));
@@ -428,7 +428,7 @@ class ProduktController extends Controller
 
     public function removeFirmaFromProdukt(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         $faprod = FirmaProdukt::where([
             [
                 'produkt_id',
@@ -562,7 +562,7 @@ class ProduktController extends Controller
      */
     public function addProduktKategorieParam(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::create($this->validateProduktKategorieParam());
         $request->session()->flash('status', __('Das Datenfeld <strong>:label</strong> wurde angelegt!', ['label' => request('pkp_name')]));
         return view('admin.systems');
@@ -578,7 +578,7 @@ class ProduktController extends Controller
      */
     public function deleteProduktKategorieParam(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+//        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::find($request->id)->delete();
         $request->session()->flash('status', __('Das Datenfeld <strong>:label</strong> wurde gelöscht!', ['label' => request('pkp_name')]));
         return back();

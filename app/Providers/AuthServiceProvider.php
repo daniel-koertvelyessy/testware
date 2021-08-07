@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
 
-        Gate::define('use_installer', function (User $user){
+/*        Gate::define('use_installer', function (User $user){
             return $user->role_id === 1;
         });
 
@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
                 return true ;
             }
             return false;
-        });
+        });*/
 
 /*
         Gate::before(function ($user, $ability){

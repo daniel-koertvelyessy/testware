@@ -59,7 +59,6 @@ class LocationsController extends Controller
 
         $locationList = Location::with('Adresse', 'Profile')->sortable()->paginate(10);
         return view('admin.standorte.location.index', compact('locationList'));
-
     }
 
     public function search()
@@ -94,7 +93,7 @@ class LocationsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+        //   $this->authorize('isAdmin', Auth()->user());
         $this->validateLocation();
         $adresse_id = $request->adresse_id ?? (new Adresse)->addNew($request);
         $profile_id = $request->profile_id ?? (new Profile)->addNew($request);
@@ -119,8 +118,7 @@ class LocationsController extends Controller
     /**
      * @return array
      */
-    public function validateLocation()
-    : array
+    public function validateLocation(): array
     {
         return request()->validate([
             'storage_id'     => '',
@@ -186,8 +184,7 @@ class LocationsController extends Controller
      *
      * @return bool
      */
-    public function destroyLocationAjax(Request $request)
-    : bool
+    public function destroyLocationAjax(Request $request): bool
     {
         if (Location::destroy($request->id)) {
             $request->session()->flash('status', __('Der Standort <strong>:label</strong> wurde gelöscht!', ['label' => request('l_label')]));
@@ -197,14 +194,12 @@ class LocationsController extends Controller
         }
     }
 
-    public function getLocationListeAsTable()
-    : array
+    public function getLocationListeAsTable(): array
     {
         return ['html' => view('components.locations_table', ['locations' => Location::sortable()->paginate(10)])->render()];
     }
 
-    public function getLocationListeAsKachel()
-    : array
+    public function getLocationListeAsKachel(): array
     {
         $html = '';
         foreach (Location::all() as $location) {
@@ -335,6 +330,4 @@ class LocationsController extends Controller
 
         return $data;
     }
-
-
 }

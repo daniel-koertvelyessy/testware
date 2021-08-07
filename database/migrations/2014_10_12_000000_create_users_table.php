@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration {
                 ->nullable()
                 ->unique();
             $table->unsignedBigInteger('role_id')
+                ->default(0)
                 ->nullable();
             $table->string('user_theme', 150)
                 ->default('css/flatly.css');

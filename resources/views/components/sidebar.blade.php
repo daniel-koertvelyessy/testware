@@ -50,6 +50,7 @@
         <span>{{__('Berichte')}}</span> <span class="fas fa-clipboard"></span>
     </a>
 
+{{--    @can('isAdmin', Auth()->user())--}}
     <div class="dropdown-divider"></div>
 
     <a href="#sideNavProdukt"
@@ -243,5 +244,6 @@
         </ul>
     </div>
 
+{{--    @endcan--}}
 
 </aside>

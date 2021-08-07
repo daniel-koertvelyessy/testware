@@ -50,8 +50,7 @@ class EquipmentDocController extends Controller
 
             $proDocFile = new EquipmentDoc();
             $file = $request->file('equipDokumentFile');
-
-            $validation = $request->validate([
+            $request->validate([
                 'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
                 // size:2048 => 2048kB
                 'eqdoc_label'       => 'required|max:150'

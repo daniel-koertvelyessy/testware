@@ -67,7 +67,7 @@ class BuildingsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('isAdmin', Auth()->user());
+        //    $this->authorize('isAdmin', Auth()->user());
         (new Building)->addNew($request);
         $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
         return back();
@@ -100,7 +100,7 @@ class BuildingsController extends Controller
      */
     public function edit(building $building)
     {
-        $this->authorize('isAdmin', Auth()->user());
+        //    $this->authorize('isAdmin', Auth()->user());
         return view('admin.standorte.building.edit', compact('building'));
     }
 
@@ -114,7 +114,7 @@ class BuildingsController extends Controller
      */
     public function update(Request $request, Building $building)
     {
-        $this->authorize('isAdmin', Auth()->user());
+        //   $this->authorize('isAdmin', Auth()->user());
         (new Storage)->checkUpdate($request->storage_id, $request->b_label);
         $building->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $building->update($this->validateBuilding());
@@ -125,8 +125,7 @@ class BuildingsController extends Controller
     /**
      * @return array
      */
-    public function validateBuilding()
-    : array
+    public function validateBuilding(): array
     {
         return request()->validate([
             'b_label'          => [
@@ -157,7 +156,7 @@ class BuildingsController extends Controller
      */
     public function destroy(Request $request, Building $building)
     {
-        $this->authorize('isAdmin', Auth()->user());
+        //    $this->authorize('isAdmin', Auth()->user());
         $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde gelöscht!', ['label' => $building->b_name]));
         $building->delete();
         return redirect()->back();
@@ -181,7 +180,7 @@ class BuildingsController extends Controller
         }
 
         if ($request->modalType === 'edit') {
-//            dd($request);
+            //            dd($request);
             $building = Building::find($request->id);
             if ($building->b_label !== $request->b_label) {
                 $storage = Storage::where('storage_uid', $request->storage_id)->first();
@@ -216,8 +215,7 @@ class BuildingsController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroyBuildingAjax(Request $request)
-    : RedirectResponse
+    public function destroyBuildingAjax(Request $request): RedirectResponse
     {
         $building = Building::find($request->id)->first();
 
@@ -230,7 +228,6 @@ class BuildingsController extends Controller
         Building::destroy($request->id);
         $request->session()->flash('status', 'Das Gebäude <strong>' . $name . '</strong> wurde gelöscht!');
         return redirect()->back();
-
     }
 
     public function getRoomListInBuilding(Request $request)
