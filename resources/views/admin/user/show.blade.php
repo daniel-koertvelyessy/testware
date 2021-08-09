@@ -117,10 +117,14 @@
                     />
                 </div>
                 <div class="col-md-3">
-                    <x-datepicker id="deleted_at"
-                                  label="{{__('Gelöscht')}}"
-                                  value="{{ $user->deleted_at }}"
-                    />
+                    <label for="deleted_at">{{__('Gelöscht')}}</label>
+                    <input type="text"
+                           name="deleted_at"
+                           id="deleted_at"
+                           readonly
+                           class="form-control-plaintext"
+                           value="{{ $user->deleted_at }}"
+                    >
                 </div>
                 <div class="col-md-3">
                     <x-selectfield id="locale"

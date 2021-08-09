@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <meta http-equiv="refresh" content="3; {{ route('portal-main') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
     <title>@yield('title')</title>
 </head>

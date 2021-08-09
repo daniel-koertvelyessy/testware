@@ -1,9 +1,7 @@
 @extends('layout.layout-login')
-
 @section('pagetitle')
     {{ __('Bitte anmelden') }}!
 @endsection
-
 @section('content')
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center" style="height: 90vh;">
@@ -16,9 +14,7 @@
                         <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" height="30" alt="">
                     </div>
                     <div class="card-body">
-                        @if (session()->has('expired'))
-                            <p class="lead">{{ __('Ihre Sitzung ist abgelaufen und Sie wurden abgemeldet.') }}</p>
-                        @endif
+                        <p class="lead text-info">{{ __('Ihre Session ist abgelaufen und Sie wurden automatisch abgemeldet.') }}</p>
                         <form method="POST" action="{{ route('login') }}" autocomplete="on">
                             @csrf
                             <div class="form-group">

@@ -18,10 +18,19 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+
+
+//        if(!Auth::user())
+//        {
+//            return redirect()->route('logout'); // add your desire URL in redirect function
+//        }
+
         if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+            dd('wasn???');
+            return redirect()->route('auth.expired');
         }
 
         return $next($request);
+
     }
 }

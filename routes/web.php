@@ -8,6 +8,13 @@ use App\Produkt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+
+
 
 Route::get('/', function () {
     return view('portal-main');
@@ -211,7 +218,12 @@ Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEve
     App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
 })->name('makePDFEquipmentControlReport');
 
-Auth::routes();
+//Auth::routes();
+
+Route::get('/expired', function (){
+    return view('auth.expired');
+})->name('auth.expired');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/auth/register', 'HomeController@index')->name('auth.register');
@@ -330,3 +342,37 @@ $storage = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
 $storage = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
 
 */
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->middleware('guest')
+    ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware('guest');
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest')
+    ->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest');
+
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');

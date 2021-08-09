@@ -18,9 +18,6 @@ class LocaleMiddleware
      */
     public function handle($request, Closure $next)
     {
-
-        $locale = null;
-
         if ( Auth::check() && !Session::has('locale')){
             Session::put('locale',$request->user()->locale);
         }

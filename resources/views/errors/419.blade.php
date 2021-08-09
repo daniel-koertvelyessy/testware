@@ -8,7 +8,5 @@
 @endsection
 @section('buttons')
     <a href="#" onclick="history.back()" class="btn btn-lg btn-outline-secondary">{{__('zurück')}}</a>
-    <a href="/" class="btn btn-lg btn-primary">{{__('zum Portal')}}</a>
-
-
+    <a href="{{ route('portal-main') }}" class="btn btn-lg btn-primary">{{__('zum Portal')}}</a>
 @endsection
