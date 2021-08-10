@@ -242,7 +242,7 @@
                            role="tab"
                            aria-controls="gebRooms"
                            aria-selected="false"
-                        >{{  ('Räume')}} <span class="badge {{ ($building->rooms->count()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $building->rooms->count() }}</span></a>
+                        >{{  ('Räume')}} <span class="badge {{ ($building->room->count()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $building->room->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -457,7 +457,7 @@
                                         </button>
                                     </div>
                                 </form>
-                                @if ($building->rooms->count()>0)
+                                @if ($building->room->count()>0)
                                     <table class="table table-responsive-md table-striped"
                                            id="tabRoomListe"
                                     >
@@ -471,7 +471,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($building->rooms as $room)
+                                        @foreach ($building->room as $room)
                                             <tr>
                                                 <td>{{ $room->r_label }}</td>
                                                 <td>{{ $room->r_name }}</td>

@@ -14,6 +14,11 @@ class Building extends Model
 {
     use SoftDeletes, Sortable;
 
+    public $sortable = [
+        'b_label',
+        'b_name',
+        'b_description',
+    ];
     /**
      * Returns the path of the page
      *
@@ -21,12 +26,6 @@ class Building extends Model
      */
 
     protected $guarded = [];
-
-    public $sortable = [
-        'b_label',
-        'b_name',
-        'b_description',
-    ];
 
     public static function boot()
     {
@@ -81,12 +80,12 @@ class Building extends Model
     }
 
     public function countTotalEquipmentInBuilding()
-        :int
+    : int
     {
         return Cache::remember('countTotalEquipmentInBuilding' . $this->id, now()->addSeconds(30), function () {
             $equipCounter = 0;
             $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
-           foreach ($this->rooms as $room) {
+            foreach ($this->rooms as $room) {
                 $equipCounter += $room->countTotalEquipmentInRoom();
             }
             return $equipCounter;
@@ -111,16 +110,18 @@ class Building extends Model
     {
         $this->validateBuilding();
 
-        $this->b_we_has = $request->has('b_we_has') ? 1 : 0;
-
-
-
-
-        Building::create();
-
         (new Storage)->add($request->storage_id, $request->b_label, 'buildings');
 
-        return true;
+        $this->b_label = $request->b_label;
+        $this->b_name_ort = $request->b_name_ort;
+        $this->b_name = $request->b_name;
+        $this->b_description = $request->b_description;
+        $this->b_we_has = $request->has('b_we_has') ? 1 : 0;
+        $this->b_we_name = $request->b_we_name;
+        $this->location_id = $request->location_id;
+        $this->building_type_id = $request->building_type_id;
+        $buildingId = $this->save();
+        return $buildingId>0;
 
     }
 

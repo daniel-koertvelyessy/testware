@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Produkte')}}
+    {{ __('Produktübersicht') }}
 @endsection
 
 @section('menu')
@@ -529,7 +529,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-2 d-md-block d-none">
             <div class="col">
                 <h1 class="h4">{{ __('Produktübersicht') }}</h1>
             </div>

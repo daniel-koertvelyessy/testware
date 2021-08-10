@@ -3,7 +3,7 @@
 @section('pagetitle','Anforderung')
 
 @section('mainSection')
-    {{__('Vorschriften')}}
+    {{__('Anforderungen')}}
 @endsection
 
 @section('menu')
@@ -13,7 +13,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
                 <h1 class="h3">{{__('Anforderungen')}}</h1>
             </div>

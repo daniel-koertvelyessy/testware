@@ -643,7 +643,6 @@
                     >
                         <div class="row">
                             <div class="col">
-                                @can('isAdmin', Auth()->user())
                                     <form class="row gy-2 gx-3  my-3"
                                           action="{{ route('building.store') }}#locGebauede"
                                           method="post"
@@ -733,7 +732,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                @endcan
 
                                 <table class="table table-responsive-md table-striped"
                                        id="tabBuildingListe"
@@ -761,7 +759,7 @@
                                                 {{ $building->BuildingType->btname }}
                                             </td>
                                             <td class="d-none d-md-table-cell text-center">
-                                                {{ $building->rooms()->count() }}
+                                                {{ $building->room()->count() }}
                                             </td>
                                             <td class="d-none d-md-table-cell text-center">
                                                 @if ($building->b_we_has === 1)

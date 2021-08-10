@@ -13,10 +13,10 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
                 <h1 class="h3">{{__('Vorschriften')}}</h1>
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
             </div>
         </div>
         <h3 class="h4 mt-md-3 mt-sm-1">{{__('Verordnungen')}}</h3>

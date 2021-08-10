@@ -532,20 +532,13 @@ class ProduktController extends Controller
     : array
     {
         return request()->validate([
-            'pkp_label'            => ['bail','unique:produkts,prod_label','min:2','max:20','required'],
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
-            'produkt_kategorie_id' => 'required'
-        ]);
-    }
-    /**
-     * @return array
-     */
-    public function validateProduktKategorie()
-    : array
-    {
-        return request()->validate([
-            'pkp_label'            => ['bail','unique:produkts,prod_label','min:2','max:20','required'],
+            'pkp_label'            => [
+                'bail',
+                'unique:produkts,prod_label',
+                'min:2',
+                'max:20',
+                'required'
+            ],
             'pkp_name'             => 'bail|string|max:100',
             'pkp_value'            => '',
             'produkt_kategorie_id' => 'required'
@@ -599,6 +592,26 @@ class ProduktController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public function validateProduktKategorie()
+    : array
+    {
+        return request()->validate([
+            'pkp_label'            => [
+                'bail',
+                'unique:produkts,prod_label',
+                'min:2',
+                'max:20',
+                'required'
+            ],
+            'pkp_name'             => 'bail|string|max:100',
+            'pkp_value'            => '',
+            'produkt_kategorie_id' => 'required'
+        ]);
+    }
+
+    /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *
      * @param  Request $request
@@ -639,7 +652,12 @@ class ProduktController extends Controller
         $anforderung = Anforderung::find($request->anforderung_id);
         $euipUdate = '';
 
-        foreach (Equipment::where('produkt_id', ProduktAnforderung::find($request->id)->produkt_id)->get() as $equipment) {
+        if (!ProduktAnforderung::find($request->id)){
+            return redirect()->back();
+        }
+
+
+            foreach (Equipment::where('produkt_id', ProduktAnforderung::find($request->id)->produkt_id)->get() as $equipment) {
 
             if (ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->count() > 0) {
                 ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->delete();

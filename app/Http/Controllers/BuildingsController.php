@@ -68,8 +68,8 @@ class BuildingsController extends Controller
     public function store(Request $request)
     {
         //    $this->authorize('isAdmin', Auth()->user());
-        (new Building)->addNew($request);
-        $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')]));
+       $addBuilding = (new Building)->addNew($request);
+        ($addBuilding) ? $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')])) : $request->session()->flash('status', __('Fehler beim Anlegen des Gebäudes :label!', ['label' => request('b_label')]));
         return back();
     }
 

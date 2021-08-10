@@ -18,7 +18,7 @@
         <div class="row d-md-block d-none">
             <div class="col">
                 <h1 class="h4">{{__('Übersicht')}}</h1>
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
             </div>
         </div>
         <div class="row">

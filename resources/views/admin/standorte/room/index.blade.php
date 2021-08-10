@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('memStandorte')}}
+    {{__('Räume')}}
 @endsection
 
 @section('menu')
@@ -46,14 +46,14 @@
 @section('content')
 
     <div class="container-fluid mt-2">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
                 <h1 class="h4">{{__('Übersicht Räume')}}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">@sortablelink('location.l_label', __('Standort'))</th>

@@ -94,13 +94,13 @@
                 <h2 class="h5">
                     <a href="{{ route('control.index') }}">{{ __('Prüfungen') }}</a>
                 </h2>
-                <div id="testcalender">
-                    <x-testcalendar setdate="{{ date('Y-m-d') }}"/>
-                </div>
+                {{-- <div id="testcalender">
+                     <x-testcalendar setdate="{{ date('Y-m-d') }}"/>
+                 </div>
+                --}}
+                 {{--                <x-testcalendar setdate="{{ date('Y-m-d') }}" />--}}
 
-                {{--                <x-testcalendar setdate="{{ date('Y-m-d') }}" />--}}
-
-                {{--      <nav>
+                      <nav>
                           <div class="nav nav-tabs"
                                id="nav-tab"
                                role="tablist"
@@ -291,7 +291,7 @@
                                   </tbody>
                               </table>
                           </div>
-                      </div>--}}
+                      </div>
 
 
             </x-dashborarditem>

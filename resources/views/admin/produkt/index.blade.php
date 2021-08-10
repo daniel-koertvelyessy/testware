@@ -18,7 +18,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row mb-4">
+        <div class="row mb-4 d-md-block d-none">
             <div class="col">
                 <h1 class="h4 mb-0">{{__('Übersicht Produkte')}}</h1>
                 <span class="small mt-0">{{__('Gesamt')}}: <span
@@ -28,7 +28,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-striped"
+                <table class="table table-striped"
                        id="tabProduktListe"
                 >
                     <thead>

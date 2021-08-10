@@ -15,12 +15,12 @@
 @section('content')
 
     <div class="container">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
                 <h1>
                     <span class="d-none d-md-block">{{__('Standortverwaltung')}}</span> <span class="d-md-none">{{__('memStandorte')}}</span>
                 </h1>
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
             </div>
         </div>
         <div class="row">

@@ -36,7 +36,7 @@
 
                     <h2 class="h5">Bezeichner</h2>
 
-                    <x-textfield id="b_label" label="{{ __('Kurzbezeichnung') }}" />
+                    <x-rtextfield id="b_label" label="{{ __('Kurzbezeichnung') }}"/>
 
                     <x-textfield id="b_name_ort" label="{{ __('Ort') }}" />
 

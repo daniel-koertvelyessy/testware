@@ -31,13 +31,13 @@
     >
     <link id="themeId"
           rel="stylesheet"
-          href="{{ url('https://bootswatch.com/4/flatly/bootstrap.min.css') }}"
+          href="{{ asset('	css/flatly.css') }}"
     >
     <link rel="stylesheet"
           href="{{ asset('css/styles.css') }}"
     >
     <script type="text/javascript"
-            src="https://code.jquery.com/jquery-3.x-git.min.js"
+            src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>
     <title>@yield('pagetitle')</title>
 </head>
@@ -121,14 +121,6 @@
 
 <script type="text/javascript"
         src="{{ mix('js/app.js') }}"
-></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
-        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
-        crossorigin="anonymous"
-></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.de.min.js"
-        integrity="sha512-3V4cUR2MLZNeqi+4bPuXnotN7VESQC2ynlNH/fUljXZiQk1BGowTqO5O2gElABNMIXzzpYg5d8DxNoXKlM210w=="
-        crossorigin="anonymous"
 ></script>
 <script type="text/javascript"
         src="{{ asset('js/main.js') }}"

@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Produkte')}}
+    <span class="d-md-block d-none">{{__('Produktverwaltung')}}</span><span class="d-md-none">{{ __('Produkte') }}</span>
 @endsection
 
 @section('menu')
@@ -15,10 +15,16 @@
 @section('content')
 
     <div class="container">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h3">{{__('Produktverwaltung')}}</h1>
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}</p>
+                <h1 class="h4">{{__('Produktverwaltung')}}</h1>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
+            </div>
+        </div>
+        <div class="row d-md-block d-none">
+            <div class="col">
+                <h1 class="h4">{{__('Produktverwaltung')}}</h1>
+                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
             </div>
         </div>
         <div class="row">
@@ -31,7 +37,7 @@
                         <span class="icon"><i class="fas fa-boxes"></i></span> <span
                             class="branding-bar text-center">{{__('Übersicht')}}</span>
                     </a>
-                    @can('isAdmin', Auth::user())
+
                     <a href="{{ route('produkt.create') }}"
                        class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
                        data-role="tile"
@@ -39,12 +45,12 @@
                         <span class="icon"><i class="fas fa-box"></i></span> <span
                             class="branding-bar text-center">{{__('Neu')}}</span>
                     </a>
-                    @endcan
+
                 </nav>
             </div>
             <div class="col-md-10">
                 <h3 class="h5">{{__('Kürzlich erstellte Produkte')}}</h3>
-                <table class="table table-responsive-md table-striped" id="tabProduktListe">
+                <table class="table table-striped" id="tabProduktListe">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
