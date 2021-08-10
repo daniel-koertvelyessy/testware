@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
+@section('mainSection', __('Gerät'))
 
 @section('pagetitle')
 {{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}
@@ -769,7 +769,8 @@
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)
-                                    <x-filecard name="{{ $bda->proddoc_name }}"
+                                    <x-filecard downloadroute="{{ route('downloadProduktDokuFile') }}"
+                                                name="{{ $bda->proddoc_name }}"
                                                 label="{{ $bda->proddoc_label }}"
                                                 path="{{ $bda->proddoc_name_pfad }}"
                                                 id="{{ $bda->id }}"
@@ -779,7 +780,8 @@
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Funtionstest')}}</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
-                                    <x-filecard name="{{ $bda->eqdoc_name }}"
+                                    <x-filecard downloadroute="{{ route('downloadEquipmentDokuFile') }}"
+                                                name="{{ $bda->eqdoc_name }}"
                                                 label="{{ $bda->eqdoc_label }}"
                                                 path="{{ $bda->eqdoc_name_pfad }}"
                                                 id="{{ $bda->id }}"

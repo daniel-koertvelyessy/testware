@@ -80,6 +80,7 @@ class EquipmentDocController extends Controller
     public function downloadEquipmentDokuFile(Request $request)
     {
         $doc = EquipmentDoc::find($request->id);
+
         return response(Storage::disk('local')->get($doc->eqdoc_name_pfad), 200)
             ->header('Cache-Control', 'public')
             ->header('Content-Description', 'File Transfer')

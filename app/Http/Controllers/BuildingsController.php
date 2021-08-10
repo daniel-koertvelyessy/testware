@@ -68,7 +68,7 @@ class BuildingsController extends Controller
     public function store(Request $request)
     {
         //    $this->authorize('isAdmin', Auth()->user());
-       $addBuilding = (new Building)->addNew($request);
+        $addBuilding = (new Building)->addNew($request);
         ($addBuilding) ? $request->session()->flash('status', __('Das Gebäude <strong>:label</strong> wurde angelegt!', ['label' => request('b_label')])) : $request->session()->flash('status', __('Fehler beim Anlegen des Gebäudes :label!', ['label' => request('b_label')]));
         return back();
     }
@@ -281,7 +281,7 @@ class BuildingsController extends Controller
 <p class="mt-3">' . __('Folgende Objekte werden von der Lösung betroffen sein.') . '</p>
 <ul class="list-group">';
         $building = Building::find($request->id);
-        $countRooms = $building->rooms->count();
+        $countRooms = $building->room->count();
         $countEquipment = $building->countTotalEquipmentInBuilding() ?? 0;
         $countCompartment = $building->countStellPlatzs($building);
 
@@ -352,7 +352,7 @@ class BuildingsController extends Controller
                                     </p>
                                     <p class="card-text mt-1 mb-0">
                                         <span class="small">
-                                            <strong>Räume:</strong><span class="ml-2" >' . $building->rooms()->count() . '</span>
+                                            <strong>Räume:</strong><span class="ml-2" >' . $building->room()->count() . '</span>
                                         </span>
                                     </p>
                                     <p class="card-text mt-1 mb-0">

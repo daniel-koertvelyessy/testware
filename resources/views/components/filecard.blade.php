@@ -9,7 +9,7 @@
     </span>
     </div>
     <div>
-        <form action="{{ route('downloadProduktDokuFile') }}#dokumente"
+        <form action="{{ $downloadroute }}#dokumente"
               method="get"
               id="downloadBDA_{{ $id }}"
         >
