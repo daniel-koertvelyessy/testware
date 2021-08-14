@@ -15,7 +15,7 @@ There are mainly two ways to install your instance of testWare:
 - [LAPP /LAMP stack](#lapplamp-stack-lappstack)
 - [Docker](#docker-docker) 
 
-### LAPP/LAMP stack {#lappstack}
+### LAPP/LAMP stack
 Make sure your server meets following requirements:
 - Linux based system (Ubuntu or Debian)
 - Apache server (or nginx reverse proxy)
@@ -56,8 +56,7 @@ MAIL_FROM_ADDRESS=[yourmail@address.com]
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-**Note:**
-If you do not want to use the e-mail features change the key `MAIL_MAILER=smtp` to `MAIL_MAILER=log` and leave the other keys blank.
+**Note:** If you do not want to use the e-mail features change the key `MAIL_MAILER=smtp` to `MAIL_MAILER=log` and leave the other keys blank.
 
 
 ## Run testware artisan installer
@@ -150,7 +149,6 @@ POSTGRES_PASSWORD=yourMostSecurePasswordYouCanThinkOf
 #   Make sure that the DB credentials are   #
 #   the same as specified in the app.env    #
 # # # # # # # # # # # # # # # # # # # # # # # 
-
 ```
 
 Start the docker containers use the following command `docker-compose up -d`
@@ -161,7 +159,7 @@ If this is the first time you run the command, docker-compose will download the 
 Suppose the container name of the app is `testware-app` you can initiate the internal installation command with:
 
 ```bash
-docker-compose container testware-app exec -it php artisan testware:install
+docker-compose exec testware-app php artisan testware:install
 ```
 
 The `testware:install` command will guide you through the setup of the database and first user / employee. 
@@ -185,7 +183,7 @@ Feel free to add issues on the repository. Pull request are welcomed 😄
 
 ## Support
 
-For support please issue an e-mail to [testware@bitpack.io](testware@bitpack.io)
+For support please issue an e-mail to [testware@bitpack.io](mailto:testware@bitpack.io)
 
 ## License
 
