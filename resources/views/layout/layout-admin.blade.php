@@ -24,7 +24,7 @@
           content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
     >
     <link rel="stylesheet"
-          href="{{ asset('css/app.css') }}"
+          href="{{ asset(mix('css/app.css')) }}"
     >
     <link id="themeId"
           rel="stylesheet"
@@ -295,7 +295,7 @@
 @yield('autoloadscripts')
 
 <script type="text/javascript"
-        src="{{ asset('js/app.js') }}"
+        src="{{ asset(mix('js/app.js')) }}"
 ></script>
 <script type="text/javascript"
         src="{{ asset('js/main.js') }}"

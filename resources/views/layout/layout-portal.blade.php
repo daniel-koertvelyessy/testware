@@ -24,7 +24,7 @@
           content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
     >
     <link rel="stylesheet"
-          href="{{ mix('css/app.css') }}"
+          href="{{ asset(mix('css/app.css')) }}"
     >
     <link id="themeId"
           rel="stylesheet"
@@ -113,7 +113,7 @@
 <x-section-footer/>
 
 <script type="text/javascript"
-        src="{{ mix('js/app.js') }}"
+        src="{{ asset(mix('js/app.js')) }}"
 ></script>
 <script type="text/javascript"
         src="{{asset('js/main.js')}}"

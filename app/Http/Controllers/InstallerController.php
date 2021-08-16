@@ -28,9 +28,14 @@ class InstallerController extends Controller
      *
      * @return Application|Factory|Response|View
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+
+//        dd(!Auth::user()->can('use_installer'));
+        if (!Auth::user()->can('use_installer')) {
+            $request->session()->flash('error',__('Sie haben keine Berechtigung für diese Aktion!'));
+            return redirect()->route('portal-main');
+        }
 
         $company = (Firma::count()>0) ? Firma::find(1) : NULL;
         $address = (Adresse::count()>0) ?Adresse::find(1) : NULL;

@@ -31,13 +31,15 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('use_installer', function (User $user){
             return $user->role_id === 1;
         });
-/*
+
         Gate::define('isSysAdmin', function ($user){
             if($user->role_id === 1){
                 return true ;
             }
             return false;
-        });*/
+        });
+
+        /**/
 
 /*
         Gate::before(function ($user, $ability){
