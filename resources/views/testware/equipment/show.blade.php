@@ -621,16 +621,10 @@
 @section('content')
 
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-2  d-md-block d-none">
             <div class="col">
                 <h1 class="h4">{{ __('Geräteübersicht')}}</h1>
 
-                @forelse($equipment->EquipmentQualifiedUser() as $person)
-                    {{ $person }}
-
-                @empty
-                nopers
-                @endforelse
             </div>
         </div>
         <div class="row">
@@ -796,7 +790,7 @@
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
-                                <h2 class="h4 mt-5">{{__('Funtionstest')}}</h2>
+                                <h2 class="h4 mt-5">{{__('Funktionstest')}}</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
                                     <x-filecard downloadroute="{{ route('downloadEquipmentDokuFile') }}"
                                                 name="{{ $bda->eqdoc_name }}"

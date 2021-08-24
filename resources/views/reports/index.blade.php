@@ -18,7 +18,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row d-none d-md-block">
+        <div class="row mb-4 d-none d-md-block">
             <div class="col">
                 <h1 class="h3">{{__('Übersicht Berichte')}}</h1>
             </div>
@@ -28,9 +28,9 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th class="d-none d-md-table-cell">Bezeichnung</th>
-                        <th class="d-none d-md-table-cell">Typ</th>
+                        <th>{{__('Name')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Typ')}}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -72,9 +72,13 @@
                         {!! $reports->withQueryString()->onEachSide(2)->links() !!}
                     </div>
                 @endif
-                <a href="{{ route('report.create') }}"
+
+   {{--
+   <a href="{{ route('report.create') }}"
                    class="btn btn-outline-primary my-3"
                 >{{ __('Neuen Bericht erstellen') }}</a>
+    --}}
+
             </div>
         </div>
     </div>

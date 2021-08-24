@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{{__('Start')}}} &triangleright; {{__('Geräte')}}
+{{{__('Gerät anlegen')}}} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('mainSection')
-    {{__('Geräte')}}
+    {{__('Gerät anlegen')}}
 @endsection
 
 @section('menu')
@@ -242,7 +242,7 @@
                 @endif
             </div>
             <div class="col-md-6 mb-2">
-                <h2 class="h4">V{{__('erfügbare Produkte')}}</h2>
+                <h2 class="h4">{{__('Verfügbare Produkte')}}</h2>
                 <table class="table table-responsive-md table-sm">
                     <thead>
                     <tr>

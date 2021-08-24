@@ -2,8 +2,7 @@
 
 @section('title', __('Unauthorized'))
 @section('code', '401')
-@section('message', __('Unauthorized'))
-
+@section('message')
 <h1>{{__('Unauthorized')}}</h1>
 <p class="lead">{{ __('Dieser Bereich ist gesperrt.') }}</p>
 @endsection

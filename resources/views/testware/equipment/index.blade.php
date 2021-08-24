@@ -8,9 +8,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h4 d-md-block d-none">{{__('Übersicht aller Geräte')}}</h1>
+                <h1 class="h4">{{__('Übersicht aller Geräte')}}</h1>
             </div>
         </div>
         <div class="row">

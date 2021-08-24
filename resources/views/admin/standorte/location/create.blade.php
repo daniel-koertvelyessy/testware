@@ -218,18 +218,18 @@
             <div class="row">
                 <div class="col">
                     <x-rtextfield id="l_label"
-                                  label="Kürzel"
+                                  label="{{__('Kürzel')}}"
                     />
                     <x-textfield id="l_name"
-                                 label="Bezeichnung"
+                                 label="{{__('Bezeichnung')}}"
                     />
                     <x-textarea id="l_beschreibung"
-                                label="Beschreibung"
+                                label="{{__('Beschreibung')}}"
                     />
 
                 </div>
             </div>
-            <x-btnMain>Standort anlegen <span class="ml-3 fas fa-download"></span></x-btnMain>
+            <x-btnMain>{{__('Standort anlegen')}} <span class="ml-3 fas fa-download"></span></x-btnMain>
         </form>
     </div>
 

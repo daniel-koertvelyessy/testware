@@ -37,12 +37,15 @@ class UserController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        if  (Auth::user()->isSysAdmin()) {
+            return view('admin.user.create');
+        } else {
+            $request->session()->flash('status',__('Sie haben keine Berechtigung Benutzer anzulegen!'));
+            return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
+        }
     }
 
     /**
@@ -50,11 +53,13 @@ class UserController extends Controller
      *
      * @param  Request $request
      *
-     * @return Response
      */
     public function store(Request $request)
     {
-        //
+//        dd($request);
+        (new User)->addNew($request);
+        return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
+
     }
 
     /**

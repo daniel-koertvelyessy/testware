@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Admin')}}
+    {{__('Benutzer')}}
 @endsection
 
 @section('menu')
@@ -76,7 +76,7 @@
         >
             @csrf
             @method('put')
-            <div class="row">
+            <div class="row mb-4 d-md-block d-none">
                 <div class="col">
                     <h1 class="h3">
                         @if(Auth::user()->id === $user->id)

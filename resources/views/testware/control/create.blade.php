@@ -183,7 +183,7 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <x-staticfield id="controlUserName"
-                                                   label="Prüfer"
+                                                   label="{{__('Prüfer')}}"
                                                    value="{{ auth()->user()->name }}"
                                     />
                                     <input type="hidden"

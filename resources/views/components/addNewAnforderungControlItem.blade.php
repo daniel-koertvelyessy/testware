@@ -12,7 +12,7 @@
         </nav>
         <div class="tab-content pt-3" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-cianforderung" role="tabpanel" aria-labelledby="nav-cianforderung-tab">
-            <p class="lead text-primary">{{__('Wählen Sie als erstes die Anforderung aus, welche zum Vorgang zugeordnet werden soll.')}}</p>
+            <p class="lead text-primary">{{__('Wählen Sie als erstes die Anforderung aus, welche dem Vorgang zugeordnet werden soll.')}}</p>
 
             <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
                 @foreach (App\Anforderung::all() as $anforderung)

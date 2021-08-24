@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Vorschriften')}}
+    {{__('Kontrollvorgang')}}
 @endsection
 
 @section('menu')
@@ -15,9 +15,9 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row mb-4 d-none d-md-block">
             <div class="col">
-                <h1 class="h3">{{__('Vorgang')}}</h1>
+                <h1 class="h3">{{__('Kontrollvorgang')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -34,7 +34,7 @@
                     >
                     <x-selectfield id="updt_anforderung_id"
                                    name="anforderung_id"
-                                   label="Anforderung"
+                                   label="{{__('Anforderung')}}"
                     >
                         @foreach (App\Anforderung::all() as $anforderung)
                             <option value="{{ $anforderung->id }}"
@@ -47,13 +47,13 @@
                     <div class="row">
                         <div class="col-md-4">
                             <x-rtextfield id="aci_label"
-                                          label="Kürzel"
+                                          label="{{__('Kürzel')}}"
                                           value="{{ $anforderungcontrolitem->aci_label }}"
                             />
                         </div>
                         <div class="col-md-6">
                             <x-rtextfield id="aci_name"
-                                          label="Name"
+                                          label="{{__('Name')}}"
                                           max="150"
                                           value="{{ $anforderungcontrolitem->aci_name }}"
                             />
@@ -71,53 +71,53 @@
                                 >
                                 <label class="custom-control-label"
                                        for="aci_control_equipment_required"
-                                >Prüfmittel benötigt</label>
+                                >{{__('Prüfmittel benötigt')}}</label>
                             </div>
                         </div>
                     </div>
 
                     <x-textarea id="aci_task"
-                                label="Aufgabe"
+                                label="{{__('Aufgabe')}}"
                                 value="{{ $anforderungcontrolitem->aci_task }}"
                     />
 
                     <div class="row">
                         <div class="col-md-2">
                             <x-textfield id="aci_value_si"
-                                         label="SI-Einheit [kg, °C, V usw]"
+                                         label="{{__('SI-Einheit [kg, °C, V usw]')}}"
                                          max="10"
                                          value="{{ $anforderungcontrolitem->aci_value_si }}"
                             />
                         </div>
                         <div class="col-md-3">
                             <x-textfield id="aci_vaule_soll"
-                                         label="Sollwert"
+                                         label="{{__('Sollwert')}}"
                                          class="decimal"
                                          value="{{ $anforderungcontrolitem->aci_vaule_soll }}"
                             />
                         </div>
                         <div class="col-md-3">
-                            <label for="aci_value_target_mode">Zielwert i.O.</label> <select name="aci_value_target_mode"
+                            <label for="aci_value_target_mode">{{__('Zielwert i.O.')}}</label> <select name="aci_value_target_mode"
                                                                                              id="aci_value_target_mode"
                                                                                              class="custom-select"
                             >
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected
                                         @endif value="lt"
-                                >Kleiner als Soll
+                                >{{__('Kleiner als Soll')}}
                                 </option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='eq') selected
                                         @endif value="eq"
-                                >Gleich ± Toleranz
+                                >{{__('Gleich ± Toleranz')}}
                                 </option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='gt') selected
                                         @endif value="gt"
-                                >Größer als Soll
+                                >{{__('Größer als Soll')}}
                                 </option>
                             </select>
                         </div>
                         <div class="col-md-2">
                             <x-textfield id="aci_value_tol"
-                                         label="± Toleranz"
+                                         label="{{__('± Toleranz')}}"
                                          class="decimal"
                                          value="{{ $anforderungcontrolitem->aci_value_tol??'' }}"
                             />
@@ -164,19 +164,27 @@
                                 >
                                 <label class="custom-control-label"
                                        for="updt_aci_internal"
-                                >Interne Durchführung</label>
+                                >{{__('Interne Durchführung')}}</label>
                             </div>
                             <x-selectfield name="aci_contact_id"
                                            id="updt_aci_contact_id"
-                                           label="Mitarbeiter"
+                                           label="{{__('Mitarbeiter')}}"
                             >
-                                @foreach (App\User::with('profile')->get() as $user)
+                                @forelse (App\User::with('profile')->get() as $user)
                                     <option value="{{ $user->id }}"
                                             @if ($user->id === $anforderungcontrolitem->aci_contact_id)
                                             selected
                                         @endif
-                                    >{{ substr($user->profile->ma_vorname,0,1)}}. {{ $user->profile->ma_name }}</option>
-                                @endforeach
+                                    >
+                                        @if($user->profile)
+                                            {{ substr($user->profile->ma_vorname,0,1)??''}}. {{ $user->profile->ma_name }}
+                                        @else
+                                        {{ $user->name }}
+                                            @endif
+                                    </option>
+                                @empty
+                                    <option value="void" disabled>{{ __('keinen Eintrag gefunden') }}</option>
+                                @endforelse
                             </x-selectfield>
                         </div>
                         <div class="col-md-6">
@@ -192,10 +200,10 @@
                                 >
                                 <label class="custom-control-label"
                                        for="updt_aci_external"
-                                >Externe Durchführung</label>
+                                >{{__('Externe Durchführung')}}</label>
                             </div>
                             <x-selectfield id="firma_id"
-                                           label="Firma"
+                                           label="{{__('Firma')}}"
 
                             >
                                 @foreach (App\Firma::all() as $firma)
@@ -212,7 +220,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary">{{__('Vorgang')}} speichern</button>
+                    <button class="btn btn-primary">{{__('Vorgang speichern')}}</button>
                 </form>
             </div>
         </div>

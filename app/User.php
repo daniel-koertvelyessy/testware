@@ -173,12 +173,12 @@ class User extends Authenticatable
         $this->name = $request->name;
         $this->email = $request->email;
         $this->username = $request->username;
-        $this->role_id = $request->role_id;
+        $this->role_id = 0;
         $this->locale = $request->locales;
-        $this->password = password_hash($request->password, PASSWORD_DEFAULT);
+        $this->password = Hash::make($request->password);
         $this->save();
 
-        $this->roles()->attach([$request->role_id]);
+        $this->roles()->attach([1]);
 
         return $this->id;
     }
@@ -194,7 +194,7 @@ class User extends Authenticatable
         $this->name = $details['name'];
         $this->email = $details['email'];
         $this->username = $details['username'];
-        $this->role_id = 1;
+        $this->role_id = (isset($details['role_id'])) ? 1 : 0;
         $this->locale = $details['locales'];
         $this->password =Hash::make($details['password']);
         $this->save();

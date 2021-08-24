@@ -1,9 +1,9 @@
 @extends('layout.layout-admin')
 
-@section('pagetitle','Systemeinstellungen')
+@section('pagetitle',__('Systemeinstellungen'))
 
 @section('mainSection')
-    {{__('Admin')}}
+    {{__('Systemeinstellungen')}}
 @endsection
 
 @section('menu')
@@ -129,9 +129,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-4 d-md-block d-none">
             <div class="col">
-                <h1 class="h3">{{__('System Einstellungen')}}</h1>
+                <h1 class="h3">{{__('Systemeinstellungen')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -147,7 +147,7 @@
                        role="tab"
                        aria-controls="Objekte"
                        aria-selected="true"
-                    >{{__('Objekte')}}</a>
+                    >{{__('Objekt Typen')}}</a>
                     <a class="nav-link"
                        id="Produkte-tab"
                        data-toggle="tab"
@@ -180,7 +180,7 @@
                            role="tab"
                            aria-controls="userRoles"
                            aria-selected="false"
-                        >{{__('Benutzerrolen')}}</a>
+                        >{{__('Benutzerrollen')}}</a>
                     @endif
                 </nav>
                 <div class="tab-content"
@@ -503,7 +503,7 @@
                                                             </select>
                                                             <x-btnLoad block="1"
                                                                        id="loadRoomTypeItem"
-                                                            >{{('Raumtyp laden')}}
+                                                            >{{ __('Raumtyp laden')}}
                                                             </x-btnLoad>
                                                         </div>
 
@@ -522,14 +522,14 @@
                                                                     label="{{__('Beschreibung des Raumtyps')}}"
                                                         />
 
-                                                        <x-btnSave>{{('Raumtyp aktualisieren')}}</x-btnSave>
+                                                        <x-btnSave>{{ __('Raumtyp aktualisieren')}}</x-btnSave>
                                                     </form>
                                                 @endif
                                             </div>
                                             <div class="col-lg-6">
                                                 @if (count(App\RoomType::all())>0 )
                                                     <div class="border border-danger p-3">
-                                                        <h2 class="h5">{{('Raumtyp löschen')}}</h2>
+                                                        <h2 class="h5">{{ __('Raumtyp löschen')}}</h2>
                                                         <form action="{{ Route('deleteRoomType') }}"
                                                               id="frmDeleteRoomType"
                                                               name="frmDeleteRoomType"
@@ -711,7 +711,7 @@
                                 >
                                     <a class="nav-link active"
                                        id="prodKategorie-tab"
-                                       data-helpertext="{{__('Erstellen Sie allgemeine Produktypen unter der Sie die Produkte zusammenfassen können. Beispielsweise Computer, EDV, Werkzeug etc.')}}"
+                                       data-helpertext="{{__('Erstellen Sie allgemeine Produkttypen unter der Sie die Produkte zusammenfassen können. Beispielsweise Computer, EDV, Werkzeug etc.')}}"
                                        data-toggle="pill"
                                        href="#prodKategorie"
                                        role="tab"
@@ -919,13 +919,13 @@
                                         >
                                             @csrf
                                             <x-rtextfield id="at_label"
-                                                          label="Kürzel"
+                                                          label="{{__('Kürzel')}}"
                                             />
                                             <x-textfield id="at_name"
-                                                         label="Name"
+                                                         label="{{__('Name')}}"
                                             />
                                             <x-textarea id="at_description"
-                                                        label="Beschreibung"
+                                                        label="{{__('Beschreibung')}}"
                                             />
 
                                             <x-btnMain>{{__('Anforderungstyp anlegen')}}
@@ -1035,7 +1035,7 @@
                                                     />
 
                                                     <x-textfield id="doctyp_name"
-                                                                 label="{{ __('Name - lang') }}"
+                                                                 label="{{ __('Name') }}"
                                                                  required
                                                                  max="100"
                                                     />
@@ -1117,7 +1117,7 @@
 
                                                         <x-textfield required
                                                                      id="updt_doctyp_name"
-                                                                     label="{{__('Name - lang')}}"
+                                                                     label="{{__('Name')}}"
                                                                      max="100"
                                                         />
 
@@ -1238,7 +1238,7 @@
                                             <td>
                                                 <x-textfield class="form-control-sm"
                                                              hideLabel
-                                                             label="Kürzel"
+                                                             label="{{__('Kürzel')}}"
                                                              id="note_type_label"
                                                              name="label"
                                                 />
@@ -1246,7 +1246,7 @@
                                             <td>
                                                 <x-textfield class="form-control-sm"
                                                              hideLabel
-                                                             label="Name"
+                                                             label="{{__('Name')}}"
                                                              id="note_type_name"
                                                              name="name"
                                                 />
@@ -1254,7 +1254,7 @@
                                             <td>
                                                 <x-textfield class="form-control-sm"
                                                              hideLabel
-                                                             label="Kürzel"
+                                                             label="{{__('Kürzel')}}"
                                                              id="note_type_description"
                                                              name="description"
                                                 />
@@ -1271,7 +1271,7 @@
                                                 <button type="button"
                                                         id="btnFormStoreNoteTyeData"
                                                         class="btn btn-sm btn-outline-primary"
-                                                >speichern
+                                                >{{__('speichern')}}
                                                 </button>
                                             </td>
                                         </tr>
@@ -1331,7 +1331,7 @@
                         >
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h3 class="h5">{{ __('Benutzerrollen') }}</h3>
+                                    <h3 class="h5">{{ __('Benutzerrolle') }}</h3>
                                     <form method="post"
                                           action="{{ route('role.store') }}#userRoles"
                                           id="frmSetUserRole"
@@ -1363,7 +1363,7 @@
                                             >
                                             <label class="custom-control-label"
                                                    for="is_super_user"
-                                            >{{ __('Super-Benutzer') }}</label>
+                                            >{{ __('SysAdmin') }}</label>
                                         </div>
                                         <x-btnSave>{{ __('Benutzerrolle speichern') }}</x-btnSave>
                                     </form>

@@ -51,7 +51,7 @@
                        id="btnLockScreen"
                     >
                         <i class="fas fa-user-lock fa-fw mr-2"></i>
-                        {{__('Bildschrim sperren')}}
+                        {{__('Bildschirm sperren')}}
                     </a>
                 </li>
                 <li>

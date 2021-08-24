@@ -57,12 +57,12 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="{{ (Request::routeIs('produktMain') or Request::routeIs('produkt.index'))  ? 'true' : 'false' }}"
+       aria-expanded="{{ (Request::routeIs('produktMain') or Request::routeIs('produkt.*'))  ? 'true' : 'false' }}"
        aria-controls="sideNavProdukt"
     >
         <span class="">{{__('Produkte')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse {{ (Request::routeIs('produktMain') or Request::routeIs('produkt.index'))  ? ' show ' : '' }}"
+    <div class="collapse {{ (Request::routeIs('produktMain') or Request::routeIs('produkt.*'))  ? ' show ' : '' }}"
          id="sideNavProdukt"
     >
         <ul class="nav flex-column">
@@ -126,12 +126,26 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="{{ (Request::routeIs('verordnung.*') ? ' true ' : 'false' }}"
+       aria-expanded="{{ (
+                            Request::routeIs('organisationMain') or
+                            Request::routeIs('firma.*') or
+                            Request::routeIs('contact.*') or
+                            Request::routeIs('adresse.*') or
+                            Request::routeIs('profile.*')
+
+                            )? ' true ' : 'false' }}"
        aria-controls="sideNavOrganisation"
     >
         <span class="">{{__('Organisation')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse"
+    <div class="collapse {{ (
+                            Request::routeIs('organisationMain') or
+                            Request::routeIs('firma.*') or
+                            Request::routeIs('contact.*') or
+                            Request::routeIs('adresse.*') or
+                            Request::routeIs('profile.*')
+
+                            )? ' show ' : '' }}"
          id="sideNavOrganisation"
     >
         <ul class="nav flex-column">
@@ -168,12 +182,26 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="false"
+       aria-expanded="{{ (
+    Request::routeIs('storageMain')
+    or Request::routeIs('lexplorer')
+    or Request::routeIs('location.*')
+    or Request::routeIs('building.*')
+    or Request::routeIs('room.*')
+    or Request::routeIs('stellplatz.*')
+    )  ? 'true' : 'false' }}"
        aria-controls="sideNavLocations"
     >
         <span class="">{{__('memStandorte')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse"
+    <div class="collapse {{ (
+    Request::routeIs('storageMain')
+    or Request::routeIs('lexplorer')
+    or Request::routeIs('location.*')
+    or Request::routeIs('building.*')
+    or Request::routeIs('room.*')
+    or Request::routeIs('stellplatz.*')
+    )  ? ' show ' : '' }}"
          id="sideNavLocations"
     >
         <ul class="nav flex-column">
@@ -218,12 +246,20 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="false"
+       aria-expanded="{{ (
+    Request::routeIs('systems')
+    or Request::routeIs('admin.*')
+    or Request::routeIs('user.*')
+    )  ? ' true ' : ' false ' }}"
        aria-controls="sideNavSystem"
     >
         <span class="">{{__('System')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse"
+    <div class="collapse {{ (
+    Request::routeIs('systems')
+    or Request::routeIs('admin.*')
+    or Request::routeIs('user.*')
+    )  ? ' show ' : '' }}"
          id="sideNavSystem"
     >
         <ul class="nav flex-column">
