@@ -11,6 +11,7 @@ use App\ControlEventItem;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentHistory;
+use App\ProductQualifiedUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -63,6 +64,9 @@ class ControlEquipmentController extends Controller
         $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
 
+        $enabledUser=[];
+
+
 
 //dd($controlItem->Equipment);
 
@@ -83,6 +87,8 @@ class ControlEquipmentController extends Controller
                 $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
                 $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
             }
+
+
 
             return view('testware.control.create', [
                 'test'                           => $controlItem,

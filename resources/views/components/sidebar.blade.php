@@ -57,12 +57,12 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="true"
+       aria-expanded="{{ (Request::routeIs('produktMain') or Request::routeIs('produkt.index'))  ? 'true' : 'false' }}"
        aria-controls="sideNavProdukt"
     >
         <span class="">{{__('Produkte')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse show"
+    <div class="collapse {{ (Request::routeIs('produktMain') or Request::routeIs('produkt.index'))  ? ' show ' : '' }}"
          id="sideNavProdukt"
     >
         <ul class="nav flex-column">
@@ -86,11 +86,12 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="false"
+       aria-expanded="{{ Request::routeIs('verordnung.*') ? ' true ' : '' }}"
        aria-controls="sideNavVorschrfiten"
     ><span class="">{{__('Vorschriften')}}</span> <span class="fas fa-ellipsis-v"></span>
     </a>
-    <div class="collapse"
+    <div class="collapse {{ (Request::routeIs('verordnung.*') or Request::routeIs('anforderung.*') or Request::routeIs
+    ('anforderungcontrolitem.*'))? ' show ' : '' }}"
          id="sideNavVorschrfiten"
     >
         <ul class="nav flex-column">
@@ -125,7 +126,7 @@
        class="d-flex align-items-center justify-content-between my-2 my-md-1"
        data-toggle="collapse"
        role="button"
-       aria-expanded="false"
+       aria-expanded="{{ (Request::routeIs('verordnung.*') ? ' true ' : 'false' }}"
        aria-controls="sideNavOrganisation"
     >
         <span class="">{{__('Organisation')}}</span> <span class="fas fa-ellipsis-v"></span>

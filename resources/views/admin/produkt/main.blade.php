@@ -21,12 +21,6 @@
                 <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
             </div>
         </div>
-        <div class="row d-md-block d-none">
-            <div class="col">
-                <h1 class="h4">{{__('Produktverwaltung')}}</h1>
-                <p>{{__('Sie können in diesem Modul folgende Aufgaben ausführen')}}:</p>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-2">
                 <nav class="d-flex justify-content-around flex-md-column flex-sm-row mb-3">

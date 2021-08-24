@@ -192,10 +192,17 @@
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                 <td class="d-flex align-items-center justify-content-between">
                                     @if($controlItem->checkControlRequirementsMet()===null)
+                                        @if(Auth::user()->isQualified($equipment->id))
                                         <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
                                            class="btn btn-sm btn-outline-primary"
                                         > {{__('Prüfung starten')}}
                                         </a>
+                                        @else
+                                            <x-notifyer>
+                                                {{ __('Sie sind für dieses Gerät noch nicht als befähigt eingetragen!') }}
+                                            </x-notifyer>
+
+                                            @endif
                                     @else
                                         {!! $controlItem->checkControlRequirementsMet() !!}
                                     @endif
@@ -617,6 +624,13 @@
         <div class="row mb-2">
             <div class="col">
                 <h1 class="h4">{{ __('Geräteübersicht')}}</h1>
+
+                @forelse($equipment->EquipmentQualifiedUser() as $person)
+                    {{ $person }}
+
+                @empty
+                nopers
+                @endforelse
             </div>
         </div>
         <div class="row">
@@ -748,11 +762,15 @@
                                        class="form-control-plaintext"
                                        value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name !!} @endforeach"
                                 >
-                                <button
-                                    class="btn btn-primary btn-lg mt-3"
+
+                                <button class="btn btn-primary btn-lg mt-3"
                                     data-toggle="modal"
                                     data-target="#modalStartControl"
-                                >{{__('Prüfung/Wartung erfassen')}}</button>
+                                >{{__('Prüfung/Wartung erfassen')}}
+                                    @if(!Auth::user()->isQualified($equipment->id))
+                                        <span class="fas fa-exclamation text-warning ml-2"></span>
+                                    @endif
+                                </button>
                             </div>
                             <div class="col-md-5 pl-3 mb-3">
                                 @if ($equipment->produkt->ControlProdukt)

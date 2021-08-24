@@ -129,7 +129,7 @@ class Equipment extends Model
 
     public function hasUser()
     {
-        return $this->hasManyThrough('User', 'EquipmentQualifiedUser');
+        return $this->hasManyThrough(User::class, EquipmentQualifiedUser::class);
     }
 
     public function EquipmentQualifiedUser()

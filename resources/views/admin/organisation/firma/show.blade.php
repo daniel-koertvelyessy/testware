@@ -39,7 +39,8 @@
             @forelse(App\FirmaProdukt::where('firma_id',$firma->id)->get() as $product)
                 <li class="list-group-item d-flex align-items-center justify-content-between">
                     {{ $product->Produkt->prod_label }}
-                    <span>verknüpfte Geräte <span class="badge badge-danger">{{ $product->Produkt->Equipment->count() }}</span> </span>
+                    <span>verknüpfte Geräte <span
+                                class="badge badge-danger">{{ $product->Produkt->Equipment->count() }}</span> </span>
                 </li>
             @empty
                 <li class="list-group-item list-group-item-success">{{ __('Keine Produkte mit der Firma gefunden!') }}</li>
@@ -158,8 +159,7 @@
                         <div class="col">
                             <x-textarea id="fa_description"
                                         label="{{__('Beschreibung')}}"
-                                        value="{{ $firma->fa_description }}"
-                            />
+                            ><{{ $firma->fa_description }}/x-textarea>
                         </div>
                     </div>
 

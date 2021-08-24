@@ -50,7 +50,7 @@ class FirmaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|Factory|Response|View
      */
@@ -60,44 +60,14 @@ class FirmaController extends Controller
 
         $firma_id = (new Firma)->addCompany($request);
 
-        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde angelegt!', ['label' => $request->fa_label]));
+        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde angelegt!',['label' => $request->fa_label]));
         return view('admin.organisation.firma.show', ['firma' => Firma::find($firma_id)]);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateFirma()
-    : array
-    {
-        return request()->validate([
-            'fa_label'       => [
-                'bail',
-                'max:20',
-                'required',
-                Rule::unique('firmas')->ignore(\request('id'))
-            ],
-            'fa_name'        => [
-                'bail',
-                'string',
-                'max:100'
-            ],
-            'fa_description' => '',
-            'fa_kreditor_nr' => [
-                'bail',
-                'max:100',
-                Rule::unique('firmas')->ignore(\request('id'))
-            ],
-            'fa_debitor_nr'  => 'max:100',
-            'fa_vat'         => 'max:30',
-            'adresse_id'      => '',
-        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Firma $firma
+     * @param Firma $firma
      *
      * @return Application
      */
@@ -109,8 +79,8 @@ class FirmaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Firma   $firma
+     * @param Request $request
+     * @param Firma $firma
      *
      * @return RedirectResponse
      */
@@ -122,10 +92,39 @@ class FirmaController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public function validateFirma(): array
+    {
+        return request()->validate([
+            'fa_label' => [
+                'bail',
+                'max:20',
+                'required',
+                Rule::unique('firmas')->ignore(\request('id'))
+            ],
+            'fa_name' => [
+                'bail',
+                'string',
+                'max:100'
+            ],
+            'fa_description' => '',
+            'fa_kreditor_nr' => [
+                'bail',
+                'max:100',
+                Rule::unique('firmas')->ignore(\request('id'))
+            ],
+            'fa_debitor_nr' => 'max:100',
+            'fa_vat' => 'max:30',
+            'adresse_id' => '',
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
-     * @param  Firma   $firma
-     * @param  Request $request
+     * @param Firma $firma
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      * @throws Exception
@@ -167,7 +166,7 @@ class FirmaController extends Controller
         $contact = Contact::where('firma_id', $request->id)->first();
 
         return [
-            'firma'   => $firma,
+            'firma' => $firma,
             'adresse' => $adresses,
             'contact' => $contact
         ];
@@ -176,26 +175,24 @@ class FirmaController extends Controller
     /**
      *  Checks if a company exists with such a label
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return bool
      */
-    public function checkCompanyLabel(Request $request)
-    : bool
+    public function checkCompanyLabel(Request $request): bool
     {
-        return json_encode(Firma::where('fa_label',$request->label)->count() > 0);
+        return json_encode(Firma::where('fa_label', $request->label)->count() > 0);
     }
 
     /**
      *  Checks if a company exists with such a label
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return bool
      */
-    public function checkCompanyKreditor(Request $request)
-    : bool
+    public function checkCompanyKreditor(Request $request): bool
     {
-        return json_encode(Firma::where('fa_kreditor_nr',$request->kreditor)->count() > 0);
+        return json_encode(Firma::where('fa_kreditor_nr', $request->kreditor)->count() > 0);
     }
 }
