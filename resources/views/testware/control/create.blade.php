@@ -51,7 +51,7 @@
                     <input type="text"
                            name="signaturName"
                            id="signaturName"
-                           placeholder="{{__('Name des Unterscheibenden')}}"
+                           placeholder="{{__('Name des Unterschreibenden')}}"
                            class="form-control"
                     >
                 </div>
@@ -499,7 +499,7 @@ aria-labelledby="controlSteps-tab"
             @else
                 <tr>
                     <td>
-                        <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name }}</span> fehlt Ihnen die benötige Berechtigung!</p>
+                        <p>Zum Ausführen des Vorgangs <span class="badge-info p-2">{{ $aci->aci_name }}</span> fehlt Ihnen die benötigte Berechtigung!</p>
                         <p>Brechtigt sind: {{ App\User::with('profile')->find($aci->aci_contact_id)->name }}</p>
                     </td>
                 </tr>
@@ -678,7 +678,7 @@ aria-labelledby="controlDone-tab"
                        id="controlEquipmentNotPassed"
                        name="control_event_pass"
                        value="0"
-                > {{__('NICHT Bestanden')}}
+                > {{__('Nicht bestanden')}}
             </label>
         </div>
     </div>
