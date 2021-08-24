@@ -1,7 +1,7 @@
 @extends('layout.layout-portal')
 
 @section('pagetitle')
-    {{ __('Wir kommen Ihnen gerne zur Hilfe')}} @ testWare
+    {{ __('Support')}} @ testWare
 @endsection
 
 @section('navigation')

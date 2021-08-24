@@ -42,7 +42,7 @@
                         <a href="{{ route('app') }}"
                            class="tile-small btn-outline-primary rounded"
                            data-role="tile"
-                           aria-label="Storagee"
+                           aria-label="Storage"
                         >
                             <div class="d-flex align-items-center justify-content-center">
                                 <img src="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"

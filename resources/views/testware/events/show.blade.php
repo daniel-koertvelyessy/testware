@@ -265,7 +265,7 @@
         <div class="row">
             <div class="col">
                 <h1 class="h3">
-                    {{ __('Ereignis Details') }}
+                    {{ __('Ereignisdetails') }}
                 </h1>
             </div>
         </div>

@@ -172,7 +172,7 @@
                                                      label="{{ __('Bezeichnung') }}"
                                         />
                                         <x-textarea id="proddoc_description"
-                                                    label="{{ __('Datei Informationen') }}"
+                                                    label="{{ __('Dateiinformationen') }}"
                                         />
                                     </div>
                                 </div>

@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    Berichte &triangleright; Systemeinstellungen | Start @ bitpack GmbH
+    Berichte &triangleright; Systemeinstellungen | Start @ bitpack.io GmbH
 @endsection
 
 @section('mainSection')

@@ -50,14 +50,14 @@
                download
             >
                 <i class="ml-2 fas fa-print mr-2 fa-fw"></i>
-                {{__('Datenblatt Drucken')}}
+                {{__('Datenblatt drucken')}}
             </a>
             <a class="dropdown-item"
                href="{{ route('makePDFEquipmentLabel',$equipment->id) }}"
                target="_blank"
             >
                 <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
-                {{__('QR-Code Drucken')}}
+                {{__('QR-Code drucken')}}
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"
@@ -175,7 +175,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende aus.') }}</p>
+                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende Gerät aus.') }}</p>
 
                     <table class="table table-responsive-md">
                         <thead>
@@ -528,7 +528,7 @@
                                         <x-selectfield id="function_control_firma"
                                                        label="{{__('durch Firma')}}"
                                         >
-                                            <option value="void">{{__('bitte wählen')}}</option>
+                                            <option value="void">{{__('Bitte wählen')}}</option>
                                             @foreach(\App\Firma::all() as $firma)
                                                 <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                                             @endforeach
@@ -538,7 +538,7 @@
                                         <x-selectfield id="function_control_profil"
                                                        label="{{__('durch befähigte Person')}}"
                                         >
-                                            <option value="void">{{__('bitte wählen')}}</option>
+                                            <option value="void">{{__('Bitte wählen')}}</option>
                                             @foreach(\App\User::all() as $user)
                                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                                             @endforeach
