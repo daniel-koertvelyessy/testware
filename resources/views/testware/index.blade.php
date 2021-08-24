@@ -28,7 +28,7 @@
         >
             <h2 class="h5">Initialisierung</h2>
             <p>Sie sind noch als <span class="badge badge-dark">testware</span> Benutzer angemeldet.</p>
-            <p>Ergänzen Sie Ihre Firmierung und Benutzerdaten. Dies können Sie entweder über die jeweilgen Seiten vornehmen oder einfach den Installer aufrufen.</p>
+            <p>Ergänzen Sie Ihre Firmierung und Benutzerdaten. Dies können Sie entweder über die jeweiligen Seiten vornehmen oder einfach den Installer aufrufen.</p>
             <a href="{{ route('installer.company') }}"
                class="btn btn-outline-primary"
             >Installation abschließen
