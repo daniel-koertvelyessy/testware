@@ -193,16 +193,15 @@
                                 <td class="d-flex align-items-center justify-content-between">
                                     @if($controlItem->checkControlRequirementsMet()===null)
                                         @if(Auth::user()->isQualified($equipment->id))
-                                        <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
-                                           class="btn btn-sm btn-outline-primary"
-                                        > {{__('Prüfung starten')}}
-                                        </a>
+                                            <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
+                                               class="btn btn-sm btn-outline-primary"
+                                            > {{__('Prüfung starten')}}
+                                            </a>
                                         @else
                                             <x-notifyer>
                                                 {{ __('Sie sind für dieses Gerät noch nicht als befähigt eingetragen!') }}
                                             </x-notifyer>
-
-                                            @endif
+                                        @endif
                                     @else
                                         {!! $controlItem->checkControlRequirementsMet() !!}
                                     @endif
@@ -758,8 +757,8 @@
                                 >
 
                                 <button class="btn btn-primary btn-lg mt-3"
-                                    data-toggle="modal"
-                                    data-target="#modalStartControl"
+                                        data-toggle="modal"
+                                        data-target="#modalStartControl"
                                 >{{__('Prüfung/Wartung erfassen')}}
                                     @if(!Auth::user()->isQualified($equipment->id))
                                         <span class="fas fa-exclamation text-warning ml-2"></span>

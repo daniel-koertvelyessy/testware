@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Vorschriften')}}
+    {{__('Neue Prüfung anlegen')}}
 @endsection
 
 @section('menu')
@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row md-4 d-none d-md-block">
             <div class="col">
                 <h1 class="h3">{{__('Neue Prüfung anlegen')}}</h1>
             </div>

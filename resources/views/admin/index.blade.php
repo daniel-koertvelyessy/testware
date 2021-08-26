@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Admin')}}
+    {{__('Systemstatus')}}
 @endsection
 
 @section('menu')

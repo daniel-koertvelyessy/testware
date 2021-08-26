@@ -14,7 +14,7 @@
         <div class="tab-pane fade show active" id="nav-cianforderung" role="tabpanel" aria-labelledby="nav-cianforderung-tab">
             <p class="lead text-primary">{{__('Wählen Sie als erstes die Anforderung aus, welche dem Vorgang zugeordnet werden soll.')}}</p>
 
-            <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="Anforderung">
+            <x-selectfield id="anforderung_id_modal" name="anforderung_id" label="{{__('Anforderung')}}">
                 @foreach (App\Anforderung::all() as $anforderung)
                     <option value="{{ $anforderung->id }}" @if($rid == $anforderung->id) selected @endif>{{ $anforderung->an_name }}</option>
                 @endforeach
@@ -28,10 +28,10 @@
             <p class="lead text-primary">{{__('Vergeben Sie Namen und Kürzel für den neuen Vorgang.')}}</p>
             <div class="row">
                 <div class="col-md-4">
-                    <x-rtextfield id="aci_label" label="Kürzel" />
+                    <x-rtextfield id="aci_label" label="{{__('Kürzel')}}" />
                 </div>
                 <div class="col-md-6">
-                    <x-rtextfield id="aci_name" label="Name" max="150" />
+                    <x-rtextfield id="aci_name" label="{{__('Name')}}" max="150" />
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
                     <div class="custom-control custom-checkbox">
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <p class="lead text-primary my-3">{{__('Legen Sie nun den Umfang des Vorgangs fest.')}}</p>
-            <x-textarea id="aci_task" label="Aufgabe" />
+            <x-textarea id="aci_task" label="{{__('Aufgabe')}}" />
 
             <div class="row">
                 <div class="col-md-2">
@@ -58,18 +58,14 @@
                     <x-textfield id="aci_vaule_soll" label="{{__('Sollwert')}}" class="decimal"/>
                 </div>
                 <div class="col-md-3">
-                    <label for="aci_value_target_mode">{{__('Zielwert i.O.')}}</label>
-                    <select name="aci_value_target_mode"
-                            id="aci_value_target_mode"
-                            class="custom-select"
-                    >
+                    <x-selectfield id="aci_value_target_mode" label="{{__('Zielwert i.O.')}}">
                         <option @if(old('aci_value_target_mode') ==='lt') selected @endif value="lt">{{__('Kleiner als Soll')}}</option>
                         <option @if(old('aci_value_target_mode') ==='eq') selected @endif value="eq">{{__('Gleich ± Toleranz')}}</option>
                         <option @if(old('aci_value_target_mode') ==='gt') selected @endif value="gt">{{__('Größer als Soll')}}</option>
-                    </select>
+                    </x-selectfield>
                 </div>
                 <div class="col-md-2">
-                    <x-textfield id="aci_value_tol" label="± Toleranz" class="decimal"  />
+                    <x-textfield id="aci_value_tol" label="± {{__('Toleranz')}}" class="decimal"  />
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
                     <div class="custom-control custom-radio custom-control-inline">
@@ -93,8 +89,7 @@
                 </div>
             </div>
             <div class="card p-3 my-4">
-                <p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p>
-                <p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>
+                {!! __('<p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p><p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>') !!}
             </div>
             <button type="button" class="btn btn-sm btn-outline-secondary bentBackTab"
                     data-showtab="#nav-cianforderung-tab"
@@ -124,7 +119,7 @@
                         <input type="radio" id="aci_external" name="aci_execution" class="custom-control-input" value="1">
                         <label class="custom-control-label" for="aci_external">{{__('Externe Durchführung')}}</label>
                     </div>
-                    <x-selectfield id="firma_id" label="Firma">
+                    <x-selectfield id="firma_id" label="{{__('Firma')}}">
                         @foreach (App\Firma::all() as $firma)
                             <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                         @endforeach

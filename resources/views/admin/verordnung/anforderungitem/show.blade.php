@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{__('Vorgang')}}
+    {{__('Kontrollvorgang')}} &triangleright; testWare
 @endsection
 
 @section('mainSection')
@@ -158,7 +158,7 @@
                                        name="aci_execution"
                                        class="custom-control-input"
                                        value="0"
-                                       @if ($anforderungcontrolitem->aci_execution===0)
+                                       @if (!$anforderungcontrolitem->aci_execution)
                                        checked
                                     @endif
                                 >
@@ -194,7 +194,7 @@
                                        name="aci_execution"
                                        class="custom-control-input"
                                        value="1"
-                                       @if ($anforderungcontrolitem->aci_execution===1)
+                                       @if ($anforderungcontrolitem->aci_execution)
                                        checked
                                     @endif
                                 >

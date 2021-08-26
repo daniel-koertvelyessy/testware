@@ -12,9 +12,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h4 d-md-block d-none">{{__('Übersicht')}}</h1>
+                <h1 class="h4">{{__('Übersicht')}}</h1>
             </div>
         </div>
 
@@ -24,10 +24,9 @@
                     <thead>
                     <tr>
                         <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
-                        <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventar-Nr'))</th>
+                        <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventarnummer'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('qe_control_date_due', __('Fällig'))</th>
-                        <th></th>
+                        <th>@sortablelink('qe_control_date_due', __('Fällig'))</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,7 +37,7 @@
                             </td>
                             <td>
                                 <span class="d-md-none">{!! $controlItem->checkDueDateIcon($controlItem) !!}</span>
-                                {{ $controlItem->Equipment->eq_inventar_nr }}
+                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
                             </td>
                             <td class="d-none d-md-table-cell">
                                 @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
@@ -50,21 +49,13 @@
                                     {{ $controlItem->Anforderung->an_name }}
                                 @endif
                             </td>
-                            <td class="d-none d-md-table-cell">
-                                {!! $controlItem->checkDueDate($controlItem) !!}
-                            </td>
                             <td>
-                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
-                                   class="btn btn-sm btn-outline-primary">
-                                    <span class="d-none d-md-inline">{{__('jetzt prüfen')}}</span>
-                                    <span class="fas fa-stethoscope"></span>
-                                </a>
+                                {!! $controlItem->checkDueDate($controlItem) !!}
                                 @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
                                     <span class="d-md-none">
                                         {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
                                     </span>
                                 @endif
-
                             </td>
                         </tr>
                         @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung) )

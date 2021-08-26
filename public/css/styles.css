@@ -814,44 +814,70 @@ input[data-function*='swipe']:checked ~ .sidebar {
 }
 
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
-    background: #26324978;
-    /*background: #263249;*/
-    color: #fff;
+    min-width: 220px;
+    max-width: 220px;
+    /*    background: #26324978;
+   background: #263249;
+    color: #fff;*/
+    color: #333333;
+    background: #ffffff;
     transition: all 0.5s;
     margin-left: 0;
+    z-index: 30000;
 }
 
 #sidebar.active {
-    margin-left: -250px;
+    margin-left: -220px;
 }
 
-#sidebar > aside > a,
-#sidebar > aside > div.collapse > ul > li > a {
-    color: #fff !important;
-}
+/*#sidebar > aside > a,*/
+/*#sidebar > aside > div.collapse > ul > li > a {*/
+/*    color: #fff !important;*/
+/*}*/
 
-#sidebar .active > aside > a,
-#sidebar .active > aside > a[aria-expanded="true"] {
-    color: #fff !important;
-    background: #263249;
-}
+/*#sidebar .active > aside > a,*/
+/*#sidebar .active > aside > a[aria-expanded="true"] {*/
+/*    color: #fff !important;*/
+/*    background: #263249;*/
+/*}*/
 
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
 
-@media (max-width: 768px) {
+@media (min-width: 576px) {
     #sidebar {
         margin-left: 0;
     }
 
     #sidebar.active {
-        margin-left: -250px;
+        margin-left: -220px;
     }
 
     #sidebarCollapse span {
         display: none;
     }
 }
+
+@media (max-width: 768px) {
+
+    #sidebar {
+        min-width: 80px;
+        max-width: 80px;
+        /*    background: #26324978;
+       background: #263249;
+        color: #fff;*/
+        color: #333333;
+        background: #fff;
+        margin-left: 0;
+    }
+
+    #sidebar.active {
+        margin-left: -80px;
+    }
+
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+

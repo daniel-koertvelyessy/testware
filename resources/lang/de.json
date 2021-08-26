@@ -568,7 +568,7 @@
     "Vergeben Sie Namen und Kürzel für den neuen Vorgang.": "Vergeben Sie Namen und Kürzel für den neuen Vorgang.",
     "Legen Sie nun den Umfang des Vorgangs fest.": "Legen Sie nun den Umfang des Vorgangs fest.",
     "Aufgabe": "Aufgabe",
-    "SI-Einheit [kg, °C, V usw]": "SI-Einheit [kg, °C, V usw]",
+    "SI-Einheit": "SI-Einheit",
     "Sollwert": "Sollwert",
     "Die Felder Sollwert und SI-Einheit können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.": "Die Felder Sollwert und SI-Einheit können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.",
     "Soll ein Messwert abgelesen werden sind die Angaben Sollwert und SI-Einheit zwingend erforderlich!": "Soll ein Messwert abgelesen werden sind die Angaben Sollwert und SI-Einheit zwingend erforderlich!",
@@ -754,6 +754,14 @@
     "Kontrollvorgang": "Kontrollvorgang",
     "Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende Gerät aus.": "Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende Gerät aus.",
     "Sie sind für dieses Gerät noch nicht als befähigt eingetragen!": "Sie sind für dieses Gerät noch nicht als befähigt eingetragen!",
+    "<p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p><p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>": "<p>Die Felder <code>Sollwert</code> und <code>SI-Einheit</code> können leer gelassen werden. In diesem Fall wird ein einfacher Entscheidungsschalter generiert. Dieser speichert, ob die oben beschriebene Aufgabe erfült wurde oder nicht.</p><p>Soll ein Messwert abgelesen werden sind die Angaben <code>Sollwert</code> und <code>SI-Einheit</code> zwingend erforderlich!</p>",
+    "zurück": "zurück",
+    "Toleranz": "Toleranz",
+    "Zielwert i.O.": "Zielwert i.O.",
+    "Kleiner als Soll": "Kleiner als Soll",
+    "Gleich ± Toleranz": "Gleich ± Toleranz",
+    "Größer als Soll": "Größer als Soll",
+    "Neue Prüfung anlegen": "Neue Prüfung anlegen",
     "###": "###"
 
 }

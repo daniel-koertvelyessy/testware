@@ -189,7 +189,7 @@
 </section>
 <div class="wrapper">
     <nav id="sidebar"
-         class="active"
+         class="active border-right border-light"
     >
         <x-sidebar/>
     </nav>
