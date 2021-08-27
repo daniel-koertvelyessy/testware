@@ -73,8 +73,8 @@
 
 @section('modals')
     <x-modal-add-note
-        objectname="{{ $equipment->eq_inventar_nr }}"
-        uid="{{ $equipment->eq_uid }}"
+            objectname="{{ $equipment->eq_inventar_nr }}"
+            uid="{{ $equipment->eq_uid }}"
     />
 
     <div class="modal fade"
@@ -562,7 +562,7 @@
                                         <option value="{{ $ad->id }}"
                                                 @if( $ad->id===2  ?? old('document_type_id')==$ad->id)
                                                 selected
-                                            @endif
+                                                @endif
                                         >{{ $ad->doctyp_label }}</option>
                                     @endforeach
                                 </x-selectfield>
@@ -772,31 +772,37 @@
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
                                 @forelse(App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $bda)
-                                    <x-filecard downloadroute="{{ route('downloadProduktDokuFile') }}"
-                                                name="{{ $bda->proddoc_name }}"
-                                                label="{{ $bda->proddoc_label }}"
-                                                path="{{ $bda->proddoc_name_pfad }}"
-                                                id="{{ $bda->id }}"
-                                    />
+                                    @if(Storage::disk('local')->exists($bda->proddoc_name_pfad))
+                                        <x-filecard downloadroute="{{ route('downloadProduktDokuFile') }}"
+                                                    name="{{ $bda->proddoc_name }}"
+                                                    label="{{ $bda->proddoc_label }}"
+                                                    path="{{ $bda->proddoc_name_pfad }}"
+                                                    id="{{ $bda->id }}"
+                                        />
+                                    @endif
                                 @empty
                                     <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
                                 <h2 class="h4 mt-5">{{__('Funktionstest')}}</h2>
                                 @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
-                                    <x-filecard downloadroute="{{ route('downloadEquipmentDokuFile') }}"
-                                                name="{{ $bda->eqdoc_name }}"
-                                                label="{{ $bda->eqdoc_label }}"
-                                                path="{{ $bda->eqdoc_name_pfad }}"
-                                                id="{{ $bda->id }}"
-                                    />
+                                    @if(Storage::disk('local')->exists($bda->eqdoc_name_pfad))
+                                        <x-filecard downloadroute="{{ route('downloadEquipmentDokuFile') }}"
+                                                    name="{{ $bda->eqdoc_name }}"
+                                                    label="{{ $bda->eqdoc_label }}"
+                                                    path="{{ $bda->eqdoc_name_pfad }}"
+                                                    id="{{ $bda->id }}"
+                                        />
+                                    @endif
                                 @empty
                                     <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
                                     <button class="btn btn-lg btn-warning"
@@ -864,7 +870,8 @@
                                                            value="{{ $equipmentUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
+                                                        <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -916,7 +923,8 @@
                                                            value="{{ $instructedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt ml-2"></span>
+                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
+                                                                class="far fa-trash-alt ml-2"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -944,7 +952,8 @@
                                         />
                                     @endif
                                 @empty
-                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
+                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}
+                                        !</p>
                                 @endforelse
                             </div>
                         </div>
@@ -1007,37 +1016,41 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach (\App\EquipmentDoc::where('equipment_id',$equipment->id)->get() as $equipDoc)
-                                                    <tr>
-                                                        <td>
-                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                  method="get"
-                                                                  id="downloadEquipmentDoku_{{ $equipDoc->id }}"
-                                                            >
-                                                                @csrf
-                                                                <input type="hidden"
-                                                                       name="id"
-                                                                       id="download_equipment_id_{{ $equipDoc->id }}"
-                                                                       value="{{ $equipDoc->id }}"
+                                                    @if(Storage::disk('local')->exists($equipDoc->eqdoc_name_pfad))
+                                                        <tr>
+                                                            <td>
+                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadEquipmentDoku_{{ $equipDoc->id }}"
                                                                 >
-                                                            </form>
-                                                            <a href="#"
-                                                               onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
-                                                            >
-                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
-                                                        <td style="text-align: right;">
-                                                            {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
-                                                        </td>
-                                                        <td>
-                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
-                                                                            tabtarget="documents"
-                                                                            prefix="EquipmentDoku"
-                                                                            id="{{ $equipDoc->id }}"
-                                                            />
-                                                        </td>
-                                                    </tr>
+                                                                    @csrf
+                                                                    <input type="hidden"
+                                                                           name="id"
+                                                                           id="download_equipment_id_{{ $equipDoc->id }}"
+                                                                           value="{{ $equipDoc->id }}"
+                                                                    >
+                                                                </form>
+                                                                <a href="#"
+                                                                   onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
+                                                                >
+                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
+                                                            <td style="text-align: right;">
+                                                                {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
+                                                            </td>
+                                                            <td>
+                                                                <x-deletebutton
+                                                                        action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
+                                                                        tabtarget="documents"
+                                                                        prefix="EquipmentDoku"
+                                                                        id="{{ $equipDoc->id }}"
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -1060,37 +1073,41 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach (App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipFunctionDoc)
-                                                    <tr>
-                                                        <td>
-                                                            <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                  method="get"
-                                                                  id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
-                                                            >
-                                                                @csrf
-                                                                <input type="hidden"
-                                                                       name="id"
-                                                                       id="download_equipment_function_id_{{ $equipFunctionDoc->id }}"
-                                                                       value="{{ $equipFunctionDoc->id }}"
+                                                    @if(Storage::disk('local')->exists($equipFunctionDoc->eqdoc_name_pfad))
+                                                        <tr>
+                                                            <td>
+                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
                                                                 >
-                                                            </form>
-                                                            <a href="#"
-                                                               onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
-                                                            >
-                                                                <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
-                                                        <td style="text-align: right;">
-                                                            {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
-                                                        </td>
-                                                        <td>
-                                                            <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
-                                                                            tabtarget="documents"
-                                                                            prefix="EquipmentFunction"
-                                                                            id="{{ $equipFunctionDoc->id }}"
-                                                            />
-                                                        </td>
-                                                    </tr>
+                                                                    @csrf
+                                                                    <input type="hidden"
+                                                                           name="id"
+                                                                           id="download_equipment_function_id_{{ $equipFunctionDoc->id }}"
+                                                                           value="{{ $equipFunctionDoc->id }}"
+                                                                    >
+                                                                </form>
+                                                                <a href="#"
+                                                                   onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
+                                                                >
+                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
+                                                            <td style="text-align: right;">
+                                                                {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
+                                                            </td>
+                                                            <td>
+                                                                <x-deletebutton
+                                                                        action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
+                                                                        tabtarget="documents"
+                                                                        prefix="EquipmentFunction"
+                                                                        id="{{ $equipFunctionDoc->id }}"
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -1113,32 +1130,35 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach (\App\ProduktDoc::where('produkt_id',$equipment->produkt_id)->get() as $produktDoc)
-                                                    <tr>
-                                                        <td>
-                                                            <form action="{{ route('downloadProduktDokuFile') }}#documents"
-                                                                  method="get"
-                                                                  id="downloadProdDoku_{{ $produktDoc->id }}"
-                                                            >
-                                                                @csrf
-                                                                <input type="hidden"
-                                                                       name="id"
-                                                                       id="download_produktdoc_id_{{ $produktDoc->id }}"
-                                                                       value="{{ $produktDoc->id }}"
+                                                    @if(Storage::disk('local')->exists($produktDoc->proddoc_name_pfad))
+                                                        <tr>
+                                                            <td>
+                                                                <form action="{{ route('downloadProduktDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadProdDoku_{{ $produktDoc->id }}"
                                                                 >
-                                                            </form>
-                                                            <a href="#"
-                                                               onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
-                                                            >
-                                                                <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="d-none d-md-table-cell">
-                                                            {{ $produktDoc->DocumentType->doctyp_label }}
-                                                        </td>
-                                                        <td style="text-align: right;">
-                                                            {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
-                                                        </td>
-                                                    </tr>
+                                                                    @csrf
+                                                                    <input type="hidden"
+                                                                           name="id"
+                                                                           id="download_produktdoc_id_{{ $produktDoc->id }}"
+                                                                           value="{{ $produktDoc->id }}"
+                                                                    >
+                                                                </form>
+                                                                <a href="#"
+                                                                   onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                                >
+                                                                    <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span>
+                                                                    <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="d-none d-md-table-cell">
+                                                                {{ $produktDoc->DocumentType->doctyp_label }}
+                                                            </td>
+                                                            <td style="text-align: right;">
+                                                                {{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -1199,7 +1219,7 @@
                                                 <td style="text-align: right; "
                                                     @if ($controlItem->AnforderungControlItem->aci_vaule_soll)
                                                     class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
-                                                    @endif
+                                                        @endif
 
                                                 >
                                                     {{ $controlItem->control_item_read }}
@@ -1225,7 +1245,8 @@
                         @forelse (App\EquipmentEvent::where('equipment_id',$equipment->id)->withTrashed()->take(10)->latest()->get() as $equipmentEvent)
                             <dl class="row">
                                 <dt class="col-sm-4">
-                                    <strong>{{__('eröffnet')}}:</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
+                                    <strong>{{__('eröffnet')}}
+                                        :</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
                                     <br><strong>{{__('geschlossen')}}:</strong>
                                     @if ($equipmentEvent->deleted_at)
                                         {{ $equipmentEvent->deleted_at->DiffForhumans() }}

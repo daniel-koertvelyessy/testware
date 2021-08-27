@@ -1277,6 +1277,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach ($produkt->ProduktDoc as $produktDoc)
+                                            @if(Storage::disk('local')->exists(($produktDoc->proddoc_name_pfad)))
                                             <tr>
                                                 <td style="vertical-align: middle;">
                                                     <a href="#"
@@ -1313,6 +1314,7 @@
                                                     />
                                                 </td>
                                             </tr>
+                                            @endif
                                         @endforeach
                                         </tbody>
                                     </table>

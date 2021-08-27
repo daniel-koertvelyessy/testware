@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -89,6 +90,13 @@ class ProduktController extends Controller
      */
     public function show(Produkt $produkt)
     {
+        foreach($produkt->ProduktDoc as $produktDoc){
+            if(Storage::disk('local')->missing(($produktDoc->proddoc_name_pfad)))
+ //          dump('Keine Datei ' . $produktDoc->proddoc_name_pfad);
+           $produktDoc->delete();
+        }
+
+
 
         return view('admin.produkt.show', [
             'produkt'    => $produkt,

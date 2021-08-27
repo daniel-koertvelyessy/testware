@@ -6,6 +6,7 @@ use App\ProduktDoc;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProduktDocController extends Controller
@@ -74,6 +75,7 @@ class ProduktDocController extends Controller
             // 'local' oder 'public' oder default, wenn nicht angegeben
 
         } else {
+            Log::warning('Fehler beim Hochladen einer Datei. Es wurde kein $_FILE übergeben!');
             $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_label') . '</strong> konnte nicht hochgeladen werden!');
         }
         //

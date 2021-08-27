@@ -159,7 +159,7 @@
                         <div class="col">
                             <x-textarea id="fa_description"
                                         label="{{__('Beschreibung')}}"
-                            ><{{ $firma->fa_description }}/x-textarea>
+                            ><{{ $firma->fa_description }}</x-textarea>
                         </div>
                     </div>
 
