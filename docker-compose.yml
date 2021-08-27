@@ -2,13 +2,14 @@ version: "3.1"
 
 services:
   app:
-    image: bitpackio/testware
+    image: bitpackio/testware:1.42-SSL
     restart: always
     container_name: testware-app
     env_file:
       - app.env
     ports:
       - 80:80
+      - 443:443
     volumes:
       - .:/var/www/html
     depends_on:
@@ -19,7 +20,6 @@ services:
     ports:
       - 8085:8080
     restart: always
-
 
   db:
     image: postgres:11
@@ -34,6 +34,5 @@ services:
       - testware-db-data:/var/lib/postgresql/data
 
 volumes:
-#  testware-files:
+  #  testware-files:
   testware-db-data:
-

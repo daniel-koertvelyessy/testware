@@ -8,8 +8,9 @@ services:
       - app.env
     ports:
       - 80:80
+      - 443:443
     volumes:
-      - ./testware-files:/var/www/html/storage/app
+      - testware-storage:/var/www/html/storage/app
     depends_on:
       - db
 
@@ -29,4 +30,4 @@ services:
     container_name: testware-db
     working_dir: /data/pgsql
     volumes:
-      - ./testware-db-data:/var/lib/postgresql/data
+      - testware-db:/var/lib/postgresql/data
