@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   app:
-    image: bitpackio/testware:1.42-SSL
+    image: bitpackio/testware:1.43-SSL
     restart: always
     container_name: testware-app
     env_file:

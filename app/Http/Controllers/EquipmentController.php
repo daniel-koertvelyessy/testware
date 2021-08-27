@@ -15,6 +15,7 @@ use App\EquipmentWarranty;
 use App\ProductInstructedUser;
 use App\ProductQualifiedUser;
 use App\Produkt;
+use App\ProduktDoc;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -25,6 +26,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -201,6 +203,21 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
+        foreach(EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipmentDocFile){
+            if(Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)){
+                Log::warning('Dateireferenz für Funktionsprüfung ('. $equipmentDocFile->eqdoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
+            }
+            $equipmentDocFile->delete();
+        }
+
+        foreach(ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $productDocFile){
+            if(Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)){
+                Log::warning('Dateireferenz ('. $productDocFile->proddoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
+            }
+            $productDocFile->delete();
+        }
+
+
         return view('testware.equipment.show', compact('equipment'));
     }
 
