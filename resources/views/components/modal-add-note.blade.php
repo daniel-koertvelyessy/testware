@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <x-textfield id="label"
-                                         label="Titel"
+                                         label="{{__('Titel')}}"
                                          required
                             />
                         </div>
@@ -84,7 +84,7 @@
                                 >
                                 <label class="custom-control-label"
                                        for="is_intern"
-                                >{{ __('Notiz intern hlaten') }}
+                                >{{ __('Notiz intern halten') }}
                                 </label>
                             </div>
                         </div>

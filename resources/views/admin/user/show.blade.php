@@ -334,6 +334,11 @@
                                         {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
                                 >Mint
                                 </option>--}}
+                                <option value="css/tbs.css"
+                                        data-asset="{{ asset('css/tbs.css') }}"
+                                        {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
+                                >Twitter Bootstrap
+                                </option>
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
                                         {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}

@@ -102,7 +102,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <x-selectfield id="anforderung_id"
-                                                       label="Anforderung wählen"
+                                                       label="{{__('Anforderung wählen')}}"
                                         >
                                             <option value="void">{{__('bitte wählen')}}</option>
                                             @foreach (App\Anforderung::all() as $anforderung)
@@ -207,7 +207,7 @@
                             <input type="text"
                                    name="setNewEquipmentFromProdukt"
                                    id="setNewEquipmentFromProdukt"
-                                   placeholder="{{__('Bitte Produktnummer oder -name eingeben')}}"
+                                   placeholder="{{__('Bitte Produkt- / Artikelnummer oder Name eingeben')}}"
                                    class="form-control getProduktListe"
                                    value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
                                    autocomplete="off"
@@ -216,7 +216,7 @@
                                     class="btn btn-primary ml-2"
                                     onclick="frmSubmitNewEquipment()"
                             >
-                                <span class="d-none d-md-inline">{{__('Gerät jetzt')}} </span>{{__('anlegen')}}
+                                {{__('Gerät anlegen')}}
                             </button>
 
                         </div>
@@ -309,7 +309,7 @@
                         });
                         resp.push(
                             {
-                                label: `neues Produkt anlegen`,
+                                label: `{{__('Neues Produkt anlegen')}}`,
                                 id: '0',
                                 value: 'neu'
                             }
@@ -381,4 +381,11 @@
             );
         });
     </script>
+
+    @if($errors->any())
+        <script>
+            $('#modalAddProdukt').modal('show');
+        </script>
+
+    @endif
 @endsection

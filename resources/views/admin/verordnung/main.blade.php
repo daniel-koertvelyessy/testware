@@ -1,6 +1,6 @@
 @extends('layout.layout-admin')
 
-@section('pagetitle','Verordnungen')
+@section('pagetitle','Vorschriften')
 
 @section('mainSection')
     {{__('Vorschriften')}}
@@ -44,7 +44,7 @@
                     <thead>
                     <tr>
                         <th class="w-md-50">{{__('Bezeichnung')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Kennung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Nummer/Zeichen')}}</th>
                         <th class="d-none d-md-table-cell">{{__('Bearbeitet')}}</th>
                     </tr>
                     </thead>

@@ -100,7 +100,8 @@
                                     label="{{__('Beschreibung')}}"
                         />
 
-                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download ml-2"></span></x-btnMain>
+                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download ml-2"></span>
+                        </x-btnMain>
 
                     </form>
                 </div>
@@ -433,7 +434,7 @@
                                                label="{{__('Unterwiesene Person')}}"
                                 >
                                     @foreach(App\User::all() as $user)
-                                        @if(! $user->isInstructed($produkt->id))
+                                        @if(! $user->isInstructed($produkt->id) && ! $user->isQualified($produkt->id))
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endif
                                     @endforeach
@@ -457,6 +458,7 @@
                                         <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
                                     @endforeach
                                 </x-selectfield>
+
                             </div>
                         </div>
                         <div class="row">
@@ -512,7 +514,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary">{{ __('Unterweisung erfassen') }}</button>
+                        <div id="selectedErrorMsg" class="text-danger small"></div>
+                        <button type="button" id="btnStoreInstructedUser" class="btn btn-primary">{{ __('Unterweisung
+                        erfassen')
+                        }}</button>
                     </div>
                 </div>
             </form>
@@ -563,7 +568,7 @@
                            aria-controls="productRequirements"
                            aria-selected="false"
                         >{{__('Anforderungen')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -589,7 +594,7 @@
                            aria-controls="prodDoku"
                            aria-selected="false"
                         >{{__('Dokumente')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -603,7 +608,7 @@
                            aria-controls="prodEquip"
                            aria-selected="false"
                         >{{__('Geräte')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->Equipment->count() }}</span></a>
                     </li>
                 </ul>
@@ -645,7 +650,7 @@
                                                         <option value="{{ $produktKategorie->id }}"
                                                                 @if($produktKategorie->id === $produkt->produkt_kategorie_id)
                                                                 selected
-                                                            @endif
+                                                                @endif
                                                         >
                                                             {{ $produktKategorie->pk_name }}
                                                         </option>
@@ -667,7 +672,7 @@
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option
-                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
+                                                            value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -679,7 +684,7 @@
                                                            name="prod_active"
                                                            id="prod_active"
                                                            value="1"
-                                                        {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
+                                                            {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="prod_active"
@@ -695,7 +700,7 @@
                                                            id="control_product"
                                                            name="control_product"
                                                            value="1"
-                                                        {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
+                                                            {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="control_product"
@@ -804,7 +809,8 @@
                                                            value="{{ $qualifiedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
+                                                        <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -864,7 +870,8 @@
                                                            value="{{ $instructedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span class="far fa-trash-alt ml-2"></span>
+                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
+                                                                class="far fa-trash-alt ml-2"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -900,7 +907,8 @@
                                         />
                                     @endif
                                 @empty
-                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}!</p>
+                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}
+                                        !</p>
                                 @endforelse
                             </div>
                         </div>
@@ -942,11 +950,11 @@
                                                     id="btnSectionFirmaDetails"
                                             >
                                                 <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                    class="fas fa-angle-down"
+                                                        class="fas fa-angle-down"
                                                 ></span>
                                             </button>
                                             <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                    class="fas fa-angle-right"
+                                                        class="fas fa-angle-right"
                                                 ></span></button>
                                         </div>
                                         <div class="collapse @if (count($errors)>0) show @endif "
@@ -1046,7 +1054,7 @@
                                                         >
                                                             @foreach (App\AddressType::all() as $addressType)
                                                                 <option
-                                                                    value="{{ $addressType->id }}"
+                                                                        value="{{ $addressType->id }}"
                                                                 >{{ $addressType->adt_name }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1072,7 +1080,7 @@
                                                         >
                                                             @foreach (App\Land::all() as $country)
                                                                 <option
-                                                                    value="{{ $country->id }}"
+                                                                        value="{{ $country->id }}"
                                                                 >{{ $country->land_iso }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1120,7 +1128,7 @@
                                                         >
                                                             @foreach (App\Anrede::all() as $anrede)
                                                                 <option
-                                                                    value="{{ $anrede->id }}"
+                                                                        value="{{ $anrede->id }}"
                                                                 >{{ $anrede->an_kurz }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1162,14 +1170,16 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="list-group">
-                                        @foreach ($produkt->firma as $firma)
+                                        @forelse ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                                    firma="{!!  $firma->fa_name !!}"
+                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                    firmaid="{{ $firma->id }}"
+                                                    produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
-                                        @endforeach
+                                        @empty
+                                            <x-notifyer>{{ __('Dem Produkt ist keine Firma zugeordnet.') }}</x-notifyer>
+                                        @endforelse
 
                                     </div>
                                 </div>
@@ -1179,10 +1189,10 @@
                                     <div class="list-group">
                                         @foreach ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                                    firma="{!!  $firma->fa_name !!}"
+                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                    firmaid="{{ $firma->id }}"
+                                                    produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @endforeach
 
@@ -1203,7 +1213,8 @@
                                       enctype="multipart/form-data"
                                 >
                                     @csrf
-                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span class="small text-muted">max 20MB</span></h2>
+                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span
+                                                class="small text-muted">max 20MB</span></h2>
 
                                     <input type="hidden"
                                            name="produkt_id"
@@ -1238,7 +1249,7 @@
                                     />
 
                                     <x-textarea id="proddoc_description"
-                                                label="Datei Informationen"
+                                                label="{{__('Datei Informationen')}}"
                                                 value="{{ $produkt->proddoc_description }}"
                                     />
 
@@ -1258,7 +1269,8 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i class="fas fa-paperclip ml-2"></i>
+                                    <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i
+                                                class="fas fa-paperclip ml-2"></i>
                                     </button>
                                 </form>
                             </div>
@@ -1278,42 +1290,42 @@
                                         <tbody>
                                         @foreach ($produkt->ProduktDoc as $produktDoc)
                                             @if(Storage::disk('local')->exists(($produktDoc->proddoc_name_pfad)))
-                                            <tr>
-                                                <td style="vertical-align: middle;">
-                                                    <a href="#"
-                                                       onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
-                                                    >
+                                                <tr>
+                                                    <td style="vertical-align: middle;">
+                                                        <a href="#"
+                                                           onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
+                                                        >
                                                         <span title="{{ $produktDoc->proddoc_name }}">
                                                     {{ str_limit($produktDoc->proddoc_label,25) }}
                                                     </span>
-                                                    </a>
-                                                    <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
-                                                          method="get"
-                                                          id="downloadProdDoku_{{ $produktDoc->id }}"
-                                                    >
-                                                        @csrf
-                                                        <input type="hidden"
-                                                               name="id"
-                                                               id="download_produktdoc_id_{{ $produktDoc->id }}"
-                                                               value="{{ $produktDoc->id }}"
+                                                        </a>
+                                                        <form action="{{ route('downloadProduktDokuFile') }}#prodDoku"
+                                                              method="get"
+                                                              id="downloadProdDoku_{{ $produktDoc->id }}"
                                                         >
-                                                    </form>
-                                                </td>
-                                                <td style="vertical-align: middle;">{{ $produktDoc->DocumentType->doctyp_label }}</td>
-                                                <td class="d-none d-lg-table-cell"
-                                                    style="text-align: right; vertical-align: middle;"
-                                                >{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
-                                                <td class="d-none d-lg-table-cell"
-                                                    style="vertical-align: middle;"
-                                                >{{ $produktDoc->created_at->DiffForHumans() }}</td>
-                                                <td>
-                                                    <x-deletebutton
-                                                        prefix="produktDoc"
-                                                        action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
-                                                        id="{{ $produktDoc->id }}"
-                                                    />
-                                                </td>
-                                            </tr>
+                                                            @csrf
+                                                            <input type="hidden"
+                                                                   name="id"
+                                                                   id="download_produktdoc_id_{{ $produktDoc->id }}"
+                                                                   value="{{ $produktDoc->id }}"
+                                                            >
+                                                        </form>
+                                                    </td>
+                                                    <td style="vertical-align: middle;">{{ $produktDoc->DocumentType->doctyp_label }}</td>
+                                                    <td class="d-none d-lg-table-cell"
+                                                        style="text-align: right; vertical-align: middle;"
+                                                    >{{ $produktDoc->getSize($produktDoc->proddoc_name_pfad) }}</td>
+                                                    <td class="d-none d-lg-table-cell"
+                                                        style="vertical-align: middle;"
+                                                    >{{ $produktDoc->created_at->DiffForHumans() }}</td>
+                                                    <td>
+                                                        <x-deletebutton
+                                                                prefix="produktDoc"
+                                                                action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                                id="{{ $produktDoc->id }}"
+                                                        />
+                                                    </td>
+                                                </tr>
                                             @endif
                                         @endforeach
                                         </tbody>
@@ -1493,8 +1505,8 @@
             );
         });
 
-        $('#btnSectionFirmaDetails').click(function (){
-            $('#ckAddNewFirma, #ckAddNewAddress, #ckAddNewContact').prop('checked',true);
+        $('#btnSectionFirmaDetails').click(function () {
+            $('#ckAddNewFirma, #ckAddNewAddress, #ckAddNewContact').prop('checked', true);
 
 
         });
@@ -1533,6 +1545,82 @@
             `);
                 }
             });
+        });
+    </script>
+
+    <script>
+        $('#btnStoreInstructedUser').click(function () {
+            let checkInstructorIsSelected = false;
+            let checkTraneeHasSignature = false;
+            let checkInstructorHasSignature = false;
+
+            let msg = '';
+
+            const selectedErrorMsg = $('#selectedErrorMsg');
+            const product_instruction_instructor_profile_id = $('#product_instruction_instructor_profile_id');
+            const product_instruction_instructor_firma_id = $('#product_instruction_instructor_firma_id');
+            const product_instruction_trainee_signature = $('#product_instruction_trainee_signature');
+            const signatureField_product_instruction_trainee_signature = $('#signatureField_product_instruction_trainee_signature');
+            const signatureField_product_instruction_instructor_signature = $('#signatureField_product_instruction_instructor_signature');
+            const product_instruction_instructor_signature = $('#product_instruction_instructor_signature');
+
+
+            if (
+                product_instruction_instructor_profile_id.val() === '0' &&
+                product_instruction_instructor_firma_id.val() === '0'
+            ){
+                msg = msg + '<span class="mr-2">{{__('Bitte entweder eine befähigte Person oder Firma auswählen.')
+                }}</span>';
+                product_instruction_instructor_profile_id.addClass('is-invalid');
+                product_instruction_instructor_firma_id.addClass('is-invalid');
+                product_instruction_instructor_profile_id.removeClass('is-valid');
+                product_instruction_instructor_firma_id.removeClass('is-valid');
+                checkInstructorIsSelected = false;
+            } else {
+                product_instruction_instructor_profile_id.addClass('is-valid');
+                product_instruction_instructor_firma_id.addClass('is-valid');
+                product_instruction_instructor_profile_id.removeClass('is-invalid');
+                product_instruction_instructor_firma_id.removeClass('is-invalid');
+                checkInstructorIsSelected = true;
+            }
+
+
+            if (product_instruction_trainee_signature.val()===''){
+                msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
+                signatureField_product_instruction_trainee_signature.addClass('is-invalid');
+                signatureField_product_instruction_trainee_signature.removeClass('is-valid');
+                checkTraneeHasSignature = false;
+            } else {
+                signatureField_product_instruction_trainee_signature.addClass('is-valid');
+                signatureField_product_instruction_trainee_signature.removeClass('is-invalid');
+                checkTraneeHasSignature = true;
+            }
+
+            if (product_instruction_instructor_signature.val()===''){
+                msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
+                signatureField_product_instruction_instructor_signature.addClass('is-invalid');
+                signatureField_product_instruction_instructor_signature.removeClass('is-valid');
+                checkInstructorHasSignature = false;
+            } else {
+                signatureField_product_instruction_instructor_signature.addClass('is-valid');
+                signatureField_product_instruction_instructor_signature.removeClass('is-invalid');
+                checkInstructorHasSignature = true;
+            }
+
+            if (
+                checkInstructorIsSelected &&
+                checkTraneeHasSignature &&
+                checkInstructorHasSignature
+            ){
+                console.log(msg);
+                selectedErrorMsg.html('');
+                $('#frmAddEquipmentInstruction').submit();
+            } else {
+                console.log(msg);
+                selectedErrorMsg.html(msg);
+            }
+
+
         });
     </script>
 @endsection
