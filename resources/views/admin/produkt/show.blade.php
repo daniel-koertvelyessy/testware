@@ -1523,23 +1523,23 @@
                     const text = (res.an_description === null) ? '-' : res.an_description;
                     $('#produktAnforderungText').html(`
                          <dl class="row">
-                            <dt class="col-sm-4">Verordnung</dt>
+                            <dt class="col-sm-4">{{__('Gehört zu Verordnung')}}</dt>
                             <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-4">Anfoderung</dt>
+                            <dt class="col-sm-4">{{__('Anforderung')}}</dt>
                             <dd class="col-sm-8">${res.an_label}</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-4">Bezeichnung</dt>
+                            <dt class="col-sm-4">{{__('Name')}}</dt>
                             <dd class="col-sm-8">${res.an_name}</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-4">Intervall</dt>
+                            <dt class="col-sm-4">{{__('Intervall')}}</dt>
                             <dd class="col-sm-8">${res.an_control_interval}  ${res.control_interval.ci_name}</dd>
                         </dl>
                         <dl class="row">
-                            <dt class="col-sm-4">Beschreibung</dt>
+                            <dt class="col-sm-4">{{__('Beschreibung')}}</dt>
                             <dd class="col-sm-8">${text}</dd>
                         </dl>
             `);

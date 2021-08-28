@@ -80,7 +80,7 @@
                             @endforeach
                         </x-selectModalgroup>
 
-                    <x-rtextfield id="updt_an_label" name="an_label" label="{{__('Name - Kürzel')}}" value="{{ $anforderung->an_label }}" />
+                    <x-rtextfield id="updt_an_label" name="an_label" label="{{__('Kürzel')}}" value="{{ $anforderung->an_label }}" />
 
                     <x-textfield id="updt_an_name" name="an_name" label="{{__('Name')}}" value="{{ $anforderung->an_name }}" />
 
