@@ -11,7 +11,7 @@
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>
     @enderror
-    <span class="small text-primary @error( $name??$id) d-none @enderror ">
+    <span class="small text-muted @error( $name??$id) d-none @enderror ">
         {{__('Datum')}} [{{date('Y-m-d')}}] @if (isset($required)), {{ __('erforderliches Feld') }}  @endif
     </span>
 </div>

@@ -749,10 +749,10 @@
                                                label="{{__('Seriennummer')}}:"
                                                value="{!!  $equipment->eq_serien_nr ?? '-' !!}"
                                 />
-                                <label for="firma">{{__('Hersteller')}}:</label>
+                                <label for="firma" class="small text-muted">{{__('Hersteller')}}:</label>
                                 <input type="text"
                                        id="firma"
-                                       class="form-control-plaintext"
+                                       class="form-control-plaintext form-control-lg"
                                        value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name !!} @endforeach"
                                 >
 

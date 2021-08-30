@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="{{ $id }}"
            @if(isset($hideLabel)) class="sr-only" @endif>
-        {{ $label }}
+        {{ $label??'' }}
     </label>
     <input type="{{ $type??'text' }}"
            name="{{ $name??$id }}"
@@ -22,7 +22,7 @@
     <span class="text-danger small">{{ $message }}</span>
     @enderror
     @if(!isset($hideLabel))
-    <span class="small text-primary @error( $name??$id) d-none @enderror ">
+    <span class="small text-muted @error( $name??$id) d-none @enderror ">
         @if(isset($required)) {{__('erforderliches Feld')}}, @endif
         @if(isset($class) && !str_contains($class,'decimal'))
             {{ __('max :max Zeichen', ['max' => $max??'100']) }}

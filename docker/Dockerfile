@@ -28,6 +28,7 @@ RUN a2enmod rewrite
 
 
 COPY configs/testware.conf /etc/apache2/sites-available/000-default.conf
+COPY configs/custom.ini /usr/local/etc/php/conf.d/custom.ini
 COPY configs/.env /var/www/html/.env
 
 # Set working directory

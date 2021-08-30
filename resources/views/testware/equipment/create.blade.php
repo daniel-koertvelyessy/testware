@@ -136,7 +136,8 @@
                                 @error('setStandOrtId')
                                 <span class="text-danger small">{{ $message }}</span>
                                 @enderror
-                                <span class="small text-primary @error( 'setStandOrtId') d-none @enderror ">{{__('erforderliches Feld, max 20 Zeichen')}}</span>
+                                <span class="small text-muted @error( 'setStandOrtId') d-none @enderror ">{{__
+                                ('erforderliches Feld, max 20 Zeichen')}}</span>
                             </div>
 
                         </div>

@@ -69,7 +69,7 @@
                         >
                         @csrf
                         <div class="form-group">
-                            <label for="btname">Name</label>
+                            <label for="btname">{{__('Name')}}</label>
                             <input type="text"
                                    name="btname"
                                    id="btname"
@@ -80,15 +80,11 @@
                             @if ($errors->has('btname'))
                                 <span class="text-danger small">{{ $errors->first('btname') }}</span>
                             @else
-                                <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
+                                <span class="small text-primary">{{__('erforderlich, maximal 20 Zeichen')}}</span>
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="btbeschreibung">Beschreibung des Gebäudetyps</label>
-                            <textarea id="btbeschreibung"
-                                      name="btbeschreibung"
-                                      class="form-control"
-                            >{{ old('btbeschreibung') ?? '' }}</textarea>
+                            <x-textarea id="btbeschreibung" label="{{ __('Beschreibung des Gebäudetyps') }}"/>
                         </div>
 
                     </div>
@@ -96,11 +92,11 @@
                         <button type="button"
                                 class="btn btn-secondary"
                                 data-dismiss="modal"
-                        >Abbruch
+                        >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >Gebäudetyp speichern
+                        >{{__('Gebäudetyp speichern')}}
                         </button>
                     </div>
                 </form>
@@ -125,7 +121,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title"
                             id="modalAddRoomTypeLabel"
-                        >Neuen Raumtyp erstellen</h5>
+                        >{{__('Neuen Raumtyp erstellen')}}</h5>
                         <button type="button"
                                 class="close"
                                 data-dismiss="modal"
@@ -142,7 +138,7 @@
                         >
                         @csrf
                         <div class="form-group">
-                            <label for="rt_label">Name</label>
+                            <label for="rt_label">{{__('Kürzel')}}</label>
                             <input type="text"
                                    name="rt_label"
                                    id="rt_label"
@@ -153,12 +149,12 @@
                             @if ($errors->has('rt_label'))
                                 <span class="text-danger small">{{ $errors->first('rt_label') }}</span>
                             @else
-                                <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
+                                <span class="small text-primary">{{__('erforderlich, maximal 20 Zeichen')}}</span>
                             @endif
                         </div>
 
                         <div class="form-group">
-                            <label for="rt_name">Name lang</label>
+                            <label for="rt_name">{{__('Name')}}</label>
                             <input type="text"
                                    name="rt_name"
                                    id="rt_name"
@@ -168,12 +164,12 @@
                             @if ($errors->has('rt_name'))
                                 <span class="text-danger small">{{ $errors->first('rt_name') }}</span>
                             @else
-                                <span class="small text-primary">maximal 100 Zeichen</span>
+                                <span class="small text-primary">{{__('maximal 100 Zeichen')}}</span>
                             @endif
                         </div>
 
                         <div class="form-group">
-                            <label for="rt_description">Beschreibung des Raumtyps</label>
+                            <label for="rt_description">{{__('Beschreibung des Raumtyps')}}</label>
                             <textarea id="rt_description"
                                       name="rt_description"
                                       class="form-control"
@@ -185,11 +181,11 @@
                         <button type="button"
                                 class="btn btn-secondary"
                                 data-dismiss="modal"
-                        >Abbruch
+                        >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >Raumtyp speichern
+                        >{{__('Raumtyp speichern')}}
                         </button>
                     </div>
                 </form>
@@ -206,7 +202,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">{{  ('Übersicht Gebäude')}} </span>{{ $building->b_label }}</h1>
+                <h1 class="h3"><span
+                            class="d-none d-md-inline">{{  ('Übersicht Gebäude')}} </span>{{ $building->b_label }}</h1>
                 {{--                <div class="visible-print text-center">
                                     {!! QrCode::size(65)->generate($building->storage_id); !!}
                                     <p class="text-muted small">Standort-ID</p>
@@ -229,7 +226,7 @@
                            role="tab"
                            aria-controls="gebStammDaten"
                            aria-selected="true"
-                        >{{  ('Stammdaten')}}</a>
+                        >{{  __('Stammdaten')}}</a>
                     </li>
 
                     <li class="nav-item"
@@ -242,7 +239,8 @@
                            role="tab"
                            aria-controls="gebRooms"
                            aria-selected="false"
-                        >{{  ('Räume')}} <span class="badge {{ ($building->room->count()>=0)? ' badge-info ' :' badge-light ' }} ">{{ $building->room->count() }}</span></a>
+                        >{{  __('Räume')}} <span class="badge {{ ($building->room->count()>=0)? ' badge-info ' :'
+                        badge-light ' }} ">{{ $building->room->count() }}</span></a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -295,7 +293,7 @@
                                     <h2 class="h5">{{  ('Bezeichner')}}</h2>
 
                                     <x-textfield id="b_label"
-                                                 label="{{ __('Kurzbezeichnung') }}"
+                                                 label="{{ __('Kürzel') }}"
                                                  value="{{ $building->b_label }}"
                                                  max="20"
                                                  required
@@ -331,7 +329,7 @@
                                         @endforeach
                                     </x-selectModalgroup>
 
-                                    <h2 class="h5">Wareneingang</h2>
+                                    <h2 class="h5">{{__('Wareneingang')}}</h2>
                                     <div class="form-group">
                                         <div class="form-check">
                                             <input class="form-check-input"
@@ -342,12 +340,12 @@
                                             <label class="form-check-label"
                                                    for="b_we_has"
                                             >
-                                                Wareneingang vorhanden
+                                                {{__(' Wareneingang vorhanden')}}
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="b_we_name">WE Bezeichnung (max 100 Zeichen)</label>
+                                        <label for="b_we_name">{{__('WE Bezeichnung (max 100 Zeichen)')}}</label>
                                         <input type="text"
                                                name="b_we_name"
                                                id="b_we_name"
@@ -358,7 +356,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <x-btnMain>Stammdaten speichern <span class="fas fa-download ml-2"></span></x-btnMain>
+                            <x-btnMain>{{__('Stammdaten speichern')}} <span class="fas fa-download
+                            ml-2"></span></x-btnMain>
                         </form>
                     </div>
                     <div class="tab-pane fade"
@@ -391,41 +390,19 @@
                                            value="building"
                                     >
                                     <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="r_label"
-                                        >Raum Nummer
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="r_label"
-                                               name="r_label"
-                                               required
-                                               placeholder="Raum Nummer"
-                                               value="{{ old('r_label')??'' }}"
-                                        >
-                                        @if ($errors->has('r_label'))
-                                            <span class="text-danger small">{{ $errors->first('r_label') }}</span>
-                                        @else
-                                            <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
-                                        @endif
+                                        <x-rtextfield id="r_label" label=""
+                                                      placeholder="{{ __('Raum Nummer') }}"
+                                                      hideLabel="1"
+                                        />
+
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="r_name"
-                                        >Raum Bezeichnung, maximal 100 Zeichen
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="r_name"
-                                               name="r_name"
-                                               placeholder="Raum Bezeichnung"
-                                               value="{{ old('r_name')??'' }}"
-                                        >
-                                        @if ($errors->has('r_name'))
-                                            <span class="text-danger small">{{ $errors->first('r_name') }}</span>
-                                        @else
-                                            <span class="small text-primary">maximal 100 Zeichen</span>
-                                        @endif
+                                        <x-textfield id="r_name"
+                                                     placeholder="{{ __('Raum Bezeichnung') }}"
+                                                     max="100"
+                                                     hideLabel="1"
+                                                     />
+
                                     </div>
                                     <div class="col-auto">
                                         <div class="input-group">
@@ -479,13 +456,13 @@
                                                 <td>{{ $room->stellplatzs()->count() }}</td>
                                                 <td class="text-right">
                                                     <x-menu_context
-                                                        :object="$room"
-                                                        routeOpen="{{ route('room.show',$room) }}"
-                                                        routeCopy="{{ route('copyRoom',$room) }}"
-                                                        routeDestory="{{ route('room.destroy',$room) }}"
-                                                        tabName="gebRooms"
-                                                        objectVal="{{$room->r_label}}"
-                                                        objectName="r_label"
+                                                            :object="$room"
+                                                            routeOpen="{{ route('room.show',$room) }}"
+                                                            routeCopy="{{ route('copyRoom',$room) }}"
+                                                            routeDestory="{{ route('room.destroy',$room) }}"
+                                                            tabName="gebRooms"
+                                                            objectVal="{{$room->r_label}}"
+                                                            objectName="r_label"
                                                     />
 
                                                 </td>

@@ -19,7 +19,7 @@
         <h1 class="h3">{{__('Neues Gebäude anlegen')}}</h1>
         <form action="{{ route('building.store') }}" method="post" class=" needs-validation">
             @csrf
-            <input type="hidden"
+            <input type="text"
                    name="storage_id"
                    id="storage_id"
                    value="{{ Str::uuid() }}"
