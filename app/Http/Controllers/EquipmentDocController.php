@@ -59,7 +59,7 @@ class EquipmentDocController extends Controller
             //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
             $proDocFile->eqdoc_name = $file->getClientOriginalName();
-            $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . \request('equipment_id'));
+            $proDocFile->eqdoc_name_pfad = $file->store('equipment_files/' . \request('equipment_id'));
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->equipment_id = request('equipment_id');
             $proDocFile->eqdoc_description = request('eqdoc_description');

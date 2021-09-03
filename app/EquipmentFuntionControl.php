@@ -49,13 +49,15 @@ class EquipmentFuntionControl extends Model
         $this->equipment_id = $equipment_id;
         $this->save();
 
-        $eh = new EquipmentHistory();
-        $eh->eqh_eintrag_kurz = __('Funktionsprüfung erfolgt');
-        $eh->eqh_eintrag_text = __('Das Geräte wurde am :date einer Funktionsprüfung unterzogen. ', ['date' => $request->function_control_date]);
-        $eh->eqh_eintrag_text .= ($request->function_control_pass === '1') ? __('Die Prüfung wurde erfolgreich abgeschlossen.') : __(' Die Prüfung konnte nicht erfolgreich abgeschlossen werden. Gerät wird gesperrt');
-        if ($request->function_control_text !== NULL) $eh->eqh_eintrag_text .= 'Bemerkungen: ' . $request->function_control_text;
-        $eh->equipment_id = $equipment_id;
-        $eh->save();
+        $eqh_eintrag_text = __('Das Geräte wurde am :date einer Funktionsprüfung unterzogen. ', ['date' => $request->function_control_date]);
+        $eqh_eintrag_text .= ($request->function_control_pass === '1') ? __('Die Prüfung wurde erfolgreich abgeschlossen.') : __(' Die Prüfung konnte nicht erfolgreich abgeschlossen werden. Gerät wird gesperrt.');
+        if ($request->function_control_text !== NULL) $eqh_eintrag_text .= __('Bemerkungen'). ': ' . $request->function_control_text;
+
+        (new EquipmentHistory)->add(
+            __('Funktionsprüfung erfolgt'),
+            $eqh_eintrag_text,
+            $equipment_id
+        );
 
         return $this->id;
     }

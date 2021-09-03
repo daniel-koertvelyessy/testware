@@ -256,21 +256,26 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
     if ($request->hasFile('equipDokumentFile')) {
         $proDocFile = new EquipmentDoc();
         $file = $request->file('equipDokumentFile');
-        $validation = $request->validate([
-            'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:10240',
+        $request->validate([
+            'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
             // size:2048 => 2048kB
             'eqdoc_label'       => 'required|max:150'
         ]);
 
         $proDocFile->eqdoc_name = $file->getClientOriginalName();
         $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . $equipment_id);
+
         $proDocFile->document_type_id = request('document_type_id');
         $proDocFile->equipment_id = $equipment_id;
         $proDocFile->eqdoc_description = request('eqdoc_description');
         $proDocFile->eqdoc_label = request('eqdoc_label');
 
-        $proDocFile->save();
-        $msg = __(' ohne Fehler ');
+        if ($proDocFile->save()) {
+            $msg = __(' ohne Fehler ');
+        } else {
+            $msg = __(' mit Fehler ');
+            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: '.$file);
+        }
         $equipment->equipment_state_id = 1;
         $equipment->save();
     } else {

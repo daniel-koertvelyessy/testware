@@ -93,9 +93,12 @@ class ProduktController extends Controller
     {
         foreach ($produkt->ProduktDoc as $produktDoc) {
             if (Storage::disk('local')->missing($produktDoc->proddoc_name_pfad)) {
-                Log::warning('Dateireferenz (' . $produktDoc->proddoc_name_pfad . ') aus DB ProduktDoc existiert nicht auf dem Laufwerk. Datensatz wird                 gelöscht!');
+                Log::warning('Dateireferenz (' . $produktDoc->proddoc_name_pfad . ') aus DB ProduktDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
+//                dump(' delete ' . $produktDoc->proddoc_name_pfad);
+                            $produktDoc->delete();
             }
-            $produktDoc->delete();
+
+
         }
 
 

@@ -30,9 +30,9 @@
           rel="stylesheet"
           href="{{ asset(Auth::user()->user_theme) }}"
     >
-    <link rel="stylesheet"
-          href="{{ asset('css/styles.css') }}"
-    >
+{{--    <link rel="stylesheet"--}}
+{{--          href="{{ asset('css/styles.min.css') }}"--}}
+{{--    >--}}
     <script type="text/javascript"
             src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>
@@ -51,8 +51,8 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <span id="sidebarCollapse"
-              class="btn m-0"
-              style="border-bottom: 4px solid transparent !important;"
+              class="mr-2 m-0"
+              style="border-bottom: 4px solid transparent !important; cursor:pointer;"
         >
             <img src="{{ asset('img/icon/toggle_icon.svg') }}"
                  alt="toggle icon sidemenu"

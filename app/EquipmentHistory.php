@@ -12,5 +12,7 @@ class EquipmentHistory extends Model
         $this->eqh_eintrag_text = $eqh_eintrag_text;
         $this->equipment_id = $equipment_id;
         $this->save();
+
+        return $this->id;
     }
 }

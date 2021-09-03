@@ -206,15 +206,19 @@ class EquipmentController extends Controller
         foreach(EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipmentDocFile){
             if(Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)){
                 Log::warning('Dateireferenz für Funktionsprüfung ('. $equipmentDocFile->eqdoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-            }
+//                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);
             $equipmentDocFile->delete();
+            }
+
         }
 
         foreach(ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $productDocFile){
             if(Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)){
                 Log::warning('Dateireferenz ('. $productDocFile->proddoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-            }
+//                dump('delete '. $productDocFile->eqdoc_name_pfad);
             $productDocFile->delete();
+            }
+
         }
 
 

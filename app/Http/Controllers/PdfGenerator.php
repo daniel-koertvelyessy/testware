@@ -14,7 +14,8 @@ class PdfGenerator extends Controller
 {
     static function makePDFEquipmentDataSheet($euqipment_id)
     {
-        $title = __('Datenblatt');
+        $inv = Equipment::find($euqipment_id)->eq_inventar_nr;
+        $title = __('Datenblatt') . ' ' . $inv;
         $html = view('pdf.html.datasheet_equipment', ['equipment_id' => $euqipment_id])->render();
         PDF::SetLineWidth(1);
         PDF::setHeaderCallback(function ($pdf) use ($title, $euqipment_id) {
@@ -42,7 +43,7 @@ class PdfGenerator extends Controller
             $pdf->SetFont('Helvetica', '', 22);
             $pdf->Cell(0, 14, $title, 0, 1, 'L');
             $pdf->SetFont('Helvetica', '', 8);
-            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Lizenz-Nr') . ':  | ' . __('Dokument-Nr') . '.', 0, 1);
+            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') , 0, 1);
             //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
             $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 20, 20, $style, 'N');

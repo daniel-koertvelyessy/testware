@@ -37,7 +37,7 @@
 
 
     <h1>{{__('Vorgänge')}}</h1>
-    <table>
+    <table cellpadding="3">
         <thead>
         <tr>
             <th style="border-bottom: 1px solid #c7d301; font-weight: bolder; font-size: 10pt;">{{__('letzte')}}</th>
@@ -55,8 +55,7 @@
                 </td>
                 <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->qe_control_date_warn }} {{__('Wochen')}}
                 </td>
-                <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->AnforderungControlItem->aci_name }}
-                </td>
+                <td style="border-bottom: 1px solid #999;">{{ $controlEquipment->Anforderung->AnforderungControlItem[0]->aci_name }}</td>
             </tr>
         @empty
             <tr>

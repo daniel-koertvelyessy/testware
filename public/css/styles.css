@@ -601,12 +601,12 @@ input.datepicker {
     text-align: center !important;
 }
 
-.nav-tabs .nav-link.active,
+/*.nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
     color: #2c3e50;
     background-color: #c7d301;
     border-color: #dee2e6 #dee2e6 #fff;
-}
+}*/
 
 .form-control,
 .custom-select {
@@ -628,16 +628,16 @@ input.datepicker {
 .navbar-light .navbar-nav .nav-link {
     border-bottom: 2px solid transparent !important;
 }
-
+/*
 .navbar-light .navbar-nav .show > .nav-link,
 .navbar-light .navbar-nav .active > .nav-link,
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .nav-link.active {
-    color: rgba(0, 0, 0, 0.9);
-    border-bottom: 2px solid #c7d301 !important;
-    /*border-bottom: 2px solid #dbe802  !important;*/
+      color: rgba(0, 0, 0, 0.9);
+      border-bottom: 2px solid #c7d301 !important;
+     border-bottom: 2px solid #dbe802  !important;
 }
-
+*/
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
     background-image: none !important;
 }
@@ -763,7 +763,7 @@ input[data-function*='swipe']:checked ~ .sidebar {
     font-size: 14px;
     text-align: left;
     background-color: #ffffff;
-    border: 1px solid #cccccc;
+    /*border: 1px solid #cccccc;*/
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);

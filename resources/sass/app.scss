@@ -35,3 +35,1628 @@
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/regular.scss";
+
+/*!
+ * Datepicker for Bootstrap v1.9.0 (https://github.com/uxsolutions/bootstrap-datepicker)
+ *
+ * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ */
+/********************************************************/
+/**/
+/*.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: #2c3e50;
+    background-color: #c7d301;
+    border-color: #dee2e6 #dee2e6 #fff;
+}*/
+/*
+.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .active > .nav-link,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .nav-link.active {
+      color: rgba(0, 0, 0, 0.9);
+      border-bottom: 2px solid #c7d301 !important;
+     border-bottom: 2px solid $app  !important;
+}
+*/
+/*$app14*/
+/*
+
+    Code By Webdevtrick ( https://webdevtrick.com )
+
+*/
+/*input[data-function*='swipe'] {
+    position: absolute;
+    opacity: 0;
+}
+.sideIcon[data-function*='swipe'] {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    z-index: 1;
+    display: block;
+    width: 30px;
+    height: 30px;
+    font: 30px fontawesome;
+    text-align: center;
+    color: #838383;
+    cursor: pointer;
+    transform: translate3d(0, 0, 0);
+    transition: transform .3s;
+}
+.sideIcon[data-function*='swipe']:hover {
+    color: #263249;
+}
+input[data-function*='swipe']:checked ~ .sideIcon[data-function*='swipe'] {
+    transform: translate3d(220px, -15px, 0);
+    color:#fff;
+    z-index: 4000;
+    display: block;
+}
+.sideIcon[data-function*='swipe']:checked {
+    display: block !important;
+}
+.sideIcon[data-function*='swipe']:checked ~ .sideIcon:nth-child(1){
+    display: block;
+}
+.sideIcon:nth-child(2){   !* X *!
+    display: none;
+}
+input[data-function*='swipe']:checked ~ .sideIcon:nth-child(1){
+    display: block;
+    transform: translate3d(270px, 0px, 0px);
+}
+
+
+input[data-function*='swipe']:checked ~ .sideIcon:nth-child(2){
+    display: none;
+}
+!*input[data-function*='swipe']:checked ~ .headings {*!
+!*    transform: translate3d(300px, 0px, 0px);*!
+!*}*!
+input[data-function*='swipe']:checked ~ .sidebar {
+    transform: translate3d(0px, 0px, 0px);
+}
+!*input[data-function*='swipe']:checked ~ .sidebar .menu li {*!
+!*    width: 100%;*!
+!*}*!
+.sidebar {
+    transform: translate3d(-270px, 0px, 0px);
+    position: absolute;
+    width: 270px;
+    background: #263249;
+    color: #eee;
+    left: 0;
+    top:0;
+    min-height: 100%;
+    transition: all .3s;
+    z-index: 3500;
+}
+.wrapper {
+    position: relative;
+    width:100%;
+    !*width:400px;*!
+    height:200px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}*/
+/*#sidebar > aside > a,*/
+/*#sidebar > aside > div.collapse > ul > li > a {*/
+/*    color: #fff !important;*/
+/*}*/
+/*#sidebar .active > aside > a,*/
+/*#sidebar .active > aside > a[aria-expanded="true"] {*/
+/*    color: #fff !important;*/
+/*    background: #263249;*/
+/*}*/
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+.datepicker {
+    padding: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    direction: ltr;
+    table {
+        margin: 0;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        tr {
+            td.day.focused {
+                background: #eee;
+                cursor: pointer;
+            }
+            td.day {
+                &:hover {
+                    //background: #eee;
+                    cursor: pointer;
+                    background-color: $app !important;
+                }
+            }
+            td.new {
+                color: #999;
+            }
+            td.old {
+                color: #999;
+            }
+            td.disabled {
+                background: 0 0;
+                color: #999;
+                cursor: default;
+                &:hover {
+                    background: 0 0;
+                    color: #999;
+                    cursor: default;
+                }
+            }
+            td.highlighted {
+                background: #d9edf7;
+                border-radius: 0;
+            }
+            td.today {
+                background-color: #fde19a;
+                background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+                background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+                border-color: #fdf59a #fdf59a #fbed50;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #000;
+                background-color: #2c3e50 !important;
+                background-image: none;
+                color: white;
+                &:hover {
+                    background-color: #fde19a;
+                    background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+                    background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+                    border-color: #fdf59a #fdf59a #fbed50;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #000;
+                    background-color: #fdf59a;
+                    background-color: #2c3e50 !important;
+                    background-image: none;
+                    color: white;
+                    &:active {
+                        background-color: #fdf59a;
+                        background-color: #fbf069 \9;
+                    }
+                    &:hover {
+                        background-color: #fdf59a;
+                        color: #000;
+                    }
+                }
+                &:active {
+                    background-color: #fdf59a;
+                    background-color: #fbf069 \9;
+                }
+                &:hover.active {
+                    background-color: #fdf59a;
+                    background-color: #fbf069 \9;
+                }
+                &:hover.disabled {
+                    background-color: #fdf59a;
+                }
+                &:hover[disabled] {
+                    background-color: #fdf59a;
+                }
+            }
+            td.today.disabled {
+                background-color: #fde19a;
+                background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+                background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+                border-color: #fdf59a #fdf59a #fbed50;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #000;
+                background-color: #fdf59a;
+                background-color: #2c3e50 !important;
+                background-image: none;
+                color: white;
+                &:hover {
+                    background-color: #fde19a;
+                    background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+                    background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+                    border-color: #fdf59a #fdf59a #fbed50;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #000;
+                    background-color: #fdf59a;
+                    background-color: #2c3e50 !important;
+                    background-image: none;
+                    color: white;
+                    &:active {
+                        background-color: #fdf59a;
+                        background-color: #fbf069 \9;
+                    }
+                    &:hover {
+                        background-color: #fdf59a;
+                    }
+                }
+                &:active {
+                    background-color: #fdf59a;
+                    background-color: #fbf069 \9;
+                }
+                &:hover.active {
+                    background-color: #fdf59a;
+                    background-color: #fbf069 \9;
+                }
+                &:hover.disabled {
+                    background-color: #fdf59a;
+                }
+                &:hover[disabled] {
+                    background-color: #fdf59a;
+                }
+            }
+            td.today.active {
+                background-color: #fdf59a;
+                background-color: #fbf069 \9;
+                &:hover {
+                    color: #fff;
+                }
+            }
+            td.today.disabled.active {
+                background-color: #fdf59a;
+                background-color: #fbf069 \9;
+            }
+            td.today.disabled.disabled {
+                background-color: #fdf59a;
+            }
+            td.today.disabled[disabled] {
+                background-color: #fdf59a;
+            }
+            td.today[disabled] {
+                background-color: #fdf59a;
+            }
+            td.range {
+                background: #eee;
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                &:hover {
+                    background: #eee;
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+                }
+            }
+            td.range.disabled {
+                background: #eee;
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                &:hover {
+                    background: #eee;
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+                }
+            }
+            td.range.today {
+                background-color: #f3d17a;
+                background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+                background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+                border-color: #f3e97a #f3e97a #edde34;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                &:hover {
+                    background-color: #f3d17a;
+                    background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+                    background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+                    border-color: #f3e97a #f3e97a #edde34;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+                    background-color: #f3e97a;
+                    &:active {
+                        background-color: #f3e97a;
+                        background-color: #efe24b \9;
+                    }
+                    &:hover {
+                        background-color: #f3e97a;
+                    }
+                }
+                &:active {
+                    background-color: #f3e97a;
+                    background-color: #efe24b \9;
+                }
+                &:hover.active {
+                    background-color: #f3e97a;
+                    background-color: #efe24b \9;
+                }
+                &:hover.disabled {
+                    background-color: #f3e97a;
+                }
+                &:hover[disabled] {
+                    background-color: #f3e97a;
+                }
+            }
+            td.range.today.disabled {
+                background-color: #f3d17a;
+                background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+                background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+                border-color: #f3e97a #f3e97a #edde34;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                background-color: #f3e97a;
+                &:hover {
+                    background-color: #f3d17a;
+                    background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+                    background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+                    border-color: #f3e97a #f3e97a #edde34;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+                    background-color: #f3e97a;
+                    &:active {
+                        background-color: #f3e97a;
+                        background-color: #efe24b \9;
+                    }
+                    &:hover {
+                        background-color: #f3e97a;
+                    }
+                }
+                &:active {
+                    background-color: #f3e97a;
+                    background-color: #efe24b \9;
+                }
+                &:hover.active {
+                    background-color: #f3e97a;
+                    background-color: #efe24b \9;
+                }
+                &:hover.disabled {
+                    background-color: #f3e97a;
+                }
+                &:hover[disabled] {
+                    background-color: #f3e97a;
+                }
+            }
+            td.range.today.active {
+                background-color: #f3e97a;
+                background-color: #efe24b \9;
+            }
+            td.range.today.disabled.active {
+                background-color: #f3e97a;
+                background-color: #efe24b \9;
+            }
+            td.range.today.disabled.disabled {
+                background-color: #f3e97a;
+            }
+            td.range.today.disabled[disabled] {
+                background-color: #f3e97a;
+            }
+            td.range.today[disabled] {
+                background-color: #f3e97a;
+            }
+            td.selected {
+                background-color: #9e9e9e;
+                background-image: -moz-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -ms-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(grey));
+                background-image: -webkit-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -o-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: linear-gradient(to bottom, #b3b3b3, grey);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+                border-color: grey grey #595959;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                &:hover {
+                    background-color: #9e9e9e;
+                    background-image: -moz-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -ms-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(grey));
+                    background-image: -webkit-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -o-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: linear-gradient(to bottom, #b3b3b3, grey);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+                    border-color: grey grey #595959;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    background-color: grey;
+                    &:active {
+                        background-color: grey;
+                        background-color: #666 \9;
+                    }
+                    &:hover {
+                        background-color: grey;
+                    }
+                }
+                &:active {
+                    background-color: grey;
+                    background-color: #666 \9;
+                }
+                &:hover.active {
+                    background-color: grey;
+                    background-color: #666 \9;
+                }
+                &:hover.disabled {
+                    background-color: grey;
+                }
+                &:hover[disabled] {
+                    background-color: grey;
+                }
+            }
+            td.selected.disabled {
+                background-color: #9e9e9e;
+                background-image: -moz-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -ms-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(grey));
+                background-image: -webkit-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: -o-linear-gradient(to bottom, #b3b3b3, grey);
+                background-image: linear-gradient(to bottom, #b3b3b3, grey);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+                border-color: grey grey #595959;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                background-color: grey;
+                &:hover {
+                    background-color: #9e9e9e;
+                    background-image: -moz-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -ms-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(grey));
+                    background-image: -webkit-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: -o-linear-gradient(to bottom, #b3b3b3, grey);
+                    background-image: linear-gradient(to bottom, #b3b3b3, grey);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+                    border-color: grey grey #595959;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    background-color: grey;
+                    &:active {
+                        background-color: grey;
+                        background-color: #666 \9;
+                    }
+                    &:hover {
+                        background-color: grey;
+                    }
+                }
+                &:active {
+                    background-color: grey;
+                    background-color: #666 \9;
+                }
+                &:hover.active {
+                    background-color: grey;
+                    background-color: #666 \9;
+                }
+                &:hover.disabled {
+                    background-color: grey;
+                }
+                &:hover[disabled] {
+                    background-color: grey;
+                }
+            }
+            td.selected.active {
+                background-color: grey;
+                background-color: #666 \9;
+            }
+            td.selected.disabled.active {
+                background-color: grey;
+                background-color: #666 \9;
+            }
+            td.selected.disabled.disabled {
+                background-color: grey;
+            }
+            td.selected.disabled[disabled] {
+                background-color: grey;
+            }
+            td.selected[disabled] {
+                background-color: grey;
+            }
+            td.active {
+                background-color: #006dcc;
+                background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                background-image: linear-gradient(to bottom, #08c, #04c);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                border-color: #04c #04c #002a80;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                &:hover {
+                    background-color: #006dcc;
+                    background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                    background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                    background-image: linear-gradient(to bottom, #08c, #04c);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                    border-color: #04c #04c #002a80;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    background-color: #04c;
+                    background-color: #95a5a6 !important;
+                    background-image: none;
+                    color: white;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                    &:active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                        background-color: rgb(7, 85, 92) !important;
+                        background-image: none;
+                    }
+                    &:hover {
+                        background-color: #04c;
+                        background-color: rgb(7, 85, 92) !important;
+                        background-image: none;
+                    }
+                }
+                &:active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover.active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover.disabled {
+                    background-color: #04c;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover[disabled] {
+                    background-color: #04c;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+            }
+            td.active.disabled {
+                background-color: #006dcc;
+                background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                background-image: linear-gradient(to bottom, #08c, #04c);
+                background-repeat: repeat-x;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                border-color: #04c #04c #002a80;
+                border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                background-color: #04c;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+                &:hover {
+                    background-color: #006dcc;
+                    background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                    background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                    background-image: linear-gradient(to bottom, #08c, #04c);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                    border-color: #04c #04c #002a80;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    background-color: #04c;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                    &:active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                        background-color: rgb(7, 85, 92) !important;
+                        background-image: none;
+                    }
+                    &:hover {
+                        background-color: #04c;
+                        background-color: rgb(7, 85, 92) !important;
+                        background-image: none;
+                    }
+                }
+                &:active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover.active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover.disabled {
+                    background-color: #04c;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+                &:hover[disabled] {
+                    background-color: #04c;
+                    background-color: rgb(7, 85, 92) !important;
+                    background-image: none;
+                }
+            }
+            td.active.active {
+                background-color: #04c;
+                background-color: #039 \9;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+            }
+            td.active.disabled.active {
+                background-color: #04c;
+                background-color: #039 \9;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+            }
+            td.active.disabled.disabled {
+                background-color: #04c;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+            }
+            td.active.disabled[disabled] {
+                background-color: #04c;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+            }
+            td.active[disabled] {
+                background-color: #04c;
+                background-color: rgb(7, 85, 92) !important;
+                background-image: none;
+            }
+            td {
+                span {
+                    display: block;
+                    width: 23%;
+                    height: 54px;
+                    line-height: 54px;
+                    float: left;
+                    margin: 1%;
+                    cursor: pointer;
+                    -webkit-border-radius: 4px;
+                    -moz-border-radius: 4px;
+                    border-radius: 4px;
+                    &:hover {
+                        background: #eee;
+                    }
+                }
+                span.focused {
+                    background: #eee;
+                }
+                span.disabled {
+                    background: 0 0;
+                    color: #999;
+                    cursor: default;
+                    &:hover {
+                        background: 0 0;
+                        color: #999;
+                        cursor: default;
+                    }
+                }
+                span.active {
+                    background-color: #006dcc;
+                    background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                    background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                    background-image: linear-gradient(to bottom, #08c, #04c);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                    border-color: #04c #04c #002a80;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    &:hover {
+                        background-color: #006dcc;
+                        background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                        background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                        background-image: linear-gradient(to bottom, #08c, #04c);
+                        background-repeat: repeat-x;
+                        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                        border-color: #04c #04c #002a80;
+                        border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                        color: #fff;
+                        text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                        background-color: #04c;
+                        &:active {
+                            background-color: #04c;
+                            background-color: #039 \9;
+                        }
+                        &:hover {
+                            background-color: #04c;
+                        }
+                    }
+                    &:active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                    }
+                    &:hover.active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                    }
+                    &:hover.disabled {
+                        background-color: #04c;
+                    }
+                    &:hover[disabled] {
+                        background-color: #04c;
+                    }
+                }
+                span.active.disabled {
+                    background-color: #006dcc;
+                    background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                    background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                    background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                    background-image: linear-gradient(to bottom, #08c, #04c);
+                    background-repeat: repeat-x;
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                    border-color: #04c #04c #002a80;
+                    border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                    background-color: #04c;
+                    &:hover {
+                        background-color: #006dcc;
+                        background-image: -moz-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -ms-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#04c));
+                        background-image: -webkit-linear-gradient(to bottom, #08c, #04c);
+                        background-image: -o-linear-gradient(to bottom, #08c, #04c);
+                        background-image: linear-gradient(to bottom, #08c, #04c);
+                        background-repeat: repeat-x;
+                        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+                        border-color: #04c #04c #002a80;
+                        border-color: rgba(0, 0, 0, .1) rgba(0, 0, 0, .1) rgba(0, 0, 0, .25);
+                        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                        color: #fff;
+                        text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+                        background-color: #04c;
+                        &:active {
+                            background-color: #04c;
+                            background-color: #039 \9;
+                        }
+                        &:hover {
+                            background-color: #04c;
+                        }
+                    }
+                    &:active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                    }
+                    &:hover.active {
+                        background-color: #04c;
+                        background-color: #039 \9;
+                    }
+                    &:hover.disabled {
+                        background-color: #04c;
+                    }
+                    &:hover[disabled] {
+                        background-color: #04c;
+                    }
+                }
+                span.active.active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                }
+                span.active.disabled.active {
+                    background-color: #04c;
+                    background-color: #039 \9;
+                }
+                span.active.disabled.disabled {
+                    background-color: #04c;
+                }
+                span.active.disabled[disabled] {
+                    background-color: #04c;
+                }
+                span.active[disabled] {
+                    background-color: #04c;
+                }
+                span.new {
+                    color: #999;
+                }
+                span.old {
+                    color: #999;
+                }
+            }
+        }
+    }
+    td {
+        text-align: center;
+        width: 2rem;
+        height: 2rem;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: none;
+    }
+    th {
+        text-align: center;
+        width: 2rem;
+        height: 2rem;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: none;
+    }
+    .datepicker-switch {
+        width: 145px;
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+    .next {
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+    .prev {
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+    tfoot {
+        tr {
+            th {
+                cursor: pointer;
+                &:hover {
+                    background: #eee;
+                }
+            }
+        }
+    }
+    .next.disabled {
+        visibility: hidden;
+    }
+    .prev.disabled {
+        visibility: hidden;
+    }
+    .cw {
+        font-size: 10px;
+        width: 12px;
+        padding: 0 2px 0 5px;
+        vertical-align: middle;
+    }
+}
+.datepicker-inline {
+    width: 220px;
+}
+.datepicker-rtl {
+    direction: rtl;
+    table {
+        tr {
+            td {
+                span {
+                    float: right;
+                }
+            }
+        }
+    }
+}
+.datepicker-rtl.dropdown-menu {
+    left: auto;
+}
+.datepicker-dropdown {
+    top: 0;
+    left: 0;
+    &:before {
+        content: '';
+        display: inline-block;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #999;
+        border-top: 0;
+        border-bottom-color: rgba(0, 0, 0, .2);
+        position: absolute;
+    }
+    &:after {
+        content: '';
+        display: inline-block;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #fff;
+        border-top: 0;
+        position: absolute;
+    }
+}
+.datepicker-dropdown.datepicker-orient-left {
+    &:before {
+        left: 6px;
+    }
+    &:after {
+        left: 7px;
+    }
+}
+.datepicker-dropdown.datepicker-orient-right {
+    &:before {
+        right: 6px;
+    }
+    &:after {
+        right: 7px;
+    }
+}
+.datepicker-dropdown.datepicker-orient-bottom {
+    &:before {
+        top: -7px;
+    }
+    &:after {
+        top: -6px;
+    }
+}
+.datepicker-dropdown.datepicker-orient-top {
+    &:before {
+        bottom: -7px;
+        border-bottom: 0;
+        border-top: 7px solid #999;
+    }
+    &:after {
+        bottom: -6px;
+        border-bottom: 0;
+        border-top: 6px solid #fff;
+    }
+}
+.table-striped {
+    .datepicker {
+        table {
+            tr {
+                td {
+                    background-color: transparent;
+                }
+                th {
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}
+.input-append.date {
+    .add-on {
+        cursor: pointer;
+        i {
+            margin-top: 3px;
+        }
+    }
+}
+.input-prepend.date {
+    .add-on {
+        cursor: pointer;
+        i {
+            margin-top: 3px;
+        }
+    }
+}
+.input-daterange {
+    input {
+        text-align: center;
+        &:first-child {
+            -webkit-border-radius: 3px 0 0 3px;
+            -moz-border-radius: 3px 0 0 3px;
+            border-radius: 3px 0 0 3px;
+        }
+        &:last-child {
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+        }
+    }
+    .add-on {
+        display: inline-block;
+        width: auto;
+        min-width: 16px;
+        height: 18px;
+        padding: 4px 5px;
+        font-weight: 400;
+        line-height: 18px;
+        text-align: center;
+        text-shadow: 0 1px 0 #fff;
+        vertical-align: middle;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+}
+:root {
+    --success: #18bc2c !important;
+}
+.text-success {
+    color: #18bc2c !important;
+}
+.page-footer {
+    background: #fff;
+    border-top: 1px solid #848484;
+}
+body {
+    margin-bottom: 45px;
+}
+a.subnav {
+    text-decoration: none !important;
+}
+.tiles-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-gap: 10px;
+    .tile-small {
+        grid-column: span 1;
+    }
+    .tile-medium {
+        grid-column: span 2;
+    }
+}
+.tile-small-disabled {
+    grid-column: span 1;
+    height: 80px;
+    //border: 1px solid #dee2e6;
+    border: 1px solid #c8c7c7;
+    display: block;
+    background-color: #fcfcfc;
+    color: #c4c4c4;
+    -webkit-box-shadow: inset 0 0 1px #a0a006;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    .branding-bar {
+        height: 20px;
+        line-height: 20px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 30px;
+        line-height: 30px;
+    }
+}
+.tile-medium-disabled {
+    grid-column: span 2;
+    height: 150px;
+    border: 1px solid #dee2e6;
+    border: 1px solid #c8c7c7;
+    display: block;
+    background-color: #fcfcfc;
+    color: #c4c4c4;
+    -webkit-box-shadow: inset 0 0 1px #a0a006;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    .branding-bar {
+        height: 32px;
+        line-height: 32px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+}
+.tile-small {
+    height: 80px;
+    border: 1px solid #dee2e6;
+    display: block;
+    -webkit-box-shadow: inset 0 0 1px #ffc;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    &:hover {
+        -webkit-box-shadow: inset 0 0 3px #ffc;
+        box-shadow: inset 0 0 3px #ffc;
+    }
+    .branding-bar {
+        height: 20px;
+        line-height: 20px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 30px;
+        line-height: 30px;
+    }
+}
+.tile-medium {
+    height: 150px;
+    border: 1px solid #dee2e6;
+    display: block;
+    -webkit-box-shadow: inset 0 0 1px #ffc;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    &:hover {
+        -webkit-box-shadow: inset 0 0 3px #ffc;
+        box-shadow: inset 0 0 3px #ffc;
+    }
+    .branding-bar {
+        height: 32px;
+        line-height: 32px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 50px;
+        line-height: 50px;
+        z-index: 2;
+    }
+}
+.tile-app {
+    display: block;
+    -webkit-box-shadow: inset 0 0 1px #ffc;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    &:hover {
+        -webkit-box-shadow: inset 0 0 3px #ffc;
+        box-shadow: inset 0 0 3px #ffc;
+    }
+    .branding-bar {
+        height: 32px;
+        line-height: 32px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 50px;
+        line-height: 50px;
+        z-index: 2;
+    }
+}
+.tile-large {
+    display: block;
+    -webkit-box-shadow: inset 0 0 1px #ffc;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    &:hover {
+        -webkit-box-shadow: inset 0 0 3px #ffc;
+        box-shadow: inset 0 0 3px #ffc;
+    }
+    .branding-bar {
+        height: 32px;
+        line-height: 32px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 50px;
+        line-height: 50px;
+        z-index: 2;
+    }
+}
+.tile-wide {
+    display: block;
+    -webkit-box-shadow: inset 0 0 1px #ffc;
+    box-shadow: inset 0 0 1px #ffc;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    max-width: none !important;
+    &:hover {
+        -webkit-box-shadow: inset 0 0 3px #ffc;
+        box-shadow: inset 0 0 3px #ffc;
+    }
+    .branding-bar {
+        height: 32px;
+        line-height: 32px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0 10px 5px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        z-index: 2;
+    }
+    .icon {
+        max-width: 60%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        -ms-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        font-size: 50px;
+        line-height: 50px;
+        z-index: 2;
+    }
+}
+input.decimal {
+    text-align: right !important;
+}
+input.datepicker {
+    text-align: center !important;
+}
+.form-control {
+    color: #2c3e50;
+    &:disabled {
+        color: #2c3e50;
+        cursor: not-allowed;
+    }
+}
+.custom-select {
+    color: #2c3e50;
+    &:disabled {
+        color: #2c3e50;
+        cursor: not-allowed;
+    }
+}
+.srchInAdminBereich {
+    background-color: #fff !important;
+}
+.navbar-light {
+    .navbar-nav {
+        .nav-link {
+            border-bottom: 2px solid transparent !important;
+        }
+    }
+}
+.custom-radio {
+    .custom-control-input {
+        &:checked {
+            ~ {
+                .custom-control-label {
+                    &::after {
+                        background-image: none !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.form-control-plaintext {
+    font-size: 1.1rem !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+#NavToggler {
+    cursor: pointer;
+}
+.signature-pad {
+    background-color: #ffffff;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 200px;
+    border: 1px solid #8c8c8c;
+}
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+    >li {
+        >div {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.42857143;
+            color: #333333;
+            white-space: nowrap;
+        }
+    }
+}
+.ui-state-hover {
+    text-decoration: none;
+    color: #262626;
+    background-color: #c7d301 !important;
+    cursor: pointer;
+}
+.ui-state-active {
+    text-decoration: none;
+    color: #262626;
+    background-color: #c7d301 !important;
+    cursor: pointer;
+}
+.ui-state-focus {
+    text-decoration: none;
+    color: #262626;
+    background-color: #c7d301 !important;
+    cursor: pointer;
+}
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.mark {
+    background-color: #c7d301;
+}
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+#sidebar {
+    min-width: 220px;
+    max-width: 220px;
+    color: #333333;
+    background: #ffffff;
+    transition: all 0.5s;
+    margin-left: 0;
+    z-index: 30000;
+}
+#sidebar.active {
+    margin-left: -220px;
+}
+@media (min-width: 576px) {
+    #sidebar {
+        margin-left: 0;
+    }
+    #sidebar.active {
+        margin-left: -220px;
+    }
+    #sidebarCollapse {
+        span {
+            display: none;
+        }
+    }
+}
+@media (max-width: 768px) {
+    #sidebar {
+        min-width: 80px;
+        max-width: 80px;
+        color: #333333;
+        background: #fff;
+        margin-left: 0;
+    }
+    #sidebar.active {
+        margin-left: -80px;
+    }
+    #sidebarCollapse {
+        span {
+            display: none;
+        }
+    }
+}

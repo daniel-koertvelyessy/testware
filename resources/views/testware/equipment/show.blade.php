@@ -46,7 +46,7 @@
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"
-               href="{{ route('makePDFEquipmentDataSheet',$equipment) }}"
+               href="{{ route('makePDFEquipmentDataSheet',$equipment->id) }}"
                download
             >
                 <i class="ml-2 fas fa-print mr-2 fa-fw"></i>
