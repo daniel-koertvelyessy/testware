@@ -175,7 +175,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie das entspechende Gerät aus.') }}</p>
+                    <p>{{ __('Folgende Prüfungen/Wartungen sind für das Gerät vorgesehen. Bitte wählen Sie die auszuführende Prüfung aus.') }}</p>
 
                     <table class="table table-responsive-md">
                         <thead>

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>{{__('Prüfbericht PR')}}{{ str_pad($controlEvent->id,5,'0',STR_PAD_LEFT) }}</h1>
+    <h1>{{__('Prüfbericht')}} {{ str_pad($controlEvent->id,5,'0',STR_PAD_LEFT) }}</h1>
 
     <p>{{__('Die Prüfung erfolgte am')}} {{ $controlEvent->control_event_date }}</p>
 
@@ -33,19 +33,20 @@
     <p>
         {!! nl2br($controlEvent->control_event_text??'') !!}
     </p>
-    <h2>{{ __('Abschluss ')}}</h2>
-    <p>Basierend auf den Ergebnissen gilt die Prüfung als <strong>{{ $controlEvent->control_event_pass ? 'bestanden' : 'nicht bestanden' }}</strong></p>
-    <p>Die nächste Prüfung wurde auf den <strong>{{ $controlEvent->control_event_next_due_date }}</strong> gesetzt.</p>
+    <h2>{{ __('Abschluss') }}</h2>
+    <p>{{__('Basierend auf den Ergebnissen gilt die Prüfung als')}} <strong>{{ $controlEvent->control_event_pass ? __('bestanden') : __('nicht bestanden') }}</strong></p>
+    <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
     <br>
     <br>
-    @if ($aci_execution->aci_execution===0)
+
+    @if (!$aci_execution->aci_execution)
         <table>
             <tr>
                 <td style="width: 50%">
                     @if($controlEvent->control_event_controller_signature)
                     <img src="{{$controlEvent->control_event_controller_signature}}"
                          width="30%"
-                         alt="Unterschrift Prüfer {{ $controlEvent->control_event_controller_name }}"
+                         alt="{{__('Unterschrift Prüfer')}} {{ $controlEvent->control_event_controller_name }}"
                     >
                     <br> <br>
                     @endif
@@ -54,11 +55,9 @@
                 <td>
                     @if ($controlEvent->control_event_supervisor_signature)
                         <img src="{{$controlEvent->control_event_supervisor_signature}}"
-                             width="30%"
-                             alt="Unterschrift Leitung {{ $controlEvent->control_event_supervisor_name }}"
+                             width="30"
+                             alt="{{__('Unterschrift Leitung')}} {{ $controlEvent->control_event_supervisor_name }}"
                         >
-
-
                         <br>
                         <br>
                         <p>{{__('Leitung')}}<br>{{ $controlEvent->control_event_supervisor_name??'-' }}</p>
@@ -112,11 +111,13 @@
 
     @endif
 
-    @if ($aci_execution->aci_execution===0)
-        <h2 style="page-break-before:always; margin:0;">{{__('Pürfschritte')}}</h2>
+    @if (!$aci_execution->aci_execution)
+        <h2 style="page-break-before:always; margin:0;">{{__('Prüfschritte')}}</h2>
         @foreach (App\AnforderungControlItem::where('anforderung_id',$ControlEquipment->anforderung_id)->get() as $aci)
 
-            @php($ceitem =  App\ControlEventItem::withTrashed()->where([['control_item_aci',$aci->id],['control_event_id',$controlEvent->id]])->first())
+            @php
+                $ceitem =  App\ControlEventItem::withTrashed()->where([['control_item_aci',$aci->id],['control_event_id',$controlEvent->id]])->first()
+            @endphp
             <table cellpadding="3"
                    cellspacing="0"
                    border="0"
@@ -140,25 +141,30 @@
 
                         <table cellpadding="4">
                             <tr>
-                                <td style="font-size: 11px; font-weight: bold;">Soll</td>
-                                <td style="font-size: 11px; font-weight: bold;">Ist</td>
-                                <td style="font-size: 11px; font-weight: bold;">Ziel</td>
-                                <td style="font-size: 11px; font-weight: bold;">Bestanden</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Sollwert') }}</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Soll') }}</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Ist') }}</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Bestanden') }}</td>
                             </tr>
                             <tr>
                                 <td>
-                                    {{ $aci->aci_vaule_soll??'-' }}
+                                    {{ $aci->aci_vaule_soll??'-' }} {{ $aci->aci_value_si??'' }}
                                 </td>
                                 <td>
-                                    {{ $ceitem->control_item_read??'-' }}
+                                    {{ $ceitem->control_item_read??'-' }} {{ $aci->aci_value_si??'' }}
                                 </td>
                                 <td>
                                     @if ($aci->aci_value_target_mode ==='eq')
-                                        Soll = Ist ± Toleranz
+                                        @php
+                                        $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol;
+                                        @endphp
+                                        Soll = Ist ±{{ $tol??'' }} Toleranz
                                     @elseif ($aci->aci_value_target_mode ==='lt')
                                         Soll < Ist
-                                    @else
+                                    @elseif ($aci->aci_value_target_mode ==='gt')
                                         Soll > Ist
+                                    @else
+                                        -
                                     @endif
                                 </td>
                                 <td>

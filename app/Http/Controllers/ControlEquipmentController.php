@@ -64,9 +64,6 @@ class ControlEquipmentController extends Controller
         $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
 
-        $enabledUser=[];
-
-
 
 //dd($controlItem->Equipment);
 
@@ -88,9 +85,23 @@ class ControlEquipmentController extends Controller
                 $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
             }
 
+            $enabledUser = [];
+            foreach (\App\ProductQualifiedUser::where('produkt_id', $controlItem->Equipment->produkt->id)->get() as $qualifiedUser) {
+                $enabledUser[] = [
+                    'id'   => $qualifiedUser->user_id,
+                    'name' => $qualifiedUser->user->name,
+                ];
+            }
 
+            foreach (\App\EquipmentQualifiedUser::where('equipment_id', $controlItem->Equipment->id)->get() as $qualifiedUser) {
+                $enabledUser[] = [
+                    'id'   => $qualifiedUser->user_id,
+                    'name' => $qualifiedUser->user->name,
+                ];
+            }
 
             return view('testware.control.create', [
+                'qualified_user_list'            => $enabledUser,
                 'test'                           => $controlItem,
                 'aci_execution'                  => $aci_execution,
                 'aci_control_equipment_required' => $aci_control_equipment_required,
@@ -114,6 +125,7 @@ class ControlEquipmentController extends Controller
     public function store(Request $request)
     : RedirectResponse
     {
+//        dd($request);
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
 
         $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
@@ -159,9 +171,10 @@ class ControlEquipmentController extends Controller
         }
 
         if ($request->hasFile('controlDokumentFile')) {
+
             $eventHasDoku = true;
             $filename = (new ControlDoc)->addDocument($request);
-            $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!',['name'=>$filename]));
+            $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!', ['name' => $filename]));
         }
 
 //        dd();

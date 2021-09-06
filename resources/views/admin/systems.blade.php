@@ -157,13 +157,13 @@
                        aria-selected="false"
                     >{{__('Produkte')}}</a>
                     <a class="nav-link"
-                       id="Belege-tab"
+                       id="Numbering-tab"
                        data-toggle="tab"
-                       href="#Belege"
+                       href="#Numbering"
                        role="tab"
-                       aria-controls="Belege"
+                       aria-controls="Numbering"
                        aria-selected="false"
-                    >{{__('Belege')}}</a>
+                    >{{__('Nummerierung')}}</a>
                     <a class="nav-link"
                        id="notes-tab"
                        data-toggle="tab"
@@ -1210,10 +1210,51 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-2"
-                         id="Belege"
+                         id="Numbering"
                          role="tabpanel"
-                         aria-labelledby="Belege-tab"
-                    ></div>
+                         aria-labelledby="Numbering-tab"
+                    >
+                        <div class="row">
+                            <div class="col-md-8">
+                                <form action=""
+                                      id="setNumbering"
+                                >
+                                    <h2 class="h4">{{__('Prüfbericht')}}</h2>
+                                    <div class="input-group mb-2 mb-md-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Präfix + Digits + Postfix</span>
+                                        </div>
+                                        <input type="text"
+                                               id="num_prefix"
+                                               class="form-control"
+                                               aria-label="Präfix"
+                                               placeholder="Präfix"
+                                        >
+                                        <input type="number"
+                                               id="num_digit"
+                                               class="form-control"
+                                               min="1"
+                                               max="20"
+                                               aria-label="Digits"
+                                               placeholder="Digits"
+                                        >
+                                        <input type="text"
+                                               id="num_postfix"
+                                               class="form-control"
+                                               aria-label="Postfix"
+                                               placeholder="Postfix"
+                                        >
+                                    </div>
+                                    <x-btnMain block="1">{{ __('Format speichern') }} <span class="fas fa-download ml-2"></span></x-btnMain>
+
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                                <h2 class="h4">{{__('Beispiel')}}</h2>
+                                <span class="h3">PR-00024-8</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade p-2"
                          id="notes"
                          role="tabpanel"
@@ -1347,11 +1388,13 @@
                                                name="id"
                                                id="role_id"
                                         >
-                                        <x-textfield id="role_label" name="label"
+                                        <x-textfield id="role_label"
+                                                     name="label"
                                                      label="{{ __('Label') }}"
                                                      required
                                         />
-                                        <x-textfield id="role_name" name="name"
+                                        <x-textfield id="role_name"
+                                                     name="name"
                                                      label="{{ __('Name') }}"
                                         />
                                         <div class="custom-control custom-switch mb-4">
@@ -1440,22 +1483,22 @@
     <script>
 
         $('.btnLoadRoleData').click(function () {
-           const id = $(this).data('id');
-           $.ajax({
-               type: "get",
-               dataType: 'json',
-               url: `/role/${id}`,
-               success: function (res) {
-                   $('#role_id').val(id);
-                   $('#role_label').val(res.label);
-                   $('#role_name').val(res.name);
-                   $('#_method').val('put');
-                   $('#frmSetUserRole').attr('action',`/role/${id}#userRoles`);
-                   const setSuperUser = $('#is_super_user');
-                   res.is_super_user=== true ?  setSuperUser.attr('checked',true): setSuperUser.attr('checked',false);
+            const id = $(this).data('id');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: `/role/${id}`,
+                success: function (res) {
+                    $('#role_id').val(id);
+                    $('#role_label').val(res.label);
+                    $('#role_name').val(res.name);
+                    $('#_method').val('put');
+                    $('#frmSetUserRole').attr('action', `/role/${id}#userRoles`);
+                    const setSuperUser = $('#is_super_user');
+                    res.is_super_user === true ? setSuperUser.attr('checked', true) : setSuperUser.attr('checked', false);
 
-              }
-           });
+                }
+            });
         });
 
         $('#btnFormStoreNoteTyeData').click(function () {

@@ -51,6 +51,15 @@ class EquipmentDoc extends Model
 
     public function addDocument(Request $request)
     {
-
+        $file = $request->file('controlDokumentFile');
+        $this->eqdoc_name = $file->getClientOriginalName();
+        $eqdoc_name_pfad = $file->store('equipment_files/' . \request('equipment_id'));
+        $this->eqdoc_name_pfad = $eqdoc_name_pfad;
+        $this->document_type_id = request('document_type_id');
+        $this->equipment_id = request('equipment_id');
+        $this->eqdoc_description = request('eqdoc_description');
+        $this->eqdoc_label = request('eqdoc_label');
+        $this->save();
+        return $eqdoc_name_pfad;
     }
 }

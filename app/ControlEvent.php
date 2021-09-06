@@ -39,7 +39,6 @@ class ControlEvent extends Model
         $data['id'] = $id;
         return $data;
 
-
     }
 
 }

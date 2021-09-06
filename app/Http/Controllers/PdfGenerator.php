@@ -67,14 +67,14 @@ class PdfGenerator extends Controller
 
     static function makePDFEquipmentControlReport(ControlEvent $controlEvent)
     {
-
         $controlEquipment = ControlEquipment::withTrashed()->find($controlEvent->control_equipment_id);
 
         //   dd($controlEquipment->equipment_id);
 
+        $reportNo = 'PR' . str_pad($controlEvent->id, 5, '0', STR_PAD_LEFT);
         $html = view('pdf.html.control_event_report', ['controlEvent' => $controlEvent])->render();
         PDF::SetLineWidth(1);
-        $reportNo = 'PR' . str_pad($controlEvent->id, 5, '0', STR_PAD_LEFT);
+
 
         PDF::setHeaderCallback(function ($pdf) use ($controlEquipment, $controlEvent, $reportNo) {
             $inv = Equipment::find($controlEquipment->equipment_id)->eq_inventar_nr;
@@ -98,9 +98,9 @@ class PdfGenerator extends Controller
             ];
             $pdf->SetY(5);
             $pdf->SetFont('Helvetica', '', 8);
-            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Lizenz-Nr') . ':  | ' . __('Dokument-Nr') . $reportNo, 0, 1);
+            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Lizenz-Nr') . ':  | ' . __('Dokument-Nr').': ' . $reportNo, 0, 1);
             //            $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 15, 15,  $style, 'N');
-            $pdf->ImageSVG($file = '/img/icon/testWareLogo_greenYellow.svg', $x = 180, $y = 5, $w = '', $h = 10, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
+            $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
         });
         PDF::setFooterCallback(function ($pdf) use ($controlEvent) {
             $pdf->SetY(-15);
@@ -111,9 +111,9 @@ class PdfGenerator extends Controller
         });
 
         PDF::startPageGroup();
-        PDF::SetTitle('Prüfbericht');
+        PDF::SetTitle(__('Prüfbericht').' '.$reportNo);
         PDF::SetAutoPageBreak(true, 50);
-        PDF::SetMargins(20, 25, 10);
+        PDF::SetMargins(24, 30, 10);
         PDF::AddPage();
         PDF::writeHTML($html, true, false, true, false, '');
         if ($controlEvent->control_event_controller_signature) {
@@ -129,7 +129,7 @@ class PdfGenerator extends Controller
         EquipmentDoc::addReport($controlEquipment->equipment_id, $reportNo . '.pdf', $reportNo);
 
 
-        PDF::Output(storage_path('/app/equipment_docu/' . $controlEquipment->equipment_id . '/' . $reportNo . '.pdf'), 'F');
+        PDF::Output(storage_path('/app/equipment_files/' . $controlEquipment->equipment_id . '/' . $reportNo . '.pdf'), 'F');
         PDF::Output($reportNo . '.pdf');
     }
 
