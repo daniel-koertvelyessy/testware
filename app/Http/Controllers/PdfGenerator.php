@@ -8,6 +8,7 @@ use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentUid;
 use App\Report;
+use App\TestReportFormat;
 use PDF;
 
 class PdfGenerator extends Controller
@@ -43,7 +44,7 @@ class PdfGenerator extends Controller
             $pdf->SetFont('Helvetica', '', 22);
             $pdf->Cell(0, 14, $title, 0, 1, 'L');
             $pdf->SetFont('Helvetica', '', 8);
-            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') , 0, 1);
+            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y'), 0, 1);
             //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
             $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 20, 20, $style, 'N');
@@ -71,35 +72,18 @@ class PdfGenerator extends Controller
 
         //   dd($controlEquipment->equipment_id);
 
-        $reportNo = 'PR' . str_pad($controlEvent->id, 5, '0', STR_PAD_LEFT);
-        $html = view('pdf.html.control_event_report', ['controlEvent' => $controlEvent])->render();
+        $reportNo = (new TestReportFormat)->makeTestreportNumber($controlEvent->id);
+        $html = view('pdf.html.control_event_report', [
+            'controlEvent' => $controlEvent,
+            'reportNo' =>$reportNo,
+        ])->render();
         PDF::SetLineWidth(1);
 
 
-        PDF::setHeaderCallback(function ($pdf) use ($controlEquipment, $controlEvent, $reportNo) {
-            $inv = Equipment::find($controlEquipment->equipment_id)->eq_inventar_nr;
-            $storage_uid = Equipment::find($controlEquipment->equipment_id)->storage->storage_uid;
-            $val = $storage_uid . '||' . $inv;
-            $style = [
-                'border'        => 0,
-                'vpadding'      => 'auto',
-                'hpadding'      => 'auto',
-                'fgcolor'       => [
-                    0,
-                    0,
-                    0
-                ],
-                'bgcolor'       => false,
-                //array(255,255,255)
-                'module_width'  => 1,
-                // width of a single module in points
-                'module_height' => 1
-                // height of a single module in points
-            ];
+        PDF::setHeaderCallback(function ($pdf) use ($reportNo) {
             $pdf->SetY(5);
             $pdf->SetFont('Helvetica', '', 8);
-            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Lizenz-Nr') . ':  | ' . __('Dokument-Nr').': ' . $reportNo, 0, 1);
-            //            $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 15, 15,  $style, 'N');
+            $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Dokument-Nr') . ': ' . $reportNo, 0, 1);
             $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
         });
         PDF::setFooterCallback(function ($pdf) use ($controlEvent) {
@@ -111,21 +95,20 @@ class PdfGenerator extends Controller
         });
 
         PDF::startPageGroup();
-        PDF::SetTitle(__('Prüfbericht').' '.$reportNo);
-        PDF::SetAutoPageBreak(true, 50);
-        PDF::SetMargins(24, 30, 10);
+        PDF::SetTitle(__('Prüfbericht') . ' ' . $reportNo);
+        PDF::SetAutoPageBreak(true, 30);
+        PDF::SetMargins(24, 10, 10);
         PDF::AddPage();
-        PDF::writeHTML($html, true, false, true, false, '');
-        if ($controlEvent->control_event_controller_signature) {
-            $y1 = PDF::GetY();
 
+        if ($controlEvent->control_event_controller_signature) {
             $img_base64_encoded = explode('data:image/png;base64,', $controlEvent->control_event_controller_signature);
 
-            PDF::Image('@' . base64_decode($img_base64_encoded[1]), 10, $y1, 90, 40);
+            PDF::Image('@' . base64_decode($img_base64_encoded[1]), 24, 170, 100, '');
             //
             //        $pdf->SetAbsXY($pdf->GetX(),$y1+40);
             //        $pdf->Cell(90, 5, $sig->sigName, 0, 0, 'L');
         }
+        PDF::writeHTML($html, true, false, true, false, '');
         EquipmentDoc::addReport($controlEquipment->equipment_id, $reportNo . '.pdf', $reportNo);
 
 

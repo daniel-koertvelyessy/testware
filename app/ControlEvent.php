@@ -34,8 +34,8 @@ class ControlEvent extends Model
 
     public static function makeControlEventReport($id) {
 //      echo  view('pdf.html.control_event_report',['controlEvent'=>ControlEvent::find($id)]);
-
-        $data['html'] = view('pdf.html.control_event_report',['controlEvent'=>ControlEvent::find($id)])->render();
+        $reportNo = (new TestReportFormat)->makeTestreportNumber($id);
+        $data['html'] = view('pdf.html.control_event_report',['controlEvent'=>ControlEvent::find($id),'reportNo'=>$reportNo])->render();
         $data['id'] = $id;
         return $data;
 

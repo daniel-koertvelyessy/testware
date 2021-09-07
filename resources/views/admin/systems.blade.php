@@ -1216,42 +1216,54 @@
                     >
                         <div class="row">
                             <div class="col-md-8">
-                                <form action=""
-                                      id="setNumbering"
+                                <form action="@if($test_report_formats['id']){{ route('testreportformat.update',$test_report_formats['id']) }}@else{{ route('testreportformat.store') }}@endif#Numbering"
+                                      id="setTestReportFormat"
+                                      method="post"
                                 >
+                                    @csrf
+                                    @if($test_report_formats['id'])
+                                        @method('put')
+                                    @endif
                                     <h2 class="h4">{{__('Prüfbericht')}}</h2>
                                     <div class="input-group mb-2 mb-md-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Präfix + Digits + Postfix</span>
+                                            <span class="input-group-text">{{__('Präfix')}} + {{__('Digits')}} + {{__('Postfix')}}</span>
                                         </div>
                                         <input type="text"
-                                               id="num_prefix"
+                                               id="prefix"
+                                               name="prefix"
                                                class="form-control"
-                                               aria-label="Präfix"
-                                               placeholder="Präfix"
+                                               aria-label="{{__('Präfix')}}"
+                                               placeholder="{{__('Präfix')}}"
+                                               value="{{ $test_report_formats['prefix']??'' }}"
                                         >
                                         <input type="number"
-                                               id="num_digit"
+                                               id="digits"
+                                               name="digits"
                                                class="form-control"
                                                min="1"
                                                max="20"
-                                               aria-label="Digits"
-                                               placeholder="Digits"
+                                               aria-label="{{__('Digits')}}"
+                                               placeholder="{{__('Digits')}}"
+                                               value="{{ $test_report_formats['digits']??6 }}"
                                         >
                                         <input type="text"
-                                               id="num_postfix"
+                                               id="postfix"
+                                               name="postfix"
                                                class="form-control"
-                                               aria-label="Postfix"
-                                               placeholder="Postfix"
+                                               aria-label="{{__('Postfix')}}"
+                                               placeholder="{{__('Postfix')}}"
+                                               value="{{ $test_report_formats['postfix']??'' }}"
                                         >
                                     </div>
+
                                     <x-btnMain block="1">{{ __('Format speichern') }} <span class="fas fa-download ml-2"></span></x-btnMain>
 
                                 </form>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 d-none d-md-inline">
                                 <h2 class="h4">{{__('Beispiel')}}</h2>
-                                <span class="h3">PR-00024-8</span>
+                                <span class="h3 text-info">{{ $test_report_formats['prefix']??'' }}{{ str_pad('32',$test_report_formats['digits']??6,'0',STR_PAD_LEFT) }}{{ $test_report_formats['postfix']??'' }}</span>
                             </div>
                         </div>
                     </div>

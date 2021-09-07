@@ -15,7 +15,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
 
-
 Route::get('/', function () {
     return view('portal-main');
 })->name('portal-main');
@@ -162,6 +161,7 @@ Route::resources([
     'tag'                    => 'TagController',
     'note'                   => 'NoteController',
     'note-type'              => 'NoteTypeController',
+    'testreportformat'       => 'TestReportFormatController',
 ]);
 
 /**
@@ -220,7 +220,7 @@ Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEve
 
 //Auth::routes();
 
-Route::get('/expired', function (){
+Route::get('/expired', function () {
     return view('auth.expired');
 })->name('auth.expired');
 
@@ -274,7 +274,7 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
             $msg = __(' ohne Fehler ');
         } else {
             $msg = __(' mit Fehler ');
-            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: '.$file);
+            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: ' . $file);
         }
         $equipment->equipment_state_id = 1;
         $equipment->save();
@@ -348,36 +348,47 @@ $storage = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten So
 
 */
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
-    ->middleware('guest')
-    ->name('register');
+Route::get('/register', [
+    RegisteredUserController::class,
+    'create'
+])->middleware('guest')->name('register');
 
-Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('guest');
+Route::post('/register', [
+    RegisteredUserController::class,
+    'store'
+])->middleware('guest');
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-    ->middleware('guest')
-    ->name('login');
+Route::get('/login', [
+    AuthenticatedSessionController::class,
+    'create'
+])->middleware('guest')->name('login');
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest');
+Route::post('/login', [
+    AuthenticatedSessionController::class,
+    'store'
+])->middleware('guest');
 
-Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.request');
+Route::get('/forgot-password', [
+    PasswordResetLinkController::class,
+    'create'
+])->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+Route::post('/forgot-password', [
+    PasswordResetLinkController::class,
+    'store'
+])->middleware('guest')->name('password.email');
 
-Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.reset');
+Route::get('/reset-password/{token}', [
+    NewPasswordController::class,
+    'create'
+])->middleware('guest')->name('password.reset');
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.update');
+Route::post('/reset-password', [
+    NewPasswordController::class,
+    'store'
+])->middleware('guest')->name('password.update');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+Route::post('/logout', [
+    AuthenticatedSessionController::class,
+    'destroy'
+])->middleware('auth')->name('logout');

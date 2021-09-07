@@ -21,6 +21,7 @@ use App\Room;
 use App\RoomType;
 use App\StellplatzTyp;
 use App\Storage;
+use App\TestReportFormat;
 use App\User;
 use App\Verordnung;
 use Cache;
@@ -96,7 +97,16 @@ class AdminController extends Controller
 
     public function systems()
     {
-        return view('admin.systems');
+        if(TestReportFormat::count()===0){
+            $test_report_formats = [
+                'digits' => 8,
+                'prefix' => 'PR',
+                'postfix' => '',
+            ];
+        } else {
+            $test_report_formats = TestReportFormat::first();
+        }
+        return view('admin.systems',compact('test_report_formats'));
     }
 
     public function indexReports()

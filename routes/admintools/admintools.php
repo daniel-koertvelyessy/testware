@@ -7,12 +7,11 @@
  */
 
 Route::get('registerphone', function () {
-    return view('admin.registerphone');
+    return view('/');
 });
 Route::get('organisation', function () {
     return view('admin.organisation.index');
 });
-
 
 Route::get('admin', 'AdminController@index')->name('admin.index');
 //Route::get('admin/user', 'AdminController@indexUser')->name('user.index');

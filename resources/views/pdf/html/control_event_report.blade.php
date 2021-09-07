@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>{{__('Prüfbericht')}} {{ str_pad($controlEvent->id,5,'0',STR_PAD_LEFT) }}</h1>
+    <h1>{{__('Prüfbericht')}} {{ $reportNo }}</h1>
 
     <p>{{__('Die Prüfung erfolgte am')}} {{ $controlEvent->control_event_date }}</p>
 
@@ -37,7 +37,6 @@
     <p>{{__('Basierend auf den Ergebnissen gilt die Prüfung als')}} <strong>{{ $controlEvent->control_event_pass ? __('bestanden') : __('nicht bestanden') }}</strong></p>
     <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
     <br>
-    <br>
 
     @if (!$aci_execution->aci_execution)
         <table>
@@ -45,10 +44,10 @@
                 <td style="width: 50%">
                     @if($controlEvent->control_event_controller_signature)
                     <img src="{{$controlEvent->control_event_controller_signature}}"
-                         width="30%"
+                         height="150px"
                          alt="{{__('Unterschrift Prüfer')}} {{ $controlEvent->control_event_controller_name }}"
                     >
-                    <br> <br>
+                    <br>
                     @endif
                     <p>{{__('Prüfer')}}<br>{{ $controlEvent->control_event_controller_name??'-' }}</p>
                 </td>
@@ -58,7 +57,7 @@
                              width="30"
                              alt="{{__('Unterschrift Leitung')}} {{ $controlEvent->control_event_supervisor_name }}"
                         >
-                        <br>
+
                         <br>
                         <p>{{__('Leitung')}}<br>{{ $controlEvent->control_event_supervisor_name??'-' }}</p>
                     @endif
