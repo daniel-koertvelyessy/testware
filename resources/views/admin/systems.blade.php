@@ -1263,7 +1263,19 @@
                             </div>
                             <div class="col-md-4 d-none d-md-inline">
                                 <h2 class="h4">{{__('Beispiel')}}</h2>
-                                <span class="h3 text-info">{{ $test_report_formats['prefix']??'' }}{{ str_pad('32',$test_report_formats['digits']??6,'0',STR_PAD_LEFT) }}{{ $test_report_formats['postfix']??'' }}</span>
+                                @if($test_report_formats['id'])
+                                <span class="h3 text-info">{{ $test_report_formats['prefix']??'' }}{{ str_pad('32',$test_report_formats['digits'],'0',STR_PAD_LEFT) }}{{ $test_report_formats['postfix']??'' }}</span>
+                                @else
+                                    <p class="h3 text-info">IR{{ str_pad('332',6,'0',STR_PAD_LEFT) }}/1</p>
+                                    <dl class="row">
+                                        <dt class="col-sm-3">{{__('Präfix')}}</dt>
+                                        <dd class="col-sm-9">IR</dd>
+                                        <dt class="col-sm-3">{{__('Digits')}}</dt>
+                                        <dd class="col-sm-9">6</dd>
+                                        <dt class="col-sm-3">{{__('Postfix')}}</dt>
+                                        <dd class="col-sm-9">/1</dd>
+                                    </dl>
+                                @endif
                             </div>
                         </div>
                     </div>

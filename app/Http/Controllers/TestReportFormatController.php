@@ -15,11 +15,14 @@ class TestReportFormatController extends Controller
      *
      * @param  Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function store(Request $request)
+    : RedirectResponse
     {
-        //
+        $msg = (new TestReportFormat)->add($request) ?  __('Erfolgreich angelegt') : __('Fehler beim Anlegen');
+        $request->session()->flash('status', $msg);
+        return redirect()->route('systems');
     }
 
 
@@ -34,24 +37,22 @@ class TestReportFormatController extends Controller
     public function update(Request $request, TestReportFormat $testreportformat)
     : RedirectResponse
     {
-        $msg=($testreportformat->update($this->validateTestReportFormat())) ?
-            __('Erfolgreich aktualisiert'):
-            __('Fehler bei der Aktualisierung');
+        $msg = ($testreportformat->update($this->validateTestReportFormat())) ? __('Erfolgreich aktualisiert') : __('Fehler bei der Aktualisierung');
 
-        $request->session()->flash('status',$msg);
+        $request->session()->flash('status', $msg);
         return redirect()->route('systems');
     }
 
     /**
      * @return array
      */
-    public function validateTestReportFormat(): array
+    public function validateTestReportFormat()
+    : array
     {
         return request()->validate([
-            'digits'       => 'numeric',
-            'prefix'           => '',
-            'postfix'    => '',
-
+            'digits'  => 'numeric',
+            'prefix'  => '',
+            'postfix' => '',
         ]);
     }
 

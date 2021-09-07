@@ -1,7 +1,6 @@
 @extends('layout.layout-htmlpdf')
 
 @section('content')
-
     <h1>{{__('Prüfbericht')}} {{ $reportNo }}</h1>
 
     <p>{{__('Die Prüfung erfolgte am')}} {{ $controlEvent->control_event_date }}</p>
@@ -23,16 +22,12 @@
         <dt>{{ __('Inventarnummer')}}</dt>
         <dd style="font-size: 14px;">{{ $equipment->eq_inventar_nr }}</dd>
     </dl>
-
     <dl>
         <dt>{{ __('Seriennummer')}}</dt>
         <dd style="font-size: 14px;">{{ $equipment->eq_serien_nr }}</dd>
     </dl>
-
     <h2>{{__('Bemerkungen')}}</h2>
-    <p>
-        {!! nl2br($controlEvent->control_event_text??'') !!}
-    </p>
+    <p>{!! nl2br($controlEvent->control_event_text??'') !!}</p>
     <h2>{{ __('Abschluss') }}</h2>
     <p>{{__('Basierend auf den Ergebnissen gilt die Prüfung als')}} <strong>{{ $controlEvent->control_event_pass ? __('bestanden') : __('nicht bestanden') }}</strong></p>
     <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
@@ -43,11 +38,11 @@
             <tr>
                 <td style="width: 50%">
                     @if($controlEvent->control_event_controller_signature)
-                    <img src="{{$controlEvent->control_event_controller_signature}}"
-                         height="150px"
-                         alt="{{__('Unterschrift Prüfer')}} {{ $controlEvent->control_event_controller_name }}"
-                    >
-                    <br>
+                        <img src="{{$controlEvent->control_event_controller_signature}}"
+                             height="150px"
+                             alt="{{__('Unterschrift Prüfer')}} {{ $controlEvent->control_event_controller_name }}"
+                        >
+                        <br>
                     @endif
                     <p>{{__('Prüfer')}}<br>{{ $controlEvent->control_event_controller_name??'-' }}</p>
                 </td>
@@ -124,26 +119,20 @@
             >
                 <tr>
                     <td>
-                        <p>
-                        <span style="font-size: 11px; font-weight: bold;">
-                            {{ __('Aufgabe / Ziel') }}:
-                        </span><br/>
+                        <p><span style="font-size: 11px; font-weight: bold;">{{ __('Aufgabe / Ziel') }}:</span><br/>
                             {!! nl2br($aci->aci_name) !!}
                         </p>
 
-                        <p>
-                        <span style="font-size: 11px; font-weight: bold;">
-                            {{ __('Beschreibung der Prüfung') }}:
-                        </span><br/>
+                        <p><span style="font-size: 11px; font-weight: bold;">{{ __('Beschreibung der Prüfung') }}:</span><br/>
                             {!!  nl2br($aci->aci_task) !!}
                         </p>
 
                         <table cellpadding="4">
                             <tr>
                                 <td style="font-size: 11px; font-weight: bold;">{{ __('Sollwert') }}</td>
-                                <td style="font-size: 11px; font-weight: bold;">{{ __('Soll') }}</td>
                                 <td style="font-size: 11px; font-weight: bold;">{{ __('Ist') }}</td>
-                                <td style="font-size: 11px; font-weight: bold;">{{ __('Bestanden') }}</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Bedingung') }}</td>
+                                <td style="font-size: 11px; font-weight: bold;">{{ __('Ergebnis') }}</td>
                             </tr>
                             <tr>
                                 <td>
@@ -155,19 +144,16 @@
                                 <td>
                                     @if ($aci->aci_value_target_mode ==='eq')
                                         @php
-                                        $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol;
-                                        @endphp
-                                        Soll = Ist ±{{ $tol??'' }} Toleranz
-                                    @elseif ($aci->aci_value_target_mode ==='lt')
-                                        Soll < Ist
-                                    @elseif ($aci->aci_value_target_mode ==='gt')
-                                        Soll > Ist
+                                            $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol;
+                                        @endphp {{__('Soll')}} = {{__('Ist')}} ±{{ $tol??'' }} {{__('Toleranz')}}
+                                    @elseif ($aci->aci_value_target_mode ==='lt') {{__('Soll')}} < {{__('Ist')}}
+                                    @elseif ($aci->aci_value_target_mode ==='gt') {{__('Soll')}} > {{__('Ist')}}
                                     @else
-                                        -
+                                                               -
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $ceitem->control_item_pass?'ja':'nein' }}
+                                    {{ $ceitem->control_item_pass? __('bestanden') : __('nicht bestanden') }}
                                 </td>
                             </tr>
                         </table>

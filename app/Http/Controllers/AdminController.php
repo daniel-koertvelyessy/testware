@@ -97,16 +97,17 @@ class AdminController extends Controller
 
     public function systems()
     {
-        if(TestReportFormat::count()===0){
+        if (TestReportFormat::count() === 0) {
             $test_report_formats = [
-                'digits' => 8,
-                'prefix' => 'PR',
+                'id'      => '',
+                'digits'  => '',
+                'prefix'  => '',
                 'postfix' => '',
             ];
         } else {
             $test_report_formats = TestReportFormat::first();
         }
-        return view('admin.systems',compact('test_report_formats'));
+        return view('admin.systems', compact('test_report_formats'));
     }
 
     public function indexReports()
