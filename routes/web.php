@@ -6,6 +6,7 @@ use App\EquipmentFuntionControl;
 use App\EquipmentUid;
 use App\Produkt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -220,7 +221,10 @@ Route::get('makePDFEquipmentControlReport/{controlEvent}', function ($controlEve
 
 //Auth::routes();
 
-Route::get('/expired', function () {
+Route::get('/expired', function (Request $request) {
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
     return view('auth.expired');
 })->name('auth.expired');
 

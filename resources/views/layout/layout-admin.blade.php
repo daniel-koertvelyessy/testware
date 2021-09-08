@@ -275,21 +275,28 @@
 @yield('modals')
 <!-- MODALS ENDE -->
 @if ($errors->any())
-    <div class="alert alert-danger fixed-bottom alert-dismissible fade show">
-        <p class="lead my-2">{{ __('Fehler') }}</p>
-        <ul class="list-group mb-4">
-            @foreach ($errors->all() as $error)
-                <li class="list-group-item list-group-item-warning">{{ $error }}</li>
-            @endforeach
-        </ul>
-        <button type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
-        >
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-danger fixed-bottom alert-dismissible fade show">
+                    <p class="lead my-2">{{ __('Fehler') }}</p>
+                    <ul class="list-group mb-4">
+                        @foreach ($errors->all() as $error)
+                            <li class="list-group-item">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="alert"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
 @endif
 <x-section-footer/>
 @yield('autoloadscripts')

@@ -124,4 +124,19 @@ class Produkt extends Model
                 ],
             ])->count() > 0;
     }
+
+    public function getEntry(array $data)
+    {
+        $product = Produkt::where([
+            [
+                'prod_label',
+                $data['product_label']
+            ],
+            [
+                'prod_nummer',
+                $data['product_number']
+            ],
+        ])->first();
+        return $product->id;
+    }
 }

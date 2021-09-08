@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <table class="table table-responsive-md table-striped"
+            <table class="table table-striped"
                    id="tabAnforderungItemListe"
             >
                 <thead>

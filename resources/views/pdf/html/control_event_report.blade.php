@@ -112,6 +112,7 @@
             @php
                 $ceitem =  App\ControlEventItem::withTrashed()->where([['control_item_aci',$aci->id],['control_event_id',$controlEvent->id]])->first()
             @endphp
+@if($ceitem)
             <table cellpadding="3"
                    cellspacing="0"
                    border="0"
@@ -160,6 +161,7 @@
                     </td>
                 </tr>
             </table>
+@endif
         @endforeach
 
     @else

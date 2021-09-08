@@ -121,11 +121,12 @@ class ProduktController extends Controller
     public function update(Request $request, Produkt $produkt)
     {
 
-//        dd($request);
 
 //        $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
             ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
+        } else {
+            ControlProdukt::where('produkt_id', $request->id)->delete();
         }
 
         $produkt->prod_active = $request->has('prod_active') ? 1 : 0;
@@ -301,8 +302,19 @@ class ProduktController extends Controller
         return redirect(route('produkt.index'));
     }
 
+
+    /**
+     * Bind a company to a given product.
+     *
+     * @param Request $request
+     *
+     * @return Application|RedirectResponse|Response|Redirector
+     * @throws AuthorizationException
+     */
     public function addProduktFirma(Request $request)
+    : RedirectResponse
     {
+        dd($request);
 
         $address_id = false;
         $firma_id = false;
@@ -382,7 +394,7 @@ class ProduktController extends Controller
             }
         }
 
-        $request->session()->flash('status', 'Das Produkt wurde der Firma ' . $request->fa_name . ' zugeordnet!');
+        $request->session()->flash('status', __('Das Produkt wurde der Firma :name zugeordnet!',['name'=>$request->fa_name]));
 
         return redirect()->back();
     }
@@ -747,4 +759,11 @@ class ProduktController extends Controller
     {
 
     }
+
+    public function addQualifiedUser(Request $request)
+    {
+        dd($request);
+    }
+
+
 }

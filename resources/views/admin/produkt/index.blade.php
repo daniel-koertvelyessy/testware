@@ -29,7 +29,6 @@
         <div class="row">
             <div class="col">
                 <table class="table table-striped"
-                       id="tabProduktListe"
                 >
                     <thead>
                     <tr>
@@ -73,7 +72,7 @@
                 </table>
                 @if($produktList->count() >0)
                     <div class="d-flex justify-content-center">
-                        {!! $produktList->withQueryString()->onEachSide(2)->links() !!}
+                        {{ $produktList->links() }}
                     </div>
                 @endif
             </div>

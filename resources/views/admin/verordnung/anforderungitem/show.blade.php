@@ -1,7 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{__('Kontrollvorgang')}} &triangleright; testWare
+{{__('Kontrollvorgang')}} &triangleright; testWare
 @endsection
 
 @section('mainSection')
@@ -39,8 +39,8 @@
                         @foreach (App\Anforderung::all() as $anforderung)
                             <option value="{{ $anforderung->id }}"
                                     @if ($anforderung->id === $anforderungcontrolitem->anforderung_id )
-                                        selected
-                                    @endif
+                                    selected
+                                @endif
                             >{{ $anforderung->an_name }}</option>
                         @endforeach
                     </x-selectfield>
@@ -64,10 +64,9 @@
                                        class="custom-control-input"
                                        name="aci_control_equipment_required"
                                        id="aci_control_equipment_required"
-                                       value="1"
-                                       @if ($anforderungcontrolitem->aci_control_equipment_required ===1)
-                                           checked
-                                       @endif
+                                       @if ($anforderungcontrolitem->aci_control_equipment_required)
+                                       checked
+                                    @endif
                                 >
                                 <label class="custom-control-label"
                                        for="aci_control_equipment_required"
@@ -97,12 +96,15 @@
                             />
                         </div>
                         <div class="col-md-3">
-                            <label for="aci_value_target_mode">{{__('Zielwert i.O.')}}</label> <select name="aci_value_target_mode"
-                                                                                             id="aci_value_target_mode"
-                                                                                             class="custom-select"
+                            <label for="aci_value_target_mode">{{__('Zielwert i.O.')}}</label>
+                            <select name="aci_value_target_mode"
+                                    id="aci_value_target_mode"
+                                    class="custom-select"
                             >
-                                <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected
-                                        @endif value="lt"
+                                <option  @if($anforderungcontrolitem->aci_value_target_mode === NULL) selected @endif
+                                        value="">{{ __('Vorgang ohne Zielwert') }}</option>
+                                <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected @endif
+                                        value="lt"
                                 >{{__('Kleiner als Soll')}}
                                 </option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='eq') selected
@@ -133,7 +135,8 @@
                                 >
                                 <label class="custom-control-label"
                                        for="aci_value_tol_mod_abs"
-                                >abs</label>
+                                >abs
+                                </label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio"
@@ -145,7 +148,8 @@
                                 >
                                 <label class="custom-control-label"
                                        for="aci_value_tol_mod_pro"
-                                >%</label>
+                                >%
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -179,11 +183,13 @@
                                         @if($user->profile)
                                             {{ substr($user->profile->ma_vorname,0,1)??''}}. {{ $user->profile->ma_name }}
                                         @else
-                                        {{ $user->name }}
-                                            @endif
+                                            {{ $user->name }}
+                                        @endif
                                     </option>
                                 @empty
-                                    <option value="void" disabled>{{ __('keinen Eintrag gefunden') }}</option>
+                                    <option value="void"
+                                            disabled
+                                    >{{ __('keinen Eintrag gefunden') }}</option>
                                 @endforelse
                             </x-selectfield>
                         </div>

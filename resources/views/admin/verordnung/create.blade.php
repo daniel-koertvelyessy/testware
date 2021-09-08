@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Neue Verordnung anlegen')}}
+    {{__('Verordnung anlegen')}}
 @endsection
 
 @section('menu')
@@ -25,17 +25,17 @@
                 <form action="{{ route('verordnung.store') }}" method="POST">
                     @csrf
 
-                    <x-rtextfield id="updt_vo_label" name="vo_label" label="{{__('Kürzel')}}"  />
+                    <x-rtextfield id="updt_vo_label" name="vo_label" label="{{__('Kürzel')}}:"  />
 
-                    <x-textfield id="updt_vo_name" name="vo_name" label="{{__('Name')}}"  />
+                    <x-textfield id="updt_vo_name" name="vo_name" label="{{__('Name')}}:"  />
 
-                    <x-textfield id="updt_vo_nummer" name="vo_nummer" label="{{__('Nummer/Zeichen')}}"  />
+                    <x-textfield id="updt_vo_nummer" name="vo_nummer" label="{{__('Nummer/Zeichen')}}:"  />
 
-                    <x-textfield id="updt_vo_stand" name="vo_stand" label="{{__('Stand')}}"  />
+                    <x-textfield id="updt_vo_stand" name="vo_stand" label="{{__('Stand')}}:"  />
 
-                    <x-textarea id="updt_vo_description" name="vo_description" label="{{__('Beschreibung')}}"  />
+                    <x-textarea id="updt_vo_description" name="vo_description" label="{{__('Beschreibung')}}:"  />
 
-                    <x-btnMain>{{__('Verordnung anlegen ')}}<i class="fas fa-download"></i></x-btnMain>
+                    <x-btnMain>{{__('Verordnung anlegen')}}<i class="fas fa-download ml-2"></i></x-btnMain>
 
                 </form>
             </div>

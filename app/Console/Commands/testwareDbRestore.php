@@ -2,24 +2,23 @@
 
 namespace App\Console\Commands;
 
-use App\User;
 use Illuminate\Console\Command;
 
-class testwareUpdateCommand extends Command
+class testwareDbRestore extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'testware:dbupdate';
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update testware database to new schema';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -38,11 +37,6 @@ class testwareUpdateCommand extends Command
      */
     public function handle()
     {
-        $this->info('Start working ... ');
-        $output = '';
-        \Artisan::call('migrate',[],$output);
-        $this->info(\Artisan::output());
-
         return 0;
     }
 }

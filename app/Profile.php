@@ -187,4 +187,19 @@ class Profile extends Model
         ]);
     }
 
+    public function getEntry(array $employee)
+    {
+
+        if (isset($employee['id'])) {
+            $getEmployee = Profile::find($employee['id']);
+            return $getEmployee->id;
+        }
+
+        $getEmployee = Profile::where([
+            ['ma_vorname' , $employee['first_name'] ],
+            ['ma_name' , $employee['last_name'] ],
+        ])->first();
+        return $getEmployee->id;
+    }
+
 }

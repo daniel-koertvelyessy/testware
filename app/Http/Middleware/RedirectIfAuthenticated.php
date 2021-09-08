@@ -26,7 +26,6 @@ class RedirectIfAuthenticated
 //        }
 
         if (Auth::guard($guard)->check()) {
-            dd('wasn???');
             return redirect()->route('auth.expired');
         }
 

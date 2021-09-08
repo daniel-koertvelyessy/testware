@@ -41,7 +41,19 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
     Route::get('/building_list_complete', 'BuildingController@full')->name('building_list_complete');
     Route::get('/room_list_complete', 'RoomController@full')->name('room_list_complete');
     Route::get('/compartment_list_complete', 'CompartmentController@full')->name('compartment_list_complete');
+
+    /**
+     *
+     *   Product API endpoints
+     *
+     */
     Route::get('/product_list_complete', 'ProductController@full')->name('product_list_complete');
+    Route::post('/products', 'ProductController@storemany')->name('addProducts');
+    Route::post('/product/add/employee_qualified', 'ProductController@addQualifiedEmployee')->name('product.add.employee_qualified');
+    Route::post('/product/add/company', 'ProductController@addCompany')->name('product.add.company');
+//    Route::post('/product/add/instructed_employee/', 'ProductController@addInstructedUser')->name('product.add.instructed_user');
+
+
 
     Route::post('/locations', 'LocationController@storemany')->name('addlocations');
     Route::post('/buildings', 'BuildingController@storemany')->name('addbuildings');

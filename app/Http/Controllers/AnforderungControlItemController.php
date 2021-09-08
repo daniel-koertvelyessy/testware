@@ -65,57 +65,6 @@ class AnforderungControlItemController extends Controller
     }
 
     /**
-     * Copy an existing resource in storage.
-     *
-     * @param  AnforderungControlItem $anforderungcontrolitem
-     * @param  Request                $request
-     *
-     * @return RedirectResponse
-     */
-    public function copy(AnforderungControlItem $anforderungcontrolitem, Request $request)
-    {
-        $newAci = $anforderungcontrolitem->replicate()->fill(['aci_label' => 'copy' . $anforderungcontrolitem->aci_label]);
-        $newAci->save();
-        $request->session()->flash('status', __('Der Vorgang <strong>:label</strong> wurde kopiert!', ['label' => request('aci_label')]));
-        return back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  AnforderungControlItem $anforderungcontrolitem
-     *
-     * @return Application|Factory|Response|View
-     */
-    public function show(AnforderungControlItem $anforderungcontrolitem)
-    {
-        return view('admin.verordnung.anforderungitem.show', ['anforderungcontrolitem' => $anforderungcontrolitem]);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request                $request
-     * @param  AnforderungControlItem $anforderungcontrolitem
-     *
-     * @return RedirectResponse
-     */
-    public function update(Request $request, AnforderungControlItem $anforderungcontrolitem)
-    {
-
-        //        dd(request()->has('aci_control_equipment_required') );
-        //        $data = AnforderungControlItem::find($request->id);
-        $anforderungcontrolitem->aci_control_equipment_required = request()->has('aci_control_equipment_required') ? 1 : 0;
-        //        $data->update($this->validateAnforderungControlItem());
-
-        //        dd($request->aci_control_equipment_required );
-        $anforderungcontrolitem->update($this->validateAnforderungControlItem());
-        $request->session()->flash('status', 'Der Vorgang <strong>' . request('aci_name') . '</strong> wurde aktualisiert!');
-        return back();
-    }
-
-    /**
      * @return array
      */
     public function validateAnforderungControlItem()
@@ -145,6 +94,72 @@ class AnforderungControlItemController extends Controller
     }
 
     /**
+     * Copy an existing resource in storage.
+     *
+     * @param  AnforderungControlItem $anforderungcontrolitem
+     * @param  Request                $request
+     *
+     * @return RedirectResponse
+     */
+    public function copy(AnforderungControlItem $anforderungcontrolitem, Request $request)
+    {
+        $txt = 'aci_' . substr(md5($anforderungcontrolitem->aci_label), 0, 14);
+
+        $newAci = $anforderungcontrolitem->replicate()->fill(['aci_label' => $txt]);
+
+        $newAci->save();
+        $request->session()->flash('status', __('Der Vorgang <strong>:label</strong> wurde kopiert!', ['label' => request('aci_label')]));
+        return redirect()->route('anforderungcontrolitem.show', ['anforderungcontrolitem' => $newAci]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  AnforderungControlItem $anforderungcontrolitem
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function show(AnforderungControlItem $anforderungcontrolitem)
+    {
+        return view('admin.verordnung.anforderungitem.show', ['anforderungcontrolitem' => $anforderungcontrolitem]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request                $request
+     * @param  AnforderungControlItem $anforderungcontrolitem
+     *
+     * @return RedirectResponse
+     */
+    public function update(Request $request, AnforderungControlItem $anforderungcontrolitem)
+    {
+
+
+        $this->validateAnforderungControlItem();
+
+
+        $anforderungcontrolitem->aci_label = $request->aci_label;
+        $anforderungcontrolitem->aci_name = $request->aci_name;
+        $anforderungcontrolitem->aci_task = $request->aci_task;
+        $anforderungcontrolitem->aci_value_si = $request->aci_value_si;
+        $anforderungcontrolitem->aci_vaule_soll = $request->aci_vaule_soll;
+        $anforderungcontrolitem->aci_value_target_mode = $request->aci_value_target_mode;
+        $anforderungcontrolitem->aci_value_tol = $request->aci_value_tol;
+        $anforderungcontrolitem->aci_value_tol_mod = $request->aci_value_tol_mod;
+        $anforderungcontrolitem->aci_execution = $request->aci_execution;
+        $anforderungcontrolitem->aci_control_equipment_required = isset($request->aci_control_equipment_required);
+        $anforderungcontrolitem->firma_id = $request->firma_id;
+        $anforderungcontrolitem->aci_contact_id = $request->aci_contact_id;
+        $anforderungcontrolitem->anforderung_id = $request->anforderung_id;
+        $anforderungcontrolitem->save();
+
+
+        $request->session()->flash('status', __('Der Vorgang <strong>:name</strong> wurde aktualisiert!', ['name' => request('aci_name')]));
+        return back();
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  AnforderungControlItem $anforderungcontrolitem
@@ -155,7 +170,7 @@ class AnforderungControlItemController extends Controller
     public function destroy(AnforderungControlItem $anforderungcontrolitem)
     {
         $anforderungcontrolitem->delete();
-        \request()->session()->flash('status', 'Der Vorgang wurde gelöscht!');
+        \request()->session()->flash('status', __('Der Vorgang wurde gelöscht!'));
         return back();
     }
 

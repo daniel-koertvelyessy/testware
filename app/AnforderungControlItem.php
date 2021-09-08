@@ -22,6 +22,10 @@ class AnforderungControlItem extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'aci_control_equipment_required' => 'boolean',
+    ];
+
     public function search($term)
     {
         return AnforderungControlItem::where('aci_label', 'like', '%' . $term . '%')
@@ -59,14 +63,14 @@ class AnforderungControlItem extends Model
         if ($anforderungControlItem->aci_control_equipment_required === 1) {
 
             if (ControlProdukt::all()->count() === 0) {
-                $msgPG = '<li>Kein Prüfgerät vorhanden!</li>';
+                $msgPG = '<li>'. __('Kein Prüfgerät vorhanden!'). '</li>';
                 $isInComplete = true;
             }
         }
 
         if ($anforderungControlItem->aci_value_target_mode === 'eq') {
             if ($anforderungControlItem->aci_value_tol === '' || $anforderungControlItem->aci_value_tol_mod === '')
-                $msgTo = '<li>Toleranzangaben sind unvollständig</li>';
+                $msgTo = '<li>'. __('Toleranzangaben sind unvollständig') .'</li>';
             $isInComplete = true;
         }
         return ($isInComplete) ? $msgPG . $msgTo : false;

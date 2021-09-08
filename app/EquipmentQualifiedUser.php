@@ -18,6 +18,7 @@ class EquipmentQualifiedUser extends Model
         'equipment_qualified_firma',
     ];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -24,13 +24,14 @@ class ProduktKategorie extends Model
     public function apiAdd(Array $data)
         :int
     {
+
         if (ProduktKategorie::where('pk_label',$data['label'])->count() >0){
             return ProduktKategorie::where('pk_label',$data['label'])->first()->id;
         }
         $this->pk_label = $data['label'];
-        $this->pk_name_nummer = $data['number'];
+        $this->pk_name_nummer = $data['number']??'';
         $this->pk_name = $data['name'];
-        $this->pk_description = $data['description'];
+        $this->pk_description = $data['description']??'';
         $this->save();
         return $this->id;
 

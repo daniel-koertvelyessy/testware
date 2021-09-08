@@ -8,11 +8,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
-    <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
     <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <script type="text/javascript" src="{{ asset('js/jquery_3.5.min.js') }}"></script>
     <title>@yield('pagetitle')</title>
 </head>
 <body>

@@ -33,7 +33,8 @@ class Firma extends Model
         return $this->belongsToMany(Produkt::class);
     }
 
-    public function getFirmaAdressData($aid) {
+    public function getFirmaAdressData($aid)
+    {
         return Adresse::find($aid)->first();
     }
 
@@ -56,7 +57,6 @@ class Firma extends Model
         ]);
 
 
-
         $this->fa_label = $request->fa_label;
         $this->fa_name = $request->fa_name;
         $this->fa_description = $request->fa_description;
@@ -69,7 +69,25 @@ class Firma extends Model
         return $this->id;
 
 
+    }
 
+    public function getEntry(array $data)
+    {
+        if (isset($data['id'])) {
+            $company = Firma::find($data['id']);
+            return $company->id;
+        }
 
+        $getCompany = Firma::where([
+            [
+                'fa_label',
+                $data['label']
+            ],
+            [
+                'fa_name',
+                $data['name']
+            ],
+        ])->first();
+        return $getCompany->id;
     }
 }
