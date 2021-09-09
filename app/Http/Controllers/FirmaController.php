@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -86,8 +87,23 @@ class FirmaController extends Controller
      */
     public function update(Request $request, Firma $firma)
     {
-        $firma->update($this->validateFirma());
-        $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde aktualisiert!', ['label' => $firma->fa_label]));
+        $this->validateFirma();
+        $firma->fa_label = $request->fa_label;
+        $firma->fa_name = $request->fa_name;
+        $firma->fa_description = $request->fa_description;
+        $firma->fa_kreditor_nr = $request->fa_kreditor_nr;
+        $firma->fa_debitor_nr = $request->fa_debitor_nr;
+        $firma->fa_vat = $request->fa_vat;
+        $firma->adresse_id = $request->adresse_id;
+        if ($firma->save()){
+            $request->session()->flash('status', __('Die Firma <strong>:label</strong> wurde aktualisiert!', ['label' => $request->fa_label]));
+        } else {
+            $request->session()->flash('status', __('Die Firma <strong>:label</strong> konnte nicht aktualisiert werden!', ['label' => $request->fa_label]));
+            Log::error('Error on update company');
+        }
+
+
+
         return redirect()->back();
     }
 

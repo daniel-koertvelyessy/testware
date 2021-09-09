@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{ __('Organisation') }}
+    {{ __('Firma bearbeiten') }}
 @endsection
 
 @section('menu')
@@ -94,7 +94,7 @@
         <div class="row">
             <div class="col-md-8">
                 <h2 class="h4">{{ __('Stammdaten') }}</h2>
-                <form action="{{ route('firma.update',['firma'=>$firma]) }}"
+                <form action="{{ route('firma.update',$firma) }}"
                       method="post"
                 >
                     @csrf
@@ -159,7 +159,8 @@
                         <div class="col">
                             <x-textarea id="fa_description"
                                         label="{{__('Beschreibung')}}"
-                            ><{{ $firma->fa_description }}</x-textarea>
+                                        value="{{ $firma->fa_description }}"
+                            />
                         </div>
                     </div>
 

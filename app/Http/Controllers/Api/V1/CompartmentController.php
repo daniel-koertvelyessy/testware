@@ -130,7 +130,7 @@ class CompartmentController extends Controller
             $compartment->sp_description = (isset($request->description)) ? $request->description : $compartment->sp_description;
 
             /**
-             * Check if compartment-uid is given and update/add the table "storages"
+             * Check if storage-uid is given and update/add the table "storages"
              */
             $uid = (isset($request->uid)) ? $request->uid : $compartment->storage_id;
             $compartment->storage_id = $uid;
@@ -138,7 +138,7 @@ class CompartmentController extends Controller
             $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
             if (!$compartment->stellplatz_typ_id)
                 return response()->json([
-                    'error' => 'referenced compartment type could not be found'
+                    'error' => 'referenced storage type could not be found'
                 ], 422);
             $compartment->save();
         } else {
@@ -159,7 +159,7 @@ class CompartmentController extends Controller
     {
         $stellplatz->delete();
         return response()->json([
-            'status' => 'compartment deleted'
+            'status' => 'storage deleted'
         ]);
     }
 }

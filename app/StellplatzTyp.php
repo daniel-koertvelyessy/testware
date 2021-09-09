@@ -17,7 +17,7 @@ class StellplatzTyp extends Model
     public function checkApiCompartmentType(Request $request)
     {
         /**
-         * Check if compartment-type-id or compartment-type-name is given and check if they exits
+         * Check if storage-type-id or storage-type-name is given and check if they exits
          */
         if (isset($request->compartment_type_id)) {
             $compartmentType = StellplatzTyp::find($request->compartment_type_id);

@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{__('Neue Prüfung anlegen')}}
+    {{__('Neuen Prüfschritt anlegen')}}
 @endsection
 
 @section('mainSection')
-    {{__('Neue Prüfung anlegen')}}
+    {{__('Neuen Prüfschritt anlegen')}}
 @endsection
 
 @section('menu')
@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row md-4 d-none d-md-block">
             <div class="col">
-                <h1 class="h3">{{__('Neue Prüfung anlegen')}}</h1>
+                <h1 class="h3">{{__('Neuen Prüfschritt anlegen')}}</h1>
             </div>
         </div>
         <div class="row">

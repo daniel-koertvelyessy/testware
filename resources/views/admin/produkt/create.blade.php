@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Produkte')}}
+    {{__('Neues Produkt anlegen')}}
 @endsection
 
 @section('menu')
@@ -100,22 +100,10 @@
                       class="needs-validation"
                 >
                     @csrf
-                    <x-frm_AddProdukt :pk="$pk"
-                                      mkpk
-                    />
+                    <x-frm_AddProdukt :pk="$pk"/>
                     <button class="btn btn-primary">{{__('Produkt anlegen')}} <i class="fas fa-download ml-2"></i></button>
                 </form>
             </div>
         </div>
     </div>
 @endsection
-
-@section('scripts')
-    <script>
-        $('#produkt_kategorie_id').change(function () {
-            location.href = "{{ route('produkt.create') }}?pk=" + $('#produkt_kategorie_id :selected').val();
-        })
-    </script>
-@endsection
-
-

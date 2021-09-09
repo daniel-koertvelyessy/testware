@@ -9,7 +9,7 @@
               @endif
     >{{  $value ?? old( $name??$id ) }}</textarea>
     @if (isset($required))
-        <span class="small text-primary">Erforderliches Feld</span>
+        <span class="small text-mute">{{ __('erforderliches Feld') }}</span>
     @endif
     @error($name??$id)
     <span class="text-danger small">{{ $message }}</span>

@@ -95,27 +95,27 @@ class EquipmentEventController extends Controller
         $event->read = now();
         $event->update();
 
-        (new EquipmentEventItem)->addItem($request);
+        $event_item = (new EquipmentEventItem)->addItem($request);
 
         $equipment = Equipment::find($request->equipment_id)->first();
         $euipStatIsNotChanged = ($equipment->equipment_state_id == $request->equipment_state_id);
 
         if (!$euipStatIsNotChanged) {
-            $eh = new EquipmentHistory();
             $stat = EquipmentState::find($request->equipment_state_id)->first();
-            $eh->eqh_eintrag_kurz = __('Gerätestatus geändert');
-            $eh->eqh_eintrag_text = 'Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf ' . $stat->estat_label . ' geändert';
-            $eh->equipment_id = $equipment->equipment_id;
-            $eh->save();
+            (new EquipmentHistory)->add(
+                __('Gerätestatus geändert'),
+                __('Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf :label geändert',['label'=>$stat->estat_label]),
+                $equipment->equipment_id
+            );
+
             $equipment->equipment_state_id = $request->equipment_state_id;
-            $equipment->update();
+            $equipment->save();
         }
 
         $event = EquipmentEvent::find($request->equipment_event_id)->first();
 
         if (isset($request->setInformUser)) {
-            //            request()->user()->notify(new EquipmentEventChanged($eeitem));
-            Notification::send(User::find($request->user_id), new EquipmentEventChanged($eeitem));
+            Notification::send(User::find($request->user_id), new EquipmentEventChanged($event_item));
         }
 
         return redirect()->route('event.show', $event);

@@ -34,7 +34,7 @@
 
 <li class="nav-item dropdown {{ Request::routeIs('anforderungcontrolitem.*') ? ' active ' : ''}}">
     <a class="nav-link dropdown-toggle " href="#" id="navTargetAppACI" role="button" data-toggle="dropdown" aria-expanded="false">
-        <i class="fas fa-tasks"></i> {{__('Vorgänge')}}
+        <i class="fas fa-tasks"></i> {{__('Prüfschritte')}}
     </a>
     <ul class="dropdown-menu" aria-labelledby="navTargetAppACI">
         <li><a class="dropdown-item" href="{{ route('anforderungcontrolitem.index') }}">{{__('Übersicht')}}</a></li>

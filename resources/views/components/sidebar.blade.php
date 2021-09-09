@@ -3,61 +3,46 @@
        style="display: flex; flex-direction: column;"
 >
 
-    <span class="d-flex align-items-center justify-content-start mt-0">
-
-        <div class="custom-control custom-switch">
-          <input type="checkbox"
-                 class="custom-control-input"
-                 id="switchFixSidebar"
-          >
-          <label class="custom-control-label"
-                 for="switchFixSidebar"
-          ></label>
-        </div>
-
-        <span class="d-md-inline d-none ">{{__('Menü fixieren')}}</span>
-    </span>
-
     <p class="h3 d-md-inline d-none"
        style="color:#c7d301;"
     >{{__('testWare')}}</p>
 
-    <a href="{{ route('testware.index') }}"
-       class=" my-2 d-flex align-items-center justify-content-start"
-    >
-        <span class="fas fa-desktop mr-2 mr-md-4"></span>
-        <span class="d-md-inline d-none ">{{__('Dashboard')}}</span>
-    </a>
+    <div class="align-items-center d-flex flex-column flex-md-row justify-content-center justify-content-md-start my-md-2 my-3">
+        <a href="{{ route('testware.index') }}">
+            <span class="fas fa-fw fa-desktop mr-md-4"></span> <span class="d-md-inline d-none ">{{__('Dashboard')}}</span>
+        </a>
+        <span class="small d-md-none">{{__('Dashboard')}}</span>
+    </div>
 
-    <a href="{{ route('equipMain') }}"
-       class=" my-2 d-flex align-items-center justify-content-start"
-    >
-        <span class="fas fa-boxes mr-2 mr-md-4"></span>
-        <span class="d-md-inline d-none ">{{__('Geräte')}}</span>
-    </a>
+    <div class="align-items-center d-flex flex-column flex-md-row justify-content-center justify-content-md-start my-md-2 my-3">
+        <a href="{{ route('equipMain') }}">
+            <span class="fas fa-fw fa-boxes mr-md-4"></span> <span class="d-md-inline d-none ">{{__('Geräte')}}</span>
+        </a>
+        <span class="small d-md-none">{{__('Geräte')}}</span>
+    </div>
 
-    <a href="{{ route('control.index') }}"
-       class=" my-2 d-flex align-items-center justify-content-start"
-    >
-        <span class="fas fa-stethoscope mr-2 mr-md-4"></span>
-        <span class="d-md-inline d-none ">{{__('Prüfungen')}}</span>
-    </a>
+    <div class="align-items-center d-flex flex-column flex-md-row justify-content-center justify-content-md-start my-md-2 my-3">
+        <a href="{{ route('control.index') }}">
+            <span class="fas fa-fw fa-stethoscope mr-md-4"></span> <span class="d-md-inline d-none ">{{__('Prüfungen')}}</span>
+        </a>
+        <span class="small d-md-none">{{__('Prüfungen')}}</span>
+    </div>
 
-    <a href="{{ route('event.index') }}"
-       class=" my-2 d-flex align-items-center justify-content-start"
-    >
-        <span class="fas fa-inbox mr-2 mr-md-4"></span>
-        <span class="d-md-inline d-none ">{{__('Ereignisse')}}</span>
-    </a>
+    <div class="align-items-center d-flex flex-column flex-md-row justify-content-center justify-content-md-start my-md-2 my-3">
+        <a href="{{ route('event.index') }}">
+            <span class="fas fa-fw fa-inbox mr-md-4"></span> <span class="d-md-inline d-none ">{{__('Ereignisse')}}</span>
+        </a>
+        <span class="small d-md-none">{{__('Ereignisse')}}</span>
+    </div>
 
-    <a href="{{ route('report.index') }}"
-       class=" my-2 d-flex align-items-center justify-content-start"
-    >
-        <span class="fas fa-clipboard mr-2 mr-md-4"></span>
-        <span class="d-md-inline d-none ">{{__('Berichte')}}</span>
-    </a>
+    <div class="align-items-center d-flex flex-column flex-md-row justify-content-center justify-content-md-start my-md-2 my-3">
+        <a href="{{ route('report.index') }}">
+            <span class="fas fa-fw fa-clipboard mr-md-4"></span> <span class="d-md-inline d-none ">{{__('Berichte')}}</span>
+        </a>
+        <span class="small d-md-none">{{__('Berichte')}}</span>
+    </div>
 
-{{--    @can('isAdmin', Auth()->user())--}}
+    {{--    @can('isAdmin', Auth()->user())--}}
     <div class="dropdown-divider"></div>
 
     <a href="#sideNavProdukt"
@@ -68,11 +53,11 @@
        aria-controls="sideNavProdukt"
     >
         <span>
-            <i class="fas fa-boxes mr-2 mr-md-4"></i>
+            <i class="fas fa-fw fa-boxes mr-2 mr-md-4"></i>
             <span class="d-md-inline d-none">{{__('Produkte')}}</span>
-        </span>
-         <span class="fas fa-ellipsis-v"></span>
+        </span> <span class="fas fa-ellipsis-v"></span>
     </a>
+
     <div class="collapse"
          id="sideNavProdukt"
     >
@@ -101,7 +86,7 @@
        aria-controls="sideNavVorschrfiten"
     >
         <span>
-            <i class="fas fa-scroll mr-2 mr-md-4"></i>
+            <i class="fas fa-fw fa-scroll mr-2 mr-md-4"></i>
             <span class="d-md-inline d-none">{{__('Vorschriften')}}</span>
         </span>
 
@@ -146,13 +131,13 @@
        aria-controls="sideNavOrganisation"
     >
         <span>
-            <i class="fas fa-users mr-2 mr-md-4"></i>
+            <i class="fas fa-fw fa-users mr-2 mr-md-4"></i>
             <span class="d-md-inline d-none">{{__('Organisation')}}</span>
         </span>
 
         <span class="fas fa-ellipsis-v"></span>
     </a>
-{{--    {{ (  Request::routeIs('organisationMain') or Request::routeIs('firma.*') or Request::routeIs('contact.*') or Request::routeIs('adresse.*') or Request::routeIs('profile.*' )? ' show ' : '' }}--}}
+    {{--    {{ (  Request::routeIs('organisationMain') or Request::routeIs('firma.*') or Request::routeIs('contact.*') or Request::routeIs('adresse.*') or Request::routeIs('profile.*' )? ' show ' : '' }}--}}
     <div class="collapse"
          id="sideNavOrganisation"
     >
@@ -194,7 +179,7 @@
        aria-controls="sideNavLocations"
     >
         <span>
-            <i class="fa fa-industry mr-2 mr-md-4"></i>
+            <i class="fas fa-fw fa-industry mr-2 mr-md-4"></i>
             <span class="d-md-inline d-none">{{__('memStandorte')}}</span>
         </span>
 
@@ -211,11 +196,11 @@
                 </a>
             </li>
             @can('isAdmin', Auth::user())
-            <li class="nav-item bg-white border-left ml-3">
-                <a class="nav-link"
-                   href="{{ route('lexplorer') }}"
-                >{{__('Explorer')}}</a>
-            </li>
+                <li class="nav-item bg-white border-left ml-3">
+                    <a class="nav-link"
+                       href="{{ route('lexplorer') }}"
+                    >{{__('Explorer')}}</a>
+                </li>
             @endcan
             <li class="nav-item bg-white border-left ml-3">
                 <a class="nav-link"
@@ -249,10 +234,9 @@
        aria-controls="sideNavSystem"
     >
         <span>
-            <i class="fas fa-user-cog mr-2 mr-md-4"></i>
+            <i class="fas fa-fw fa-user-cog mr-2 mr-md-4"></i>
             <span class="d-md-inline d-none">{{__('System')}}</span>
-        </span>
-        <span class="fas fa-ellipsis-v"></span>
+        </span> <span class="fas fa-ellipsis-v"></span>
     </a>
     <div class="collapse"
          id="sideNavSystem"
@@ -275,7 +259,21 @@
             </li>
         </ul>
     </div>
+    <span class="d-flex align-items-center justify-content-start mt-3">
 
-{{--    @endcan--}}
+        <div class="custom-control custom-switch">
+          <input type="checkbox"
+                 class="custom-control-input"
+                 id="switchFixSidebar"
+          >
+          <label class="custom-control-label"
+                 for="switchFixSidebar"
+          ></label>
+        </div>
+
+        <span class="d-md-inline d-none ">{{__('Menü fixieren')}}</span>
+    </span>
+
+    {{--    @endcan--}}
 
 </aside>

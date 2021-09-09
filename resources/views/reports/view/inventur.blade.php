@@ -13,11 +13,11 @@
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
           crossorigin="anonymous"
     >
-    <title>Inventurbericht</title>
+    <title>{{ __('Inventurbericht')}}</title>
 </head>
 <body class="container">
 
-<h1>Inventurbericht</h1>
+<h1>{{ __('Inventurbericht')}}</h1>
 <?php
 
 $sumNew = 0;
@@ -35,13 +35,13 @@ $countUsed = 0;
 >
     <thead>
     <tr style="font-size: 11pt; font-weight: bold;">
-        <th style="width: 250px">Gerät</th>
-        <th style="width: 105px">Inventarnummer</th>
-        <th style="width: 100px">Status</th>
-        <th style="width: 75px">Gekauft</th>
-        <th style=",text-align: right; width: 55px">Abschr</th>
-        <th style="text-align: right; width: 80px">Wert neu</th>
-        <th style="text-align: right; width: 80px">Wert aktuell</th>
+        <th style="width: 250px">{{ __('Gerät')}}</th>
+        <th style="width: 105px">{{ __('Inventarnummer')}}</th>
+        <th style="width: 100px">{{ __('Status')}}</th>
+        <th style="width: 75px">{{ __('Gekauft')}}</th>
+        <th style=",text-align: right; width: 55px">{{ __('Abschr')}}</th>
+        <th style="text-align: right; width: 80px">{{ __('Wert neu')}}</th>
+        <th style="text-align: right; width: 80px">{{ __('Wert aktuell')}}</th>
     </tr>
     </thead>
     <tbody>
@@ -80,23 +80,23 @@ $countUsed = 0;
     </tbody>
 </table>
 <div style="page-break-before:always">
-    <h2>Zusammenfassung</h2>
-    <h3>Anzahl Geräte</h3>
+    <h2>{{__('Zusammenfassung')}}</h2>
+    <h3>{{__('Anzahl Geräte')}}</h3>
     <table cellspacing="0"
            cellpadding="3"
            border="1"
            nobr="true"
     >
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">Gesamt Geräte</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('Gesamt Geräte')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ $countTotal }}</td>
         </tr>
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">davon in Benutzung</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('davon in Benutzung')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ $countUsed }}</td>
         </tr>
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">in Reparatur / gesperrt</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('in Reparatur / gesperrt')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ $countLocked }}</td>
         </tr>
     </table>
@@ -108,22 +108,22 @@ $countUsed = 0;
            nobr="true"
     >
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">Gesamt (Neubeschaffung)</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('Gesamt (Neubeschaffung)')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ number_format($sumNew,2,',','.') }}</td>
         </tr>
         <tr>
-            <td colspan="2">Werte (Abschreibung berücksichtigt)</td>
+            <td colspan="2">{{ __('Werte (Abschreibung berücksichtigt)')}}</td>
         </tr>
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">Gesamt</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('Gesamt')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ number_format($sumTotal,2,',','.') }}</td>
         </tr>
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">In Benutzung</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('In Benutzung')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ number_format($sumUsed,2,',','.') }}</td>
         </tr>
         <tr>
-            <th style="width: 200px; font-size: 11pt; font-weight: bold;">Gesperrt</th>
+            <th style="width: 200px; font-size: 11pt; font-weight: bold;">{{ __('Gesperrt')}}</th>
             <td style="width: 200px; font-size: 11pt; text-align: right;">{{ number_format($sumLocked,2,',','.') }}</td>
         </tr>
 

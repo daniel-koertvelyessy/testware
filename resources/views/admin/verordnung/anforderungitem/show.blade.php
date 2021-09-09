@@ -83,7 +83,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <x-textfield id="aci_value_si"
-                                         label="{{__('SI-Einheit [kg, °C, V usw]')}}"
+                                         label="{{__('SI-Einheit')}}"
                                          max="10"
                                          value="{{ $anforderungcontrolitem->aci_value_si }}"
                             />
@@ -226,7 +226,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary">{{__('Vorgang speichern')}}</button>
+                    <button class="btn btn-primary">{{__('Prüfschritt speichern')}}</button>
                 </form>
             </div>
         </div>

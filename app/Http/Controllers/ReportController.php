@@ -39,7 +39,6 @@ class ReportController extends Controller
      */
     public function template()
     {
-        dd('nop');
         return view('reports.template');
     }
 
@@ -110,9 +109,9 @@ class ReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-        $report->update($this->validateReportData($request));
+        $report->update($this->validateReportData());
         $request->session()->flash('status', __('Der Bericht <strong>:label</strong> wurde aktualisiert!',['label'=>$request->label]));
-        return back();
+        return redirect()->route('report.index', ['reports' => Report::with('types')->sortable()->paginate(10)]);
     }
 
     /**
@@ -132,9 +131,9 @@ class ReportController extends Controller
         return redirect()->back();
     }
 
-    public function validateReportData(Request $request)
+    public function validateReportData()
     {
-        return $request->validate([
+        return request()->validate([
             'id' => 'nullable|required',
             'label' => 'required',
             'name' => '',

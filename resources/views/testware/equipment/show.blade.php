@@ -73,8 +73,8 @@
 
 @section('modals')
     <x-modal-add-note
-            objectname="{{ $equipment->eq_inventar_nr }}"
-            uid="{{ $equipment->eq_uid }}"
+        objectname="{{ $equipment->eq_inventar_nr }}"
+        uid="{{ $equipment->eq_uid }}"
     />
 
     <div class="modal fade"
@@ -562,7 +562,7 @@
                                         <option value="{{ $ad->id }}"
                                                 @if( $ad->id===2  ?? old('document_type_id')==$ad->id)
                                                 selected
-                                                @endif
+                                            @endif
                                         >{{ $ad->doctyp_label }}</option>
                                     @endforeach
                                 </x-selectfield>
@@ -749,7 +749,10 @@
                                                label="{{__('Seriennummer')}}:"
                                                value="{!!  $equipment->eq_serien_nr ?? '-' !!}"
                                 />
-                                <label for="firma" class="small text-muted">{{__('Hersteller')}}:</label>
+                                <label for="firma"
+                                       class="small text-muted"
+                                >{{__('Hersteller')}}:
+                                </label>
                                 <input type="text"
                                        id="firma"
                                        class="form-control-plaintext form-control-lg"
@@ -772,12 +775,10 @@
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
-                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
-                                    <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
@@ -870,8 +871,7 @@
                                                            value="{{ $equipmentUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
-                                                        <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -924,7 +924,8 @@
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
                                                         <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                                                class="far fa-trash-alt ml-2"></span>
+                                                            class="far fa-trash-alt ml-2"
+                                                        ></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -1033,8 +1034,7 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
@@ -1043,10 +1043,10 @@
                                                             </td>
                                                             <td>
                                                                 <x-deletebutton
-                                                                        action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
-                                                                        tabtarget="documents"
-                                                                        prefix="EquipmentDoku"
-                                                                        id="{{ $equipDoc->id }}"
+                                                                    action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
+                                                                    tabtarget="documents"
+                                                                    prefix="EquipmentDoku"
+                                                                    id="{{ $equipDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1090,8 +1090,7 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
@@ -1100,10 +1099,10 @@
                                                             </td>
                                                             <td>
                                                                 <x-deletebutton
-                                                                        action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
-                                                                        tabtarget="documents"
-                                                                        prefix="EquipmentFunction"
-                                                                        id="{{ $equipFunctionDoc->id }}"
+                                                                    action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
+                                                                    tabtarget="documents"
+                                                                    prefix="EquipmentFunction"
+                                                                    id="{{ $equipFunctionDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1147,8 +1146,7 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
+                                                                    <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span> <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell">
@@ -1203,7 +1201,9 @@
                                     </thead>
                                     <tbody>
                                     @forelse (\App\ControlEventItem::with('AnforderungControlItem')->where('equipment_id',$equipment->id)->get() as $controlItem)
-                                        @if($controlItem->AnforderungControlItem->aci_vaule_soll !== null)
+
+                                        @if($controlItem->AnforderungControlItem)
+                                            @if($controlItem->AnforderungControlItem->aci_vaule_soll)
                                             <tr>
                                                 <td>
                                                     {{ $controlItem->created_at->diffForHumans() }}
@@ -1219,7 +1219,7 @@
                                                 <td style="text-align: right; "
                                                     @if ($controlItem->AnforderungControlItem->aci_vaule_soll)
                                                     class="{{ $controlItem->control_item_pass ? 'bg-success text-white' : 'bg-danger text-white' }}"
-                                                        @endif
+                                                    @endif
 
                                                 >
                                                     {{ $controlItem->control_item_read }}
@@ -1228,9 +1228,9 @@
                                                     {!! $controlItem->control_item_pass ? '<span class="fas fa-check text-success"></span>' : '<span class="fas fa-times text-danger"></span>' !!}
                                                 </td>
                                             </tr>
+                                            @endif
                                         @endif
                                     @empty
-
                                     @endforelse
                                     </tbody>
                                 </table>

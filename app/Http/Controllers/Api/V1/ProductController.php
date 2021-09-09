@@ -139,6 +139,14 @@ class ProductController extends Controller
                     continue;
                 }
 
+
+                if ($this->checkProductExists($data['number'])){
+                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['number'] . ' dataset already existent in database'];
+                    $countSkipped++;
+                    continue;
+                }
+
+
                 /**
                  *  Check if given product exists in database and decide to
                  *  update or create new one
@@ -200,6 +208,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+        if ($this->checkProductExists($request->number))
+            return response()->json([
+                'error'=>'',
+                'product' => new ProductResource(Produkt::where('prod_nummer',$request->number)->first())
+            ], 422);
+
+
         $request->validate([
             'label'          => 'required',
             'number'         => 'required',
@@ -521,13 +537,16 @@ class ProductController extends Controller
                 Log::info($msg);
             } else {
                 $msg .= __('Es gab einen Fehler bei der Verarbeitung');
-                Log::error( __('API Fehler beim Anlegen ProductQualifiedUser ') );
+                Log::error(__('API Fehler beim Anlegen ProductQualifiedUser '));
             }
             return response()->json(['status' => $msg]);
         } else {
             return response()->json($msg, 422);
         }
+    }
 
-
+    protected function checkProductExists(string $product_number)
+    {
+        return (Produkt::where('prod_nummer', $product_number)->count() > 0) ;
     }
 }

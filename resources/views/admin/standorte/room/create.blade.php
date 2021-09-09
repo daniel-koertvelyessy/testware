@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('memStandorte')}}
+    {{__('Raum anlegen')}}
 @endsection
 
 @section('menu')
@@ -32,7 +32,7 @@
 
                         <x-textarea id="rt_description" label="{{__('Beschreibung des Raumtyps')}}" />
 
-                        <x-btnMain>{{__('Neuen Raumtyp anlegen')}} <span class="fas fa-download"></span></x-btnMain>
+                        <x-btnMain>{{__('Neuen Raumtyp anlegen')}} <span class="fas fa-download ml-2"></span></x-btnMain>
 
                     </form>
                 </div>
@@ -64,7 +64,6 @@
                     <x-selectModalgroup
                         id="room_type_id"
                         label="{{__('Raum Typ')}}"
-                        btnL="Neu"
                         modalid="modalAddRaumTyp"
                     >
                     @foreach (\App\RoomType::all() as $roomType)
@@ -76,12 +75,12 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <x-rtextfield id="r_label" label="{{__('Raum Kürzel')}}"/>
-                    <x-textfield id="r_name" label="{{__('Bezeichnung')}}"/>
+                    <x-rtextfield id="r_label" label="{{__('Kürzel')}}" max="20"/>
+                    <x-textfield id="r_name" label="{{__('Bezeichnung')}}" max="100"/>
                     <x-textarea id="r_description" label="{{__('Beschreibung')}}" />
                 </div>
             </div>
-            <x-btnMain>{{__('Raum anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>
+            <x-btnMain>{{__('Neuen Raum anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>
 
         </form>
     </div>

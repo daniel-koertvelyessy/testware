@@ -8,17 +8,30 @@ use Illuminate\Http\Request;
 
 class Firma extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'fa_label',
+        'fa_name',
+        'fa_description',
+        'fa_kreditor_nr',
+        'fa_debitor_nr',
+        'fa_vat',
+        'adresse_id',
+    ];
 
     use SoftDeletes;
 
     public function path()
     {
-        return view('admin.firma.show', $this);
+        return view('admin.organisation.firma.show', $this);
     }
 
-
+    #TODO replace german method with en one below
     public function Adresse()
+    {
+        return $this->belongsTo(Adresse::class);
+    }
+
+    public function address()
     {
         return $this->belongsTo(Adresse::class);
     }

@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('Berichte')}}
+    {{__('Bericht bearbeiten')}}
 @endsection
 
 @section('menu')
@@ -18,7 +18,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row d-none d-md-block mb-4">
             <div class="col">
                 <h1 class="h3">{{__('Bericht bearbeiten')}}</h1>
             </div>
@@ -38,8 +38,7 @@
                     @method('PUT')
                     <div class="row">
                         <div class="col-md-4">
-                            <x-textfield required
-                                         max="100"
+                            <x-rtextfield max="100"
                                          label="{{ __('Titel') }}"
                                          id="label"
                                          value="{{ $report->label }}"
@@ -53,7 +52,7 @@
                         </div>
                         <div class="col-md-4">
                             <x-selectfield id="report_type_id"
-                                           label="Bericht Typ"
+                                           label="{{__('Typ')}}"
                             >
                                 @foreach(App\ReportType::all() as $reportType)
                                     <option value="{{ $reportType->id }}"
@@ -64,7 +63,8 @@
                     </div>
                     <x-textarea label="{{ __('Beschreibung') }}"
                                 id="description"
-                    >{{ $report->description }}</x-textarea>
+                                value="{{ $report->description }}"
+                    />
                     <button class="btn btn-primary">
                         {{ __('Bericht speichern') }}
                         <i class="fas fa-download ml-2"></i>

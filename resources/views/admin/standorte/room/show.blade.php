@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('memStandorte')}}
+    {{__('Raum')}}: {{  $room->r_label  }}
 @endsection
 
 @section('menu')
@@ -23,7 +23,7 @@
             </li>
             <li class="breadcrumb-item">
                 @if($room->building)
-                <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_label }}</a>
+                    <a href="{{ route('location.show', $room->building->location) }}"> {{ $room->building->location->l_label }}</a>
                 @else
                     -
                 @endif
@@ -33,10 +33,10 @@
             </li>
             <li class="breadcrumb-item">
                 @if($room->building)
-                <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_label }}</a>
+                    <a href="{{ route('building.index', $room->building) }}"> {{ $room->building->b_label }}</a>
                 @else
-                -
-                    @endif
+                    -
+                @endif
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('room.index') }}">{{__('Räume')}} <i class="fas fa-angle-right"></i></a>
@@ -174,9 +174,9 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-4 d-none d-md-block">
             <div class="col d-flex justify-content-between">
-                <h1 class="h3"><span class="d-none d-md-inline">{{__('Übersicht Raum')}} </span>{{ $room->r_label }}</h1>
+                <h1 class="h3">{{__('Übersicht Raum')}}: {{ $room->r_label }}</h1>
             </div>
         </div>
         <div class="row">
@@ -289,7 +289,7 @@
                                     />
                                 </div>
                             </div>
-                            <button class="btn btn-primary btn-block"><i class="fas fa-save"></i> {{__('Stammdaten speichern')}}</button>
+                            <x-btnMain block="1">{{__('Stammdaten speichern')}} <i class="fas fa-download"></i></x-btnMain>
                         </form>
                     </div>
                     <div class="tab-pane fade"
@@ -322,70 +322,34 @@
                                            value="room"
                                     >
                                     <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="sp_label"
-                                        >Name kurz
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="sp_label"
-                                               name="sp_label"
-                                               required
-                                               placeholder="Stellplatz Nummer"
-                                               value="{{ old('sp_label')??'' }}"
-                                        >
-                                        @if ($errors->has('sp_label'))
-                                            <span class="text-danger small">{{ $errors->first('sp_label') }}</span>
-                                        @else
-                                            <span class="small text-primary">erforderlich, maximal 20 Zeichen</span>
-                                        @endif
+                                        <x-rtextfield id="sp_label"
+                                                      hideLabel="1"
+                                                      placeholder="{{__('Stellplatz Nummer')}}"
+                                        />
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only"
-                                               for="sp_name"
-                                        >Beschreibung kurz
-                                        </label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="sp_name"
-                                               name="sp_name"
-                                               placeholder="Stellplatz Name"
-                                               value="{{ old('sp_name')??'' }}"
-                                        >
-                                        @if ($errors->has('sp_name'))
-                                            <span class="text-danger small">{{ $errors->first('sp_name') }}</span>
-                                        @else
-                                            <span class="small text-primary">maximal 100 Zeichen</span>
-                                        @endif
+                                        <x-textfield id="sp_name"
+                                                     placeholder="{{ __('Stellplatz Name') }}"
+                                                     hideLabel="1"
+                                                     max="100"
+                                        />
                                     </div>
                                     <div class="col-auto">
-                                        <div class="input-group">
-                                            <label for="stellplatz_typ_id"
-                                                   class="sr-only"
-                                            >Stellplatz Typ angeben
-                                            </label>
-                                            <select name="stellplatz_typ_id"
-                                                    id="stellplatz_typ_id"
-                                                    class="custom-select"
-                                            >
-                                                @foreach (\App\StellplatzTyp::all() as $roomType)
-                                                    <option value="{{ $roomType->id }}"
-                                                            title="{{ $roomType->spt_name  }}"
-                                                    >{{ $roomType->spt_label  }}</option>
-                                                @endforeach
-                                            </select>
-                                            <button type="button"
-                                                    class="btn btn-outline-secondary"
-                                                    data-toggle="modal"
-                                                    data-target="#modalAddStellPlatzType"
-                                            ><i class="fas fa-plus"></i></button>
-                                        </div>
-                                        <span class="small text-primary">Stellplatztyp</span>
+                                        <x-selectModalgroup id="stellplatz_typ_id" hideLabel="1"
+                                                            label="{{__('Stellplatztyp')}}"
+                                            modalid="modalAddStellPlatzType"
+                                        >
+                                    @foreach (\App\StellplatzTyp::all() as $roomType)
+                                        <option value="{{ $roomType->id }}"
+                                                title="{{ $roomType->spt_name  }}"
+                                        >{{ $roomType->spt_label  }}</option>
+                                    @endforeach
+                                        </x-selectModalgroup>
                                     </div>
                                     <div class="col-auto">
                                         <button {{--@if (!env('app.makeobjekte') ) disabled @endif --}} type="submit"
                                                 class="btn btn-primary"
-                                        >Neuen Stellplatz anlegen
+                                        >{{__('Neuen Stellplatz anlegen')}} <i class="fas fa-download ml-2"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -395,9 +359,9 @@
                                     >
                                         <thead>
                                         <tr>
-                                            <th>Nummer</th>
-                                            <th>Platz</th>
-                                            <th>Typ</th>
+                                            <th>{{__('Nummer')}}</th>
+                                            <th>{{__('Name')}}</th>
+                                            <th>{{__('Typ')}}</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -410,7 +374,7 @@
                                                 <td class="text-right">
                                                     <x-menu_context
                                                         :object="$spl"
-                                                        routeOpen="#"
+                                                        routeOpen="{{ route('stellplatz.show', $spl) }}"
                                                         routeCopy="{{ route('copyStellplatz',$spl) }}"
                                                         routeDestory="{{ route('stellplatz.destroy',$spl) }}"
                                                         tabName="roomStellPlatze"
@@ -418,7 +382,6 @@
                                                         objectName="sp_label"
                                                     />
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                         </tbody>

@@ -31,7 +31,7 @@ class StellplatzController extends Controller
     public function index()
     {
         $compartments = Stellplatz::with('stellplatztypes', 'rooms')->sortable()->paginate(10);
-        return view('admin.standorte.compartment.index', compact('compartments'));
+        return view('admin.standorte.storage.index', compact('compartments'));
     }
 
     /**
@@ -41,7 +41,7 @@ class StellplatzController extends Controller
      */
     public function create()
     {
-        return view('admin.standorte.compartment.create');
+        return view('admin.standorte.storage.create');
     }
 
     /**
@@ -91,15 +91,15 @@ class StellplatzController extends Controller
     public function copyStellplatz(Request $reuest)
     {
         $stellplatz = Stellplatz::find($reuest->id);
-        $name = strtr('Kopie_' . $stellplatz->sp_label, 0, 19);
+        $name = substr('stor_' . md5($stellplatz->sp_label), 0, 15);
         $newStellplatz = $stellplatz->replicate()->fill([
             'sp_label' => $name
         ]);
 
         $newStellplatz->save();
 
-        session()->flash('status', 'Der Stellplatzt <strong>' . $stellplatz->sp_label . '</strong> wurde kopiert!');
-        return redirect()->back();
+        session()->flash('status', __('Der Stellplatzt <strong>:name</strong> wurde kopiert!', ['name'=>$stellplatz->sp_label]));
+        return redirect()->route('stellplatz.show',$newStellplatz);
     }
 
     /**
@@ -111,7 +111,7 @@ class StellplatzController extends Controller
      */
     public function show(Stellplatz $stellplatz)
     {
-        return view('admin.standorte.compartment.show', compact('stellplatz'));
+        return view('admin.standorte.storage.show', compact('stellplatz'));
     }
 
     /**
@@ -123,7 +123,7 @@ class StellplatzController extends Controller
      */
     public function edit(Stellplatz $stellplatz)
     {
-        return view('admin.standorte.compartment.edit', compact('stellplatz'));
+        return view('admin.standorte.storage.edit', compact('stellplatz'));
     }
 
     /**

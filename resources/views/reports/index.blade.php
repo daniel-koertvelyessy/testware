@@ -29,7 +29,7 @@
                     <thead>
                     <tr>
                         <th>{{__('Name')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Bezeichnung')}}</th>
+                        <th class="d-none d-md-table-cell">{{__('Beschreibung')}}</th>
                         <th class="d-none d-md-table-cell">{{__('Typ')}}</th>
                         <th></th>
                     </tr>
@@ -45,7 +45,7 @@
                                     {{ $report->name }}
                                 </a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ $report->description }}</td>
+                            <td class="d-none d-md-table-cell">{{ str_limit($report->description,80) }}</td>
                             <td class="d-none d-md-table-cell">{{ $report->types->name }}</td>
                             <td>
                                 <x-menu_context

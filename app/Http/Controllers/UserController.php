@@ -36,6 +36,15 @@ class UserController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return Application|Factory|Response|View
+     */
+    public function ldap()
+    {
+        return view('admin.user.ldap', ['users' => User::with('roles')->get()]);
+    }
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)

@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-    {{__('memStandorte')}}
+    {{__('Raum bearbeiten')}}
 @endsection
 
 @section('menu')

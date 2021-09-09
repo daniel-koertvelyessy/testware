@@ -148,25 +148,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     @forelse(auth()->user()->unreadNotifications()->get() as $notification)
-                        <div class="d-flex border p-2 flex-column"
-                             id="msg{{ $notification->id }}"
-                        >
-                            <div class="d-flex ml-2 justify-content-between small">
-                                <span>
-                                    {{__('Nachricht')}}:
-                                     {{ $notification->type === 'App\Notifications\EquipmentEventChanged' ? 'Änderung Ereignis' : 'Neues Ereignis' }}
-                                </span>
-
-                                <span>{{ $notification->created_at->DiffForHumans() }}</span>
-                            </div>
-                            <div class="d-flex mt-3 ml-2 flex-row align-items-center">
-                                <div class="d-flex
-                                 flex-column"
-                                >
-                                    <span class="small">{{__('von')}}: {{ $notification->data['userid'] }}</span> <span class="small">{{__('Nachricht')}}:</span> <span class="lead"> {{ $notification->data['message'] }}</span>
-                                </div>
-                            </div>
-                        </div>
+                        <x-message_modal :notification="$notification" :link="route('event.show',$notification->data['eventid'])" />
                     @empty
                         <span class="list-group-item">
                                 <x-notifyer>{{__('Keine neuen Nachrichten')}}</x-notifyer>

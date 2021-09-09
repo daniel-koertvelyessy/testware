@@ -49,11 +49,11 @@ class ControlEquipment extends Model
     {
         $date = Carbon::parse($qeitem->qe_control_date_due)->DiffForHumans();
         if (now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due) {
-            return '<span class="fas fa-circle text-success mr-3"></span> ' . $date;
+            return '<span class="fas fa-circle text-success mr-3"></span> ' . '<span class="d-none d-md-inline">' . $date . '</span>';
         } elseif (now()->addWeeks($qeitem->qe_control_date_warn) >= $qeitem->qe_control_date_due && now() < $qeitem->qe_control_date_due) {
-            return '<span class="fas fa-circle text-warning mr-3"></span> ' . $date;
+            return '<span class="fas fa-circle text-warning mr-3"></span> ' . '<span class="d-none d-md-inline">' . $date . '</span>';
         } else {
-            return '<span class="fas fa-circle text-danger mr-3"></span> ' . $date;
+            return '<span class="fas fa-circle text-danger mr-3"></span> ' . '<span class="d-none d-md-inline">' . $date . '</span>';
         }
 
     }

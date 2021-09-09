@@ -60,7 +60,7 @@ class AnforderungControlItemController extends Controller
 
         AnforderungControlItem::create($this->validateAnforderungControlItem());
 
-        $request->session()->flash('status', __('Der Vorgang <strong>:label</strong> wurde angelegt!', ['label' => request('aci_label')]));
+        $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> wurde angelegt!', ['label' => request('aci_label')]));
         return back();
     }
 
@@ -108,7 +108,7 @@ class AnforderungControlItemController extends Controller
         $newAci = $anforderungcontrolitem->replicate()->fill(['aci_label' => $txt]);
 
         $newAci->save();
-        $request->session()->flash('status', __('Der Vorgang <strong>:label</strong> wurde kopiert!', ['label' => request('aci_label')]));
+        $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> wurde kopiert!', ['label' => request('aci_label')]));
         return redirect()->route('anforderungcontrolitem.show', ['anforderungcontrolitem' => $newAci]);
     }
 
@@ -155,7 +155,7 @@ class AnforderungControlItemController extends Controller
         $anforderungcontrolitem->save();
 
 
-        $request->session()->flash('status', __('Der Vorgang <strong>:name</strong> wurde aktualisiert!', ['name' => request('aci_name')]));
+        $request->session()->flash('status', __('Der Prüfschritt <strong>:name</strong> wurde aktualisiert!', ['name' => request('aci_name')]));
         return back();
     }
 
@@ -170,7 +170,7 @@ class AnforderungControlItemController extends Controller
     public function destroy(AnforderungControlItem $anforderungcontrolitem)
     {
         $anforderungcontrolitem->delete();
-        \request()->session()->flash('status', __('Der Vorgang wurde gelöscht!'));
+        \request()->session()->flash('status', __('Der Prüfschritt wurde gelöscht!'));
         return back();
     }
 

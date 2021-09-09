@@ -57,7 +57,7 @@
 
                         <x-selectfield name="location_id"
                                        id="location_id_modal"
-                                       label="{{ __('befindet sich in ') . __('Standort') }}"
+                                       label="{{ __('Befindet sich in ') . __('Standort') }}"
                         >
                             @foreach(\App\Location::all() as $loc)
                                 <option value="{{ $loc->id }}"
@@ -67,9 +67,8 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <x-textfield id="b_label"
+                                <x-rtextfield id="b_label"
                                              label="{{ __('Kurzbezeichnung') }}"
-                                             required
                                              max="20"
                                 />
                             </div>
@@ -79,7 +78,6 @@
                                 />
                             </div>
                         </div>
-
 
                         <x-textfield id="b_name"
                                      label="{{ __('Bezeichnung') }}"
@@ -116,7 +114,6 @@
                             </div>
                             <div class="col-md-6">
                                 <h2 class="h5">{{__('Wareneingang')}}</h2>
-
                                 <div class="form-group">
                                     <div class="form-check">
                                         <input class="form-check-input"
@@ -131,7 +128,7 @@
                                     </div>
                                 </div>
                                 <x-textfield id="b_we_name"
-                                             label="{{ __('WE Bezeichnung') }}"
+                                             label="{{ __('Name') }}"
                                 />
                             </div>
                         </div>
@@ -145,7 +142,7 @@
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >{{__('speichern')}}
+                        >{{__('Speichern')}}
                         </button>
                     </div>
                 </form>
@@ -196,7 +193,7 @@
                                id="storage_id_room"
                                value="{{ Str::uuid() }}"
                         >
-                        <x-selectfield label="{{__('Befindet sich in Gebäude')}}"
+                        <x-selectfield label="{{__('Befindet sich in ')}} {{ __('Gebäude') }}"
                                        name="building_id"
                                        id="building_id_room_modal"
                         >
@@ -216,7 +213,7 @@
                                 <label for="room_type_id">{{__('Raumtyp festlegen')}}</label>
                                 <label for="newRoomType"
                                        class="sr-only"
-                                >{{__('neuer Raumtyp')}}</label>
+                                >{{__('Raumtyp festlegen')}}</label>
                                 <div class="input-group">
                                     <select name="room_type_id"
                                             class="custom-select"
@@ -238,7 +235,7 @@
                         </div>
 
                         <x-textfield id="r_name"
-                                     label="{{ __('Name lang') }}"
+                                     label="{{ __('Name') }}"
                         />
 
                         <x-textarea id="r_description"
@@ -255,7 +252,7 @@
                         </button>
                         <button type="submit"
                                 class="btn btn-primary"
-                        >{{__('speichern')}}
+                        >{{__('Speichern')}}
                         </button>
                     </div>
                 </form>
@@ -307,7 +304,7 @@
                         >
                         <x-selectfield name="room_id"
                                        id="room_id_compartment_modal"
-                                       label="{{__('Befindet sich im Raum')}}"
+                                       label="{{__('Befindet sich in ')}} {{ __('Room') }}"
                         >
                             @foreach(App\Room::all() as $room)
                                 <option value="{{ $room->id }}">{{ $room->r_label . ' ' . $room->r_name }}</option>
@@ -430,7 +427,7 @@
 @section('content')
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row d-none d-md-block mb-4">
             <div class="col">
                 <h1 class="h3">{{__('Explorer')}}</h1>
             </div>
@@ -657,7 +654,7 @@
                        name="compartment_id"
                        id="compartment_id"
                 >
-                <h2 class="h4">{{__('Stellpätze')}}</h2>
+                <h2 class="h4">{{__('Stellplätze')}}</h2>
                 <div class="btn-toolbar"
                      role="toolbar"
                      aria-label="{{__('Übersicht der Stellplätze des ausgewählten Raums')}}"

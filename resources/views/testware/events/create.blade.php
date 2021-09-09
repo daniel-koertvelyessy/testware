@@ -1,9 +1,11 @@
 @extends('layout.layout-admin')
 
-@section('mainSection', 'testWare')
+@section('mainSection')
+    {{__('Neues Ereignis erstellen')}}
+@endsection
 
 @section('pagetitle')
-    {{__('Ereignis erstellen')}}
+    {{__('Neues Ereignis erstellen')}}
 @endsection
 
 @section('menu')
@@ -12,7 +14,7 @@
 
 @section('content')
     <div class="container-md">
-        <div class="row">
+        <div class="row mb-4 d-none d-md-block">
             <div class="col">
                 <h1 class="h3">
                     {{ __('Neues Ereignis erstellen') }}
@@ -21,7 +23,9 @@
         </div>
         <div class="row">
             <div class="col">
-                <form action="{{ route('event.store') }}" method="post">
+                <form action="{{ route('event.store') }}"
+                      method="post"
+                >
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -29,10 +33,29 @@
                                    name="equipment_id"
                                    id="equipment_id"
                             >
-                            <x-textfield id="setEquipmetID" label="Gerät" required class="getEquipment"  />
+                            <label for="setEquipmetID">{{__('Gerät')}}</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"
+                                          id="setEquipmentIdIcon"
+                                    ><i class="fas fa-search"></i></span>
+                                </div>
+                                <input type="text"
+                                       id="setEquipmetID"
+                                       required
+                                       class="form-control getEquipment"
+                                       placeholder="{{ __('Suche') }}"
+                                       aria-label="{{__('Gerät')}}"
+                                       aria-describedby="setEquipmentIdIcon"
+                                >
+                            </div>
+
+
                         </div>
                         <div class="col-md-6">
-                            <x-selectfield id="equipment_event_user" label="Verantwortlicher Benutzer">
+                            <x-selectfield id="equipment_event_user"
+                                           label="{{__('Verantwortlicher Benutzer')}}"
+                            >
                                 @foreach(App\User::all() as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
@@ -41,12 +64,17 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-textarea id="equipment_event_text" label="Fehlerbeschreibung" required />
+                            <x-textarea id="equipment_event_text"
+                                        label="{{__('Fehlerbeschreibung')}}"
+                                        required
+                            />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-selectfield id="equipment_state_id" label="Neuer Gerätestatus">
+                            <x-selectfield id="equipment_state_id"
+                                           label="{{__('Neuer Gerätestatus')}}"
+                            >
                                 @foreach(App\EquipmentState::all() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}">
                                         {{ $equipmentState->estat_name }}
@@ -66,12 +94,22 @@
 @endsection
 
 @section('autoloadscripts')
-{{--    <link rel="stylesheet"--}}
-{{--          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"--}}
-{{--    >--}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    {{--    <link rel="stylesheet"--}}
+    {{--          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"--}}
+    {{--    >
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script>
 
+        $(document).on('blur', '#setEquipmetID', function () {
+            const setEquipmetID_node = $('#setEquipmetID');
+            if (!$('#equipment_id').val()) {
+                setEquipmetID_node.addClass('is-invalid');
+                $('label[for="setEquipmetID"]').text('{{ __('Bitte ein vorhandenes Gerät eingeben!') }}').addClass('text-danger');
+            } else {
+                setEquipmetID_node.removeClass('is-invalid').addClass('is-valid');
+                $('label[for="setEquipmetID"]').text('{{ __('Gerät') }}').removeClass('text-danger');
+            }
+        })
         $(".getEquipment").autocomplete({
             source: function (request, response) {
                 $.ajax({

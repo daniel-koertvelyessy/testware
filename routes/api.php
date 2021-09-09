@@ -30,8 +30,9 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
         'location'                   => 'LocationController',
         'building'                   => 'BuildingController',
         'room'                       => 'RoomController',
-        'compartment'                => 'CompartmentController',
+        'storage'                    => 'CompartmentController',
         'product'                    => 'ProductController',
+        'company'                    => 'CompanyController',
         'product_parameter'          => 'ProductParameterController',
         'product_category'           => 'ProductCategoryController',
         'product_category_parameter' => 'ProductCategoryParameterController',
@@ -40,12 +41,10 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
     Route::get('/location_list_complete', 'LocationController@full')->name('location_list_complete');
     Route::get('/building_list_complete', 'BuildingController@full')->name('building_list_complete');
     Route::get('/room_list_complete', 'RoomController@full')->name('room_list_complete');
-    Route::get('/compartment_list_complete', 'CompartmentController@full')->name('compartment_list_complete');
+    Route::get('/storage_list_complete', 'CompartmentController@full')->name('storage_list_complete');
 
     /**
-     *
      *   Product API endpoints
-     *
      */
     Route::get('/product_list_complete', 'ProductController@full')->name('product_list_complete');
     Route::post('/products', 'ProductController@storemany')->name('addProducts');
@@ -54,11 +53,10 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
 //    Route::post('/product/add/instructed_employee/', 'ProductController@addInstructedUser')->name('product.add.instructed_user');
 
 
-
     Route::post('/locations', 'LocationController@storemany')->name('addlocations');
     Route::post('/buildings', 'BuildingController@storemany')->name('addbuildings');
     Route::post('/rooms', 'RoomController@storemany')->name('addrooms');
-    Route::post('/compartments', 'CompartmentController@storemany')->name('addcompartments');
+    Route::post('/storages', 'CompartmentController@storemany')->name('addstorages');
 
 });
 

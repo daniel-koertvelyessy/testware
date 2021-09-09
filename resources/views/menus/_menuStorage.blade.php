@@ -8,7 +8,7 @@
     <a class="nav-link "
        href="{{ route('storageMain') }}"
     >
-        <i class="fas fa-desktop"></i> Start
+        <i class="fas fa-desktop"></i> {{__('Start')}}
     </a>
 </li>
 
@@ -17,7 +17,7 @@
         <a class="nav-link "
            href="{{ route('lexplorer') }}"
         >
-            <i class="fas fa-project-diagram"></i> Explorer
+            <i class="fas fa-project-diagram"></i> {{__('Explorer')}}
         </a>
     </li>
 @endcan
@@ -61,7 +61,7 @@
                        href="{{ route('exportjson.locations') }}"
                     >
                         <i class="fas fa-file-export mr-2 fa-fw"></i>
-                        {{__('Standorte')}} {{ __('exportieren') }}
+                        {{__('Standorte exportieren') }}
                     </a>
                 </li>
             @endif
@@ -111,7 +111,7 @@
                        href="{{ route('exportjson.buildings') }}"
                     >
                         <i class="fas fa-file-export mr-2 fa-fw"></i>
-                        {{__('Gebäude')}} {{ __('exportieren') }}
+                        {{__('Gebäude exportieren') }}
                     </a>
                 </li>
             @endcan
@@ -168,7 +168,7 @@
                        href="{{ route('exportjson.rooms') }}"
                     >
                         <i class="fas fa-file-export mr-2 fa-fw"></i>
-                        {{__('Räume')}} {{ __('exportieren') }}
+                        {{__('Räume exportieren') }}
                     </a>
                 </li>
             @endcan
@@ -225,7 +225,7 @@
                        href="{{ route('exportjson.compartments') }}"
                     >
                         <i class="fas fa-file-export mr-2 fa-fw"></i>
-                        {{__('Stellplätze')}} {{ __('exportieren') }}
+                        {{__('Stellplätze exportieren') }}
                     </a>
                 </li>
             @endcan

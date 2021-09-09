@@ -62,8 +62,7 @@ class BuildingsController extends Controller
      *
      * @param  Request $request
      *
-     * @return Application|RedirectResponse|Response|Redirector
-     * @throws AuthorizationException
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
@@ -75,7 +74,7 @@ class BuildingsController extends Controller
 
     public function getBuildingList($id)
     {
-        return DB::table('buildings')->where('location_id', $id)->get();
+        return Building::where('location_id', $id)->get();
     }
 
     /**
@@ -110,7 +109,7 @@ class BuildingsController extends Controller
      * @param  Request  $request
      * @param  Building $building
      *
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function update(Request $request, Building $building)
     {
@@ -187,12 +186,12 @@ class BuildingsController extends Controller
                 $storage->storage_label = $request->b_label;
                 $storage->save();
             }
-            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde aktualisiert!');
+            $request->session()->flash('status', __('Das Gebäude <strong>:name</strong> wurde aktualisiert!',['name'=>request('b_label')]));
         } else {
             $building = new Building(); //::create();
 
             $std = (new Storage)->add($request->storage_id, $request->b_label, 'buildings');
-            $request->session()->flash('status', 'Das Gebäude <strong>' . request('b_label') . '</strong> wurde angelegt!');
+            $request->session()->flash('status', __('Das Gebäude <strong>:name</strong> wurde angelegt!',['name'=>request('b_label')]));
         }
         $building->b_label = $request->b_label;
         $building->b_name_ort = $request->b_name_ort;
@@ -226,7 +225,7 @@ class BuildingsController extends Controller
         $stnd->delete();
 
         Building::destroy($request->id);
-        $request->session()->flash('status', 'Das Gebäude <strong>' . $name . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', __('Das Gebäude <strong>:name</strong> wurde gelöscht!',['name'=>$name]));
         return redirect()->back();
     }
 
@@ -302,10 +301,10 @@ class BuildingsController extends Controller
 <table class="table table-responsive-md table-sm table-striped">
     <thead>
     <tr>
-    <th>Standort</th>
-    <th>Nummer</th>
-    <th>Name</th>
-    <th>Gebäudetyp</th>
+    <th>'. __('Standort') . '</th>
+    <th>'. __('Nummer') . '</th>
+    <th>'. __('Name') . '</th>
+    <th>'. __('Gebäudetyp') . '</th>
     <th></th>
 </tr>
 </thead>

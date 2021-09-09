@@ -31,6 +31,7 @@ class EquipmentEventItem extends Model {
         $this->user_id = (isset($request->user_id)) ? $request->user_id : Auth()->user()->id;
         $this->equipment_event_id = $request->equipment_event_id;
         $this->save();
+        return $this;
     }
 
 }

@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h4">{{__('Übersicht')}}</h1>
+                <h1 class="h4">{{__('Übersicht Prüfungen')}}</h1>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                     <tr>
                         <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
                         <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventarnummer'))</th>
-                        <th class="d-none d-md-table-cell">@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
+                        <th>@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th>@sortablelink('qe_control_date_due', __('Fällig'))</th>
                     </tr>
                     </thead>
@@ -36,18 +36,26 @@
                                 {{ $controlItem->Equipment->eq_name }}
                             </td>
                             <td>
-                                <span class="d-md-none">{!! $controlItem->checkDueDateIcon($controlItem) !!}</span>
                                 <a href="{{ route('control.create',['test_id' => $controlItem]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
                             </td>
-                            <td class="d-none d-md-table-cell">
+                            <td>
+                                <span class="d-md-none">
+                                    {{ $controlItem->Anforderung->an_label }}
+                                </span>
+
+                                <span class="d-none d-md-table-cell">
                                 @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
                                     <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
                                         {{ $controlItem->Anforderung->an_name }}
                                     </a>
-                                    {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
+                                    <span>
+                                        {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
+                                    </span>
+
                                 @else
                                     {{ $controlItem->Anforderung->an_name }}
                                 @endif
+                                    </span>
                             </td>
                             <td>
                                 {!! $controlItem->checkDueDate($controlItem) !!}

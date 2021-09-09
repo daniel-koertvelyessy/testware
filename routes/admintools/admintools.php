@@ -15,6 +15,7 @@ Route::get('organisation', function () {
 
 Route::get('admin', 'AdminController@index')->name('admin.index');
 //Route::get('admin/user', 'AdminController@indexUser')->name('user.index');
+//Route::get('admin/user/ldap', 'UserController@ldap')->name('user.ldap');
 Route::get('admin/reports', 'AdminController@indexReports');
 Route::get('admin/reports/template', 'AdminController@indexReportsTemplate')->name('report.tempate');
 Route::get('admin/systems', 'AdminController@systems')->name('systems');
