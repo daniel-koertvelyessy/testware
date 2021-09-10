@@ -9,7 +9,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
-    <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
+    <link id="themeId" rel="stylesheet" href="{{ asset('css/tbs.css') }}">
     <title>@yield('pagetitle')</title>
 </head>
 <body>

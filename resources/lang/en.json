@@ -900,7 +900,16 @@
     "Keine neuen Nachrichten": "No new messages",
     "Nachrichten als gelesen markieren": "Mark message as read",
     "von": "from",
-    "####": "####",
-    "####": "####",
-    "####": "####"
+    "Übersicht Gerät": "Übersicht Gerät",
+    "Scan": "Scan",
+    "Schaden melden": "Schaden melden",
+    "Kontakt": "Kontakt",
+    "Keine Dateien gefunden": "No files found",
+    "Details zum Gerät": "Equipmennt details",
+    "Inventar-Nr": "Inventary-No",
+    "Serien-Nr": "Serial-No",
+    "zuletzt bearbeitet": "Last modified",
+    "Gerät Dokumente": "Equipment documents",
+    "Produktdokumente": "Product documents",
+    "Sprache": "en"
 }

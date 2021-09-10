@@ -606,7 +606,7 @@
     "Fällig": "Fällig",
     "80% der Geräte sind einsatzbereit": "80% der Geräte sind einsatzbereit",
     "Mitteillungen": "Mitteillungen",
-    "zum Gerät": "zum Gerät",
+    "Gerät öffnen": "Gerät öffnen",
     "Gerät angelegt": "Gerät angelegt",
     "Das Gerät mit der Inventar-Nr :invno wurde angelegt": "Das Gerät mit der Inventar-Nr :invno wurde angelegt",
     "Anforderung angelegt": "Anforderung angelegt",
@@ -751,7 +751,6 @@
     "Bitte beachten Sie, dass Räume diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!": "Bitte beachten Sie, dass Räume diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!",
     "Bitte beachten Sie, dass Adressen diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!": "Bitte beachten Sie, dass Adressen diesen Typs verloren gehen können! Bitte prüfen Sie vorab, welche Adressen von der Löschung betroffen sein werden!",
     "neues Gerät anlegen": "neues Gerät anlegen",
-
     "Anforderungen können verschiedene Aufgaben umfassen. Mit Hilfe von Anforderungs-typen können Sie diese gruppieren.": "Anforderungen können verschiedene Aufgaben umfassen. Mit Hilfe von Anforderungs-typen können Sie diese gruppieren.",
     "Erstellen Sie Dokumenttypen wie zum Beispiel Bedienungs-anleitungen, Zeichnugen oder Kataloge.": "Erstellen Sie Dokumenttypen wie zum Beispiel Bedienungs-anleitungen, Zeichnugen oder Kataloge.",
     "Anforderungstyp wählen": "Anforderungstyp wählen",
@@ -899,8 +898,17 @@
     "Keine neuen Nachrichten": "Keine neuen Nachrichten",
     "Nachrichten als gelesen markieren": "Nachrichten als gelesen markieren",
     "von": "von",
-    "#####": "#####",
-    "#####": "#####",
+    "Übersicht Gerät": "Übersicht Gerät",
+    "Scan": "Scan",
+    "Schaden melden": "Schaden melden",
+    "Kontakt": "Kontakt",
+    "Keine Dateien gefunden": "Keine Dateien gefunden",
+    "Details zum Gerät": "Details zum Gerät",
+    "Inventar-Nr": "Inventar-Nr",
+    "Serien-Nr": "Serien-Nr",
+    "zuletzt bearbeitet": "zuletzt bearbeitet",
+    "Gerät Dokumente": "Gerät Dokumente",
+    "Produktdokumente": "Produktdokumente",
+    "Sprache": "de",
     "###": "###"
-
 }

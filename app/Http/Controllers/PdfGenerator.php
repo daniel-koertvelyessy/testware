@@ -119,12 +119,11 @@ class PdfGenerator extends Controller
     static function makePDFEquipmentLabel($euqipment_id)
     {
         $equipment = Equipment::findOrFail($euqipment_id);
-        $html = view('pdf.html.qrcode_Equipment', ['equipment' => $euqipment_id])->render();
+//        $html = view('pdf.html.qrcode_Equipment', ['equipment' => $euqipment_id])->render();
         PDF::SetLineWidth(1);
         PDF::setHeaderCallback(function ($pdf) use ($euqipment_id, $equipment) {
 
             $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . EquipmentUid::where('equipment_id', $euqipment_id)->first()->equipment_uid;
-
             $style = [
                 'border'        => 0,
                 'vpadding'      => 0,
@@ -157,7 +156,7 @@ class PdfGenerator extends Controller
 
             //            $pdf->cell(0,10, $inv,0,1);
         });
-
+        PDF::setTitle('QRCODE_' . $equipment->eq_inventar_nr . '_' . date('Y-m-d'));
         PDF::SetAutoPageBreak(false);
         PDF::SetMargins(2, 2, 2);
         PDF::AddPage('P', [

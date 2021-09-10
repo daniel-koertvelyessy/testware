@@ -23,22 +23,13 @@
     <meta name="msapplication-TileImage"
           content="{{ asset('img/icon/InfoSy_Logo_greenYellow.svg') }}"
     >
-    <script src="https://kit.fontawesome.com/b5297e65e8.js"
-            crossorigin="anonymous"
-    ></script>
     <link rel="stylesheet"
           href="{{ asset(mix('css/app.css')) }}"
     >
     <link id="themeId"
           rel="stylesheet"
-          href="{{ asset('	css/flatly.css') }}"
+          href="{{ asset('css/tbs.css') }}"
     >
-    <link rel="stylesheet"
-          href="{{ asset('css/styles.css') }}"
-    >
-    <script type="text/javascript"
-            src="{{ asset('js/jquery_3.5.min.js') }}"
-    ></script>
     <title>@yield('pagetitle')</title>
 </head>
 <body>
@@ -51,7 +42,12 @@
                  alt=""
                  height="30px"
             >
-            <span class="ml-3 d-md-none">testWare InfoSy</span>
+        </a>
+        <a href="/"
+           class="ml-1 navbar-brand d-lg-none"
+           style="border-bottom: 2px solid transparent !important;"
+        >
+        @yield('mainSection')
         </a>
         <button class="navbar-toggler"
                 type="button"
@@ -71,14 +67,14 @@
                     <a class="nav-link"
                        href="{{ route('portal-main') }}"
                     >
-                        <i class="fas fa-chalkboard"></i> Portal
+                        <i class="fas fa-chalkboard"></i> {{__('Portal')}}
                     </a>
                 </li>
                 <li class="nav-item {{ (strpos(Request::path(), 'app')!==false) ? ' active ' : '' }}">
                     <a class="nav-link"
                        href="{{ route('app') }}"
                     >
-                        <i class="fas fa-qrcode"></i> Scan
+                        <i class="fas fa-qrcode"></i> {{__('Scan')}}
                     </a>
                 </li>
                 @if(isset($edata)||isset($ident))
@@ -86,14 +82,14 @@
                         <a class="nav-link"
                            href="{{ route('edata',$ident) }}"
                         >
-                            <i class="fas fa-box"></i> Gerät
+                            <i class="fas fa-box"></i> {{__('Gerät')}}
                         </a>
                     </li>
                     <li class="nav-item {{ (strpos(Request::path(), 'edmg')!==false) ? ' active ' : '' }}">
                         <a class="nav-link"
                            href="{{ route('edmg',$ident) }}"
                         >
-                            <i class="fas fa-inbox"></i> Schaden melden
+                            <i class="fas fa-inbox"></i> {{__('Schaden melden')}}
                         </a>
                     </li>
                 @endif
@@ -101,34 +97,24 @@
                     <a class="nav-link"
                        href="{{ route('support') }}"
                     >
-                        <i class="fas fa-envelope"></i> Kontakt
+                        <i class="fas fa-envelope"></i> {{__('Kontakt')}}
                     </a>
                 </li>
-                @auth
-                    <x-accountNav/>
-                @endauth
             </ul>
+            <x-accountNav/>
         </div>
     </nav>
 </header>
-<main id="app"
-      class="pt-3"
->
+<main id="app">
     @yield('content')
 </main>
 <x-section-footer/>
-
-
 <script type="text/javascript"
         src="{{ asset(mix('js/app.js')) }}"
 ></script>
 <script type="text/javascript"
         src="{{ asset('js/main.js') }}"
 ></script>
-
-
 @yield('scripts')
-
-
 </body>
 </html>

@@ -1,4 +1,4 @@
-@auth
+@if(Auth::user())
     <ul class="navbar-nav">
         <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
             <a class="nav-link "
@@ -85,4 +85,30 @@
     >
         @csrf
     </form>
-@endauth
+
+@else
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown dropleft">
+            <a class="nav-link "
+               href="#"
+               id="navbarUserAccount"
+               role="button"
+               data-toggle="dropdown"
+               aria-expanded="false"
+            >
+                {{__('Sprache')}}
+            </a>
+            <ul class="dropdown-menu"
+                aria-labelledby="navbarUserAccount"
+            >
+                @foreach(App\User::LOCALES as $locale)
+                <li>
+                    <a class="dropdown-item"
+                       href="?locale={{ App\User::LANGS[$locale] }}"
+                    >{{ $locale }}</a>
+                </li>
+                @endforeach
+            </ul>
+        </li>
+    </ul>
+@endif

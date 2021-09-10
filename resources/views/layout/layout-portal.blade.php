@@ -28,7 +28,7 @@
     >
     <link id="themeId"
           rel="stylesheet"
-          href="{{ asset('css/flatly.css') }}"
+          href="{{ asset('css/tbs.css') }}"
     >
     @auth
         <link id="themeId"

@@ -4,8 +4,8 @@
     {{__('Willkommen')}}
 @endsection
 
-@section('navigation')
-    {{--    @include('menus._menuPortal')--}}
+@section('mainSection')
+{{__('Scan')}}
 @endsection
 
 @section('content')

@@ -20,7 +20,15 @@ class User extends Authenticatable
         'en' => 'English',
         'nl' => 'Nederlands',
         'th' => 'Tailand',
-        'fr' => 'French'
+        'fr' => 'France'
+    ];
+
+    public const LANGS = [
+        'Deutsch' => 'de',
+        'English' => 'en',
+        'Nederlands' => 'nl',
+        'Tailand' => 'th',
+        'France' => 'fr'
     ];
 
     public function notes()
