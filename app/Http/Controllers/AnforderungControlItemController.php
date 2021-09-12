@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AnforderungControlItem;
+use App\ControlEventItem;
 use Exception;
 use http\Client\Response;
 use Illuminate\Contracts\Foundation\Application;
@@ -121,7 +122,12 @@ class AnforderungControlItemController extends Controller
      */
     public function show(AnforderungControlItem $anforderungcontrolitem)
     {
-        return view('admin.verordnung.anforderungitem.show', ['anforderungcontrolitem' => $anforderungcontrolitem]);
+        return view('admin.verordnung.anforderungitem.show', [
+            'anforderungcontrolitem' => $anforderungcontrolitem,
+            'testEventFromItem' => ControlEventItem::with('ControlEvent')->where('control_item_aci',
+                $anforderungcontrolitem->id)
+                ->get()
+        ]);
     }
 
     /**
