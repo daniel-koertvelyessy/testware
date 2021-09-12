@@ -117,7 +117,7 @@
             <li class="nav-item bg-white border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('anforderungcontrolitem.index') }}"
-                > {{__('Vorgänge')}}
+                > {{__('Prüfschritte')}}
                 </a>
             </li>
         </ul>

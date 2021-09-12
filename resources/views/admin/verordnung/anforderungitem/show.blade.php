@@ -1,23 +1,50 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Kontrollvorgang')}} &triangleright; testWare
+{{__('Prüfschritt')}} {{ $anforderungcontrolitem->aci_label }} &triangleright; testWare
 @endsection
 
 @section('mainSection')
-    {{__('Kontrollvorgang')}}
+    {{__('Prüfschritt')}}
 @endsection
 
 @section('menu')
     @include('menus._menuVerordnung')
 @endsection
 
+@section('modals')
+
+    <x-modals.form_modal modalId="modalDeleteTestProcedure"
+                         title="{{ __('Prüfschritt löschen') }}"
+                         methode="DELETE"
+                         modalType="danger"
+                         modalSize="lg"
+                         modalRoute="{{ route('anforderungcontrolitem.destroy',$anforderungcontrolitem) }}"
+                         btnSubmit="{{ __('Prüfschritt entgültig löschen') }}">
+        <input type="hidden" name="id" id="id" value="{{$anforderungcontrolitem->id}}">
+        @if($testEventFromItem->count()>0)
+        <h1 class="h3">{{ __('Vorsicht') }}</h1>
+        <p>{{ __('Folgende Prüfungen haben diesen Prüfschritt verwendet. Ein Löschung lässt deren Zuordnung nicht
+        mehr nachvollziehen!') }}</p>
+        <ul class="list-unstyled">
+            @foreach($testEventFromItem as $item )
+                <li class="list-group-item">{{ $item->ControlEvent->control_event_date }} {{ $item->ControlEvent->control_event_controller_name
+                }}</li>
+            @endforeach
+        </ul>
+
+            @else
+            <p>{{ __('Es wurden keine vergangenen Prüfungen mit diesem Prüfschritt gefunden.') }}</p>
+            @endif
+    </x-modals.form_modal>
+
+@endsection
 
 @section('content')
     <div class="container">
         <div class="row mb-4 d-none d-md-block">
             <div class="col">
-                <h1 class="h3">{{__('Kontrollvorgang')}}</h1>
+                <h1 class="h3">{{__('Prüfschritt')}}</h1>
             </div>
         </div>
         <div class="row">
@@ -40,7 +67,7 @@
                             <option value="{{ $anforderung->id }}"
                                     @if ($anforderung->id === $anforderungcontrolitem->anforderung_id )
                                     selected
-                                @endif
+                                    @endif
                             >{{ $anforderung->an_name }}</option>
                         @endforeach
                     </x-selectfield>
@@ -66,7 +93,7 @@
                                        id="aci_control_equipment_required"
                                        @if ($anforderungcontrolitem->aci_control_equipment_required)
                                        checked
-                                    @endif
+                                        @endif
                                 >
                                 <label class="custom-control-label"
                                        for="aci_control_equipment_required"
@@ -101,10 +128,10 @@
                                     id="aci_value_target_mode"
                                     class="custom-select"
                             >
-                                <option  @if($anforderungcontrolitem->aci_value_target_mode === NULL) selected @endif
-                                        value="">{{ __('Vorgang ohne Zielwert') }}</option>
+                                <option @if($anforderungcontrolitem->aci_value_target_mode === NULL) selected @endif
+                                value="">{{ __('Vorgang ohne Zielwert') }}</option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected @endif
-                                        value="lt"
+                                value="lt"
                                 >{{__('Kleiner als Soll')}}
                                 </option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='eq') selected
@@ -131,7 +158,7 @@
                                        name="aci_value_tol_mod"
                                        class="custom-control-input"
                                        value="abs"
-                                    {{ $anforderungcontrolitem->aci_value_tol_mod === 'abs'? ' checked ' :'' }}
+                                        {{ $anforderungcontrolitem->aci_value_tol_mod === 'abs'? ' checked ' :'' }}
                                 >
                                 <label class="custom-control-label"
                                        for="aci_value_tol_mod_abs"
@@ -144,7 +171,7 @@
                                        name="aci_value_tol_mod"
                                        class="custom-control-input"
                                        value="pro"
-                                    {{ $anforderungcontrolitem->aci_value_tol_mod === 'pro'? ' checked ' :'' }}
+                                        {{ $anforderungcontrolitem->aci_value_tol_mod === 'pro'? ' checked ' :'' }}
                                 >
                                 <label class="custom-control-label"
                                        for="aci_value_tol_mod_pro"
@@ -164,7 +191,7 @@
                                        value="0"
                                        @if (!$anforderungcontrolitem->aci_execution)
                                        checked
-                                    @endif
+                                        @endif
                                 >
                                 <label class="custom-control-label"
                                        for="updt_aci_internal"
@@ -178,10 +205,11 @@
                                     <option value="{{ $user->id }}"
                                             @if ($user->id === $anforderungcontrolitem->aci_contact_id)
                                             selected
-                                        @endif
+                                            @endif
                                     >
                                         @if($user->profile)
-                                            {{ substr($user->profile->ma_vorname,0,1)??''}}. {{ $user->profile->ma_name }}
+                                            {{ substr($user->profile->ma_vorname,0,1)??''}}
+                                            . {{ $user->profile->ma_name }}
                                         @else
                                             {{ $user->name }}
                                         @endif
@@ -202,7 +230,7 @@
                                        value="1"
                                        @if ($anforderungcontrolitem->aci_execution)
                                        checked
-                                    @endif
+                                        @endif
                                 >
                                 <label class="custom-control-label"
                                        for="updt_aci_external"
@@ -217,7 +245,7 @@
                                         <option value="{{ $firma->id }}"
                                                 @if ($firma->id === $anforderungcontrolitem->firma_id)
                                                 selected
-                                            @endif
+                                                @endif
                                         >{{ $firma->fa_name }}</option>
                                     @endif
 
@@ -227,6 +255,11 @@
                     </div>
 
                     <button class="btn btn-primary">{{__('Prüfschritt speichern')}}</button>
+                    <button class="btn btn-outline-danger ml-2"
+                            data-toggle="modal"
+                            type="button"
+                            data-target="#modalDeleteTestProcedure"
+                    >{{ __('Prüfschritt löschen') }}</button>
                 </form>
             </div>
         </div>
