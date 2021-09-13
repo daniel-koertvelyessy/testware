@@ -7,9 +7,9 @@
     'btnSubmit' => __('Senden'),
     'modalType' => 'sd',
      'typeGBColor'=>[
-            'warning' => 'bg-warning',
-            'danger' => 'bg-danger text-white',
-            'info' => 'bg-info',
+            'warning' => 'text-warning',
+            'danger' => 'text-danger',
+            'info' => 'text-info',
             'sd'=>'',
     ],
     'typeBtnColor'=>[
@@ -41,7 +41,7 @@
             >
                 @if($methode!=='GET')  @method($methode) @endif
                 @csrf
-                <div class="modal-header  {{ $typeGBColor[$modalType] }}">
+                <div class="modal-header {{ $typeGBColor[$modalType] }}">
                     <h5 class="modal-title"
                         id="{{$modalId}}Label"
                     >

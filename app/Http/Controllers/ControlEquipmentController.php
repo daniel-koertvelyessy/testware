@@ -125,10 +125,21 @@ class ControlEquipmentController extends Controller
     public function store(Request $request)
     : RedirectResponse
     {
-//        dd($request);
         $ControlEquipment = ControlEquipment::find($request->control_equipment_id);
+        $changeEquipmentStatus = false;
+        /**
+         * get Equipment data
+         */
+        $equipment = Equipment::find($request->equipment_id);
+        $old_state_id = $equipment->equipment_state_id;
 
         $request->control_event_pass = request()->has('control_event_pass') ? 1 : 0;
+
+        if ($old_state_id !== 1) if ($request->control_event_pass === 1) {
+            $equipment->equipment_state_id = 1;
+            $equipment->save();
+            $changeEquipmentStatus = true;
+        }
 
         $setNewControlEquipment = new ControlEquipment();
         $setNewControlEquipment->qe_control_date_last = $request->control_event_date;
@@ -137,6 +148,7 @@ class ControlEquipmentController extends Controller
         $setNewControlEquipment->anforderung_id = $ControlEquipment->anforderung_id;
         $setNewControlEquipment->equipment_id = $ControlEquipment->equipment_id;
         $setNewControlEquipment->save();
+
 
         $controlevent = ControlEvent::create($this->validateControlEvent());
         $itempassed = 0;
@@ -171,26 +183,41 @@ class ControlEquipmentController extends Controller
         }
 
         if ($request->hasFile('controlDokumentFile')) {
-
             $eventHasDoku = true;
             $filename = (new ControlDoc)->addDocument($request);
             $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!', ['name' => $filename]));
         }
 
-//        dd();
 
         /**
          * Add Data to History
          */
-        $text = 'Das Geräte wurde am ' . $request->control_event_date . ' geprüft. ';
-        if (isset($request->event_item)) $text .= $itempassed . ' von ' . count($request->event_item) . ' Prüfungen wurden bestanden.';
-        $text .= ' Die nächste Prüfung wurde auf den ' . $request->control_event_next_due_date . ' gesetzt.';
-        if ($eventHasDoku) {
-            $text .= ' Das Dokument ' . $filename . ' wurde erfolgreich angefügt.';
+        $text = '<div class="d-flex flex-column">'. __('<span>Das Geräte wurde am :date geprüft:</span>', ['date' => $request->control_event_date]);
+
+        /**
+         * Start list of results
+         */
+        $text .='<ul>';
+        if (isset($request->event_item)) $text .= __('<li>:passed von :total Prüfungen wurden bestanden</li>', [
+            'passed' => $itempassed,
+            'total'  => count($request->event_item)
+        ]);
+        $text .= ($request->control_event_pass === 1) ? __('<li>Die Prüfung wurde insgesamt als <span class="text-success font-weight-bold">Bestanden</span> bewertet</li>') : __('<li>Die Prüfung wurde insgesamt als <span class="text-warning font-weight-bold">Nicht Bestanden</span> bewertet</li>');
+
+        if ($changeEquipmentStatus) {
+            $text .= __('<li>Der Gerätestatus wurde auf <span class="text-info font-weight-bold">:status</span> gesetzt</li>', ['status' => $equipment->EquipmentState->estat_label]);
         }
 
+        $text .= __('<li>Die nächste Prüfung wurde auf den <span class="text-info">:date</span> gesetzt</li>', ['date' => $request->control_event_next_due_date]);
+        if ($eventHasDoku) {
+            $text .= __('<li>Das Dokument <span class="text-info">:name</span> wurde erfolgreich angefügt</li>', ['name' => $filename]);
+        }
+        $text .='</ul></div>';
+
         (new EquipmentHistory)->add(__('Prüfung am :conDate ausgeführt ', ['conDate' => $request->control_event_date]), $text, $request->equipment_id);
+
         $ControlEquipment->delete();
+
         return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
     }
 

@@ -77,15 +77,18 @@
                                  label="{{ __('Bezeichner') }}"
                                  max="20"
                                  required
-                                 class="col-md-6"
+                                 class="col-md-6 checkLabel"
+                                 :placeholer="__('fa_')"
                                  value="{{ $company->fa_label ?? '' }}"
                     />
                     <x-textfield id="fa_name"
                                  label="{{ __('Name') }}"
+                                 :placeholer="__('Mein Firmenname') "
                                  value="{{ $company->fa_name ?? '' }}"
                     />
                     <x-textfield id="fa_description"
                                  label="{{ __('Beschreibung') }}"
+                                 :placeholer=" __('Kurze Beschreibung der Firma') "
                                  value="{{ $company->fa_description ?? '' }}"
                     />
                     <div class="row">
@@ -119,6 +122,7 @@
                             <x-textfield id="ad_labels"
                                          name="ad_label"
                                          label="{{ __('Kürzel') }}"
+                                         :placeholder="__('ad_')"
                                          class="checkLabel"
                                          max="20"
                                          required
@@ -145,6 +149,8 @@
                             <x-textfield id="ad_anschrift_strasse"
                                          label="{{ __('Straße') }}"
                                          required
+                                         max="100"
+                                         class="required"
                                          value="{{ $address->ad_anschrift_strasse ?? '' }}"
                             />
                         </div>
@@ -161,6 +167,8 @@
                                          label="{{ __('Ort') }}"
                                          value="{{ $address->ad_anschrift_ort ?? '' }}"
                                          required
+                                         max="100"
+                                         class="required"
                             />
                         </div>
                         <div class="col-md-4">
@@ -168,6 +176,8 @@
                                          label="{{ __('PLZ') }}"
                                          value="{{ $address->ad_anschrift_plz ?? '' }}"
                                          required
+                                         max="100"
+                                         class="required"
                             />
                         </div>
                     </div>
@@ -217,7 +227,9 @@
 @section('scripts')
 
     <script>
-
+        $('#fa_name').change(function () {
+            $('#ad_name_firma').val($(this).val());
+        })
     </script>
 
 @endsection

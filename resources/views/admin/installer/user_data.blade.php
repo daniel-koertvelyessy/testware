@@ -70,10 +70,14 @@
                     <x-textfield id="name"
                                  label="{{ __('Name') }}"
                                  required
+                                 class="required"
+                                 max="100"
                     />
                     <x-textfield id="email"
                                  label="{{ __('E-Mail') }}"
                                  required
+                                 class="required"
+                                 max="100"
                     />
 
                     <div class="row">
@@ -96,11 +100,17 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
+                            @php($pw = App\User::makePassword())
                             <x-textfield id="password"
                                          required
                                          label="{{ __('Passwort') }}"
-                                         value="21$User@testWare"
+                                         value="{{ $pw }}"
+                                         class="required"
                             />
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="sendInvitation" name="sendInvitation" checked>
+                                <label class="custom-control-label" for="sendInvitation">{{ __('Benutzer einladen') }}</label>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <x-selectfield id="locale"
@@ -113,6 +123,7 @@
                                 <option value="th">{{ __('Tailand') }}</option>
                                 <option value="fr">{{ __('French') }}</option>
                             </x-selectfield>
+
                         </div>
                     </div>
 
@@ -164,19 +175,24 @@
                             />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="reset"
+                                    id="btnResetuserForms"
+                                    class="btn btn-outline-primary mr-2"
+                            >{{ __('Neu') }} <i class="far fa-file ml-2"></i></button>
+                            <button type="button"
+                                    id="btnStoreUserData"
+                                    class="btn btn-outline-primary mr-2"
+                            >{{ __('Daten speichern') }} <i class="fas fa-save ml-2"></i></button>
+                        </div>
+                    </div>
 
 
                 </div>
                 <div class="col-md-5">
                     <h2 class="h4">{{__('Erfasst')}}</h2>
-                    <button type="reset"
-                            id="btnResetuserForms"
-                            class="btn btn-sm btn-outline-primary mr-2"
-                    >{{ __('Neu') }} <i class="far fa-file ml-2"></i></button>
-                    <button type="button"
-                            id="btnStoreUserData"
-                            class="btn btn-sm btn-outline-primary mr-2"
-                    >{{ __('Daten speichern') }} <i class="fas fa-save ml-2"></i></button>
+
                     <table class="table">
                         <thead>
                         <tr>

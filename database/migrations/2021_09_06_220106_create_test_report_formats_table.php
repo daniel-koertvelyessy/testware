@@ -13,12 +13,12 @@ class CreateTestReportFormatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('test_report_formats', function (Blueprint $table) {
+        if (!Schema::hasTable('test_report_formats')) Schema::create('test_report_formats', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->unsignedTinyInteger('digits')->default(6);
-            $table->string('prefix',10)->nullable();
-            $table->string('postfix',10)->nullable();
+            $table->string('prefix', 10)->nullable();
+            $table->string('postfix', 10)->nullable();
         });
     }
 

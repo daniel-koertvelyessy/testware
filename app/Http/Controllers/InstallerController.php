@@ -30,12 +30,7 @@ class InstallerController extends Controller
      */
     public function index(Request $request)
     {
-
-//        dd(!Auth::user()->can('use_installer'));
-        if (!Auth::user()->can('use_installer')) {
-            $request->session()->flash('error',__('Sie haben keine Berechtigung für diese Aktion!'));
-            return redirect()->route('portal-main');
-        }
+        $this->checkUserCanUseInstaller($request);
 
         $company = (Firma::count()>0) ? Firma::find(1) : NULL;
         $address = (Adresse::count()>0) ?Adresse::find(1) : NULL;
@@ -53,7 +48,7 @@ class InstallerController extends Controller
      */
     public function system()
     {
-        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+        $this->checkUserCanUseInstaller($request);
         return view('admin.installer.system_data');
 
     }
@@ -61,11 +56,11 @@ class InstallerController extends Controller
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function location()
+    public function location(Request $request)
     {
-        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+        $this->checkUserCanUseInstaller($request);
 
         $location = \App\Location::find(1);
 
@@ -78,9 +73,9 @@ class InstallerController extends Controller
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
-    public function seed()
+    public function seed(Request $request)
     {
-        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+        $this->checkUserCanUseInstaller($request);
 
         $company = Firma::find(1);
         $address = Adresse::find(1);
@@ -98,7 +93,7 @@ class InstallerController extends Controller
      */
     public function create(Request $request)
     {
-        if (!Auth::user()->can('use_installer')) return redirect()->route('portal-main');
+        $this->checkUserCanUseInstaller($request);
 
         if (isset($request->address_id)) {
             $address = Adresse::find($request->address_id);
@@ -154,15 +149,34 @@ class InstallerController extends Controller
     public function store(Request $request)
     : RedirectResponse
     {
-        $this->authorize('use_installer');
+        $this->checkUserCanUseInstaller($request);
 
         return back();
     }
 
+    public function setServer(Request $request)
+    {
+        $this->checkUserCanUseInstaller($request);
+        \Artisan::call('config:clear');
+        \Artisan::call('cache:clear');
+        return view('admin.installer.server_data',[
+            'smtpdata'=>
+            [
+                'MAIL_HOST'         => getenv('MAIL_HOST'),
+                'MAIL_PORT'         => getenv('MAIL_PORT'),
+                'MAIL_USERNAME'     => getenv('MAIL_USERNAME'),
+                'MAIL_PASSWORD'     => getenv('MAIL_PASSWORD'),
+                'MAIL_ENCRYPTION'   => getenv('MAIL_ENCRYPTION'),
+                'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS'),
+                'MAIL_FROM_NAME'    => getenv('MAIL_FROM_NAME')
+            ]
+        ]);
+    }
 
     public function getUserData(Request $request)
     : array
     {
+
         $data['user'] = User::find($request->id);
         $data['profile'] = Profile::where('user_id', $request->id)->first();
         return $data;
@@ -272,6 +286,14 @@ class InstallerController extends Controller
     public function checkName(Request $request)
     {
         return json_encode(User::where('name',$request->name)->count()>0);
+    }
+
+    public function checkUserCanUseInstaller(Request $request)
+    {
+        if (!Auth::user()->can('use_installer')) {
+            $request->session()->flash('error',__('Sie haben keine Berechtigung für diese Aktion!'));
+            return redirect()->route('portal-main');
+        }
     }
 
 

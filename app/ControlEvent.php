@@ -21,7 +21,7 @@ class ControlEvent extends Model
     }
 
     public function Equipment() {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(Equipment::class, 'control_equipment_id');
     }
 
     public function ControlEquipment() {

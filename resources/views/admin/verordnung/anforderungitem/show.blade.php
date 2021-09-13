@@ -24,12 +24,10 @@
         <input type="hidden" name="id" id="id" value="{{$anforderungcontrolitem->id}}">
         @if($testEventFromItem->count()>0)
         <h1 class="h3">{{ __('Vorsicht') }}</h1>
-        <p>{{ __('Folgende Prüfungen haben diesen Prüfschritt verwendet. Ein Löschung lässt deren Zuordnung nicht
-        mehr nachvollziehen!') }}</p>
+        <p>{{ __('Folgende Prüfungen haben diesen Prüfschritt verwendet. Ein Löschung lässt deren Zuordnung nicht mehr nachvollziehen!') }}</p>
         <ul class="list-unstyled">
             @foreach($testEventFromItem as $item )
-                <li class="list-group-item">{{ $item->ControlEvent->control_event_date }} {{ $item->ControlEvent->control_event_controller_name
-                }}</li>
+                <li class="list-group-item"><span class="text-muted">{{ __('Datum') }} :</span> {{ $item->ControlEvent->control_event_date }} | <span class="text-muted">{{ __('Prüfer') }} :</span>{{ $item->ControlEvent->control_event_controller_name }} | <span class="text-muted">{{ __('Gerät') }} :</span> {{ $item->ControlEvent->Equipment->eq_name }}</li>
             @endforeach
         </ul>
 

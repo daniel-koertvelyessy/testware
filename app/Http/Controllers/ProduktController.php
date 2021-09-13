@@ -97,10 +97,7 @@ class ProduktController extends Controller
 //                dump(' delete ' . $produktDoc->proddoc_name_pfad);
                             $produktDoc->delete();
             }
-
-
         }
-
 
         return view('admin.produkt.show', [
             'produkt' => $produkt,
@@ -314,7 +311,6 @@ class ProduktController extends Controller
     public function addProduktFirma(Request $request)
     : RedirectResponse
     {
-        dd($request);
 
         $address_id = false;
         $firma_id = false;

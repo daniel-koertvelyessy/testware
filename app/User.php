@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Faker\Generator as Faker;
 
 class User extends Authenticatable
 {
@@ -24,11 +25,11 @@ class User extends Authenticatable
     ];
 
     public const LANGS = [
-        'Deutsch' => 'de',
-        'English' => 'en',
+        'Deutsch'    => 'de',
+        'English'    => 'en',
         'Nederlands' => 'nl',
-        'Tailand' => 'th',
-        'France' => 'fr'
+        'Tailand'    => 'th',
+        'France'     => 'fr'
     ];
 
     public function notes()
@@ -49,7 +50,6 @@ class User extends Authenticatable
         'username',
         'locale'
     ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -60,7 +60,6 @@ class User extends Authenticatable
         'remember_token',
         'role_id'
     ];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -79,6 +78,17 @@ class User extends Authenticatable
         static::updating(function () {
             Cache::forget('system-status-counter');
         });
+    }
+
+    public static function makePassword()
+    {
+        return substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%|{}*_"), 0, 8);
+
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
     }
 
     public function profile()
@@ -182,6 +192,7 @@ class User extends Authenticatable
         $this->email = $request->email;
         $this->username = $request->username;
         $this->role_id = 0;
+        $this->user_theme = 'css/tbs.css';
         $this->locale = $request->locales;
         $this->password = Hash::make($request->password);
         $this->save();
@@ -189,6 +200,14 @@ class User extends Authenticatable
         $this->roles()->attach([1]);
 
         return $this->id;
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withTimestamps();
     }
 
     /**
@@ -204,7 +223,7 @@ class User extends Authenticatable
         $this->username = $details['username'];
         $this->role_id = (isset($details['role_id'])) ? 1 : 0;
         $this->locale = $details['locales'];
-        $this->password =Hash::make($details['password']);
+        $this->password = Hash::make($details['password']);
         $this->save();
 
         $this->roles()->attach([1]);
@@ -213,17 +232,11 @@ class User extends Authenticatable
         return $this->id;
     }
 
-    /**
-     * The roles that belong to the user.
-     */
-    public function roles()
+    public function checkUserExists($username, $email)
+    : bool
     {
-        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withTimestamps();
-    }
 
-    public function checkUserExists($username, $email):bool{
-
-        return User::where('username',$username)->count() >0 || User::where('email',$email)->count() >0;
+        return User::where('username', $username)->count() > 0 || User::where('email', $email)->count() > 0;
 
     }
 

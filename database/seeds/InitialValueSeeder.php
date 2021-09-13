@@ -139,130 +139,35 @@ class InitialValueSeeder extends Seeder
             ]
         ]);
 
-        DB::table('adresses')->insert([
-            [
-                'created_at'              => now(),
-                'updated_at'              => now(),
-                'ad_label'                => 'ad_label',
-                'ad_name'                 => 'HA-firma',
-                'ad_name_firma'           => 'Name',
-                'ad_anschrift_strasse'    => 'Weg',
-                'ad_anschrift_hausnummer' => '19',
-                'ad_anschrift_plz'        => '12345',
-                'ad_anschrift_ort'        => 'Stadt',
+//        DB::table('adresses')->insert([
+//            [
+//                'created_at'              => now(),
+//                'updated_at'              => now(),
+//                'ad_label'                => 'ad_label',
+//                'ad_name'                 => 'HA-firma',
+//                'ad_name_firma'           => '',
+//                'ad_anschrift_strasse'    => '',
+//                'ad_anschrift_hausnummer' => '',
+//                'ad_anschrift_plz'        => '',
+//                'ad_anschrift_ort'        => '',
+//
+//            ]
+//        ]);
 
-            ]
-        ]);
+//        DB::table('firmas')->insert([
+//            [
+//                'created_at'     => now(),
+//                'updated_at'     => now(),
+//                'fa_label'       => NULL,
+//                'fa_name'        => NULL,
+//                'fa_description' => NULL,
+//                'fa_kreditor_nr' => null,
+//                'fa_debitor_nr'  => null,
+//                'fa_vat'         => null,
+//                'adresse_id'     => 1,
+//            ]
+//        ]);
 
-        DB::table('firmas')->insert([
-            [
-                'created_at'     => now(),
-                'updated_at'     => now(),
-                'fa_label'       => 'fa_label',
-                'fa_name'        => 'fa_name',
-                'fa_description' => 'fa_description',
-                'fa_kreditor_nr' => null,
-                'fa_debitor_nr'  => null,
-                'fa_vat'         => null,
-                'adresse_id'     => 1,
-            ]
-        ]);
-        /*
-              DB::table('users')->insert([
-                [
-                          'created_at'        => now(),
-                          'updated_at'        => now(),
-                          'name'              => 'testware',
-                          'email'             => 'testware@bitpack.io',
-                          'role_id'           => 1,
-                          'email_verified_at' => now(),
-                          'username'          => 'Testware User',
-                          'password'          => password_hash('sp7RSzSLZ6kC3kS', PASSWORD_DEFAULT),
-                          'api_token'        > null
-                      ],
-                    [
-                          'created_at'        => now(),
-                          'updated_at'        => now(),
-                          'name'              => 'Martin Schubert',
-                          'email'             => 'martin@bitpack.io',
-                          'role_id'           => 1,
-                          'email_verified_at' => now(),
-                          'username'          => 'martin',
-                          'password'          => '$2y$10$X7eQRHOqNesOEXh8sCZlKu2PF3XSi2SgU90x7r1TPbAmg5MJRu.Si',
-                          'api_token'         => null
-
-                      ],
-                      [
-                          'created_at'        => now(),
-                          'updated_at'        => now(),
-                          'name'              => 'Matthias Roethig',
-                          'email'             => 'matthias@bitpack.io',
-                          'role_id'           => 1,
-                          'email_verified_at' => now(),
-                          'username'          => 'matthias',
-                          'password'          => '$2y$10$rSL7UWBig6GElydsciIDO.K54wfG2TgNdIKiw3KFd6K2dmSKlZ8G6',
-                          'api_token'         => null
-
-                      ],
-        ]);
-
-              DB::table('role_user')->insert([
-                  [
-                      'created_at' => now(),
-                      'updated_at' => now(),
-                      'role_id'    => 1,
-                      'user_id'    => 1,
-                  ],
-                  [
-                      'created_at' => now(),
-                      'updated_at' => now(),
-                      'role_id'    => 2,
-                 'user_id'    => 1,
-                  ],
-              ]);
-
-         DB::table('profiles')->insert([
-                     [
-                         'created_at'      => now(),
-                         'updated_at'      => now(),
-                         'user_id'         => 3,
-                         'ma_nummer'       => random_int(1000, 2000),
-                         'ma_name'         => 'Roethig',
-                         'ma_name_2'       => '',
-                         'ma_vorname'      => 'Matthias',
-                         'ma_geburtsdatum' => now()->addYears(-38),
-                         'ma_eingetreten'  => now()->addYears(-5),
-                         'ma_telefon'      => '',
-                         'ma_mobil'        => '',
-                     ],
-                     [
-                         'created_at'      => now(),
-                         'updated_at'      => now(),
-                         'user_id'         => 2,
-                         'ma_nummer'       => random_int(1000, 2000),
-                         'ma_name'         => 'Schubert',
-                         'ma_name_2'       => '',
-                         'ma_vorname'      => 'Martin',
-                         'ma_geburtsdatum' => now()->addYears(-42),
-                         'ma_eingetreten'  => now()->addYears(-13),
-                         'ma_telefon'      => '',
-                         'ma_mobil'        => '',
-                     ],
-                     [
-                         'created_at'      => now(),
-                         'updated_at'      => now(),
-                         'user_id'         => 1,
-                         'ma_nummer'       => random_int(1000, 2000),
-                         'ma_name'         => 'Körtvélyessy',
-                         'ma_name_2'       => '',
-                         'ma_vorname'      => 'Daniel',
-                         'ma_geburtsdatum' => now()->addYears(-46),
-                         'ma_eingetreten'  => now()->addYears(-15),
-                         'ma_telefon'      => '03040586940',
-                         'ma_mobil'        => '',
-                     ],
-                 ]);
-        */
         DB::table('anredes')->insert([
             [
                 'an_kurz'   => 'Hr',

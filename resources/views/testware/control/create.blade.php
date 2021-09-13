@@ -112,8 +112,6 @@
 @endsection
 
 @section('content')
-
-
     <form action="{{ route('control.store') }}"
           method="post"
           id="frmAddControlEvent"

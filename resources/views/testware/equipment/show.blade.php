@@ -775,10 +775,10 @@
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mr-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span> <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
 
                                 <h2 class="h4 mt-5">@if (App\ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->count() >1 ){{__('Anleitungen')}} @else {{__('Anleitung')}} @endif </h2>
@@ -1177,13 +1177,7 @@
                             <div class="col-md-6">
                                 <h3 class="h5">{{__('Historie')}}</h3>
                                 @foreach (App\EquipmentHistory::where('equipment_id',$equipment->id)->take(10)->latest()->get() as $equipmentHistorie)
-                                    <dl class="row">
-                                        <dt class="col-md-4 col-lg-3">{{ $equipmentHistorie->created_at->DiffForhumans() }}</dt>
-                                        <dd class="col-sm-8 col-lg-9">
-                                            <strong>{{ $equipmentHistorie->eqh_eintrag_kurz }}</strong><br>
-                                            {{ $equipmentHistorie->eqh_eintrag_text }}
-                                        </dd>
-                                    </dl>
+                                    <x-equip-history-card :logEntry="$equipmentHistorie"/>
                                 @endforeach
                             </div>
                             <div class="col-md-6">
@@ -1243,46 +1237,7 @@
                          aria-labelledby="events-tab"
                     >
                         @forelse (App\EquipmentEvent::where('equipment_id',$equipment->id)->withTrashed()->take(10)->latest()->get() as $equipmentEvent)
-                            <dl class="row">
-                                <dt class="col-sm-4">
-                                    <strong>{{__('eröffnet')}}
-                                        :</strong> {{ $equipmentEvent->created_at->DiffForhumans() }}
-                                    <br><strong>{{__('geschlossen')}}:</strong>
-                                    @if ($equipmentEvent->deleted_at)
-                                        {{ $equipmentEvent->deleted_at->DiffForhumans() }}
-                                    @else
-                                        -
-                                    @endif
-                                    <br>
-                                    @if ($equipmentEvent->deleted_at)
-                                        <form action="{{ route('event.restore') }}"
-                                              method="post"
-                                        >
-                                            @csrf
-                                            <input type="hidden"
-                                                   name="id"
-                                                   id="id_equipment_event_{{ $equipmentEvent->id }}"
-                                                   value="{{ $equipmentEvent->id }}"
-                                            >
-                                            <button class="btn btn-sm btn-outline-primary mt-2">{{__('wiederherstellen')}}</button>
-                                        </form>
-                                    @else
-                                        <a href="{{ route('event.show',$equipmentEvent) }}"
-                                           class="btn btn-sm btn-outline-primary mt-2"
-                                        >{{__('öffnen')}}
-                                        </a>
-                                    @endif
-
-                                </dt>
-                                <dd class="col-sm-8">
-                                    <span class="lead">{{ __('Meldung:') }}</span><br>
-                                    {{ $equipmentEvent->equipment_event_text??__('keine Information übermittelt') }}
-                                </dd>
-                            </dl>
-                            @if (!$loop->last)
-                                <div class="dropdown-divider my-2"></div>
-                            @endif
-
+                            <x-equip_event_card :equipmentEvent="$equipmentEvent" :loop="$loop"/>
                         @empty
                             <x-notifyer>{{__('Keine Meldungen zum Gerät gefunden!')}}</x-notifyer>
                         @endforelse

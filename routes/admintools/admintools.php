@@ -151,6 +151,7 @@ Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'Anforderung
 Route::get('/installer', 'InstallerController@index')->name('installer.company');
 Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
 Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
+Route::get('/installer/server', 'InstallerController@setServer')->name('installer.server');
 Route::get('/installer/location', 'InstallerController@location')->name('installer.location');
 Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
 Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.seed');
@@ -161,7 +162,9 @@ Route::get('installer/getUserData', 'InstallerController@getUserData')->name('in
 Route::post('installer/storeUserData', 'InstallerController@addUserData')->name('installer.storeuserData');
 Route::post('installer/deleteUserData', 'InstallerController@deleteUserData')->name('installer.deleteUserData');
 
-
+Route::get('email/test')->name('email.test');
+Route::post('email/setserver','EmailController@store')->name('email.setserver');
+Route::get('email/server','EmailController@show')->name('email.getserver');
 
 /**
  *   Benutzer Profil

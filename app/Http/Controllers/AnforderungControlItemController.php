@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -59,10 +60,14 @@ class AnforderungControlItemController extends Controller
     {
         $request->firma_id = ($request->aci_exinternal === 'internal') ? 1 : $request->firma_id;
 
-        AnforderungControlItem::create($this->validateAnforderungControlItem());
-
-        $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> wurde angelegt!', ['label' => request('aci_label')]));
-        return back();
+        $testStep =AnforderungControlItem::create($this->validateAnforderungControlItem());
+        if($testStep) {
+            $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> wurde angelegt!', ['label' => request('aci_label')]));
+            return redirect()->route('anforderungcontrolitem.show', $testStep);
+        } else {
+            Log::error('Error during creation of test step '.request('aci_label'));
+            $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> konnte nicht angelegt werden!', ['label' => request('aci_label')]));
+        }
     }
 
     /**
@@ -124,9 +129,7 @@ class AnforderungControlItemController extends Controller
     {
         return view('admin.verordnung.anforderungitem.show', [
             'anforderungcontrolitem' => $anforderungcontrolitem,
-            'testEventFromItem' => ControlEventItem::with('ControlEvent')->where('control_item_aci',
-                $anforderungcontrolitem->id)
-                ->get()
+            'testEventFromItem'      => ControlEventItem::with('ControlEvent')->where('control_item_aci', $anforderungcontrolitem->id)->get()
         ]);
     }
 
@@ -175,9 +178,9 @@ class AnforderungControlItemController extends Controller
      */
     public function destroy(AnforderungControlItem $anforderungcontrolitem)
     {
+        request()->session()->flash('status', __('Der Prüfschritt <strong>:name</strong> wurde gelöscht!', ['name' => $anforderungcontrolitem->aci_name]));
         $anforderungcontrolitem->delete();
-        \request()->session()->flash('status', __('Der Prüfschritt wurde gelöscht!'));
-        return back();
+        return redirect()->route('anforderungcontrolitem.index');
     }
 
     public function getAnforderungControlItemData(Request $request)
