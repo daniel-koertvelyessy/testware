@@ -147,6 +147,8 @@ class TestwareInstallAppCommand extends Command
             $details['username'] = $this->ask('Username');
         }
 
+        $details['role_id'] = 1;
+        $details['user_theme'] = 'css/tbs.css';
         $details['name'] = $this->ask('Name');
         $details['locales'] = $this->ask('Language', 'de');
         $details['password'] = $this->secret('Password (min. 8 charakters)');
