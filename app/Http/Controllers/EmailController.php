@@ -28,44 +28,44 @@ class EmailController extends Controller
         return true;
     }
 
-/**
- * Store a newly created resource in storage.
- *
- * @param  Request $request
- *
- * @return RedirectResponse
- */
-public function store(Request $request)
-: RedirectResponse
-{
-    $res['MAIL_HOST']=$this->changeenv('MAIL_HOST', $request->MAIL_HOST);
-    $res['MAIL_PORT']=$this->changeenv('MAIL_PORT', $request->MAIL_PORT);
-    $res['MAIL_USERNAME']=$this->changeenv('MAIL_USERNAME', $request->MAIL_USERNAME);
-    $res['MAIL_PASSWORD']=$this->changeenv('MAIL_PASSWORD', $request->MAIL_PASSWORD);
-    $res['MAIL_ENCRYPTION']=$this->changeenv('MAIL_ENCRYPTION', $request->MAIL_ENCRYPTION);
-    $res['MAIL_FROM_ADDRESS']=$this->changeenv('MAIL_FROM_ADDRESS', $request->MAIL_FROM_ADDRESS);
-    $res['MAIL_FROM_NAME']=$this->changeenv('MAIL_FROM_NAME', $request->MAIL_FROM_NAME);
-    dump($res);
-    Artisan::call('config:clear');
-    Artisan::call('cache:clear');
-    return back();
-}
-
-private function changeenv($key, $value)
-{
-    $path = base_path('app.env');
-
-    if (is_bool(env($key))) {
-        $old = env($key) ? 'true' : 'false';
-    } else {
-        $old = env($key);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(Request $request)
+    : RedirectResponse
+    {
+        $res['MAIL_HOST'] = $this->changeenv('MAIL_HOST', $request->MAIL_HOST);
+        $res['MAIL_PORT'] = $this->changeenv('MAIL_PORT', $request->MAIL_PORT);
+        $res['MAIL_USERNAME'] = $this->changeenv('MAIL_USERNAME', $request->MAIL_USERNAME);
+        $res['MAIL_PASSWORD'] = $this->changeenv('MAIL_PASSWORD', $request->MAIL_PASSWORD);
+        $res['MAIL_ENCRYPTION'] = $this->changeenv('MAIL_ENCRYPTION', $request->MAIL_ENCRYPTION);
+        $res['MAIL_FROM_ADDRESS'] = $this->changeenv('MAIL_FROM_ADDRESS', $request->MAIL_FROM_ADDRESS);
+        $res['MAIL_FROM_NAME'] = $this->changeenv('MAIL_FROM_NAME', $request->MAIL_FROM_NAME);
+        dd($res);
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        return back();
     }
-    if (file_exists($path)) {
-        return file_put_contents($path, str_replace("$key=" . $old, "$key=" . $value, file_get_contents($path)));
-    } else {
-        return false;
+
+    private function changeenv($key, $value)
+    {
+        $path = base_path('app.env');
+
+        if (is_bool(env($key))) {
+            $old = env($key) ? 'true' : 'false';
+        } else {
+            $old = env($key);
+        }
+        if (file_exists($path)) {
+            return file_put_contents($path, str_replace("$key=" . $old, "$key=" . $value, file_get_contents($path)));
+        } else {
+            return false;
+        }
     }
-}
 
     /**
      * Display the specified resource.

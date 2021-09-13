@@ -32,12 +32,6 @@ class User extends Authenticatable
         'France'     => 'fr'
     ];
 
-    public function notes()
-    {
-        return $this->hasMany(Note::class);
-    }
-
-
     /**
      * The attributes that are mass assignable.
      *
