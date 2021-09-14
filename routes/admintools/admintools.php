@@ -148,15 +148,17 @@ Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'Anforderung
 /**
  *   INSTALLER
  */
-Route::get('/installer', 'InstallerController@index')->name('installer.company');
+Route::get('/installer', 'InstallerController@index')->name('installer.start');
 Route::get('/installer/user', 'InstallerController@create')->name('installer.user');
+//Route::get('/installer/clear_config', 'InstallerController@clearConfig')->name('installer.clear_config');
+//Route::get('/installer/clear_cache', 'InstallerController@clearCache')->name('installer.clear_cache');
 Route::get('/installer/company', 'InstallerController@setCompany')->name('installer.company');
 Route::get('/installer/system', 'InstallerController@system')->name('installer.system');
-Route::get('/installer/server', 'InstallerController@setServer')->name('installer.server');
+Route::get('/installer/server', 'InstallerController@index')->name('installer.server');
 Route::post('/installer/set_app_url', 'InstallerController@setAppUrl')->name('installer.setAppUrl');
 Route::get('/installer/location', 'InstallerController@location')->name('installer.location');
-Route::get('/installer/seed', 'InstallerController@seed')->name('installer.seed');
-Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.seed');
+Route::get('/installer/seed', 'InstallerController@seed')->name('installer.getseed');
+Route::put('/installer/seed', 'InstallerController@setseed')->name('installer.putseed');
 Route::get('/installer/checkemail', 'InstallerController@checkEmail')->name('installer.checkemail');
 Route::get('/installer/checkname', 'InstallerController@checkName')->name('installer.checkname');
 Route::get('/installer/checkusername', 'InstallerController@checkUserName')->name('installer.checkusername');

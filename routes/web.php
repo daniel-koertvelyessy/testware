@@ -311,9 +311,9 @@ Route::get('verordnung.main', function () {
     return view('admin.verordnung.main');
 })->name('verordnung.main')->middleware('auth');
 
-Route::get('getKategorieProducts', function () {
-    return view('admin.produkt.kategorie.index');
-})->name('getKategorieProducts')->middleware('auth');
+//Route::get('getKategorieProducts', function () {
+//    return view('admin.produkt.kategorie.index');
+//})->name('getKategorieProducts')->middleware('auth');
 
 Route::get('firma.checkCompanyLabel', 'FirmaController@checkCompanyLabel')->name('firma.checkCompanyLabel')->middleware('auth');
 Route::get('firma.checkCompanyKreditor', 'FirmaController@checkCompanyKreditor')->name('firma.checkCompanyKreditor')->middleware('auth');

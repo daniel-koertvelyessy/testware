@@ -316,16 +316,12 @@ class InstallerController extends Controller
     public function setAppUrl(Request $request)
     : RedirectResponse
     {
-
         foreach ($this->env_fields as $field) {
             (new DotEnvController)->changeenv('.env', $field, request($field));
             (new DotEnvController)->changeenv('app.env', $field, request($field));
         }
-        Artisan::call('config:clear');
-        Artisan::call('cache:clear');
 
         return back();
     }
-
 
 }

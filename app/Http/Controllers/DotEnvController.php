@@ -48,8 +48,6 @@ class DotEnvController extends Controller
 //            dump($enf_file . ': ' . $key . ' - ' . $current_value . ' - ' . $new_value);
             file_put_contents($path, str_replace("$key=" . $current_value, "$key=" . $new_value, file_get_contents($path)));
         }
-        Artisan::call('config:clear');
-
     }
 
 }
