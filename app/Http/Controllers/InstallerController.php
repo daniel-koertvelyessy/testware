@@ -6,6 +6,7 @@ use App\Adresse;
 use App\Firma;
 use App\Profile;
 use App\User;
+use Artisan;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,23 +18,58 @@ use Illuminate\View\View;
 
 class InstallerController extends Controller
 {
+    protected array $env_fields = [
+        'APP_URL',
+        'APP_PORT',
+        //        'APP_DEBUG',
+    ];
 
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
-        $this->checkUserCanUseInstaller($request);
 
-        $company = (Firma::count()>0) ? Firma::find(1) : NULL;
-        $address = (Adresse::count()>0) ?Adresse::find(1) : NULL;
+        $this->checkUserCanUseInstaller($request);
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+
+        return view('admin.installer.server_data', [
+            'env_app'  => [
+                'APP_URL'  => env('APP_URL'),
+                'APP_PORT' => env('APP_PORT'),
+            ],
+            'env_smtp' => [
+                'MAIL_HOST'         => env('MAIL_HOST'),
+                'MAIL_PORT'         => env('MAIL_PORT'),
+                'MAIL_USERNAME'     => env('MAIL_USERNAME'),
+                'MAIL_PASSWORD'     => env('MAIL_PASSWORD'),
+                'MAIL_ENCRYPTION'   => env('MAIL_ENCRYPTION'),
+                'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS'),
+                'MAIL_FROM_NAME'    => env('MAIL_FROM_NAME')
+            ]
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function setCompany(Request $request)
+    {
+
+        $this->checkUserCanUseInstaller($request);
+        $company = (Firma::count() > 0) ? Firma::find(1) : null;
+        $address = (Adresse::count() > 0) ? Adresse::find(1) : null;
         return view('admin.installer.company_data', [
             'company' => $company,
             'address' => $address
@@ -41,12 +77,20 @@ class InstallerController extends Controller
 
     }
 
+    public function checkUserCanUseInstaller(Request $request)
+    {
+        if (!Auth::user()->can('use_installer')) {
+            $request->session()->flash('error', __('Sie haben keine Berechtigung für diese Aktion!'));
+            return redirect()->route('portal-main');
+        }
+    }
+
     /**
      * Display the systems page to set system variables
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
-    public function system()
+    public function system(Request $request)
     {
         $this->checkUserCanUseInstaller($request);
         return view('admin.installer.system_data');
@@ -71,7 +115,7 @@ class InstallerController extends Controller
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function seed(Request $request)
     {
@@ -89,7 +133,7 @@ class InstallerController extends Controller
      *
      * @param  Request $request
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
@@ -154,25 +198,6 @@ class InstallerController extends Controller
         return back();
     }
 
-    public function setServer(Request $request)
-    {
-        $this->checkUserCanUseInstaller($request);
-        \Artisan::call('config:clear');
-        \Artisan::call('cache:clear');
-        return view('admin.installer.server_data',[
-            'smtpdata'=>
-            [
-                'MAIL_HOST'         => getenv('MAIL_HOST'),
-                'MAIL_PORT'         => getenv('MAIL_PORT'),
-                'MAIL_USERNAME'     => getenv('MAIL_USERNAME'),
-                'MAIL_PASSWORD'     => getenv('MAIL_PASSWORD'),
-                'MAIL_ENCRYPTION'   => getenv('MAIL_ENCRYPTION'),
-                'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS'),
-                'MAIL_FROM_NAME'    => getenv('MAIL_FROM_NAME')
-            ]
-        ]);
-    }
-
     public function getUserData(Request $request)
     : array
     {
@@ -200,7 +225,7 @@ class InstallerController extends Controller
             $data['user_id'] = (new User)->addNew($request);
             $user = User::find($data['user_id']);
         }
-        $request->user_id =  $user->id;
+        $request->user_id = $user->id;
         /**
          * Check if profile_id was submitted. If so update given User
          */
@@ -222,27 +247,27 @@ class InstallerController extends Controller
          * make new table row for userList
          */
         $data['html'] = '
-<tr id="userListItem'.$data['user_id'].'">
-    <td>'.$request->username.'</td>
+<tr id="userListItem' . $data['user_id'] . '">
+    <td>' . $request->username . '</td>
     <td>';
-        foreach($user->roles as $role) {
+        foreach ($user->roles as $role) {
             $data['html'] .= $role->name;
         }
-        $data['html'] .='</td>
+        $data['html'] .= '</td>
     <td>';
         $data['html'] .= ($user->profile) ? '<span class="fas fa-check"></span>' : '';
-        $data['html'] .='</td>
+        $data['html'] .= '</td>
     <td>';
         $data['html'] .= ($user->role_id === 1) ? '<span class="fas fa-check"></span>' : '';
-   $data['html'] .= ' </td>
+        $data['html'] .= ' </td>
     <td>
         <button type="button"
                 class="btn btn-sm btn-outline-secondary btnEditUser"
-                data-userid="'.$data['user_id'].'"
+                data-userid="' . $data['user_id'] . '"
         ><span class="fas fa-edit"></span></button>
         <button type="button"
                 class="btn btn-sm btn-outline-secondary btnRemoveUser"
-                data-userid="'.$data['user_id'].'"
+                data-userid="' . $data['user_id'] . '"
         ><span class="far fa-trash-alt"></span></button>
     </td>
 </tr>
@@ -254,7 +279,7 @@ class InstallerController extends Controller
     public function deleteUserData(Request $request)
     {
         $data['user'] = User::find($request->id)->delete();
-        $data['employee'] = Profile::where('user_id',$request->id)->delete();
+        $data['employee'] = Profile::where('user_id', $request->id)->delete();
         return $data;
     }
 
@@ -265,7 +290,7 @@ class InstallerController extends Controller
      */
     public function checkEmail(Request $request)
     {
-        return json_encode(User::where('email',$request->email)->count()>0);
+        return json_encode(User::where('email', $request->email)->count() > 0);
     }
 
     /**
@@ -275,7 +300,7 @@ class InstallerController extends Controller
      */
     public function checkUserName(Request $request)
     {
-        return json_encode(User::where('username',$request->username)->count()>0);
+        return json_encode(User::where('username', $request->username)->count() > 0);
     }
 
     /**
@@ -285,15 +310,21 @@ class InstallerController extends Controller
      */
     public function checkName(Request $request)
     {
-        return json_encode(User::where('name',$request->name)->count()>0);
+        return json_encode(User::where('name', $request->name)->count() > 0);
     }
 
-    public function checkUserCanUseInstaller(Request $request)
+    public function setAppUrl(Request $request)
+    : RedirectResponse
     {
-        if (!Auth::user()->can('use_installer')) {
-            $request->session()->flash('error',__('Sie haben keine Berechtigung für diese Aktion!'));
-            return redirect()->route('portal-main');
+
+        foreach ($this->env_fields as $field) {
+            (new DotEnvController)->changeenv('.env', $field, request($field));
+            (new DotEnvController)->changeenv('app.env', $field, request($field));
         }
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+
+        return back();
     }
 
 

@@ -37,9 +37,9 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        if($this->app->environment('production')) {
-            \URL::forceScheme('https');
-        }
+//        if($this->app->environment('production')) {
+//            \URL::forceScheme('https');
+//        }
     }
 
     /**

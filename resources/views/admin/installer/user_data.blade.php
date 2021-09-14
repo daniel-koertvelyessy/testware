@@ -25,19 +25,25 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link"
-                       href="{{ route('installer.company') }}"
-                    >{{ __('Firmierung') }} </a>
+                       href="{{ route('installer.server') }}"
+                       tabindex="-1"
+                       aria-disabled="true"
+                    >{{ __('Server') }}</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link disabled"
                        href="{{ route('installer.user') }}"
-                       tabindex="-1"
-                       aria-disabled="true"
                     >{{ __('Benutzer') }}<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled"
-                       href="#"
+                       href="{{ route('installer.company') }}"
+                    >{{ __('Firmierung') }}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link disabled"
+                       href="{{ route('installer.location') }}"
                        tabindex="-1"
                        aria-disabled="true"
                     >{{ __('memStandort') }}</a>

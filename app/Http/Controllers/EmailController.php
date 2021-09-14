@@ -2,31 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use Artisan;
-use Dotenv\Exception\ExceptionInterface;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
+use Swift_Mailer;
+use Swift_SmtpTransport;
+use Swift_TransportException;
 
 class EmailController extends Controller
 {
+
+    protected array $env_fields = [
+        'MAIL_HOST',
+        'MAIL_PORT',
+        'MAIL_USERNAME',
+        'MAIL_PASSWORD',
+        'MAIL_ENCRYPTION',
+        'MAIL_FROM_ADDRESS',
+        'MAIL_FROM_NAME',
+    ];
+
     /**
      * Display a listing of the resource.
      *
-     * @return bool
+     * @return string
      */
     public function testMailServer()
-    : bool
+    : string
     {
-
-        /*      Mail::send([
-                  ''
-              ]);*/
-
-        return true;
+        dump(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION'));
+        try {
+            $transport = new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION'));
+            $transport->setUsername(env('MAIL_USERNAME'));
+            $transport->setPassword(env('MAIL_PASSWORD'));
+            $mailer = new Swift_Mailer($transport);
+            $mailer->getTransport()->start();
+            return json_encode(['status' => true]);
+        } catch (Swift_TransportException | Exception $e) {
+            return json_encode(['error' => $e->getMessage()]);
+        }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -38,87 +55,13 @@ class EmailController extends Controller
     public function store(Request $request)
     : RedirectResponse
     {
-        $res['MAIL_HOST'] = $this->changeenv('MAIL_HOST', $request->MAIL_HOST);
-        $res['MAIL_PORT'] = $this->changeenv('MAIL_PORT', $request->MAIL_PORT);
-        $res['MAIL_USERNAME'] = $this->changeenv('MAIL_USERNAME', $request->MAIL_USERNAME);
-        $res['MAIL_PASSWORD'] = $this->changeenv('MAIL_PASSWORD', $request->MAIL_PASSWORD);
-        $res['MAIL_ENCRYPTION'] = $this->changeenv('MAIL_ENCRYPTION', $request->MAIL_ENCRYPTION);
-        $res['MAIL_FROM_ADDRESS'] = $this->changeenv('MAIL_FROM_ADDRESS', $request->MAIL_FROM_ADDRESS);
-        $res['MAIL_FROM_NAME'] = $this->changeenv('MAIL_FROM_NAME', $request->MAIL_FROM_NAME);
-        dd($res);
         Artisan::call('config:clear');
-        Artisan::call('cache:clear');
+
+        foreach ($this->env_fields as $field) {
+            (new DotEnvController)->changeenv('.env', $field, request($field));
+            (new DotEnvController)->changeenv('app.env', $field, request($field));
+        }
         return back();
     }
 
-    private function changeenv($key, $value)
-    {
-        $path = base_path('app.env');
-
-        if (is_bool(env($key))) {
-            $old = env($key) ? 'true' : 'false';
-        } else {
-            $old = env($key);
-        }
-        if (file_exists($path)) {
-            return file_put_contents($path, str_replace("$key=" . $old, "$key=" . $value, file_get_contents($path)));
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return false|Response|string
-     */
-    public function show()
-    {
-        return json_encode([
-            'MAIL_HOST'         => getenv('MAIL_HOST'),
-            'MAIL_PORT'         => getenv('MAIL_PORT'),
-            'MAIL_USERNAME'     => getenv('MAIL_USERNAME'),
-            'MAIL_PASSWORD'     => getenv('MAIL_PASSWORD'),
-            'MAIL_ENCRYPTION'   => getenv('MAIL_ENCRYPTION'),
-            'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS'),
-            'MAIL_FROM_NAME'    => getenv('MAIL_FROM_NAME')
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request $request
-     * @param  int     $id
-     *
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

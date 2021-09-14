@@ -31,19 +31,19 @@
                     >{{ __('Server') }}<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"
+                    <a class="nav-link disabled"
                        href="{{ route('installer.user') }}"
                     >{{ __('Benutzer') }} </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"
+                    <a class="nav-link disabled"
                        href="{{ route('installer.company') }}"
                     >{{ __('Firmierung') }} </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link disabled"
-                       href="#"
+                       href="{{ route('installer.location') }}"
                        tabindex="-1"
                        aria-disabled="true"
                     >{{ __('memStandort') }}</a>
@@ -60,7 +60,7 @@
         </div>
     </nav>
 
-    <form action=""
+    <form action="{{ route('installer.setAppUrl') }}"
           method="POST"
     >
         @csrf
@@ -76,20 +76,20 @@
                                          required
                                          class="required"
                                          max="100"
-                                         value="{{ env('APP_URL') }}"
+                                         value="{{ $env_app['APP_URL'] }}"
                             />
                         </div>
                         <div class="col-md-2">
                             <x-textfield id="APP_PORT"
+                                         type="number"
                                          label="{{ __('Port') }}"
                                          required
                                          class="required"
                                          max="5"
-                                         value="{{ env('APP_PORT') }}"
+                                         value="{{ $env_app['APP_PORT'] }}"
                             />
                         </div>
                     </div>
-
                     <x-btnSave>{{ __('Server URL setzen') }}</x-btnSave>
                 </div>
             </div>
@@ -104,7 +104,7 @@
         <div class="container">
             <div class="row mt-3">
                 <div class="col">
-                    <h2 class="h4">{{__('E-Mail Server konfigurieren')}}</h2>
+                    <h2 class="h4">{{__('SMTP Server konfigurieren')}}</h2>
                     <div class="row">
                         <div class="col-md-6">
                             <x-textfield id="MAIL_HOST"
@@ -112,7 +112,7 @@
                                          required
                                          class="required"
                                          max="100"
-                                         value="{{ env('MAIL_HOST') }}"
+                                         value="{{ $env_smtp['MAIL_HOST'] }}"
                             />
                         </div>
                         <div class="col-md-3">
@@ -121,7 +121,7 @@
                                          required
                                          class="required"
                                          max="10"
-                                         value="{{ env('MAIL_PORT') }}"
+                                         value="{{ $env_smtp['MAIL_PORT'] }}"
                             />
                         </div>
                         <div class="col-md-3">
@@ -129,12 +129,12 @@
                                            label="{{ __('Verschlüsselung') }}"
                                            required
                                            class="required"
-                                           value="{{ env('MAIL_ENCRYPTION') }}"
+                                           value="{{ $env_smtp['MAIL_ENCRYPTION'] }}"
 
                             >
-                                <option value="" {{ env('MAIL_ENCRYPTION')==='' ? ' selected ': '' }}>{{ __('ohne') }}</option>
-                                <option value="ssl" {{ env('MAIL_ENCRYPTION')==='ssl' ? ' selected ': '' }}>ssl</option>
-                                <option value="tls" {{ env('MAIL_ENCRYPTION')==='tls' ? ' selected ': '' }}>tls</option>
+                                <option value="" {{ $env_smtp['MAIL_ENCRYPTION']==='' ? ' selected ': '' }}>{{ __('ohne') }}</option>
+                                <option value="ssl" {{ $env_smtp['MAIL_ENCRYPTION']==='ssl' ? ' selected ': '' }}>ssl</option>
+                                <option value="tls" {{ $env_smtp['MAIL_ENCRYPTION']==='tls' ? ' selected ': '' }}>tls</option>
                             </x-selectfield>
                         </div>
                     </div>
@@ -145,8 +145,8 @@
                                          max="100"
                                          required
                                          class="required"
-                                         max="10"
-                                         value="{{ env('MAIL_USERNAME') }}"
+                                         max="100"
+                                         value="{{ $env_smtp['MAIL_USERNAME'] }}"
                             />
                         </div>
                         <div class="col-md-6">
@@ -155,8 +155,8 @@
                                          label="{{ __('Passwort') }}"
                                          required
                                          class="required"
-                                         max="10"
-                                         value="{{ $smtpdata['MAIL_PASSWORD'] }}"
+                                         max="100"
+                                         value="{{ $env_smtp['MAIL_PASSWORD'] }}"
                             />
                         </div>
                     </div>
@@ -164,21 +164,44 @@
                         <div class="col-md-6">
                             <x-textfield id="MAIL_FROM_NAME"
                                          label="{{ __('Angezeiger Name der System E-Mails') }}"
-                                         value="{{ env('MAIL_FROM_NAME') }}"
+                                         value="{{ $env_smtp['MAIL_FROM_NAME'] }}"
                             />
                         </div>
                         <div class="col-md-6">
                             <x-textfield id="MAIL_FROM_ADDRESS"
                                          label="{{ __('E-Mail Adresse der Systememails') }}"
-                                         value="{{ env('MAIL_FROM_ADDRESS') }}"
+                                         value="{{ $env_smtp['MAIL_FROM_ADDRESS'] }}"
                             />
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <x-btnSave>{{ __('E-Mail Server speichern') }}</x-btnSave>
-                            <button class="btn btn-outline-secondary ml-2" id="sendTestEmail">{{ __('Testmail versenden') }}</button>
+                        <div class="col-md-5">
+                            <x-btnSave>{{ __('SMTP Server speichern') }}</x-btnSave>
+                            <button type="button"
+                                    class="btn btn-outline-secondary ml-md-2 mr-2 mr-md-4"
+                                    id="sendTestEmail"
+                            >{{ __('Verbindung prüfen') }}</button>
+                        </div>
+                        <div class="col-md-7">
+                            <div id="testMailSpinner" class="d-none align-items-center">
+                                <div class="fa-2x text-muted mr-2 mr-md-4">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <span class="lead">{{ __('Prüfe Verbindung zu SMPT Server '. env('MAIL_HOST') . ':'.env('MAIL_PORT')) }}</span>
+                            </div>
+                            <div id="testMailSucess" class="d-none">
+                                <i class="fas fa-check text-success fa-2x mr-2 mr-md-4"></i>
+                                <span class="lead">{{ __('Erfolg') }}</span>
+                            </div>
+                            <div id="testMailFail" class="d-none">
+                                <i class="fas fa-times text-warning fa-2x mr-2 mr-md-4"></i>
+                                <div class="d-flex flex-column">
+                                    <span class="lead">{{ __('Fehler') }}</span>
+                                    <span id="testMailFailText"></span>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
@@ -193,4 +216,32 @@
 @section('scripts')
 
 
+    <script>
+        $('#sendTestEmail').click(function () {
+            const testMailSpinner = $('#testMailSpinner');
+            testMailSpinner.removeClass('d-none').addClass('d-flex');
+            $('#testMailSucess').addClass('d-none');
+            $('#testMailFail').addClass('d-none');
+
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('email.test') }}",
+                data: {},
+                success: function (res) {
+
+                    testMailSpinner.removeClass('d-flex').addClass('d-none');
+                    if (res.status){
+                        $('#testMailSucess').removeClass('d-none').addClass('d-flex');
+                    } else if(res.error) {
+                        $('#testMailFailText').text(res.error);
+                        $('#testMailFail').removeClass('d-none').addClass('d-flex');
+                    } else {
+                        $('#testMailFailText').text('{{ __('Da ist was schief gegangen. Bitte den Support benachrichtigen. Danke!') }}');
+                        $('#testMailFail').removeClass('d-none').addClass('d-flex');
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

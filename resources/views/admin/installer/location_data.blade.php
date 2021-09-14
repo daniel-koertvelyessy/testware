@@ -177,26 +177,32 @@
              id="navbarSupportedContent"
         >
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item disabled">
+                <li class="nav-item">
                     <a class="nav-link"
-                       href="{{ route('installer.company') }}"
+                       href="{{ route('installer.server') }}"
                        tabindex="-1"
-                       aria-disabled="true"
-                    >{{ __('Firmierung') }} </a>
+                       aria-disabled="false"
+                    >{{ __('Server') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{{ route('installer.user') }}"
-                       tabindex="-1"
-                       aria-disabled="true"
-                    >{{ __('Benutzer') }}</a>
+                       aria-disabled="false"
+                    >{{ __('Benutzer') }} </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active"
+                    <a class="nav-link"
+                       aria-disabled="false"
+                       href="{{ route('installer.company') }}"
+                    >{{ __('Firmierung') }}</a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link disabled"
                        href="{{ route('installer.location') }}"
                        tabindex="-1"
                        aria-disabled="true"
-                    >{{ __('memStandort') }} <span class="sr-only">(current)</span></a>
+                    >{{ __('memStandort') }}<span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <div class="navbar-nav">
