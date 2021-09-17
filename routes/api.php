@@ -33,6 +33,8 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
         'storage'                    => 'CompartmentController',
         'product'                    => 'ProductController',
         'company'                    => 'CompanyController',
+        'contact'                    => 'ContactController',
+        'address'                    => 'AddressController',
         'product_parameter'          => 'ProductParameterController',
         'product_category'           => 'ProductCategoryController',
         'product_category_parameter' => 'ProductCategoryParameterController',
@@ -57,6 +59,9 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
     Route::post('/buildings', 'BuildingController@storemany')->name('addbuildings');
     Route::post('/rooms', 'RoomController@storemany')->name('addrooms');
     Route::post('/storages', 'CompartmentController@storemany')->name('addstorages');
+    Route::post('/addresses', 'AddressController@storemany')->name('addresses');
+    Route::post('/companies', 'CompanyController@storemany')->name('companies');
+    Route::post('/contacts', 'ContactController@storemany')->name('make.contacts');
 
 });
 

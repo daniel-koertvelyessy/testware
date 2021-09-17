@@ -78,10 +78,24 @@ class Firma extends Model
         $this->fa_vat = $request->fa_vat;
         $this->adresse_id = isset($request->adresse_id) ? $request->adresse_id : 1;
         $this->save();
-
         return $this->id;
+    }
 
+    public function addFromAPI(array $data)
+    {
+        $this->fa_label = $data['label'];
+        $this->fa_name = $data['name'];
+        $this->fa_description = $data['description'];
+        $this->fa_kreditor_nr = $data['vendor_id'];
+        $this->fa_debitor_nr = $data['custmer_id'];
+        $this->fa_vat = $data['vat'];
+        if (isset($data['address']) && isset($data['address']['label'])){
+            $this->adresse_id =(new Adresse)->addFromAPI($data['address']);
+        } else {
+            $this->adresse_id = $data['address_id'] ?? 1;
+        }
 
+        return ($this->save()) ? $this->id : false;
     }
 
     public function getEntry(array $data)

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\address;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AddressFull extends JsonResource
+class Address extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,8 @@ class AddressFull extends JsonResource
     public function toArray($request)
     {
         return [
-            'type'                    => new AddressType($this->AddressType),
+            'id'                      => $this->id,
+            'address_type_id'         => $this->address_type_id,
             'label'                   => $this->ad_label,
             'name'                    => $this->ad_name,
             'company'                 => $this->ad_name_firma,
@@ -31,7 +32,7 @@ class AddressFull extends JsonResource
             'zip'                     => $this->ad_anschrift_plz,
             'city'                    => $this->ad_anschrift_ort,
             'floor'                   => $this->ad_anschrift_etage,
-            'enterance'               => $this->ad_anschrift_eingang,
+            'entrance'                => $this->ad_anschrift_eingang,
         ];
     }
 }

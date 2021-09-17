@@ -26,7 +26,7 @@ class Company extends JsonResource
             'creditor_no' => $this->fa_kreditor_nr,
             'debitor_no'  => $this->fa_debitor_nr,
             'vat'         => $this->fa_vat,
-            'address_id'  => $this->address_id,
+            'address_id'  => $this->adresse_id,
         ];
     }
 }

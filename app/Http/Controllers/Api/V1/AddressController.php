@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Adresse;
-use App\Firma;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Resources\companies\Company as CompanyResource;
+use App\Http\Resources\address\Address as AddressResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
 
-class CompanyController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,9 +20,9 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         if ($request->input('per_page')) {
-            return CompanyResource::collection(Firma::with('Adresse')->paginate($request->input('per_page')));
+            return AddressResource::collection(Adresse::all()->paginate($request->input('per_page')));
         }
-        return CompanyResource::collection(Firma::with('Adresse')->get());
+        return AddressResource::collection(Adresse::all());
     }
 
     /**
@@ -31,7 +30,7 @@ class CompanyController extends Controller
      *
      * @param  Request $request
      *
-     * @return CompanyResource|JsonResponse
+     * @return AddressResource|JsonResponse
      */
     public function storeMany(Request $request)
     {
@@ -45,19 +44,30 @@ class CompanyController extends Controller
             $countUpdate = 0;
             $countSkipped = 0;
             foreach ($jsondata as $data) {
-                if ($this->checkCompanyExists($data['name'])) {
+                if (is_null($data['label']) || is_null($data['city']) || is_null($data['zip'])) {
                     $countSkipped++;
-                    $skippedObjectIdList[] = new CompanyResource(Firma::where('fa_name', $data['name'])->first());
+                    $skippedObjectIdList[] = [
+                        'empty required values' => [
+                            'label'  => $data['label'] ?? '<- required',
+                            'zip' => $data['zip'] ?? '<- required',
+                            'city'   => $data['city'] ?? '<- required',
+                        ]
+                    ];
                     continue;
                 }
-
-                $id = (new Firma)->addFromAPI($data);
-                if($id>0){
+                if ($this->checkAddressExists($data['label'])) {
+                    $countSkipped++;
+                    $skippedObjectIdList[] = new AddressResource(Adresse::where('ad_label', $data['label'])->first());
+                    continue;
+                }
+                $id = (new Adresse)->addFromAPI($data);
+                if ($id > 0) {
                     $idList[] =  $id;
+//                    $idList[] = new AddressResource(Adresse::find($id));
                     $countNew++;
                 } else {
                     $countSkipped++;
-//                    Log::warning('API could not create new product! => '. $data['name']);
+//                    Log::warning('API could not create new address! => '. $data['label']);
                 }
             }
 
@@ -68,8 +78,8 @@ class CompanyController extends Controller
                     'id_list' => $skippedObjectIdList
                 ],
                 'new_objects'     => [
-                    'total'      => $countNew,
-                    'product_id' => $idList
+                    'total'     => $countNew,
+                    'adress_id' => $idList
                 ],
             ]);
         }
@@ -81,38 +91,24 @@ class CompanyController extends Controller
      *
      * @param  Request $request
      *
-     * @return CompanyResource|JsonResponse
+     * @return AddressResource|JsonResponse
      */
     public function store(Request $request)
     {
-
-        if ($this->checkCompanyExists($request->name)) return response()->json([
-            'Error'   => 'A company with the provided name already exists',
-            'company' => new CompanyResource(Firma::where('fa_name', $request->name)->first())
+        if ($this->checkAddressExists($request->label)) return response()->json([
+            'Error'   => 'Am address with the provided name already exists',
+            'company' => new AddressResource(Adresse::where('ad_label', $request->label)->first())
         ], 422);
 
-        $company = new Firma();
-        $company->fa_label = $request->label;
-        $company->fa_name = $request->name;
-        $company->fa_description = $request->description;
-        $company->fa_kreditor_nr = $request->vendor_id;
-        $company->fa_debitor_nr = $request->custmer_id;
-        $company->fa_vat = $request->vat;
-
-        if (isset($request->address) && isset($request->address['label'])){
-            $company->adresse_id =(new Adresse)->addFromAPI($request->address, false);
-        } else {
-            $company->adresse_id = $request->adresse_id ?? 1;
-        }
-
-        return ($company->save()) ? new CompanyResource($company) : response()->json([
+        $address_id = (new Adresse)->addAddress($request);
+        return ($address_id > 0) ? new AddressResource($address_id) : response()->json([
             'Error' => 'An error occurred during the storing of the company.'
         ], 422);
     }
 
-    protected function checkCompanyExists($name)
+    protected function checkAddressExists($label)
     {
-        return Firma::where('fa_name', $name)->count() > 0;
+        return Adresse::where('ad_label', $label)->count() > 0;
     }
 
     /**
@@ -120,13 +116,13 @@ class CompanyController extends Controller
      *
      * @param  int $id
      *
-     * @return CompanyResource|JsonResponse
+     * @return AddressResource|JsonResponse
      */
-    public function show(int $id)
+    public function show($id)
     {
-        $company = Firma::find($id);
-        return ($company) ? new CompanyResource($company) : response()->json([
-            'Error' => 'The requested company was not found on this server.'
+        $address = Adresse::find($id);
+        return ($address) ? new AddressResource($address) : response()->json([
+            'Error' => 'The requested address was not found on this server.'
         ], 404);
     }
 
@@ -151,9 +147,8 @@ class CompanyController extends Controller
      * @return JsonResponse
      */
     public function destroy(int $id)
-    : JsonResponse
     {
-        $msg = Firma::destroy([$id]) ? [
+        $msg = Adresse::destroy([$id]) ? [
             'Deleted' => 'The address was deleted'
         ] : [
             'Error' => 'An error occurred during the deletion of the address.'

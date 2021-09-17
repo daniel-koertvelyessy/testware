@@ -24,3 +24,5 @@ git_update.py
 update.py
 
 .DS_Store
+app.env
+docker-compose.yml
