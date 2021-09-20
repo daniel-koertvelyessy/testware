@@ -41,38 +41,33 @@ class AddressController extends Controller
             $idList = [];
             $skippedObjectIdList = [];
             $countNew = 0;
-            $countUpdate = 0;
             $countSkipped = 0;
             foreach ($jsondata as $data) {
                 if (is_null($data['label']) || is_null($data['city']) || is_null($data['zip'])) {
                     $countSkipped++;
-                    $skippedObjectIdList[] = [
-                        'empty required values' => [
+                    $skippedObjectIdList['empty required values'][] = [
                             'label'  => $data['label'] ?? '<- required',
                             'zip' => $data['zip'] ?? '<- required',
                             'city'   => $data['city'] ?? '<- required',
-                        ]
+
                     ];
                     continue;
                 }
                 if ($this->checkAddressExists($data['label'])) {
                     $countSkipped++;
-                    $skippedObjectIdList[] = new AddressResource(Adresse::where('ad_label', $data['label'])->first());
+                    $skippedObjectIdList['duplicate entry'][] =  new AddressResource(Adresse::where('ad_label', $data['label'])->first());
                     continue;
                 }
                 $id = (new Adresse)->addFromAPI($data);
                 if ($id > 0) {
-                    $idList[] =  $id;
-//                    $idList[] = new AddressResource(Adresse::find($id));
+                    $idList[] = new AddressResource(Adresse::find($id));
                     $countNew++;
                 } else {
                     $countSkipped++;
-//                    Log::warning('API could not create new address! => '. $data['label']);
                 }
             }
 
             return response()->json([
-                'updated_objects' => $countUpdate,
                 'skipped_objects' => [
                     'total'   => $countSkipped,
                     'id_list' => $skippedObjectIdList
