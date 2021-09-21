@@ -688,7 +688,7 @@
                                 now()->
                                 add(
                                     $test->Anforderung->an_control_interval,
-                                    strtolower($test->Anforderung->ControlInterval->ci_delta)
+                                    mb_strtolower($test->Anforderung->ControlInterval->ci_delta)
                                     )
                                 ->toDateString()
                                 }}"

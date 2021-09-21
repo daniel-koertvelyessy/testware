@@ -43,6 +43,7 @@ class AddressController extends Controller
             $countNew = 0;
             $countSkipped = 0;
             foreach ($jsondata as $data) {
+                echo 'process -> '.$data['name']. "\n";
                 if (is_null($data['label']) || is_null($data['city']) || is_null($data['zip'])) {
                     $countSkipped++;
                     $skippedObjectIdList['empty required values'][] = [
@@ -95,9 +96,9 @@ class AddressController extends Controller
             'company' => new AddressResource(Adresse::where('ad_label', $request->label)->first())
         ], 422);
 
-        $address_id = (new Adresse)->addAddress($request);
-        return ($address_id > 0) ? new AddressResource($address_id) : response()->json([
-            'Error' => 'An error occurred during the storing of the company.'
+        $address_id = (new Adresse)->addFromAPI($request->toArray());
+        return ($address_id > 0) ? new AddressResource(Adresse::find($address_id)) : response()->json([
+            'Error' => 'An error occurred during the storing of the address.'
         ], 422);
     }
 

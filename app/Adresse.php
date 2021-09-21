@@ -58,7 +58,7 @@ class Adresse extends Model
         return $this->hasOne(Firma::class);
     }
 
-    public function addAddress(Request $request, $model = false)
+    public function addLocationAddress(Request $request, $model = false)
     {
         if (isset($request->address) && isset($request->address['label'])) {
             $request->validate([
@@ -110,54 +110,9 @@ class Adresse extends Model
         }
     }
 
-    public function addAddressArray($data)
-    {
-
-        if (isset($data) && isset($data['label'])) {
-            $adresse = new Adresse();
-            $adresse->ad_label = $data['label'];
-            $adresse->ad_name = $data['name'];
-            $adresse->ad_name_firma = $data['company'];
-            $adresse->ad_name_firma_2 = $data['company_2'];
-            $adresse->ad_name_firma_co = $data['company_co'];
-            $adresse->ad_name_firma_abladestelle = $data['company_unloading_point'];
-            $adresse->ad_anschrift_strasse = $data['street'];
-            $adresse->ad_anschrift_hausnummer = $data['no'];
-            $adresse->ad_anschrift_plz = $data['zip'];
-            $adresse->ad_anschrift_ort = $data['city'];
-            $adresse->land_id = (isset($data['country_id'])) ? $data['country_id'] : 1;
-
-            /**
-             * Check if address-type or respective id is given
-             */
-            if (isset($data['address_type']['name'])) {
-                $st = AddressType::where('adt_name', $data['address_type'])->first();
-                if (!$st) {
-                    $address_type = new AddressType();
-                    $address_type->adt_name = $data['address_type']['name'];
-                    $address_type->adt_text_lang = (isset($data['address_type']['description'])) ? $data['address_type']['description'] : null;
-                    $address_type->save();
-                    $adresse->address_type_id = $address_type->id;
-                } else {
-                    $adresse->address_type_id = $st->id;
-                }
-            } elseif (isset($data['address_type_id'])) {
-                $adresse->address_type_id = (AddressType::find($data['address_type_id'])) ? $data['address_type_id'] : 1;
-            } else {
-                $adresse->address_type_id = 1;
-            }
-            $adresse->save();
-            return $adresse->id;
-        } elseif (isset($data['address_id'])) {
-            return (Adresse::find($data['address_id'])) ? $data['address_id'] : null;
-        } else {
-            return null;
-        }
-    }
-
     /**
-     * @param       $data
-     * @param  bool $addCompanyData
+     * @param  array $data
+     * @param  bool  $addCompanyData
      *
      * @return mixed|null
      */
@@ -168,16 +123,16 @@ class Adresse extends Model
 
         if (isset($data['label'])) {
             $adresse = new Adresse();
-            $adresse->ad_label = $data['label'];
-            $adresse->ad_name = $data['name'];
-            $adresse->ad_name_firma = $data['company'];
-            $adresse->ad_name_firma_2 = $data['company_2'] ?? null;
-            $adresse->ad_name_firma_co = $data['company_co'] ?? null;
-            $adresse->ad_name_firma_abladestelle = $data['company_unloading_point'] ?? null;
-            $adresse->ad_anschrift_strasse = $data['street'];
-            $adresse->ad_anschrift_hausnummer = $data['no'];
-            $adresse->ad_anschrift_plz = $data['zip'];
-            $adresse->ad_anschrift_ort = $data['city'];
+            $adresse->ad_label = $this->encUft($data['label']);
+            $adresse->ad_name = $this->encUft($data['name']);
+            $adresse->ad_name_firma = $this->encUft($data['company']);
+            $adresse->ad_name_firma_2 = $this->encUft($data['company_2']) ?? null;
+            $adresse->ad_name_firma_co = $this->encUft($data['company_co']) ?? null;
+            $adresse->ad_name_firma_abladestelle = $this->encUft($data['company_unloading_point']) ?? null;
+            $adresse->ad_anschrift_strasse = $this->encUft($data['street']);
+            $adresse->ad_anschrift_hausnummer = $this->encUft($data['no']);
+            $adresse->ad_anschrift_plz = $this->encUft($data['zip']);
+            $adresse->ad_anschrift_ort = $this->encUft($data['city']);
             $adresse->land_id = (isset($data['country_id'])) ? $data['country_id'] : 1;
 
             /**
@@ -187,8 +142,8 @@ class Adresse extends Model
                 $existingAddress = AddressType::where('adt_name', $data['address_type'])->first();
                 if (!$existingAddress) {
                     $address_type = new AddressType();
-                    $address_type->adt_name = $data['address_type']['name'];
-                    $address_type->adt_text_lang = (isset($data['address_type']['description'])) ? $data['address_type']['description'] : null;
+                    $address_type->adt_name = $this->encUft($data['address_type']['name']);
+                    $address_type->adt_text_lang = (isset($data['address_type']['description'])) ? $this->encUft($data['address_type']['description']) : null;
                     $address_type->save();
                     $adresse->address_type_id = $address_type->id;
                 } else {
@@ -217,9 +172,11 @@ class Adresse extends Model
                 ])->first();
                 if (!$existingCompany) {
                     $company = new Firma();
-                    $company->fa_label = strtolower(substr(preg_replace('/\s/', '_', 'co_API_' . $adresse->id . $data['company']), 0, 20));
-                    $company->fa_name = $data['company'];
-                    $company->fa_description = "Generated by API during creation of address " . $data['label'];
+                    $label = mb_strtolower(substr( 'co_API_'.$adresse->id. '_' . preg_replace('/\s/', '_',$this->encUft($data['company'])), 0, 20));
+                    echo 'new label => '. $label . "\n";
+                    $company->fa_label = $label;
+                    $company->fa_name = $this->encUft($data['company']);
+                    $company->fa_description = "Generated by API during creation of address " . $this->encUft($data['label']);
                     $company->adresse_id = $adresse->id;
                     $company->save();
                 }
@@ -276,5 +233,10 @@ class Adresse extends Model
             'ad_anschrift_plz'     => 'required',
             'ad_anschrift_ort'     => 'required'
         ]);
+    }
+
+    public function encUft($string)
+    {
+       return (is_null($string)) ? NULL : mb_convert_encoding($string,'UTF-8',mb_detect_encoding($string, "UTF-8, ISO-8859-1, ISO-8859-15, ASCII"));
     }
 }

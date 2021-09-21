@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\contacts\Contact as ContactResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -44,8 +43,8 @@ class ContactController extends Controller
             $countNew = 0;
             $countSkipped = 0;
             foreach ($jsondata as $data) {
-                if ($this->checkContactExists($data['name'], $data['vorname'], $data['company'])) {
-                    $skippedObjectIdList[] = $data['name'] . ' - ' . $data['vorname'] . ' - ' . $data['company'];
+                if ($this->checkContactExists($data['name'], $data['last_name'], $data['company'])) {
+                    $skippedObjectIdList[] = $data['name'] . ' - ' . $data['last_name'] . ' - ' . $data['company'];
                     $countSkipped++;
                     continue;
                 }
@@ -86,20 +85,9 @@ class ContactController extends Controller
             'Error'   => 'Am contact with the provided name already exists',
             'contact' => 'oijoi'
         ], 422);
-/*
- new ContactResource(Contact::where([
-                [
-                    'con_name',
-                    $request->name
-                ],
-                [
-                    'con_vorname',
-                    $request->vorname
-                ]
-            ])->first())
- */
-        $address_id = (new Contact)->addContact($request);
-        return ($address_id > 0) ? new ContactResource($address_id) : response()->json([
+
+        $address_id = (new Contact)->addFromAPI($request->toArray());
+        return ($address_id > 0) ? new ContactResource(Contact::find($address_id)) : response()->json([
             'Error' => 'An error occurred during the storing of the contact.'
         ], 422);
     }
@@ -145,11 +133,18 @@ class ContactController extends Controller
      *
      * @param  int $id
      *
-     * @return ContactResource
+     * @return ContactResource|Jsonresponse
      */
-    public function show($id)
+    public function show(int $id)
     {
-        return new ContactResource(Contact::find($id));
+        $contact = Contact::find($id);
+        if ($contact) {
+            return new ContactResource($contact->id);
+        } else {
+            return response()->json([
+                'Error' => 'The requested contact cannot be found on this server.'
+            ], 404);
+        }
     }
 
     /**

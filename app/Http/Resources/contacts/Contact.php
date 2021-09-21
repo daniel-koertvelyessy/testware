@@ -17,22 +17,22 @@ class Contact extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'        => $this->id,
-            'created'   => (string)$this->created_at,
-            'updated'   => (string)$this->updated_at,
-            'label'     => $this->label,
-            'name'      => $this->name,
-            'name_2'    => $this->name_2,
-            'vorname'   => $this->vorname,
-            'position'  => $this->position,
-            'email'     => $this->email,
-            'phone'     => $this->phone,
-            'mobil'     => $this->mobil,
-            'fax'       => $this->fax,
-            'com_1'     => $this->com_1,
-            'com_2'     => $this->com_2,
-            'firma_id'  => $this->firma_id,
-            'anrede_id' => $this->anrede_id ?? 1,
+            'id'         => $this->id,
+            'created'    => (string)$this->created_at,
+            'updated'    => (string)$this->updated_at,
+            'label'      => $this->con_label,
+            'last_name'  => $this->con_name,
+            'name_2'     => $this->con_name_2,
+            'first_name' => $this->con_vorname,
+            'position'   => $this->con_position,
+            'email'      => $this->con_email,
+            'phone'      => $this->con_phone,
+            'mobil'      => $this->con_mobil,
+            'fax'        => $this->con_fax,
+            'com_1'      => $this->con_com_1,
+            'com_2'      => $this->con_com_2,
+            'firma_id'   => $this->firma_id,
+            'anrede_id'  => $this->anrede_id ?? 1,
         ];
     }
 }

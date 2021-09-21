@@ -23,7 +23,7 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -37,7 +37,7 @@ class ContactController extends Controller
      *
      * @param  Request $request
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
