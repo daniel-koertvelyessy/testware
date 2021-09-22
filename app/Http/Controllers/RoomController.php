@@ -422,4 +422,21 @@ class RoomController extends Controller
 
         return ['html' => $html];
     }
+
+    /**
+     * Check if a label exists for a building
+     *
+     * @return bool[]
+     */
+    public function checkDuplicateLabel(Request $request)
+    : array
+    {
+        $building = Room::where('r_label', $request->term)->first();
+        return ($building) ? [
+            'exists' => true
+        ] : [
+            'exists' => false
+        ];
+    }
+
 }

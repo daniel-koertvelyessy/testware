@@ -68,8 +68,9 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <x-rtextfield id="b_label"
-                                             label="{{ __('Kurzbezeichnung') }}"
-                                             max="20"
+                                              label="{{ __('Kurzbezeichnung') }}"
+                                              max="20"
+                                              class="checkLabel"
                                 />
                             </div>
                             <div class="col-md-8">
@@ -207,6 +208,7 @@
                                              label="{{ __('Kurzbezeichnung') }}"
                                              required
                                              max="20"
+                                             class="checkLabel"
                                 />
                             </div>
                             <div class="col-md-6">
@@ -316,6 +318,7 @@
                                              label="{{ __('Kurzbezeichnung') }}"
                                              required
                                              max="20"
+                                             class="checkLabel"
                                 />
                             </div>
                             <div class="col-md-6">
@@ -992,31 +995,32 @@
                     dataType: 'json',
                     url: "{{ route('getBuildingData') }}",
                     data: {id},
-                    success: (res) => {
-                        form.find('#b_name_ort').val(res.b_name_ort);
-                        form.find('#storage_id_building').val(res.storage_id);
-                        form.find('#b_name').val(res.b_name);
-                        form.find('#b_description').val(res.b_description);
-                        if (res.b_we_has === 1)
+                    success: (building) => {
+                        form.find('#b_name_ort').val(building.b_name_ort);
+                        form.find('#storage_id_building').val(building.storage_id);
+                        form.find('#b_name').val(building.b_name);
+                        form.find('#b_description').val(building.b_description);
+                        if (building.b_we_has === 1)
                             form.find('#b_we_has').prop('checked', true);
-                        form.find('#b_we_name').val(res.b_we_name);
-                        form.find('#location_id').val(res.location_id);
-                        form.find('#building_type_id').val(res.building_type_id);
+                        form.find('#b_we_name').val(building.b_we_name);
+                        form.find('#location_id').val(building.location_id);
+                        form.find('#building_type_id').val(building.building_type_id);
+
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
                             $('#modalSetBuildingLabel').text('{{ __('Gebäude bearbeiten') }}');
                             form.find('#modalType').val('edit');
-                            form.find('#b_label').val(res.b_label);
+                            form.find('#b_label').val(building.b_label);
                             modalBuilding.modal('show');
                         } else {
                             $.ajax({
                                 type: "get",
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
-                                success: function (res) {
+                                success: function (newBuildingUid) {
                                     $('#modalSetBuildingLabel').text('{{ __('Gebäude kopieren') }}');
-                                    form.find('#b_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}');
-                                    form.find('#storage_id_building').val(res);
+                                    form.find('#b_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val(building.b_label+'_{{ __('Kopie') }}');
+                                    form.find('#storage_id_building').val(newBuildingUid);
                                     form.find('#modalType').val('copy');
                                     modalBuilding.modal('show');
                                 }
@@ -1026,6 +1030,7 @@
                 });
             }
         });
+
 
         $('.btnRoom').click(function () {
             const type = $(this).data('type'),
@@ -1053,28 +1058,28 @@
                     dataType: 'json',
                     url: "{{ route('getRoomData') }}",
                     data: {id},
-                    success: (res) => {
-                        form.find('#r_label').val(res.r_label);
-                        form.find('#storage_id_room').val(res.storage_id);
-                        form.find('#r_name').val(res.r_name);
-                        form.find('#r_description').val(res.r_description);
-                        form.find('#building_id_room_modal').val(res.building_id);
-                        form.find('#room_type_id').val(res.room_type_id);
+                    success: (room) => {
+                        form.find('#r_label').val(room.r_label);
+                        form.find('#storage_id_room').val(room.storage_id);
+                        form.find('#r_name').val(room.r_name);
+                        form.find('#r_description').val(room.r_description);
+                        form.find('#building_id_room_modal').val(room.building_id);
+                        form.find('#room_type_id').val(room.room_type_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
                             $('#modalSetRoomLabel').text('{{__('Raum bearbeiten')}}');
                             form.find('#modalType_room').val('edit');
-                            form.find('#r_label').val(res.r_label);
+                            form.find('#r_label').val(room.r_label);
                             modalRoom.modal('show');
                         } else {
                             $.ajax({
                                 type: "get",
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
-                                success: function (res) {
+                                success: function (newRoomUid) {
                                     $('#modalSetRoomLabel').text('{{__('Raum kopieren')}}');
-                                    form.find('#r_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
-                                    form.find('#storage_id_room').val(res);
+                                    form.find('#r_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val(room.r_label+'_{{ __('Kopie') }}');
+                                    form.find('#storage_id_room').val(newRoomUid);
                                     form.find('#modalType_room').val('copy');
                                     modalRoom.modal('show');
                                 }
@@ -1112,33 +1117,93 @@
                     dataType: 'json',
                     url: "{{ route('getStellplatzData') }}",
                     data: {id},
-                    success: (res) => {
-                        console.log(res);
-                        form.find('#sp_label').val(res.sp_label);
-                        form.find('#storage_id_compartment').val(res.storage_id);
-                        form.find('#sp_name').val(res.sp_name);
-                        form.find('#sp_description').val(res.sp_description);
-                        form.find('#room_id_compartment_modal').val(res.room_id);
-                        form.find('#stellplatz_typ_id').val(res.stellplatz_typ_id);
+                    success: (storagePlace) => {
+                        console.log(storagePlace);
+                        form.find('#sp_label').val(storagePlace.sp_label);
+                        form.find('#storage_id_compartment').val(storagePlace.storage_id);
+                        form.find('#sp_name').val(storagePlace.sp_name);
+                        form.find('#sp_description').val(storagePlace.sp_description);
+                        form.find('#room_id_compartment_modal').val(storagePlace.room_id);
+                        form.find('#stellplatz_typ_id').val(storagePlace.stellplatz_typ_id);
                         if (type === 'edit') {
                             form.find('#id_modal').val(id);
                             $('#modalSetStellplatzLabel').text('{{__('Stellplatz bearbeiten')}}');
                             form.find('#modalType_compartment').val('edit');
-                            form.find('#sp_label').val(res.sp_label);
+                            form.find('#sp_label').val(storagePlace.sp_label);
                             modalStellplatz.modal('show');
                         } else {
                             $.ajax({
                                 type: "get",
                                 dataType: 'json',
                                 url: "{{ route('fetchUid') }}",
-                                success: function (res) {
+                                success: function (newStoragePlaceUid) {
                                     $('#modalSetStellplatzLabel').text('{{__('Stellplatz kopieren')}}');
-                                    form.find('#sp_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val('');
-                                    form.find('#storage_id_compartment').val(res);
+                                    form.find('#sp_label').attr('placeholder', '{{__('neue Kurzbezeichnung angeben')}}').val(storagePlace.sp_label+'_{{ __('Kopie') }}');
+                                    form.find('#storage_id_compartment').val(newStoragePlaceUid);
                                     form.find('#modalType_compartment').val('copy');
                                     modalStellplatz.modal('show');
                                 }
                             });
+                        }
+                    }
+                });
+            }
+        });
+
+
+        $('#b_label').blur(function (){
+            const modalMode = $('#frmModalSetBuilding').find('#modalType').val();
+            if (modalMode!=='edit') {
+                const label_nd = $('#b_label');
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json',
+                    url: "{{ route('checkDuplicateBuildingLabel') }}",
+                    data: {term: $(this).val()},
+                    success: function (buildingLabel) {
+                        if (buildingLabel.exists) {
+                            label_nd.addClass('is-invalid').removeClass('is-valid');
+                        } else {
+                            label_nd.removeClass('is-invalid').addClass('is-valid');
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#r_label').blur(function (){
+            const modalMode = $('#frmModalSetRoom').find('#modalType').val();
+            if (modalMode!=='edit') {
+                const label_nd = $('#r_label');
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json',
+                    url: "{{ route('checkDuplicateRoomLabel') }}",
+                    data: {term: $(this).val()},
+                    success: function (roomLabel) {
+                        if (roomLabel.exists) {
+                            label_nd.addClass('is-invalid').removeClass('is-valid');
+                        } else {
+                            label_nd.removeClass('is-invalid').addClass('is-valid');
+                        }
+                    }
+                });
+            }
+        });
+        $('#sp_label').blur(function (){
+            const modalMode = $('#frmModalSetStellplatz').find('#modalType').val();
+            if (modalMode!=='edit') {
+                const label_nd = $('#sp_label');
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json',
+                    url: "{{ route('checkDuplicateStoragePlaceLabel') }}",
+                    data: {term: $(this).val()},
+                    success: function (storageLabel) {
+                        if (storageLabel.exists) {
+                            label_nd.addClass('is-invalid').removeClass('is-valid');
+                        } else {
+                            label_nd.removeClass('is-invalid').addClass('is-valid');
                         }
                     }
                 });

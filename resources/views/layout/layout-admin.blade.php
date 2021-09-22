@@ -49,7 +49,7 @@
     ></div>
 @endauth
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <span id="sidebarCollapse"
               class="mr-2 m-0"
               style="border-bottom: 4px solid transparent !important; cursor:pointer;"

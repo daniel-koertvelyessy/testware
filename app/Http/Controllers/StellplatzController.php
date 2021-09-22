@@ -229,4 +229,20 @@ class StellplatzController extends Controller
 
         return $data;
     }
+
+    /**
+     * Check if a label exists for a storage place
+     *
+     * @return bool[]
+     */
+    public function checkDuplicateLabel(Request $request)
+    : array
+    {
+        $building = Stellplatz::where('sp_label', $request->term)->first();
+        return ($building) ? [
+            'exists' => true
+        ] : [
+            'exists' => false
+        ];
+    }
 }

@@ -339,15 +339,16 @@
                                         {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
                                 >Twitter Bootstrap
                                 </option>
+
+                                <option value="css/darkmode.css"
+                                        data-asset="{{ asset('css/darkmode.css') }}"
+                                        {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
+                                >Dark
+                                </option>
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
-                                        {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
+                                    {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
                                 >Light
-                                </option>
-                                <option value="css/hero.css"
-                                        data-asset="{{ asset('css/hero.css') }}"
-                                        {{ $user->user_theme=='css/hero.css'? ' selected ' : '' }}
-                                >Dark
                                 </option>
                                 <option value="css/materia.css"
                                         data-asset="{{ asset('css/materia.css') }}"

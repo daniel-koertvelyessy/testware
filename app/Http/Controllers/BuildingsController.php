@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -375,15 +376,20 @@ class BuildingsController extends Controller
     }
 
     /**
-     * Get the error messages for the defined validation rules.
+     * Check if a label exists for a building
      *
-     * @return array
+     * @return bool[]
      */
-    public function messages()
+    public function checkDuplicateLabel(Request $request)
+    : array
     {
-        return [
-            'b_we_name.required_if' => 'custom-message',
-            'body.required'         => 'A message is required',
+        $building = Building::where('b_label',$request->term)->first();
+        return ($building) ? [
+            'exists' => true
+        ] : [
+            'exists' => false
         ];
     }
+
+
 }

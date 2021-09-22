@@ -53,19 +53,16 @@ class ControlEquipmentController extends Controller
      */
     public function create(Request $request)
     {
-
+        $check_aci_execution_is_external = [];
+        $check_aci_control_equipment_required = [];
         $controlEquipmentIsComplete = true;
         $controlEquipmentIsCompleteMsg = __('<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>');
         $controlEquipmentIsCompleteItem = '';
-        $aci_execution = 0;
-        $aci_control_equipment_required = 0;
         $controlItem = ControlEquipment::find($request->test_id);
-        $qualifiedUser = 0;
-        $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
-        $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
+//        $qualifiedUser = 0;
+//        $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
+//        $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
 
-
-//dd($controlItem->Equipment);
 
         if ($controlItem->countQualifiedUser() === 0) {
             $controlEquipmentIsComplete = false;
@@ -81,8 +78,8 @@ class ControlEquipmentController extends Controller
 
         if ($controlEquipmentIsComplete) {
             foreach ($acidata as $aci) {
-                $aci_execution = ($aci->aci_execution === 1) ? 1 : 0;
-                $aci_control_equipment_required = ($aci->aci_control_equipment_required === 1) ? 1 : 0;
+                $check_aci_execution_is_external[] = $aci->aci_execution;
+                $check_aci_control_equipment_required[] = $aci->aci_control_equipment_required;
             }
 
             $enabledUser = [];
@@ -100,11 +97,12 @@ class ControlEquipmentController extends Controller
                 ];
             }
 
+
             return view('testware.control.create', [
-                'qualified_user_list'            => $enabledUser,
-                'test'                           => $controlItem,
-                'aci_execution'                  => $aci_execution,
-                'aci_control_equipment_required' => $aci_control_equipment_required,
+                'qualified_user_list'        => $enabledUser,
+                'test'                       => $controlItem,
+                'is_test_internal'           => !array_search(true, $check_aci_execution_is_external),
+                'control_equipment_required' => array_search(true, $check_aci_control_equipment_required),
             ]);
         } else {
             $controlEquipmentIsCompleteMsg .= $controlEquipmentIsCompleteItem;
@@ -192,12 +190,12 @@ class ControlEquipmentController extends Controller
         /**
          * Add Data to History
          */
-        $text = '<div class="d-flex flex-column">'. __('<span>Das Geräte wurde am :date geprüft:</span>', ['date' => $request->control_event_date]);
+        $text = '<div class="d-flex flex-column">' . __('<span>Das Geräte wurde am :date geprüft:</span>', ['date' => $request->control_event_date]);
 
         /**
          * Start list of results
          */
-        $text .='<ul>';
+        $text .= '<ul>';
         if (isset($request->event_item)) $text .= __('<li>:passed von :total Prüfungen wurden bestanden</li>', [
             'passed' => $itempassed,
             'total'  => count($request->event_item)
@@ -212,7 +210,7 @@ class ControlEquipmentController extends Controller
         if ($eventHasDoku) {
             $text .= __('<li>Das Dokument <span class="text-info">:name</span> wurde erfolgreich angefügt</li>', ['name' => $filename]);
         }
-        $text .='</ul></div>';
+        $text .= '</ul></div>';
 
         (new EquipmentHistory)->add(__('Prüfung am :conDate ausgeführt ', ['conDate' => $request->control_event_date]), $text, $request->equipment_id);
 
@@ -228,7 +226,7 @@ class ControlEquipmentController extends Controller
     : array
     {
         return request()->validate([
-            'control_event_next_due_date'        => 'date|required',
+            'control_event_next_due_date'        => 'date|required|after:control_event_date',
             'control_event_pass'                 => 'required',
             'control_event_date'                 => 'date|required',
             'control_event_controller_signature' => '',
@@ -238,6 +236,12 @@ class ControlEquipmentController extends Controller
             'user_id'                            => '',
             'control_event_text'                 => '',
             'control_equipment_id'               => 'required'
+        ], [
+            'control_event_pass.required'            => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
+            'control_event_controller_name.required' => __('Der Name des Prüfers ist nicht gegeben!'),
+            'control_event_next_due_date.required'   => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
+            'control_event_next_due_date.after'     => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
+            'control_event_date.required'            => __('Bitte tragen Sie das Datum der Prüfung ein!'),
         ]);
     }
 

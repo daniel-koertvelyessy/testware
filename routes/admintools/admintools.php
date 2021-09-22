@@ -39,6 +39,7 @@ Route::get('getStellplatzTypeList', 'AdminController@getStellplatzTypeList')->na
 Route::get('getStellplatzData', 'StellplatzController@getStellplatzData')->name('getStellplatzData');
 Route::get('getStellplatzList', 'StellplatzController@getStellplatzList')->name('getStellplatzList');
 Route::get('getObjectsInCompartment', 'StellplatzController@getObjectsInCompartment')->name('getObjectsInCompartment');
+Route::get('checkDuplicateStoragePlaceLabel', 'StellplatzController@checkDuplicateLabel')->name('checkDuplicateStoragePlaceLabel');
 
 Route::post('stellplatz.modal', 'StellplatzController@modal')->name('stellplatz.modal');
 Route::delete('destroyStellplatzAjax', 'StellplatzController@destroyStellplatzAjax')->name('destroyStellplatzAjax');
@@ -67,6 +68,7 @@ Route::get('getRoomData', 'RoomController@getRoomData')->name('getRoomData');
 Route::get('getRoomList', 'RoomController@getRoomList')->name('getRoomList');
 Route::get('getObjectsInRoom', 'RoomController@getObjectsInRoom')->name('getObjectsInRoom');
 Route::get('getStellplatzListInRoom', 'RoomController@getStellplatzListInRoom')->name('getStellplatzListInRoom');
+Route::get('checkDuplicateRoomLabel', 'RoomController@checkDuplicateLabel')->name('checkDuplicateRoomLabel');
 
 Route::post('room.modal', 'RoomController@modal')->name('room.modal');
 
@@ -92,6 +94,7 @@ Route::post('copyBuilding', 'BuildingsController@copyBuilding')->name('copyBuild
 Route::get('getBuildingListeAsTable', 'BuildingsController@getBuildingListeAsTable')->name('getBuildingListeAsTable');
 Route::get('getBuildingListeAsKachel', 'BuildingsController@getBuildingListeAsKachel')->name('getBuildingListeAsKachel');
 Route::get('getRoomListInBuilding', 'BuildingsController@getRoomListInBuilding')->name('getRoomListInBuilding');
+Route::get('checkDuplicateBuildingLabel', 'BuildingsController@checkDuplicateLabel')->name('checkDuplicateBuildingLabel');
 
 Route::get('getBuildingTypeList', 'AdminController@getBuildingTypeList')->name('getBuildingTypeList');
 Route::get('getBuildingData', 'BuildingsController@getBuildingData')->name('getBuildingData');

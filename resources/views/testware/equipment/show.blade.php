@@ -39,6 +39,14 @@
             <a class="dropdown-item"
                href="#"
                data-toggle="modal"
+               data-target="#modalStartControl"
+            >
+                <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
+                {{__('Prüfung erfassen')}}
+            </a>
+            <a class="dropdown-item"
+               href="#"
+               data-toggle="modal"
                data-target="#modalAddEquipFuncTest"
             >
                 <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
@@ -191,7 +199,7 @@
                                 <td>{{ $controlItem->Anforderung->an_name }}</td>
                                 <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                 <td class="d-flex align-items-center justify-content-between">
-                                    @if($controlItem->checkControlRequirementsMet()===null)
+                                    @if($controlItem->checkControlRequirementsMet()['success'])
                                         @if(Auth::user()->isQualified($equipment->id))
                                             <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
                                                class="btn btn-sm btn-outline-primary"
@@ -203,7 +211,7 @@
                                             </x-notifyer>
                                         @endif
                                     @else
-                                        {!! $controlItem->checkControlRequirementsMet() !!}
+                                        {!! $controlItem->checkControlRequirementsMet()['html'] !!}
                                     @endif
                                 </td>
                             </tr>
@@ -216,7 +224,6 @@
                         @endforelse
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
@@ -762,7 +769,7 @@
                                 <button class="btn btn-primary btn-lg mt-3"
                                         data-toggle="modal"
                                         data-target="#modalStartControl"
-                                >{{__('Prüfung/Wartung erfassen')}}
+                                >{{__('Prüfung erfassen')}}
                                     @if(!Auth::user()->isQualified($equipment->id))
                                         <span class="fas fa-exclamation text-warning ml-2"></span>
                                     @endif

@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('mainSection')
-    {{__('Prüfung erfassen')}}
+    {{ ( $is_test_internal) ?  __('Interne Prüfung erfassen'):__('Externe Prüfung erfassen') }}
 @endsection
 
 @section('pagetitle')
-    {{__('Prüfung erfassen')}}
+    {{ ( $is_test_internal) ?  __('Interne Prüfung erfassen') :__('Externe Prüfung erfassen')}} &triangleright; testWare
 @endsection
 
 @section('menu')
@@ -16,7 +16,7 @@
     <div class="modal fade "
          tabindex="-1"
          role="dialog"
-         aria-labelledby="myExtraLargeModalLabel"
+         aria-labelledby="signaturModalLabel"
          aria-hidden="true"
          id="signatureModal"
     >
@@ -26,7 +26,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"
-                        id="messWertDialog"
+                        id="signaturModalLabel"
                     >{{__('Unterschrift')}} <span id="sigHead"></span></h5>
                     <button type="button"
                             class="close"
@@ -120,7 +120,7 @@
         <div class="container">
             <div class="row mb-4 d-none d-md-block">
                 <div class="col">
-                    <h1 class="h3">{{ ( $aci_execution) ? __('Externe Prüfung erfassen') : __('Interne Prüfung erfassen') }}</h1>
+                    <h1 class="h3">{{ ( $is_test_internal) ? __('Interne Prüfung erfassen'): __('Externe Prüfung erfassen')  }}</h1>
                 </div>
             </div>
             <nav>
@@ -136,9 +136,8 @@
                        aria-controls="controlHead"
                        aria-selected="true"
                     >{{__('Kopfdaten')}}</a>
-
-                    @if ($aci_execution === 0)
-                        @if($aci_control_equipment_required===1)
+                    @if ($is_test_internal)
+                        @if($control_equipment_required)
                             <a class="nav-link"
                                id="controlEquipment-tab"
                                data-toggle="tab"
@@ -261,8 +260,11 @@
                         </div>
                     </div>
                     <div class="mt-5 border-top pt-2">
-                        @if ($aci_execution===0)
-                            @if($aci_control_equipment_required===1)
+                        <a href="{{ route('equipment.show',$equipment) }}"
+                           class="btn btn-sm btn-outline-secondary"
+                        >{{ __('Abbruch') }}</a>
+                        @if ($is_test_internal)
+                            @if($control_equipment_required)
                                 <button type="button"
                                         class="btn btn-sm btn-primary bentNextTab"
                                         data-showtab="#controlEquipment-tab"
@@ -285,8 +287,8 @@
                     </div>
 
                 </div>
-                @if ($aci_execution==0)
-                    @if($aci_control_equipment_required===1)
+                @if ($is_test_internal)
+                    @if($control_equipment_required)
                         <div class="tab-pane fade"
                              id="controlEquipment"
                              role="tabpanel"
@@ -557,7 +559,7 @@
                                        data-browse="{{__('Datei')}}"
                                        class="custom-file-input"
                                        accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
-                                       @if ($aci_execution===1)
+                                       @if ($is_test_internal)
                                        required
                                     @endif
                                 >
@@ -567,7 +569,7 @@
                             </div>
 
 
-                            @if ($aci_execution===0)
+                            @if ($is_test_internal)
 
 
                                 <h2 class="h4">{{__('Unterschriften')}}</h2>

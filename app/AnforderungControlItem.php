@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
 
 class AnforderungControlItem extends Model
@@ -24,6 +26,7 @@ class AnforderungControlItem extends Model
 
     protected $casts = [
         'aci_control_equipment_required' => 'boolean',
+        'aci_execution' => 'boolean',
     ];
 
     public function search($term)
@@ -75,4 +78,26 @@ class AnforderungControlItem extends Model
         }
         return ($isInComplete) ? $msgPG . $msgTo : false;
     }
+
+
+    public function add(Request $request)
+    {
+        $this->aci_label = $request->aci_label;
+        $this->aci_name = $request->aci_name;
+        $this->aci_task = $request->aci_task;
+        $this->aci_value_si = $request->aci_value_si;
+        $this->aci_vaule_soll = $request->aci_vaule_soll;
+        $this->aci_value_target_mode = $request->aci_value_target_mode;
+        $this->aci_value_tol = $request->aci_value_tol;
+        $this->aci_value_tol_mod = $request->aci_value_tol_mod;
+        $this->aci_execution = ($request->aci_execution==="0");
+        $this->aci_control_equipment_required = isset($request->aci_control_equipment_required);
+        $this->firma_id = ($request->aci_execution==="0") ? NULL : $request->firma_id;
+        $this->aci_contact_id = $request->aci_contact_id;
+        $this->anforderung_id = $request->anforderung_id;
+        return ($this->save()) ? $this->id : false;
+    }
+
+
+
 }

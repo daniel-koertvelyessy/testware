@@ -63,44 +63,68 @@ class ControlEquipment extends Model
         $controlItemMsg = '';
         $hasQualifiedUsersMsg = '';
         $hasTestItemMsg = '';
-
         $hasControlItems = 0;
+
+
         if ($this->countControlItems() > 0) {
             $hasControlItems = $this->countControlItems();
         } else {
-            $controlItemMsg = '<span class="bg-warning p-1">' . __('Keine Kontrollvorgänge gefunden!') . ' </span><a href="' . route('anforderungcontrolitem.create', ['anforderung_id' => $this->Anforderung->id]) . '" class="btn btn-sm btn-outline-primary ml-2">' . __('Beheben') . '</a>';
+            $controlItemMsg = $this->makeHtmlWarning(__('Keine Prüfschritte gefunden!'), route('anforderungcontrolitem.create', ['anforderung_id' => $this->Anforderung->id]));
+
         }
 
         $hasQualifiedUsers = 0;
         if ($this->countQualifiedUser() > 0) {
             $hasQualifiedUsers = $this->countQualifiedUser();
         } else {
-            $hasQualifiedUsersMsg = '<span class="bg-warning p-1">' . __('Keine befähigte Person gefunden!') . '</span>';
+            $hasQualifiedUsersMsg = $this->makeHtmlWarning(__('Keine befähigte Person gefunden!'), route('produkt.index'));
         }
-
+        $testProductsAvaliable = true;
         $hasTestItem = false;
-        $countControlProducts = ControlProdukt::all()->count();
+        $controlProductsAvaliable = ControlProdukt::all()->count();
+
         foreach ($this->Anforderung->AnforderungControlItem as $aci) {
-            if ($aci->aci_control_equipment_required === 1) {
-                if ($countControlProducts === 0) {
-                    $hasTestItem = true;
-                    $hasTestItemMsg = '<span class="bg-warning p-1">' . __('Keine Prüfmittel vorhanden!') . '</span><a href="' . route('produkt.index') . '" class="btn btn-sm btn-outline-primary ml-2">' . __('Beheben') . '</a>';
+            $hasTestItem = true;
+            if ($aci->aci_control_equipment_required) {
+                if ($controlProductsAvaliable === 0) {
+                    $testProductsAvaliable = false;
+                    $hasTestItemMsg = $this->makeHtmlWarning(__('Keine Prüfmittel vorhanden!'), route('produkt.index'));
                 }
             }
         }
 
-        if ($hasControlItems > 0 && $hasQualifiedUsers > 0 && !$hasTestItem) {
-            return null;
-        } else {
-            return $controlItemMsg . $hasQualifiedUsersMsg . $hasTestItemMsg;
-        }
+//        dump('countControlItems => ' . $this->countControlItems());
+//        dump('countQualifiedUser => ' . $this->countQualifiedUser());
+//        dump('$testProductsAvaliable => ', $testProductsAvaliable);
+//        dump('$hasTestItem => ', $hasTestItem);
+//        dump('$controlProductsAvaliable => ' . $controlProductsAvaliable);
+//        dump('$testProductsAvaliable => ', $testProductsAvaliable);
+//
+//        dd($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable));
 
+
+        if ($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable)) {
+            return [
+                'success' => true,
+                'html'    => null
+            ];
+        } else {
+            return [
+                'success' => false,
+                'html'    => $controlItemMsg . $hasQualifiedUsersMsg . $hasTestItemMsg
+            ];
+        }
 
     }
 
     public function countControlItems()
     {
         return $this->Anforderung->AnforderungControlItem->count();
+    }
+
+    public function makeHtmlWarning($msg, $link)
+    {
+        return '<span class="bg-warning p-1">' . $msg . '</span><a href="' . $link . '" class="btn btn-sm btn-outline-primary ml-2">' . __('Beheben') . '</a>';
     }
 
     public function countQualifiedUser()

@@ -1157,7 +1157,6 @@ input[data-function*='swipe']:checked ~ .sidebar {
     color: #18bc2c !important;
 }
 .page-footer {
-    background: #fff;
     border-top: 1px solid #848484;
 }
 body {
@@ -1622,7 +1621,7 @@ input.datepicker {
     min-width: 220px;
     max-width: 220px;
     color: #333333;
-    background: #ffffff;
+    //background: #ffffff;
     transition: all 0.5s;
     margin-left: 0;
     z-index: 100;

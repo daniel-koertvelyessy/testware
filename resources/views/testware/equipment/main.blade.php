@@ -41,7 +41,7 @@
                     <thead>
                     <tr>
                         <th class="">
-                            @sortablelink('produkt.prod_name', __('Bezeichnung'))
+                            @sortablelink('eq_name', __('Bezeichnung'))
                         </th>
                         <th class="d-none d-md-table-cell ">
                             @sortablelink('eq_inventar_nr', __('Inventarnummer'))
@@ -66,7 +66,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
-                                    {{ $equipment->produkt->prod_name }}
+                                    {{ $equipment->eq_name }}
                                 </a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>

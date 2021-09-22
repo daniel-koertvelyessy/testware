@@ -1032,12 +1032,13 @@
                                                                  label="{{ __('Kürzel') }}"
                                                                  required
                                                                  max="20"
+                                                                 class="required"
                                                     />
 
                                                     <x-textfield id="doctyp_name"
                                                                  label="{{ __('Name') }}"
-                                                                 required
                                                                  max="100"
+                                                                 class="required"
                                                     />
 
                                                     <x-textarea id="doctyp_description"
@@ -1112,12 +1113,13 @@
                                                         <x-textfield required
                                                                      id="updt_doctyp_label"
                                                                      label="{{__('Kürzel')}}"
-                                                                     max="2"
+                                                                     class="required"
+                                                                     max="20"
                                                         />
 
-                                                        <x-textfield required
-                                                                     id="updt_doctyp_name"
+                                                        <x-textfield id="updt_doctyp_name"
                                                                      label="{{__('Name')}}"
+                                                                     class="required"
                                                                      max="100"
                                                         />
 

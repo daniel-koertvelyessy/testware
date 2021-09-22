@@ -62,13 +62,13 @@
          id="sideNavProdukt"
     >
         <ul class="nav flex-column">
-            <li class="nav-item  bg-white border-left ml-3">
+            <li class="nav-item  border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('produktMain') }}"
                 > {{__('Start')}}
                 </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('produkt.index') }}"
                 > {{__('Übersicht')}}
@@ -96,25 +96,25 @@
          id="sideNavVorschrfiten"
     >
         <ul class="nav flex-column">
-            <li class="nav-item  bg-white border-left ml-3">
+            <li class="nav-item  border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('verordnung.main') }}"
                 > {{__('Start')}}
                 </a>
             </li>
-            <li class="nav-item  bg-white border-left ml-3">
+            <li class="nav-item  border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('verordnung.index') }}"
                 > {{__('Verordnungen')}}
                 </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('anforderung.index') }}"
                 > {{__('Anforderungen')}}
                 </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('anforderungcontrolitem.index') }}"
                 > {{__('Prüfschritte')}}
@@ -142,28 +142,28 @@
          id="sideNavOrganisation"
     >
         <ul class="nav flex-column">
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('organisationMain') }}"
                 > {{__('Start')}}
                 </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('firma.index') }}"
                 >{{__('Firmen')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('contact.index') }}"
                 >{{__('Kontakte')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('adresse.index') }}"
                 >{{__('Adressen')}} </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('profile.index') }}"
                 >{{__('Mitarbeiter')}} </a>
@@ -189,35 +189,35 @@
          id="sideNavLocations"
     >
         <ul class="nav flex-column">
-            <li class="nav-item  bg-white border-left ml-3">
+            <li class="nav-item  border-left ml-3">
                 <a class="nav-link "
                    href="{{ route('storageMain') }}"
                 > {{__('Start')}}
                 </a>
             </li>
             @can('isAdmin', Auth::user())
-                <li class="nav-item bg-white border-left ml-3">
+                <li class="nav-item border-left ml-3">
                     <a class="nav-link"
                        href="{{ route('lexplorer') }}"
                     >{{__('Explorer')}}</a>
                 </li>
             @endcan
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('location.index') }}"
                 >{{__('Standorte')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('building.index') }}"
                 >{{__('Gebäude')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('room.index') }}"
                 >{{__('Räume')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('stellplatz.index') }}"
                 >{{__('Stellplätze')}}</a>
@@ -242,17 +242,17 @@
          id="sideNavSystem"
     >
         <ul class="nav flex-column">
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('admin.index') }}"
                 > {{__('Übersicht')}} </a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('user.index') }}"
                 >{{__('Benutzer')}}</a>
             </li>
-            <li class="nav-item bg-white border-left ml-3">
+            <li class="nav-item border-left ml-3">
                 <a class="nav-link"
                    href="{{ route('systems') }}"
                 >{{__('Einstellungen')}} </a>

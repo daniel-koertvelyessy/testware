@@ -130,6 +130,9 @@
                             <option @if(old('aci_value_target_mode') ==='gt') selected
                                     @endif value="gt"
                             >{{__('Größer als Soll')}}</option>
+                            <option @if(old('aci_value_target_mode') ===NULL) selected
+                                    @endif value=""
+                            >{{__('Prüfschritt ohne Zielwert')}}</option>
                         </x-selectfield>
                     </div>
                     <div class="col-md-2">
