@@ -88,19 +88,28 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col-md-5">
                     <x-rtextfield id="name"
-                                  label="{{__('Benutzername')}}"
+                                  label="{{__('Name')}}"
                                   value="{{ $user->name }}"
+                                  max="200"
                     />
+                </div>
+                <div class="col-md-2">
+                    <x-textfield id="username"
+                                   label="{{__('Anzeigename')}}"
+                                   value="{{ $user->username }}"
+                    />
+                </div>
+                <div class="col-md-5">
                     <x-emailfield id="email"
+                                  required
+                                  class="required"
                                   label="{{__('E-Mail Adresse')}}"
                                   value="{{ $user->email }}"
+                                  max="200"
                     />
-                    <x-textfield id="username"
-                                 label="{{__('Anmeldename')}}"
-                                 value="{{ $user->username }}"
-                    />
+
                 </div>
             </div>
             <div class="row mb-4">
@@ -141,8 +150,15 @@
             @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
                 <x-btnMain>{{__('Nutzerdaten aktualisieren')}} <span class="fas fa-download ml-2"></span></x-btnMain>
             @endif
-        </form>
 
+        </form>
+        @if(Auth::user()->isSysAdmin() && Auth::user()->id != $user->id)
+            <form action="{{ route('user.destroy',$user) }}">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-outline-danger">{{ __('Benutzer löschen') }} <i class="fas fa-trash-alt ml-2"></i></button>
+            </form>
+        @endif
         {{--
         Set Userpassword
         --}}

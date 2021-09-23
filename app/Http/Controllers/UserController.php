@@ -32,7 +32,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.user.index', ['users' => User::with('roles')->get()]);
+        $userList = User::with('roles')->sortable()->paginate(15);
+        return view('admin.user.index', ['userList' => $userList]);
     }
 
     /**
@@ -44,15 +45,16 @@ class UserController extends Controller
     {
         return view('admin.user.ldap', ['users' => User::with('roles')->get()]);
     }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
-        if  (Auth::user()->isSysAdmin()) {
+        if (Auth::user()->isSysAdmin()) {
             return view('admin.user.create');
         } else {
-            $request->session()->flash('status',__('Sie haben keine Berechtigung Benutzer anzulegen!'));
+            $request->session()->flash('status', __('Sie haben keine Berechtigung Benutzer anzulegen!'));
             return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
         }
     }
@@ -61,14 +63,42 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
-     *
      */
     public function store(Request $request)
     {
-//        dd($request);
+        $this->validateUser();
         (new User)->addNew($request);
         return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
 
+    }
+
+    private function validateUser()
+    : array
+    {
+        return request()->validate([
+            'username'          => [
+                'bail',
+                'required',
+                'max:100',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email'             => [
+                'bail',
+                'required',
+                'email',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email_verified_at' => '',
+            'password'          => 'required',
+            'api_token'         => 'nullable',
+            'name'              => 'nullable',
+            'role_id'           => ''
+        ], [
+            'username.required' => __('Ihr Anzeigename ist notwendig'),
+            'username.unique'   => __('Der Anzeigename ist bereits vergeben'),
+            'email.required'    => __('Die E-Mail Adress ist notwendig!'),
+            'email.unique'      => __('Die E-Mail Adress ist bereits in Benutzung'),
+        ]);
     }
 
     /**
@@ -111,22 +141,6 @@ class UserController extends Controller
         $user->update($this->validateUser());
         $request->session()->flash('status', __('Ihr Konto wurde aktualisiert!'));
         return redirect()->back();
-    }
-
-    /**
-     * @return array
-     */
-    public function validateUser()
-    : array
-    {
-        return request()->validate([
-            'email'    => 'bail|email|required',
-            'username' => '',
-            'name'     => 'required',
-            'locale'   => 'required'
-            //            'password' => 'required',
-
-        ]);
     }
 
     /**
@@ -216,22 +230,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewUser()
-    : array
-    {
-        return request()->validate([
-            'email'    => 'bail|email|unique:users,email|required',
-            'username' => 'bail|unique:users,username',
-            'name'     => 'required',
-            'locale'   => 'required'
-            //            'password' => 'required',
-
-        ]);
-    }
-
     public function resetPassword(Request $request)
     {
         if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
@@ -247,4 +245,15 @@ class UserController extends Controller
         return back();
     }
 
+    public function checkUserEmailAddressExists(Request $request)
+    : array
+    {
+        return ['exists' => User::where('email', $request->term)->count() > 0];
+    }
+
+    public function checkUserUserNameExists(Request $request)
+    : array
+    {
+        return ['exists' => User::where('username', $request->term)->count() > 0];
+    }
 }

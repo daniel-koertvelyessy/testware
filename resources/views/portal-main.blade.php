@@ -24,7 +24,7 @@
         <div class="row justify-content-md-center">
             <div class="col">
                 <section class="card-body text-dark">
-                    <h2 class="h4 text-primary">{{__('Apps')}}</h2>
+                    <h2 class="h4">{{__('Apps')}}</h2>
                     <nav class="tiles-grid">
                         <a href="{{ route('testware.index') }}"
                            class="tile-small btn-outline-primary rounded"
@@ -64,7 +64,7 @@
                 </section>
 
                 <section class="card-body text-dark">
-                    <h2 class="h4 text-primary">{{__('Einstellungen')}}</h2>
+                    <h2 class="h4">{{__('Einstellungen')}}</h2>
                     <nav class="tiles-grid">
                         <a href="{{ route('storageMain') }}"
                            class="tile-small btn-outline-primary rounded"

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,11 +11,15 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Faker\Generator as Faker;
+use Illuminate\Validation\Rule;
+use Kyslik\ColumnSortable\Sortable;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use Sortable;
+    use HasFactory;
 
     public const LOCALES = [
         'de' => 'Deutsch',
@@ -182,6 +187,8 @@ class User extends Authenticatable
 
     public function addNew(Request $request)
     {
+
+        $this->validateUser();
         $this->name = $request->name;
         $this->email = $request->email;
         $this->username = $request->username;
@@ -194,6 +201,33 @@ class User extends Authenticatable
         $this->roles()->attach([1]);
 
         return $this->id;
+    }
+
+    private function validateUser()
+    : array
+    {
+        return request()->validate([
+            'username'          => [
+                'bail',
+                'required',
+                'max:100',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email'             => [
+                'bail',
+                'required',
+                'email',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email_verified_at' => '',
+            'password'          => 'required',
+            'api_token'         => 'nullable',
+            'name'              => 'nullable',
+            'role_id'           => ''
+        ],[
+            'username' => __('Der Name ist bereits vergeben'),
+            'email'    => __('Die E-Mail Adress ist bereits in Benutzung'),
+        ]);
     }
 
     /**

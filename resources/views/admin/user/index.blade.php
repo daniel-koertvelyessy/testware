@@ -33,16 +33,16 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>{{__('Name')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Benutzername')}}</th>
+                        <th>@sortablelink('name', __('Name'))</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('name', __('Anzeigename'))</th>
                         <th>{{__('Rolle(n)')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('Erstellt')}}</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('created_at', __('Erstellt'))</th>
                         <th class="d-none d-md-table-cell">{{__('API token')}}</th>
-                        <th class="d-none d-md-table-cell">{{__('SysAdmin')}}</th>
+                        <th class="d-none d-md-table-cell">@sortablelink('role_id', __('SysAdmin'))</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($users as $user)
+                    @forelse ($userList as $user)
                         <tr>
                             <td><a href="{{ route('user.show',$user->id) }}">{{ $user->name }}</a></td>
                             <td class="d-none d-md-table-cell">{{ $user->username }}</td>
@@ -65,6 +65,11 @@
                     @endforelse
                     </tbody>
                 </table>
+                @if($userList->count() >0)
+                    <div class="d-flex justify-content-center">
+                        {{ $userList->withQueryString()->onEachSide(2)->links() }}
+                    </div>
+                @endif
             </div>
         </div>
 

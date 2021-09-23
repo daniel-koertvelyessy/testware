@@ -47,27 +47,33 @@
                 <div class="col">
                     <x-emailfield id="email"
                                   label="{{__('E-Mail Adresse')}}"
+                                  required
+                                  max="200"
                     />
 
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <x-rtextfield id="name"
-                                  label="{{__('Benutzername')}}"
+                    <x-textfield id="name"
+                                 label="{{__('Name')}}"
+                                 class="required"
+                                 required
+                                 max="200"
                     />
                 </div>
                 <div class="col-md-4">
                     <x-textfield id="username"
-                                 label="{{__('Anmeldename')}}"
+                                 label="{{__('Anzeigename')}}"
                     />
                 </div>
                 <div class="col-md-4">
                     <x-selectfield id="locales"
-                                   label="Sprache"
+                                   label="{{ __('Sprache') }}"
                     >
-                        <option value="de">de - Deutsch</option>
-                        <option value="en">en - English</option>
+                        @foreach(\App\User::LOCALES as $locale)
+                            <option value="{{ \App\User::LANGS[$locale] }}">{{ \App\User::LANGS[$locale] }} - {{ $locale }}</option>
+                        @endforeach
                     </x-selectfield>
                 </div>
             </div>
@@ -118,7 +124,41 @@
                 passmsg.text('{{ __('Die Passwörter stimmen nicht überein!') }}');
             }
         });
+        $('#email').blur(function () {
+            const email = $('#email');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('checkUserEmailAddressExists') }}",
+                data: {term:email.val()},
+                success: (emailAddress) => {
+                    if (emailAddress.exists){
+                        email.addClass('is-invalid').removeClass('is-valid');
+                    } else{
+                        email.removeClass('is-invalid').addClass('is-valid');
+                    }
 
+               }
+            });
+        });
+        $('#username').blur(function () {
+            const username = $('#username');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('checkUserUserNameExists') }}",
+                data: {term:username.val()},
+                success: (userName) => {
+                    if (userName.exists){
+                        username.addClass('is-invalid').removeClass('is-valid');
+                    } else{
+                        username.removeClass('is-invalid').addClass('is-valid');
+                    }
+
+                }
+            });
+        });
 
     </script>
 @endsection
+

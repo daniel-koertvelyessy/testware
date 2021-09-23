@@ -54,7 +54,7 @@
 
                 <x-selectfield id="anforderung_id_modal"
                                name="anforderung_id"
-                               label="{{__('Anforderung')}}"
+                               label="{{__('Anforderung')}}:"
                 >
                     @foreach (App\Anforderung::all() as $anforderung)
                         <option value="{{ $anforderung->id }}"
@@ -76,12 +76,12 @@
                 <div class="row">
                     <div class="col-md-4">
                         <x-rtextfield id="aci_label"
-                                      label="{{__('Kürzel')}}"
+                                      label="{{__('Kürzel')}}:"
                         />
                     </div>
                     <div class="col-md-6">
                         <x-rtextfield id="aci_name"
-                                      label="{{__('Name')}}"
+                                      label="{{__('Name')}}:"
                                       max="150"
                         />
                     </div>
@@ -101,25 +101,25 @@
                 </div>
                 <p class="lead text-primary my-3">{{__('Legen Sie nun den Umfang des Prüfschritts fest.')}}</p>
                 <x-textarea id="aci_task"
-                            label="{{__('Aufgabe')}}"
+                            label="{{__('Aufgabe')}}:"
                 />
 
                 <div class="row">
                     <div class="col-md-2">
                         <x-textfield id="aci_value_si"
-                                     label="{{__('SI-Einheit')}}"
+                                     label="{{__('SI-Einheit')}}:"
                                      max="10"
                         />
                     </div>
                     <div class="col-md-3">
                         <x-textfield id="aci_vaule_soll"
-                                     label="{{__('Sollwert')}}"
+                                     label="{{__('Sollwert')}}:"
                                      class="decimal"
                         />
                     </div>
                     <div class="col-md-3">
                         <x-selectfield id="aci_value_target_mode"
-                                       label="{{__('Zielwert i.O.')}}"
+                                       label="{{__('Zielwert i.O.')}}:"
                         >
                             <option @if(old('aci_value_target_mode') ==='lt') selected
                                     @endif value="lt"
@@ -137,7 +137,7 @@
                     </div>
                     <div class="col-md-2">
                         <x-textfield id="aci_value_tol"
-                                     label="± {{__('Toleranz')}}"
+                                     label="± {{__('Toleranz')}}:"
                                      class="decimal"
                         />
                     </div>
@@ -205,7 +205,7 @@
                             >{{__('Interne Durchführung')}}</label>
                         </div>
                         <x-selectfield id="aci_contact_id"
-                                       label="{{__('Eingewiesener Mitarbeiter')}}"
+                                       label="{{__('Eingewiesener Mitarbeiter')}}:"
                         >
                             @foreach (App\User::with('Profile')->get() as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -225,7 +225,7 @@
                             >{{__('Externe Durchführung')}}</label>
                         </div>
                         <x-selectfield id="firma_id"
-                                       label="{{__('Firma')}}"
+                                       label="{{__('Firma')}}:"
                         >
                             @foreach (App\Firma::all() as $firma)
                                 <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
