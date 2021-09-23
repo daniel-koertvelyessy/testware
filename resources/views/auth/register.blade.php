@@ -11,7 +11,7 @@
                     <h1 class="h5 mb-3">
                         <i class="fas fa-user"></i> {{ __('Registrierung als neue Benutzer') }}
                     </h1>
-                    <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" height="30" alt="">
+                    <img src="{{ asset('img/icon/testWare_Logo.svg') }}" height="30" alt="">
                 </div>
 
                 <div class="card-body">

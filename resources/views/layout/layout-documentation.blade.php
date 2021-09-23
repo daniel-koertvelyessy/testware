@@ -14,18 +14,18 @@
     <!-- Favicon -->
     <link rel="icon"
           type="image/png"
-          href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          href="{{ asset('img/icon/testWare_Logo.svg') }}"
           sizes="32x32"
     >
     <link rel="apple-touch-icon"
           sizes="180x180"
-          href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          href="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
     <meta name="msapplication-TileColor"
           content="#ffffff"
     >
     <meta name="msapplication-TileImage"
-          content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+          content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
 
     <script type="text/javascript"
@@ -66,7 +66,7 @@
         >
             <img
                 class="mr-1"
-                src="{{ url('img/icon/testWareLogo_greenYellow.svg') }}"
+                src="{{ asset('img/icon/testWare_Logo.svg') }}"
                 alt="Docs UI Kit"
                 style="width: 30px;"
             />

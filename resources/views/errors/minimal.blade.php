@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/icon/testWare_Logo.svg') }}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWare_Logo.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}">
-    <script src="https://kit.fontawesome.com/b5297e65e8.js" crossorigin="anonymous"></script>
+    <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWare_Logo.svg') }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link id="themeId" rel="stylesheet" href="{{ asset('css/flatly.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <meta http-equiv="refresh" content="3; {{ route('portal-main') }}">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.x-git.min.js"></script>
+    <link id="themeId" rel="stylesheet" href="{{ asset('css/tbs.css') }}">
+{{--    <meta http-equiv="refresh" content="3; {{ route('portal-main') }}">--}}
     <title>@yield('title')</title>
 </head>
 <body>
@@ -21,7 +18,7 @@
     <section class="container">
         <div class="row shadow p-4 border rounded">
             <div class="col-md-3 d-flex justify-content-center flex-column align-items-center">
-                <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}" alt="Logo testWare" style="max-height: 150px;">
+                <img src="{{ asset('img/icon/testWare_Logo.svg') }}" alt="Logo testWare" style="max-height: 150px;">
                 <p class="h3 text-muted">{{ __('Fehler ') }} @yield('code')</p>
             </div>
             <div class="col-md-6">

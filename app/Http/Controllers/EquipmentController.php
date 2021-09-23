@@ -199,30 +199,37 @@ class EquipmentController extends Controller
      *
      * @param  Equipment $equipment
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function show(Equipment $equipment)
     {
-        foreach(EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $equipmentDocFile){
-            if(Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)){
-                Log::warning('Dateireferenz für Funktionsprüfung ('. $equipmentDocFile->eqdoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
+        foreach (EquipmentDoc::where('equipment_id', $equipment->id)->where('document_type_id', 2)->get() as $equipmentDocFile) {
+            if (Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)) {
+                Log::warning('Dateireferenz für Funktionsprüfung (' . $equipmentDocFile->eqdoc_name_pfad . ') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
 //                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);
-            $equipmentDocFile->delete();
+                $equipmentDocFile->delete();
             }
 
         }
 
-        foreach(ProduktDoc::where('produkt_id',$equipment->Produkt->id)->where('document_type_id',1)->get() as $productDocFile){
-            if(Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)){
-                Log::warning('Dateireferenz ('. $productDocFile->proddoc_name_pfad .') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
+        foreach (ProduktDoc::where('produkt_id', $equipment->Produkt->id)->where('document_type_id', 1)->get() as $productDocFile) {
+            if (Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)) {
+                Log::warning('Dateireferenz (' . $productDocFile->proddoc_name_pfad . ') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
 //                dump('delete '. $productDocFile->eqdoc_name_pfad);
-            $productDocFile->delete();
+                $productDocFile->delete();
             }
 
         }
 
+        $companyString = '';
+        foreach ($equipment->produkt->firma as $firma) {
+            $companyString .= $firma->fa_name . ' ';
+        }
 
-        return view('testware.equipment.show', compact('equipment'));
+        return view('testware.equipment.show', [
+            'equipment'     => $equipment,
+            'companyString' => $companyString
+        ]);
     }
 
     /**
@@ -247,114 +254,115 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, Equipment $equipment)
     {
-
         $feld = '';
         $flag = false;
         $oldEquipment = Equipment::find($request->id);
 
-        if (!isset($request->setFieldReadWrite) && $oldEquipment->eq_inventar_nr === $request->eq_inventar_nr) {
-            $equipment->update($this->validateEquipment());
-        } elseif (isset($request->setFieldReadWrite) && $oldEquipment->eq_inventar_nr === $request->eq_inventar_nr) {
-            $equipment->update($this->validateEquipment());
-        } else {
-            $equipment->update($this->validateEquipment());
-        }
-
-        $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ' => ';
+        $feld .=  __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ': <ul>';
         if ($oldEquipment->eq_serien_nr != $request->eq_serien_nr) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Seriennummer'),
                     'old' => $oldEquipment->eq_serien_nr,
                     'new' => $request->eq_serien_nr,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
+
         if ($oldEquipment->eq_qrcode != $request->eq_qrcode) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('QR Code'),
                     'old' => $oldEquipment->eq_qrcode,
                     'new' => $request->eq_qrcode,
-                ]) . ' | ';
+                ]) . '</li>';
+            $flag = true;
+        }
+
+        if ($oldEquipment->eq_name != $request->eq_name) {
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
+                    'fld' => __('Name'),
+                    'old' => $oldEquipment->eq_name,
+                    'new' => $request->eq_name,
+                ]) . '</li>';
             $flag = true;
         }
 
         if ($oldEquipment->purchased_at != $request->purchased_at) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Kaufdatum'),
                     'old' => $oldEquipment->purchased_at,
                     'new' => $request->purchased_at,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
 
         if ($oldEquipment->installed_at != $request->installed_at) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Inbetriebnahme am'),
                     'old' => $oldEquipment->installed_at,
                     'new' => $request->installed_at,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
         if ($oldEquipment->eq_text != $request->eq_text) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Beschreibung'),
                     'old' => $oldEquipment->eq_text,
                     'new' => $request->eq_text,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
         if ($oldEquipment->equipment_state_id != $request->equipment_state_id) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Geräte Status'),
                     'old' => $oldEquipment->equipment_state_id,
                     'new' => $request->equipment_state_id,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
         if ($oldEquipment->storage_id != $request->storage_id) {
-            $feld .= __('Feld :fld von [:old] in [:new] geändert', [
+            $feld .= '<li>' . __('Feld :fld von [:old] in [:new] geändert', [
                     'fld' => __('Aufstellplatz / Standort'),
                     'old' => $oldEquipment->storage->storage_label,
                     'new' => \App\Storage::find($request->storage_id)->storage_label,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
         if ($oldEquipment->produkt_id != $request->produkt_id) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Produkt'),
                     'old' => $oldEquipment->produkt_id,
                     'new' => $request->produkt_id,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_price != $request->eq_price) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Kaufpreis'),
                     'old' => $oldEquipment->eq_price,
                     'new' => $request->eq_price,
-                ]) . ' | ';
+                ]) . '</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_price != $request->eq_price) {
-            $feld .= __('Feld :fld von :old in :new geändert', [
+            $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Kaufpreis'),
                     'old' => $oldEquipment->eq_price,
                     'new' => $request->eq_price,
-                ]) . ' | ';
+                ]) ;
             $flag = true;
         }
+        $feld .='</ul>';
 
         if ($flag) {
+            $equipment->update($this->validateEquipment());
             (new EquipmentHistory)->add(__('Gerät geändert'), $feld, $equipment->id);
             $request->session()->flash('status', __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!', ['equipName' => request('eq_inventar_nr')]));
-
-            return view('testware.equipment.show', compact('equipment'));
         } else {
             $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
-            return view('testware.equipment.show', compact('equipment'));
         }
+        return redirect()->route('equipment.show',$equipment);
     }
 
 
@@ -382,6 +390,7 @@ class EquipmentController extends Controller
                 'required',
                 Rule::unique('equipment')->ignore(request('id'))
             ],
+            'eq_name'            => '',
             'eq_qrcode'          => '',
             'eq_text'            => '',
             'eq_price'           => '',

@@ -929,7 +929,7 @@
     "<li>Der Gerätestatus wurde auf <span class=\"text-info font-weight-bold\">:status</span> gesetzt</li>": "<li>Der Gerätestatus wurde auf <span class=\"text-info font-weight-bold\">:status</span> gesetzt</li>",
     "<li>Die nächste Prüfung wurde auf den <span class=\"text-info\">:date</span> gesetzt</li>": "<li>Die nächste Prüfung wurde auf den <span class=\"text-info\">:date</span> gesetzt</li>",
     "<li>Das Dokument <span class=\"text-info\">:name</span> wurde erfolgreich angefügt</li>": "<li>Das Dokument <span class=\"text-info\">:name</span> wurde erfolgreich angefügt</li>",
-    "###": "###",
+    "Passwort vergessen": "Passwort vergessen",
     "###": "###",
     "###": "###",
     "###": "###"

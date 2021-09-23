@@ -4,7 +4,9 @@
 {{__('Gerät :equip bearbeiten',['equip'=>$equipment->eq_inventar_nr])}} &triangleright; {{__('Geräte')}}
 @endsection
 
-@section('mainSection', 'testWare')
+@section('mainSection')
+    {{__('Gerät Stammdaten bearbeiten')}}
+    @endsection
 
 @section('menu')
     @include('menus._menu_testware_main')
@@ -86,7 +88,7 @@
 @section('content')
 
     <div class="container">
-        <div class="row">
+        <div class="row mb-4 d-none d-md-block">
             <div class="col">
                 <h1 class="h3">{{__('Gerät Stammdaten bearbeiten')}}</h1>
             </div>
@@ -194,6 +196,12 @@
                                        value="{{ $produktParam->id }}"
                                 >
                             @endforeach
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <x-textfield id="eq_name" label="{{__('Name')}}"
+                                         value="{{ $equipment->eq_name }}"/>
                         </div>
                     </div>
                     <div class="row">

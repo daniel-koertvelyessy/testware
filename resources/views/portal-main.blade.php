@@ -31,7 +31,7 @@
                            data-role="tile"
                         >
                             <div class=" d-flex align-items-center justify-content-center">
-                                <img src="{{ asset('img/icon/testWareLogo_greenYellow.svg') }}"
+                                <img src="{{ asset('img/icon/testWare_Logo.svg') }}"
                                      alt="Logo"
                                      class="img-fluid p-1"
                                      style="max-height: 45px; margin-top: 0.8em;"

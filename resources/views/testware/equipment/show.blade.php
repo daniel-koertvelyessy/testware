@@ -627,10 +627,9 @@
 @section('content')
 
     <div class="container-fluid">
-        <div class="row mb-2  d-md-block d-none">
+        <div class="row mb-2 d-md-block d-none">
             <div class="col">
                 <h1 class="h4">{{ __('Geräteübersicht')}}</h1>
-
             </div>
         </div>
         <div class="row">
@@ -733,13 +732,13 @@
                                                label="{{__('Bezeichnung')}}:"
                                                value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
                                 />
-                                <?php
+                                @php
                                 if (App\Storage::find($equipment->storage_id)) {
                                     $value = App\Storage::find($equipment->storage_id)->storage_label;
                                 } else {
                                     $value = __('nicht zugeordnet');
                                 }
-                                ?>
+                                @endphp
                                 <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
                                                value="{{ $value }}"
@@ -756,16 +755,10 @@
                                                label="{{__('Seriennummer')}}:"
                                                value="{!!  $equipment->eq_serien_nr ?? '-' !!}"
                                 />
-                                <label for="firma"
-                                       class="small text-muted"
-                                >{{__('Hersteller')}}:
-                                </label>
-                                <input type="text"
-                                       id="firma"
-                                       class="form-control-plaintext form-control-lg"
-                                       value="@foreach ($equipment->produkt->firma as $firma) {!! $firma->fa_name !!} @endforeach"
-                                >
-
+                                <x-staticfield id="firma"
+                                               label="{{__('Hersteller')}}:"
+                                               value="{{ $companyString??'' }}"
+                                />
                                 <button class="btn btn-primary btn-lg mt-3"
                                         data-toggle="modal"
                                         data-target="#modalStartControl"
