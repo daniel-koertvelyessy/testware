@@ -211,7 +211,7 @@
     >
         <div class="modal-dialog modal-lg modal-fullscreen-md-down">
             <div class="modal-content">
-                <form action="{{ route('addProduktParams') }}"
+                <form action="{{ route('productparameter.store') }}"
                       method="POST"
                       class="needs-validation"
                       id="frmAddProdParam"
@@ -514,8 +514,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div id="selectedErrorMsg" class="text-danger small"></div>
-                        <button type="button" id="btnStoreInstructedUser" class="btn btn-primary">{{ __('Unterweisung
+                        <div id="selectedErrorMsg"
+                             class="text-danger small"
+                        ></div>
+                        <button type="button"
+                                id="btnStoreInstructedUser"
+                                class="btn btn-primary"
+                        >{{ __('Unterweisung
                         erfassen')
                         }}</button>
                     </div>
@@ -568,7 +573,7 @@
                            aria-controls="productRequirements"
                            aria-selected="false"
                         >{{__('Anforderungen')}} <span
-                                    class="badge badge-primary"
+                                class="badge badge-primary"
                             >{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -594,7 +599,7 @@
                            aria-controls="prodDoku"
                            aria-selected="false"
                         >{{__('Dokumente')}} <span
-                                    class="badge badge-primary"
+                                class="badge badge-primary"
                             >{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -608,7 +613,7 @@
                            aria-controls="prodEquip"
                            aria-selected="false"
                         >{{__('Geräte')}} <span
-                                    class="badge badge-primary"
+                                class="badge badge-primary"
                             >{{ $produkt->Equipment->count() }}</span></a>
                     </li>
                 </ul>
@@ -634,10 +639,16 @@
                                            value="{{ $produkt->id }}"
                                     >
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
                                             <x-textfield id="prod_name"
                                                          label="{{__('Bezeichnung')}}"
                                                          value="{!! $produkt->prod_name !!}"
+                                            />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <x-textfield id="prod_nummer"
+                                                         label="Nummer"
+                                                         value="{!! $produkt->prod_nummer !!}"
                                             />
                                         </div>
                                         <div class="col md-4">
@@ -650,7 +661,7 @@
                                                         <option value="{{ $produktKategorie->id }}"
                                                                 @if($produktKategorie->id === $produkt->produkt_kategorie_id)
                                                                 selected
-                                                                @endif
+                                                            @endif
                                                         >
                                                             {{ $produktKategorie->pk_name }}
                                                         </option>
@@ -672,7 +683,7 @@
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option
-                                                            value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
+                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -684,7 +695,7 @@
                                                            name="prod_active"
                                                            id="prod_active"
                                                            value="1"
-                                                            {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
+                                                        {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="prod_active"
@@ -700,7 +711,7 @@
                                                            id="control_product"
                                                            name="control_product"
                                                            value="1"
-                                                            {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
+                                                        {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="control_product"
@@ -710,47 +721,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col"
-                                             aria-label="Felderliste"
-                                        >
-                                            @forelse ($produkt->ProduktParam as $param)
-                                                <x-textfield id="{{ $param->pp_label }}"
-                                                             label="{{ $param->pp_name }}"
-                                                             value="{!! $param->pp_value !!}"
-                                                             max="150"
-                                                />
-                                                <input type="hidden"
-                                                       name="pp_id[]"
-                                                       id="pp_id_{{ $param->id }}"
-                                                       value="{{ $param->id }}"
-                                                >
-                                            @empty
-                                                @forelse ($produkt->ProduktKategorie->ProduktKategorieParam as $pkParam)
-                                                    <input type="hidden"
-                                                           name="pp_id[]"
-                                                           id="pp_id_{{ $pkParam->id }}"
-                                                           value="{{ $pkParam->id }}"
-                                                    >
-                                                    <x-textfield id="{{ $pkParam->pkp_label }}"
-                                                                 name="pp_label[]"
-                                                                 label="{{ $pkParam->pkp_name }}"
-                                                                 value="{!! $pkParam->pkp_value !!}"
-                                                                 max="150"
-                                                    />
-                                                @empty
-                                                    <x-notifyer>
-                                                        {{__('Es wurden bislang keine Datenfelder angelegt')}}
-                                                    </x-notifyer>
-                                                @endforelse
-                                            @endforelse
-                                        </div>
+                                        <x-paramfield :params="$produkt->ProduktParam"
+                                                      :isproduct="true"
+                                        />
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <x-textfield id="prod_nummer"
-                                                         label="Nummer"
-                                                         value="{!! $produkt->prod_nummer !!}"
-                                            />
                                             <x-textarea id="prod_description"
                                                         label="Beschreibung"
                                                         value="{!! $produkt->prod_description !!}"
@@ -809,8 +785,7 @@
                                                            value="{{ $qualifiedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
-                                                        <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -871,7 +846,8 @@
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
                                                         <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                                                class="far fa-trash-alt ml-2"></span>
+                                                            class="far fa-trash-alt ml-2"
+                                                        ></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -950,11 +926,11 @@
                                                     id="btnSectionFirmaDetails"
                                             >
                                                 <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                        class="fas fa-angle-down"
+                                                    class="fas fa-angle-down"
                                                 ></span>
                                             </button>
                                             <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                        class="fas fa-angle-right"
+                                                    class="fas fa-angle-right"
                                                 ></span></button>
                                         </div>
                                         <div class="collapse @if (count($errors)>0) show @endif "
@@ -1054,7 +1030,7 @@
                                                         >
                                                             @foreach (App\AddressType::all() as $addressType)
                                                                 <option
-                                                                        value="{{ $addressType->id }}"
+                                                                    value="{{ $addressType->id }}"
                                                                 >{{ $addressType->adt_name }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1080,7 +1056,7 @@
                                                         >
                                                             @foreach (App\Land::all() as $country)
                                                                 <option
-                                                                        value="{{ $country->id }}"
+                                                                    value="{{ $country->id }}"
                                                                 >{{ $country->land_iso }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1128,7 +1104,7 @@
                                                         >
                                                             @foreach (App\Anrede::all() as $anrede)
                                                                 <option
-                                                                        value="{{ $anrede->id }}"
+                                                                    value="{{ $anrede->id }}"
                                                                 >{{ $anrede->an_kurz }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1172,10 +1148,10 @@
                                     <div class="list-group">
                                         @forelse ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                    firma="{!!  $firma->fa_name !!}"
-                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                    firmaid="{{ $firma->id }}"
-                                                    produktid="{{ $produkt->id }}"
+                                                firma="{!!  $firma->fa_name !!}"
+                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                firmaid="{{ $firma->id }}"
+                                                produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @empty
                                             <x-notifyer>{{ __('Dem Produkt ist keine Firma zugeordnet.') }}</x-notifyer>
@@ -1189,10 +1165,10 @@
                                     <div class="list-group">
                                         @foreach ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                    firma="{!!  $firma->fa_name !!}"
-                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                    firmaid="{{ $firma->id }}"
-                                                    produktid="{{ $produkt->id }}"
+                                                firma="{!!  $firma->fa_name !!}"
+                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                firmaid="{{ $firma->id }}"
+                                                produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @endforeach
 
@@ -1214,7 +1190,8 @@
                                 >
                                     @csrf
                                     <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span
-                                                class="small text-muted">max 20MB</span></h2>
+                                            class="small text-muted"
+                                        >max 20MB</span></h2>
 
                                     <input type="hidden"
                                            name="produkt_id"
@@ -1270,7 +1247,8 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i
-                                                class="fas fa-paperclip ml-2"></i>
+                                            class="fas fa-paperclip ml-2"
+                                        ></i>
                                     </button>
                                 </form>
                             </div>
@@ -1320,9 +1298,9 @@
                                                     >{{ $produktDoc->created_at->DiffForHumans() }}</td>
                                                     <td>
                                                         <x-deletebutton
-                                                                prefix="produktDoc"
-                                                                action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
-                                                                id="{{ $produktDoc->id }}"
+                                                            prefix="produktDoc"
+                                                            action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                            id="{{ $produktDoc->id }}"
                                                         />
                                                     </td>
                                                 </tr>
@@ -1568,7 +1546,7 @@
             if (
                 product_instruction_instructor_profile_id.val() === '0' &&
                 product_instruction_instructor_firma_id.val() === '0'
-            ){
+            ) {
                 msg = msg + '<span class="mr-2">{{__('Bitte entweder eine befähigte Person oder Firma auswählen.')
                 }}</span>';
                 product_instruction_instructor_profile_id.addClass('is-invalid');
@@ -1585,7 +1563,7 @@
             }
 
 
-            if (product_instruction_trainee_signature.val()===''){
+            if (product_instruction_trainee_signature.val() === '') {
                 msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
                 signatureField_product_instruction_trainee_signature.addClass('is-invalid');
                 signatureField_product_instruction_trainee_signature.removeClass('is-valid');
@@ -1596,7 +1574,7 @@
                 checkTraneeHasSignature = true;
             }
 
-            if (product_instruction_instructor_signature.val()===''){
+            if (product_instruction_instructor_signature.val() === '') {
                 msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
                 signatureField_product_instruction_instructor_signature.addClass('is-invalid');
                 signatureField_product_instruction_instructor_signature.removeClass('is-valid');
@@ -1611,7 +1589,7 @@
                 checkInstructorIsSelected &&
                 checkTraneeHasSignature &&
                 checkInstructorHasSignature
-            ){
+            ) {
                 console.log(msg);
                 selectedErrorMsg.html('');
                 $('#frmAddEquipmentInstruction').submit();

@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Faker\Generator as Faker;
 use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -57,6 +56,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'user_lock_pin',
         'role_id'
     ];
     /**
@@ -98,12 +98,12 @@ class User extends Authenticatable
 
     public function AnforderungControlItem()
     {
-        return $this->hasOne(AnforderungControlItem::class);
+        return $this->hasMany(AnforderungControlItem::class, 'aci_contact_id');
     }
 
     public function EquipmentQualifiedUser()
     {
-        return $this->hasMany(EquipmentQualifiedUser::class);
+        return $this->hasMany(EquipmentQualifiedUser::class, 'user_id');
     }
 
     public function hasEquipment()
@@ -113,7 +113,7 @@ class User extends Authenticatable
 
     public function instructedOnEquipment()
     {
-        return $this->hasMany(EquipmentInstruction::class);
+        return $this->hasMany(EquipmentInstruction::class,'equipment_instruction_trainee_id');
     }
 
     public function isInstructed($id)
@@ -182,7 +182,7 @@ class User extends Authenticatable
     public function roleUser()
     : BelongsToMany
     {
-        return $this->belongsToMany('App\RoleUser');
+        return $this->belongsToMany(RoleUser::class );
     }
 
     public function addNew(Request $request)

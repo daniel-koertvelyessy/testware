@@ -46,8 +46,9 @@
             </div>
         </div>
     </div>
-</div>--}}
+</div>
 <ul class="navbar-nav mr-auto">
+--}}
     <li class="nav-item {{ Request::routeIs('produktMain')  ? ' active ' : '' }}">
         <a class="nav-link "
            href="{{ route('produktMain') }}"
@@ -64,13 +65,13 @@
     <li class="nav-item {{ Request::routeIs('getKategorieProducts') ? ' active ' : '' }} dropdown">
         <a class="nav-link dropdown-toggle"
            href="#"
-           id="navbarDropdownAddProdukt"
+           id="navbarDropdownAddProduktCategory"
            role="button"
            data-toggle="dropdown"
            aria-expanded="false"
         ><i class="fas fa-list-ol"></i> {{__('Kategorien')}}</a>
         <ul class="dropdown-menu"
-            aria-labelledby="navbarDropdownAddProdukt"
+            aria-labelledby="navbarDropdownAddProduktCategory"
         >
             <li>
                 <a class="dropdown-item"
@@ -127,7 +128,7 @@
     {{--    </li>--}}
     {{--    <li class="nav-item {{ Request::routeIs('exportProdukt')   ? ' active ' : '' }}">--}}
     {{--        <a class="nav-link " href="{{ route('exportProdukt') }}"><i class="fas fa-file-export"></i> Export</a>--}}
-    {{--    </li>--}}
-</ul>
+    {{--    </li>
+</ul>--}}
 
 

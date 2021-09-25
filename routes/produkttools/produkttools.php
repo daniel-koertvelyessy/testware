@@ -1,8 +1,6 @@
 <?php
 
 Route::get('/downloadEquipmentDokuFile','EquipmentDocController@downloadEquipmentDokuFile')->name('downloadEquipmentDokuFile');
-
-
 Route::get('/downloadProduktDokuFile','ProduktDocController@downloadProduktDokuFile')->name('downloadProduktDokuFile');
 Route::get('getProduktListe','ProduktController@getProduktListe')->name('getProduktListe');
 Route::get('importProdukt','ProduktController@importProdukt')->name('importProdukt');
@@ -16,7 +14,6 @@ Route::post('addProduktKategorieParam','ProduktController@addProduktKategoriePar
 Route::post('produkt.ajaxstore','ProduktController@ajaxstore')->name('produkt.ajaxstore');
 
 Route::get('getUsedProduktsByPK','ProduktController@getUsedProduktsByPK')->name('getUsedProduktsByPK');
-
 Route::get('exportProduktToJson','DataportController@exportProduktToJson')->name('exportProduktToJson');
 
 
@@ -25,10 +22,15 @@ Route::post('addProduktFirma','ProduktController@addProduktFirma')->name('addPro
 Route::delete('removeFirmaFromProdukt','ProduktController@removeFirmaFromProdukt')->name('removeFirmaFromProdukt');
 
 Route::put('updateProduktKategorieParams','ProduktController@updateProduktKategorieParams')->name('updateProduktKategorieParams');
+Route::post('addProderialKategorie','ProduktController@addProderialKategorie')->name('addProderialKategorie');
 
 
 Route::post('addProduktParams','ProduktController@addProduktParams')->name('addProduktParams');
-Route::post('addProderialKategorie','ProduktController@addProderialKategorie')->name('addProderialKategorie');
+Route::put('updateProduktParams','ProduktController@updateProduktParams')->name('updateProduktParams');
+Route::delete('deleteProduktParams','ProduktController@deleteProduktParams')->name('deleteProduktParams');
+Route::get('getParamData','ProductParameterController@getParamData')->name('getParamData');
+
+
 Route::post('addAnforderung','ProduktController@addAnforderung')->name('addAnforderung');
 Route::post('addProduktAnforderung','ProduktController@addProduktAnforderung')->name('addProduktAnforderung');
 Route::delete('deleteProduktAnfordrung','ProduktController@deleteProduktAnfordrung')->name('deleteProduktAnfordrung');

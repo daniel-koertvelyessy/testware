@@ -26,6 +26,113 @@
 @endsection
 
 @section('modals')
+    <x-modals.form_modal modalRoute="{{ route('user.destroy',$user) }}"
+                         method="DELETE"
+                         modalId="modalDeleteUser"
+                         modalType="danger"
+                         modalSize="lg"
+                         btnSubmit="{{ __('Benutzer endgültig löschen') }}"
+                         title="{{ __('Löschung des Benutzers prüfen!') }}"
+    >
+
+        <input type="hidden"
+               name="id"
+               id="id"
+               value="{{ $user->id }}"
+        >
+        <h1 class="text-waring">{{ __('Hinweis zur Löschung') }}</h1>
+        <p class="lead">{{ __('Folgende Einträge werden mit der Löschung des Benutzers aus der Datenbank entfernt. Dies kann ohne vorherige Sicherung nicht wiederhergestellt werden!') }}</p>
+        <h2 class="h4">{{ __('Mitarbeiter') }}</h2>
+        @if($user->profile)
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-danger">{{ $user->profile }}</li>
+            </ul>
+        @else
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-success">
+                    <span class="far mr-2 fa-fw fa-check-circle"></span> {{ __('Keine Verknüpfung gefunden') }}
+                </li>
+            </ul>
+        @endif
+        <h2 class="h4 mt-2">{{ __('Prüfschritte') }}</h2>
+        @if($user->AnforderungControlItem)
+            <ul class="list-group list-unstyled">
+                @foreach($user->AnforderungControlItem as $aci)
+                    <li class="list-group-item list-group-item-danger d-flex align-items-center justify-content-between">
+                        <span>{{ $aci->aci_name }}</span>
+                        <a href="{{ route('anforderungcontrolitem.show',$aci) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-secondary"
+                        >{{ __('beheben') }} <i class="fa-external-link-alt fa-sm ml-1 fas"></i></a>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-success">
+                    <span class="far mr-2 fa-fw fa-check-circle"></span> {{ __('Keine Verknüpfung gefunden') }}
+                </li>
+            </ul>
+        @endif
+        <h2 class="h4 mt-2">{{ __('Befähigt an Gerät') }}</h2>
+        @if($user->EquipmentQualifiedUser->count() >0)
+            <ul class="list-group list-unstyled">
+                @foreach($user->EquipmentQualifiedUser as $equ)
+                    <li class="list-group-item list-group-item-danger d-flex align-items-center justify-content-between">
+                        <span>{{ $equ->equipment->eq_name }}</span>
+                        <a href="{{ route('equipment.show',$equ->equipment) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-secondary"
+                        >{{ __('beheben') }} <i class="fa-external-link-alt fa-sm ml-1 fas"></i></a>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-success">
+                    <span class="far mr-2 fa-fw fa-check-circle"></span> {{ __('Keine Verknüpfung gefunden') }}
+                </li>
+            </ul>
+        @endif
+        <h2 class="h4 mt-2">{{ __('Eingewiesen an Geräte') }}</h2>
+        @if($user->instructedOnEquipment->count() >0)
+            <ul class="list-group list-unstyled">
+                @foreach($user->instructedOnEquipment as $ioe)
+                    <li class="list-group-item list-group-item-danger d-flex align-items-center justify-content-between">
+                        <span>{{ $ioe->equipment->eq_name }}</span>
+                        <a href="{{ route('equipment.show',$ioe->equipment) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-secondary"
+                        >{{ __('beheben') }} <i class="fa-external-link-alt fa-sm ml-1 fas"></i></a>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-success">
+                    <span class="far mr-2 fa-fw fa-check-circle"></span> {{ __('Keine Verknüpfung gefunden') }}
+                </li>
+            </ul>
+        @endif
+
+        <h2 class="h4 mt-2">{{ __('Benutzerrollen') }}</h2>
+        @if($user->roles->count() >0)
+            <ul class="list-group list-unstyled">
+                @foreach($roles as $roleUser)
+                    <li class="list-group-item list-group-item-danger d-flex align-items-center justify-content-between">
+                        <span>{{ $roleUser->name }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <ul class="list-group list-unstyled">
+                <li class="list-group-item list-group-item-success">
+                    <span class="far mr-2 fa-fw fa-check-circle"></span> {{ __('Keine Verknüpfung gefunden') }}
+                </li>
+            </ul>
+        @endif
+
+    </x-modals.form_modal>
     <x-modals.form_modal modalRoute="{{ route('user.revokeSysAdmin',$user) }}"
                          method="DELETE"
                          modalId="revokeUserAsSysAdmin"
@@ -97,8 +204,8 @@
                 </div>
                 <div class="col-md-2">
                     <x-textfield id="username"
-                                   label="{{__('Anzeigename')}}"
-                                   value="{{ $user->username }}"
+                                 label="{{__('Anzeigename')}}"
+                                 value="{{ $user->username }}"
                     />
                 </div>
                 <div class="col-md-5">
@@ -150,15 +257,16 @@
             @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
                 <x-btnMain>{{__('Nutzerdaten aktualisieren')}} <span class="fas fa-download ml-2"></span></x-btnMain>
             @endif
-
+            @if(Auth::user()->isSysAdmin() && Auth::user()->id != $user->id)
+                <button type="button"
+                        data-toggle="modal"
+                        data-target="#modalDeleteUser"
+                        class="btn btn-outline-danger"
+                >{{ __('Benutzer löschen') }} <i class="fas fa-trash-alt ml-2"></i></button>
+            @endif
         </form>
-        @if(Auth::user()->isSysAdmin() && Auth::user()->id != $user->id)
-            <form action="{{ route('user.destroy',$user) }}">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-outline-danger">{{ __('Benutzer löschen') }} <i class="fas fa-trash-alt ml-2"></i></button>
-            </form>
-        @endif
+
+
         {{--
         Set Userpassword
         --}}
@@ -209,16 +317,20 @@
                             @if($user->isSysAdmin())
                                 <i class="fas fa-user-shield fa-3x mb-2"></i>
                                 @if(\App\User::where('role_id','1')->count()>1)
-                                    <form method="POST" action="{{ route('user.revokeSysAdmin',$user) }}">
+                                    <form method="POST"
+                                          action="{{ route('user.revokeSysAdmin',$user) }}"
+                                    >
                                         @csrf
                                         @method('delete')
                                         <x-btnSave>{{ __('Entziehen') }}</x-btnSave>
                                     </form>
                                 @else
-                                <x-btnModal modalid="revokeUserAsSysAdmin">{{ __('Entziehen') }}</x-btnModal>
+                                    <x-btnModal modalid="revokeUserAsSysAdmin">{{ __('Entziehen') }}</x-btnModal>
                                 @endif
                             @else
-                                <form method="POST" action="{{ route('user.grantSysAdmin',$user) }}">
+                                <form method="POST"
+                                      action="{{ route('user.grantSysAdmin',$user) }}"
+                                >
                                     @csrf
                                     <input type="hidden"
                                            name="user_id"
@@ -340,25 +452,25 @@
                                     id="systemTheme"
                                     class="custom-select"
                             >
-                               {{-- <option value="css/sand.css"
-                                        data-asset="{{ asset('css/sand.css') }}"
-                                        {{ $user->user_theme=='css/sand.css'? ' selected ' : '' }}
-                                >Sandstone
-                                </option>
-                                <option value="css/minty.css"
-                                        data-asset="{{ asset('css/minty.css') }}"
-                                        {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
-                                >Mint
-                                </option>--}}
+                                {{-- <option value="css/sand.css"
+                                         data-asset="{{ asset('css/sand.css') }}"
+                                         {{ $user->user_theme=='css/sand.css'? ' selected ' : '' }}
+                                 >Sandstone
+                                 </option>
+                                 <option value="css/minty.css"
+                                         data-asset="{{ asset('css/minty.css') }}"
+                                         {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
+                                 >Mint
+                                 </option>--}}
                                 <option value="css/tbs.css"
                                         data-asset="{{ asset('css/tbs.css') }}"
-                                        {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
+                                    {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
                                 >Twitter Bootstrap
                                 </option>
 
                                 <option value="css/darkmode.css"
                                         data-asset="{{ asset('css/darkmode.css') }}"
-                                        {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
+                                    {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
                                 >Dark
                                 </option>
                                 <option value="css/flatly.css"

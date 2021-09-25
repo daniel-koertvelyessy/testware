@@ -57,7 +57,7 @@
                 <li>
                     <a class="dropdown-item"
                        href="{{ route('user.show',Auth::user()) }}"
-                       id="btnLockScreen"
+                       id="btnMyAccount"
                     >
                         <i class="fas fa-user fa-fw mr-2"></i>
                         {{__('Mein Konto')}}

@@ -99,10 +99,10 @@
         // Show the tab corresponding with the hash in the URL, or the first tab.
         var showTabFromHash = function () {
             var hash =
-                settings.selectorAttribute == "href"
+                settings.selectorAttribute === "href"
                     ? window.location.hash
                     : window.location.hash.substring(1);
-            if (hash != "") {
+            if (hash !== "") {
                 var selector = hash
                     ? "a[" + settings.selectorAttribute + '="' + hash + '"]'
                     : settings.initialTab;
@@ -172,18 +172,7 @@ if (localStorage.getItem('testware-lockscreen') !== null) {
 }
 
 
-$("#userSeinPIN").on("keyup", function (e) {
-    if (e.keyCode === 13) {
-        const pin = $("#userSeinPIN");
-        if (pin.val() === "2231") {
-            pin.val("");
-            $("#lockUserView").modal("hide");
-            $(".modal-backdrop").remove();
-            $('#lockscreen').hide();
-            localStorage.removeItem('testware-lockscreen');
-        }
-    }
-});
+
 
 $(".datepicker").datepicker({
     format: "yyyy-mm-dd",
@@ -420,27 +409,27 @@ $('#btnAddTag').click(function () {
             `);
 });
 
-$(document).on('click','.editNote',function (){
-   const id=$(this).data('id');
-   $.ajax({
-       type: "get",
-       dataType: 'json',
-       url: "/note",
-       data: {id},
-       success: function (res) {
-           $('#model_note_id').val(id);
-           $('#frmStoreNoteData').attr('action','/note/'+id);
-           $('#modal_method').val('put');
-           $('#note_object_uid').val(res.data.uid);
-           $('#modal_addnote_user_id').val(res.data.user_id);
-           $('#note_type_id').val(res.data.note_type_id);
-           $('#label').val(res.data.label);
-           $('#description').val(res.data.description);
-           $('#file_name').val(res.data.file_name);
-           $('#modalAddNoteLabel').text(res.title);
+$(document).on('click', '.editNote', function () {
+    const id = $(this).data('id');
+    $.ajax({
+        type: "get",
+        dataType: 'json',
+        url: "/note",
+        data: {id},
+        success: function (res) {
+            $('#model_note_id').val(id);
+            $('#frmStoreNoteData').attr('action', '/note/' + id);
+            $('#modal_method').val('put');
+            $('#note_object_uid').val(res.data.uid);
+            $('#modal_addnote_user_id').val(res.data.user_id);
+            $('#note_type_id').val(res.data.note_type_id);
+            $('#label').val(res.data.label);
+            $('#description').val(res.data.description);
+            $('#file_name').val(res.data.file_name);
+            $('#modalAddNoteLabel').text(res.title);
             $('#taglist').html(res.tags);
-           $('#modalAddNote').modal('show');
+            $('#modalAddNote').modal('show');
 
-      }
-   });
+        }
+    });
 });

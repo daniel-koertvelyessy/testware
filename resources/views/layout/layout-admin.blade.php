@@ -43,7 +43,8 @@
    class="sr-only"
 >{{__('Überspringe gesamte Navigation')}}</a>
 @auth
-    <div style="width: 100vw; height: 100vh; background-color: #d7efb0; position: fixed; z-index: 2500; display: none;"
+    <div style="width: 100vw; height: 100vh; position: fixed; z-index: 2500; display: none;"
+         class="bg-dark"
          id="lockscreen"
          aria-label="Element zum verbergen von Inhalten, wenn der Bildschirm vom Benutzer gesperrt wird"
     ></div>
@@ -238,16 +239,19 @@
                         {{__('Bitte geben Sie Ihre PIN ein, um den Bildschirm zu entsperren')}}
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="userSeinPIN"
-                               class="sr-only"
-                        >PIN
-                        </label>
-                        <input type="password"
-                               class="form-control"
-                               id="userSeinPIN"
-                               placeholder="PIN"
-                               autocomplete="off"
-                        >
+                        <form action="{{ route('unlockScreen') }}" id="frmUnlockUserScreen">
+                            <label for="userScreenLockPIN"
+                                   class="sr-only"
+                            >PIN
+                            </label>
+                            <input type="password"
+                                   class="form-control"
+                                   id="userScreenLockPIN"
+                                   placeholder="PIN"
+                                   autocomplete="off"
+                            >
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -298,25 +302,25 @@
 
 @yield('scripts')
 <script>
-    /*    $(document).on('click','.markNoteAsRead',function () {
-            const id = $(this).data('id');
-            $.ajax({
-                type: "post",
-                dataType: 'json',
-                url: '{{ route('user.setMsgRead') }}',
-            data: {id},
-            success: (res) => {
-                console.debug(res);
-
+    $(document).on('submit', "#frmUnlockUserScreen", function (e) {
+        e.preventDefault();
+        const pin = $("#userScreenLockPIN");
+        $.ajax({
+            type: "get",
+            dataType: 'json',
+            url: "{{ route('unlockScreen') }}",
+            data: {pin:pin.val()},
+            success: (checkpin) => {
+                if (checkpin.status) {
+                    pin.val("");
+                    $("#lockUserView").modal("hide");
+                    $(".modal-backdrop").remove();
+                    $('#lockscreen').hide();
+                    localStorage.removeItem('testware-lockscreen');
+                }
             }
         });
-        console.log(id);
-    });*/
-    // $('#lockscreen').hide();
-    // $('#sideNav').hide();
-    // $('#NavToggler').click(function () {
-    //     $('#sideNav').animate({width:'toggle'},350);
-    // });
+    });
 </script>
 
 

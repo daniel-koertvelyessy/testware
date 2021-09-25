@@ -16,6 +16,7 @@ Route::get('organisation', function () {
 Route::get('admin', 'AdminController@index')->name('admin.index');
 //Route::get('admin/user', 'AdminController@indexUser')->name('user.index');
 //Route::get('admin/user/ldap', 'UserController@ldap')->name('user.ldap');
+Route::get('user/restore/{user}', 'UserController@restore')->name('user.restore');
 Route::get('checkUserEmailAddressExists', 'UserController@checkUserEmailAddressExists')->name('checkUserEmailAddressExists');
 Route::get('checkUserUserNameExists', 'UserController@checkUserUserNameExists')->name('checkUserUserNameExists');
 Route::get('admin/reports', 'AdminController@indexReports');

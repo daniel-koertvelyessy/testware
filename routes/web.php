@@ -156,6 +156,7 @@ Route::resources([
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
     'ProductInstruction'     => 'ProductInstructedUserController',
     'ProductQualifiedUser'   => 'ProductQualifiedUserController',
+    'productparameter'       => 'ProductParameterController',
     'lizenz'                 => 'LizenzController',
     'report'                 => 'ReportController',
     'search'                 => 'SearchController',
@@ -241,6 +242,10 @@ Route::get('organisationMain', function () {
     ]);
 })->name('organisationMain')->middleware('auth');
 
+Route::get('unlockScreen', function (){
+    return ['status' => request('pin')==='2231'];
+})->name('unlockScreen')->middleware('auth');
+
 Route::get('storageMain', function () {
     return view('admin.standorte.index', [
         'locations'    => App\Location::take(5)->latest()->get(),
@@ -324,33 +329,11 @@ Route::get('/report/template', 'ReportController@template')->name('report.templa
 
 Route::get('/notes/file/{id}', 'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
-Route::get('getTestingCalender/{setdate}', function ($setdate) {
-    $data['html'] = view('components.testcalendar', compact('setdate'))->render();
-    return json_encode($data);
-
-});
-
-/*
-
-Übergabe von GET Variablen an Route
-Route::get('kb',function(){
-    return view('kb',['kb'=>request('kb')]);
-});
-
-Übergabe von Wildcard-eingaben als getvar an Route
-Route::get('post/{wildcard}, function($wildcard){
-    if (!$wildcard){
-        abort(404, 'File not found!!');
-    }
-
-    return view('post', 'getvar' => $wildcard);
-
-});
-
-$storage = App\Location::latest('{var}')->get();  Sotrierung nach {var} desc
-$storage = App\Location::take()3->latest('{var}')->get(); nehme die 3 letzten Sotrierung nach {var} desc
-
-*/
+//Route::get('getTestingCalender/{setdate}', function ($setdate) {
+//    $data['html'] = view('components.testcalendar', compact('setdate'))->render();
+//    return json_encode($data);
+//
+//});
 
 Route::get('/register', [
     RegisteredUserController::class,

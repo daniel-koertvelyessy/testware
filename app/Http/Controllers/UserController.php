@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\AnforderungControlItem;
+use App\EquipmentInstruction;
+use App\EquipmentQualifiedUser;
+use App\ProductInstructedUser;
+use App\ProductQualifiedUser;
+use App\Profile;
 use App\Role;
 use App\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -28,18 +34,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        $userList = User::with('roles')->sortable()->paginate(15);
-        return view('admin.user.index', ['userList' => $userList]);
+        /*
+        ** if a restoring of deleted useres is prefered exchange this section with the simple return
+        if (Auth::user()->isSysAdmin()) {
+            $userList = User::with('roles')->withTrashed()->sortable()->paginate(15);
+        } else {
+            $userList = User::with('roles')->sortable()->paginate(15);
+        }*/
+        return view('admin.user.index', ['userList' => User::with('roles')->sortable()->paginate(15)]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function ldap()
     {
@@ -63,8 +75,11 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     *
+     * @return RedirectResponse
      */
     public function store(Request $request)
+    : RedirectResponse
     {
         $this->validateUser();
         (new User)->addNew($request);
@@ -72,6 +87,9 @@ class UserController extends Controller
 
     }
 
+    /**
+     * @return array
+     */
     private function validateUser()
     : array
     {
@@ -106,9 +124,10 @@ class UserController extends Controller
      *
      * @param  User $user
      *
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application
      */
     public function show(User $user)
+    : Application
     {
         return view('admin.user.show', [
             'user'  => $user,
@@ -148,11 +167,46 @@ class UserController extends Controller
      *
      * @param  User $user
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
+    : RedirectResponse
     {
-        //
+        $user_id = $request->id;
+//        Profile::where('user_id',$user_id)->delete();
+
+        AnforderungControlItem::where('aci_contact_id',$user_id)->delete();
+        ProductInstructedUser::where('product_instruction_trainee_id',$user_id)->delete();
+        ProductQualifiedUser::where('user_id',$user_id)->delete();
+        EquipmentInstruction::where('equipment_instruction_trainee_id',$user_id)->delete();
+        EquipmentQualifiedUser::where('user_id',$user_id)->delete();
+
+
+
+        if (User::find($user_id)->delete()) {
+            request()->session()->flash('status', __('Der Benutzer wurde gelöscht!'));
+        }
+        return redirect()->route('user.index');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $user
+     *
+     * @return RedirectResponse
+     */
+    public function restore(int $id)
+    : RedirectResponse
+    {
+        if (Auth::user()->isSysAdmin()) {
+            $user = User::withTrashed()->where('id', $id)->first();
+            if ($user->restore()) {
+                request()->session()->flash('status', __('Der Benutzer wurde wiederhergestellt!'));
+                return redirect()->route('user.show', $user);
+            }
+        }
+        return back();
     }
 
     /**

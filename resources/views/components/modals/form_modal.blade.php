@@ -1,11 +1,12 @@
 @props([
     'title' => '',
-    'methode' => 'GET',
+    'method' => 'GET',
     'modalId' => 'modal',
     'modalRoute' => '#',
     'btnClose' => __('Abbruch'),
     'btnSubmit' => __('Senden'),
     'modalType' => 'sd',
+     'modalCenter' => '',
      'typeGBColor'=>[
             'warning' => 'text-warning',
             'danger' => 'text-danger',
@@ -34,12 +35,12 @@
      aria-labelledby="{{$modalId}}Label"
      aria-hidden="true"
 >
-    <div class="modal-dialog {{ $sizeClass[$modalSize] }}">
+    <div class="modal-dialog {{ $sizeClass[$modalSize] }} {{ $modalCenter ? ' modal-dialog-centered ' :'' }}">
         <div class="modal-content">
-            <form action="{{ $modalRoute }}"
-                  method="{{$methode==='GET'?'GET':'POST'}}"
+            <form action="{{ $modalRoute }}" id="frm{{$modalId}}"
+                  method="{{$method==='GET'?'GET':'POST'}}"
             >
-                @if($methode!=='GET')  @method($methode) @endif
+                @if($method!=='GET')  @method($method) @endif
                 @csrf
                 <div class="modal-header {{ $typeGBColor[$modalType] }}">
                     <h5 class="modal-title"

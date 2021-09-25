@@ -101,7 +101,7 @@ class AnforderungControlItemController extends Controller
     {
         return view('admin.verordnung.anforderungitem.show', [
             'anforderungcontrolitem' => $anforderungcontrolitem,
-            'testEventFromItem'      => ControlEventItem::with('ControlEvent')->where('control_item_aci', $anforderungcontrolitem->id)->get()
+            'testEventFromItem'      => ControlEventItem::withTrashed()->with('ControlEvent')->where('control_item_aci', $anforderungcontrolitem->id)->get()
         ]);
     }
 

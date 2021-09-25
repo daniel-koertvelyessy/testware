@@ -45,7 +45,6 @@
     >
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title">{{__('Neue Produkt Kategorie anlegen')}}</h5>
                     <button type="button"
