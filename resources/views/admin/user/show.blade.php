@@ -177,12 +177,13 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('user.update',$user) }}"
+        <form action="{{ route('user.updatedata',$user) }}"
               method="post"
               class="mb-4"
         >
             @csrf
             @method('put')
+            <input type="hidden" name="id" id="user_id" value="{{ $user->id }}">
             <div class="row mb-4 d-md-block d-none">
                 <div class="col">
                     <h1 class="h3">

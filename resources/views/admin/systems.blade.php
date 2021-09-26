@@ -64,65 +64,30 @@
         </div>
     </div>
 
-    <div class="modal fade"
-         id="modalAddProduktKategorieParam"
-         tabindex="-1"
-         aria-labelledby="modalAddProduktKategorieParamLabel"
-         aria-hidden="true"
+    <x-modals.form_modal title="{{ __('Edit parameter') }}"
+                         method="POST"
+                         modalId="modalAddProduktKategorieParam"
+                         modalRoute="{{ route('addProduktKategorieParam') }}#Produkte"
+                         btnSubmit="{{ __('Parameter speichern') }}"
+                         modalType="sd"
+                         modalCenter="true"
     >
-        <div class="modal-dialog">
-            <form action="{{ route('addProduktKategorieParam') }}#Produkte"
-                  method="POST"
-                  name="frmAddProduktKategorieParam"
-                  id="frmAddProduktKategorieParam"
-            >
-                @csrf
-                <input type="hidden"
-                       name="produkt_kategorie_id"
-                       id="produkt_kategorie_id"
-                >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{__('Neues Datenfeld anlegen')}}</h5>
-                        <button type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-2">
-                            <label for="pkp_label">{{__('Label')}}</label>
-                            <input type="text"
-                                   name="pkp_label"
-                                   id="pkp_label"
-                                   class="form-control checkLabel"
-                            >
-                            <p class="small text-primary">{{__('erforderlich, max 20 Zeichen, ohne Sonder- und Leerzeichen')}}</p>
-                        </div>
-                        <div class="mb-2">
-                            <label for="pkp_name">{{__('Name')}}</label>
-                            <input type="text"
-                                   name="pkp_name"
-                                   id="pkp_name"
-                                   class="form-control"
-                            >
-                            <p class="small text-primary">{{__('maximal 150 Zeichen')}}</p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-outline-secondary"
-                                data-dismiss="modal"
-                        >{{__('Abbruch')}}</button>
-                        <button class="btn btn-primary">{{__('Datenfeld speichern')}}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+        <input type="text"
+               name="produkt_kategorie_id"
+               id="produkt_kategorie_id_addNewPK"
+        >
+        <x-textfield id="pkp_label"
+                     class="checkLabel required"
+                     label="{{__('Label')}}"
+                     required
+                     max="20"
+        />
+        <x-textfield id="pkp_name"
+                     label="{{ __('Name') }}"
+                     max="100"
+        />
+    </x-modals.form_modal>
+
 
 @endsection
 
@@ -993,7 +958,8 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">
-                                                                    {{__('Anforderungstyp löschen')}} <i class="fas fa-trash-alt"></i>
+                                                                    {{__('Anforderungstyp löschen')}} <i
+                                                                            class="fas fa-trash-alt"></i>
                                                                 </button>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!')}}</p>
@@ -1185,8 +1151,9 @@
                                                                         >{{ $ad->doctyp_label }}</option>
                                                                     @endforeach
                                                                 </select>
-                                                                <button class="btn btn-outline-danger">{{__('Dokumententyp löschen')}} <i
-                                                                        class="fas fa-trash-alt"
+                                                                <button class="btn btn-outline-danger">{{__('Dokumententyp löschen')}}
+                                                                    <i
+                                                                            class="fas fa-trash-alt"
                                                                     ></i></button>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!')}}</p>
@@ -1259,14 +1226,15 @@
                                         >
                                     </div>
 
-                                    <x-btnMain block="1">{{ __('Format speichern') }} <span class="fas fa-download ml-2"></span></x-btnMain>
+                                    <x-btnMain block="1">{{ __('Format speichern') }} <span
+                                                class="fas fa-download ml-2"></span></x-btnMain>
 
                                 </form>
                             </div>
                             <div class="col-md-4 d-none d-md-inline">
                                 <h2 class="h4">{{__('Beispiel')}}</h2>
                                 @if($test_report_formats['id'])
-                                <span class="h3 text-info">{{ $test_report_formats['prefix']??'' }}{{ str_pad('32',$test_report_formats['digits'],'0',STR_PAD_LEFT) }}{{ $test_report_formats['postfix']??'' }}</span>
+                                    <span class="h3 text-info">{{ $test_report_formats['prefix']??'' }}{{ str_pad('32',$test_report_formats['digits'],'0',STR_PAD_LEFT) }}{{ $test_report_formats['postfix']??'' }}</span>
                                 @else
                                     <p class="h3 text-info">IR{{ str_pad('332',6,'0',STR_PAD_LEFT) }}/1</p>
                                     <dl class="row">
@@ -1969,40 +1937,7 @@
                     id: nd.val(),
                 },
                 success: function (res) {
-
-                    $.each(res, function (ui, item) {
-                        $('#showProduktKategorieParamListe').append(`
-                     <div class="card p-2 mb-4 showProduktKategorieParamListItem" id="pkp_${item.id}">
-                        <form action="/updateProduktKategorieParams" method="post" id="updateProduktKategorieParams_${item.id}">
-                            @csrf
-                        @method('PUT')
-                        <input type="hidden" id="produkt_kategorie_id_${item.id}" name="produkt_kategorie_id" value="${item.produkt_kategorie_id}">
-                            <input type="hidden" id="id_${item.id}" name="id" value="${item.id}">
-                            <div class="mb-2">
-                                <label for="pkp_label_${item.id}">{{__('Label')}}</label>
-                                <input type="text" name="pkp_label" id="pkp_label_${item.id}" class="form-control checkLabel" value="${item.pkp_label}">
-                                <p class="small text-primary">{{__('erforderlich, max 20 Zeichen, ohne Sonder- und Leerzeichen')}}</p>
-                            </div>
-                            <div class="mb-2">
-                                <label for="pkp_name_${item.id}">Name</label>
-                                <input type="text" name="pkp_name" id="pkp_name_${item.id}" class="form-control" value="${item.pkp_name}">
-                                 <p class="small text-primary">{{__('maximal 150 Zeichen')}}</p>
-                            </div>
-                            <div class="input-group mt-2 d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-link mr-2 btnUpdatePKParam" data-id="${item.id}"><span class="fas fa-download ml-md-2"></span> {{__('speichern')}}</button>
-                                <button type="button" class="btn btn-sm btn-link btnDeletePKParam" data-id="${item.id}">{{__('Löschen')}} <span class="far fa-trash-alt"></span></button>
-                            </div>
-                        </form>
-                        <form method="post" action="{{ route('deleteProduktKategorieParam') }}#Produkte" id="frmDeleteProduktKategorieParam_${item.id}">
-                        @csrf
-                        @method('DELETE')
-
-                        <input type="hidden" id="pkp_id_${item.id}" name="id" value="${item.id}">
-                        <input type="hidden" id="pkp_label_${item.id}" name="pkp_label" value="${item.pkp_label}">
-                        </form>
-                    </div>
-                `);
-                    });
+                    $('#showProduktKategorieParamListe').html(res.htmlList);
                 }
             });
         });
@@ -2081,7 +2016,7 @@
 
         $('#makePkParam').click(function () {
             const nd = $('#getProduktKategorieParams :selected');
-            $('#frmAddProduktKategorieParam #produkt_kategorie_id').val(
+            $('#produkt_kategorie_id_addNewPK').val(
                 nd.val()
             );
             $('#modalAddProduktKategorieParam').modal('show');

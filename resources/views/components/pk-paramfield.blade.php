@@ -1,56 +1,13 @@
-@props([
-    'params'=> $params,
-    'isproduct' => $isproduct,
-    ])
-
-
-@forelse ($params as $param)
-
-    @if($isproduct)
+<div class="row">
+    @forelse ($params as $param)
         <div class="mb-3 col-md-3">
-            <x-parameter-item :param="$param"/>
+            <x-parameter-item-pk :param="$param" mode="edit"/>
         </div>
-    @else
-        <div class="mb-3 col-md-3">
-            <x-textfield id="{{ $param->pp_label . $param->id }}" name="{{ $param->pp_label }}"
-                         label="{{ $param->pp_name }}"
-                         value="{!! $param->pp_value !!}"
-                         max="150"
-            />
-            <input type="hidden"
-                   name="pp_id[]"
-                   id="pp_id_{{ $param->id }}"
-                   value="{{ $param->id }}"
-            >
+    @empty
+        <div class="col">
+            <x-notifyer>{{ __('Keine Daten gefunden') }}</x-notifyer>
         </div>
-    @endif
-@empty
-    {{--
-        @forelse ($produkt->ProduktKategorie->ProduktKategorieParam as $pkParam)
-            <input type="hidden"
-                   name="pp_id[]"
-                   id="pp_id_{{ $pkParam->id }}"
-                   value="{{ $pkParam->id }}"
-            >
-            <x-textfield id="{{ $pkParam->pkp_label }}"
-                         name="pp_label[]"
-                         label="{{ $pkParam->pkp_name }}"
-                         value="{!! $pkParam->pkp_value !!}"
-                         max="150"
-            />
-        @empty
-            <x-notifyer>
-                {{__('Es wurden bislang keine Datenfelder angelegt')}}
-            </x-notifyer>
-        @endforelse
-    --}}
-@endforelse
-<div class="col">
-    <a class="btn btn-primary"
-       href="#"
-       data-toggle="modal"
-       data-target="#modalAddParameter"
-    >{{ __('Neuen Paramter anlegen') }}</a>
+    @endforelse
 </div>
 <x-modals.form_modal
         title="{{ __('Edit parameter') }}"
@@ -142,7 +99,7 @@
 
     });
 
-    $(document).on('click','.btnDeleteParam',function(){
+    $(document).on('click', '.btnDeleteParam', function () {
         $('#frmmodalDeleteParameter').attr('action', $(this).data('route'));
 
     })

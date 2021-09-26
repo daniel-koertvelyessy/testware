@@ -15,7 +15,7 @@
                     <option value="{{ $produktKategorie->id }}"
                     @if (isset($pk))
                         {{ ($pk==$produktKategorie->id)? ' selected ': '' }}
-                        @endif
+                            @endif
                     >{{ $produktKategorie->pk_label }}</option>
                 @endforeach
                 @if (!isset($mkpk))
@@ -101,23 +101,27 @@
                      label="{{__('Artikelnummer')}}"
         />
         @if (isset($pk))
-            @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
+            <div class="row">
+                @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
+                    <div class="col-md-4">
+                        <x-parameter-item-pk :param="$pkpItem" mode="insert"/>
+                    </div>
+                    {{--     <input type="hidden"
+                                name="pp_label[]"
+                                id="pp_label{{ $pkpItem->id }}"
+                                value="{{ $pkpItem->pkp_label }}"
+                         >
+                         <input type="hidden"
+                                name="pp_name[]"
+                                id="pp_name_{{ $pkpItem->id }}"
+                                value="{{ $pkpItem->pkp_name }}"
+                         >
+                         <x-textfield id="{{ $pkpItem->pkp_label }}"
+                                      label="{{ $pkpItem->pkp_name }}"
+                         />--}}
 
-                <input type="hidden"
-                       name="pp_label[]"
-                       id="pp_label{{ $pkpItem->id }}"
-                       value="{{ $pkpItem->pkp_label }}"
-                >
-                <input type="hidden"
-                       name="pp_name[]"
-                       id="pp_name_{{ $pkpItem->id }}"
-                       value="{{ $pkpItem->pkp_name }}"
-                >
-                <x-textfield id="{{ $pkpItem->pkp_label }}"
-                             label="{{ $pkpItem->pkp_name }}"
-                />
-
-            @endforeach
+                @endforeach
+            </div>
         @endif
         <x-textarea id="prod_description"
                     label="{{__('Beschreibung')}}"

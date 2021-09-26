@@ -85,7 +85,7 @@ class ProduktController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Produkt $produkt
+     * @param Produkt $produkt
      *
      * @return Application|Factory|Response|View
      */
@@ -100,7 +100,8 @@ class ProduktController extends Controller
         }
 
         return view('admin.produkt.show', [
-            'produkt'    => $produkt,
+            'produkt' => $produkt,
+            'params' => $produkt->ProduktParam,
             'equipLists' => Equipment::where('produkt_id', $produkt->id)->with('EquipmentState', 'produktDetails')->sortable()->paginate(10)
         ]);
 
@@ -109,9 +110,9 @@ class ProduktController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Produkt $produkt
-     * @param  ProduktParam ProduktParam
+     * @param Request $request
+     * @param Produkt $produkt
+     * @param ProduktParam ProduktParam
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -148,35 +149,34 @@ class ProduktController extends Controller
     /**
      * @return array
      */
-    public function validateProdukt()
-    : array
+    public function validateProdukt(): array
     {
         return request()->validate([
-            'prod_label'           => [
+            'prod_label' => [
                 'bail',
                 'min:2',
                 'max:20',
                 'required',
                 Rule::unique('produkts')->ignore(\request('id'))
             ],
-            'prod_name'            => '',
-            'prod_description'     => '',
-            'prod_nummer'          => [
+            'prod_name' => '',
+            'prod_description' => '',
+            'prod_nummer' => [
                 'bail',
                 'alpha_dash',
                 'max:100',
                 Rule::unique('produkts')->ignore(\request('id'))
             ],
-            'prod_active'          => '',
+            'prod_active' => '',
             'produkt_kategorie_id' => 'nullable',
-            'produkt_state_id'     => 'required'
+            'produkt_state_id' => 'required'
         ]);
     }
 
     /**
      * Speichere neuen Produktstamm
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|Response
      * @throws AuthorizationException
@@ -188,6 +188,7 @@ class ProduktController extends Controller
         $produkt = Produkt::create($this->validateProdukt());
 
         if (isset($request->pp_label) && count($request->pp_label) > 0) {
+
             for ($i = 0; $i < count($request->pp_label); $i++) {
                 $param = new ProduktParam;
 
@@ -273,14 +274,13 @@ class ProduktController extends Controller
     /**
      * @return array
      */
-    public function validateProduktDokument()
-    : array
+    public function validateProduktDokument(): array
     {
         return request()->validate([
-            'proddoc_label'       => 'bail|required|max:150',
-            'proddoc_name'        => 'max:100',
-            'proddoc_name_pfad'   => 'max:150',
-            'document_type_id'    => 'required',
+            'proddoc_label' => 'bail|required|max:150',
+            'proddoc_name' => 'max:100',
+            'proddoc_name_pfad' => 'max:150',
+            'document_type_id' => 'required',
             'proddoc_description' => ''
         ]);
     }
@@ -288,7 +288,7 @@ class ProduktController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      * @throws AuthorizationException
@@ -305,13 +305,12 @@ class ProduktController extends Controller
     /**
      * Bind a company to a given product.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      * @throws AuthorizationException
      */
-    public function addProduktFirma(Request $request)
-    : RedirectResponse
+    public function addProduktFirma(Request $request): RedirectResponse
     {
 
         $address_id = false;
@@ -397,52 +396,48 @@ class ProduktController extends Controller
         return redirect()->back();
     }
 
-    public function validateAdresse()
-    : array
+    public function validateAdresse(): array
     {
         return request()->validate([
-            'ad_label'                => 'bail|max:20|required|unique:adresses,ad_label',
-            'ad_anschrift_strasse'    => 'bail|required|max:100',
-            'ad_anschrift_plz'        => 'bail|required|max:100',
-            'ad_anschrift_ort'        => 'bail|required|max:100',
+            'ad_label' => 'bail|max:20|required|unique:adresses,ad_label',
+            'ad_anschrift_strasse' => 'bail|required|max:100',
+            'ad_anschrift_plz' => 'bail|required|max:100',
+            'ad_anschrift_ort' => 'bail|required|max:100',
             'ad_anschrift_hausnummer' => 'max:100',
-            'land_id'                 => 'max:100',
-            'address_type_id'         => '',
+            'land_id' => 'max:100',
+            'address_type_id' => '',
         ]);
     }
 
-    public function validateFirma()
-    : array
+    public function validateFirma(): array
     {
         return request()->validate([
-            'fa_label'       => 'bail|max:20|required|unique:firmas,fa_label',
-            'fa_name'        => 'max:100',
+            'fa_label' => 'bail|max:20|required|unique:firmas,fa_label',
+            'fa_name' => 'max:100',
             'fa_kreditor_nr' => 'max:100',
-            'fa_debitor_nr'  => 'max:100',
-            'fa_vat'         => 'max:30',
-            'adress_id'      => '',
+            'fa_debitor_nr' => 'max:100',
+            'fa_vat' => 'max:30',
+            'adress_id' => '',
         ]);
     }
 
-    public function validateFirmaProdukt()
-    : array
+    public function validateFirmaProdukt(): array
     {
         return request()->validate([
-            'firma_id'   => 'required',
+            'firma_id' => 'required',
             'produkt_id' => 'required',
         ]);
     }
 
-    public function validateContact()
-    : array
+    public function validateContact(): array
     {
         return request()->validate([
-            'con_label'   => 'bail|max:20|required|unique:contacts,con_label',
+            'con_label' => 'bail|max:20|required|unique:contacts,con_label',
             'con_vorname' => 'max:100',
-            'con_name'    => 'max:100',
+            'con_name' => 'max:100',
             'con_telefon' => 'max:100',
-            'con_email'   => 'max:100',
-            'anrede_id'   => '',
+            'con_email' => 'max:100',
+            'anrede_id' => '',
         ]);
     }
 
@@ -471,7 +466,7 @@ class ProduktController extends Controller
         $prodList = Produkt::where('produkt_kategorie_id', $id)->sortable()->paginate(20);
         return view('admin.produkt.kategorie.index', [
             'prodList' => $prodList,
-            'id'       => $id
+            'id' => $id
         ]);
     }
 
@@ -483,7 +478,7 @@ class ProduktController extends Controller
     /**
      *   Liefert die JSON-Daten für die Übersichtstablle in /produkt -> index.blade.php
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array JSON
      */
@@ -498,24 +493,29 @@ class ProduktController extends Controller
         foreach ($produkts as $produkt) {
             $icon = ($produkt->prod_active === 1) ? '<i class="fas fa-check text-success"  data-toggle="tooltip" data-placement="top" ></i>' : '<i class="fas fa-times text-danger"  data-toggle="tooltip" data-placement="top"></i>';
             $data[] = [
-                'term'           => $request->id,
-                'id'             => $produkt->id,
+                'term' => $request->id,
+                'id' => $produkt->id,
                 'prod_kategorie' => $produkt->ProduktKategorie->pk_label,
-                'created_at'     => date('d.m.Y H:s', strtotime($produkt->created_at)),
-                'prod_nummer'    => $produkt->prod_nummer,
-                'prod_label'     => $produkt->prod_label,
-                'prod_active'    => $icon,
-                'prod_status'    => '<i class="' . $produkt->ProduktState->ps_icon . ' text-' . $produkt->ProduktState->ps_color . '"  data-toggle="tooltip" data-placement="top" title="' . $produkt->ProduktState->ps_name . '"></i>',
-                'prod_link'      => '<a href="/produkt/' . $produkt->id . '" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>'
+                'created_at' => date('d.m.Y H:s', strtotime($produkt->created_at)),
+                'prod_nummer' => $produkt->prod_nummer,
+                'prod_label' => $produkt->prod_label,
+                'prod_active' => $icon,
+                'prod_status' => '<i class="' . $produkt->ProduktState->ps_icon . ' text-' . $produkt->ProduktState->ps_color . '"  data-toggle="tooltip" data-placement="top" title="' . $produkt->ProduktState->ps_name . '"></i>',
+                'prod_link' => '<a href="/produkt/' . $produkt->id . '" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>'
             ];
         }
         //        dd(DB::getQueryLog());
         return $data;
     }
 
-    public function getProduktKategorieParams(ProduktKategorieParam $produktKategorieParam, Request $request)
+    public function getProduktKategorieParams(Request $request)
     {
-        return ProduktKategorieParam::where('produkt_kategorie_id', $request->id)->get();
+        // return ;
+        $data['htmlList'] = view('components.pk-paramfield',[
+            'params' => ProduktKategorieParam::where('produkt_kategorie_id', $request->id)->get(),
+        ])->render();
+
+        return $data;
     }
 
     public function getUsedProduktsByPK(Request $request)
@@ -524,8 +524,8 @@ class ProduktController extends Controller
     }
 
     /**
-     * @param  ProduktKategorieParam $produktKategorieParam
-     * @param  Request               $request
+     * @param ProduktKategorieParam $produktKategorieParam
+     * @param Request $request
      *
      * @return bool
      */
@@ -548,19 +548,18 @@ class ProduktController extends Controller
     /**
      * @return array
      */
-    public function validateProduktKategorieParam()
-    : array
+    public function validateProduktKategorieParam(): array
     {
         return request()->validate([
-            'pkp_label'            => [
+            'pkp_label' => [
                 'bail',
                 'unique:produkts,prod_label',
                 'min:2',
                 'max:20',
                 'required'
             ],
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
+            'pkp_name' => 'bail|string|max:100',
+            'pkp_value' => '',
             'produkt_kategorie_id' => 'required'
         ]);
     }
@@ -568,23 +567,22 @@ class ProduktController extends Controller
     /**
      * Speichere neuen Produktstamm
      *
-     * @param  Request $request
+     * @param Request $request
      *
-     * @return Application|Response
-     * @throws AuthorizationException
+     * @return RedirectResponse
      */
-    public function addProduktKategorieParam(Request $request)
+    public function addProduktKategorieParam(Request $request): RedirectResponse
     {
 //        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::create($this->validateProduktKategorieParam());
         $request->session()->flash('status', __('Das Datenfeld <strong>:label</strong> wurde angelegt!', ['label' => request('pkp_name')]));
-        return view('admin.systems');
+        return back();
     }
 
     /**
      *  Löscht den Param von der Produk-Kategorie
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return RedirectResponse
      * @throws AuthorizationException
@@ -600,7 +598,7 @@ class ProduktController extends Controller
     /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|Response
      */
@@ -614,32 +612,27 @@ class ProduktController extends Controller
     /**
      * @return array
      */
-    public function validateProduktKategorie()
-    : array
+    public function validateProduktKategorie(): array
     {
         return request()->validate([
-            'pkp_label'            => [
+            'pkp_label' => [
                 'bail',
                 'unique:produkts,prod_label',
                 'min:2',
                 'max:20',
                 'required'
             ],
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
+            'pkp_name' => 'bail|string|max:100',
+            'pkp_value' => '',
             'produkt_kategorie_id' => 'required'
         ]);
     }
 
 
-
-
-
-
     /**
      *  Löscht die Zuordnung der Anforderung vom Produkt
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -725,15 +718,13 @@ class ProduktController extends Controller
     /**
      * @return array
      */
-    public function validateProduktAnforderung()
-    : array
+    public function validateProduktAnforderung(): array
     {
         return request()->validate([
-            'produkt_id'     => 'required',
+            'produkt_id' => 'required',
             'anforderung_id' => 'required|gt:0'
         ]);
     }
-
 
 
     public function addQualifiedUser(Request $request)

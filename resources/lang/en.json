@@ -948,9 +948,9 @@
     "Benutzer löschen": "Delete this user",
     "Der Benutzer wurde gelöscht!": "The user has been deleted!",
     "Neues Feld für Stammdaten anlegen": "Add new parameter",
-    "####": "####",
-    "####": "####",
-    "####": "####",
+    "Parameter": "Parameter",
+    "Paramter auch für abgeleitete Geräte anfügen": "Add paramenter for related equipment, too",
+    "Neuen Parameter für Produkt anlegen": "Add parameter to product",
     "####": "####",
     "####": "####",
     "####": "####"

@@ -119,15 +119,15 @@ class UserController extends Controller
         ]);
     }
 
+
     /**
      * Display the specified resource.
      *
      * @param  User $user
      *
-     * @return Application
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function show(User $user)
-    : Application
     {
         return view('admin.user.show', [
             'user'  => $user,
@@ -161,6 +161,24 @@ class UserController extends Controller
         $request->session()->flash('status', __('Ihr Konto wurde aktualisiert!'));
         return redirect()->back();
     }
+
+    /**
+     * Update user from systems view.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updatedata(Request $request): RedirectResponse
+    {
+        $msg = ((new User)->updateData($request)) ?
+            __('Ihr Konto wurde aktualisiert!') :
+            __('Fehler!') ;
+
+        $request->session()->flash('status', $msg);
+        return redirect()->back();
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

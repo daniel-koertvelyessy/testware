@@ -47,7 +47,7 @@
                href="#"
                data-toggle="modal"
                data-target="#modalAddParameter"
-            ><i class="fas fa-table"></i> {{__('Datenfeld hinzufügen')}}</a>
+            ><i class="fas fa-table"></i> {{__('Parameter hinzufügen')}}</a>
             @can('isAdmin', Auth::user())
                 <a class="dropdown-item"
                    href="#"
@@ -211,7 +211,7 @@
     >
         <div class="modal-dialog modal-lg modal-fullscreen-md-down">
             <div class="modal-content">
-                <form action="{{ route('productparameter.store') }}"
+                <form action="{{ route('productparameter.store') }}#Parameter"
                       method="POST"
                       class="needs-validation"
                       id="frmAddProdParam"
@@ -224,7 +224,7 @@
                            value="{{ $produkt->id }}"
                     >
                     <div class="modal-header">
-                        <h5 class="modal-title">{{__('Neues Feld für Stammdaten anlegen')}}</h5>
+                        <h5 class="modal-title">{{__('Neuen Parameter für Produkt anlegen')}}</h5>
                         <button type="button"
                                 class="close"
                                 data-dismiss="modal"
@@ -245,7 +245,17 @@
                                 <x-textfield id="pp_value"
                                              label="{{__('Wert')}}"
                                 />
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input"
+                                           id="checkAddParameterToEquipment"
+                                           name="checkAddParameterToEquipment">
+                                    <label class="custom-control-label"
+                                           for="checkAddParameterToEquipment">
+                                        {{ __('Paramter auch für abgeleitete Geräte anfügen') }}
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -566,6 +576,21 @@
                         role="presentation"
                     >
                         <a class="nav-link"
+                           id="Parameter-tab"
+                           data-toggle="tab"
+                           href="#Parameter"
+                           role="tab"
+                           aria-controls="Parameter"
+                           aria-selected="false"
+                        >{{__('Parameter')}} <span
+                                    class="badge badge-primary"
+                            >{{ $params->count() }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item"
+                        role="presentation"
+                    >
+                        <a class="nav-link"
                            id="productRequirements-tab"
                            data-toggle="tab"
                            href="#productRequirements"
@@ -573,7 +598,7 @@
                            aria-controls="productRequirements"
                            aria-selected="false"
                         >{{__('Anforderungen')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->ProduktAnforderung->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -599,7 +624,7 @@
                            aria-controls="prodDoku"
                            aria-selected="false"
                         >{{__('Dokumente')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->ProduktDoc->count() }}</span></a>
                     </li>
                     <li class="nav-item"
@@ -613,7 +638,7 @@
                            aria-controls="prodEquip"
                            aria-selected="false"
                         >{{__('Geräte')}} <span
-                                class="badge badge-primary"
+                                    class="badge badge-primary"
                             >{{ $produkt->Equipment->count() }}</span></a>
                     </li>
                 </ul>
@@ -661,7 +686,7 @@
                                                         <option value="{{ $produktKategorie->id }}"
                                                                 @if($produktKategorie->id === $produkt->produkt_kategorie_id)
                                                                 selected
-                                                            @endif
+                                                                @endif
                                                         >
                                                             {{ $produktKategorie->pk_name }}
                                                         </option>
@@ -683,7 +708,7 @@
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option
-                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
+                                                            value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -695,7 +720,7 @@
                                                            name="prod_active"
                                                            id="prod_active"
                                                            value="1"
-                                                        {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
+                                                            {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="prod_active"
@@ -711,7 +736,7 @@
                                                            id="control_product"
                                                            name="control_product"
                                                            value="1"
-                                                        {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
+                                                            {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="control_product"
@@ -719,11 +744,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <x-paramfield :params="$produkt->ProduktParam"
-                                                      :isproduct="true"
-                                        />
                                     </div>
                                     <div class="row">
                                         <div class="col">
@@ -737,7 +757,43 @@
                                         {{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span>
                                     </x-btnMain>
                                 </form>
+
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade"
+                         id="Parameter"
+                         role="tabpanel"
+                         aria-labelledby="Parameter-tab"
+                    >
+                        <div class="row">
+                            <div class="col">
+                                @if($params->count()===0)
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <h4 class="alert-heading">{{ __('Hinweis') }}</h4>
+
+                                        <p class="lead">{{ __('Paramter können Produkte und Geräte um Datenfelder ergänzen,
+                                welche nur auf dem jeweiligen Objekt sichtbar sind.')
+                            }}</p>
+                                        <p>{{ __('Tipp: Sie können Parameter auch für Produktkategorien anlegen und so
+                                    bequem
+                                 bestimmte Parametergruppen erstellen. Beispiel: Produkte einer Kategorie Elektrogeräte
+                                 können eigene Parameter wie Nennleistung, Nennstrom oder Nennspannung erhalten.')
+                                 }}</p>
+
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <x-paramfield :params="$params"
+                                          :isproduct="true"
+                            />
                         </div>
                     </div>
                     <div class="tab-pane fade"
@@ -785,7 +841,8 @@
                                                            value="{{ $qualifiedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
+                                                        <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -846,7 +903,7 @@
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
                                                         <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                                            class="far fa-trash-alt ml-2"
+                                                                class="far fa-trash-alt ml-2"
                                                         ></span>
                                                     </button>
                                                 </form>
@@ -926,11 +983,11 @@
                                                     id="btnSectionFirmaDetails"
                                             >
                                                 <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                    class="fas fa-angle-down"
+                                                        class="fas fa-angle-down"
                                                 ></span>
                                             </button>
                                             <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                    class="fas fa-angle-right"
+                                                        class="fas fa-angle-right"
                                                 ></span></button>
                                         </div>
                                         <div class="collapse @if (count($errors)>0) show @endif "
@@ -1030,7 +1087,7 @@
                                                         >
                                                             @foreach (App\AddressType::all() as $addressType)
                                                                 <option
-                                                                    value="{{ $addressType->id }}"
+                                                                        value="{{ $addressType->id }}"
                                                                 >{{ $addressType->adt_name }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1056,7 +1113,7 @@
                                                         >
                                                             @foreach (App\Land::all() as $country)
                                                                 <option
-                                                                    value="{{ $country->id }}"
+                                                                        value="{{ $country->id }}"
                                                                 >{{ $country->land_iso }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1104,7 +1161,7 @@
                                                         >
                                                             @foreach (App\Anrede::all() as $anrede)
                                                                 <option
-                                                                    value="{{ $anrede->id }}"
+                                                                        value="{{ $anrede->id }}"
                                                                 >{{ $anrede->an_kurz }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1148,10 +1205,10 @@
                                     <div class="list-group">
                                         @forelse ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                                    firma="{!!  $firma->fa_name !!}"
+                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                    firmaid="{{ $firma->id }}"
+                                                    produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @empty
                                             <x-notifyer>{{ __('Dem Produkt ist keine Firma zugeordnet.') }}</x-notifyer>
@@ -1165,10 +1222,10 @@
                                     <div class="list-group">
                                         @foreach ($produkt->firma as $firma)
                                             <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                                    firma="{!!  $firma->fa_name !!}"
+                                                    address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                    firmaid="{{ $firma->id }}"
+                                                    produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @endforeach
 
@@ -1190,7 +1247,7 @@
                                 >
                                     @csrf
                                     <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span
-                                            class="small text-muted"
+                                                class="small text-muted"
                                         >max 20MB</span></h2>
 
                                     <input type="hidden"
@@ -1247,7 +1304,7 @@
                                         </div>
                                     </div>
                                     <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i
-                                            class="fas fa-paperclip ml-2"
+                                                class="fas fa-paperclip ml-2"
                                         ></i>
                                     </button>
                                 </form>
@@ -1298,9 +1355,9 @@
                                                     >{{ $produktDoc->created_at->DiffForHumans() }}</td>
                                                     <td>
                                                         <x-deletebutton
-                                                            prefix="produktDoc"
-                                                            action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
-                                                            id="{{ $produktDoc->id }}"
+                                                                prefix="produktDoc"
+                                                                action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                                id="{{ $produktDoc->id }}"
                                                         />
                                                     </td>
                                                 </tr>

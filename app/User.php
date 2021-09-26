@@ -79,6 +79,17 @@ class User extends Authenticatable
         });
     }
 
+    public function updateData(Request $request)
+    {
+        $this->validateUserData();
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->locale = $request->locale;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        return $user->save();
+    }
+
     public static function makePassword()
     {
         return substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%|{}*_"), 0, 8);
@@ -227,6 +238,35 @@ class User extends Authenticatable
         ],[
             'username' => __('Der Name ist bereits vergeben'),
             'email'    => __('Die E-Mail Adress ist bereits in Benutzung'),
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function validateUserData()
+    : array
+    {
+        return request()->validate([
+            'username'          => [
+                'bail',
+                'required',
+                'max:100',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email'             => [
+                'bail',
+                'required',
+                'email',
+                Rule::unique('users')->ignore(\request('id'))
+            ],
+            'email_verified_at' => '',
+            'name'              => 'nullable',
+        ], [
+            'username.required' => __('Ihr Anzeigename ist notwendig'),
+            'username.unique'   => __('Der Anzeigename ist bereits vergeben'),
+            'email.required'    => __('Die E-Mail Adress ist notwendig!'),
+            'email.unique'      => __('Die E-Mail Adress ist bereits in Benutzung'),
         ]);
     }
 
