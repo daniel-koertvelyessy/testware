@@ -149,7 +149,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     @forelse(auth()->user()->unreadNotifications()->get() as $notification)
-                        <x-message_modal :notification="$notification" :link="route('event.show',$notification->data['eventid'])" />
+                        <x-message_modal :notification="$notification" />
                     @empty
                         <span class="list-group-item">
                                 <x-notifyer>{{__('Keine neuen Nachrichten')}}</x-notifyer>

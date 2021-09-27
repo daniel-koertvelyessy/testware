@@ -23,10 +23,10 @@ class ControlEquipment extends Model
         return $this->belongsTo(Equipment::class);
     }
 
-    /*    public function Produkt()
-        {
-            return $this->hasOneThrough('App\Produkt','App\Equipment');
-        }*/
+    public function DelayedControlEquipment()
+    {
+        return $this->belongsTo(DelayedControlEquipment::class);
+    }
 
     public function Anforderung()
     {

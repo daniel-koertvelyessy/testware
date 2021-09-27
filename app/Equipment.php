@@ -132,6 +132,18 @@ class Equipment extends Model
         return $this->hasManyThrough(User::class, EquipmentQualifiedUser::class);
     }
 
+    /**
+     * @param  Equipment $equipment
+     *
+     * @return bool
+     */
+    public function lockEquipment(Equipment $equipment)
+    : bool
+    {
+        $equipment->equipment_state_id = 4;
+        return $equipment->save();
+    }
+
     public function EquipmentQualifiedUser()
     {
         return $this->hasMany(EquipmentQualifiedUser::class);

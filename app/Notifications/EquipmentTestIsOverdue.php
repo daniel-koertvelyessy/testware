@@ -2,26 +2,26 @@
 
 namespace App\Notifications;
 
-use App\EquipmentEvent;
-use App\EquipmentEventItem;
+use App\ControlEquipment;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EquipmentEventChanged extends Notification
+class EquipmentTestIsOverdue extends Notification
 {
     use Queueable;
-    protected $equipmentEventItem;
 
+    public $controlEquipment;
     /**
      * Create a new notification instance.
      *
-     * @param  EquipmentEventItem $equipmentEventItem
+     * @return void
      */
-    public function __construct(EquipmentEventItem $equipmentEventItem)
+    public function __construct(ControlEquipment $controlEquipment)
     {
-        $this->equipmentEventItem = $equipmentEventItem;
+        $this->controlEquipment = $controlEquipment;
     }
 
     /**
@@ -39,7 +39,7 @@ class EquipmentEventChanged extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {
@@ -57,13 +57,16 @@ class EquipmentEventChanged extends Notification
      */
     public function toArray($notifiable)
     {
-
         return [
-           'userid'=>$this->equipmentEventItem->equipment_event_user,
-           'message'=>$this->equipmentEventItem->equipment_event_item_text,
-           'header'=>__('Ereignis geändert'),
-           'eventid'=>$this->equipmentEventItem->equipment_event_id,
-           'detailLink'=>route('event.show',$this->equipmentEventItem->equipment_event_id)
+            'userid'=>NULL,
+            'message'=>__('Die Prüfung :testname des Gerätes :eqname ist überfällig. Das Geräte wurde daher gesperrt!',
+                [
+                    'eqname'=>$this->controlEquipment->Equipment->eq_name,
+                    'testname'=>$this->controlEquipment->Anforderung->an_name,
+                ]),
+            'eventid'=>$this->controlEquipment->id,
+            'header'=>__('Prüfung überfällig'),
+            'detailLink'=>route('equipment.show',$this->controlEquipment->Equipment->eq_inventar_nr)
         ];
     }
 }

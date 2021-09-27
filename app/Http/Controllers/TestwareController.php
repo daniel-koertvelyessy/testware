@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CheckEquipmentTestDueDates;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -21,10 +22,11 @@ class TestwareController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
+//        CheckEquipmentTestDueDates::dispatchSync();
         $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
         return view('testware.index', compact('initialiseApp'));
     }

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class testwareUpdateCommand extends Command
 {
@@ -12,7 +13,7 @@ class testwareUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'testware:dbupdate';
+    protected $signature = 'testware:update';
 
     /**
      * The console command description.
@@ -42,7 +43,6 @@ class testwareUpdateCommand extends Command
         $output = '';
         \Artisan::call('migrate',[],$output);
         $this->info(\Artisan::output());
-
         return 0;
     }
 }

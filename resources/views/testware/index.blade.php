@@ -10,16 +10,6 @@
 
 @section('mainSection', __('testWare'))
 
-@section('modals')
-    <x-modals.form_modal
-        title="Übersicht Prüfungen"
-        modalId="modalShowTestingList"
-        btnSubmit=""
-        btnClose="ok"
-        modalSize="lg"
-    />
-@endsection
-
 @section('content')
     @if($initialiseApp)
 
@@ -164,7 +154,7 @@
                                   @forelse(\App\ControlEquipment::take(10)->where('qe_control_date_due','<=',now()->addWeeks(4))->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                       <tr>
                                           <td>
-                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_label }}</a>
+                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
                                               <br>
                                               <x-notifyer>{{__('Inventar-Nr')}}: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                           </td>
@@ -200,7 +190,7 @@
                                   @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now()->addWeeks(4),now()->addMonths(3)])->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                       <tr>
                                           <td>
-                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_label }}</a>
+                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
                                               <br>
                                               <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                           </td>
@@ -237,9 +227,9 @@
                                   @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now(),date('Y'.'-12-31')])->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                       <tr>
                                           <td>
-                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_label }}</a>
+                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
                                               <br>
-                                              <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                              <x-notifyer>{{ __('Inventar-Nr')}}: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                           </td>
                                           <td>{{ $controlEquipment->Anforderung->an_name }}</td>
                                           <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -273,7 +263,7 @@
                                   @forelse(\App\ControlEquipment::take(10)->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                       <tr>
                                           <td>
-                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->produkt->prod_label }}</a>
+                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
                                               <br>
                                               <x-notifyer>Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
                                           </td>

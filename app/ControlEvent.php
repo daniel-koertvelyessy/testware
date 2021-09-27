@@ -28,6 +28,11 @@ class ControlEvent extends Model
         return $this->belongsTo(ControlEquipment::class);
     }
 
+    public function Requirement()
+    {
+        return $this->belongsTo(Anforderung::class);
+    }
+
     public function ControlEventItem() {
         return $this->hasMany(ControlEventItem::class);
     }
