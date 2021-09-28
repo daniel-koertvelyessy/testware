@@ -862,7 +862,6 @@
                                                                block="1"
                                                     >{{__('Datenfelder laden')}}
                                                     </x-btnLoad>
-
                                                     <x-btnAdd id="makePkParam"
                                                               block="1"
                                                     >{{__('Neu')}}</x-btnAdd>
@@ -1942,7 +1941,7 @@
             });
         });
 
-        $(document).on('click', '.btnUpdatePKParam', function () {
+/*        $(document).on('click', '.btnUpdatePKParam', function () {
             const pkp_id = $(this).data('id');
             $.ajax({
                 type: "POST",
@@ -1959,9 +1958,9 @@
                     jQuery('.toast').toast('show');
                 }
             })
-        });
+        });*/
 
-        $(document).on('click', '.btnDeletePKParam', function () {
+      /*  $(document).on('click', '.btnDeletePKParam', function () {
             const pkp_id = $(this).data('id');
             $.ajax({
                 type: "GET",
@@ -1982,7 +1981,7 @@
                 }
             })
 
-        });
+        });*/
 
         $('.btnEditACI').click(function () {
             const aciid = $(this).data('aciid');

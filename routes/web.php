@@ -1,14 +1,9 @@
 <?php
 
-use App\ControlEquipment;
-use App\ControlEvent;
-use App\DelayedControlEquipment;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
-use App\EquipmentHistory;
 use App\EquipmentUid;
-use App\Notifications\EquipmentTestIsOverdue;
 use App\Produkt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +13,6 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
 
 
 Route::get('/', function () {
@@ -236,56 +230,6 @@ Route::get('/expired', function (Request $request) {
 
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/delayer', function (){
-    /**
-     * place all overdue Equipment control-event into this array
-     */
-    $delayedControlEquipment = [];
-    foreach (ControlEquipment::all() as $controlEquipment) {
-
-        /**
-         * Check if the control-event is overdue
-         *  report it to DelayedControlEvent
-         */
-
-        if ($controlEquipment->qe_control_date_due < now()) {
-
-            $equipment = Equipment::find($controlEquipment->equipment_id);
-
-            (new DelayedControlEquipment)->reportEquipment($equipment);
-            $delayedControlEquipment[] = $controlEquipment;
-
-
-            if((new Equipment)->lockEquipment($equipment)){
-                (new EquipmentHistory)->add(
-                    __('Prüfung überfällig'),
-                    __('Die Prüfung :testname des Gerätes :eqname ist überfällig. Das Geräte wurde daher gesperrt!',
-                        [
-                            'eqname'=>$controlEquipment->Equipment->eq_name,
-                            'testname'=>$controlEquipment->Anforderung->an_name,
-                        ]),
-                    $controlEquipment->equipment_id
-                );
-            }
-        }
-
-    }
-
-    if(count($delayedControlEquipment)>0) {
-        /**
-         *  Fetch all qualified employess from equipment and send
-         *  a notification that 'their' equipment should be tested
-         *  now.
-         */
-        foreach ($delayedControlEquipment as $controlEquipment) {
-            foreach ($controlEquipment->Equipment->EquipmentQualifiedUser as $qualifiedUser) {
-                $qualifiedUser->user->notify( new EquipmentTestIsOverdue($controlEquipment));
-            }
-
-        }
-    }
-
-})->name('delayer')->middleware('auth');
 Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
 Route::get('organisationMain', function () {

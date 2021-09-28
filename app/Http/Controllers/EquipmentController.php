@@ -254,11 +254,13 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, Equipment $equipment)
     {
+        $oldEquipment = Equipment::find($request->id);
+        $changedPrameter = [];
+
+
         $feld = '';
         $flag = false;
-        $oldEquipment = Equipment::find($request->id);
-
-        $feld .=  __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ': <ul>';
+        $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ': <ul>';
         if ($oldEquipment->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                     'fld' => __('Seriennummer'),
@@ -350,19 +352,37 @@ class EquipmentController extends Controller
                     'fld' => __('Kaufpreis'),
                     'old' => $oldEquipment->eq_price,
                     'new' => $request->eq_price,
-                ]) ;
+                ]);
             $flag = true;
         }
-        $feld .='</ul>';
 
-        if ($flag) {
+
+        if (isset($request->eqp_id)) {
+
+            foreach ($request->eqp_id as $parameter_id) {
+                $parameter = EquipmentParam::find($parameter_id);
+                $parameter->ep_value = $request->eqp_value[$parameter_id];
+                if ($parameter->save() && $parameter->ep_value !== $request->eqp_value[$parameter_id]) {
+                    $changedPrameter[] = [$parameter_id => $request->eqp_value[$parameter_id]];
+                    $feld.= __('<li>:num Parameter :name geändert</li>', ['num'=>count($changedPrameter), 'name'=> $parameter->ep_name]);
+                }
+            }
+
+        }
+
+        $feld .= '</ul>';
+
+
+        if ($flag || count($changedPrameter)>0 ) {
             $equipment->update($this->validateEquipment());
             (new EquipmentHistory)->add(__('Gerät geändert'), $feld, $equipment->id);
-            $request->session()->flash('status', __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!', ['equipName' => request('eq_inventar_nr')]));
+            $msg = __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!', ['equipName' => request('eq_inventar_nr')]);
         } else {
-            $request->session()->flash('status', __('Es wurden keine Änderungen festgestellt.'));
+            $msg = __('Es wurden keine Änderungen festgestellt.');
         }
-        return redirect()->route('equipment.show',$equipment);
+
+        $request->session()->flash('status', $msg);
+        return redirect()->route('equipment.show', $equipment);
     }
 
 
@@ -411,12 +431,10 @@ class EquipmentController extends Controller
      * @throws Exception
      */
     public function destroy(Equipment $equipment)
+    : RedirectResponse
     {
-
-
         foreach (EquipmentDoc::where('equipment_id', $equipment->id)->get() as $prodDoku) {
             EquipmentDoc::find($prodDoku->id);
-            $file = $prodDoku->proddoc_name;
             Storage::delete($prodDoku->proddoc_name_pfad);
             $prodDoku->delete();
         }

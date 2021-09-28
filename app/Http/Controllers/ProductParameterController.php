@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Equipment;
 use App\EquipmentParam;
+use App\ProduktKategorieParam;
 use App\ProduktParam;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class ProductParameterController extends Controller
         $this->validateProduktParam();
         $parameter = (new ProduktParam)->makeNewParameter($request);
 
-        $msg = __('Das Datenfeld  <strong>:name</strong> wurde angelegt!', ['name' => request('pp_name')]);
+        $msg = __('Der Parameter <strong>:name</strong> wurde angelegt!', ['name' => request('pp_name')]);
         if (isset($request->checkAddParameterToEquipment)) {
             $msg .= $this->updateEquipment($parameter, 'store');
         }
@@ -85,7 +86,7 @@ class ProductParameterController extends Controller
                 (new EquipmentParam)->delteParameter($parameter, $equipment->id);
         }
         $equipmentUpdatedWithParameter = count($countEquipmentUopdated);
-        return ($equipmentUpdatedWithParameter > 0) ? __('<br>Es wurden  <strong>:counter</strong> Geräte aktualisiert!', ['counter' => $equipmentUpdatedWithParameter]) : __('<br>Es wurden keine Geräte aktualisiert');
+        return ($equipmentUpdatedWithParameter > 0) ? __('<br>Es wurden <strong>:counter</strong> Geräte aktualisiert!', ['counter' => $equipmentUpdatedWithParameter]) : __('<br>Es wurden keine Geräte aktualisiert');
     }
 
     /**
@@ -96,7 +97,19 @@ class ProductParameterController extends Controller
      */
     public function show($id)
     {
-        //
+        return ProduktKategorieParam::find($id);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Request $request
+     *
+     * @return Response
+     */
+    public function getCategogryParam(Request $request)
+    {
+        return ProduktKategorieParam::find($request->id);
     }
 
     /**
@@ -124,14 +137,13 @@ class ProductParameterController extends Controller
         $ProduktParam->pp_name = $request->pp_name;
         $ProduktParam->pp_value = $request->pp_value;
 
-        $msg = ($ProduktParam->save()) ? __('Das Datenfeld <strong>:name</strong> wurde aktualisiert!', ['name' => request('pp_name')]) : 'Error!!';
+        $msg = ($ProduktParam->save()) ? __('Der Parameter <strong>:name</strong> wurde aktualisiert!', ['name' => request('pp_name')]) : 'Error!!';
         $request->session()->flash('status', $msg);
 
         if (isset($request->checkUpdateEquipmentToo)) {
             $msg .= $this->updateEquipment($ProduktParam, 'store');
             $request->session()->flash('status', $msg);
         }
-
 
         return redirect()->back();
     }
@@ -145,7 +157,7 @@ class ProductParameterController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $parameter = ProduktParam::find($id);
-        $msg = __('Der Parameter <strong>:name</strong> wurde entfernt', ['name' => $parameter->pp_name]);
+        $msg = __('Der Parameter <strong>:name</strong> wurde entfernt!', ['name' => $parameter->pp_name]);
         if (request('checkDeleteParamOnEquipment')) {
             $msg .= $this->updateEquipment($parameter, 'delete');
         }

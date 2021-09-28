@@ -1,19 +1,19 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Gerät :equip bearbeiten',['equip'=>$equipment->eq_inventar_nr])}} &triangleright; {{__('Geräte')}}
+{{ __('Gerät :equip bearbeiten',['equip'=>$equipment->eq_inventar_nr]) }} &triangleright; {{__('Geräte')}}
 @endsection
 
 @section('mainSection')
-    {{__('Gerät Stammdaten bearbeiten')}}
-    @endsection
+    {{__('Gerät bearbeiten')}}
+@endsection
 
 @section('menu')
     @include('menus._menu_testware_main')
 @endsection
 
 @section('modals')
-    <x-modals.form_modal methode="DELETE"
+    <x-modals.form_modal method="DELETE"
                          modalRoute="{{ route('equipment.destroy',$equipment) }}"
                          modalId="modalDeleteEquipment"
                          modalType="danger"
@@ -90,7 +90,7 @@
     <div class="container">
         <div class="row mb-4 d-none d-md-block">
             <div class="col">
-                <h1 class="h3">{{__('Gerät Stammdaten bearbeiten')}}</h1>
+                <h1 class="h3">{{__('Gerät bearbeiten')}}</h1>
             </div>
         </div>
         <div class="row mb-5 mt-3">
@@ -121,11 +121,15 @@
                            id="eq_uid"
                            value="{{ $equipment->eq_uid??'' }}"
                     >
-
+                    <div class="row">
+                        <div class="col">
+                            <h2 class="h4">{{ __('Stammdaten') }}</h2>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <x-staticCheckfield id="eq_inventar_nr"
-                                                label="{{__('Inventarnummer')}}"
+                                                label="{{__('Inventarnummer')}}:"
                                                 max="100"
                                                 value="{{ $equipment->eq_inventar_nr }}"
                             />
@@ -133,21 +137,21 @@
 
                         <div class="col-md-2">
                             <x-datepicker id="installed_at"
-                                          label="{{__('Inbetriebnahme am')}}"
+                                          label="{{__('Inbetriebnahme am')}}:"
                                           value="{{ $equipment->installed_at }}"
                             />
                         </div>
 
                         <div class="col-md-2">
                             <x-datepicker id="purchased_at"
-                                          label="{{__('Gekauft am')}}"
+                                          label="{{__('Gekauft am')}}:"
                                           value="{{ $equipment->purchased_at }}"
                             />
                         </div>
                         <div class="col-md-2">
                             <x-textfield id="eq_price"
                                          class="decimal price"
-                                         label="{{__('Kaufpreis')}}"
+                                         label="{{__('Kaufpreis')}}:"
                                          value="{{ $equipment->priceTag() }}"
                             />
                         </div>
@@ -183,25 +187,10 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            @foreach (\App\ProduktParam::where('produkt_id',$equipment->produkt_id )->get() as $produktParam)
-                                <x-textfield id="{{ $produktParam->pp_label }}"
-                                             name="ep_value[]"
-                                             label="{{ $produktParam->pp_name }}"
-                                             value="{{ $produktParam->pp_value }}"
-                                             max="150"
-                                />
-                                <input type="hidden"
-                                       name="pp_id[]"
-                                       id="pp_id_{{ $produktParam->id }}"
-                                       value="{{ $produktParam->id }}"
-                                >
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <x-textfield id="eq_name" label="{{__('Name')}}"
-                                         value="{{ $equipment->eq_name }}"/>
+                            <x-textfield id="eq_name"
+                                         label="{{__('Name')}}"
+                                         value="{{ $equipment->eq_name }}"
+                            />
                         </div>
                     </div>
                     <div class="row">
@@ -212,6 +201,14 @@
                             />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <h2 class="h4">{{ __('Parameter') }}</h2>
+                        </div>
+                    </div>
+                    <x-eq-paramfield :params="\App\EquipmentParam::where('equipment_id',$equipment->id )->get()"
+                                     mode="show"
+                    />
                     <div class="d-md-none">
                         <a role="button"
                            class="btn btn-outline-secondary mt-2 btn-block"
@@ -221,7 +218,7 @@
                             {{ __('Abbruch') }}</a>
 
                         <button class="btn btn-primary mt-2 btn-block">
-                            {{__('Gerät speichern ')}}<span class="fas fa-download ml-2"></span>
+                            {{__('Gerät speichern')}}<span class="fas fa-download ml-2"></span>
                         </button>
 
                         <button type="button"
@@ -229,7 +226,7 @@
                                 data-toggle="modal"
                                 data-target="#modalDeleteEquipment"
                         >
-                            {{__('Gerät löschen ')}} <i class="fas fa-trash-alt ml-2"></i>
+                            {{__('Gerät löschen')}} <i class="fas fa-trash-alt ml-2"></i>
                         </button>
                     </div>
                     <div class="d-none d-md-inline-block">
@@ -241,7 +238,7 @@
                             {{ __('Abbruch') }}</a>
 
                         <button class="btn btn-primary mt-2 ml-2">
-                            {{__('Gerät speichern ')}}<span class="fas fa-download ml-2"></span>
+                            {{__('Gerät speichern')}}<span class="fas fa-download ml-2"></span>
                         </button>
 
                         <button type="button"
@@ -249,16 +246,15 @@
                                 data-toggle="modal"
                                 data-target="#modalDeleteEquipment"
                         >
-                            {{__('Gerät löschen ')}} <i class="fas fa-trash-alt ml-2"></i>
+                            {{__('Gerät löschen')}} <i class="fas fa-trash-alt ml-2"></i>
                         </button>
                     </div>
-
                 </form>
+
+
             </div>
         </div>
-
     </div>
-    {{--    {{ App\Produkt::find(request('produkt_id'))  }}--}}
 @endsection
 
 @section('scripts')
@@ -276,11 +272,6 @@
 
 @endsection
 @section('autocomplete')
-
-    <link rel="stylesheet"
-          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
-    >
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $("#setNewEquipmentFromProdukt").autocomplete({
             source: function (request, response) {

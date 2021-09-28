@@ -29,6 +29,7 @@ Route::post('addProduktParams','ProduktController@addProduktParams')->name('addP
 Route::put('updateProduktParams','ProduktController@updateProduktParams')->name('updateProduktParams');
 Route::delete('deleteProduktParams','ProduktController@deleteProduktParams')->name('deleteProduktParams');
 Route::get('getParamData','ProductParameterController@getParamData')->name('getParamData');
+Route::get('getCategogryParam','ProductParameterController@getCategogryParam')->name('getCategogryParam');
 
 
 Route::post('addAnforderung','ProduktController@addAnforderung')->name('addAnforderung');
