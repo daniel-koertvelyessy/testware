@@ -7,21 +7,17 @@ use App\EquipmentInstruction;
 use App\EquipmentQualifiedUser;
 use App\ProductInstructedUser;
 use App\ProductQualifiedUser;
-use App\Profile;
-use App\Role;
 use App\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\View\View;
 
 
 class UserController extends Controller
@@ -34,7 +30,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -45,13 +41,14 @@ class UserController extends Controller
         } else {
             $userList = User::with('roles')->sortable()->paginate(15);
         }*/
-        return view('admin.user.index', ['userList' => User::with('roles')->sortable()->paginate(15)]);
+        return view('admin.user.index',
+            ['userList' => User::with('roles')->sortable()->paginate(15)]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function ldap()
     {
@@ -66,24 +63,26 @@ class UserController extends Controller
         if (Auth::user()->isSysAdmin()) {
             return view('admin.user.create');
         } else {
-            $request->session()->flash('status', __('Sie haben keine Berechtigung Benutzer anzulegen!'));
-            return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
+            $request->session()->flash('status',
+                __('Sie haben keine Berechtigung Benutzer anzulegen!'));
+            return redirect()->route('user.index',
+                ['users' => User::with('roles')->get()]);
         }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param  Request  $request
      *
      * @return RedirectResponse
      */
     public function store(Request $request)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $this->validateUser();
         (new User)->addNew($request);
-        return redirect()->route('user.index', ['users' => User::with('roles')->get()]);
+        return redirect()->route('user.index',
+            ['users' => User::with('roles')->get()]);
 
     }
 
@@ -94,23 +93,15 @@ class UserController extends Controller
     : array
     {
         return request()->validate([
-            'username'          => [
-                'bail',
-                'required',
-                'max:100',
+            'username'             => [
+                'bail', 'required', 'max:100',
                 Rule::unique('users')->ignore(\request('id'))
-            ],
-            'email'             => [
-                'bail',
-                'required',
-                'email',
+            ], 'email'             => [
+                'bail', 'required', 'email',
                 Rule::unique('users')->ignore(\request('id'))
-            ],
-            'email_verified_at' => '',
-            'password'          => 'required',
-            'api_token'         => 'nullable',
-            'name'              => 'nullable',
-            'role_id'           => ''
+            ], 'email_verified_at' => '', 'password' => 'required',
+            'api_token'            => 'nullable', 'name' => 'nullable',
+            'role_id'              => ''
         ], [
             'username.required' => __('Ihr Anzeigename ist notwendig'),
             'username.unique'   => __('Der Anzeigename ist bereits vergeben'),
@@ -123,22 +114,21 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  User $user
+     * @param  User  $user
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function show(User $user)
     {
         return view('admin.user.show', [
-            'user'  => $user,
-            'roles' => $user->roles
+            'user' => $user, 'roles' => $user->roles
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  User $user
+     * @param  User  $user
      *
      * @return Response
      */
@@ -150,59 +140,56 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  User    $user
+     * @param  Request  $request
+     * @param  User  $user
      *
      * @return RedirectResponse
      */
     public function update(Request $request, User $user)
     {
         $user->update($this->validateUser());
-        $request->session()->flash('status', __('Ihr Konto wurde aktualisiert!'));
+        $request->session()->flash('status',
+            __('Ihr Konto wurde aktualisiert!'));
         return redirect()->back();
     }
 
     /**
      * Update user from systems view.
      *
-     * @param Request $request
+     * @param  Request  $request
+     *
      * @return RedirectResponse
      */
-    public function updatedata(Request $request): RedirectResponse
-    {
-        $msg = ((new User)->updateData($request)) ?
-            __('Ihr Konto wurde aktualisiert!') :
-            __('Fehler!') ;
+    public function updatedata(Request $request)
+    : RedirectResponse {
+        $msg = ((new User)->updateData($request)) ? __('Ihr Konto wurde aktualisiert!') : __('Fehler!');
 
         $request->session()->flash('status', $msg);
         return redirect()->back();
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  User $user
+     * @param  User  $user
      *
      * @return RedirectResponse
      */
     public function destroy(Request $request)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $user_id = $request->id;
-//        Profile::where('user_id',$user_id)->delete();
-
-        AnforderungControlItem::where('aci_contact_id',$user_id)->delete();
-        ProductInstructedUser::where('product_instruction_trainee_id',$user_id)->delete();
-        ProductQualifiedUser::where('user_id',$user_id)->delete();
-        EquipmentInstruction::where('equipment_instruction_trainee_id',$user_id)->delete();
-        EquipmentQualifiedUser::where('user_id',$user_id)->delete();
-
+        ProductInstructedUser::where('product_instruction_trainee_id',
+            $user_id)->delete();
+        ProductQualifiedUser::where('user_id', $user_id)->delete();
+        EquipmentInstruction::where('equipment_instruction_trainee_id',
+            $user_id)->delete();
+        EquipmentQualifiedUser::where('user_id', $user_id)->delete();
 
 
         if (User::find($user_id)->delete()) {
-            request()->session()->flash('status', __('Der Benutzer wurde gelöscht!'));
+            request()->session()->flash('status',
+                __('Der Benutzer wurde gelöscht!'));
         }
         return redirect()->route('user.index');
     }
@@ -210,17 +197,17 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $user
+     * @param  int  $user
      *
      * @return RedirectResponse
      */
     public function restore(int $id)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         if (Auth::user()->isSysAdmin()) {
             $user = User::withTrashed()->where('id', $id)->first();
             if ($user->restore()) {
-                request()->session()->flash('status', __('Der Benutzer wurde wiederhergestellt!'));
+                request()->session()->flash('status',
+                    __('Der Benutzer wurde wiederhergestellt!'));
                 return redirect()->route('user.show', $user);
             }
         }
@@ -230,14 +217,13 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
+     * @param  Request  $request
      *
      * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function revokerole(Request $request)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $this->authorize('isAdmin', Auth()->user());
         User::find($request->user_id)->roles()->detach($request->role_id);
         return back();
@@ -246,14 +232,13 @@ class UserController extends Controller
     /**
      * Add Role to user
      *
-     * @param  Request $request
+     * @param  Request  $request
      *
      * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function grantrole(Request $request)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $this->authorize('isAdmin', Auth()->user());
         User::find($request->user_id)->roles()->sync($request->roleuser);
         return back();
@@ -262,14 +247,13 @@ class UserController extends Controller
     /**
      * Revoke user as SysAdmin
      *
-     * @param  User $user
+     * @param  User  $user
      *
      * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function revokeSysAdmin(User $user)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $this->authorize('isAdmin', Auth()->user());
         $user->role_id = 0;
         $user->update();
@@ -279,14 +263,13 @@ class UserController extends Controller
     /**
      * Revoke user as SysAdmin
      *
-     * @param  User $user
+     * @param  User  $user
      *
      * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function grantSysAdmin(User $user)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $this->authorize('isAdmin', Auth()->user());
         $user->role_id = 1;
         $user->update();
@@ -294,11 +277,11 @@ class UserController extends Controller
     }
 
     public function addTokenToUser(User $user)
-    : RedirectResponse
-    {
+    : RedirectResponse {
         $user->api_token = Str::random(80);
         $user->save();
-        session()->flash('status', __('Ein Token wurde erfolgreich zugewiesen!'));
+        session()->flash('status',
+            __('Ein Token wurde erfolgreich zugewiesen!'));
         return redirect()->back();
     }
 
@@ -318,14 +301,14 @@ class UserController extends Controller
     }
 
     public function checkUserEmailAddressExists(Request $request)
-    : array
-    {
+    : array {
         return ['exists' => User::where('email', $request->term)->count() > 0];
     }
 
     public function checkUserUserNameExists(Request $request)
-    : array
-    {
-        return ['exists' => User::where('username', $request->term)->count() > 0];
+    : array {
+        return [
+            'exists' => User::where('username', $request->term)->count() > 0
+        ];
     }
 }

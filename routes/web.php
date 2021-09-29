@@ -150,7 +150,7 @@ Route::resources([
     'equipDoku'              => 'EquipmentDocController',
     'firma'                  => 'FirmaController',
     'adresse'                => 'AdresseController',
-//    'testware'               => 'TestwareController',
+    //    'testware'               => 'TestwareController',
     'equipment'              => 'EquipmentController',
     'control'                => 'ControlEquipmentController',
     'user'                   => 'UserController', 'role' => 'RoleController',
