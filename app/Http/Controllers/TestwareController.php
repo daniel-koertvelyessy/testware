@@ -28,7 +28,7 @@ class TestwareController extends Controller
     {
 //        CheckEquipmentTestDueDates::dispatchSync();
         $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
-        return view('testware.index', compact('initialiseApp'));
+        return view('dashboard', compact('initialiseApp'));
     }
 
     /**
@@ -38,7 +38,7 @@ class TestwareController extends Controller
      */
     public function create()
     {
-        return view('testware.index');
+        return view('dashboard');
     }
 
     /**

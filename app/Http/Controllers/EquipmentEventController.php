@@ -195,7 +195,7 @@ class EquipmentEventController extends Controller
         }
 
         $event->delete();
-        return redirect()->route('testware.index');
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -227,7 +227,7 @@ class EquipmentEventController extends Controller
 
         (new EquipmentDocController)->store($request);
 
-        return redirect()->route('testware.index');
+        return redirect()->route('dashboard');
     }
 
 

@@ -26,7 +26,7 @@
                 <section class="mb-2 mb-md-4">
                     <h2 class="h4">{{__('Apps')}}</h2>
                     <nav class="tiles-grid">
-                        <a href="{{ route('testware.index') }}"
+                        <a href="{{ route('dashboard') }}"
                            class="tile-small btn-outline-primary rounded"
                            data-role="tile"
                         >

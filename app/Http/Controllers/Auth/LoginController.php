@@ -42,7 +42,7 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        $path = (Adresse::all()->count()>0) ? route('testware.index') : route('installer.company');
+        $path = (Adresse::all()->count()>0) ? route('dashboard') : route('installer.company');
         return  $this->redirectTo = $path;
 //        return $this->redirectTo = route($for[auth()->user()->role]);
     }

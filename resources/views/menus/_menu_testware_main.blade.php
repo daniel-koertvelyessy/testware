@@ -2,7 +2,7 @@
 
     <li class="nav-item {{ Request::routeIs('testware.*') ? ' active ' : ' ' }}">
         <a class="nav-link "
-           href="{{ route('testware.index') }}"
+           href="{{ route('dashboard') }}"
         ><i class="fas fa-desktop"></i> {{__('Dashboard')}} </a>
     </li>
 

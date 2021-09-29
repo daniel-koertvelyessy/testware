@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainSection')
-{{__('Organisation')}}
+{{__('Mitarbeiter')}}
 @endsection
 
 @section('menu')
@@ -15,7 +15,7 @@
 @section('content')
 
     <div class="container">
-        <div class="row mb-3">
+        <div class="row mb-3 d-none d-md-block">
             <div class="col">
                 <h1 class="h3">{{__('Mitarbeiter')}}</h1>
                 <span class="badge badge-light">{{__('Gesamt')}}: {{ $profileList->total() }}</span>
@@ -23,7 +23,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{__('Nachname')}}</th>
