@@ -134,7 +134,7 @@ class CompartmentController extends Controller
              */
             $uid = (isset($request->uid)) ? $request->uid : $compartment->storage_id;
             $compartment->storage_id = $uid;
-            (new \App\Storage)->change($uid, $request->label, 'stellplatzs');
+            (new Storage)->change($uid, $request->label, 'stellplatzs');
             $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
             if (!$compartment->stellplatz_typ_id)
                 return response()->json([

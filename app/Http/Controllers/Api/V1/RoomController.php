@@ -283,7 +283,7 @@ class RoomController extends Controller
              */
             $uid = (isset($request->uid)) ? $request->uid : $room->storage_id;
             $room->storage_id = $uid;
-            (new \App\Storage)->change($uid, $request->label, 'rooms');
+            (new Storage)->change($uid, $request->label, 'rooms');
         } else {
             /**
              * Room was not found. Try to add as new room
@@ -298,7 +298,7 @@ class RoomController extends Controller
              */
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
             $room->storage_id = $uid;
-            (new \App\Storage)->add($uid, $request->label, 'rooms');
+            (new Storage)->add($uid, $request->label, 'rooms');
         }
 
         /**
@@ -336,7 +336,7 @@ class RoomController extends Controller
             if ($roomType) {
                 $room->room_type_id = $roomType->id;
             } else {
-                $room->room_type_id = (new \App\RoomType)->addAPIRoomType($request);
+                $room->room_type_id = (new RoomType)->addAPIRoomType($request);
             }
         } else {
             $room->room_type_id = 1;

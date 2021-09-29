@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-9">
                 <h3 class="h5">{{__('Kürzlich bearbeitete Firmen')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table  table-striped">
                     <thead>
                     <tr>
                         <th class="w-50">{{__('Bezeichnung')}}</th>
@@ -114,7 +114,7 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Kontakte')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table  table-striped">
                     <thead>
                     <tr>
                         <th class="w-50">{{__('Name')}}</th>
@@ -128,7 +128,7 @@
                             <td>
                                 <a href="{{ route('contact.show',$contact) }}">{{ $contact->fullName() }}</a>
                             </td>
-                            <td>{{ $contact->firma->fa_label }}</td>
+                            <td>{{ $contact->firma->fa_label??'-' }}</td>
                             <td class="d-none d-md-table-cell">{{ $contact->updated_at?
                             $contact->updated_at->DiffForHumans():'-' }}</td>
                         </tr>
@@ -144,7 +144,7 @@
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
 
                 <h3 class="h5">{{__('Kürzlich bearbeitete Adressen')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table  table-striped">
                     <thead>
                     <tr>
                         <th class="w-50">{{__('Bezeichnung')}}</th>
@@ -172,7 +172,7 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Mitarbeiter')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table  table-striped">
                     <thead>
                     <tr>
                         <th class="w-50">{{__('Name')}}</th>

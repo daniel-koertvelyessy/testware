@@ -11,6 +11,7 @@ use App\ControlEventItem;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentHistory;
+use App\EquipmentQualifiedUser;
 use App\ProductQualifiedUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -83,14 +84,14 @@ class ControlEquipmentController extends Controller
             }
 
             $enabledUser = [];
-            foreach (\App\ProductQualifiedUser::where('produkt_id', $controlItem->Equipment->produkt->id)->get() as $qualifiedUser) {
+            foreach (ProductQualifiedUser::where('produkt_id', $controlItem->Equipment->produkt->id)->get() as $qualifiedUser) {
                 $enabledUser[] = [
                     'id'   => $qualifiedUser->user_id,
                     'name' => $qualifiedUser->user->name,
                 ];
             }
 
-            foreach (\App\EquipmentQualifiedUser::where('equipment_id', $controlItem->Equipment->id)->get() as $qualifiedUser) {
+            foreach (EquipmentQualifiedUser::where('equipment_id', $controlItem->Equipment->id)->get() as $qualifiedUser) {
                 $enabledUser[] = [
                     'id'   => $qualifiedUser->user_id,
                     'name' => $qualifiedUser->user->name,
@@ -248,7 +249,7 @@ class ControlEquipmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ControlEvent $control
+     * @param  ControlEvent  $control
      *
      * @return Response
      */
@@ -266,7 +267,7 @@ class ControlEquipmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ControlEvent $control
+     * @param  ControlEvent  $control
      *
      * @return Response
      */
@@ -279,7 +280,7 @@ class ControlEquipmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request           $request
-     * @param  \App\ControlEvent $control
+     * @param  ControlEvent  $control
      *
      * @return Response
      */
@@ -291,7 +292,7 @@ class ControlEquipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ControlEvent $control
+     * @param  ControlEvent  $control
      *
      * @return Response
      */

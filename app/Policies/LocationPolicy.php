@@ -20,7 +20,8 @@ class LocationPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
+     *
      * @return mixed
      */
     public function viewAny(User $user)
@@ -31,8 +32,9 @@ class LocationPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Location  $location
+     * @param  User  $user
+     * @param  Location  $location
+     *
      * @return mixed
      */
     public function view(User $user, Location $location)
@@ -43,7 +45,8 @@ class LocationPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
+     *
      * @return mixed
      */
     public function create(User $user)
@@ -57,8 +60,9 @@ class LocationPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Location  $location
+     * @param  User  $user
+     * @param  Location  $location
+     *
      * @return mixed
      */
     public function update(User $user, Location $location)
@@ -69,8 +73,9 @@ class LocationPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Location  $location
+     * @param  User  $user
+     * @param  Location  $location
+     *
      * @return mixed
      */
     public function delete(User $user, Location $location)
@@ -81,8 +86,9 @@ class LocationPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Location  $location
+     * @param  User  $user
+     * @param  Location  $location
+     *
      * @return mixed
      */
     public function restore(User $user, Location $location)
@@ -93,8 +99,9 @@ class LocationPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Location  $location
+     * @param  User  $user
+     * @param  Location  $location
+     *
      * @return mixed
      */
     public function forceDelete(User $user, Location $location)

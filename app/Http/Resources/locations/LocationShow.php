@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\locations;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\locations\Location as LocationResource;
 use App\Http\Resources\locations\LocationShow as LocationShowResource;
@@ -11,7 +12,7 @@ class LocationShow extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)

@@ -206,7 +206,7 @@
                             <h2 class="h4">{{ __('Parameter') }}</h2>
                         </div>
                     </div>
-                    <x-eq-paramfield :params="\App\EquipmentParam::where('equipment_id',$equipment->id )->get()"
+                    <x-parameters.eq-paramfield :params="\App\EquipmentParam::where('equipment_id',$equipment->id )->get()"
                                      mode="show"
                     />
                     <div class="d-md-none">

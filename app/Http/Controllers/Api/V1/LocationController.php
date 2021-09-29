@@ -195,11 +195,11 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $this->validateNewLocation();
-        $adresse_id = (new \App\Adresse)->addLocationAddress($request);
-        $profile_id = (new \App\Profile)->addProfile($request);
+        $adresse_id = (new Adresse)->addLocationAddress($request);
+        $profile_id = (new Profile)->addProfile($request);
 
         $storage_id = (!isset($request->uid)) ? Str::uuid() : $request->uid;
-        (new \App\Storage)->add($storage_id, $request->label, 'locations');
+        (new Storage)->add($storage_id, $request->label, 'locations');
 
         $location = new Location();
         $location->l_label = $request->label;

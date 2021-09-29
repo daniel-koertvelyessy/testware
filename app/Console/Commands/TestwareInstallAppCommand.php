@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Profile;
+use Artisan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use App\User;
@@ -58,13 +59,13 @@ class TestwareInstallAppCommand extends Command
         if ($this->confirm('Type [yes] to proceed or [no] to exit without changes.', false)) {
             $output = '';
             if ($this->confirm('Initialise fresh database with default entries [yes] or leave it empty [no] ?', true)) {
-                \Artisan::call('migrate:fresh --seed', [], $output);
+                Artisan::call('migrate:fresh --seed', [], $output);
             } else {
-                \Artisan::call('migrate:fresh');
+                Artisan::call('migrate:fresh');
             }
 
             $this->info('Start working ... ');
-            $this->info(\Artisan::output());
+            $this->info(Artisan::output());
 
             if ($this->confirm('Create new user with SuperAdmin privileges?', true)) {
                 $details = $this->getDetails();
@@ -85,7 +86,7 @@ class TestwareInstallAppCommand extends Command
             }
 
             $this->info('Generate new encryption key ...');
-            \Artisan::call('key:generate');
+            Artisan::call('key:generate');
 
             $this->newLine(2);
 

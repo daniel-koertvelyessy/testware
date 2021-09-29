@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\ControlDoc;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ControlDocController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -20,7 +21,7 @@ class ControlDocController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,8 +31,9 @@ class ControlDocController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     *
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,8 +43,9 @@ class ControlDocController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ControlDoc  $controlDoc
-     * @return \Illuminate\Http\Response
+     * @param  ControlDoc  $controlDoc
+     *
+     * @return Response
      */
     public function show(ControlDoc $controlDoc)
     {
@@ -52,8 +55,9 @@ class ControlDocController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ControlDoc  $controlDoc
-     * @return \Illuminate\Http\Response
+     * @param  ControlDoc  $controlDoc
+     *
+     * @return Response
      */
     public function edit(ControlDoc $controlDoc)
     {
@@ -63,9 +67,10 @@ class ControlDocController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ControlDoc  $controlDoc
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  ControlDoc  $controlDoc
+     *
+     * @return Response
      */
     public function update(Request $request, ControlDoc $controlDoc)
     {
@@ -75,8 +80,9 @@ class ControlDocController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ControlDoc  $controlDoc
-     * @return \Illuminate\Http\Response
+     * @param  ControlDoc  $controlDoc
+     *
+     * @return Response
      */
     public function destroy(ControlDoc $controlDoc)
     {

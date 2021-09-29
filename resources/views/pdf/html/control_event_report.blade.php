@@ -91,7 +91,7 @@
             <tbody>
             @foreach (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->get() as $coEvEquip)
                 @php
-                    $conEquip = App\ControlEquipment::where('equipment_id',$coEvEquip->Equipment->id )->first();
+                    $conEquip = App\ControlEquipment::where('equipment_id',$coEvEquip->Equipment->id )->first()
                 @endphp
                 <tr>
                     <td>{{ $coEvEquip->Equipment->produkt->prod_name }}</td>
@@ -145,7 +145,7 @@
                                 <td>
                                     @if ($aci->aci_value_target_mode ==='eq')
                                         @php
-                                            $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol;
+                                            $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol
                                         @endphp {{__('Soll')}} = {{__('Ist')}} ±{{ $tol??'' }} {{__('Toleranz')}}
                                     @elseif ($aci->aci_value_target_mode ==='lt') {{__('Soll')}} < {{__('Ist')}}
                                     @elseif ($aci->aci_value_target_mode ==='gt') {{__('Soll')}} > {{__('Ist')}}

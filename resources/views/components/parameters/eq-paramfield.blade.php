@@ -1,7 +1,7 @@
 <div class="row">
     @forelse ($params as $param)
-        <div class="mb-3 {{ $mode==='edit' ? 'col' : 'col-md-3' }}">
-            <x-parameter-item-pk :param="$param"
+        <div class="mb-3 col-md-3">
+            <x-parameters.parameter-item-eq :param="$param"
                                  :mode="$mode"
             />
         </div>
@@ -15,7 +15,7 @@
     <x-modals.form_modal
         title="{{ __('Parameter bearbeiten') }}"
         method="PUT"
-        modalId="modalEditCategoryParams"
+        modalId="modalEditEquipmentParams"
         modalRoute="#"
         btnSubmit="{{ __('Parameter aktualisieren') }}"
         modalType="sd"
@@ -28,12 +28,12 @@
         >
         <input type="hidden"
                name="id"
-               id="pkp_id_edit"
+               id="eq_id_edit"
         >
         <div class="row">
             <div class="col">
-                <x-textfield id="pkp_label_edit"
-                             name="pkp_label"
+                <x-textfield id="ep_label_edit"
+                             name="ep_label"
                              label="{{__('Label')}}"
                 />
                 <x-textfield id="pkp_name_edit"
@@ -93,12 +93,12 @@
                 url: "{{ route('getCategogryParam') }}",
                 data: {id},
                 success: (paramData) => {
-                    $('#frmmodalEditCategoryParams').attr('action', $(this).data('route'));
-                    $('#pkp_id_edit').val(paramData.id);
-                    $('#pkp_label_edit').val(paramData.pkp_label);
+                    $('#frmmodalEditEquipmentParams').attr('action', $(this).data('route'));
+                    $('#eq_id_edit').val(paramData.id);
+                    $('#ep_label_edit').val(paramData.ep_label);
                     $('#pkp_name_edit').val(paramData.pkp_name);
                     $('#produkt_id_param_category_edit').val(paramData.produkt_kategorie_id);
-                    $('#modalEditCategoryParams').modal('show');
+                    $('#modalEditEquipmentParams').modal('show');
                 }
             });
 

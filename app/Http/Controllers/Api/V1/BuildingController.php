@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Storage;
 use Exception;
 use App\Building;
 use App\Location;
@@ -85,7 +86,7 @@ class BuildingController extends Controller
         }
 
         if (isset($request->type['label'])) {
-            $buildingType = \App\BuildingTypes::where('btname', $request->type['label'])->first();
+            $buildingType = BuildingTypes::where('btname', $request->type['label'])->first();
             if (!$buildingType) {
                 $newBuildingType = new BuildingTypes();
                 $newBuildingType->btname = $request->type['label'];
@@ -103,7 +104,7 @@ class BuildingController extends Controller
         $building->b_label = $request->label;
         $building->b_we_has = $request->goods_income_has;
         $building->storage_id = $uid;
-        (new \App\Storage)->add($uid, $request->label, 'buildings');
+        (new Storage)->add($uid, $request->label, 'buildings');
         $building->b_name = $request->name;
         $building->b_name_ort = $request->place;
         $building->b_name = $request->description;
@@ -159,7 +160,7 @@ class BuildingController extends Controller
             $building->b_we_name = (isset($request->goods_income_name)) ? $request->goods_income_name : $building->b_we_name;
             $uid = (isset($request->uid)) ? $request->uid : $building->storage_id;
             $building->storage_id = $uid;
-            (new \App\Storage)->change($uid, $request->label, 'buildings');
+            (new Storage)->change($uid, $request->label, 'buildings');
             $building->building_type_id = (isset($request->type_id) && BuildingTypes::find($request->type_id)) ? $request->type_id : $building->building_type_id;
             $building->location_id = (isset($request->location_id) && Location::find($request->location_id)) ? $request->location_id : $building->location_id;
             $building->save();
@@ -171,7 +172,7 @@ class BuildingController extends Controller
             $building->b_label = $request->label;
             $building->b_we_has = $request->goods_income_has;
             $building->storage_id = $uid;
-            (new \App\Storage)->add($uid, $request->label, 'buildings');
+            (new Storage)->add($uid, $request->label, 'buildings');
             $building->b_name = $request->name;
             $building->b_name_ort = $request->place;
             $building->b_description = $request->description;

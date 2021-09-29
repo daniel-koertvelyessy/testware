@@ -8,6 +8,7 @@ use App\Room;
 use App\RoomType;
 use App\Storage;
 use App\Stellplatz;
+use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -32,15 +33,15 @@ class RoomController extends Controller
      */
     public function index()
     {
-        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Standorte!') . '</span> <br>' . __('Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!'));
             return redirect()->route('location.create');
         }
-        if (Building::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Building::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
             return redirect()->route('building.create');
         }
-        if (Room::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Room::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('Es existieren noch keine Räume!'));
             return redirect()->route('room.create');
         } else {

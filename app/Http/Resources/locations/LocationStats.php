@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\locations;
 
+use App\Building;
+use App\Room;
 use App\Stellplatz;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,11 +19,11 @@ class LocationStats extends JsonResource
      */
     public function toArray($request)
     {
-        $buildings = \App\Building::where('location_id',$this->id);
+        $buildings = Building::where('location_id',$this->id);
         $roomCount = 0;
         $compartmentCount = 0;
         foreach($buildings->get() as $building){
-            $rooms = \App\Room::where('building_id',$building->id);
+            $rooms = Room::where('building_id',$building->id);
             $roomCount += $rooms->count();
             foreach($rooms->get() as $room){
                 $compartments = Stellplatz::where('room_id',$room->id);

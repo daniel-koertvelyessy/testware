@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\User;
+use Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
@@ -13,7 +14,7 @@ class UserPolicy
     public function isSysAdmin()
     : Response
     {
-        return \Auth::user()->role_id === 1
+        return Auth::user()->role_id === 1
             ? Response::allow()
             : Response::deny('nope, you cannot do that!');
     }

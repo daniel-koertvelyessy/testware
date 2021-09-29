@@ -3,7 +3,7 @@
 @section('content')
 
     @php
-        $equipment = App\Equipment::find($equipment_id);
+        $equipment = App\Equipment::find($equipment_id)
         @endphp
 
 

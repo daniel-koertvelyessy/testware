@@ -103,7 +103,7 @@
             </div>
             <div class="col-md-9">
                 <h3 class="h5">{{__('Kürzlich bearbeitete Standorte')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
@@ -131,7 +131,7 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Gebäude')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
@@ -159,7 +159,7 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Räume')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
@@ -168,7 +168,6 @@
                     </tr>
                     </thead>
                     <tbody>
-
                     @forelse ($rooms as $loc)
                         <tr>
                             <td>
@@ -188,7 +187,7 @@
                 </table>
                 <div class="dropdown-divider mx-3 my-md-5 my-sm-3"></div>
                 <h3 class="h5">{{__('Kürzlich bearbeitete Stellplätze')}}</h3>
-                <table class="table table-responsive-md table-striped">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>

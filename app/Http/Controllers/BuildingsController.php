@@ -7,6 +7,7 @@ use App\BuildingTypes;
 use App\Location;
 use App\Room;
 use App\Storage;
+use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -34,7 +35,7 @@ class BuildingsController extends Controller
     public function index()
     {
         $this->checkLocation();
-        if (Building::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Building::all()->count() === 0 && Auth::user()->isAdmin()) {
             return redirect()->route('building.create');
         } else {
             return view('admin.standorte.building.index', ['buildingList' => Building::with('BuildingType')->sortable()->paginate(10)]);
@@ -43,7 +44,7 @@ class BuildingsController extends Controller
 
     protected function checkLocation()
     {
-        if (Location::all()->count() === 0 && \Auth::user()->isAdmin()) {
+        if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie erst einen Standort bevor Sie ein Gebäude anlegen können!'));
             return redirect()->route('location.create')->with('status');
         }

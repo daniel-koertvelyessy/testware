@@ -1,5 +1,6 @@
 <?php
 
+use App\Produkt;
 use Illuminate\Database\Seeder;
 
 
@@ -21,8 +22,8 @@ class EquipmentSeeder extends Seeder
 
             $equip->purchased_at = $date;
             $equip->installed_at = $date;
-            $equip->eq_price = \App\Produkt::find($id)->prod_price;
-            $equip->eq_name = \App\Produkt::find($id)->prod_name;
+            $equip->eq_price = Produkt::find($id)->prod_price;
+            $equip->eq_name = Produkt::find($id)->prod_name;
             $equip->eq_uid = $uid;
             $equip->storage_id =  $storage->random()->id;
             $equip->produkt_id = $id;

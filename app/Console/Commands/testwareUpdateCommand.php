@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\User;
+use Artisan;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -41,8 +42,8 @@ class testwareUpdateCommand extends Command
     {
         $this->info('Start working ... ');
         $output = '';
-        \Artisan::call('migrate',[],$output);
-        $this->info(\Artisan::output());
+        Artisan::call('migrate',[],$output);
+        $this->info(Artisan::output());
         return 0;
     }
 }

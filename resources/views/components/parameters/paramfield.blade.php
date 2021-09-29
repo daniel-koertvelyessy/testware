@@ -8,7 +8,7 @@
 
     @if($isproduct)
         <div class="mb-3 col-md-3">
-            <x-parameter-item :param="$param"/>
+            <x-parameters.parameter-item :param="$param"/>
         </div>
     @else
         <div class="mb-3 col-md-3">
@@ -107,6 +107,10 @@
            name="id"
            id="pp_id_delete"
     >
+    <input type="hidden"
+           name="produkt_id"
+           id="produkt_id_pp_delete"
+    >
     <div class="row">
         <div class="col">
             <p class="lead">{{ __('Der Parameter wird gelöscht.') }}</p>
@@ -144,6 +148,8 @@
 
     $(document).on('click','.btnDeleteParam',function(){
         $('#frmmodalDeleteParameter').attr('action', $(this).data('route'));
+        $('#pp_id_delete').val($(this).data('id'));
+        $('#produkt_id_pp_delete').val($(this).data('id'));
 
     })
 </script>

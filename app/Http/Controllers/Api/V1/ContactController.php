@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\contacts\Contact as ContactResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
@@ -153,7 +154,7 @@ class ContactController extends Controller
      * @param  Request $request
      * @param  int     $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {

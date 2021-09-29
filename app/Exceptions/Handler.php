@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Throwable;
 
@@ -31,10 +33,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
-     * @return void
+     * @param  Throwable  $exception
      *
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
     public function report(Throwable $exception)
     {
@@ -44,11 +46,11 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  Request  $request
+     * @param  Throwable  $exception
      *
-     * @throws \Throwable
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {

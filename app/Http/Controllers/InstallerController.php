@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Adresse;
 use App\Firma;
+use App\Location;
 use App\Profile;
 use App\User;
 use Artisan;
@@ -106,7 +107,7 @@ class InstallerController extends Controller
     {
         $this->checkUserCanUseInstaller($request);
 
-        $location = \App\Location::find(1);
+        $location = Location::find(1);
 
         return view('admin.installer.location_data', compact('location'));
 

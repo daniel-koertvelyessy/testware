@@ -59,7 +59,8 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  Tag  $tag
+     *
      * @return Response
      */
     public function show(Tag $tag)
@@ -70,7 +71,8 @@ class TagController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  Tag  $tag
+     *
      * @return Response
      */
     public function edit(Tag $tag)
@@ -82,7 +84,7 @@ class TagController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  \App\Tag $tag
+     * @param  Tag $tag
      *
      * @return Response
      */
@@ -94,7 +96,8 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Tag  $tag
+     * @param  Tag  $tag
+     *
      * @return Response
      */
     public function destroy(Tag $tag)

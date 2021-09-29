@@ -533,7 +533,7 @@ class ProduktController extends Controller
 
     public function getProduktKategorieParams(Request $request)
     {
-        $data['htmlList'] = view('components.pk-paramfield', [
+        $data['htmlList'] = view('components.parameters.pk-paramfield', [
             'params' => ProduktKategorieParam::where('produkt_kategorie_id', $request->id)->get(),
             'mode'   => 'edit'
         ])->render();

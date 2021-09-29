@@ -72,7 +72,7 @@
                          modalType="sd"
                          modalCenter="true"
     >
-        <input type="text"
+        <input type="hidden"
                name="produkt_kategorie_id"
                id="produkt_kategorie_id_addNewPK"
         >

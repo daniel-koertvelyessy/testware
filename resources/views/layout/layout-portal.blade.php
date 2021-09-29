@@ -36,9 +36,7 @@
               href="{{Auth()->user()->user_theme }}"
         >
     @endauth
-    <link rel="stylesheet"
-          href="{{ asset('css/styles.css') }}"
-    >
+
     <script type="text/javascript"
             src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>

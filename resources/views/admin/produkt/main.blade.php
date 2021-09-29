@@ -23,9 +23,9 @@
         </div>
         <div class="row">
             <div class="col-md-2">
-                <nav class="d-flex justify-content-around flex-md-column flex-sm-row mb-3">
+                <nav class="justify-content-around flex-md-column flex-sm-row mb-3">
                     <a href="{{ route('produkt.index') }}"
-                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-2"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-boxes"></i></span> <span
@@ -33,7 +33,7 @@
                     </a>
 
                     <a href="{{ route('produkt.create') }}"
-                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1"
+                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-2"
                        data-role="tile"
                     >
                         <span class="icon"><i class="fas fa-box"></i></span> <span
