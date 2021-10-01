@@ -124,7 +124,7 @@ Route::get('docs/api/endpoints/events', function () {
 Route::get('/dashboard', function () {
     $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
     return view('dashboard', compact('initialiseApp'));
-})->name('dashboard');
+})->name('dashboard')->middleware('auth');
 
 Route::put('user.resetPassword',
     'UserController@resetPassword')->name('user.resetPassword');
