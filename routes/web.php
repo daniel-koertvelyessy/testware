@@ -3,6 +3,7 @@
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
+use App\EquipmentLabel;
 use App\EquipmentUid;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -162,6 +163,7 @@ Route::resources([
     'eventitem'              => 'EquipmentEventItemController',
     'EquipmentInstruction'   => 'EquipmentInstructionController',
     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
+    'equipmentlabel'         => 'EquipmentLabelController',
     'ProductInstruction'     => 'ProductInstructedUserController',
     'ProductQualifiedUser'   => 'ProductQualifiedUserController',
     'productparameter'       => 'ProductParameterController',
@@ -238,6 +240,10 @@ Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
     App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
 })->name('makePDFEquipmentDataSheet');
 
+Route::get('test_equipment_label/{label}', function ($label) {
+    App\Http\Controllers\PdfGenerator::makePDFLabel($label);
+})->name('test_equipment_label');
+
 Route::get('makePDFEquipmentControlReport/{controlEvent}',
     function ($controlEvent) {
         App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
@@ -268,6 +274,22 @@ Route::get('organisationMain', function () {
 Route::get('unlockScreen', function () {
     return ['status' => request('pin') === '2231'];
 })->name('unlockScreen')->middleware('auth');
+
+Route::post('equipmentlabel/copy/{id}', function ($id) {
+    $label = EquipmentLabel::find($id);
+    $copyLabel = $label->replicate()->fill([
+        'label' => 'copy_'.$label->label
+    ]);
+    if ( $copyLabel->save() ) {
+        $msg = __('Das Label wurde kopiert');
+    } else {
+        $msg = __('Ein Fehler ist beim Kopieren passiert!');
+        Log::warning('error on copying an existing label');
+    }
+    request()->session()->flash('status',$msg);
+    return back();
+
+})->name('equipmentlabel.copy')->middleware('auth');
 
 Route::get('storageMain', function () {
     return view('admin.standorte.index', [

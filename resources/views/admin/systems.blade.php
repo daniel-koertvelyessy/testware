@@ -122,6 +122,14 @@
                        aria-selected="false"
                     >{{__('Produkte')}}</a>
                     <a class="nav-link"
+                       id="Label-tab"
+                       data-toggle="tab"
+                       href="#Label"
+                       role="tab"
+                       aria-controls="Label"
+                       aria-selected="false"
+                    >{{__('Label')}}</a>
+                    <a class="nav-link"
                        id="Numbering-tab"
                        data-toggle="tab"
                        href="#Numbering"
@@ -958,7 +966,8 @@
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">
                                                                     {{__('Anforderungstyp löschen')}} <i
-                                                                            class="fas fa-trash-alt"></i>
+                                                                        class="fas fa-trash-alt"
+                                                                    ></i>
                                                                 </button>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!')}}</p>
@@ -1152,7 +1161,7 @@
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">{{__('Dokumententyp löschen')}}
                                                                     <i
-                                                                            class="fas fa-trash-alt"
+                                                                        class="fas fa-trash-alt"
                                                                     ></i></button>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!')}}</p>
@@ -1174,6 +1183,251 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade p-2"
+                         id="Label"
+                         role="tabpanel"
+                         aria-labelledby="Label-tab"
+                    >
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h2 class="h3">{{ __('Verfügbare Label') }}</h2>
+                                <div class="list-group">
+                                    @forelse(\App\EquipmentLabel::all() as $label)
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">{{ $label->label }}</h5>
+                                            <small>{{ $label->created_at->DiffForHumans() }}</small>
+                                        </div>
+                                        <p class="mb-1">{{ $label->name }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="small">
+                                            <span>
+                                                <i class="far fa-check-square fa-fw"></i>
+                                                {{ __('Labels zeigen') }}
+                                            </span>
+                                                <span>
+                                                <i class="far fa-check-square fa-fw"></i>
+                                                {{ __('Inventarnummer zeigen') }}
+                                            </span>
+                                                <span>
+                                                <i class="far fa-check-square fa-fw"></i>
+                                                {{ __('Stellplatz zeigen') }}
+                                            </span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <form action="{{ route('equipmentlabel.copy',$label->id) }}" method="POST">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-outline-secondary">{{ __('Kopieren') }}</button>
+                                                </form>
+
+                                                <button class="btn btn-sm btn-outline-primary ml-2 btnLoadLabelLayout"
+                                                        data-routeshow="{{ route('equipmentlabel.show',$label) }}"
+                                                        data-labelid="{{ $label->id }}">{{ __('Laden') }}</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    @empty
+                                    <x-notifyer>{{ __('Keine Daten gefunden') }}</x-notifyer>
+                                    @endforelse
+
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <form action="{{ route('equipmentlabel.store') }}#Label"
+                                      method="POST"
+                                      id="frmEditLabelLayout"
+                                >
+                                    @csrf
+                                    <input type="hidden"
+                                           name="id"
+                                           id="label_id"
+                                    >
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col">
+                                            <x-textfield id="label"
+                                                         label="{{ __('Kürzel') }}"
+                                                         required="1"
+                                                         max="20"
+                                            />
+                                        </div>
+                                        <div class="col">
+                                            <x-textfield id="name"
+                                                         label="{{ __('Name') }}"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-3">
+                                            <h3 class="h4">{{ __('Labelgröße') }}</h3>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="{{ asset('/img/icon/label_dimensions.svg') }}"
+                                                 alt="{{ __('Abmessungen Label') }}"
+                                                 class="img-fluid img-thumbnail"
+                                            >
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="label_w"
+                                                                 label="{{ __('Breite') }} [w]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="Label_h"
+                                                                 label="{{ __('Höhe') }} [h]"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="label_mt"
+                                                                 label="{{ __('Rand oben') }} [mt]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="label_ml"
+                                                                 label="{{ __('Rand links') }} [ml]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="label_mr"
+                                                                 label="{{ __('Rand rechts') }} [mr]"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-3">
+                                            <h3 class="h4">{{ __('Logo') }}</h3>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="{{ asset('/img/icon/LogoDimensions.svg') }}"
+                                                 alt="{{ __('Abmessungen Logo') }}"
+                                                 class="img-fluid img-thumbnail"
+                                            >
+                                        </div>
+                                        <div class="col-md-6">
+                                            <x-textarea id="logo_svg"
+                                                        label="{{ __('Logo svg') }}"
+                                            />
+                                            <div class="row">
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="logo_h"
+                                                                 label="{{ __('Logo Höhe') }} [h]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="logo_w"
+                                                                 label="{{ __('Logo Breite') }} [w]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="logo_x"
+                                                                 label="{{ __('Position x') }} [x]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="logo_y"
+                                                                 label="{{ __('Position y') }} [y]"
+                                                    />
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-3">
+                                            <h3 class="h4">{{ __('Inhalt') }}</h3>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="{{ asset('/img/icon/LabelContent.svg') }}"
+                                                 alt="{{ __('Abmessungen Label') }}"
+                                                 class="img-fluid img-thumbnail"
+                                            >
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           class="custom-control-input"
+                                                           id="show_labels"
+                                                           name="show_labels"
+                                                           checked
+                                                    >
+                                                    <label class="custom-control-label"
+                                                           for="show_labels"
+                                                    >{{ __('Zeige Labels') }}</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           class="custom-control-input"
+                                                           id="show_inventory"
+                                                           name="show_inventory"
+                                                           checked
+                                                    >
+                                                    <label class="custom-control-label"
+                                                           for="show_inventory"
+                                                    >{{ __('Zeige Inventarnummer') }}</label>
+                                                </div>
+
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox"
+                                                           class="custom-control-input"
+                                                           id="show_location"
+                                                           name="show_location"
+                                                           checked
+                                                    >
+                                                    <label class="custom-control-label"
+                                                           for="show_location"
+                                                    >{{ __('Zeige Stellplatz') }}</label>
+                                                </div>
+                                                </div>
+
+
+                                            <div class="col">
+                                                <x-textfield type="number"
+                                                             id="qrcode_y"
+                                                             label="{{ __('y - Position QR-Code') }} [y]"
+                                                />
+                                            </div>
+                                            <div class="col">
+                                                <x-textfield type="number"
+                                                             id="qrcode_x"
+                                                             label="{{ __('x - Position QR-Code') }} [x]"
+                                                />
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <x-btnMain>{{ __('Label speichern') }} <i class="fas fa-download ml-2"></i></x-btnMain>
+
+                                            <a href="#" class="btn btn-outline-secondary" type="button" id="btnTestLabelLayout" target="_blank">
+                                                {{ __('Label Layout testen') }}
+                                                <i class="fas fa-qrcode ml-2"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -1226,7 +1480,8 @@
                                     </div>
 
                                     <x-btnMain block="1">{{ __('Format speichern') }} <span
-                                                class="fas fa-download ml-2"></span></x-btnMain>
+                                            class="fas fa-download ml-2"
+                                        ></span></x-btnMain>
 
                                 </form>
                             </div>
@@ -1941,38 +2196,38 @@
             });
         });
 
-/*        $(document).on('click', '.btnUpdatePKParam', function () {
-            const pkp_id = $(this).data('id');
-            $.ajax({
-                type: "POST",
-                dataType: 'json',
-                url: "/updateProduktKategorieParams",
-                data: $('#updateProduktKategorieParams_' + pkp_id).serialize(),
-                success: (res) => {
-                    if (res) $('#toastMessageBody').html(`Das Datenfeld <strong>${$('#pkp_name_' + pkp_id).val()}</strong> wurde aktualisiert!`);
-                    jQuery('.toast').toast('show');
-                },
-                error: (er) => {
-                    console.log(er.responseJSON.errors.pkp_label);
-                    $('#toastMessageBody').text(er.responseJSON.errors.pkp_label);
-                    jQuery('.toast').toast('show');
-                }
-            })
-        });*/
+        /*        $(document).on('click', '.btnUpdatePKParam', function () {
+                    const pkp_id = $(this).data('id');
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: "/updateProduktKategorieParams",
+                        data: $('#updateProduktKategorieParams_' + pkp_id).serialize(),
+                        success: (res) => {
+                            if (res) $('#toastMessageBody').html(`Das Datenfeld <strong>${$('#pkp_name_' + pkp_id).val()}</strong> wurde aktualisiert!`);
+                            jQuery('.toast').toast('show');
+                        },
+                        error: (er) => {
+                            console.log(er.responseJSON.errors.pkp_label);
+                            $('#toastMessageBody').text(er.responseJSON.errors.pkp_label);
+                            jQuery('.toast').toast('show');
+                        }
+                    })
+                });*/
 
-      /*  $(document).on('click', '.btnDeletePKParam', function () {
-            const pkp_id = $(this).data('id');
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: "/getUsedProduktsByPK",
-                data: {id: pkp_id},
-                success: function (res) {
-                    if (res > 0) {
-                        $('#frmDeleteProduktKategorieParam #id').val(pkp_id);
-                        $('#warningDeleteProduktKategorieParamBody').html(`
-                    <p class="lead">Es sind insgesamt <span class="badge badge-warning">${res}</span> Produkte in dieser Kategorie vorhanden.</p>
-                     <p class="lead text-danger">{{__('Alle Einträge zu diesem Datenfeld gehen unwiderruflich verloren!')}}</p>
+        /*  $(document).on('click', '.btnDeletePKParam', function () {
+              const pkp_id = $(this).data('id');
+              $.ajax({
+                  type: "GET",
+                  dataType: 'json',
+                  url: "/getUsedProduktsByPK",
+                  data: {id: pkp_id},
+                  success: function (res) {
+                      if (res > 0) {
+                          $('#frmDeleteProduktKategorieParam #id').val(pkp_id);
+                          $('#warningDeleteProduktKategorieParamBody').html(`
+                      <p class="lead">Es sind insgesamt <span class="badge badge-warning">${res}</span> Produkte in dieser Kategorie vorhanden.</p>
+                       <p class="lead text-danger">{{__('Alle Einträge zu diesem Datenfeld gehen unwiderruflich verloren!')}}</p>
                     `);
                         $('#warningDeleteProduktKategorieParam').modal('show');
                     } else {
@@ -2028,6 +2283,41 @@
             );
             $('#modalAddNewAnforderungControlItem').modal('show');
         });
+
+
+        $('.btnLoadLabelLayout').click(function () {
+            const id = $(this).data('labelid');
+            const routeshow = $(this).data('routeshow');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: routeshow,
+                data: {id},
+                success: (res) => {
+                    $('#label_id').val(res.id);
+                    $('#label').val(res.label);
+                    $('#name').val(res.name);
+                    $('#show_labels').val(res.show_labels);
+                    $('#show_inventory').val(res.show_inventory);
+                    $('#show_location').val(res.show_location);
+                    $('#label_w').val(res.label_w);
+                    $('#Label_h').val(res.Label_h);
+                    $('#label_ml').val(res.label_ml);
+                    $('#label_mt').val(res.label_mt);
+                    $('#label_mr').val(res.label_mr);
+                    $('#qrcode_y').val(res.qrcode_y);
+                    $('#qrcode_x').val(res.qrcode_x);
+                    $('#logo_y').val(res.logo_y);
+                    $('#logo_x').val(res.logo_x);
+                    $('#logo_h').val(res.logo_h);
+                    $('#logo_w').val(res.logo_w);
+                    $('#logo_svg').val(res.logo_svg);
+                    $('#btnTestLabelLayout').attr('href','/test_equipment_label/'+res.id)
+               }
+            });
+        });
+
+
 
     </script>
 

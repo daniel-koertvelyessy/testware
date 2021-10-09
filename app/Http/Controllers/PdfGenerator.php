@@ -6,6 +6,7 @@ use App\ControlEquipment;
 use App\ControlEvent;
 use App\Equipment;
 use App\EquipmentDoc;
+use App\EquipmentLabel;
 use App\EquipmentUid;
 use App\Report;
 use App\TestReportFormat;
@@ -116,14 +117,37 @@ class PdfGenerator extends Controller
         PDF::Output($reportNo . '.pdf');
     }
 
-    static function makePDFEquipmentLabel($euqipment_id)
+    static function makePDFLabel(int $label_id, int $equipment_id = NULL)
     {
-        $equipment = Equipment::findOrFail($euqipment_id);
+
+        if (isset($equipment_id)){
+            $equipment = Equipment::find($equipment_id)->toArray();
+            $data = [
+                'uid' => EquipmentUid::where('equipment_id', $equipment_id)->first()->equipment_uid,
+                'inventary' => $equipment->eq_inventar_nr,
+                'location' => $equipment->storage->storage_label,
+            ];
+        } else {
+            $data = [
+                'uid' => '',
+                'inventary' => '5584828.12-1',
+                'location' => 'PAS1223254',
+            ];
+        }
+
+        PdfGenerator::makePDFEquipmentLabel($data, EquipmentLabel::find($label_id));
+
+    }
+
+
+
+    static function makePDFEquipmentLabel(array $data, EquipmentLabel $equipmentLabel)
+    {
 //        $html = view('pdf.html.qrcode_Equipment', ['equipment' => $euqipment_id])->render();
         PDF::SetLineWidth(1);
-        PDF::setHeaderCallback(function ($pdf) use ($euqipment_id, $equipment) {
+        PDF::setHeaderCallback(function ($pdf) use ($data, $equipmentLabel) {
 
-            $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . EquipmentUid::where('equipment_id', $euqipment_id)->first()->equipment_uid;
+            $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
             $style = [
                 'border'        => 0,
                 'vpadding'      => 0,
@@ -140,33 +164,38 @@ class PdfGenerator extends Controller
                 'module_height' => 1
                 // height of a single module in points
             ];
-            //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
-            $pdf->write2DBarcode($val, 'QRCODE,M', 2, 2, 25, 25, $style, 'N');
-            $pdf->setY(25);
-
-            $pdf->SetFont('Helvetica', '', 8);
-            $pdf->cell(0, 5, __('Inventarnummer') . ': ', 0, 1);
-            $pdf->SetFont('Helvetica', 'B', 11);
-            $pdf->MultiCell(0, 4, $equipment->eq_inventar_nr, 0, 1);
-            $pdf->SetFont('Helvetica', '', 8);
-            $pdf->cell(0, 5, __('Seriennummer') . ': ', 0, 1);
-            $pdf->SetFont('Helvetica', 'B', 11);
-            $pdf->MultiCell(0, 5, $equipment->eq_serien_nr, 0, 1);
-
-
-            //            $pdf->cell(0,10, $inv,0,1);
+            $pdf->ImageSVG('@'.$equipmentLabel->logo_svg, $x=$equipmentLabel->logo_x, $y=$equipmentLabel->logo_y, $w=$equipmentLabel->logo_w, $h=$equipmentLabel->logo_h, '', $align='', $palign='C', $border=0, $fitonpage=false );
+            $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr -2;
+            $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml) , ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt) , $qrCodeQidth, $qrCodeQidth, $style, 'N');
+//            $pdf->setY(25);
+            if ($equipmentLabel->show_labels) {
+                $pdf->SetFont('Helvetica', '', 8);
+                $pdf->cell(0, 5, __('Inventarnummer').': ', 0,1);
+            }
+            if ($equipmentLabel->show_inventory) {
+                $pdf->SetFont('Helvetica', 'B', 11);
+                $pdf->Cell(0, 4, $data['inventary'], 0, 1, 0, '', 1);
+            }
+            if ($equipmentLabel->show_labels) {
+                $pdf->SetFont('Helvetica', '', 8);
+                $pdf->cell(0, 5, __('Stellplatz').': ', 0, 1);
+            }
+            if ($equipmentLabel->show_location) {
+                $pdf->SetFont('Helvetica', 'B', 11);
+                $pdf->Cell(0, 5, $data['location'], 0, 1, 0, '', 1);
+            }
         });
-        PDF::setTitle('QRCODE_' . $equipment->eq_inventar_nr . '_' . date('Y-m-d'));
+        PDF::setTitle('QRCODE_' . $data['inventary'] . '_' . date('Y-m-d'));
         PDF::SetAutoPageBreak(false);
-        PDF::SetMargins(2, 2, 2);
+        PDF::SetMargins($equipmentLabel->label_ml, $equipmentLabel->label_mt, $equipmentLabel->label_mr);
         PDF::AddPage('P', [
-            50.8,
-            25.4
+            $equipmentLabel->Label_h,
+            $equipmentLabel->label_w
         ]);
         //        PDF::writeHTML($html, true, false, true, false, '');
         // D is the change of these two functions. Including D parameter will avoid
         // loading PDF in browser and allows downloading directly
-        PDF::Output('QRCODE_' . $equipment->eq_inventar_nr . '_' . date('Y-m-d') . '.pdf');
+        PDF::Output('QRCODE_' . $data['inventary'] . '_' . date('Y-m-d') . '.pdf','I');
     }
 
 

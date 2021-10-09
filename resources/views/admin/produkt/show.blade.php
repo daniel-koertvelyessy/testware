@@ -48,6 +48,9 @@
                data-toggle="modal"
                data-target="#modalAddParameter"
             ><i class="fas fa-table"></i> {{__('Parameter hinzufügen')}}</a>
+            <a class="dropdown-item"
+               href="#"
+            ><i class="fas fa-list"></i> {{__('Label drucken')}}</a>
             @can('isAdmin', Auth::user())
                 <a class="dropdown-item"
                    href="#"
@@ -699,19 +702,29 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <x-rtextfield id="prod_label"
                                                           label="{{__('Kurzbezeichnung / Spezifikation')}}"
                                                           value="{!! $produkt->prod_label !!}"
                                             />
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <x-selectfield id="produkt_state_id"
                                                            label="{{__('Produkt Status')}}"
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
                                                     <option
                                                         value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
+                                                @endforeach
+                                            </x-selectfield>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <x-selectfield id="equipment_label_id"
+                                                           label="{{__('Produkt Label')}}"
+                                            >
+                                                @foreach ($labels as $label)
+                                                    <option
+                                                        value="{{ $label->id }}" {{ ($produkt->equipment_label_id===$label->id)? ' selected ' : ''  }}>{{ $label->name }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
