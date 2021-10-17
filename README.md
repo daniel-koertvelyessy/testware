@@ -84,6 +84,7 @@ services:
       - app.env
     ports:
       - 80:80
+      - 443:443
     volumes:
       - testware-files:/var/www/html/storage/app
     depends_on:
@@ -168,6 +169,9 @@ The `testware:install` command will guide you through the setup of the database 
 After completing the installation of your testWare instance you can run the web based installer at `domain.tld/installer`  
 
 The web-installer initiates your company, location, users and employees. This step is optional as you can achieve these steps within the backend of testWare.
+
+## Start working with testWare
+You may start to build your enviorment with locations and equipment. See [firstSteps.md](firstSteps.md) for help and guidances.
 
 ---
 
