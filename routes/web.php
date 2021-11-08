@@ -129,6 +129,10 @@ Route::get('/dashboard', function () {
 
 Route::put('user.resetPassword',
     'UserController@resetPassword')->name('user.resetPassword');
+
+Route::put('user.setPassword',
+    'UserController@setPassword')->name('user.setPassword');
+
 Route::post('event.restore',
     'EquipmentEventController@restore')->name('event.restore');
 Route::delete('event.close',
@@ -233,7 +237,8 @@ Route::get('/report.print/{id}', function ($id) {
 })->name('printReport');
 
 Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
-    App\Http\Controllers\PdfGenerator::makePDFEquipmentLabel($equipment);
+    $equip=Equipment::find($equipment);
+    App\Http\Controllers\PdfGenerator::makePDFLabel($equip->produkt->equipment_label_id,$equipment);
 })->name('makePDFEquipmentLabel');
 
 Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {

@@ -8,6 +8,7 @@ use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentLabel;
 use App\EquipmentUid;
+use App\Produkt;
 use App\Report;
 use App\TestReportFormat;
 use PDF;
@@ -120,8 +121,9 @@ class PdfGenerator extends Controller
     static function makePDFLabel(int $label_id, int $equipment_id = NULL)
     {
 
+        if (!$label_id) return false;
         if (isset($equipment_id)){
-            $equipment = Equipment::find($equipment_id)->toArray();
+            $equipment = Equipment::find($equipment_id);
             $data = [
                 'uid' => EquipmentUid::where('equipment_id', $equipment_id)->first()->equipment_uid,
                 'inventary' => $equipment->eq_inventar_nr,
@@ -136,9 +138,16 @@ class PdfGenerator extends Controller
         }
 
         PdfGenerator::makePDFEquipmentLabel($data, EquipmentLabel::find($label_id));
+        PDF::Output('QRCODE_' . $data['inventary'] . '_' . date('Y-m-d') . '.pdf','I');
 
     }
 
+    static function printEquipmentLabels(Produkt $produkt){
+        $label_id = $produkt->equipment_label_id;
+        foreach(Equipment::where('produkt_id', $produkt->id)->get() as $equipmemnt){
+            PdfGenerator::makePDFLabel($label_id,$equipmemnt->id);
+        }
+    }
 
 
     static function makePDFEquipmentLabel(array $data, EquipmentLabel $equipmentLabel)
@@ -164,17 +173,19 @@ class PdfGenerator extends Controller
                 'module_height' => 1
                 // height of a single module in points
             ];
-            $pdf->ImageSVG('@'.$equipmentLabel->logo_svg, $x=$equipmentLabel->logo_x, $y=$equipmentLabel->logo_y, $w=$equipmentLabel->logo_w, $h=$equipmentLabel->logo_h, '', $align='', $palign='C', $border=0, $fitonpage=false );
+            if ($equipmentLabel->logo_svg!=='') {
+                $pdf->ImageSVG('@' . $equipmentLabel->logo_svg, $x = $equipmentLabel->logo_x, $y = $equipmentLabel->logo_y, $w = $equipmentLabel->logo_w, $h = $equipmentLabel->logo_h, '', $align = '', $palign = 'C', $border = 0, $fitonpage = false);
+            }
             $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr -2;
             $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml) , ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt) , $qrCodeQidth, $qrCodeQidth, $style, 'N');
 //            $pdf->setY(25);
             if ($equipmentLabel->show_labels) {
                 $pdf->SetFont('Helvetica', '', 8);
-                $pdf->cell(0, 5, __('Inventarnummer').': ', 0,1);
+                $pdf->Cell(0, 5, __('Inventarnummer').': ', 0,1);
             }
             if ($equipmentLabel->show_inventory) {
                 $pdf->SetFont('Helvetica', 'B', 11);
-                $pdf->Cell(0, 4, $data['inventary'], 0, 1, 0, '', 1);
+                $pdf->MultiCell(0, 4, $data['inventary'], 0, 1, 0, '', 1);
             }
             if ($equipmentLabel->show_labels) {
                 $pdf->SetFont('Helvetica', '', 8);
@@ -195,7 +206,6 @@ class PdfGenerator extends Controller
         //        PDF::writeHTML($html, true, false, true, false, '');
         // D is the change of these two functions. Including D parameter will avoid
         // loading PDF in browser and allows downloading directly
-        PDF::Output('QRCODE_' . $data['inventary'] . '_' . date('Y-m-d') . '.pdf','I');
     }
 
 

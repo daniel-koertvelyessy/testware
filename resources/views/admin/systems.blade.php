@@ -128,7 +128,7 @@
                        role="tab"
                        aria-controls="Label"
                        aria-selected="false"
-                    >{{__('Label')}}</a>
+                    >{{__('Labels')}}</a>
                     <a class="nav-link"
                        id="Numbering-tab"
                        data-toggle="tab"
@@ -1260,17 +1260,19 @@
                                             />
                                         </div>
                                     </div>
-                                    <div class="row mb-2 mb-md-4">
-                                        <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col">
                                             <h3 class="h4">{{ __('Labelgröße') }}</h3>
                                         </div>
-                                        <div class="col-md-3">
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-4">
                                             <img src="{{ asset('/img/icon/label_dimensions.svg') }}"
                                                  alt="{{ __('Abmessungen Label') }}"
                                                  class="img-fluid img-thumbnail"
                                             >
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col">
                                                     <x-textfield type="number"
@@ -1307,17 +1309,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-2 mb-md-4">
-                                        <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col">
                                             <h3 class="h4">{{ __('Logo') }}</h3>
                                         </div>
-                                        <div class="col-md-3">
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-4">
                                             <img src="{{ asset('/img/icon/LogoDimensions.svg') }}"
                                                  alt="{{ __('Abmessungen Logo') }}"
                                                  class="img-fluid img-thumbnail"
                                             >
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <x-textarea id="logo_svg"
                                                         label="{{ __('Logo svg') }}"
                                             />
@@ -1352,17 +1356,20 @@
                                         </div>
 
                                     </div>
-                                    <div class="row mb-2 mb-md-4">
-                                        <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col">
                                             <h3 class="h4">{{ __('Inhalt') }}</h3>
+
                                         </div>
-                                        <div class="col-md-3">
+                                    </div>
+                                    <div class="row mb-2 mb-md-4">
+                                        <div class="col-md-4">
                                             <img src="{{ asset('/img/icon/LabelContent.svg') }}"
                                                  alt="{{ __('Abmessungen Label') }}"
                                                  class="img-fluid img-thumbnail"
                                             >
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col">
                                                 <div class="custom-control custom-checkbox">

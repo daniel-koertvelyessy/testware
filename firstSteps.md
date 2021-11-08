@@ -64,8 +64,12 @@ Regulations represent the overarching law, directive or your own company specifi
 Within the regulation you may specify requirements. Following the example the DIN VDE 0701-0702 differentiate between protection class I, II and III. Each protection class can be represented as a requirement. The requirement is basically a collection of test steps.
 
 The requirement can store:
-
-- type, a required label, a name, the interval, value and time-frame (years, months etc.) within the test steps of the requirement have to be executed, as well as a description. 
+- the related regulation
+- the requirement type
+- a label which is required  
+- a name
+- the interval value and time-frame (years, months etc.) within the test steps of the requirement have to be executed
+- a description
 
 ### Test steps
  A test step is a dedicated procedure to measure / verify a specific task. I require a label, a name and a description as required fields to specify the task of the test step.
@@ -78,19 +82,23 @@ In addition to a task you can assign to measure / verify a value. You can specif
 
 Choosing the *Target ±tolerance* option enables you to set a specifc value as a target which has to be met in order for the test step tp pass. Specify a tolerance value and choose if the value is absolute (abs) or a percentage (%) of the target value.
 
-You can set as many target values as required to meet the specification.
+* [ ] *TODO* You can set as many target values as required to meet the specification.
 
 #### Test step execution
-You can set if the test step can be executed internally wthin your company or if it has to be executed by an external company. You can determine multiple employees or companies respectively.
+You can set if the test step can be executed internally wthin your company or if it has to be executed by an external company. 
+Interally executed test steps can only be performed by qualified employees. 
+Externally executed test steps can only be executed by companies assiciated to the related product.
 
 ## Generate products
-### Why separate products and equipment?
+The overview of all products is viewable at `domain.tld/produkt`. The detail page for a product can be viewed at `domain.tld/produkt/[product_number]`.
+
+### Why products and equipment?
 The basic idea is to have **products** as templates from which you can generate the actual equipment. Therefore, the amount of time to maintain central data, such as adding / removing a qualified person, is reduced significantly.
 
-Upon creating, editing and deletion every equipment related to this product will be changed accordingly.
+> Upon creating, editing and deletion every equipment related to this product will be changed accordingly.
 
 ### Base data
-The overview of all products is viewable at `domain.tld/produkt`. The base data of a product includes following data-fields:
+The base data of a product includes following data-fields:
 - required label / specification
 - name
 - product number
@@ -101,9 +109,32 @@ The overview of all products is viewable at `domain.tld/produkt`. The base data 
 > The `product number` field is used as an identifier. The intended use is to fill in the part- oder product number of the vendor or your interal assigend product number. To view the page of the product number use the url `domain.tld/produkt/[product-number]`. In order not to break the link the data-field can only take numbers `0-9`, letters `a-Z` and special charakters `-` `_` `.`
 
 ### Parameter
-Each product can be assigned with multiple parameters if necessary to extend the base data fields.  
+Each product can be assigned with multiple parameters if necessary to extend the base data fields. 
 
 ### Requirements
-You can assign multiple requirements to a
+You can assign multiple requirements to a product.
+
+### Companies
+A product can be associated to many companies. You can either choose from a list of existing companies or create a new one by using the forms. 
+
+#### Create a new entry
+If you want to add a new company you can click on <code>Add new</code>. You have to add the company data, address 
+and a contact. You can load existing companies by start typing in the search field. By clicking on the checkbox 
+`create new xxx` you can add a dataset to the existing company such as a new contact or address.
+
+### Documents
+In the document section you can assign documents to the product such as manuals, checklists or drawings. 
+
+> As with all types in testWare you can create or change document types to replicate your specific infrastructure
+
+> All documents will be stored with a hashed name to prevent issues on storing or retrieving files. The actual 
+> filename is stored along with the hashed name in the database. The directory is `domain.
+> tld/storage/app/product_docu` **which is not accesssible from the browser**
+
+> The upload limit is set to 200 MB per file.
+
+> Only files of the types `.pdf` `.jpg`/`.jpeg` `.png` `.tif`/`.tiff` can be uploaded
+
+
 
 ## Generate equipment

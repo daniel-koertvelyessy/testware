@@ -285,10 +285,20 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function resetPassword(Request $request)
+
+    public function resetPassword(Request $request): RedirectResponse
     {
         if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
             (new User)->updatePassword($request->newPassword, Auth::user());
+            session()->flash('status', __('Passwort wurde aktualisiert!'));
+        }
+        return back();
+    }
+
+    public function setPassword(Request $request): RedirectResponse
+    {
+        if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
+            (new User)->updatePassword($request->newPassword, User::find($request->id));
             session()->flash('status', __('Passwort wurde aktualisiert!'));
         }
         return back();

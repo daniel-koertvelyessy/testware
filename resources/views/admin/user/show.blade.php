@@ -354,10 +354,11 @@
                 <div class="col">
                     <h2 class="h4">{{__('Passwort ändern')}}</h2>
                     <form method="POST"
-                          action="{{ route('user.resetPassword') }}"
+                          action="{{ route('user.setPassword') }}"
                     >
                         @method('PUT')
                         @csrf
+                        <input type="hidden" name="id" id="set_user_id" value="{{ $user->id }}">
                         <div class="row">
                             <div class="col-md-6">
                                 <x-textfield id="newPassword"
