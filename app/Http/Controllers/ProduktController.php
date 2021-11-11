@@ -289,17 +289,29 @@ class ProduktController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
+     * @param Produkt $produkt
+     * @param Request $request
      *
-     * @return Application|RedirectResponse|Response|Redirector
-     * @throws AuthorizationException
+     * @return Application|Redirector|RedirectResponse
      */
-    public function destroy(Request $request)
+    public function destroy(Produkt $produkt, Request $request)
     {
-//        $this->authorize('isAdmin', Auth()->user());
-        Produkt::find($request->produkt_id)->delete();
+        $produkt->delete();
         $request->session()->flash('status', __('Das Produkt wurde gelöscht!'));
         return redirect(route('produkt.index'));
+    }
+
+    /**
+     * Copy the specified resource including .
+     *
+     * @param Produkt $produkt
+     * @param Request $request
+     *
+     * @return Application|Redirector|RedirectResponse
+     */
+    public function copy(Produkt $produkt, Request $request)
+    {
+
     }
 
 

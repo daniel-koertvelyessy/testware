@@ -39,6 +39,9 @@
                         <th>@sortablelink('prod_active', __('Aktiv'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ControlProdukt.id', __('Prüfmittel'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_label', __('Status'))</th>
+                        @if(Auth::user()->isSysAdmin())
+                        <th></th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody>
@@ -60,6 +63,17 @@
                                     <span class="fas fa-exclamation-triangle text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
                                 @endif
                             </td>
+                            @if(Auth::user()->isSysAdmin())
+                            <td>
+                                <x-menu_context :object="$produkt"
+                                                routeOpen="{{ route('produkt.show',$produkt) }}"
+                                                routeCopy="#"
+                                                routeDestory="{{ route('produkt.destroy',$produkt)}}"
+                                                objectName="prod_label"
+                                                objectVal="{{ $produkt->prod_label }}"
+                                                />
+                            </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>

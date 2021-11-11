@@ -519,7 +519,7 @@
                     </div>
                     --}}
                 </div>
-                @if(Auth::user()->id === $user->id)
+                @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
                     <x-btnSave>{{__('Einstellungen für Benutzer speichern')}}</x-btnSave>
                 @endif
             </form>

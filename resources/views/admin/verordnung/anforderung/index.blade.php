@@ -54,7 +54,8 @@
                         </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
-                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label }}  </td>
+                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label??'' }}
+                        </td>
                         <td style="vertical-align: middle;"
                             class="text-center d-none d-md-table-cell"
                         >

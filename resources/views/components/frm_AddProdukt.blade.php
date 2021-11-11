@@ -104,7 +104,7 @@
             <div class="row">
                 @foreach (App\ProduktKategorieParam::where('produkt_kategorie_id',$pk)->get() as $pkpItem)
                     <div class="col-md-4">
-                        <x-parameter-item-pk :param="$pkpItem" mode="insert"/>
+                        <x-parameters.parameter-item-pk :param="$pkpItem" mode="insert"/>
                     </div>
                     {{--     <input type="hidden"
                                 name="pp_label[]"
