@@ -17,12 +17,10 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /vendor/kyslik
-configs.txt
-layout_DIN.txt
 _ide_helper.php
 git_update.py
 update.py
-
+db.env
 .DS_Store
 app.env
-docker-compose.yml
+docker‚-compose.yml
