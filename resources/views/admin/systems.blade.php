@@ -1226,6 +1226,11 @@
                                                 <button class="btn btn-sm btn-outline-primary ml-2 btnLoadLabelLayout"
                                                         data-routeshow="{{ route('equipmentlabel.show',$label) }}"
                                                         data-labelid="{{ $label->id }}">{{ __('Laden') }}</button>
+
+                                                <button class="btn btn-sm btn-outline-danger ml-2 btnDeleteLabelLayout"
+                                                        data-routeshow="{{ route('equipmentlabel.destroy',$label) }}"
+                                                        data-labelid="{{ $label->id }}">{{ __('Löschen') }}</button>
+
                                             </div>
                                         </div>
 

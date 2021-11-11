@@ -152,9 +152,14 @@ class PdfGenerator extends Controller
 
     static function makePDFEquipmentLabel(array $data, EquipmentLabel $equipmentLabel)
     {
+
+        $ratio = ($equipmentLabel->Label_h >= $equipmentLabel->label_w) ? 'P' : 'L';
 //        $html = view('pdf.html.qrcode_Equipment', ['equipment' => $euqipment_id])->render();
         PDF::SetLineWidth(1);
-        PDF::setHeaderCallback(function ($pdf) use ($data, $equipmentLabel) {
+        PDF::setHeaderCallback(function ($pdf) use ($data, $equipmentLabel, $ratio) {
+            $hRatio = 12;
+            $thRatio = 8;
+            $valRatio = 5;
 
             $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
             $style = [
@@ -173,33 +178,40 @@ class PdfGenerator extends Controller
                 'module_height' => 1
                 // height of a single module in points
             ];
+
             if ($equipmentLabel->logo_svg!=='') {
                 $pdf->ImageSVG('@' . $equipmentLabel->logo_svg, $x = $equipmentLabel->logo_x, $y = $equipmentLabel->logo_y, $w = $equipmentLabel->logo_w, $h = $equipmentLabel->logo_h, '', $align = '', $palign = 'C', $border = 0, $fitonpage = false);
             }
+
             $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr -2;
+
             $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml) , ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt) , $qrCodeQidth, $qrCodeQidth, $style, 'N');
-//            $pdf->setY(25);
+
             if ($equipmentLabel->show_labels) {
-                $pdf->SetFont('Helvetica', '', 8);
-                $pdf->Cell(0, 5, __('Inventarnummer').': ', 0,1);
+                $pdf->SetFont('Helvetica', '', $equipmentLabel->Label_h/$thRatio);
+                $pdf->Cell(0, $equipmentLabel->Label_h/$hRatio, __('Inventarnummer ').': ', 0,1);
             }
+
             if ($equipmentLabel->show_inventory) {
-                $pdf->SetFont('Helvetica', 'B', 11);
-                $pdf->MultiCell(0, 4, $data['inventary'], 0, 1, 0, '', 1);
+                $pdf->SetFont('Helvetica', 'B', $equipmentLabel->Label_h/$valRatio);
+                // MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0)
+                $pdf->MultiCell(0, $equipmentLabel->Label_h/$hRatio, $data['inventary'], 0, 'L', 0, 1);
             }
+
             if ($equipmentLabel->show_labels) {
-                $pdf->SetFont('Helvetica', '', 8);
-                $pdf->cell(0, 5, __('Stellplatz').': ', 0, 1);
+                $pdf->SetFont('Helvetica', '', $equipmentLabel->Label_h/$thRatio);
+                $pdf->cell(0, $equipmentLabel->Label_h/$hRatio, __('Stellplatz').': ', 0, 1);
             }
+
             if ($equipmentLabel->show_location) {
-                $pdf->SetFont('Helvetica', 'B', 11);
-                $pdf->Cell(0, 5, $data['location'], 0, 1, 0, '', 1);
+                $pdf->SetFont('Helvetica', 'B', $equipmentLabel->Label_h/$valRatio);
+                $pdf->MultiCell(0, $equipmentLabel->Label_h/$hRatio, $data['location'], 0,'L',0, 1);
             }
         });
         PDF::setTitle('QRCODE_' . $data['inventary'] . '_' . date('Y-m-d'));
         PDF::SetAutoPageBreak(false);
         PDF::SetMargins($equipmentLabel->label_ml, $equipmentLabel->label_mt, $equipmentLabel->label_mr);
-        PDF::AddPage('P', [
+        PDF::AddPage($ratio, [
             $equipmentLabel->Label_h,
             $equipmentLabel->label_w
         ]);
