@@ -379,7 +379,6 @@
                             </div>
 
                         </div>
-
                         <x-btnSave>{{__('Passwort setzen')}}</x-btnSave>
 
                         {{--
@@ -446,7 +445,7 @@
                         <input type="hidden"
                                name="id"
                                id="frmChangeUserTheme-id"
-                               value="{{ Auth::user()->id }}"
+                               value="{{ $user->id }}"
                         >
                         <div class="form-group">
                             <label for="systemTheme">{{__('Farbschema auswählen')}}</label>
@@ -492,32 +491,6 @@
                         >{{__('Vorschau')}}</button>
 
                     </div>
-                    {{--
-                    <div class="col-md-4">
-                        <h2 class="h4">{{__('Darstellung Eingabemasken')}}</h2>
-                        <div class="custom-control custom-switch ml-3">
-                            <input class="custom-control-input"
-                                   type="checkbox"
-                                   id="setUserDisplaySimpleView"
-                                   name="setUserDisplaySimpleView"
-                            >
-                            <label class="custom-control-label"
-                                   for="setUserDisplaySimpleView"
-                            >{{__('Vereinfachte Anzeige von Formularen')}}</label>
-                        </div>
-
-                        <div class="custom-control custom-switch ml-3">
-                            <input class="custom-control-input"
-                                   type="checkbox"
-                                   id="setUserDisplayHelperText"
-                                   name="setUserDisplayHelperText"
-                            >
-                            <label class="custom-control-label"
-                                   for="setUserDisplayHelperText"
-                            >{{__('Hilfetexte anzeigen')}}</label>
-                        </div>
-                    </div>
-                    --}}
                 </div>
                 @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
                     <x-btnSave>{{__('Einstellungen für Benutzer speichern')}}</x-btnSave>
