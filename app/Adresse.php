@@ -53,6 +53,11 @@ class Adresse extends Model
         return $this->belongsTo(AddressType::class);
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Land::class);
+    }
+
     public function Firma()
     {
         return $this->hasOne(Firma::class);
@@ -108,6 +113,14 @@ class Adresse extends Model
         } else {
             return null;
         }
+    }
+
+    public function fullAddress(Adresse $adresse){
+        return [
+            'street' => $adresse->ad_anschrift_strasse . ' ' . $adresse->ad_anschrift_hausnummer,
+            'city' => $adresse->ad_anschrift_plz . ' ' . $adresse->ad_anschrift_ort,
+            'country' => $adresse->country->land_lang
+            ];
     }
 
     /**
@@ -195,12 +208,7 @@ class Adresse extends Model
         return $this->ad_label . ': ' . $this->ad_anschrift_strasse . ' ' . $this->ad_anschrift_hausnummer . ' /  ' . $this->ad_anschrift_plz . ' ' . $this->ad_anschrift_ort;
     }
 
-    public function fullAddress()
-    {
-        return $this->ad_label . ': ' . $this->ad_anschrift_strasse . ' ' . $this->ad_anschrift_hausnummer . ' /  ' . $this->ad_anschrift_plz . ' ' . $this->ad_anschrift_ort;
-    }
-
-    public function addNew(Request $request)
+    public function addNew(Request $request, $returnModel = false)
     {
         $this->ad_label = $request->ad_label;
         $this->address_type_id = $request->address_type_id;
@@ -211,10 +219,33 @@ class Adresse extends Model
         $this->ad_anschrift_plz = $request->ad_anschrift_plz;
         $this->land_id = $request->land_id;
         $this->ad_name_firma = $request->ad_name_firma;
-
-        $this->save();
-        return $this->id;
+        $checkStatus = $this->save();
+        return ($returnModel) ? $checkStatus : $this->id;
     }
+
+
+    public function updateAddress(Request $request): ?Adresse
+    {
+        if (isset($request->address_id)) {
+            $address = Adresse::find($request->address_id);
+            $address->ad_label = $request->ad_label;
+            $address->address_type_id = $request->address_type_id;
+            $address->ad_name = $request->ad_name;
+            $address->ad_anschrift_strasse = $request->ad_anschrift_strasse;
+            $address->ad_anschrift_hausnummer = $request->ad_anschrift_hausnummer;
+            $address->ad_anschrift_ort = $request->ad_anschrift_ort;
+            $address->ad_anschrift_plz = $request->ad_anschrift_plz;
+            $address->land_id = $request->land_id;
+            $address->ad_name_firma = $request->ad_name_firma;
+            return $address;
+        } else {
+            return null;
+        }
+
+
+    }
+
+
 
     /**
      * @return array

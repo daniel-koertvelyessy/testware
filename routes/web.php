@@ -1,5 +1,6 @@
 <?php
 
+use App\Contact;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
@@ -23,6 +24,18 @@ Route::get('/', function () {
 Route::get('support', function () {
     return view('support');
 })->name('support');
+
+Route::get('imprint', function () {
+    $firma = \App\Location::with('Adresse','Profile')->first();
+
+    return view('imprint',[
+        'company_name' => $firma->ad_name_firma??'',
+        'address' => $firma->Adresse->postalAddress(),
+        'contact' => $firma->Profile->fullName(),
+        'telefon' => $firma->Profile->ma_telefon,
+        'email' => $firma->Profile ->ma_email
+    ]);
+})->name('imprint');
 
 Route::get('app', function () {
     return view('testware.app.index');

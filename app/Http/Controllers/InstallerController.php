@@ -8,14 +8,12 @@ use App\Location;
 use App\Profile;
 use App\User;
 use Artisan;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class InstallerController extends Controller
 {
@@ -34,7 +32,7 @@ class InstallerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index(Request $request)
     {
@@ -44,38 +42,20 @@ class InstallerController extends Controller
         Artisan::call('cache:clear');
 
         return view('admin.installer.server_data', [
-            'env_app'  => [
-                'APP_URL'  => env('APP_URL'),
+            'env_app' => [
+                'APP_URL' => env('APP_URL'),
                 'APP_PORT' => env('APP_PORT'),
             ],
             'env_smtp' => [
-                'MAIL_HOST'         => env('MAIL_HOST'),
-                'MAIL_PORT'         => env('MAIL_PORT'),
-                'MAIL_USERNAME'     => env('MAIL_USERNAME'),
-                'MAIL_PASSWORD'     => env('MAIL_PASSWORD'),
-                'MAIL_ENCRYPTION'   => env('MAIL_ENCRYPTION'),
+                'MAIL_HOST' => env('MAIL_HOST'),
+                'MAIL_PORT' => env('MAIL_PORT'),
+                'MAIL_USERNAME' => env('MAIL_USERNAME'),
+                'MAIL_PASSWORD' => env('MAIL_PASSWORD'),
+                'MAIL_ENCRYPTION' => env('MAIL_ENCRYPTION'),
                 'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS'),
-                'MAIL_FROM_NAME'    => env('MAIL_FROM_NAME')
+                'MAIL_FROM_NAME' => env('MAIL_FROM_NAME')
             ]
         ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
-     */
-    public function setCompany(Request $request)
-    {
-
-        $this->checkUserCanUseInstaller($request);
-        $company = (Firma::count() > 0) ? Firma::find(1) : null;
-        $address = (Adresse::count() > 0) ? Adresse::find(1) : null;
-        return view('admin.installer.company_data', [
-            'company' => $company,
-            'address' => $address
-        ]);
-
     }
 
     public function checkUserCanUseInstaller(Request $request)
@@ -87,9 +67,76 @@ class InstallerController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return Application|Factory|View
+     */
+    public function company(Request $request)
+    {
+
+        $this->checkUserCanUseInstaller($request);
+        $company = (Firma::count() > 0) ? Firma::first() : null;
+        $address = (Adresse::count() > 0) ? Adresse::first() : null;
+        return view('admin.installer.company_data', [
+            'company' => $company,
+            'address' => $address
+        ]);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function setCompany(Request $request): RedirectResponse
+    {
+        $this->checkUserCanUseInstaller($request);
+
+        $company = (isset($request->company_id)) ?
+            (new Firma)->updateCompany($request, true) :
+            (new Firma)->addCompany($request);
+
+        $address = (isset($request->address_id)) ?
+            (new Adresse)->updateAddress($request):
+            (new Adresse)->addNew($request, true) ;
+
+        return redirect()->route('installer.location', [
+            'company' => $company,
+            'address' => $address
+        ]);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     b*/
+    public function setAddress(Request $request): RedirectResponse
+    {
+
+        $this->checkUserCanUseInstaller($request);
+
+        $address = (isset($request->address_id)) ?
+            (new Adresse)->addNew($request, true) :
+            (new Adresse)->updateAddress($request);
+
+        $request->session()->flash('status', __('Addressdaten wurden gespreichert'));
+        $company = (isset($request->company_id)) ? Firma::find($request->company_id) : null;
+        return redirect()->route('installer.company', [
+            'company' => $company,
+            'address' => $address
+        ]);
+
+    }
+
+    /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @return Application|Factory|View
      */
     public function system(Request $request)
     {
@@ -98,16 +145,17 @@ class InstallerController extends Controller
 
     }
 
+
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function location(Request $request)
     {
         $this->checkUserCanUseInstaller($request);
 
-        $location = Location::find(1);
+        $location = Location::first();
 
         return view('admin.installer.location_data', compact('location'));
 
@@ -116,7 +164,7 @@ class InstallerController extends Controller
     /**
      * Display the systems page to set system variables
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function seed(Request $request)
     {
@@ -132,9 +180,9 @@ class InstallerController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request $request
+     * @param Request $request
      *
-     * @return Application|Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function create(Request $request)
     {
@@ -143,19 +191,19 @@ class InstallerController extends Controller
         if (isset($request->address_id)) {
             $address = Adresse::find($request->address_id);
             $address->update($request->validate([
-                'ad_label'                => 'bail|required|max:20',
-                'address_type_id'         => 'required',
-                'ad_name'                 => 'max:100',
-                'ad_anschrift_strasse'    => 'required|max:100',
+                'ad_label' => 'bail|required|max:20',
+                'address_type_id' => 'required',
+                'ad_name' => 'max:100',
+                'ad_anschrift_strasse' => 'required|max:100',
                 'ad_anschrift_hausnummer' => '',
-                'ad_anschrift_ort'        => 'required|max:100',
-                'ad_anschrift_plz'        => 'required|max:100',
-                'land_id'                 => 'required',
-                'ad_name_firma'           => 'max:100',
+                'ad_anschrift_ort' => 'required|max:100',
+                'ad_anschrift_plz' => 'required|max:100',
+                'land_id' => 'required',
+                'ad_name_firma' => 'max:100',
             ]));
             $request->session()->flash(__('Die Adresse wurde aktualisiert'));
 
-        } else {
+        } elseif (isset($request->adresse_id)) {
             $request->adresse_id = (new Adresse)->addNew($request);
             $request->session()->flash(__('Die Adresse wurde angeleget'));
         }
@@ -164,20 +212,18 @@ class InstallerController extends Controller
         if (isset($request->company_id)) {
             $company = Firma::find($request->company_id);
             $company->update($request->validate([
-                'fa_label'       => 'required|max:20',
-                'fa_name'        => 'max:100',
+                'fa_label' => 'required|max:20',
+                'fa_name' => 'max:100',
                 'fa_description' => '',
                 'fa_kreditor_nr' => '',
-                'fa_debitor_nr'  => '',
-                'fa_vat'         => 'max:30',
-                'adresse_id'     => 'integer',
+                'fa_debitor_nr' => '',
+                'fa_vat' => 'max:30',
+                'adresse_id' => 'integer',
             ]));
             $request->session()->flash(__('Die Firma wurde aktualisiert'));
-
-        } else {
+        } elseif (isset($request->fa_label)) {
             (new Firma)->addCompany($request);
             $request->session()->flash(__('Die Firma wurde angeleget'));
-
         }
 
         return view('admin.installer.user_data');
@@ -186,21 +232,18 @@ class InstallerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return RedirectResponse
-     * @throws AuthorizationException
      */
-    public function store(Request $request)
-    : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->checkUserCanUseInstaller($request);
 
         return back();
     }
 
-    public function getUserData(Request $request)
-    : array
+    public function getUserData(Request $request): array
     {
 
         $data['user'] = User::find($request->id);
@@ -219,6 +262,7 @@ class InstallerController extends Controller
             $user->email = $request->email;
             $user->username = $request->username;
             $user->role_id = $request->role_id;
+            $user->user_theme = 'css/tbs.css';
             $user->save();
             $data['user_id'] = $user->id;
 
@@ -285,7 +329,7 @@ class InstallerController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return false|string
      */
@@ -295,7 +339,7 @@ class InstallerController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return false|string
      */
@@ -305,7 +349,7 @@ class InstallerController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return false|string
      */
@@ -314,8 +358,7 @@ class InstallerController extends Controller
         return json_encode(User::where('name', $request->name)->count() > 0);
     }
 
-    public function setAppUrl(Request $request)
-    : RedirectResponse
+    public function setAppUrl(Request $request): RedirectResponse
     {
         foreach ($this->env_fields as $field) {
             (new DotEnvController)->changeenv('.env', $field, request($field));

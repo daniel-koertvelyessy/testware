@@ -51,10 +51,10 @@
             </ul>
             <div class="navbar-nav">
                 <a class="btn btn-sm btn-outline-warning"
-                   href="{{ route('installer.company') }}"
+                   href="/"
                 >{{ __('Abbruch') }}</a>
                 <a class="btn btn-sm btn-primary ml-2"
-                   href="{{ route('installer.location') }}"
+                   href="{{ route('installer.user') }}"
                 >{{ __('weiter') }}</a>
             </div>
         </div>

@@ -51,10 +51,15 @@
             </ul>
             <div class="navbar-nav">
                 <a class="btn btn-sm btn-outline-warning"
-                   href="{{ route('installer.company') }}"
+                   href="{{ route('portal-main') }}"
                 >{{ __('Abbruch') }}</a>
-                <a class="btn btn-sm btn-primary ml-2"
-                   href="{{ route('installer.location') }}"
+
+                <a class="btn btn-sm btn-outline-primary ml-2"
+                   href="{{ route('installer.server') }}"
+                >{{ __('zurück') }}</a>
+
+                <a class="btn btn-sm btn-primary"
+                   href="{{ route('installer.company') }}"
                 >{{ __('weiter') }}</a>
             </div>
         </div>

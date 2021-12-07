@@ -57,7 +57,9 @@
         &nbsp; GmbH
         </span>
     </div>
+
     <div>
         {!! $status !!}
+        <a href="{{ route('imprint') }}" class="mr-2">{{ __('Impressum') }}</a>
     </div>
 </footer>

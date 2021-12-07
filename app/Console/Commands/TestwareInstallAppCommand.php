@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Firma;
 use App\Profile;
 use Artisan;
 use Illuminate\Database\Eloquent\Model;
@@ -45,32 +46,32 @@ class TestwareInstallAppCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('* * * * * * * * * * * *   W A R N I N G   * * * * * * * * * * * ');
         $this->info('* ');
-        $this->info('* This installer will reset your database! ');
-        $this->info('* All data will be lost and cannot be restored!');
+        $this->info('*          This installer will reset your database! ');
+        $this->info('*       All data will be lost and cannot be restored!');
         $this->info('* ');
-        $this->info('* * * * * * * * * * * * * * * * * * * *');
+        $this->info('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
 
         $this->info(' ');
 
         if ($this->confirm('Type [yes] to proceed or [no] to exit without changes.', false)) {
             $output = '';
-            if ($this->confirm('Initialise fresh database with default entries [yes] or leave it empty [no] ?', true)) {
+            $this->info('* * * * *  Initialise database');
+            if ($this->confirm('Fill database with default entries [yes] or leave it empty [no] ?', true)) {
                 Artisan::call('migrate:fresh --seed', [], $output);
             } else {
                 Artisan::call('migrate:fresh');
             }
-
             $this->info('Start working ... ');
             $this->info(Artisan::output());
 
             if ($this->confirm('Create new user with SuperAdmin privileges?', true)) {
                 $details = $this->getDetails();
                 $userID = $this->user->addInstallerUser($details);
-                $this->info('New user created ...');
+                $this->info('* * * * *  New user created');
                 if ($userID) {
 
                     /**
@@ -79,7 +80,7 @@ class TestwareInstallAppCommand extends Command
                     $this->seedReports($userID);
 
                     if ($this->confirm('Is this user going to be an employee as well?', false)) {
-                        $this->registerEmpoyee($details['name'],$userID);
+                        $this->registerEmpoyee($details['name'],$userID, $details['email']);
                     }
 
                 }
@@ -107,10 +108,11 @@ class TestwareInstallAppCommand extends Command
      *
      * @param $fullname
      * @param $userID
-     *
-     * @return mixed
+     * @param null $email
+     * @return void
      */
-    private function registerEmpoyee($fullname,$userID){
+    private function registerEmpoyee($fullname,$userID, $email=NULL): void
+    {
         $names = explode(' ', $fullname);
         $employee = new Profile();
         $employee->user_id = $userID;
@@ -122,9 +124,9 @@ class TestwareInstallAppCommand extends Command
             $employee->ma_eingetreten = $this->ask('Employed on (YYYY-MM-DD)');
             $employee->ma_telefon = $this->ask('Phone-#');
             $employee->ma_mobil = $this->ask('Mobile-#');
+            $employee->ma_email = $this->ask('E-Mail', $email);
         }
         $employee->save();
-        return $employee->id;
     }
 
     /**
@@ -137,6 +139,12 @@ class TestwareInstallAppCommand extends Command
     {
 
         $details['email'] = $this->ask('E-Mail (used for login)');
+
+        while(!$this->confirm('Confirm given e-mail address : ' . utf8_encode($details['email']),false)){
+            $details['email'] = $this->ask('E-Mail (used for login)');
+        }
+
+
         while (User::where('email', $details['email'])->count() > 0) {
             $this->error('This e-mail address is already in use! Please us anotherone');
             $details['email'] = $this->ask('E-Mail (used for login)');

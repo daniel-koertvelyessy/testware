@@ -31,9 +31,6 @@
     <script type="text/javascript"
             src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>
-    <link rel="stylesheet"
-          href="{{ asset(mix('css/app.css')) }}"
-    >
     <link
         rel="stylesheet"
         href="{{ asset('assets/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}"
@@ -53,6 +50,9 @@
     <link rel="stylesheet"
           href="{{ asset('assets/css/layout.css') }}"
     />
+{{--    <link rel="stylesheet"
+          href="{{ asset(mix('css/app.css')) }}"
+    >--}}
 
 </head>
 <body class="bg-white">
@@ -66,12 +66,12 @@
         >
             <img
                 class="mr-1"
-                src="{{ asset('img/icon/testWare_Logo.svg') }}"
+                src="{{ asset('img/icon/logo_neu_full_blue_007bff.svg') }}"
                 alt="Docs UI Kit"
                 style="width: 30px;"
             />
             <span class="small">{{ __('Dokumentation') }}
-                <span class="badge badge-dark text-space-1">v0.9.3</span>
+                <span class="badge badge-dark text-space-1">v0.9.6</span>
             </span>
         </a>
 

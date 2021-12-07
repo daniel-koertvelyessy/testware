@@ -31,7 +31,8 @@ class Profile extends Model
         'ma_com_1',
         'ma_com_2',
         'group_id',
-        'user_id'
+        'user_id',
+        'ma_email'
     ];
 
     public function User()

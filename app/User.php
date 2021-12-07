@@ -84,7 +84,7 @@ class User extends Authenticatable
         $this->validateUserData();
         $user = User::find($request->id);
         $user->name = $request->name;
-        $user->locale = $request->locale;
+        $user->locale = $request->locales;
         $user->username = $request->username;
         $user->email = $request->email;
         return $user->save();
@@ -291,11 +291,12 @@ class User extends Authenticatable
         $this->username = $details['username'];
         $this->role_id = (isset($details['role_id'])) ? 1 : 0;
         $this->locale = $details['locales'];
+        $this->user_theme = 'css/tbs.css';
         $this->password = Hash::make($details['password']);
         $this->save();
 
-        $this->roles()->attach([1]);
-        $this->roles()->attach([4]);
+   //     $this->roles()->attach([1]);
+    //    $this->roles()->attach([4]);
 
         return $this->id;
     }

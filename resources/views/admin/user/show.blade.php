@@ -13,16 +13,10 @@
 @endsection
 
 @section('breadcrumbs')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/">{{__('Portal')}}</a>
-            </li>
-            <li class="breadcrumb-item active"
-                aria-current="page"
-            >{{__('Benutzer')}}</li>
-        </ol>
-    </nav>
+    <x-breadcrumbs :breadlist="[
+        ['name' => __('Systemverwaltung'),'link' => route('systems')],
+        ['name' => __('Benutzer'),'link' => '#'],
+    ]"/>
 @endsection
 
 @section('modals')
@@ -244,7 +238,7 @@
                     >
                 </div>
                 <div class="col-md-3">
-                    <x-selectfield id="locale"
+                    <x-selectfield id="locales"
                                    label="{{__('Sprache einstellen')}}"
                     >
                         @foreach(App\User::LOCALES as $locale => $label)
