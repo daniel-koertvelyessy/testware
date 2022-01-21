@@ -124,7 +124,8 @@
                     @if (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->count()>0)
 
                         @foreach (\App\ProduktDoc::where('produkt_id',$edata->produkt_id)->get() as $produktDoc)
-                            <x-filecard name="{{ $produktDoc->DocumentType->doctyp_name }}"
+                            <x-filecard downloadroute="{{ route('downloadProduktDokuFile') }}"
+                                        name="{{ $produktDoc->DocumentType->doctyp_name }}"
                                         label="{{ $produktDoc->proddoc_label }}"
                                         path="{{ $produktDoc->proddoc_name_pfad }}"
                                         id="{{ $produktDoc->id }}"

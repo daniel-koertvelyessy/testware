@@ -52,7 +52,7 @@ class CompanyController extends Controller
                     continue;
                 }
 
-                $id = (new Firma)->addFromAPI($data);
+                $id = (new Firma)->addFromAPI($data, true);
                 if($id>0){
                     $idList[] =  $id;
                     $countNew++;

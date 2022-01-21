@@ -94,15 +94,16 @@ class Firma extends Model
         return $this->id;
     }
 
-    public function addFromAPI(array $data)
+    public function addFromAPI(array $data, $addAddress = False)
     {
+        if (empty($data['label'])) return 0;
         $this->fa_label = $data['label'];
         $this->fa_name = $data['name'];
         $this->fa_description = $data['description'];
         $this->fa_kreditor_nr = $data['vendor_id'];
         $this->fa_debitor_nr = $data['custmer_id'];
         $this->fa_vat = $data['vat'];
-        if (isset($data['address']) && isset($data['address']['label'])){
+        if (isset($data['address']) && isset($data['address']['label']) && $addAddress){
             $this->adresse_id =(new Adresse)->addFromAPI($data['address']);
         } else {
             $this->adresse_id = $data['address_id'] ?? 1;

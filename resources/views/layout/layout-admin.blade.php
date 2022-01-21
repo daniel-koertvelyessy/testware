@@ -261,12 +261,12 @@
 @yield('modals')
 <!-- MODALS ENDE -->
 @if ($errors->any())
-    <div class="container-fluid">
+    <div class="container fixed-bottom py-4 ">
         <div class="row">
             <div class="col">
-                <div class="alert alert-danger fixed-bottom alert-dismissible fade show">
-                    <p class="lead my-2">{{ __('Fehler') }}</p>
-                    <ul class="list-group mb-4">
+                <div class="alert alert-light border border-danger shadow rounded-top alert-dismissible fade show">
+                    <p class="lead my-2 text-danger">{{ __('Fehler') }}</p>
+                    <ul class="list-group mb-4 small">
                         @foreach ($errors->all() as $error)
                             <li class="list-group-item">{{ $error }}</li>
                         @endforeach
@@ -322,7 +322,5 @@
         });
     });
 </script>
-
-
 </body>
 </html>

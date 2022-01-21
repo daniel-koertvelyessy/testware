@@ -180,12 +180,12 @@ class PdfGenerator extends Controller
             ];
 
             if ($equipmentLabel->logo_svg!=='') {
-                $pdf->ImageSVG('@' . $equipmentLabel->logo_svg, $x = $equipmentLabel->logo_x, $y = $equipmentLabel->logo_y, $w = $equipmentLabel->logo_w, $h = $equipmentLabel->logo_h, '', $align = '', $palign = 'C', $border = 0, $fitonpage = false);
+                $pdf->ImageSVG('@' . $equipmentLabel->logo_svg, $x = $equipmentLabel->logo_x, $y = $equipmentLabel->logo_y, $w = $equipmentLabel->logo_w, $h = $equipmentLabel->logo_h, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             }
 
             $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr -2;
 
-            $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml) , ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt) , $qrCodeQidth, $qrCodeQidth, $style, 'N');
+            $pdf->write2DBarcode($val, 'QRCODE,H',   ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt), ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml) , $qrCodeQidth, $qrCodeQidth, $style, 'N');
 
             if ($equipmentLabel->show_labels) {
                 $pdf->SetFont('Helvetica', '', $equipmentLabel->Label_h/$thRatio);

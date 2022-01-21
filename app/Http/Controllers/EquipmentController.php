@@ -12,6 +12,7 @@ use App\EquipmentParam;
 use App\EquipmentQualifiedUser;
 use App\EquipmentUid;
 use App\EquipmentWarranty;
+use App\FirmaProdukt;
 use App\ProductInstructedUser;
 use App\ProductQualifiedUser;
 use App\Produkt;
@@ -42,7 +43,7 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -59,9 +60,11 @@ class EquipmentController extends Controller
     public function create(Request $request)
     {
         $produkt = (isset($request->produkt_id)) ? request('produkt_id') : false;
+        $companyList = FirmaProdukt::where('produkt_id',$request->produkt_id )->get();
         return view('testware.equipment.create', [
             'pk'      => $request->pk,
-            'produkt' => $produkt
+            'produkt' => $produkt,
+            'companies' => $companyList
         ]);
     }
 

@@ -233,40 +233,47 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h2 class="h5">{{__('Funktionsprüfung')}}</h2>
-                            <div class="btn-group btn-group-toggle mb-3"
-                                 data-toggle="buttons"
-                            >
-                                <label class="btn btn-outline-success active">
-                                    <input type="radio"
-                                           id="controlEquipmentPassed"
-                                           name="function_control_pass"
-                                           value="1"
-                                           class="function_control_pass"
-                                    > {{__('Bestanden')}}
-                                </label>
-                                <label class="btn btn-outline-danger">
-                                    <input type="radio"
-                                           id="controlEquipmentNotPassed"
-                                           name="function_control_pass"
-                                           value="0"
-                                           class="function_control_pass"
-                                           checked
-                                    > {{__('NICHT Bestanden')}}
-                                </label>
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <x-datepicker id="function_control_date"
+                                                  label="{{__('Die Prüfung erfolgte am')}}"
+                                                  required
+                                                  value="{{ date('Y-m-d') }}"
+                                    />
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="btn-group btn-group-toggle mt-4"
+                                         data-toggle="buttons"
+                                    >
+                                        <label class="btn btn-outline-success active">
+                                            <input type="radio"
+                                                   id="controlEquipmentPassed"
+                                                   name="function_control_pass"
+                                                   value="1"
+                                                   class="function_control_pass"
+                                            > {{__('Bestanden')}}
+                                        </label>
+                                        <label class="btn btn-outline-danger">
+                                            <input type="radio"
+                                                   id="controlEquipmentNotPassed"
+                                                   name="function_control_pass"
+                                                   value="0"
+                                                   class="function_control_pass"
+                                                   checked
+                                            > {{__('NICHT Bestanden')}}
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <x-datepicker id="function_control_date"
-                                          label="{{__('Die Prüfung erfolgte am')}}"
-                                          required
-                                          value="{{ date('Y-m-d') }}"
-                            />
                             <div class="row">
                                 <div class="col-md-6">
                                     <x-selectfield id="function_control_firma"
                                                    label="{{__('durch Firma')}}"
                                     >
                                         <option value="void">{{__('bitte wählen')}}</option>
-                                        @foreach(\App\Firma::all() as $firma)
-                                            <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                        @foreach($companies as $company)
+                                            <option value="{{ $company->firma_id }}">{{ \App\Firma::find
+                                            ($company->firma_id)->first()->fa_name }}</option>
                                         @endforeach
                                     </x-selectfield>
                                 </div>

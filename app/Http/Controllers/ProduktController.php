@@ -44,7 +44,7 @@ class ProduktController extends Controller
     /**
      * Führt zur Übersichtsseite Produkt
      *
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -734,7 +734,7 @@ class ProduktController extends Controller
     {
         return request()->validate([
             'pkp_label'            => [
-                'bail', 'unique:produkts,prod_label', 'min:2', 'max:20',
+                'bail', 'min:2', 'max:20',
                 'required'
             ], 'pkp_name'          => 'bail|string|max:100', 'pkp_value' => '',
             'produkt_kategorie_id' => 'required'

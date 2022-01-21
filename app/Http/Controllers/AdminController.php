@@ -618,7 +618,7 @@ class AdminController extends Controller
     : array
     {
         return request()->validate([
-            'pk_label'       => 'bail|required|min:1|max:20',
+            'pk_label'       => ['bail','required','min:1','max:20', Rule::unique('produkt_kategories')->ignore(\request('id')),],
             'pk_name'        => 'bail|min:1|max:100',
             'pk_description' => ''
         ]);
