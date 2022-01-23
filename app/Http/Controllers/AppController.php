@@ -44,10 +44,10 @@ class AppController extends Controller
         $eh->equipment_id = $equipment->equipment_id;
         $eh->save();
 
-        foreach((new Equipment)->qualifiedUserList($equipment) as $qualifiedUser){
+        foreach((new Equipment)->qualifiedUserList(Equipment::find($request->equipment_id)) as $qualifiedUser){
             Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
         }
-        
+
         $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
         return redirect()->route('portal-main');
     }
