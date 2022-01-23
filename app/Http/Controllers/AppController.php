@@ -29,8 +29,9 @@ class AppController extends Controller
 
         $userid = (isset($request->equipment_event_user)) ? $request->equipment_event_user : 1;
         $equipment = EquipmentUid::where('equipment_uid', $request->equipment_id)->first();
-//        $this->validateNewEquipmentEvent();
-//        dd($equipment->equipment_id);
+       $this->validateNewEquipmentEvent();
+
+
         $eevent = new EquipmentEvent();
         $eevent->equipment_event_text = $request->equipment_event_text;
         $eevent->equipment_event_user = $userid;
@@ -44,7 +45,8 @@ class AppController extends Controller
         $eh->equipment_id = $equipment->equipment_id;
         $eh->save();
 
-        foreach((new Equipment)->qualifiedUserList(Equipment::find($request->equipment_id)) as $qualifiedUser){
+
+        foreach((new Equipment)->qualifiedUserList(Equipment::find($equipment->equipment_id)) as $qualifiedUser){
             Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
         }
 

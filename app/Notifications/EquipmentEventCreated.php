@@ -68,7 +68,7 @@ class EquipmentEventCreated extends Notification
             'message'=>$this->equipmentEvent->equipment_event_item_text,
             'header'=>__('Neues Ereignis'),
             'eventid'=>$this->equipmentEvent->equipment_event_id,
-            'detailLink'=>route('event.show',$this->equipmentEvent->equipment_event_id)
+            'detailLink'=>route('event.show',$this->equipmentEvent->id)
         ];
     }
 }

@@ -156,10 +156,11 @@ class Equipment extends Model
     }
 
     public function qualifiedUserList(Equipment $equipment){
-        $userList = collect([]);
+
+        $userList = [];
         if ($equipment->countQualifiedUser() > 0)
-            foreach($this->EquipmentQualifiedUser($equipment) as $quUser){
-                $userList.push(User::find($quUser->user_id));
+            foreach($equipment->EquipmentQualifiedUser as $quUser){
+                $userList[]= User::find($quUser->user_id);
             }
 
         return $userList;
