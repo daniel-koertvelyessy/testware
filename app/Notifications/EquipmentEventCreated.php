@@ -45,7 +45,7 @@ class EquipmentEventCreated extends Notification
     public function toMail($notifiable)
     {
         $equipment = Equipment::find($this->equipmentEvent->equipment_id)->first();
-        $url = 'http://testware.hub.bitpack.io/equipment/'.$equipment->eq_inventar_nr;
+        $url = env('APP_URL').'/equipment/'.$equipment->eq_inventar_nr;
         return (new MailMessage)
             ->subject('testWare Serviceinfo: Neue Schadensmeldung eingegangen!')
             ->greeting('Hallo !')

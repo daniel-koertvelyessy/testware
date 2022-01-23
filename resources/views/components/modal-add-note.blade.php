@@ -113,7 +113,7 @@
                     <x-textfield id="file_name"
                                  label="{{ __('Datei Name') }}"
                     />
-                    <div class="row">
+                   {{-- <div class="row">
                         <div class="col-md-8">
                             <h3 class="h5">{{ __('Tag hinzufügen') }}</h3>
 
@@ -163,7 +163,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
 
                 </div>
                 <div class="modal-footer">

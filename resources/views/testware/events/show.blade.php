@@ -35,6 +35,17 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden"
+                               name="equipment_event_id"
+                               id="equipment_event_id_modal"
+                               value="{{ $event->id }}"
+                        >
+
+                        <input type="hidden"
+                               name="equipment_id"
+                               id="equipment_id_modal"
+                               value="{{ $event->equipment_id }}"
+                        >
                         @csrf
                         @method('delete')
                         @if ($event->equipment_event_user>0)

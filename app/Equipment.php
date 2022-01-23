@@ -155,6 +155,17 @@ class Equipment extends Model
         return $this->EquipmentQualifiedUser->count();
     }
 
+    public function qualifiedUserList(Equipment $equipment){
+        $userList = collect([]);
+        if ($equipment->countQualifiedUser() > 0)
+            foreach($this->EquipmentQualifiedUser($equipment) as $quUser){
+                $userList.push(User::find($quUser->user_id));
+            }
+
+        return $userList;
+
+    }
+
     public function addInstructedUser(Request $request)
     {
         return  EquipmentInstruction::create($request->validate([

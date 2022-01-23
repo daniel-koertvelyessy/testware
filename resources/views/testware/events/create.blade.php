@@ -29,7 +29,7 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="hidden"
+                            <input type="text"
                                    name="equipment_id"
                                    id="equipment_id"
                             >

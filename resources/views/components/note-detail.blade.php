@@ -5,9 +5,9 @@
         <span class="small">{{ __('geändert:') }} <strong>{{$note->updated_at->diffForHumans()}}</strong></span>
     </div>
 
-    @foreach($note->tags()->get() as $tag)
+{{--    @foreach($note->tags()->get() as $tag)
         <span class="badge badge-{{$tag->color}} mr-1">{{$tag->label}}</span>
-    @endforeach
+    @endforeach--}}
 
     <h2 class="h4 my-2">{{$note->label}}</h2>
     <p>{{$note->description}}</p>

@@ -162,6 +162,7 @@ class PdfGenerator extends Controller
             $valRatio = 5;
 
             $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
+
             $style = [
                 'border'        => 0,
                 'vpadding'      => 0,

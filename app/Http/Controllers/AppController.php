@@ -43,8 +43,11 @@ class AppController extends Controller
         $eh->eqh_eintrag_text = 'Gerät wurde über die App als beschädigt gemeldet. Das Event wurde ausgelöst und wird nachverfolgt.';
         $eh->equipment_id = $equipment->equipment_id;
         $eh->save();
-        Notification::send(User::find($userid), new EquipmentEventCreated($eevent));
 
+        foreach((new Equipment)->qualifiedUserList($equipment) as $qualifiedUser){
+            Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
+        }
+        
         $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
         return redirect()->route('portal-main');
     }
