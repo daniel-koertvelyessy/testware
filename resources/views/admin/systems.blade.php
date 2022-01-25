@@ -966,7 +966,7 @@
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">
                                                                     {{__('Anforderungstyp löschen')}} <i
-                                                                        class="fas fa-trash-alt"
+                                                                            class="fas fa-trash-alt"
                                                                     ></i>
                                                                 </button>
                                                             </div>
@@ -1161,7 +1161,7 @@
                                                                 </select>
                                                                 <button class="btn btn-outline-danger">{{__('Dokumententyp löschen')}}
                                                                     <i
-                                                                        class="fas fa-trash-alt"
+                                                                            class="fas fa-trash-alt"
                                                                     ></i></button>
                                                             </div>
                                                             <p class="text-danger lead">{{__('Bitte beachten Sie, dass mit diesem Typ verknüpfte Objekte verloren gehen können! Bitte prüfen Sie vorab, welche von der Löschung betroffen sein werden!')}}</p>
@@ -1196,47 +1196,58 @@
                                 <h2 class="h3">{{ __('Verfügbare Label') }}</h2>
                                 <div class="list-group">
                                     @forelse(\App\EquipmentLabel::all() as $label)
-                                    <div class="list-group-item list-group-item-action">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">{{ $label->label }}</h5>
-                                            <small>{{ $label->created_at->DiffForHumans() }}</small>
-                                        </div>
-                                        <p class="mb-1">{{ $label->name }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="small">
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{ $label->label }}</h5>
+                                                <small>{{ $label->created_at->DiffForHumans() }}</small>
+                                            </div>
+                                            <p class="mb-1">{{ $label->name }}</p>
+                                            <div class="d-flex justify-content-between align-items-center ">
+                                                <div class="small d-flex flex-row">
                                             <span>
-                                                <i class="far fa-check-square fa-fw"></i>
+                                               {!!  $label->show_labels ? '<i class="far fa-check-square
+                                               fa-fw"></i>' :
+                                                '<i class="far fa-square fa-fw"></i>' !!}
+
+
                                                 {{ __('Labels zeigen') }}
                                             </span>
-                                                <span>
-                                                <i class="far fa-check-square fa-fw"></i>
+                                            <span>
+                                                {!!  $label->show_inventory ? '<i class="far fa-check-square
+                                               fa-fw"></i>' : '<i class="far fa-square fa-fw"></i>' !!}
                                                 {{ __('Inventarnummer zeigen') }}
                                             </span>
-                                                <span>
-                                                <i class="far fa-check-square fa-fw"></i>
+                                            <span>
+                                               {!!  $label->show_location ? '<i class="far fa-check-square
+                                               fa-fw"></i>'
+                                                : '<i class="far fa-square fa-fw"></i>' !!}
                                                 {{ __('Stellplatz zeigen') }}
                                             </span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <form action="{{ route('equipmentlabel.copy',$label->id) }}"
+                                                          method="POST"
+                                                    >
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-outline-secondary">{{ __('Kopieren') }}</button>
+                                                    </form>
+
+                                                    <button class="btn btn-sm btn-outline-primary ml-2 btnLoadLabelLayout"
+                                                            data-routeshow="{{ route('equipmentlabel.show',$label) }}"
+                                                            data-labelid="{{ $label->id }}"
+                                                    >{{ __('Laden') }}</button>
+
+                                                    <button class="btn btn-sm btn-outline-danger ml-2 btnDeleteLabelLayout"
+                                                            data-routeshow="{{ route('equipmentlabel.destroy',$label) }}"
+                                                            data-labelid="{{ $label->id }}"
+                                                    >{{ __('Löschen') }}</button>
+
+                                                </div>
                                             </div>
-                                            <div class="d-flex justify-content-between">
-                                                <form action="{{ route('equipmentlabel.copy',$label->id) }}" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-outline-secondary">{{ __('Kopieren') }}</button>
-                                                </form>
 
-                                                <button class="btn btn-sm btn-outline-primary ml-2 btnLoadLabelLayout"
-                                                        data-routeshow="{{ route('equipmentlabel.show',$label) }}"
-                                                        data-labelid="{{ $label->id }}">{{ __('Laden') }}</button>
-
-                                                <button class="btn btn-sm btn-outline-danger ml-2 btnDeleteLabelLayout"
-                                                        data-routeshow="{{ route('equipmentlabel.destroy',$label) }}"
-                                                        data-labelid="{{ $label->id }}">{{ __('Löschen') }}</button>
-
-                                            </div>
                                         </div>
-
-                                    </div>
                                     @empty
-                                    <x-notifyer>{{ __('Keine Daten gefunden') }}</x-notifyer>
+                                        <x-notifyer>{{ __('Keine Daten gefunden') }}</x-notifyer>
                                     @endforelse
 
                                 </div>
@@ -1377,63 +1388,69 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="show_labels"
-                                                           name="show_labels"
-                                                           checked
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="show_labels"
-                                                    >{{ __('Zeige Labels') }}</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="show_inventory"
-                                                           name="show_inventory"
-                                                           checked
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="show_inventory"
-                                                    >{{ __('Zeige Inventarnummer') }}</label>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="show_labels"
+                                                               name="show_labels"
+                                                               checked
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="show_labels"
+                                                        >{{ __('Zeige Labels') }}</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="show_inventory"
+                                                               name="show_inventory"
+                                                               checked
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="show_inventory"
+                                                        >{{ __('Zeige Inventarnummer') }}</label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input"
+                                                               id="show_location"
+                                                               name="show_location"
+                                                               checked
+                                                        >
+                                                        <label class="custom-control-label"
+                                                               for="show_location"
+                                                        >{{ __('Zeige Stellplatz') }}</label>
+                                                    </div>
                                                 </div>
 
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox"
-                                                           class="custom-control-input"
-                                                           id="show_location"
-                                                           name="show_location"
-                                                           checked
-                                                    >
-                                                    <label class="custom-control-label"
-                                                           for="show_location"
-                                                    >{{ __('Zeige Stellplatz') }}</label>
-                                                </div>
-                                                </div>
 
-
-                                            <div class="col">
-                                                <x-textfield type="number"
-                                                             id="qrcode_y"
-                                                             label="{{ __('y - Position QR-Code') }} [y]"
-                                                />
-                                            </div>
-                                            <div class="col">
-                                                <x-textfield type="number"
-                                                             id="qrcode_x"
-                                                             label="{{ __('x - Position QR-Code') }} [x]"
-                                                />
-                                            </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="qrcode_y"
+                                                                 label="{{ __('y - Position QR-Code') }} [y]"
+                                                    />
+                                                </div>
+                                                <div class="col">
+                                                    <x-textfield type="number"
+                                                                 id="qrcode_x"
+                                                                 label="{{ __('x - Position QR-Code') }} [x]"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <x-btnMain>{{ __('Label speichern') }} <i class="fas fa-download ml-2"></i></x-btnMain>
+                                            <x-btnMain>{{ __('Label speichern') }} <i class="fas fa-download ml-2"></i>
+                                            </x-btnMain>
 
-                                            <a href="#" class="btn btn-outline-secondary" type="button" id="btnTestLabelLayout" target="_blank">
+                                            <a href="#"
+                                               class="btn btn-outline-secondary"
+                                               type="button"
+                                               id="btnTestLabelLayout"
+                                               target="_blank"
+                                            >
                                                 {{ __('Label Layout testen') }}
                                                 <i class="fas fa-qrcode ml-2"></i>
                                             </a>
@@ -1492,7 +1509,7 @@
                                     </div>
 
                                     <x-btnMain block="1">{{ __('Format speichern') }} <span
-                                            class="fas fa-download ml-2"
+                                                class="fas fa-download ml-2"
                                         ></span></x-btnMain>
 
                                 </form>
@@ -2309,9 +2326,11 @@
                     $('#label_id').val(res.id);
                     $('#label').val(res.label);
                     $('#name').val(res.name);
-                    $('#show_labels').val(res.show_labels);
-                    $('#show_inventory').val(res.show_inventory);
-                    $('#show_location').val(res.show_location);
+                    (res.show_labels) ? $('#show_labels').prop('checked', true) : $('#show_labels').prop('checked',false);
+                    (res.show_inventory) ? $('#show_inventory').prop('checked', true) : $('#show_inventory').prop('checked',false);
+                    (res.show_location) ? $('#show_location').prop('checked', true) : $('#show_location').prop('checked',false);
+
+
                     $('#label_w').val(res.label_w);
                     $('#Label_h').val(res.Label_h);
                     $('#label_ml').val(res.label_ml);
@@ -2324,11 +2343,10 @@
                     $('#logo_h').val(res.logo_h);
                     $('#logo_w').val(res.logo_w);
                     $('#logo_svg').val(res.logo_svg);
-                    $('#btnTestLabelLayout').attr('href','/test_equipment_label/'+res.id)
-               }
+                    $('#btnTestLabelLayout').attr('href', '/test_equipment_label/' + res.id)
+                }
             });
         });
-
 
 
     </script>

@@ -1152,6 +1152,15 @@
 
 
         $('#b_label').blur(function (){
+            let label = $(this)
+                .val()
+                // .toLowerCase()
+                .trim();
+            const rex = /[^a-zA-Z0-9_.-]/g;
+            $(this)
+                .val(label.replace(rex, "_"))
+                .attr('title', 'Leer- und Sonderzeichen werden in diesem Feld automatisch entfernt!')
+                .tooltip('show');
             const modalMode = $('#frmModalSetBuilding').find('#modalType').val();
             if (modalMode!=='edit') {
                 const label_nd = $('#b_label');

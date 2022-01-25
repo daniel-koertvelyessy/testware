@@ -25,6 +25,7 @@ Route::get('admin/reports/template', 'AdminController@indexReportsTemplate')->na
 Route::get('admin/systems', 'AdminController@systems')->name('systems');
 Route::get('storageDataPort', 'AdminController@storageDataPort')->name('storageDataPort');
 Route::get('getLocationTree', 'LocationsController@getLocationTree')->name('getLocationTree');
+Route::get('location.remove/{location}', 'LocationsController@remove')->name('location.remove');
 //    Route::get('registerphone', 'AdminController@systems')->name('registerphone');
 
 

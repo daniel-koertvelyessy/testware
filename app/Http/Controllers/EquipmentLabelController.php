@@ -33,15 +33,16 @@ class EquipmentLabelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function store(Request $request)
-    : RedirectResponse {
+    public function store(Request $request): RedirectResponse
+    {
+
         if (isset($request->id)) {
             $msg = ($this->update($request, EquipmentLabel::find($request->id))) ? __('Das Label wurde aktualisiert') : __('Das Label konnte nicht aktualisiert werden');
-        }elseif ((new EquipmentLabel)->add($request)) {
+        } elseif ((new EquipmentLabel)->add($request)) {
             $msg = __('Das Label wurde gespeichert');
         } else {
             $msg = __('Ein Fehler ist beim Speichern passiert!');
@@ -54,20 +55,37 @@ class EquipmentLabelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  EquipmentLabel  $equipmentlabel
+     * @param Request $request
+     * @param EquipmentLabel $equipmentlabel
      *
      * @return bool
      */
     public function update(Request $request, EquipmentLabel $equipmentlabel)
     {
-       return $equipmentlabel->update($this->validateEquipmentLabel());
+        $equipmentlabel->name = $request->name;
+        $equipmentlabel->label = $request->label;
+        $equipmentlabel->label_w = $request->label_w;
+        $equipmentlabel->Label_h = $request->Label_h;
+        $equipmentlabel->label_mt = $request->label_mt;
+        $equipmentlabel->label_ml = $request->label_ml;
+        $equipmentlabel->label_mr = $request->label_mr;
+        $equipmentlabel->logo_svg = $request->logo_svg;
+        $equipmentlabel->logo_h = $request->logo_h;
+        $equipmentlabel->logo_w = $request->logo_w;
+        $equipmentlabel->logo_x = $request->logo_x;
+        $equipmentlabel->logo_y = $request->logo_y;
+        $equipmentlabel->qrcode_y = $request->qrcode_y;
+        $equipmentlabel->qrcode_x = $request->qrcode_x;
+        $equipmentlabel->show_labels = isset($request->show_labels);
+        $equipmentlabel->show_inventory = isset($request->show_inventory);
+        $equipmentlabel->show_location = isset($request->show_location);
+        return $equipmentlabel->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  EquipmentLabel  $equipmentlabel
+     * @param EquipmentLabel $equipmentlabel
      *
      * @return Response
      */
@@ -79,7 +97,7 @@ class EquipmentLabelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  EquipmentLabel  $equipmentlabel
+     * @param EquipmentLabel $equipmentlabel
      *
      * @return Response
      */
@@ -91,7 +109,7 @@ class EquipmentLabelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentLabel  $equipmentlabel
+     * @param EquipmentLabel $equipmentlabel
      *
      * @return Response
      */
@@ -103,8 +121,7 @@ class EquipmentLabelController extends Controller
     /**
      * @return array
      */
-    public function validateEquipmentLabel()
-    : array
+    public function validateEquipmentLabel(): array
     {
         return request()->validate([
 //            'eq_inventar_nr'     => [
@@ -114,12 +131,12 @@ class EquipmentLabelController extends Controller
 //                Rule::unique('equipment')->ignore(request('id'))
 //            ],
 
-'label'          => 'required|max:20', 'name' => 'max:100',
-'show_labels'    => '', 'show_inventory' => '',
-'show_location'  => '', 'label_w' => '', 'Label_h' => '',
-'label_ml'       => '', 'label_mt' => '', 'label_mr' => '', 'qrcode_y' => '',
-'qrcode_x'       => '', 'logo_y' => '', 'logo_x' => '', 'logo_h' => '',
-'logo_w'         => '', 'logo_svg' => ''
-        ]);
+'label'         => 'required|max:20', 'name' => 'max:100',
+'show_labels'   => '', 'show_inventory' => '',
+'show_location' => '', 'label_w' => '', 'Label_h' => '',
+'label_ml'      => '', 'label_mt' => '', 'label_mr' => '', 'qrcode_y' => '',
+'qrcode_x'      => '', 'logo_y' => '', 'logo_x' => '', 'logo_h' => '',
+'logo_w'        => '', 'logo_svg' => ''
+                                   ]);
     }
 }

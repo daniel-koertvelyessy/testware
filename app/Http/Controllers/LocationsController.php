@@ -180,6 +180,92 @@ class LocationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Location $location
+     * @param Request $request
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function remove(Location $location){
+
+        if (!Auth::user()->isSysAdmin()){
+            request()->session()->flash('status', __('Betriebe können nur vom SysAdmin gelöscht werden!'));
+            return back();
+        }
+
+        return view('admin.standorte.location.remove',
+                    [
+                        'location' => $location,
+                        'address' => $location->Adresse,
+                        'buildings' => $location->Building,
+                        'employee' => $location->Profile,
+                    ]
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Location $location
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function destroy(Location $location, Request $request){
+
+        if (!Auth::user()->isSysAdmin()){
+            $request->session()->flash('status', __('Betriebe können nur vom SysAdmin gelöscht werden!'));
+            return back();
+        }
+
+        $deleteAddress = false;
+        $deleteEmployee = false;
+        $deleteLocationObjects = false;
+
+        if (isset($request->deleteAddress)) {
+            $deleteAddress = true;
+   //         Adresse::find($request->deleteAddress)->delete();
+        }
+        if (isset($request->deleteEmployee)) {
+            $deleteEmployee = true;
+      //      Profile::find($request->deleteEmployee)->delete();
+        }
+        $delObj = 0;
+        if (isset($request->deleteLocationObjects)) {
+            $deleteLocationObjects = true;
+            foreach($location->Building as $building){
+                foreach($building->room as $room){
+                    foreach($room->stellplatzs as $stellplatz){
+                        $stellplatz->delete();
+                        $delObj++;
+                    }
+                    $room->delete();
+                    $delObj++;
+                }
+                $building->delete();
+                $delObj++;
+            }
+        }
+
+        Storage::where('storage_uid',$request->storage_id)->delete();
+
+        \Log::info(__('Standort gelöscht'),[
+            'location-id'=>$location->id,
+            'user-id' => Auth::user()->id,
+            'delete-address' => $deleteAddress,
+            'delete-employee' => $deleteEmployee,
+            'delete-locationObjects' => ['numObj' => $delObj, 'set'=>$deleteLocationObjects],
+        ]);
+
+        $location->delete();
+        $request->session()->flash('status', __('Der Betrieb wurde gelöscht / :num Objekte gelöscht',['num'=>$delObj]));
+        return redirect()->route('location.index');
+
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
      * @param  Request $request
      *
      * @return bool
@@ -221,8 +307,8 @@ class LocationsController extends Controller
                 __('Gebäude'),
                 Building::where('location_id', $location->id)->count()
             ],
-
         ];
+
         if (Building::where('location_id', $location->id)->count() > 0) {
             foreach (Building::where('location_id', $location->id)->get() as $building) {
                 if (Room::where('building_id', $building->id)->count() > 0) {
