@@ -137,10 +137,13 @@ class ContactController extends Controller
      *
      * @param  Contact $contact
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy(Contact $contact)
     {
-        //
+        request()->session()->flash('status', __('Der Kontakt <strong>:label</strong> wurde gelöscht!', ['label' => $contact->con_name]));
+        $contact->delete();
+        return redirect()->route('contact.index');
+
     }
 }

@@ -256,6 +256,10 @@
                         <tr>
                             <td style="vertical-align: middle">
                                 {{ $produkt->prod_nummer }}
+                                @if($produkt->ProduktAnforderung->count() === 0)
+                                    <i class="fas fa-exclamation-circle text-warning" title="{{ __('Es sind keine Anforderungen hinterlegt!') }}"></i>
+                                    @endif
+
                             </td>
                             <td style="vertical-align: middle">
                                 {{ $produkt->prod_name }}

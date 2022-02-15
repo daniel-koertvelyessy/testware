@@ -58,7 +58,13 @@ class Equipment extends Model
 
     public function search($term)
     {
-        return Equipment::where('eq_inventar_nr', 'like', '%' . $term . '%')->orWhere('eq_serien_nr', 'like', '%' . $term . '%')->orWhere('eq_inventar_nr', 'like', '%' . $term . '%')->orWhere('eq_text', 'like', '%' . $term . '%')->orWhere('eq_uid', 'like', '%' . $term . '%')->orWhere('eq_name', 'like', '%' . $term . '%')->get();
+        return Equipment::whereRaw('LOWER(eq_inventar_nr) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(eq_serien_nr) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(eq_inventar_nr) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(eq_text) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(eq_uid) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(eq_name) LIKE ?', '%' . strtolower($term) . '%')
+            ->get();
     }
 
     /**

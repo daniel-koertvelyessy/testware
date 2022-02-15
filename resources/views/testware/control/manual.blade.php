@@ -1,11 +1,11 @@
 @extends('layout.layout-admin')
 
 @section('mainSection')
-    {{ ( $is_test_internal) ?  __('Interne Prüfung erfassen'):__('Externe Prüfung erfassen') }}
+    {{   __('Manuelle Prüfung erfassen') }}
 @endsection
 
 @section('pagetitle')
-    {{ ( $is_test_internal) ?  __('Interne Prüfung erfassen') :__('Externe Prüfung erfassen')}} &triangleright; testWare
+    {{ __('Manuelle Prüfung erfassen')}} &triangleright; testWare
 @endsection
 
 @section('menu')
@@ -120,7 +120,7 @@
         <div class="container">
             <div class="row mb-4 d-none d-md-block">
                 <div class="col">
-                    <h1 class="h3">{{ ( $is_test_internal) ? __('Interne Prüfung erfassen'): __('Externe Prüfung erfassen')  }}</h1>
+                    <h1 class="h3">{{  __('Manuelle Prüfung erfassen')  }}</h1>
                 </div>
             </div>
             <nav>
@@ -147,7 +147,6 @@
                                aria-selected="false"
                             >{{ __('Prüfmittel') }}</a>
                         @endif
-
                         <a class="nav-link"
                            id="controlSteps-tab"
                            data-toggle="tab"
@@ -171,6 +170,21 @@
                  id="nav-tabContent"
             >
                 @csrf
+                <input type="hidden"
+                       name="qe_control_date_warn"
+                       id="qe_control_date_warn"
+                       value="{{ $requirement->an_control_interval }}"
+                >
+                <input type="hidden"
+                       name="anforderung_id"
+                       id="anforderung_id"
+                       value="{{ $requirement->id }}"
+                >
+                <input type="hidden"
+                       name="equipment_id"
+                       id="equipment_id"
+                       value="{{ $equipment->id }}"
+                >
                 <div class="tab-pane fade show active"
                      id="controlHead"
                      role="tabpanel"
@@ -178,40 +192,33 @@
                 >
                     <div class="row">
                         <div class="col">
+                            <h2 class="h4">{{ __('Prüfer')  }}</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <div class="row">
-                                <div class="col-md-10">
-
-                                    <x-selectfield id="user_id" label="{{ __('Prüfer')  }}">
-
-                                        @foreach($qualified_user_list as $qualified_user)
+                                <div class="col-md-5">
+                                    <x-selectfield id="user_id" label="{{ __('Benutzer')  }}">
+                                        @foreach(\App\User::all() as $qualified_user)
                                         <option value="{{ $qualified_user['id'] }}">
                                             {{ $qualified_user['name'] }}
                                         </option>
-
-
                                         @endforeach
                                     </x-selectfield>
-{{--
-                                    <x-staticfield id="controlUserName"
-                                                   label="{{__('Prüfer')}}"
-                                                   value="{{ auth()->user()->name }}"
-                                    />
-
-                                    <input type="hidden"
-                                           name="user_id"
-                                           id="user_id"
-                                           value="{{ auth()->user()->id }}"
-                                    >--}}
-                                    <input type="hidden"
-                                           name="equipment_id"
-                                           id="equipment_id"
-                                           value="{{ $test->equipment_id }}"
-                                    >
-                                    <input type="hidden"
-                                           name="control_equipment_id"
-                                           id="control_equipment_id"
-                                           value="{{ $test->id }}"
-                                    >
+                                    <div class="custom-control custom-checkbox mb-4">
+                                        <input type="checkbox" class="custom-control-input" id="setQualifiedUser" name="setQualifiedUser">
+                                        <label class="custom-control-label" for="setQualifiedUser">{{ __('Prüfer als befähigte Person dem Gerät zuordnen') }}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <x-selectfield id="equipment_qualified_firma" label="{{ __('Firma') }}">
+                                        @foreach(\App\Firma::all() as $firma)
+                                            <option value="{{ $firma->id }}">
+                                                {{ $firma->fa_name }}
+                                            </option>
+                                        @endforeach
+                                    </x-selectfield>
                                 </div>
                                 <div class="col-md-2">
                                     <x-datepicker id="control_event_date"
@@ -225,8 +232,7 @@
 
                     <div class="row">
                         <div class="col mb-3">
-                            <h2 class="h5">{{__('Prüfling')}} </h2>
-                            @php  $equipment = App\Equipment::find($test->equipment_id) @endphp
+                            <h2 class="h4">{{__('Prüfling')}} </h2>
                             <x-staticfield label="{{ __('Name') }}"
                                            id="eq_name"
                                            value="{{ $equipment->eq_name }}"
@@ -250,13 +256,13 @@
 
                     <div class="row">
                         <div class="col mb-3">
-                            <h2 class="h5">{{__('Prüfaufgabe')}} </h2>
+                            <h2 class="h4">{{__('Prüfaufgabe')}} </h2>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col mb-3">
-                            <p class="lead p-3 border">{{ $test->Anforderung->an_name }}</p>
+                            <p class="lead p-3 border">{{ $requirement->an_name }}</p>
                         </div>
                     </div>
                     <div class="mt-5 border-top pt-2">
@@ -280,12 +286,8 @@
                                     class="btn btn-sm btn-primary bentNextTab"
                                     data-showtab="#controlDone-tab"
                             >{{__('weiter')}}</button>
-
                         @endif
-
-
                     </div>
-
                 </div>
                 @if ($is_test_internal)
                     @if($control_equipment_required)
@@ -303,27 +305,26 @@
                                         btnL="{{__('hinzufügen')}}"
                                         class="btnAddControlEquipmentToList"
                                     >
-
-                                        @forelse (App\Equipment::all() as $controlEquipment)
-                                            @if($controlEquipment->getControlProductData() !== null)
-                                                @if($controlEquipment->ControlEquipment->first()->qe_control_date_due > now())
-                                                    <option value="{{ $controlEquipment->id }}">
-                                                        {{ $controlEquipment->eq_name  }}
-                                                    </option>
-                                                @else
-                                                    <option value="{{ $controlEquipment->id }}"
-                                                            disabled
-                                                    >{{ $controlEquipment->eq_name.' - '. $controlEquipment->eq_inventar_nr }} {{__('Prüfung überfällig!')}}
-                                                    </option>
-                                                @endif
+                                    @forelse (App\Equipment::all() as $controlEquipment)
+                                        @if($controlEquipment->getControlProductData() !== null)
+                                            @if($controlEquipment->ControlEquipment->first()->qe_control_date_due > now())
+                                                <option value="{{ $controlEquipment->id }}">
+                                                    {{ $controlEquipment->eq_name  }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $controlEquipment->id }}"
+                                                        disabled
+                                                >{{ $controlEquipment->eq_name.' - '. $controlEquipment->eq_inventar_nr }} {{__('Prüfung überfällig!')}}
+                                                </option>
                                             @endif
-                                        @empty
-                                            <option value="void"
-                                                    selected
-                                                    disabled
-                                            >{{__('Keine Prüfmittel gefunden')}}
-                                            </option>
-                                        @endforelse
+                                        @endif
+                                    @empty
+                                        <option value="void"
+                                                selected
+                                                disabled
+                                        >{{__('Keine Prüfmittel gefunden')}}
+                                        </option>
+                                    @endforelse
                                     </x-selectgroup>
 
                                 </div>
@@ -361,7 +362,7 @@
 
                                 <table class="table table-responsive-md table-borderless">
 
-                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->get() as $aci)
+                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$requirement->id)->get() as $aci)
 
                                             <tr>
                                                 <td colspan="4"
@@ -388,7 +389,6 @@
                                                         >
                                                             {{__('Details')}}
                                                         </button>
-
                                                         <div class="collapse"
                                                              id="taskDetails_{{ $aci->id }}"
                                                         >
@@ -437,7 +437,7 @@
                                                             </span>
                                                         @endif
                                                         </div>
-                                                        @endif
+                                                    @endif
                                                 </td>
                                                 <td style="min-width: 95px;" class="px-0">
                                                     @if($aci->aci_vaule_soll !== null)
@@ -689,8 +689,8 @@
                                                   value="{{
                                 now()->
                                 add(
-                                    $test->Anforderung->an_control_interval,
-                                    mb_strtolower($test->Anforderung->ControlInterval->ci_delta)
+                                    $requirement->an_control_interval,
+                                    mb_strtolower($requirement->ControlInterval->ci_delta)
                                     )
                                 ->toDateString()
                                 }}"
@@ -698,12 +698,12 @@
                                     <p class="lead">{{__('Erinnerung setzen')}}</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <x-textfield id="qe_control_date_warn" label="{{ __('Anzahl') }}" value="{{ $test->Anforderung->an_date_warn }}"/>
+                                            <x-textfield id="qe_control_date_warn" label="{{ __('Anzahl') }}" value="{{ $requirement->an_date_warn }}"/>
                                         </div>
                                         <div class="col-md-6">
                                             <x-selectfield id="control_interval_id" label="{{ __('Zeit') }}">
                                                 @foreach(\App\ControlInterval::all() as $CIitem)
-                                                    <option value="{{ $CIitem->id }}" {{ $test->Anforderung->warn_interval_id === $CIitem->id ? ' selected ' : '' }}>{{ $CIitem->ci_name }}</option>
+                                                    <option value="{{ $CIitem->id }}" {{ $requirement->warn_interval_id === $CIitem->id ? ' selected ' : '' }}>{{ $CIitem->ci_name }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>

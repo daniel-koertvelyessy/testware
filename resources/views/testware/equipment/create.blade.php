@@ -90,7 +90,7 @@
                     <input type="hidden"
                            name="produkt_id"
                            id="produkt_id"
-                           value="{{ $produkt }}"
+                           value="{{ $produkt->id }}"
                     >
                     <input type="hidden"
                            name="eq_uid"
@@ -107,7 +107,7 @@
                             <x-textfield id="eq_name"
                                          placeholder="{{ __('Eingabe startet Suche') }}"
                                          label="{{__('Bezeichnung')}}"
-                                         value="{{ App\Produkt::find($produkt)->prod_name  }}"
+                                         value="{{ App\Produkt::find($produkt->id)->prod_name  }}"
                             />
                         </div>
                         <div class="col-md-6">
@@ -139,10 +139,7 @@
                                 <span class="small text-muted @error( 'setStandOrtId') d-none @enderror ">{{__
                                 ('erforderliches Feld, max 20 Zeichen')}}</span>
                             </div>
-
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -177,7 +174,7 @@
                             <x-textfield id="eq_price"
                                          class="decimal"
                                          label="{{__('Kaufpreis')}}"
-                                         value="{{ App\Produkt::find($produkt)->prod_price }}"
+                                         value="{{ App\Produkt::find($produkt->id)->prod_price }}"
                             />
                         </div>
                         <div class="col-md-2">
@@ -207,7 +204,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            @foreach (\App\ProduktParam::where('produkt_id',$produkt )->get() as $produktParam)
+                            @foreach (\App\ProduktParam::where('produkt_id',$produkt->id )->get() as $produktParam)
                                 <x-textfield id="{{ $produktParam->pp_label }}"
                                              name="ep_value[]"
                                              label="{{ $produktParam->pp_name }}"
@@ -230,7 +227,31 @@
                             />
                         </div>
                     </div>
-                    <div class="row">
+
+                    @if($produkt->ProduktAnforderung->count() > 0)
+                        <x-selectfield id="anforderung_id"
+                                       label="{{ __('Anforderung für Funktionstest auswählen') }}"
+                        >
+                            @foreach($produkt->ProduktAnforderung as $anforderung)
+                                <option value="{{ $anforderung->anforderung_id }}">{{ $anforderung->Anforderung->an_name }}</option>
+                            @endforeach
+                        </x-selectfield>
+                    @else
+                        <p class="lead text-info">{{ __('Es sind keine Anforderungen für das Produkt hinterlegt worden. Bitte legen Sie fest, welche für den initialen Funktionstest verwendet werden soll. ') }}</p>
+                       <x-selectfield id="anforderung_id"
+                        label="{{ __('Anforderung für Funktionstest auswählen') }}"
+                        >
+                           @foreach(\App\Anforderung::all() as $anforderung)
+                               <option value="{{ $anforderung->id }}">{{ $anforderung->an_name }}</option>
+                           @endforeach
+                       </x-selectfield>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="setRequirementToProduct" name="setRequirementToProduct" value="1">
+                            <label class="custom-control-label" for="setRequirementToProduct">{{ __('Ausgewählte Anforderung dem Produkt zuordnen') }}</label>
+                        </div>
+                    @endif
+
+                   {{-- <div class="row">
                         <div class="col-md-6">
                             <h2 class="h5">{{__('Funktionsprüfung')}}</h2>
                             <div class="row mb-3">
@@ -329,11 +350,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                     <button id="btnAddNewEquipment"
                             type="button"
-                            class="btn btn-primary"
-                    >{{__('Gerät anlegen')}} <i class="fas fa-download ml-3"></i>
+                            class="btn btn-primary mt-2 mt-md-5"
+                    >{{__('Gerät anlegen und Funktionprüfung ausführen')}} <i class="fas fa-angle-right ml-3"></i>
                     </button>
                 </form>
             </div>

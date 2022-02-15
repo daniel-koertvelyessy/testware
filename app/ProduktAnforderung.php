@@ -37,4 +37,11 @@ class ProduktAnforderung extends Model
         return $this->hasMany(AnforderungControlItem::class);
     }
 
+    public function add($product_id, $requirement_id)
+    {
+        $this->produkt_id = $product_id;
+        $this->anforderung_id = $requirement_id;
+        return $this->save();
+    }
+
 }

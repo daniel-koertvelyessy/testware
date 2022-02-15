@@ -1,9 +1,13 @@
 # testWare
 
-Current version: 1.41
-
 ## Content
-testWare enables you manage the testing and maintanace of your location and equipment. To get started you need two steps:
+testWare enables you manage the testing and maintanace of your location and equipment. 
+
+Current version: `1.66.1`
+
+- [Install testWare instance](#install-testware-instance)
+- [testWare commands](#testware-commands)
+
 
 1. [Install testWare instance](#install-testware-instance)
 2. [Run the web-installer](#run-the-web-installer)
@@ -12,8 +16,8 @@ testWare enables you manage the testing and maintanace of your location and equi
 ## Install testWare instance
 
 There are mainly two ways to install your instance of testWare:
-- [LAPP /LAMP stack](#lapplamp-stack-lappstack)
-- [Docker](#docker-docker) 
+- [LAPP / LAMP stack](#lapplamp-stack)
+- [Docker](#docker) 
 
 ### LAPP/LAMP stack
 Make sure your server meets following requirements:
@@ -60,7 +64,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 
 ## Run testware artisan installer
-Within your project folder run the testWare installer command.
+Within your project folder run the testWare installer [command](#testware-commands).
 
 ```php
 php artisan testware:install
@@ -73,7 +77,7 @@ Using docker requires to
 ### docker-compose.yml
 Your example for a `docker-compose.yml` file with an external env files:
 ```
-version: "3.1"
+version: "3.1"  #  3.1 is the minimum version
 
 services:
   app:
@@ -91,7 +95,7 @@ services:
       - db
 
   db:
-    image: postgres:11
+    image: postgres:14
     restart: always
     env_file:
       - db.env
@@ -157,10 +161,10 @@ Start the docker containers use the following command `docker-compose up -d`
 If this is the first time you run the command, docker-compose will download the necessary docker images and initiate the enviorment. Depending on your internet connection this may take a minute or two. 
 > if you want to see the log output of the docker-compse steps just leave out the `-d` option which stands for `detachted`.
  
-Suppose the container name of the app is `testware-app` you can initiate the internal installation command with:
+Suppose the service name of the testWare applicaation is `app` you can initiate the internal installation [command](#testware-commands) with:
 
 ```bash
-docker-compose exec testware-app php artisan testware:install
+docker-compose exec app php artisan testware:install
 ```
 
 The `testware:install` command will guide you through the setup of the database and first user / employee. 
@@ -172,6 +176,198 @@ The web-installer initiates your company, location, users and employees. This st
 
 ## Start working with testWare
 You may start to build your enviorment with locations and equipment. See [firstSteps.md](firstSteps.md) for help and guidances.
+
+## testWare commands
+As soon your instance of testWare is up and running you have the possebility to run laravel related commands in console. Usually you do not need to worry about this as we got all covered. However, there are some specific  commands for your testWare instance avaliable. These commands follow the syntax `php artisan command:task {value} [options]`. Please note that using docker or other containeration deamon you need to prefix the syntax with the respective commands, e.g. for docker-compose the systax would be `docker-compose exec app php artisan command:task {value} [options]` (provided the service name for testWare in the docker-compose.yml is set to `app`. See the respective [section](#docker-composeyml) for details).
+
+In the following sections the header is the `command:task` command with respective explanations.
+
+---
+
+### testware:install
+`required value : `
+
+`options : `
+
+`example : testware:install'`
+
+
+This command lets you fill the database with initial values.
+
+> W A R N I N G 
+> 
+> Use this command only on a fresh system as it will overwrite existing data.
+> 
+> If you have an existing testWare application running please consider to make a backup of your database first. 
+
+> Hint: Values surrounded with [] are default ones. You can simply press *enter* to use them.
+
+After issuing a warning in the console you will have to confirm to start the process.
+
+```text
+Type [yes] to proceed or [no] to exit without changes. (yes/no) [no]:
+``` 
+
+Once confirmed the process starts, and you can decide to seed the database with default data or leave it empty.
+
+```text
+Fill database with default entries [yes] or leave it empty [no] ? (yes/no) [yes]:
+``` 
+
+The default data contains:
+
+- user roles (note that this feature is visible but not activated, yet)
+- list of EU countries
+- 3 Address types (Base, accounting address, delivery address)
+- 8 Control time intervals (Year, month, day etc.)
+- 3 building types (Office, workshop, storage)
+- 4 room types (Office, Assembly, storage room, material storage)
+- 2 product states (avaliable, locked)
+- 1 product category (none)
+- 4 equipment states (avaliable, damaged, repair, locked)
+- 3 compartment types (shelf compartment, drawer, storage location)
+- 6 document types (manual, function report, test report, drawing, regulation, requirement)
+
+In the next section you will be able to make a SysAdmin user. You will need this user to login and continue with the installtion process on the webbrowser.
+```text
+Create new user with SysAdmin privileges? (yes/no) [yes]:
+``` 
+
+Set the e-mail address of the user.
+```text
+E-Mail (used for login):
+``` 
+
+The process will ask you to confirm the provided address. This is to prevent a typeerror which would cause frustation uopn first loging attempts.
+```text
+Confirm given e-mail address : my.name@domain.tld (yes/no) [no]:
+``` 
+
+Then proceed to add the display name. This will be shown in the upper right corner of the menubar. Therefore, be mindfull of too long names ;) 
+```text
+Username (will be displayed in app):
+``` 
+
+Provide the full name of the user
+```text
+Name:
+``` 
+
+Set your language for the testWare menu
+```text
+ Language [de]:
+```
+
+Provide a password. It needs to have a minimum of 8 charakters.
+```text
+ Password (min. 8 charakters):
+```
+
+Confirm the password.
+```text
+Confirm password:
+```
+
+
+The SysAdmin user will be created with the provided credentials. If the SysAdmin user is an employee as well you can use the already provided Data to creat a new employee.
+```text
+Is this user going to be an employee as well? (yes/no) [no]:
+```
+
+An empoyee dataset requires as a minimum the name. The installer will try to guess the name and set it as default. E.g. if you provided Foo Bar as name, the default value will be set to Bar.
+```text
+ Name [Bar]:
+```
+
+You may want to fill out the optional data for the empolyee. You can skip this step and fillout the remaining data in the testWare frontend later.
+```text
+Is this user going to be an employee as well? (yes/no) [no]:
+```
+
+If you choose to the employee data you will be prompted for the following fields.
+```text
+Surename [default]: 
+Birthday (YYYY-MM-DD) : 
+Employee ID : 
+Employed on (YYYY-MM-DD) : 
+Phone-# : 
+Mobile-# : 
+E-Mail [default value the e-mail already provided] : 
+```
+The [default] values for *Surename* and *E-Mail* will be taken from the SysAdmin user account credentials. 
+
+> Note that these are all optinal fields, you can leave them empty if they do not apply.
+
+After completion the installer will generate a random key for encryption of the user sessions and a key to cypher external links used in the equipment QR-codes, called *hskey*. You do not need to do anything here.
+```text
+Generate new encryption keys ...
+```
+You will find the keys in your `.env` file at the entries `APP_KEY` and `APP_HSKEY`
+
+This is the last step. You can use the system from this point on. If you want to have a guide to create your company and location you will find a form at `https://domain.tld/installer`
+```text
+Please use the newly created user to login at https://domain.tld/installer to set your company, location and complete the setup process.
+```
+
+---
+
+### testware:hskey
+`required value : `
+
+`options : `
+
+`example : testware:hskey`
+
+This command will generate a new value for the hskey which is used as a salt in the generation for a link in the equipment QR-Code.
+
+> 
+> W A R N I N G
+> 
+> If you have already used the command `testware:install` an entry for the key exists. 
+> Changing this key will make all printed QR-Codes invalid. Any old link will be denied from the testWare instance.
+> 
+
+---
+
+### testware:resetuserpw
+`required value : {user}`
+
+`options : `
+
+`example : testware:resetuserpw 'user.email.address@domain.tld'`
+
+It might happen, that a password is forgotten / lost to the user. By design testWare has the *password forgotten* feature deactivated since it requires a smtp server to send out e-mails with a token etc. If you want to activate the process you may want to get in touch with us or view the laravel documentation for further steps.
+
+The command requres the e-mail address of a registered user in order to work. The command will terminate with a respective error output if the user could not be found.
+
+Once the user is found you will be promted to provide the new password. **Note that your keyboard input is not visible!**
+
+After confirmation with the same password the selected user will be able to login with the provided password. All running sessions of the user will be terminated and data migth be lost if not saved. 
+
+---
+
+### testware:promotesysadmin
+`required value : {user}`
+
+`options : `
+
+`example : testware:promotesysadmin 'user.email.address@domain.tld'`
+
+`SysAdmin` is a super-user role which has total control over the testWare application. Usually, such user is set during the installation process. However, a SysAdmin can promote / demote of this user-role. testWare has a built-in feature to prevent a SysAdmin from demotion is no other SysAdmin is found.
+
+If for any reason there is no user with the SysAdmin role left, you cannot promote on through the web-frontend. In order to achieve this the command `testware:promotesysadmin` has been implemented as a fallback option.
+
+---
+
+### testware:demotesysadmin
+`required value : {user}`
+
+`options : `
+
+`example : testware:demotesysadmin 'user.email.address@domain.tld'`
+
+Similar to promotion, you can also remove the SysAdmin status of a given user.
+
 
 ---
 

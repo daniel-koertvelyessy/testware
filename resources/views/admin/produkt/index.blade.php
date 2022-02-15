@@ -60,8 +60,13 @@
                                 </span>
 
                                 @if($produkt->ProductQualifiedUser->count()===0)
-                                    <span class="fas fa-exclamation-triangle text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
+                                    <span class="fas fa-user-md text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
                                 @endif
+
+                                @if($produkt->ProduktAnforderung->count()===0)
+                                    <span class="fas fa-stethoscope text-warning" title="{{ __('Es ist keine Anforderung hinterlegt') }}"></span>
+                                @endif
+
                             </td>
                             @if(Auth::user()->isSysAdmin())
                             <td>

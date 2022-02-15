@@ -957,13 +957,13 @@ class AdminController extends Controller
 
     public function getStorageIdListAll(Request $request)
     {
-        $loc = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,l_name as name'))->distinct()->join('locations', 'storages.storage_uid', '=', 'locations.storage_id')->where('storage_label', 'like', '%' . $request->term . '%')->orWhere('l_name', 'like', '%' . $request->term . '%')->orWhere('l_beschreibung', 'like', '%' . $request->term . '%')->get();
+        $loc = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,l_name as name'))->distinct()->join('locations', 'storages.storage_uid', '=', 'locations.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(l_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(l_beschreibung) LIKE ?', '%' . strtolower($request->term) . '%')->get();
 
-        $bul = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,b_name as name'))->distinct()->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')->where('storage_label', 'like', '%' . $request->term . '%')->orWhere('b_name', 'like', '%' . $request->term . '%')->orWhere('b_description', 'like', '%' . $request->term . '%')->get();
+        $bul = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,b_name as name'))->distinct()->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(b_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(b_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
 
-        $rom = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,r_name as name'))->distinct()->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')->where('storage_label', 'like', '%' . $request->term . '%')->orWhere('r_name', 'like', '%' . $request->term . '%')->orWhere('r_description', 'like', '%' . $request->term . '%')->get();
+        $rom = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,r_name as name'))->distinct()->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(r_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(r_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
 
-        $stp = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,sp_name as name'))->distinct()->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')->where('storage_label', 'like', '%' . $request->term . '%')->orWhere('sp_name', 'like', '%' . $request->term . '%')->orWhere('sp_description', 'like', '%' . $request->term . '%')->get();
+        $stp = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,sp_name as name'))->distinct()->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(sp_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(sp_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
 
         return [
             'loc' => $loc,

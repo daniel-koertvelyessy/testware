@@ -23,39 +23,39 @@
                 <table class="table table-striped" id="tabControlListe">
                     <thead>
                     <tr>
+                        <th>@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
                         <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventarnummer'))</th>
-                        <th>@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th>@sortablelink('qe_control_date_due', __('Fällig'))</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($controlItems as $controlItem)
                         <tr>
+                            <td>
+                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
+                                    <span class="d-md-none">
+                                        {{ $controlItem->Anforderung->an_label }}
+                                    </span>
+                                    <span class="d-none d-md-table-cell">
+                                    @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
+                                        <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
+                                        {{ $controlItem->Anforderung->an_name }}
+                                        </a>
+                                        <span>
+                                        {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
+                                        </span>
+                                    @else
+                                        {{ $controlItem->Anforderung->an_name }}
+                                    @endif
+                                    </span>
+                                </a>
+                            </td>
                             <td class="d-none d-md-table-cell">
                                 {{ $controlItem->Equipment->eq_name }}
                             </td>
                             <td>
-                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
-                            </td>
-                            <td>
-                                <span class="d-md-none">
-                                    {{ $controlItem->Anforderung->an_label }}
-                                </span>
-
-                                <span class="d-none d-md-table-cell">
-                                @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
-                                    <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
-                                        {{ $controlItem->Anforderung->an_name }}
-                                    </a>
-                                    <span>
-                                        {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
-                                    </span>
-
-                                @else
-                                    {{ $controlItem->Anforderung->an_name }}
-                                @endif
-                                    </span>
+                                <a href="{{ route('equipment.show',['equipment' => $controlItem->Equipment]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
                             </td>
                             <td>
                                 {!! $controlItem->checkDueDate($controlItem) !!}

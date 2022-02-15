@@ -284,7 +284,7 @@
     >
         <div class="modal-dialog modal-lg modal-fullscreen-md-down">
             <div class="modal-content">
-                <form action="{{ route('produkt.destroy',['produkt'=>$produkt->id]) }}"
+                <form action="{{ route('produkt.destroy',$produkt) }}"
                       method="POST"
                       class="needs-validation"
                       id="frmDeleteProdukt"

@@ -103,6 +103,25 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-textfield id="an_date_warn" label="{{__('Vorwarnzeit für Prüfungen')}}" value="{{ $anforderung->an_date_warn }}" />
+                        </div>
+                        <div class="col-md-6">
+                            <x-selectfield id="warn_interval_id" label="{{__('Zeit')}}">
+                                @foreach (App\ControlInterval::all() as $controlInterval)
+                                    <option value="{{ $controlInterval->id }}"
+                                            @if ($controlInterval->id === $anforderung->warn_interval_id)
+                                            selected
+                                        @endif
+                                    >
+                                        {{ $controlInterval->ci_label }}
+                                    </option>
+                                @endforeach
+                            </x-selectfield>
+                        </div>
+                    </div>
+
                     <x-textarea id="updt_an_description" name="an_description" label="{{__('Beschreibung')}}" value="{{ $anforderung->an_description }}"/>
 
                     <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>

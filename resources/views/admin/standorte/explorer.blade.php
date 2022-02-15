@@ -371,7 +371,7 @@
         </div>
     </div>
 
-    <x-modals.form_modal methode="DELETE"
+    <x-modals.form_modal method="DELETE"
                          modalRoute="{{ route('destroyBuildingAjax') }}"
                          modalId="modalDeleteBuilding"
                          modalType="danger"
@@ -389,7 +389,7 @@
         <p class="mx-3 mt-4 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
     </x-modals.form_modal>
 
-    <x-modals.form_modal methode="DELETE"
+    <x-modals.form_modal method="DELETE"
                          modalRoute="{{ route('room.destroyRoomAjax') }}"
                          modalId="modalDeleteRoom"
                          modalType="danger"
@@ -407,7 +407,7 @@
         <p class="mx-3 mt-4 text-danger lead">{{__('Der Löschvorgang ist permanent und kann nicht wieder rückgängig gemacht werden.')}}</p>
     </x-modals.form_modal>
 
-    <x-modals.form_modal methode="DELETE"
+    <x-modals.form_modal method="DELETE"
                          modalRoute="{{ route('destroyStellplatzAjax') }}"
                          modalId="modalDeleteCompartment"
                          modalType="danger"

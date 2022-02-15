@@ -109,7 +109,7 @@ class AdresseController extends Controller
      * @param  Request $request
      * @param  Adresse $adresse
      *
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application|Redirector|RedirectResponse
      * @throws Exception
      */
     public function destroy(Request $request, Adresse $adresse)

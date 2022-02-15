@@ -14,7 +14,7 @@ class EquipmentParam extends Model
      *
      * @return bool
      */
-    public function addEquipmnt(
+    public function addEquipment(
         int $param_id,
         string $param_value,
         int $equipment_id

@@ -13,7 +13,7 @@
 @endsection
 
 @section('modals')
-    <x-modals.form_modal methode="DELETE"
+    <x-modals.form_modal method="DELETE"
                     modalRoute="{{ route('adresse.destroy',$adresse) }}"
                     modalId="modalDeleteProfile"
                     modalType="danger"

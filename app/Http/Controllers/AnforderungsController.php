@@ -61,7 +61,6 @@ class AnforderungsController extends Controller
     public function store(Request $request)
     {
         Anforderung::create($this->validateAnforderung());
-
         $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde angelegt!');
         return back();
     }
@@ -79,6 +78,8 @@ class AnforderungsController extends Controller
             'an_control_interval' => 'integer',
             'control_interval_id' => '',
             'verordnung_id'       => '',
+            'an_date_warn'       => '',
+            'warn_interval_id'       => '',
             'anforderung_type_id' => 'bail|required|integer',
         ]);
     }
@@ -93,7 +94,6 @@ class AnforderungsController extends Controller
     public function storeAnObjekt(Request $request)
     {
         AnforderungObjekt::create($this->validateObjektAnforderung());
-
         $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde zugewiesen!');
         return back();
     }

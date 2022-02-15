@@ -11,7 +11,8 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Produkt;
-use App\User;
+    use App\ProduktAnforderung;
+    use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -318,6 +319,8 @@ Route::get('storageMain', function () {
     ]);
 })->name('storageMain')->middleware('auth');
 
+Route::get('control.manual', 'ControlEquipmentController@manual')->name('control.manual')->middleware('auth');
+
 Route::post('addEquipmentFunctionControl', function (Request $request) {
 
     $equipment_id = $request->equipment_id;
@@ -374,7 +377,7 @@ Route::get('equipMain', function () {
 })->name('equipMain')->middleware('auth');
 
 Route::get('equipment.maker', function () {
-    $produktList = Produkt::sortable()->paginate(10);
+    $produktList = Produkt::where('prod_active','1')->with('ProduktAnforderung')->sortable()->paginate(10);
     return view('testware.equipment.maker', ['produktList' => $produktList]);
 })->name('equipment.maker')->middleware('auth');
 

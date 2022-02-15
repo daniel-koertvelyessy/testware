@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Http\Request;
 
 class ControlEquipment extends Model
 {
@@ -136,15 +137,17 @@ class ControlEquipment extends Model
         return $qualifiedUser;
     }
 
-    public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, $lastDate)
+    public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, Request $request)
     {
 
         $interval = $produktAnforderung->Anforderung->an_control_interval;
         $conInt = $produktAnforderung->Anforderung->control_interval_id;
         $zeit = ControlInterval::find($conInt);
-        $dueDate = date('Y-m-d', strtotime("+" . $interval . $zeit->ci_delta, strtotime($lastDate)));
-        $this->qe_control_date_last = $lastDate;
+        $dueDate = date('Y-m-d', strtotime("+" . $interval . $zeit->ci_delta, strtotime($request->qe_control_date_last)));
+        $this->qe_control_date_last = $request->qe_control_date_last;
         $this->qe_control_date_due = $dueDate;
+        $this->qe_control_date_warn = $request->qe_control_date_warn;
+        $this->control_interval_id = $request->control_interval_id;
         $this->anforderung_id = $produktAnforderung->anforderung_id;
         $this->equipment_id = $equipmemt_id;
         $this->save();

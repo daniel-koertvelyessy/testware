@@ -806,7 +806,7 @@
                                     @endif
                                 @empty
                                     <p class="text-muted text-center small">{{__('keine Dokumente zur Funtionsprüfung gefunden!')}}</p>
-                                    <button class="btn btn-lg btn-warning"
+                                    <button class="btn btn-lg btn-warning btn-block"
                                             data-toggle="modal"
                                             data-target="#modalAddEquipFuncTest"
                                     >

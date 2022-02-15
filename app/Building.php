@@ -118,6 +118,7 @@ class Building extends Model
         $this->b_we_has = $request->has('b_we_has') ? 1 : 0;
         $this->b_we_name = $request->b_we_name;
         $this->location_id = $request->location_id;
+        $this->storage_id = $request->storage_id;
         $this->building_type_id = $request->building_type_id;
         $buildingId = $this->save();
         return $buildingId > 0;

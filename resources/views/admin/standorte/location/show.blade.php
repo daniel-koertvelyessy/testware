@@ -19,6 +19,9 @@
                 <a href="/">{{__('Portal')}}</a>
             </li>
             <li class="breadcrumb-item">
+                <a href="{{ route('storageMain') }}">{{__('memStandorte')}}</a>
+            </li>
+            <li class="breadcrumb-item">
                 <a href="{{ route('location.index') }}">{{__('Standorte')}}</a>
             </li>
             <li class="breadcrumb-item active"

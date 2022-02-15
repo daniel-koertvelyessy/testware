@@ -48,14 +48,12 @@ class TestwareInstallAppCommand extends Command
      */
     public function handle(): int
     {
-        $this->info('* * * * * * * * * * * *   W A R N I N G   * * * * * * * * * * * ');
-        $this->info('* ');
-        $this->info('*          This installer will reset your database! ');
-        $this->info('*       All data will be lost and cannot be restored!');
-        $this->info('* ');
-        $this->info('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *');
-
-        $this->info(' ');
+        $this->error('                                                            ');
+        $this->error('                        W A R N I N G                       ');
+        $this->error('                                                            ');
+        $this->error('          This installer will reset your database!          ');
+        $this->error('       All data will be lost and cannot be restored!        ');
+        $this->error('                                                            ');
 
         if ($this->confirm('Type [yes] to proceed or [no] to exit without changes.', false)) {
             $output = '';
@@ -65,9 +63,8 @@ class TestwareInstallAppCommand extends Command
             } else {
                 Artisan::call('migrate:fresh');
             }
-            $this->info('Start working ... ');
-            $this->info(Artisan::output());
 
+            $this->info(Artisan::output());
             if ($this->confirm('Create new user with SuperAdmin privileges?', true)) {
                 $details = $this->getDetails();
                 $userID = $this->user->addInstallerUser($details);
@@ -86,8 +83,9 @@ class TestwareInstallAppCommand extends Command
                 }
             }
 
-            $this->info('Generate new encryption key ...');
+            $this->info('Generate new encryption keys ...');
             Artisan::call('key:generate');
+            Artisan::call('testware:hskey');
 
             $this->newLine(2);
 

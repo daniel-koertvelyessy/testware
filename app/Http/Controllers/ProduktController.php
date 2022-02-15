@@ -296,6 +296,7 @@ class ProduktController extends Controller
      */
     public function destroy(Produkt $produkt, Request $request)
     {
+
         $produkt->delete();
         $request->session()->flash('status', __('Das Produkt wurde gelöscht!'));
         return redirect(route('produkt.index'));
@@ -493,14 +494,14 @@ class ProduktController extends Controller
             'prod_name', 'pk_label',
             'prod_label')->distinct()->join('produkt_kategories',
             'produkts.produkt_kategorie_id', '=',
-            'produkt_kategories.id')->leftJoin('produkt_params', 'produkts.id',
-            '=', 'produkt_params.produkt_id')->where('prod_label', 'like',
-            '%'.$request->term.'%')->orWhere('prod_name', 'like',
-            '%'.$request->term.'%')->orWhere('prod_description', 'like',
-            '%'.$request->term.'%')->orWhere('prod_nummer', 'like',
-            '%'.$request->term.'%')->orWhere('pp_name', 'like',
-            '%'.$request->term.'%')->orWhere('pp_label', 'like',
-            '%'.$request->term.'%')->get();
+            'produkt_kategories.id')
+            ->leftJoin('produkt_params', 'produkts.id','=', 'produkt_params.produkt_id')
+            ->whereRaw('LOWER(prod_label) LIKE ?',  '%'.strtolower($request->term).'%')
+            ->orWhereRaw('LOWER(prod_name) LIKE ?',  '%'.strtolower($request->term).'%')
+            ->orWhereRaw('LOWER(prod_description) LIKE ?',  '%'.strtolower($request->term).'%')
+            ->orWhereRaw('LOWER(prod_nummer) LIKE ?',  '%'.strtolower($request->term).'%')
+            ->orWhereRaw('LOWER(pp_name) LIKE ?',  '%'.strtolower($request->term).'%')
+            ->orWhereRaw('LOWER(pp_label) LIKE ?',  '%'.strtolower($request->term).'%')->get();
     }
 
     /**

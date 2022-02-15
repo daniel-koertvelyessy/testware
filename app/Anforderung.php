@@ -24,9 +24,9 @@ class Anforderung extends Model
 
     public function search($term)
     {
-        return Anforderung::where('an_label', 'like', '%' . $term . '%')
-            ->orWhere('an_name', 'like', '%' . $term . '%')
-            ->orWhere('an_description', 'like', '%' . $term . '%')
+        return Anforderung::whereRaw('LOWER(an_label) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(an_name) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(an_description) LIKE ?', '%' . strtolower($term) . '%')
             ->get();
     }
 

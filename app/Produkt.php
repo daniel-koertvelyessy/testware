@@ -38,7 +38,11 @@ class Produkt extends Model
 
     public function search($term)
     {
-        return Produkt::where('prod_label', 'like', '%' . $term . '%')->orWhere('prod_name', 'like', '%' . $term . '%')->orWhere('prod_description', 'like', '%' . $term . '%')->orWhere('prod_nummer', 'like', '%' . $term . '%')->get();
+        return Produkt::whereRaw('LOWER(prod_label) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(prod_name) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(prod_description) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(prod_nummer) LIKE ?', '%' . strtolower($term) . '%')
+            ->get();
     }
 
     /**
