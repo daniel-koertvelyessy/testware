@@ -16,12 +16,7 @@
           Schema::table('anforderungs', function (Blueprint $table)
             {
                 $table->unsignedSmallInteger('an_date_warn')->nullable()->default(4);
-                $table->foreignId('control_interval_id')
-                    ->nullable()
-                    ->default('5')
-                    ->constrained()
-                    ->onDelete('set null')
-                    ->onUpdate('cascade');
+
             });
         }
 
@@ -35,7 +30,6 @@
            Schema::table('anforderungs', function (Blueprint $table)
             {
                 $table->dropColumn([
-                    'control_interval_id',
                     'an_date_warn'
                 ]);
             });
