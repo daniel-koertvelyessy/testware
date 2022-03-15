@@ -164,7 +164,7 @@ class ProduktController extends Controller
                 Rule::unique('produkts')->ignore(\request('id'))
             ], 'prod_name'     => '', 'prod_description' => '',
             'prod_nummer'      => [
-                'bail', 'alpha_dash', 'max:100',
+                'bail','required', 'alpha_dash', 'max:100',
                 Rule::unique('produkts')->ignore(\request('id'))
             ], 'prod_active'   => '', 'produkt_kategorie_id' => 'nullable',
             'equipment_label_id' => '',
@@ -241,7 +241,7 @@ class ProduktController extends Controller
         }
         $produkt_id = $produkt->id;
 
-        if (isset($request->anforderung_id)) {
+        if (is_array($request->anforderung_id)) {
             for ($i = 0; $i < count($request->anforderung_id); $i++) {
                 $prodAnfor = new ProduktAnforderung();
                 $prodAnfor->produkt_id = $produkt_id;

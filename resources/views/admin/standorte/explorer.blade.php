@@ -142,6 +142,7 @@
                         >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
+                                id="btnSubmitModalSetBuilding"
                                 class="btn btn-primary"
                         >{{__('Speichern')}}
                         </button>
@@ -253,6 +254,7 @@
                         >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
+                                id="btnSubmitModalSetRoom"
                                 class="btn btn-primary"
                         >{{__('Speichern')}}
                         </button>
@@ -362,6 +364,7 @@
                         >{{__('Abbruch')}}
                         </button>
                         <button type="submit"
+                                id="btnSubmitModalSetStellplatz"
                                 class="btn btn-primary"
                         >{{__('speichern')}}
                         </button>
@@ -1118,7 +1121,7 @@
                     url: "{{ route('getStellplatzData') }}",
                     data: {id},
                     success: (storagePlace) => {
-                        console.log(storagePlace);
+                //        console.log(storagePlace);
                         form.find('#sp_label').val(storagePlace.sp_label);
                         form.find('#storage_id_compartment').val(storagePlace.storage_id);
                         form.find('#sp_name').val(storagePlace.sp_name);
@@ -1172,8 +1175,10 @@
                     success: function (buildingLabel) {
                         if (buildingLabel.exists) {
                             label_nd.addClass('is-invalid').removeClass('is-valid');
+                            $('#btnSubmitModalSetBuilding').attr('disabled',true);
                         } else {
                             label_nd.removeClass('is-invalid').addClass('is-valid');
+                            $('#btnSubmitModalSetBuilding').attr('disabled',false);
                         }
                     }
                 });
@@ -1192,8 +1197,10 @@
                     success: function (roomLabel) {
                         if (roomLabel.exists) {
                             label_nd.addClass('is-invalid').removeClass('is-valid');
+                            $('#btnSubmitModalSetRoom').attr('disabled',true);
                         } else {
                             label_nd.removeClass('is-invalid').addClass('is-valid');
+                            $('#btnSubmitModalSetRoom').attr('disabled',false);
                         }
                     }
                 });
@@ -1211,8 +1218,11 @@
                     success: function (storageLabel) {
                         if (storageLabel.exists) {
                             label_nd.addClass('is-invalid').removeClass('is-valid');
+                            $('#btnSubmitModalSetStellplatz').attr('disabled',true);
+
                         } else {
                             label_nd.removeClass('is-invalid').addClass('is-valid');
+                            $('#btnSubmitModalSetStellplatz').attr('disabled',false);
                         }
                     }
                 });

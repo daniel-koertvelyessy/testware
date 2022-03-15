@@ -89,7 +89,7 @@
                                     <button type="button"
                                             class="btn btn-sm btn-primary bentNextTab"
                                             data-showtab="#new-prod-requirements-tab"
-                                            data-required="#prod_name,#prod_label"
+                                            data-required="#prod_name,#prod_label,#prod_nummer"
 
                                     >{{__('weiter')}}</button>
                                 </div>
@@ -349,7 +349,7 @@
             nd.attr('disabled', true);
         });
         $(document).on('click', '.deleteAnforderungsListItem', function () {
-            console.log($(this).data('id'));
+      //      console.log($(this).data('id'));
             $($(this).data('id')).remove();
         });
 

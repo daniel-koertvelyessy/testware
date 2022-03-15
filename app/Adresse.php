@@ -35,7 +35,21 @@ class Adresse extends Model
 
     public function search($term)
     {
-        return Adresse::where('ad_label', 'like', '%' . $term . '%')->orWhere('ad_name', 'like', '%' . $term . '%')->orWhere('ad_name_firma', 'like', '%' . $term . '%')->orWhere('ad_name_firma_2', 'like', '%' . $term . '%')->orWhere('ad_name_firma_co', 'like', '%' . $term . '%')->orWhere('ad_name_firma_abladestelle', 'like', '%' . $term . '%')->orWhere('ad_name_firma_wareneingang', 'like', '%' . $term . '%')->orWhere('ad_name_firma_abteilung', 'like', '%' . $term . '%')->orWhere('ad_anschrift_strasse', 'like', '%' . $term . '%')->orWhere('ad_anschrift_hausnummer', 'like', '%' . $term . '%')->orWhere('ad_anschrift_etage', 'like', '%' . $term . '%')->orWhere('ad_anschrift_eingang', 'like', '%' . $term . '%')->orWhere('ad_anschrift_plz', 'like', '%' . $term . '%')->orWhere('ad_anschrift_ort', 'like', '%' . $term . '%')->get();
+        return Adresse::whereRaw('lower(ad_label) like ?', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma_2) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma_co) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma_abladestelle) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma_wareneingang) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_name_firma_abteilung) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_strasse) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_hausnummer) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_etage) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_eingang) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_plz) like ? ', '%' . strtolower($term) . '%')
+                      ->orWhereRaw('lower(ad_anschrift_ort) like ? ', '%' . strtolower($term) . '%')
+                      ->get();
     }
 
     public function profile()

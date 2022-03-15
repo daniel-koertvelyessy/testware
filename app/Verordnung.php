@@ -31,11 +31,12 @@ class Verordnung extends Model
 
     public function search($term)
     {
-        return Verordnung::where('vo_label', 'like', '%' . $term . '%')
-            ->orWhere('vo_name', 'like', '%' . $term . '%')
-            ->orWhere('vo_nummer', 'like', '%' . $term . '%')
-            ->orWhere('vo_stand', 'like', '%' . $term . '%')
-            ->orWhere('vo_description', 'like', '%' . $term . '%')
+        $term = strtolower($term);
+        return Verordnung::whereRaw('lower(vo_label) like ?', '%' . $term . '%')
+            ->orWhereRaw('lower(vo_name) like ?', '%' . $term . '%')
+            ->orWhereRaw('lower(vo_nummer) like ?', '%' . $term . '%')
+            ->orWhereRaw('lower(vo_stand) like ?', '%' . $term . '%')
+            ->orWhereRaw('lower(vo_description) like ?', '%' . $term . '%')
             ->get();
     }
 }

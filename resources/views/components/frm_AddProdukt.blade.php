@@ -99,6 +99,7 @@
         <x-textfield id="prod_nummer"
                      class="checkLabel"
                      label="{{__('Artikelnummer')}}"
+                     required
         />
         @if (isset($pk))
             <div class="row">

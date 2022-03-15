@@ -14,9 +14,9 @@ class ControlEvent extends Model
     use SoftDeletes;
 
     public function search($term) {
-        return ControlEvent::where('control_event_text', 'like', '%' . $term . '%')
-            ->orWhere('control_event_supervisor_name', 'like', '%' . $term . '%')
-            ->orWhere('control_event_controller_name', 'like', '%' . $term . '%')
+        return ControlEvent::whereRaw('lower(control_event_text) like ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('lower(control_event_supervisor_name) like ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('lower(control_event_controller_name) like ?', '%' . strtolower($term) . '%')
             ->get();
     }
 

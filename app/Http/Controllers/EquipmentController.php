@@ -312,7 +312,7 @@
             if ($oldEquipment->storage_id != $request->storage_id) {
                 $feld .= '<li>' . __('Feld :fld von [:old] in [:new] geändert', [
                         'fld' => __('Aufstellplatz / Standort'),
-                        'old' => $oldEquipment->storage->storage_label,
+                        'old' => $oldEquipment->storage->storage_label?? __('ohne Zuordnung'),
                         'new' => \App\Storage::find($request->storage_id)->storage_label,
                     ]) . '</li>';
                 $flag = true;
@@ -396,7 +396,7 @@
                 'eq_text'            => '',
                 'eq_price'           => 'nullable|numeric',
                 'installed_at'       => 'date',
-                'purchased_at'       => 'date‚',
+                'purchased_at'       => 'date',
                 'produkt_id'         => '',
                 'storage_id'         => 'required',
                 'equipment_state_id' => 'required'

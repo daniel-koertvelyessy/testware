@@ -31,9 +31,10 @@ class AnforderungControlItem extends Model
 
     public function search($term)
     {
-        return AnforderungControlItem::where('aci_label', 'like', '%' . $term . '%')
-            ->orWhere('aci_name', 'like', '%' . $term . '%')
-            ->orWhere('aci_task', 'like', '%' . $term . '%')
+        $term = strtolower($term);
+        return AnforderungControlItem::whereRaw('lower(aci_label) like ? ', '%' . $term . '%')
+            ->orWhereRaw('lower(aci_name) like ? ', '%' . $term . '%')
+            ->orWhereRaw('lower(aci_task) like ? ', '%' . $term . '%')
             ->get();
     }
 

@@ -28,7 +28,10 @@ class Stellplatz extends Model
 
     public function search($term)
     {
-        return Stellplatz::where('sp_label', 'like', '%' . $term . '%')->orWhere('sp_name', 'like', '%' . $term . '%')->orWhere('sp_description', 'like', '%' . $term . '%')->get();
+        return Stellplatz::whereRaw('lower(sp_label) like ?', '%' .strtolower( $term) . '%')
+                         ->orWhereRaw('lower(sp_name) like ?', '%' .strtolower( $term) . '%')
+                         ->orWhereRaw('lower(sp_description) like ?', '%' .strtolower( $term) . '%')
+                         ->get();
     }
 
     public function Room()

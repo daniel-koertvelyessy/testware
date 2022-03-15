@@ -90,7 +90,9 @@ class Location extends Model
 
     public function search($term)
     {
-        return Location::where('l_label', 'like', '%' . $term . '%')->orWhere('l_name', 'like', '%' . $term . '%')->orWhere('l_beschreibung', 'like', '%' . $term . '%')->get();
+        return Location::whereRaw('lower(l_label) like ?',  '%' . strtolower($term) . '%')
+                       ->orWhereRaw('lower(l_name) like ?',  '%' . strtolower($term) . '%')
+                       ->orWhereRaw('lower(l_beschreibung) like ?',  '%' . strtolower($term) . '%')->get();
     }
 
     /**

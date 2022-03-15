@@ -14,11 +14,13 @@ use App\DocumentType;
 use App\Equipment;
 use App\EquipmentFuntionControl;
 use App\EquipmentQualifiedUser;
+use App\Location;
 use App\ProductQualifiedUser;
 use App\Produkt;
 use App\ProduktKategorie;
 use App\Room;
 use App\RoomType;
+use App\Stellplatz;
 use App\StellplatzTyp;
 use App\Storage;
 use App\TestReportFormat;
@@ -52,14 +54,107 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
+    public function sycStorages()
+    {
+
+        /**
+         *   Search for location objects wich are not stored in the Storage table
+         */
+
+        $missingLocation = [];
+        $missingBuilding = [];
+        $missingRoom = [];
+        $missingCompartment = [];
+
+        foreach (Location::select('id', 'l_label', 'storage_id')->get() as $place) {
+            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
+                $missingLocation[$place->storage_id] = $this->sycStorage($place->storage_id, $place->l_label, 'locations');
+
+            }
+        }
+
+        foreach (Building::select('id', 'b_label', 'storage_id')->get() as $place) {
+            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
+                $missingBuilding[$place->storage_id] = $this->sycStorage($place->storage_id, $place->b_label, 'buildings');;
+            }
+        }
+
+        foreach (Room::select('id', 'r_label', 'storage_id')->get() as $place) {
+            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
+                $missingRoom[$place->storage_id] = $this->sycStorage($place->storage_id, $place->r_label, 'rooms');;
+            }
+        }
+
+        foreach (Stellplatz::select('id', 'sp_label', 'storage_id')->get() as $place) {
+            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
+                $missingCompartment[$place->storage_id] = $this->sycStorage($place->storage_id, $place->sp_label, 'stellplatzs');;
+            }
+        }
+
+        /**
+         * search for uid's in storages which do not have a matching location object
+         */
+        $storageEmptyLocations = [];
+        $storageEmptyBuildings = [];
+        $storageEmptyRooms = [];
+        $storageEmptyCompartments = [];
+
+        foreach (Storage::where('storage_object_type', 'locations')->get() as $storeItem) {
+            if (Location::where('storage_id', $storeItem->storage_uid)->count() === 0) {
+                $storageEmptyLocations[] = $storeItem->storage_uid;
+                $storeItem->delete();
+            }
+        }
+
+        foreach (Storage::where('storage_object_type', 'buildings')->get() as $storeItem) {
+            if (Building::where('storage_id', $storeItem->storage_uid)->count() === 0) {
+                $storageEmptyBuildings[] = $storeItem->storage_uid;
+                $storeItem->delete();
+            }
+        }
+
+        foreach (Storage::where('storage_object_type', 'rooms')->get() as $storeItem) {
+            if (Room::where('storage_id', $storeItem->storage_uid)->count() === 0) {
+                $storageEmptyRooms[] = $storeItem->storage_uid;
+                $storeItem->delete();
+            }
+        }
+
+        foreach (Storage::where('storage_object_type', 'stellplatzs')->get() as $storeItem) {
+            if (Stellplatz::where('storage_id', $storeItem->storage_uid)->count() === 0) {
+                $storageEmptyCompartments[] = $storeItem->storage_uid;
+                $storeItem->delete();
+            }
+        }
+
+        return view('admin.standorte.syncstorage', [
+            'missingLocations'         => $missingLocation,
+            'missingBuildings'         => $missingBuilding,
+            'missingRooms'             => $missingRoom,
+            'missingCompartments'      => $missingCompartment,
+            'storageEmptyLocations'    => $storageEmptyLocations,
+            'storageEmptyBuildings'    => $storageEmptyBuildings,
+            'storageEmptyRooms'        => $storageEmptyRooms,
+            'storageEmptyCompartments' => $storageEmptyCompartments,
+        ]);
+    }
+
+    public function sycStorage($uid, $label, $table)
+    {
+        $storeage = new Storage();
+        $storeage->storage_uid = $uid;
+        $storeage->storage_label = $label;
+        $storeage->storage_object_type = $table;
+        return $storeage->save();
+    }
+
     public function index()
     {
         $system = $this::getSystemStatus();
         return view('admin.index', compact('system'));
     }
 
-    public static function getSystemStatus()
-    : array
+    public static function getSystemStatus(): array
     {
         $incomplete_equipment = false;
         $incomplete_requirement = 0;
@@ -145,8 +240,8 @@ class AdminController extends Controller
     /**
      *  Aktualisiert die CSS-Datei zur Darstellung von Farben und Schriften
      *
-     * @param  Request $request
-     * @param  User    $adt
+     * @param Request $request
+     * @param User $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -168,7 +263,7 @@ class AdminController extends Controller
     /**
      * Speichert einen neuen Adresstyp
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -183,20 +278,19 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateAdressTypes()
-    : array
+    public function validateAdressTypes(): array
     {
         return request()->validate([
-            'adt_name'      => 'bail|required|min:1|max:20',
-            'adt_text_lang' => ''
-        ]);
+                                       'adt_name'      => 'bail|required|min:1|max:20',
+                                       'adt_text_lang' => ''
+                                   ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request     $request
-     * @param  AddressType $adt
+     * @param Request $request
+     * @param AddressType $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -211,7 +305,7 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Response
      */
@@ -227,8 +321,8 @@ class AdminController extends Controller
      */
 
     /**
-     * @param  Request     $request
-     * @param  AddressType $adt
+     * @param Request $request
+     * @param AddressType $adt
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -245,7 +339,7 @@ class AdminController extends Controller
     /**
      * Speichere einen neuen Gebäudetyp.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -260,20 +354,19 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateNewBuldingTypes()
-    : array
+    public function validateNewBuldingTypes(): array
     {
         return request()->validate([
-            'btname'         => 'bail|unique:building_types,btname|required|min:1|max:20',
-            'btbeschreibung' => ''
-        ]);
+                                       'btname'         => 'bail|unique:building_types,btname|required|min:1|max:20',
+                                       'btbeschreibung' => ''
+                                   ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request       $request
-     * @param  BuildingTypes $adt
+     * @param Request $request
+     * @param BuildingTypes $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -289,13 +382,12 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateBuldingTypes()
-    : array
+    public function validateBuldingTypes(): array
     {
         return request()->validate([
-            'btname'         => 'bail|required|min:1|max:20',
-            'btbeschreibung' => ''
-        ]);
+                                       'btname'         => 'bail|required|min:1|max:20',
+                                       'btbeschreibung' => ''
+                                   ]);
     }
 
     /**
@@ -305,8 +397,8 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request       $request
-     * @param  BuildingTypes $adt
+     * @param Request $request
+     * @param BuildingTypes $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -321,7 +413,7 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Response
      */
@@ -348,7 +440,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -384,27 +476,26 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateRoomTypes()
-    : array
+    public function validateRoomTypes(): array
     {
         return request()->validate([
-            'rt_label'       => [
-                'bail',
-                'required',
-                'min:1',
-                'max:20',
-                Rule::unique('room_types')->ignore(request('id'))
-            ],
-            'rt_name'        => 'max:100',
-            'rt_description' => ''
-        ]);
+                                       'rt_label'       => [
+                                           'bail',
+                                           'required',
+                                           'min:1',
+                                           'max:20',
+                                           Rule::unique('room_types')->ignore(request('id'))
+                                       ],
+                                       'rt_name'        => 'max:100',
+                                       'rt_description' => ''
+                                   ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  RoomType $rmt
+     * @param Request $request
+     * @param RoomType $rmt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -420,7 +511,7 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Response
      */
@@ -452,7 +543,7 @@ class AdminController extends Controller
      */
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -466,12 +557,11 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function createStellPlatzType(Request $request)
-    : RedirectResponse
+    public function createStellPlatzType(Request $request): RedirectResponse
     {
         StellplatzTyp::create($this->validateStellPlatzTypes());
 
@@ -483,27 +573,26 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateStellPlatzTypes()
-    : array
+    public function validateStellPlatzTypes(): array
     {
         return request()->validate([
-            'spt_label'       => [
-                'bail',
-                'required',
-                'min:1',
-                'max:20',
-                Rule::unique('stellplatz_typs')->ignore(\request('id'))
-            ],
-            'spt_name'        => 'max:100',
-            'spt_description' => ''
-        ]);
+                                       'spt_label'       => [
+                                           'bail',
+                                           'required',
+                                           'min:1',
+                                           'max:20',
+                                           Rule::unique('stellplatz_typs')->ignore(\request('id'))
+                                       ],
+                                       'spt_name'        => 'max:100',
+                                       'spt_description' => ''
+                                   ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request       $request
-     * @param  StellplatzTyp $StellPlatzTyp
+     * @param Request $request
+     * @param StellplatzTyp $StellPlatzTyp
      *
      * @return Response
      */
@@ -554,7 +643,7 @@ class AdminController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * * @param  Request $request
+     * * @param Request $request
      *
      * @return Response
      */
@@ -565,7 +654,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -599,7 +688,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -614,21 +703,20 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateProduktKategorie()
-    : array
+    public function validateProduktKategorie(): array
     {
         return request()->validate([
-            'pk_label'       => ['bail','required','min:1','max:20', Rule::unique('produkt_kategories')->ignore(\request('id')),],
-            'pk_name'        => 'bail|min:1|max:100',
-            'pk_description' => ''
-        ]);
+                                       'pk_label'       => ['bail', 'required', 'min:1', 'max:20', Rule::unique('produkt_kategories')->ignore(\request('id')),],
+                                       'pk_name'        => 'bail|min:1|max:100',
+                                       'pk_description' => ''
+                                   ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request          $request
-     * @param  ProduktKategorie $produktKategorie
+     * @param Request $request
+     * @param ProduktKategorie $produktKategorie
      *
      * @return RedirectResponse
      */
@@ -642,7 +730,7 @@ class AdminController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * * @param  Request $request
+     * * @param Request $request
      *
      * @return Response
      */
@@ -653,7 +741,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -690,7 +778,7 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Response
      */
@@ -702,8 +790,8 @@ class AdminController extends Controller
     /**
      * Aktualisiere die gegebene Anforderung
      *
-     * @param  Request     $request
-     * @param  Anforderung $anforderung
+     * @param Request $request
+     * @param Anforderung $anforderung
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -719,7 +807,7 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Builder|Builder[]|Collection|Model|Response
      */
@@ -729,7 +817,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -750,14 +838,13 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateNewAnforderungType()
-    : array
+    public function validateNewAnforderungType(): array
     {
         return request()->validate([
-            'at_label'       => 'bail|required|unique:anforderung_types,at_label|max:20',
-            'at_name'        => 'bail|max:100',
-            'at_description' => '',
-        ]);
+                                       'at_label'       => 'bail|required|unique:anforderung_types,at_label|max:20',
+                                       'at_name'        => 'bail|max:100',
+                                       'at_description' => '',
+                                   ]);
     }
 
 
@@ -790,14 +877,13 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateAnforderungType()
-    : array
+    public function validateAnforderungType(): array
     {
         return request()->validate([
-            'at_label'       => 'bail|required|max:20',
-            'at_name'        => 'bail|max:100',
-            'at_description' => '',
-        ]);
+                                       'at_label'       => 'bail|required|max:20',
+                                       'at_name'        => 'bail|max:100',
+                                       'at_description' => '',
+                                   ]);
     }
 
     public function getAnforderungTypData(Request $request)
@@ -806,7 +892,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -820,7 +906,7 @@ class AdminController extends Controller
     /**
      *  Speichere neue Dokzemententyp
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -835,22 +921,21 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateNewDokumentType()
-    : array
+    public function validateNewDokumentType(): array
     {
         return request()->validate([
-            'doctyp_label'       => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
-            'doctyp_name'        => 'bail|min:1|max:100',
-            'doctyp_description' => '',
-            'doctyp_mandatory'   => 'required'
-        ]);
+                                       'doctyp_label'       => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
+                                       'doctyp_name'        => 'bail|min:1|max:100',
+                                       'doctyp_description' => '',
+                                       'doctyp_mandatory'   => 'required'
+                                   ]);
     }
 
     /**
      * Aktualisiere die gegebene Dokzemententyp
      *
-     * @param  Request      $request
-     * @param  DocumentType $documentype
+     * @param Request $request
+     * @param DocumentType $documentype
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -865,22 +950,21 @@ class AdminController extends Controller
     /**
      * @return array
      */
-    public function validateDokumentType()
-    : array
+    public function validateDokumentType(): array
     {
         return request()->validate([
-            'doctyp_label'       => 'bail|required|min:1|max:20',
-            'doctyp_name'        => 'bail|min:1|max:100',
-            'doctyp_description' => '',
-            'doctyp_mandatory'   => 'required'
-        ]);
+                                       'doctyp_label'       => 'bail|required|min:1|max:20',
+                                       'doctyp_name'        => 'bail|min:1|max:100',
+                                       'doctyp_description' => '',
+                                       'doctyp_mandatory'   => 'required'
+                                   ]);
     }
 
     /**
      * Show the form for creating a new resource.
      * *
      *
-     * @param  Request $id
+     * @param Request $id
      *
      * @return Response
      */
@@ -890,7 +974,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Application|RedirectResponse|Redirector
      */
@@ -904,7 +988,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return Response
      */

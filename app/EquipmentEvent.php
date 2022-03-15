@@ -29,7 +29,7 @@ class EquipmentEvent extends Model
 
 
     public function search($term) {
-        return EquipmentEvent::where('equipment_event_text', 'like', '%' . $term . '%')
+        return EquipmentEvent::whereRaw('lower(equipment_event_text) like ? ', '%' . strtolower($term) . '%')
             ->get();
     }
 

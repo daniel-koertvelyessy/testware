@@ -46,7 +46,8 @@
                                        class="custom-control-input setStorage"
                                        value="{{ $storage->id }}"
                                 >
-                                <span id="storage_label_{{ $storage->id }}">{{ $storage->storage_label }}</span>
+                                <span id="storage_label_{{ $storage->id }}">{{ $storage->getStoragePath() }}</span>
+
                             </label>
                         @empty
                             <label class="btn btn-outline-info">

@@ -40,9 +40,9 @@ class Room extends Model
 
     public function search($term)
     {
-        return Room::where('r_label', 'like', '%' . $term . '%')
-            ->orWhere('r_name', 'like', '%' . $term . '%')
-            ->orWhere('r_description', 'like', '%' . $term . '%')
+        return Room::whereRaw('LOWER(r_label) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(r_name) LIKE ?', '%' . strtolower($term) . '%')
+            ->orWhereRaw('LOWER(r_description) LIKE ?', '%' . strtolower($term) . '%')
             ->get();
     }
 

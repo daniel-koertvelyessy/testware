@@ -189,7 +189,7 @@ class SearchController extends Controller
         return view('search', $resArray);
     }
 
-    public function searchInModules(Request $request)
+    public function searchInModules()
     {
         $term = request('term');
         $data = [];

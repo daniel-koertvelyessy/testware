@@ -42,7 +42,11 @@ class Building extends Model
 
     public function search($term)
     {
-        return Building::where('b_label', 'like', '%' . $term . '%')->orWhere('b_name_ort', 'like', '%' . $term . '%')->orWhere('b_name', 'like', '%' . $term . '%')->orWhere('b_description', 'like', '%' . $term . '%')->orWhere('b_we_name', 'like', '%' . $term . '%')->get();
+        return Building::whereRaw('LOWER(b_label) LIKE ?', '%' . strtolower($term) . '%')
+                       ->orWhereRaw('LOWER(b_name_ort) LIKE ?', '%' . strtolower($term) . '%')
+                       ->orWhereRaw('LOWER(b_name) LIKE ?', '%' . strtolower($term) . '%')
+                       ->orWhereRaw('LOWER(b_description) LIKE ?', '%' . strtolower($term) . '%')
+                       ->orWhereRaw('LOWER(b_we_name) LIKE ?', '%' . strtolower($term) . '%')->get();
     }
 
     public function path()

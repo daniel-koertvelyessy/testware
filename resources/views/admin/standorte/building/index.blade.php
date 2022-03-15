@@ -69,7 +69,7 @@
                             </td>
                             <td>{{ $building->b_name }}</td>
                             <td class="d-none d-md-table-cell">{{ $building->BuildingType->btname }}</td>
-                            <td class="d-none d-md-table-cell">{{ $building->Rooms->count() }}</td>
+                            <td class="d-none d-md-table-cell">{{ $building->Rooms }}</td>
                         </tr>
                     @endforeach
                     </tbody>

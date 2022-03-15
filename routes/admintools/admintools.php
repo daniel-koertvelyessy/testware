@@ -13,6 +13,9 @@ Route::get('organisation', function () {
     return view('admin.organisation.index');
 });
 
+Route::get('sync_storages', 'AdminController@sycStorages')->name('storages.sync');
+Route::post('sync_storage', 'AdminController@sycStorage')->name('storage.sync');
+
 Route::get('admin', 'AdminController@index')->name('admin.index');
 //Route::get('admin/user', 'AdminController@indexUser')->name('user.index');
 //Route::get('admin/user/ldap', 'UserController@ldap')->name('user.ldap');

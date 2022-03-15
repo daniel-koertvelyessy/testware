@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Kyslik\ColumnSortable\Sortable;
 
 class Storage extends Model
@@ -31,6 +30,31 @@ class Storage extends Model
             Cache::forget('countTotalEquipmentInLocation');
             Cache::forget('system-status-counter');
         });
+    }
+
+    public function getStoragePath()
+    {
+
+        switch ($this->storage_object_type) {
+
+            case 'locations':
+                $loc = Location::where('storage_id', $this->storage_uid)->first();
+                return ($loc) ? $loc->l_label . ' - ' . $loc->l_name : 'loc - ' . $this->storage_label;
+
+            case 'buildings':
+                $bul = Building::where('storage_id', $this->storage_uid)->first();
+                return ($bul) ? $bul->b_label . ' - ' . $bul->b_name : 'bul - ' . $this->storage_label;
+
+            case 'rooms':
+                $room = Room::where('storage_id', $this->storage_uid)->first();
+                return ($room) ? $room->r_label . ' - ' . $room->r_name : 'rom - ' . $this->storage_label;
+
+            case 'stellplatzs':
+                $spl = Stellplatz::where('storage_id', $this->storage_uid)->first();
+                return ($spl) ? $spl->sp_label . ' - ' . $spl->sp_name : 'com - ' . $this->storage_label;
+
+        }
+
     }
 
     public static function getLocationPath($uid)

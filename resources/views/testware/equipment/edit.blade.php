@@ -162,7 +162,7 @@
                         <div class="col-md-4">
                             <x-textmodal id="setStandOrtId"
                                          label="{{__('Aufstellplatz / Standort')}}"
-                                         value="{{ $equipment->storage->storage_label }}"
+                                         value="{{ $equipment->storage->storage_label ?? 'ohne' }}"
                                          modalid="modalSetStorage"
                             />
                         </div>

@@ -56,15 +56,16 @@ class Equipment extends Model
         return $this->Produkt->ControlProdukt;
     }
 
-    public function search($term)
+    public function search(string $term)
     {
-        return Equipment::whereRaw('LOWER(eq_inventar_nr) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(eq_serien_nr) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(eq_inventar_nr) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(eq_text) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(eq_uid) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(eq_name) LIKE ?', '%' . strtolower($term) . '%')
-            ->get();
+
+
+        return Equipment::whereRaw('LOWER(eq_serien_nr) LIKE ?', '%' . strtolower($term) . '%')
+                        ->orWhereRaw('LOWER(eq_inventar_nr) LIKE (?)', '%' . strtolower($term) . '%')
+                        ->orWhereRaw('LOWER(eq_text) LIKE (?)', '%' . strtolower($term) . '%')
+                        ->orWhere('eq_uid','like', '%' . strtolower($term) . '%')
+                        ->orWhereRaw('LOWER(eq_name) LIKE (?)', '%' . strtolower($term) . '%')
+                        ->get();
     }
 
     /**
@@ -139,12 +140,11 @@ class Equipment extends Model
     }
 
     /**
-     * @param  Equipment $equipment
+     * @param Equipment $equipment
      *
      * @return bool
      */
-    public function lockEquipment(Equipment $equipment)
-    : bool
+    public function lockEquipment(Equipment $equipment): bool
     {
         $equipment->equipment_state_id = 4;
         return $equipment->save();
@@ -155,35 +155,35 @@ class Equipment extends Model
         return $this->hasMany(EquipmentQualifiedUser::class);
     }
 
-
-    public function countQualifiedUser()
+    public function qualifiedUserList(Equipment $equipment)
     {
-        return $this->EquipmentQualifiedUser->count();
-    }
-
-    public function qualifiedUserList(Equipment $equipment){
 
         $userList = [];
         if ($equipment->countQualifiedUser() > 0)
-            foreach($equipment->EquipmentQualifiedUser as $quUser){
-                $userList[]= User::find($quUser->user_id);
+            foreach ($equipment->EquipmentQualifiedUser as $quUser) {
+                $userList[] = User::find($quUser->user_id);
             }
 
         return $userList;
 
     }
 
+    public function countQualifiedUser()
+    {
+        return $this->EquipmentQualifiedUser->count();
+    }
+
     public function addInstructedUser(Request $request)
     {
-        return  EquipmentInstruction::create($request->validate([
-            'equipment_instruction_date'                  => 'bail|required|date',
-            'equipment_instruction_instructor_signature'  => '',
-            'equipment_instruction_instructor_profile_id' => '',
-            'equipment_instruction_instructor_firma_id'   => '',
-            'equipment_instruction_trainee_signature'     => '',
-            'equipment_instruction_trainee_id'            => 'required',
-            'equipment_id'                                => 'required'
-        ]));
+        return EquipmentInstruction::create($request->validate([
+                                                                   'equipment_instruction_date'                  => 'bail|required|date',
+                                                                   'equipment_instruction_instructor_signature'  => '',
+                                                                   'equipment_instruction_instructor_profile_id' => '',
+                                                                   'equipment_instruction_instructor_firma_id'   => '',
+                                                                   'equipment_instruction_trainee_signature'     => '',
+                                                                   'equipment_instruction_trainee_id'            => 'required',
+                                                                   'equipment_id'                                => 'required'
+                                                               ]));
     }
 
 
