@@ -31,6 +31,7 @@
                     </thead>
                     <tbody>
                     @forelse ($controlItems as $controlItem)
+                        @if($controlItem->Equipment)
                         <tr>
                             <td>
                                 <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
@@ -66,6 +67,7 @@
                                 @endif
                             </td>
                         </tr>
+                        @endif
                         @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung) )
                             <tr>
                                 <td colspan="5">

@@ -63,7 +63,7 @@ class Equipment extends Model
         return Equipment::whereRaw('LOWER(eq_serien_nr) LIKE ?', '%' . strtolower($term) . '%')
                         ->orWhereRaw('LOWER(eq_inventar_nr) LIKE (?)', '%' . strtolower($term) . '%')
                         ->orWhereRaw('LOWER(eq_text) LIKE (?)', '%' . strtolower($term) . '%')
-                        ->orWhere('eq_uid','like', '%' . strtolower($term) . '%')
+                        ->orWhere('eq_uid', 'like', '%' . strtolower($term) . '%')
                         ->orWhereRaw('LOWER(eq_name) LIKE (?)', '%' . strtolower($term) . '%')
                         ->get();
     }

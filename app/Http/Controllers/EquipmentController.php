@@ -6,6 +6,8 @@
     use App\ControlEquipment;
     use App\Equipment;
     use App\EquipmentDoc;
+    use App\EquipmentEvent;
+    use App\EquipmentEventItem;
     use App\EquipmentFuntionControl;
     use App\EquipmentHistory;
     use App\EquipmentInstruction;
@@ -417,13 +419,66 @@
          */
         public function destroy(Equipment $equipment): RedirectResponse
         {
+            $msg ='';
+
+            $eDoc =0;
+            $eEv =0;
+            $eQu =0;
+            $eIn =0;
+            $ePa =0;
+            $eCon =0;
+
             foreach (EquipmentDoc::where('equipment_id', $equipment->id)->get() as $prodDoku) {
                 EquipmentDoc::find($prodDoku->id);
                 Storage::delete($prodDoku->proddoc_name_pfad);
-                $prodDoku->delete();
+                if ($prodDoku->delete()) $eCon++;
+
             }
 
-            $equipment->delete();
+            foreach(ControlEquipment::where('equipment_id',$equipment->id)->get() as $eevent){
+                if ($eevent->delete()) $eEv++;
+
+            }
+
+            foreach(EquipmentEvent::where('equipment_id',$equipment->id)->get() as $eevent){
+                if ($eevent->delete()) $eEv++;
+
+            }
+
+            foreach(EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $eevent){
+                if ($eevent->delete()) $eQu++;
+            }
+
+            foreach(EquipmentInstruction::where('equipment_id',$equipment->id)->get() as $eevent){
+                if ($eevent->delete()) $eIn++;
+            }
+
+            foreach(EquipmentParam::where('equipment_id',$equipment->id)->get() as $eevent){
+                if ($eevent->delete()) $ePa++;
+            }
+
+
+            if ($equipment->delete()) {
+                $msg = __('Geräte wurde mit 
+                 :eCon Prüfungen,
+                 :eDoc Dokumenten,
+                 :eEv Prüfungen,
+                 :eQu Befähigten Personen,
+                 :eIn Eingewiesenen Personen und 
+                 :ePa Parameter 
+                 erfolgreich gelöscht',[
+                     'eCon' => $eCon,
+                     'eDoc' => $eDoc,
+                     'eEv' => $eEv,
+                     'eQu' => $eQu,
+                     'eIn' => $eIn,
+                     'ePa' => $ePa,
+                ]);
+            } else {
+                $msg = __('Geräte konnte nicht erfolgreich gelöscht werden');
+            }
+
+            request()->session()->flash('status', $msg);
 
             return redirect()->route('equipMain');
         }

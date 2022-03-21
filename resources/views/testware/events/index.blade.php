@@ -17,7 +17,9 @@
                 <h1 class="h4 d-md-block d-none">
                     {{ __('Übersicht') }}
                 </h1>
-                <table class="table" id="tableEventListe">
+                <table class="table"
+                       id="tableEventListe"
+                >
                     <thead>
                     <tr>
                         <th>@sortablelink('created_at', __('Vom'))</th>
@@ -28,18 +30,20 @@
                     </thead>
                     <tbody>
                     @forelse ($eventListItems as $equipmentEvent)
-                        <tr>
-                            <td>
-                                <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
-                            </td>
-                            <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? __('offen') }}</td>
-                            <td>
-                                {{ $equipmentEvent->equipment->produkt->prod_label }} /
-                                {{ $equipmentEvent->equipment->eq_inventar_nr }}
-                            </td>
-                            <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>
-                        </tr>
-                        @empty
+                        @if($equipmentEvent->equipment)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('event.show',$equipmentEvent) }}">{{ $equipmentEvent->created_at->DiffForHumans() }}</a>
+                                </td>
+                                <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? __('offen') }}</td>
+                                <td>
+                                    {{ $equipmentEvent->equipment->produkt->prod_label }} /
+                                    {{ $equipmentEvent->equipment->eq_inventar_nr }}
+                                </td>
+                                <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>
+                            </tr>
+                        @endif
+                    @empty
                         <tr>
                             <td colspan="4">
                                 <x-notifyer>{{__('Keine aktiven Ereignisse gefunden')}}</x-notifyer>
@@ -49,18 +53,13 @@
                     </tbody>
                 </table>
                 @if($eventListItems->count()>10)
-                <div class="d-flex justify-content-center">
-                    {!! $eventListItems->withQueryString()->onEachSide(2)->links() !!}
-                </div>
-                    @endif
+                    <div class="d-flex justify-content-center">
+                        {!! $eventListItems->withQueryString()->onEachSide(2)->links() !!}
+                    </div>
+                @endif
             </div>
         </div>
-
     </div>
-
-
-
-
 @endsection
 
 @section('scripts')

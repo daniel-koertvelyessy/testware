@@ -154,9 +154,12 @@
                                   @forelse(\App\ControlEquipment::take(10)->where('qe_control_date_due','<=',now()->addWeeks(4))->orderBy('qe_control_date_due')->get() as $controlEquipment)
                                       <tr>
                                           <td>
-                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
+                                              @if($controlEquipment->Equipment)
+                                              <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}">
+                                                  {{ $controlEquipment->Equipment->eq_name }}</a>
                                               <br>
                                               <x-notifyer>{{__('Inventar-Nr')}}: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                                  @endif
                                           </td>
                                           <td>{{ $controlEquipment->Anforderung->an_name }}</td>
                                           <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
@@ -188,6 +191,7 @@
                                   </thead>
                                   <tbody>
                                   @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now()->addWeeks(4),now()->addMonths(3)])->orderBy('qe_control_date_due')->get() as $controlEquipment)
+                                      @if($controlEquipment->Equipment)
                                       <tr>
                                           <td>
                                               <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -198,6 +202,7 @@
                                           <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                           <td></td>
                                       </tr>
+                                      @endif
                                   @empty
                                       <tr>
                                           <td colspan="4">
@@ -225,6 +230,7 @@
                                   </thead>
                                   <tbody>
                                   @forelse(\App\ControlEquipment::take(10)->whereBetween('qe_control_date_due',[now(),date('Y'.'-12-31')])->orderBy('qe_control_date_due')->get() as $controlEquipment)
+                                      @if($controlEquipment->Equipment)
                                       <tr>
                                           <td>
                                               <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -235,6 +241,7 @@
                                           <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                           <td></td>
                                       </tr>
+                                      @endif
                                   @empty
                                       <tr>
                                           <td colspan="4">
@@ -261,6 +268,7 @@
                                   </thead>
                                   <tbody>
                                   @forelse(\App\ControlEquipment::take(10)->orderBy('qe_control_date_due')->get() as $controlEquipment)
+                                      @if($controlEquipment->Equipment)
                                       <tr>
                                           <td>
                                               <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -271,6 +279,7 @@
                                           <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                           <td></td>
                                       </tr>
+                                      @endif
                                   @empty
                                       <tr>
                                           <td colspan="4">

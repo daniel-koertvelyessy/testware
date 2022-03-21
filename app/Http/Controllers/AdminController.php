@@ -54,100 +54,6 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
-    public function sycStorages()
-    {
-
-        /**
-         *   Search for location objects wich are not stored in the Storage table
-         */
-
-        $missingLocation = [];
-        $missingBuilding = [];
-        $missingRoom = [];
-        $missingCompartment = [];
-
-        foreach (Location::select('id', 'l_label', 'storage_id')->get() as $place) {
-            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingLocation[$place->storage_id] = $this->sycStorage($place->storage_id, $place->l_label, 'locations');
-
-            }
-        }
-
-        foreach (Building::select('id', 'b_label', 'storage_id')->get() as $place) {
-            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingBuilding[$place->storage_id] = $this->sycStorage($place->storage_id, $place->b_label, 'buildings');;
-            }
-        }
-
-        foreach (Room::select('id', 'r_label', 'storage_id')->get() as $place) {
-            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingRoom[$place->storage_id] = $this->sycStorage($place->storage_id, $place->r_label, 'rooms');;
-            }
-        }
-
-        foreach (Stellplatz::select('id', 'sp_label', 'storage_id')->get() as $place) {
-            if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingCompartment[$place->storage_id] = $this->sycStorage($place->storage_id, $place->sp_label, 'stellplatzs');;
-            }
-        }
-
-        /**
-         * search for uid's in storages which do not have a matching location object
-         */
-        $storageEmptyLocations = [];
-        $storageEmptyBuildings = [];
-        $storageEmptyRooms = [];
-        $storageEmptyCompartments = [];
-
-        foreach (Storage::where('storage_object_type', 'locations')->get() as $storeItem) {
-            if (Location::where('storage_id', $storeItem->storage_uid)->count() === 0) {
-                $storageEmptyLocations[] = $storeItem->storage_uid;
-                $storeItem->delete();
-            }
-        }
-
-        foreach (Storage::where('storage_object_type', 'buildings')->get() as $storeItem) {
-            if (Building::where('storage_id', $storeItem->storage_uid)->count() === 0) {
-                $storageEmptyBuildings[] = $storeItem->storage_uid;
-                $storeItem->delete();
-            }
-        }
-
-        foreach (Storage::where('storage_object_type', 'rooms')->get() as $storeItem) {
-            if (Room::where('storage_id', $storeItem->storage_uid)->count() === 0) {
-                $storageEmptyRooms[] = $storeItem->storage_uid;
-                $storeItem->delete();
-            }
-        }
-
-        foreach (Storage::where('storage_object_type', 'stellplatzs')->get() as $storeItem) {
-            if (Stellplatz::where('storage_id', $storeItem->storage_uid)->count() === 0) {
-                $storageEmptyCompartments[] = $storeItem->storage_uid;
-                $storeItem->delete();
-            }
-        }
-
-        return view('admin.standorte.syncstorage', [
-            'missingLocations'         => $missingLocation,
-            'missingBuildings'         => $missingBuilding,
-            'missingRooms'             => $missingRoom,
-            'missingCompartments'      => $missingCompartment,
-            'storageEmptyLocations'    => $storageEmptyLocations,
-            'storageEmptyBuildings'    => $storageEmptyBuildings,
-            'storageEmptyRooms'        => $storageEmptyRooms,
-            'storageEmptyCompartments' => $storageEmptyCompartments,
-        ]);
-    }
-
-    public function sycStorage($uid, $label, $table)
-    {
-        $storeage = new Storage();
-        $storeage->storage_uid = $uid;
-        $storeage->storage_label = $label;
-        $storeage->storage_object_type = $table;
-        return $storeage->save();
-    }
-
     public function index()
     {
         $system = $this::getSystemStatus();
@@ -1061,5 +967,7 @@ class AdminController extends Controller
     {
         return Str::uuid();
     }
+
+
 
 }

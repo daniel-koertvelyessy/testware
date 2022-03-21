@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\locations;
 
-use App\Http\Resources\AddressFull;
+use App\Http\Resources\address\AddressFull;
 use App\Http\Resources\ProfileFull;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
