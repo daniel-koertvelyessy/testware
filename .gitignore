@@ -23,7 +23,9 @@ update.py
 db.env
 .DS_Store
 app.env
-docker‚-compose.yml
+docker-compose.yml
 *.env
 *.yml
 .DS_Store
+package-lock.json
+.styleci.yml
