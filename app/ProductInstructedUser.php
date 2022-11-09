@@ -32,6 +32,10 @@ class ProductInstructedUser extends Model
         });
     }
 
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class, 'product_instruction_trainee_id');
+    }
 
     public function user()
     {

@@ -242,7 +242,7 @@
                        <x-selectfield id="anforderung_id"
                         label="{{ __('Anforderung für Funktionstest auswählen') }}"
                         >
-                           @foreach(\App\Anforderung::all() as $anforderung)
+                           @foreach(\App\Anforderung::select('id','an_name')->orderBy('is_initial_test')->get() as $anforderung)
                                <option value="{{ $anforderung->id }}">{{ $anforderung->an_name }}</option>
                            @endforeach
                        </x-selectfield>

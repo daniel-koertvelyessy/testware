@@ -13,20 +13,6 @@ class Location extends Model
 
     use SoftDeletes, Sortable;
 
-    /*
- *
- *    Schütz nicht vor Injektionsangriffen!!!!
-
-
-    protected $fillable = [
-        'l_label',
-        'l_name',
-        'l_beschreibung',
-        'adress_id',
-        'profile_id'
-    ];
-
-*/
     public $sortable = [
         'l_label',
         'l_name',
@@ -65,7 +51,7 @@ class Location extends Model
         return $this->id;
     }
 
-    static function checkStatus()
+    public static function checkStatus()
     {
         if (rand(1, 3) === 1) {
             return '
@@ -88,12 +74,7 @@ class Location extends Model
         }
     }
 
-    public function search($term)
-    {
-        return Location::whereRaw('lower(l_label) like ?',  '%' . strtolower($term) . '%')
-                       ->orWhereRaw('lower(l_name) like ?',  '%' . strtolower($term) . '%')
-                       ->orWhereRaw('lower(l_beschreibung) like ?',  '%' . strtolower($term) . '%')->get();
-    }
+
 
     /**
      * Returns the path of the page

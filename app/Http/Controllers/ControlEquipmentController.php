@@ -12,13 +12,16 @@
     use App\Equipment;
     use App\EquipmentHistory;
     use App\EquipmentQualifiedUser;
+    use App\Http\Services\Equipment\EquipmentService;
     use App\ProductQualifiedUser;
+    use App\User;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Database\Eloquent\SoftDeletes;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
+    use Illuminate\Routing\Redirector;
     use Illuminate\View\View;
     use Kyslik\ColumnSortable\Sortable;
 
@@ -32,16 +35,16 @@
             $this->middleware('auth');
         }
 
-
         /**
          * Display a listing of the resource.
          *
-         * @return Application|Factory|Response|View
+         * @return Application|Factory|\Illuminate\Contracts\View\View
          */
         public function index()
         {
             $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
-            return view('testware.control.index', compact('controlItems'));
+            $isSysAdmin = \Auth::user()->isSysAdmin();
+            return view('testware.control.index', compact('controlItems', 'isSysAdmin'));
 
         }
 
@@ -50,7 +53,7 @@
          *
          * @param Request $request
          *
-         * @return Application|Factory|Response|View
+         * @return Application|Factory|\Illuminate\Contracts\View\View|Redirector|RedirectResponse
          */
         public function create(Request $request)
         {
@@ -195,7 +198,7 @@
             $setNextControlEquipment->save();
 
             $this->validateControlEvent();
-            $controlevent =  new ControlEvent(); // ControlEvent::create();
+            $controlevent = new ControlEvent(); // ControlEvent::create();
             $controlevent->control_event_next_due_date = $request->control_event_next_due_date;
             $controlevent->control_event_pass = $request->control_event_pass;
             $controlevent->control_event_date = $request->control_event_date;
@@ -284,7 +287,7 @@
         public function validateControlEvent(): array
         {
             return request()->validate([
-                'control_event_next_due_date'        => 'date|required|after:control_event_date',
+                'control_event_next_due_date'        => 'date|required|after_or_equal::control_event_date',
                 'control_event_pass'                 => 'required',
                 'control_event_date'                 => 'date|required',
                 'control_event_controller_signature' => '',
@@ -324,57 +327,115 @@
         /**
          * Show the form for editing the specified resource.
          *
-         * @param ControlEvent $control
+         * @param ControlEquipment $control
          *
-         * @return Response
+         * @return Application|Factory|\Illuminate\Contracts\View\View
          */
-        public function edit(ControlEvent $control)
+        public function edit(ControlEquipment $control)
         {
-            //
+            return view('testware.control.edit', compact('control'));
         }
 
         /**
          * Update the specified resource in storage.
          *
          * @param Request $request
-         * @param ControlEvent $control
+         * @param ControlEquipment $control
          *
-         * @return Response
+         * @return RedirectResponse
          */
-        public function update(Request $request, ControlEvent $control)
+        public function update(Request $request, ControlEquipment $control)
         {
-            //
+            //       dd($request);
+            $control->update($this->validateEquipmentControl());
+            return back();
+        }
+
+        /**
+         * @return array
+         */
+        public function validateEquipmentControl(): array
+        {
+            return request()->validate([
+                'qe_control_date_last' => 'date',
+                'qe_control_date_due'  => 'date',
+                'qe_control_date_warn' => '',
+                'control_interval_id'  => '',
+                'anforderung_id'       => 'required',
+                'equipment_id'         => 'required',
+
+            ], [
+                'control_event_pass.required'                => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
+                'control_event_controller_name.required'     => __('Der Name des Prüfers ist nicht gegeben!'),
+                'control_event_next_due_date.required'       => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
+                'control_event_next_due_date.after_or_equal' => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
+                'control_event_date.required'                => __('Bitte tragen Sie das Datum der Prüfung ein!'),
+            ]);
         }
 
         /**
          * Remove the specified resource from storage.
          *
-         * @param ControlEvent $control
-         *
-         * @return Response
+         * @param Request $request
+         * @return RedirectResponse
          */
-        public function destroy(ControlEvent $control)
+        public function destroy(Request $request)
         {
-            //
+
+            //        dd($request);
+
+            if (!\Auth::user()->isSysAdmin()) {
+                request()->session()->flash('status', 'Keine Berechtigung zum Löschen des Eintrages!');
+                return redirect()->back();
+            }
+            $controlEquipment = ControlEquipment::withTrashed()->find($request->id);
+
+            $equipment_id = $controlEquipment->equipment_id;
+            $control_date = $controlEquipment->created_at;
+
+
+            if ($controlEquipment->forceDelete()) {
+                $msg = 'Die Prüfung vom ' . $control_date . ' wurde erfolgreich gelöscht';
+                (new EquipmentHistory)->add(
+                    'Prüfung gelöscht',
+                    $msg,
+                    $equipment_id
+                );
+
+            } else {
+                $msg = 'Fehler beim Löschen der Prüfung!';
+            }
+
+            request()->session()->flash('status', $msg);
+            return redirect()->back();
+
         }
 
         public function manual()
         {
             $equipment = Equipment::where('eq_inventar_nr', request('equipment'))->first();
+
+            if (!$equipment) {
+                $equipment = Equipment::find(request('equipment'));
+            };
+
             $enabledUser = [];
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             if ($equipment) {
                 return view('testware.control.manual', [
+                    'qualifieduserList'          => (new EquipmentService)->getQualifiedPersonList($equipment),
+                    'current_user_id'            => \Auth::user()->id,
+                    'userList'                   => User::select('id', 'name')->get(),
                     'equipment'                  => $equipment,
-                    'requirement'                => Anforderung::find(request(('requirement'))),
+                    'requirement'                => Anforderung::find(request('requirement')),
                     'qualified_user_list'        => $enabledUser,
                     'is_test_internal'           => !array_search(true, $check_aci_execution_is_external),
                     'control_equipment_required' => array_search(true, $check_aci_control_equipment_required),
                 ]);
             } else {
-                \Log::error('fehler beim erstellen eines Gerätes -> request ' . \request());
-                request()->session()->flash('status', 'Fehler beim Erstellen des Gerätes');
+                \Log::error('fehler beim Erstellen der Prüfung -> request ' . \request());
+                request()->session()->flash('status', 'Fehler beim Erstellen der Prüfung');
                 return redirect()->route('equipment.maker');
             }
 

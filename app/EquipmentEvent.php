@@ -28,11 +28,6 @@ class EquipmentEvent extends Model
         ];
 
 
-    public function search($term) {
-        return EquipmentEvent::whereRaw('lower(equipment_event_text) like ? ', '%' . strtolower($term) . '%')
-            ->get();
-    }
-
     public function User() {
         return $this->belongsTo(User::class, 'equipment_event_user');
     }

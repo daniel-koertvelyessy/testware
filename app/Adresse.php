@@ -33,25 +33,6 @@ class Adresse extends Model
 
     protected $guarded = [];
 
-    public function search($term)
-    {
-        return Adresse::whereRaw('lower(ad_label) like ?', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma_2) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma_co) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma_abladestelle) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma_wareneingang) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_name_firma_abteilung) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_strasse) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_hausnummer) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_etage) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_eingang) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_plz) like ? ', '%' . strtolower($term) . '%')
-                      ->orWhereRaw('lower(ad_anschrift_ort) like ? ', '%' . strtolower($term) . '%')
-                      ->get();
-    }
-
     public function profile()
     {
         return $this->belongsTo(Location::class);

@@ -20,55 +20,207 @@
 
         <div class="row">
             <div class="col">
-                <table class="table table-striped" id="tabControlListe">
+                <table class="table table-striped"
+                       id="tabControlListe"
+                >
                     <thead>
                     <tr>
                         <th>@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
                         <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventarnummer'))</th>
                         <th>@sortablelink('qe_control_date_due', __('Fällig'))</th>
+                        @if($isSysAdmin)
+                            <th>
+
+                            </th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($controlItems as $controlItem)
-                        @if($controlItem->Equipment)
-                        <tr>
-                            <td>
-                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
+                        @if($controlItem->Equipment && $controlItem->Anforderung && !$controlItem->Anforderung->is_initial_test)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
                                     <span class="d-md-none">
-                                        {{ $controlItem->Anforderung->an_label }}
+                                        {{ $controlItem->Anforderung->an_label??'n.a.' }}
                                     </span>
-                                    <span class="d-none d-md-table-cell">
+                                        <span class="d-none d-md-table-cell">
                                     @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
-                                        <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
+                                                <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
                                         {{ $controlItem->Anforderung->an_name }}
                                         </a>
-                                        <span>
+                                                <span>
                                         {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
                                         </span>
-                                    @else
-                                        {{ $controlItem->Anforderung->an_name }}
-                                    @endif
+                                            @else
+                                                {{ $controlItem->Anforderung->an_name ?? 'na'}}
+                                            @endif
                                     </span>
-                                </a>
-                            </td>
-                            <td class="d-none d-md-table-cell">
-                                {{ $controlItem->Equipment->eq_name }}
-                            </td>
-                            <td>
-                                <a href="{{ route('equipment.show',['equipment' => $controlItem->Equipment]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
-                            </td>
-                            <td>
-                                {!! $controlItem->checkDueDate($controlItem) !!}
-                                @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
-                                    <span class="d-md-none">
+                                    </a>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    {{ $controlItem->Equipment->eq_name }}
+                                </td>
+                                <td>
+                                    <a href="{{ route('equipment.show',['equipment' => $controlItem->Equipment]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
+                                </td>
+                                <td>
+                                    {!! $controlItem->checkDueDate($controlItem) !!}
+                                    @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
+                                        <span class="d-md-none">
                                         {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
                                     </span>
+                                    @endif
+                                </td>
+                                @if($isSysAdmin)
+                                    <td>
+
+                                        <a role="button"
+                                           class="small"
+                                           data-toggle="modal"
+                                           data-target="#editControlItemModal{{$controlItem->id}}"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <div class="modal fade"
+                                             id="editControlItemModal{{$controlItem->id}}"
+                                             tabindex="-1"
+                                             aria-labelledby="editControlItemModalLabel{{$controlItem->id}}"
+                                             aria-hidden="true"
+                                        >
+                                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                                <div class="modal-content">
+                                                    <form action="{{ route('control.update',$controlItem) }}"
+                                                          method="POST"
+                                                    >
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="editControlItemModalLabel{{$controlItem->id}}"
+                                                            >{{ __('Eintrag bearbeiten') }}</h5>
+                                                            <button type="button"
+                                                                    class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close"
+                                                            >
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="form-group col">
+                                                                    <label for="qe_control_eq_name_{{$controlItem->id}}">{{ __('Zu prüfendes Gerät') }}</label>
+                                                                    <input type="text"
+                                                                           readonly
+                                                                           class="form-control-plaintext"
+                                                                           id="qe_control_eq_name_{{$controlItem->id}}"
+                                                                           name="qe_control_eq_name"
+                                                                           value="{{ $controlItem->Equipment->eq_name }}"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col">
+                                                                    <label for="anforderung_id_{{$controlItem->id}}">{{ __('Anforderung') }}</label>
+                                                                    {!! (new \App\Http\Services\Control\ControlEquipmentService)->setRequirementSelector(
+                                                                        'anforderung_id',
+                                                                        $controlItem->id,
+                                                                        $controlItem->anforderung_id
+                                                                    ) !!}
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="qe_control_date_last_{{$controlItem->id}}">{{ __('Letzte Prüfung') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker"
+                                                                           id="qe_control_date_last_{{$controlItem->id}}"
+                                                                           name="qe_control_date_last"
+                                                                           value="{{ $controlItem->qe_control_date_last }}"
+                                                                    >
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="qe_control_date_due_{{$controlItem->id}}">{{ __('Prüfung fällig') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker"
+                                                                           id="qe_control_date_due_{{$controlItem->id}}"
+                                                                           name="qe_control_date_due"
+                                                                           value="{{ $controlItem->qe_control_date_due }}"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="qe_control_date_warn_{{$controlItem->id}}">{{ __('Vorlauf') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control"
+                                                                           id="qe_control_date_warn_{{$controlItem->id}}"
+                                                                           name="qe_control_date_warn"
+                                                                           value="{{ $controlItem->qe_control_date_warn }}"
+                                                                    >
+                                                                </div>
+                                                                <div class="form-group col-md-8">
+                                                                    <label for="control_interval_id_{{$controlItem->id}}">{{ __('Intervall') }}</label>
+                                                                    {!! (new \App\Http\Services\Control\ControlEquipmentService)->setIntervalTypeSelector(
+                                                                        'control_interval_id',
+                                                                        $controlItem->id,
+                                                                        $controlItem->control_interval_id
+                                                                    ) !!}
+                                                                </div>
+
+                                                            </div>
+                                                            <input type="hidden"
+                                                                   name="equipment_id"
+                                                                   id="equipment_id_{{ $controlItem->id }}"
+                                                                   value="{{ $controlItem->equipment_id }}"
+                                                            >
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-dismiss="modal"
+                                                            >{{ __('Abbruch') }}
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-primary"
+                                                            >{{ __('Aktualisieren') }}
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <a role="button"
+                                           class="small text-danger mx-1"
+                                           onclick="$('#deleteEquipmentControlItem{{$controlItem->id}}').submit()"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+
+                                        <form action="{{ route('control.destroy',$controlItem) }}"
+                                              id="deleteEquipmentControlItem{{$controlItem->id}}"
+                                              method="POST"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden"
+                                                   name="id"
+                                                   id="deleteEquipmentControlId{{$controlItem->id}}"
+                                                   value="{{$controlItem->id}}"
+                                            >
+                                        </form>
+
+                                    </td>
                                 @endif
-                            </td>
-                        </tr>
+                            </tr>
                         @endif
-                        @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung) )
+                        @if ($controlItem->Anforderung && $controlItem->Anforderung->isInComplete
+                        ($controlItem->Anforderung) )
                             <tr>
                                 <td colspan="5">
                                     <blockquote class="d-md-none blockquote border-left border-warning pl-3">

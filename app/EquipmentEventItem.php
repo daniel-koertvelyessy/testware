@@ -20,10 +20,6 @@ class EquipmentEventItem extends Model {
         return $this->belongsTo(EquipmentEvent::class);
     }
 
-    public function search($term) {
-        return EquipmentEventItem::whereRaw('lower(equipment_event_item_text) like ? ', '%' . strtolower($term) . '%')
-            ->get();
-    }
 
     public function addItem(Request $request)
     {

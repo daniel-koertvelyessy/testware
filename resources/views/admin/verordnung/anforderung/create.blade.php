@@ -94,9 +94,27 @@
 
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-7">
+                            <x-rtextfield id="an_label" label="Name - Kürzel" value="{{ old('an_label')??'' }}" />
+                        </div>
+                        <div class="col-md-5 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       value="1"
+                                       id="is_initial_test"
+                                       name="is_initial_test"
+                                >
+                                <label class="form-check-label"
+                                       for="is_initial_test"
+                                >
+                                    {{ __('Ist initiale Funktionsprüfung?') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-
-                    <x-rtextfield id="an_label" label="Name - Kürzel" value="{{ old('an_label')??'' }}" />
 
                     <x-textfield id="an_name" label="Name" value="{{ old('an_name')??'' }}" />
 

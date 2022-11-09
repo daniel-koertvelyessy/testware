@@ -3,41 +3,55 @@
 @endphp
 @auth
     @php
-        $system = \App\Http\Controllers\AdminController::getSystemStatus();
+        $systemStatus = new \App\Http\Controllers\SystemStatusController();
+
+        $dbstatus = $systemStatus->getBrokenDBLinks();
+        $objects = $systemStatus->getObjectStatus();
+
+
+        if ($dbstatus['totalBrokenLinks']>0){
+            $status .= '<a href="'.route('admin.index').'"
+           class="text-danger mr-2"
+           title="'. __('Mindestens :num verwaiste Einträge gefunden',['num'=>$dbstatus['totalBrokenLinks']]).'"
+        ><i class="fas fa-database"></i></a>';
+        }
+
         $issueCounter = 0;
-        if ($system['equipment_qualified_user'] === 0 && $system['equipment']>0) $issueCounter++;
-        if ($system['product_qualified_user'] === 0) $issueCounter++;
-        if ($system['regulations'] === 0) $issueCounter++;
-        if ($system['requirements'] === 0) $issueCounter++;
-        if ($system['requirements_items'] === 0) $issueCounter++;
-        if ($system['products'] === 0) $issueCounter++;
-        if ($system['control_products'] === 0) $issueCounter++;
-        if ($system['storages'] === 0) $issueCounter++;
-        if ($system['incomplete_equipment']>0 && $system['equipment']>0 ) $issueCounter++;
-        if ($system['incomplete_requirement']>0 && $system['requirements']>0 ) $issueCounter++;
+        if ($objects['equipment_qualified_user'] === 0 && $objects['equipment']>0) $issueCounter++;
+        if ($objects['product_qualified_user'] === 0) $issueCounter++;
+        if ($objects['regulations'] === 0) $issueCounter++;
+        if ($objects['requirements'] === 0) $issueCounter++;
+        if ($objects['requirements_items'] === 0) $issueCounter++;
+        if ($objects['products'] === 0) $issueCounter++;
+        if ($objects['control_products'] === 0) $issueCounter++;
+        if ($objects['storages'] === 0) $issueCounter++;
+        if ($objects['incomplete_equipment']>0 && $objects['equipment']>0 ) $issueCounter++;
+        if ($objects['incomplete_requirement']>0 && $objects['requirements']>0 ) $issueCounter++;
 
         if($issueCounter>0){
             $statusMsg = ($issueCounter===1) ? __('Problem beheben') : __('Probleme beheben');
 
             if (
-                $system['incomplete_equipment']>0 && $system['equipment']>0 ||
-                $system['incomplete_requirement']>0 && $system['requirements']>0 ||
-                $system['equipment_qualified_user'] === 0 ||
-                $system['product_qualified_user'] === 0 ||
-                $system['regulations'] === 0 ||
-                $system['requirements'] === 0 ||
-                $system['requirements_items'] === 0 ||
-                $system['products'] === 0 ||
-                $system['control_products']===0 &&
-                $system['storages'] === 0
+                $objects['incomplete_equipment']>0 && $objects['equipment']>0 ||
+                $objects['incomplete_requirement']>0 && $objects['requirements']>0 ||
+                $objects['equipment_qualified_user'] === 0 ||
+                $objects['product_qualified_user'] === 0 ||
+                $objects['regulations'] === 0 ||
+                $objects['requirements'] === 0 ||
+                $objects['requirements_items'] === 0 ||
+                $objects['products'] === 0 ||
+                $objects['control_products']===0 &&
+                $objects['storages'] === 0
                 )
-                $status = '<a href="'.route('admin.index').'" class="btn-warning p-1"><span class="font-bold mx-2">'. $issueCounter.'</span>'. $statusMsg .'</a>';
+                $status .= '<a href="'.route('admin.index').'" class="btn-warning p-1"><span class="font-bold mx-2">'
+                . $issueCounter.'</span>'. $statusMsg .'</a>';
 
             if (
-                $system['storages']===0||
-                $system['products']===0
+                $objects['storages']===0||
+                $objects['products']===0
                 )
-                $status = '<a href="'.route('admin.index').'" class="btn-danger p-1"><span class="font-bold mx-2">'. $issueCounter.'</span>'. $statusMsg .'</a>';
+                $status .= '<a href="'.route('admin.index').'" class="btn-danger p-1"><span class="font-bold mx-2">'.
+                 $issueCounter.'</span>'. $statusMsg .'</a>';
 
         }
     @endphp

@@ -942,6 +942,7 @@
     "Die E-Mail Adress ist notwendig!": "Die E-Mail Adress ist notwendig!",
     "Die E-Mail Adress ist bereits in Benutzung": "Die E-Mail Adress ist bereits in Benutzung",
     "Benutzer endgültig löschen": "Benutzer endgültig löschen",
+    "Endgültig löschen": "Endgültig löschen",
     "Löschung des Benutzers prüfen!": "Löschung des Benutzers prüfen!",
     "Hinweis zur Löschung": "Hinweis zur Löschung",
     "Folgende Einträge werden mit der Löschung des Benutzers aus der Datenbank entfernt. Dies kann ohne vorherige Sicherung nicht wiederhergestellt werden!": "Folgende Einträge werden mit der Löschung des Benutzers aus der Datenbank entfernt. Dies kann ohne vorherige Sicherung nicht wiederhergestellt werden!",
@@ -981,6 +982,7 @@
     "Stellplatz zeigen": "Stellplatz zeigen",
     "Laden": "Laden",
     "Impressum": "Impressum",
+    "Mindestens :num verwaiste Einträge gefunden": "Mindestens :num verwaiste Einträge gefunden",
     "####": "####",
     "####": "####",
     "###": "###"

@@ -36,15 +36,6 @@ class Produkt extends Model
         });
     }
 
-    public function search($term)
-    {
-        return Produkt::whereRaw('LOWER(prod_label) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(prod_name) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(prod_description) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(prod_nummer) LIKE ?', '%' . strtolower($term) . '%')
-            ->get();
-    }
-
     /**
      * Get the route key for the model.
      *

@@ -21,6 +21,9 @@ class ProduktAnforderung extends Model
         static::updating(function () {
             Cache::forget('system-status-counter');
         });
+        static::deleting(function () {
+            Cache::forget('system-status-counter');
+        });
     }
 
     public function Produkt()

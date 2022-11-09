@@ -38,13 +38,6 @@ class Room extends Model
         });
     }
 
-    public function search($term)
-    {
-        return Room::whereRaw('LOWER(r_label) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(r_name) LIKE ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('LOWER(r_description) LIKE ?', '%' . strtolower($term) . '%')
-            ->get();
-    }
 
     public function path()
     {

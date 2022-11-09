@@ -13,13 +13,6 @@ class ControlEvent extends Model
 
     use SoftDeletes;
 
-    public function search($term) {
-        return ControlEvent::whereRaw('lower(control_event_text) like ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('lower(control_event_supervisor_name) like ?', '%' . strtolower($term) . '%')
-            ->orWhereRaw('lower(control_event_controller_name) like ?', '%' . strtolower($term) . '%')
-            ->get();
-    }
-
     public function Equipment() {
         return $this->belongsTo(Equipment::class, 'control_equipment_id');
     }

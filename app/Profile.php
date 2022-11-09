@@ -57,9 +57,43 @@ class Profile extends Model
 
     public function fullName()
     {
-        return $this->ma_vorname . ' ' . $this->ma_name . ' ' . $this->ma_name_2;
+        return $this->ma_vorname . ' ' . $this->ma_name ;
     }
 
+    public function instructedOnEquipment()
+    {
+        return $this->hasMany(EquipmentInstruction::class,'equipment_instruction_trainee_id');
+
+    }
+
+    public function isQualified($id)
+    : bool
+    {
+        return EquipmentQualifiedUser::where([
+                [
+                    'user_id',
+                    $this->id
+                ],
+                [
+                    'equipment_id',
+                    $id
+                ]
+            ])->count() > 0;
+    }
+    public function isInstructed($id)
+    : bool
+    {
+        return EquipmentInstruction::where([
+                [
+                    'equipment_instruction_trainee_id',
+                    $this->id
+                ],
+                [
+                    'equipment_id',
+                    $id
+                ]
+            ])->count() > 0;
+    }
 
     public function getNextEmployeeNumber()
     {

@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Start')}} &triangleright; {{__('Geräte')}}
-@endsection
+    {{__('Start')}} &triangleright; {{__('Geräte')}}@endsection
 
 @section('mainSection')
     {{__('Geräte')}}
@@ -29,7 +28,8 @@
                            class="tile-small rounded m-lg-3 btn-outline-primary"
                            data-role="tile"
                         >
-                            <span class="icon"><i class="fas fa-box"></i></span> <span class="branding-bar text-center">{{__('Neu')}}</span>
+                            <span class="icon"><i class="fas fa-box"></i></span>
+                            <span class="branding-bar text-center">{{__('Neu')}}</span>
                         </a>
                     </nav>
                 </section>
@@ -74,7 +74,14 @@
                             <td class="d-none d-lg-table-cell">
                                 <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
                                 @if($equipment->EquipmentQualifiedUser->count()===0)
-                                    <span class="fas fa-exclamation-triangle text-warning" title="{{ __('Es ist keine befähigte Person hinterlegt') }}"></span>
+                                    <span class="fas fa-user-times text-warning"
+                                          title="{{ __('Es ist keine befähigte Person hinterlegt') }}"
+                                    ></span>
+                                @endif
+                                @if(!\App\Http\Services\Equipment\EquipmentService::isTested($equipment))
+                                    <i class="fas fa-exclamation-circle text-warning"
+                                       title="{{__('Dieses Gerät hat noch keine Funktionsprüfung')}}"
+                                    ></i>
                                 @endif
                             </td>
                             <td class="d-none d-md-table-cell"
@@ -84,18 +91,21 @@
                             </td>
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
-                                    <span
-                                        class="p-1
+                                    @if(! $controlItem->Anforderung->is_initial_test)
+                                        <span class="p-1
                                         @if ($controlItem->qe_control_date_due <  now())
                                             bg-danger text-white
                                         @else
                                         {{ ($controlItem->qe_control_date_due <  now()->addWeeks($controlItem->qe_control_date_warn)) ? 'bg-warning text-white' : '' }}
                                         @endif
                                             "
-                                    >
+                                        >
                                         {{ $controlItem->qe_control_date_due }}
                                     </span>
-                                    @if (!$loop->last) <br> @endif
+                                        @if (!$loop->last)
+                                            <br>
+                                        @endif
+                                    @endif
                                 @empty
                                     -
                                 @endforelse
@@ -109,7 +119,9 @@
                                 </p>
                                 <a href="{{ route('equipment.maker') }}"
                                    class="btn mt-2 btn-primary"
-                                >{{__('neues Gerät anlegen')}} <span class="fas fa-angle-right ml-3"></span></a>
+                                >{{__('neues Gerät anlegen')}}
+                                    <span class="fas fa-angle-right ml-3"></span>
+                                </a>
                             </td>
                         </tr>
                     @endforelse

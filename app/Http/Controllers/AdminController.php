@@ -9,6 +9,7 @@ use App\AnforderungControlItem;
 use App\AnforderungType;
 use App\Building;
 use App\BuildingTypes;
+use App\ControlEquipment;
 use App\ControlProdukt;
 use App\DocumentType;
 use App\Equipment;
@@ -56,44 +57,10 @@ class AdminController extends Controller
 
     public function index()
     {
-        $system = $this::getSystemStatus();
-        return view('admin.index', compact('system'));
-    }
-
-    public static function getSystemStatus(): array
-    {
-        $incomplete_equipment = false;
-        $incomplete_requirement = 0;
-        foreach (Anforderung::all() as $requirement) {
-            $incomplete_requirement += $requirement->AnforderungControlItem()->count() > 0 ? 0 : 1;
-        }
-
-        $countEquipment = Equipment::all()->count();
-        if ($countEquipment > 0) {
-            $countEquipmentFunctionTest = EquipmentFuntionControl::all()->count();
-            $incomplete_equipment = $countEquipment - $countEquipmentFunctionTest;
-        }
-
-        $countControlEquipment = Equipment::with('produkt')->get()->map(function ($value, $item) {
-            return $value->produkt->ControlProdukt === null ? 1 : 0;
-        })->sum();
-        return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($incomplete_requirement, $countEquipment, $incomplete_equipment, $countControlEquipment) {
-            return [
-                'products'                 => Produkt::all()->count(),
-                'equipment'                => $countEquipment,
-                'control_products'         => ControlProdukt::all()->count(),
-                'control_equipment'        => $countControlEquipment,
-                'storages'                 => Storage::all()->count(),
-                'equipment_qualified_user' => EquipmentQualifiedUser::all()->count(),
-                'product_qualified_user'   => ProductQualifiedUser::all()->count(),
-                'regulations'              => Verordnung::all()->count(),
-                'requirements'             => Anforderung::all()->count(),
-                'incomplete_requirement'   => $incomplete_requirement,
-                'incomplete_equipment'     => $incomplete_equipment,
-                'requirements_items'       => AnforderungControlItem::all()->count(),
-            ];
-        });
-
+        $systemStatus = new SystemStatusController();
+        $objects = $systemStatus->getObjectStatus();
+        $dbstatus = $systemStatus->getBrokenDBLinks();
+        return view('admin.index', compact('objects','dbstatus'));
     }
 
     public function systems()

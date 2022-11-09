@@ -492,6 +492,14 @@
             </form>
 
         @endif
+
+
+        <div class="row my-10">
+            <div class="col small pt-10 text-right">
+                testWare 1.70
+            </div>
+        </div>
+
     </div>
 
 @endsection

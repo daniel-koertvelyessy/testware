@@ -3,36 +3,30 @@
     namespace App\Http\Controllers;
 
     use App\Anforderung;
-    use App\ControlEquipment;
     use App\Equipment;
     use App\EquipmentDoc;
-    use App\EquipmentEvent;
-    use App\EquipmentEventItem;
-    use App\EquipmentFuntionControl;
     use App\EquipmentHistory;
     use App\EquipmentInstruction;
     use App\EquipmentParam;
     use App\EquipmentQualifiedUser;
+    use App\EquipmentState;
     use App\EquipmentUid;
     use App\EquipmentWarranty;
     use App\FirmaProdukt;
+    use App\Http\Actions\Equipment\EquipmentAction;
+    use App\Http\Services\Equipment\EquipmentDocumentService;
+    use App\Http\Services\Equipment\EquipmentService;
     use App\ProductInstructedUser;
     use App\ProductQualifiedUser;
     use App\Produkt;
     use App\ProduktAnforderung;
-    use App\ProduktDoc;
-    use App\User;
     use Exception;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
-    use Illuminate\Routing\Redirector;
-    use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Log;
-    use Illuminate\Support\Facades\Storage;
     use Illuminate\Validation\Rule;
     use Illuminate\View\View;
 
@@ -54,12 +48,22 @@
             return view('testware.equipment.index');
         }
 
+        public function statuslist(EquipmentState $equipmentState)
+        {
+
+            return view('testware.equipment.state_list', [
+                'equipmentList' => Equipment::where('equipment_state_id', $equipmentState->id)->get(),
+                'status_label'  => $equipmentState->estat_label
+            ]);
+
+        }
+
         /**
          * Show the form for creating a new resource.
          *
          * @param Request $request
          *
-         * @return Application|Factory|Response|View
+         * @return Application|Factory|\Illuminate\Contracts\View\View
          */
         public function create(Request $request)
         {
@@ -81,34 +85,9 @@
          */
         public function store(Request $request)
         {
-            $request->validate([
-                'eq_inventar_nr'     => [
-                    'bail',
-                    'max:100',
-                    'required',
-                    Rule::unique('equipment')->ignore($request->id)
-                ],
-                'eq_serien_nr'       => [
-                    'bail',
-                    'nullable',
-                    'max:100',
-                    Rule::unique('equipment')->ignore($request->id)
-                ],
-                'eq_uid'             => [
-                    'bail',
-                    'required',
-                    Rule::unique('equipment')->ignore($request->id)
-                ],
-                'eq_name'            => '',
-                'eq_qrcode'          => '',
-                'eq_text'            => '',
-                'eq_price'           => 'nullable|numeric',
-                'installed_at'       => 'date',
-                'purchased_at'       => 'date',
-                'produkt_id'         => '',
-                'storage_id'         => 'required',
-                'equipment_state_id' => 'required'
-            ]);
+            $service = new EquipmentService();
+
+            $service->vaidateEquipmnt($request);
 
             if (isset($request->warranty_expires_at)) {
                 $request->validate([
@@ -117,7 +96,7 @@
                 ]);
             }
 
-            if (isset($request->setRequirementToProduct)){
+            if (isset($request->setRequirementToProduct)) {
                 (new ProduktController)->addProduktAnforderung($request);
             }
 
@@ -152,34 +131,18 @@
                 (new EquipmentWarranty)->addEquipment($request->warranty_expires_at, $equipment->id);
 
 
-       /*     foreach (Produkt::find($request->produkt_id)->ProduktAnforderung as $prodAnforderung) {
+            $service->transferProductQualifiedUser($request, $equipment);
 
-                $dueDate = (new ControlEquipment)->addEquipment($prodAnforderung, $equipment->id, $request);
+            $service->transferProductInstructedUser($request, $equipment);
 
-                (new EquipmentHistory)->add(__('Anforderung angelegt'), __('Für das Geräte wurde die Anforderung :anname angelegt, welche am :duedate zum ersten Mal fällig wird.', [
-                    'anname'  => $prodAnforderung->Anforderung->an_name,
-                    'duedate' => $dueDate
-                ]), $equipment->id);
+            $service->transferProductParameters($request, $equipment);
 
-            }*/
-
-            foreach (ProductQualifiedUser::where('produkt_id', $request->produkt_id)->get() as $productQualifiedUser) {
-                (new EquipmentQualifiedUser)->addEquipment($productQualifiedUser, $equipment->id);
-            }
-
-            foreach (ProductInstructedUser::where('produkt_id', $request->produkt_id)->get() as $productInstructedUser) {
-                (new EquipmentInstruction)->addEquipment($productInstructedUser, $equipment->id);
-            }
-
-            if (isset($request->pp_id) && count($request->pp_id) > 0) {
-                for ($i = 0; $i < count($request->pp_id); $i++) (new EquipmentParam)->addEquipment($request->pp_id[$i], $request->ep_value[$i], $equipment->id);
-            }
 
             $request->session()->flash('status', __('Das Gerät <strong>:eqname</strong> wurde angelegt!', ['eqname' => request('eq_name')]));
 
 
             return redirect()->route('control.manual', [
-                'equipment' => $equipment,
+                'equipment'   => $equipment,
                 'requirement' => Anforderung::find($request->anforderung_id)
             ]);
         }
@@ -193,32 +156,26 @@
          */
         public function show(Equipment $equipment)
         {
-            foreach (EquipmentDoc::where('equipment_id', $equipment->id)->where('document_type_id', 2)->get() as $equipmentDocFile) {
-                if (Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)) {
-                    Log::warning('Dateireferenz für Funktionsprüfung (' . $equipmentDocFile->eqdoc_name_pfad . ') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-//                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);
-                    $equipmentDocFile->delete();
-                }
 
-            }
+            $serviceDocument = new EquipmentDocumentService();
 
-            foreach (ProduktDoc::where('produkt_id', $equipment->Produkt->id)->where('document_type_id', 1)->get() as $productDocFile) {
-                if (Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)) {
-                    Log::warning('Dateireferenz (' . $productDocFile->proddoc_name_pfad . ') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-//                dump('delete '. $productDocFile->eqdoc_name_pfad);
-                    $productDocFile->delete();
-                }
+            $service = new EquipmentService();
 
-            }
+            EquipmentAction::deleteLoseEquipmentDocumentEntries($equipment);
 
-            $companyString = '';
-            foreach ($equipment->produkt->firma as $firma) {
-                $companyString .= $firma->fa_name . ' ';
-            }
+            EquipmentAction::deleteLoseProductDocumentEntries($equipment);
 
             return view('testware.equipment.show', [
-                'equipment'     => $equipment,
-                'companyString' => $companyString
+                'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
+                'upcomingControlList'     => $service->getUpcomingControlItems($equipment),
+                'instructedPersonList'    => $service->getInstruectedPersonList($equipment),
+                'requirementList'         => $service->getRequirementList($equipment),
+                'recentControlList'       => $service->getRecentExecutedControls($equipment),
+                'euqipmentDocumentList'   => $serviceDocument->getDocumentList($equipment),
+                'functionDocumentList'    => $serviceDocument->getFunctionTestDocumentList($equipment),
+                'newFileList'             => $serviceDocument->checkStorageSyncDB($equipment),
+                'equipment'               => $equipment,
+                'companyString'           => $service->makeCompanyString($equipment)
             ]);
         }
 
@@ -244,122 +201,12 @@
          */
         public function update(Request $request, Equipment $equipment)
         {
-            $oldEquipment = Equipment::find($request->id);
-            $changedPrameter = [];
 
+            $changedItems = (new EquipmentService)->checkUpdatedFields($request, Equipment::find($request->id));
 
-            $feld = '';
-            $flag = false;
-            $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]) . ': <ul>';
-            if ($oldEquipment->eq_serien_nr != $request->eq_serien_nr) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Seriennummer'),
-                        'old' => $oldEquipment->eq_serien_nr,
-                        'new' => $request->eq_serien_nr,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-            if ($oldEquipment->eq_qrcode != $request->eq_qrcode) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('QR Code'),
-                        'old' => $oldEquipment->eq_qrcode,
-                        'new' => $request->eq_qrcode,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-            if ($oldEquipment->eq_name != $request->eq_name) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Name'),
-                        'old' => $oldEquipment->eq_name,
-                        'new' => $request->eq_name,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-            if ($oldEquipment->purchased_at != $request->purchased_at) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Kaufdatum'),
-                        'old' => $oldEquipment->purchased_at,
-                        'new' => $request->purchased_at,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-            if ($oldEquipment->installed_at != $request->installed_at) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Inbetriebnahme am'),
-                        'old' => $oldEquipment->installed_at,
-                        'new' => $request->installed_at,
-                    ]) . '</li>';
-                $flag = true;
-            }
-            if ($oldEquipment->eq_text != $request->eq_text) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Beschreibung'),
-                        'old' => $oldEquipment->eq_text,
-                        'new' => $request->eq_text,
-                    ]) . '</li>';
-                $flag = true;
-            }
-            if ($oldEquipment->equipment_state_id != $request->equipment_state_id) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Geräte Status'),
-                        'old' => $oldEquipment->equipment_state_id,
-                        'new' => $request->equipment_state_id,
-                    ]) . '</li>';
-                $flag = true;
-            }
-            if ($oldEquipment->storage_id != $request->storage_id) {
-                $feld .= '<li>' . __('Feld :fld von [:old] in [:new] geändert', [
-                        'fld' => __('Aufstellplatz / Standort'),
-                        'old' => $oldEquipment->storage->storage_label?? __('ohne Zuordnung'),
-                        'new' => \App\Storage::find($request->storage_id)->storage_label,
-                    ]) . '</li>';
-                $flag = true;
-            }
-            if ($oldEquipment->produkt_id != $request->produkt_id) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Produkt'),
-                        'old' => $oldEquipment->produkt_id,
-                        'new' => $request->produkt_id,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-            if ($oldEquipment->eq_price != $request->eq_price) {
-                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
-                        'fld' => __('Kaufpreis'),
-                        'old' => $oldEquipment->eq_price,
-                        'new' => $request->eq_price,
-                    ]) . '</li>';
-                $flag = true;
-            }
-
-
-
-            if (isset($request->eqp_id)) {
-
-                foreach ($request->eqp_id as $parameter_id) {
-                    $parameter = EquipmentParam::find($parameter_id);
-                    $parameter->ep_value = $request->eqp_value[$parameter_id];
-                    if ($parameter->save() && $parameter->ep_value !== $request->eqp_value[$parameter_id]) {
-                        $changedPrameter[] = [$parameter_id => $request->eqp_value[$parameter_id]];
-                        $feld .= __('<li>:num Parameter :name geändert</li>', ['num'  => count($changedPrameter),
-                                                                               'name' => $parameter->ep_name
-                        ]);
-                    }
-                }
-
-            }
-
-            $feld .= '</ul>';
-
-
-            if ($flag || count($changedPrameter) > 0) {
+            if ($changedItems['changedStatus'] || count($changedItems['changedPrameter']) > 0) {
                 $equipment->update($this->validateEquipment());
-                (new EquipmentHistory)->add(__('Gerät geändert'), $feld, $equipment->id);
+                (new EquipmentHistory)->add(__('Gerät geändert'), $changedItems['changedItems'], $equipment->id);
                 $msg = __('Das Gerät <strong>:equipName</strong> wurde aktualisiert!', ['equipName' => request('eq_inventar_nr')]);
             } else {
                 $msg = __('Es wurden keine Änderungen festgestellt.');
@@ -402,10 +249,10 @@
                 'produkt_id'         => '',
                 'storage_id'         => 'required',
                 'equipment_state_id' => 'required'
-            ],[
+            ], [
                 'eq_inventar_nr.required' => __('Ein Geräte mit dieser Inventarnummer existiert bereits!'),
-                'eq_serien_nr.required' => __('Ein Gerät mit dieser Seriennummer existiert bereits!'),
- //               'eq_price.numberic' => __('Ein Gerät mit dieser Seirennummer existiert bereits!'),
+                'eq_serien_nr.required'   => __('Ein Gerät mit dieser Seriennummer existiert bereits!'),
+                //               'eq_price.numberic' => __('Ein Gerät mit dieser Seirennummer existiert bereits!'),
             ]);
         }
 
@@ -419,43 +266,22 @@
          */
         public function destroy(Equipment $equipment): RedirectResponse
         {
-            $msg ='';
 
-            $eDoc =0;
-            $eEv =0;
-            $eQu =0;
-            $eIn =0;
-            $ePa =0;
-            $eCon =0;
+            /**
+             * Delete all related objects first
+             */
+            $objects = EquipmentAction::deleteRelatedObjetcs($equipment);
 
-            foreach (EquipmentDoc::where('equipment_id', $equipment->id)->get() as $prodDoku) {
-                EquipmentDoc::find($prodDoku->id);
-                Storage::delete($prodDoku->proddoc_name_pfad);
-                if ($prodDoku->delete()) $eCon++;
-
-            }
-
-            foreach(ControlEquipment::where('equipment_id',$equipment->id)->get() as $eevent){
-                if ($eevent->delete()) $eEv++;
-
-            }
-
-            foreach(EquipmentEvent::where('equipment_id',$equipment->id)->get() as $eevent){
-                if ($eevent->delete()) $eEv++;
-
-            }
-
-            foreach(EquipmentQualifiedUser::where('equipment_id',$equipment->id)->get() as $eevent){
-                if ($eevent->delete()) $eQu++;
-            }
-
-            foreach(EquipmentInstruction::where('equipment_id',$equipment->id)->get() as $eevent){
-                if ($eevent->delete()) $eIn++;
-            }
-
-            foreach(EquipmentParam::where('equipment_id',$equipment->id)->get() as $eevent){
-                if ($eevent->delete()) $ePa++;
-            }
+            /**
+             *
+             * Since the deletion of the equipment will set the deleted_at field with a timestamp
+             * rather than deleting the database entry itself, the serial number and invertory id
+             * recieve a prefix to prevent the unique violation of the fields.
+             *
+             */
+            $equipment->eq_serien_nr = 'del_' . $equipment->eq_serien_nr;
+            $equipment->eq_inventar_nr = 'del_' . $equipment->eq_inventar_nr;
+            $equipment->save();
 
 
             if ($equipment->delete()) {
@@ -466,13 +292,13 @@
                  :eQu Befähigten Personen,
                  :eIn Eingewiesenen Personen und 
                  :ePa Parameter 
-                 erfolgreich gelöscht',[
-                     'eCon' => $eCon,
-                     'eDoc' => $eDoc,
-                     'eEv' => $eEv,
-                     'eQu' => $eQu,
-                     'eIn' => $eIn,
-                     'ePa' => $ePa,
+                 erfolgreich gelöscht', [
+                    'eCon' => $objects['eCon'],
+                    'eDoc' => $objects['eDoc'],
+                    'eEv'  => $objects['eEv'],
+                    'eQu'  => $objects['eQu'],
+                    'eIn'  => $objects['eIn'],
+                    'ePa'  => $objects['ePa'],
                 ]);
             } else {
                 $msg = __('Geräte konnte nicht erfolgreich gelöscht werden');
@@ -488,13 +314,14 @@
             return DB::table('equipment')
                 ->select('eq_inventar_nr', 'equipment.id', 'equipment.eq_serien_nr', 'prod_name')
                 ->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')
-                ->whereRaw('LOWER(eq_serien_nr) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(eq_inventar_nr) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(eq_uid) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(prod_nummer) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(prod_name) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(prod_label) LIKE ?', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(prod_description) LIKE ?', '%' . strtolower($request->term) . '%')
+                ->whereRaw('lower(eq_serien_nr) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('LOWER(eq_name) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('lower(eq_inventar_nr) LIKE (?)', '%' . strtolower($request->term) . '%')
+                //  ->orWhereRaw('eq_uid LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('lower(prod_nummer) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('lower(prod_name) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('lower(prod_label) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->orWhereRaw('lower(prod_description) LIKE (?)', '%' . strtolower($request->term) . '%')
                 ->get();
         }
     }

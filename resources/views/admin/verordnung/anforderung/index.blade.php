@@ -54,7 +54,12 @@
                         </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"
-                        >{{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label??'' }}
+                        >
+                            @if($anforderung->an_control_interval>0)
+                                {{ $anforderung->an_control_interval }} {{ $anforderung->ControlInterval->ci_label??'' }}
+                            @else
+                            {{ __('ohne') }}
+                            @endif
                         </td>
                         <td style="vertical-align: middle;"
                             class="text-center d-none d-md-table-cell"

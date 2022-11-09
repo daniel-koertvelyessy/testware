@@ -1194,7 +1194,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <h2 class="h3">{{ __('Verfügbare Label') }}</h2>
-                                <div class="list-group">
+                                <div class="list-group mb-3">
                                     @forelse(\App\EquipmentLabel::all() as $label)
                                         <div class="list-group-item list-group-item-action">
                                             <div class="d-flex w-100 justify-content-between">
@@ -1202,22 +1202,20 @@
                                                 <small>{{ $label->created_at->DiffForHumans() }}</small>
                                             </div>
                                             <p class="mb-1">{{ $label->name }}</p>
-                                            <div class="d-flex justify-content-between align-items-center ">
-                                                <div class="small d-flex flex-row">
-                                            <span>
+                                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="small d-flex flex-row mb-3">
+                                            <span class="mr-1">
                                                {!!  $label->show_labels ? '<i class="far fa-check-square
                                                fa-fw"></i>' :
                                                 '<i class="far fa-square fa-fw"></i>' !!}
-
-
                                                 {{ __('Labels zeigen') }}
                                             </span>
-                                            <span>
+                                            <span class="mr-1">
                                                 {!!  $label->show_inventory ? '<i class="far fa-check-square
                                                fa-fw"></i>' : '<i class="far fa-square fa-fw"></i>' !!}
                                                 {{ __('Inventarnummer zeigen') }}
                                             </span>
-                                            <span>
+                                            <span class="mr-1">
                                                {!!  $label->show_location ? '<i class="far fa-check-square
                                                fa-fw"></i>'
                                                 : '<i class="far fa-square fa-fw"></i>' !!}
@@ -1225,22 +1223,38 @@
                                             </span>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
-                                                    <form action="{{ route('equipmentlabel.copy',$label->id) }}"
+                                                    <form action="{{ route('equipmentlabel.copy',$label->id) }}#Label"
                                                           method="POST"
                                                     >
                                                         @csrf
-                                                        <button class="btn btn-sm btn-outline-secondary">{{ __('Kopieren') }}</button>
+                                                        <button class="btn btn-sm btn-outline-secondary">
+                                                            <span class=" mr-1">
+                                                                {{ __('Kopieren') }}
+                                                            </span>
+                                                            <i class="fas fa-copy"></i>
+
+                                                        </button>
                                                     </form>
 
                                                     <button class="btn btn-sm btn-outline-primary ml-2 btnLoadLabelLayout"
                                                             data-routeshow="{{ route('equipmentlabel.show',$label) }}"
                                                             data-labelid="{{ $label->id }}"
-                                                    >{{ __('Laden') }}</button>
+                                                    >
+                                                        <span class=" mr-1">{{ __('Laden') }}</span>
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
 
-                                                    <button class="btn btn-sm btn-outline-danger ml-2 btnDeleteLabelLayout"
-                                                            data-routeshow="{{ route('equipmentlabel.destroy',$label) }}"
-                                                            data-labelid="{{ $label->id }}"
-                                                    >{{ __('Löschen') }}</button>
+                                                    <form action="{{ route('equipmentlabel.destroy',$label) }}#Label" method="POST">
+                                                        @csrf
+                                                       @method('DELETE')
+                                                        <button class="btn btn-sm btn-outline-danger ml-2">
+                                                            <span class=" mr-1">
+                                                            {{ __('Löschen') }}
+                                                            </span>
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+
 
                                                 </div>
                                             </div>

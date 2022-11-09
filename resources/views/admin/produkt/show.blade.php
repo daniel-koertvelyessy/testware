@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{ __('Produkt :label bearbeiten',['label'=>$produkt->prod_nummer]) }} &triangleright; {{__('Produkte')}}
-@endsection
+    {{ __('Produkt :label bearbeiten',['label'=>$produkt->prod_nummer]) }} &triangleright; {{__('Produkte')}}@endsection
 
 @section('mainSection')
     {{ __('Produktübersicht') }}
@@ -103,7 +102,8 @@
                                     label="{{__('Beschreibung')}}"
                         />
 
-                        <x-btnMain>{{__('Neue Kategorie anlegen')}} <span class="fas fa-download ml-2"></span>
+                        <x-btnMain>{{__('Neue Kategorie anlegen')}}
+                            <span class="fas fa-download ml-2"></span>
                         </x-btnMain>
 
                     </form>
@@ -371,17 +371,24 @@
                                 />
                             </div>
                             <div class="col-md-8">
-                                <x-selectfield id="product_qualified_firma"
-                                               label="{{__('durch Firma / Institution')}}"
-                                >
-                                    @forelse($produkt->firma as $firma)
-                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
-                                    @empty
-                                        @foreach(App\Firma::all() as $company)
-                                            <option value="{{ $company->id }}">{{ $company->fa_name }}</option>
-                                        @endforeach
-                                    @endforelse
-                                </x-selectfield>
+                                @if($hasExternalSupplier)
+                                    <x-selectfield id="product_qualified_firma"
+                                                   label="{{__('durch Firma / Institution')}}"
+                                    >
+                                        @forelse($produkt->firma as $firma)
+                                            <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                        @empty
+                                            @foreach(App\Firma::all() as $company)
+                                                <option value="{{ $company->id }}">{{ $company->fa_name }}</option>
+                                            @endforeach
+                                        @endforelse
+                                    </x-selectfield>
+                                @else
+                                    <label>{{__('durch Firma / Institution')}}</label>
+                                    <div class="alert alert-info">
+                                        {{ __('Bislang sind keine Firmen für dieses Produkt hinterlegt worden.') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="row">
@@ -399,9 +406,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary">
-                            {{__('Befähigte Person anlegen')}}
-                        </button>
+                        @if($hasExternalSupplier)
+                            <button class="btn btn-primary">
+                                {{__('Befähigte Person anlegen')}}
+                            </button>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -415,11 +424,12 @@
          aria-hidden="true"
     >
         <div class="modal-dialog modal-xl">
-            <form action="{{ route('ProductInstruction.store') }}"
+            <form action="{{ route('ProductInstruction.store') }}#productRequirements"
                   method="post"
                   id="frmAddEquipmentInstruction"
             >
                 <div class="modal-content">
+
                     <div class="modal-header">
                         <h5 class="modal-title"
                             id="addInstructedUserLabel"
@@ -449,32 +459,46 @@
                                 <x-selectfield id="product_instruction_trainee_id"
                                                label="{{__('Unterwiesene Person')}}"
                                 >
-                                    @foreach(App\User::all() as $user)
-                                        @if(! $user->isInstructed($produkt->id) && ! $user->isQualified($produkt->id))
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @foreach(App\Profile::all() as $trainee)
+                                        @if(! $trainee->isInstructed($produkt->id) && ! $trainee->isQualified($produkt->id))
+                                            <option value="{{ $trainee->id }}">{{ $trainee->fullName() }}</option>
                                         @endif
                                     @endforeach
                                 </x-selectfield>
                             </div>
                             <div class="col-md-6">
-                                <x-selectfield id="product_instruction_instructor_profile_id"
-                                               label="{{__('Interne Unterweisung durch')}}"
-                                               required
-                                >
-                                    <option value="0">{{ __('bitte auswählen') }}</option>
-                                    @foreach(App\ProductQualifiedUser::where('produkt_id',$produkt->id)->with('user')->get() as $qualifiedUser)
-                                        <option value="{{ $qualifiedUser->user->id }}">{{ $qualifiedUser->user->name }}</option>
-                                    @endforeach
-                                </x-selectfield>
-                                <x-selectfield id="product_instruction_instructor_firma_id"
-                                               label="{{__('Externe Unterweisung durch')}}"
-                                >
-                                    <option value="0">{{__('bitte auswählen')}}</option>
-                                    @foreach($produkt->firma as $firma)
-                                        <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
-                                    @endforeach
-                                </x-selectfield>
+                                @if($hasQualifiedUser)
+                                    <x-selectfield id="product_instruction_instructor_profile_id"
+                                                   label="{{__('Interne Unterweisung durch')}}"
+                                                   required
+                                    >
+                                        <option value="0">{{ __('bitte auswählen') }}</option>
+                                        @foreach($qualifiedUserList as $qualifiedUser)
+                                            <option value="{{ $qualifiedUser->user->id }}">{{ $qualifiedUser->user->name }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                @else
+                                    <label>Interne Unterweisung durch</label>
+                                    <div class="alert alert-info">
+                                        {{ __('Bislang sind keine Personen für dieses Produkt befähigt wurden.') }}
+                                    </div>
+                                @endif
 
+                                @if($hasExternalSupplier)
+                                    <x-selectfield id="product_instruction_instructor_firma_id"
+                                                   label="{{__('Externe Unterweisung durch')}}"
+                                    >
+                                        <option value="0">{{__('bitte auswählen')}}</option>
+                                        @foreach($produkt->firma as $firma)
+                                            <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
+                                        @endforeach
+                                    </x-selectfield>
+                                @else
+                                    <label>Externe Unterweisung durch</label>
+                                    <div class="alert alert-info">
+                                        {{ __('Bislang sind keine Firmen für dieses Produkt verknüpft worden.') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="row">
@@ -533,12 +557,14 @@
                         <div id="selectedErrorMsg"
                              class="text-danger small"
                         ></div>
-                        <button type="button"
-                                id="btnStoreInstructedUser"
-                                class="btn btn-primary"
-                        >{{ __('Unterweisung
+                        @if($hasExternalSupplier && $hasQualifiedUser)
+                            <button type="button"
+                                    id="btnStoreInstructedUser"
+                                    class="btn btn-primary"
+                            >{{ __('Unterweisung
                         erfassen')
                         }}</button>
+                        @endif
                     </div>
                 </div>
             </form>
@@ -588,8 +614,8 @@
                            role="tab"
                            aria-controls="Parameter"
                            aria-selected="false"
-                        >{{__('Parameter')}} <span
-                                class="badge badge-primary"
+                        >{{__('Parameter')}}
+                            <span class="badge badge-primary"
                             >{{ $params->count() }}</span>
                         </a>
                     </li>
@@ -603,9 +629,10 @@
                            role="tab"
                            aria-controls="productRequirements"
                            aria-selected="false"
-                        >{{__('Anforderungen')}} <span
-                                class="badge badge-primary"
-                            >{{ $produkt->ProduktAnforderung->count() }}</span></a>
+                        >{{__('Anforderungen')}}
+                            <span class="badge badge-primary"
+                            >{{ $produkt->ProduktAnforderung->count() }}</span>
+                        </a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -617,7 +644,9 @@
                            role="tab"
                            aria-controls="prodCompany"
                            aria-selected="false"
-                        >{{__('Firmen')}} <span class="badge badge-primary">{{  $produkt->firma->count() }}</span></a>
+                        >{{__('Firmen')}}
+                            <span class="badge badge-primary">{{  $produkt->firma->count() }}</span>
+                        </a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -629,9 +658,10 @@
                            role="tab"
                            aria-controls="prodDoku"
                            aria-selected="false"
-                        >{{__('Dokumente')}} <span
-                                class="badge badge-primary"
-                            >{{ $produkt->ProduktDoc->count() }}</span></a>
+                        >{{__('Dokumente')}}
+                            <span class="badge badge-primary"
+                            >{{ $produkt->ProduktDoc->count() }}</span>
+                        </a>
                     </li>
                     <li class="nav-item"
                         role="presentation"
@@ -643,9 +673,10 @@
                            role="tab"
                            aria-controls="prodEquip"
                            aria-selected="false"
-                        >{{__('Geräte')}} <span
-                                class="badge badge-primary"
-                            >{{ $produkt->Equipment->count() }}</span></a>
+                        >{{__('Geräte')}}
+                            <span class="badge badge-primary"
+                            >{{ $produkt->Equipment->count() }}</span>
+                        </a>
                     </li>
                 </ul>
                 <div class="tab-content px-2 pt-4"
@@ -691,8 +722,8 @@
                                                     @foreach (App\ProduktKategorie::all() as $produktKategorie)
                                                         <option value="{{ $produktKategorie->id }}"
                                                                 @if($produktKategorie->id === $produkt->produkt_kategorie_id)
-                                                                selected
-                                                            @endif
+                                                                    selected
+                                                                @endif
                                                         >
                                                             {{ $produktKategorie->pk_name }}
                                                         </option>
@@ -713,8 +744,7 @@
                                                            label="{{__('Produkt Status')}}"
                                             >
                                                 @foreach (App\ProduktState::all() as $produktState)
-                                                    <option
-                                                        value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
+                                                    <option value="{{ $produktState->id }}" {{ ($produkt->produkt_state_id===$produktState->id)? ' selected ' : ''  }}>{{ $produktState->ps_label }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -723,8 +753,7 @@
                                                            label="{{__('Produkt Label')}}"
                                             >
                                                 @foreach ($labels as $label)
-                                                    <option
-                                                        value="{{ $label->id }}" {{ ($produkt->equipment_label_id===$label->id)? ' selected ' : ''  }}>{{ $label->name }}</option>
+                                                    <option value="{{ $label->id }}" {{ ($produkt->equipment_label_id===$label->id)? ' selected ' : ''  }}>{{ $label->name }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -736,7 +765,7 @@
                                                            name="prod_active"
                                                            id="prod_active"
                                                            value="1"
-                                                        {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
+                                                            {{ ($produkt->prod_active==1)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="prod_active"
@@ -752,7 +781,7 @@
                                                            id="control_product"
                                                            name="control_product"
                                                            value="1"
-                                                        {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
+                                                            {{ ($produkt->ControlProdukt)? ' checked ' : ''  }}
                                                     >
                                                     <label class="custom-control-label"
                                                            for="control_product"
@@ -770,7 +799,8 @@
                                         </div>
                                     </div>
                                     <x-btnMain>
-                                        {{__('Produkt speichern')}} <span class="fas fa-download ml-3"></span>
+                                        {{__('Produkt speichern')}}
+                                        <span class="fas fa-download ml-3"></span>
                                     </x-btnMain>
                                 </form>
 
@@ -828,6 +858,8 @@
                             <div class="col-md-7 mb-3 border-md-right border-dark">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Befähigte Personen')}}</h3>
+
+                                    @if($hasExternalSupplier)
                                     <button type="button"
                                             class="btn btn-sm btn-outline-primary"
                                             data-toggle="modal"
@@ -835,6 +867,31 @@
                                     >
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
+                                    @else
+                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#noExternalCompanyFoundModal">
+                                            {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                        </button>
+
+                                        <div class="modal fade" id="noExternalCompanyFoundModal" tabindex="-1" aria-labelledby="noExternalCompanyFoundModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header alert-warning">
+                                                        <h5 class="modal-title" id="noExternalCompanyFoundModalLabel">{{ __('Fehlende Voraussetzungen beheben') }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="lead">{{ __('Diesem Produkt muss noch eine Firma zugeordnet werden, damit diese eine Person im Umgang mit dem Produkt befähigen kann.') }}</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{ __('Alles klar') }}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @endif
                                 </div>
                                 <table class="table table-responsive-md">
                                     <thead>
@@ -863,7 +920,8 @@
                                                            value="{{ $qualifiedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span> <span class="far fa-trash-alt"></span>
+                                                        <span class="d-none d-lg-inline mr-2">{{ __('Löschen') }}</span>
+                                                        <span class="far fa-trash-alt"></span>
                                                     </button>
                                                 </form>
                                             </td>
@@ -882,6 +940,7 @@
                                 <div class="dropdown-divider my-4"></div>
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Unterwiesene Personen')}}</h3>
+                                    @if($hasExternalSupplier && $hasQualifiedUser)
                                     <button type="button"
                                             class="btn btn-sm btn-outline-primary"
                                             data-toggle="modal"
@@ -889,6 +948,48 @@
                                     >
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
+                                    @else
+                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#noExternalCompanyOrQualifiedUserFoundModal">
+                                            {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                        </button>
+
+                                        <div class="modal fade" id="noExternalCompanyOrQualifiedUserFoundModal" tabindex="-1" aria-labelledby="noExternalCompanyOrQualifiedUserFoundModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header alert-warning">
+                                                        <h5 class="modal-title" id="noExternalCompanyOrQualifiedUserFoundModalLabel">{{ __('Fehlende Voraussetzungen beheben') }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                       <p class="lead">{{ __('Bitte die benötigten Voraussetzungen erfüllen, damit befähigte Personen angelegt werden können. ') }}</p>
+                                                        <ul class="list-unstyled">
+                                                            <li>
+                                                                @if($hasExternalSupplier)
+                                                                    <i class="far fa-check-square text-success mr-1"></i>
+                                                                    @else
+                                                                    <i class="far fa-square text-muted mr-1"></i>
+                                                                @endif
+                                                                {{ __('Dem Produkt wurde mind. eine Firma zugeordet') }}
+                                                            </li>
+                                                            <li>
+                                                                @if($hasQualifiedUser)
+                                                                    <i class="far fa-check-square text-success mr-1"></i>
+                                                                @else
+                                                                    <i class="far fa-square text-muted mr-1"></i>
+                                                                @endif
+                                                                {{ __('Dem Produkt wurde mind. eine befähigte Person zugeordet') }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{ __('Alles klar') }}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <table class="table table-responsive-md">
                                     <thead>
@@ -902,7 +1003,7 @@
                                     <tbody>
                                     @forelse (\App\ProductInstructedUser::where('produkt_id',$produkt->id)->get() as $instructedUser)
                                         <tr>
-                                            <td style="vertical-align: middle;">{{ $instructedUser->user->name }}</td>
+                                            <td style="vertical-align: middle;">{{ $instructedUser->profile->fullName() }}</td>
                                             <td style="vertical-align: middle;">{{ $instructedUser->product_instruction_date }}</td>
                                             <td>
                                                 <img src="{{ $instructedUser->product_instruction_trainee_signature }}"
@@ -923,8 +1024,8 @@
                                                            value="{{ $instructedUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span> <span
-                                                            class="far fa-trash-alt ml-2"
+                                                        <span class="d-none d-lg-inline">{{__('Löschen')}}</span>
+                                                        <span class="far fa-trash-alt ml-2"
                                                         ></span>
                                                     </button>
                                                 </form>
@@ -951,13 +1052,12 @@
                                         <span class="fas fa-plus"></span>
                                     </button>
                                 </div>
-                                @php
-                                    $Anforderung = App\Anforderung::all()
-                                @endphp
-                                @forelse (\App\ProduktAnforderung::where('produkt_id',$produkt->id)->get() as $produktAnforderung)
+
+                                @forelse ($requirementList as $produktAnforderung)
                                     @if ($produktAnforderung->anforderung_id!=0)
                                         <x-requirement_box :requirement="$produktAnforderung->Anforderung"
                                                            :produkt="$produkt"
+                                                           :produktAnforderungId="$produktAnforderung->id"
                                         />
                                     @endif
                                 @empty
@@ -1003,13 +1103,14 @@
                                                     aria-controls="sectionFirmaDetails"
                                                     id="btnSectionFirmaDetails"
                                             >
-                                                <span id="btnMakeNewFirma">{{__('Neu')}}</span> <span
-                                                    class="fas fa-angle-down"
+                                                <span id="btnMakeNewFirma">{{__('Neu')}}</span>
+                                                <span class="fas fa-angle-down"
                                                 ></span>
                                             </button>
-                                            <button class="btn btn-primary ml-1">{{__('Zuordnen')}} <span
-                                                    class="fas fa-angle-right"
-                                                ></span></button>
+                                            <button class="btn btn-primary ml-1">{{__('Zuordnen')}}
+                                                <span class="fas fa-angle-right"
+                                                ></span>
+                                            </button>
                                         </div>
                                         <div class="collapse @if (count($errors)>0) show @endif "
                                              id="sectionFirmaDetails"
@@ -1107,8 +1208,7 @@
                                                                        label="{{__('Adresse Typ')}}"
                                                         >
                                                             @foreach (App\AddressType::all() as $addressType)
-                                                                <option
-                                                                    value="{{ $addressType->id }}"
+                                                                <option value="{{ $addressType->id }}"
                                                                 >{{ $addressType->adt_name }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1133,8 +1233,7 @@
                                                                        label="{{__('Land')}}"
                                                         >
                                                             @foreach (App\Land::all() as $country)
-                                                                <option
-                                                                    value="{{ $country->id }}"
+                                                                <option value="{{ $country->id }}"
                                                                 >{{ $country->land_iso }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1181,8 +1280,7 @@
                                                                        label="{{ __('Anrede') }}"
                                                         >
                                                             @foreach (App\Anrede::all() as $anrede)
-                                                                <option
-                                                                    value="{{ $anrede->id }}"
+                                                                <option value="{{ $anrede->id }}"
                                                                 >{{ $anrede->an_kurz }}</option>
                                                             @endforeach
                                                         </x-selectfield>
@@ -1225,11 +1323,10 @@
                                 <div class="col-md-4">
                                     <div class="list-group">
                                         @forelse ($produkt->firma as $firma)
-                                            <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                            <x-addresslabel firma="{!!  $firma->fa_name !!}"
+                                                            address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                            firmaid="{{ $firma->id }}"
+                                                            produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @empty
                                             <x-notifyer>{{ __('Dem Produkt ist keine Firma zugeordnet.') }}</x-notifyer>
@@ -1242,11 +1339,10 @@
                                 <div class="col">
                                     <div class="list-group">
                                         @foreach ($produkt->firma as $firma)
-                                            <x-addresslabel
-                                                firma="{!!  $firma->fa_name !!}"
-                                                address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
-                                                firmaid="{{ $firma->id }}"
-                                                produktid="{{ $produkt->id }}"
+                                            <x-addresslabel firma="{!!  $firma->fa_name !!}"
+                                                            address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                            firmaid="{{ $firma->id }}"
+                                                            produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>
                                         @endforeach
 
@@ -1267,9 +1363,10 @@
                                       enctype="multipart/form-data"
                                 >
                                     @csrf
-                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}} <span
-                                            class="small text-muted"
-                                        >max 20MB</span></h2>
+                                    <h2 class="h5">{{__('Dokument an Produkt anhängen')}}
+                                        <span class="small text-muted"
+                                        >max 20MB</span>
+                                    </h2>
 
                                     <input type="hidden"
                                            name="produkt_id"
@@ -1324,8 +1421,8 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}<i
-                                            class="fas fa-paperclip ml-2"
+                                    <button class="btn btn-primary">{{ __('Neues Dokument an Produkt anhängen')}}
+                                        <i class="fas fa-paperclip ml-2"
                                         ></i>
                                     </button>
                                 </form>
@@ -1375,10 +1472,9 @@
                                                         style="vertical-align: middle;"
                                                     >{{ $produktDoc->created_at->DiffForHumans() }}</td>
                                                     <td>
-                                                        <x-deletebutton
-                                                            prefix="produktDoc"
-                                                            action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
-                                                            id="{{ $produktDoc->id }}"
+                                                        <x-deletebutton prefix="produktDoc"
+                                                                        action="{{ route('produktDoku.destroy',$produktDoc->id) }}"
+                                                                        id="{{ $produktDoc->id }}"
                                                         />
                                                     </td>
                                                 </tr>

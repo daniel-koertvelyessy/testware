@@ -29,14 +29,5 @@ class Verordnung extends Model
         return $this->hasMany(Anforderung::class);
     }
 
-    public function search($term)
-    {
-        $term = strtolower($term);
-        return Verordnung::whereRaw('lower(vo_label) like ?', '%' . $term . '%')
-            ->orWhereRaw('lower(vo_name) like ?', '%' . $term . '%')
-            ->orWhereRaw('lower(vo_nummer) like ?', '%' . $term . '%')
-            ->orWhereRaw('lower(vo_stand) like ?', '%' . $term . '%')
-            ->orWhereRaw('lower(vo_description) like ?', '%' . $term . '%')
-            ->get();
-    }
+
 }

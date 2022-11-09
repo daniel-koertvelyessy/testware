@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EquipmentHistory;
 use App\EquipmentInstruction;
+use App\Profile;
 use App\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -28,11 +29,11 @@ class EquipmentInstructionController extends Controller
     public function store(Request $request)
     : RedirectResponse
     {
-        $user = User::find($request->equipment_instruction_trainee_id);
+        $trainee = Profile::find($request->equipment_instruction_trainee_id);
 
         (new EquipmentHistory)->add(
             __('Neue Unterweisung erfolgt'),
-            $user->name . __(' wurde am :inDate in das Gerät eingewiesen.',['inDate'=> $request->equipment_instruction_date]),
+            $trainee->ma_name . __(' wurde am :inDate in das Gerät eingewiesen.',['inDate'=> $request->equipment_instruction_date]),
             $request->equipment_id
         );
 

@@ -1,369 +1,275 @@
 <?php
 
-namespace App\Http\Controllers;
+    namespace App\Http\Controllers;
 
-use App\Adresse;
-use App\Anforderung;
-use App\AnforderungControlItem;
-use App\ControlEvent;
-use App\Equipment;
-use App\EquipmentEvent;
-use App\EquipmentEventItem;
-use App\Produkt;
-use App\Stellplatz;
-use App\Verordnung;
-use Illuminate\Http\Request;
-use App\Location;
-use App\Building;
-use App\Room;
-use Illuminate\Support\Facades\Cache;
+    use App\Adresse;
+    use App\Anforderung;
+    use App\AnforderungControlItem;
+    use App\Http\Services\Equipment\EquipmentEventItemService;
+    use App\Http\Services\Location\AddressService;
+    use App\Http\Services\Location\CompartmentService;
+    use App\ControlEvent;
+    use App\Equipment;
+    use App\EquipmentEvent;
+    use App\EquipmentEventItem;
+    use App\Http\Services\Control\ControlEventService;
+    use App\Http\Services\Equipment\EquipmentEventService;
+    use App\Http\Services\Equipment\EquipmentService;
+    use App\Http\Services\Location\BuildingService;
+    use App\Http\Services\Location\LocationService;
+    use App\Http\Services\Location\RoomService;
+    use App\Http\Services\Product\ProductService;
+    use App\Http\Services\Regulation\RequirementService;
+    use App\Http\Services\Regulation\RegulationService;
+    use App\Http\Services\Regulation\RequirementControlItemService;
+    use App\Produkt;
+    use App\Stellplatz;
+    use App\Verordnung;
+    use Illuminate\Http\Request;
+    use App\Location;
+    use App\Building;
+    use App\Room;
+    use Illuminate\Support\Facades\Cache;
 
-class SearchController extends Controller
-{
-
-    public function __construct()
+    class SearchController extends Controller
     {
-        $this->middleware('auth');
+
+        public function __construct()
+        {
+            $this->middleware('auth');
+        }
+
+        public function index(Request $request)
+        {
+
+            if (isset($request->srchTopMenuTerm)) {
+                $term = $request->srchTopMenuTerm;
+
+                $cacheDuration = now()->addSeconds(9);
+
+                $resultsEquipment = Cache::remember('search-Equipment-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return EquipmentService::search($term);
+                }
+                );
+
+                $resultsProdukt = Cache::remember('search-Produkt-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return ProductService::search($term);
+                }
+                );
+
+                $resultsEquipmentEvent = Cache::remember('search-EquipmentEvent-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return EquipmentEventService::search($term);
+                }
+                );
+
+                $resultsEquipmentEventItem = Cache::remember('search-EquipmentEventItem-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return EquipmentEventService::search($term);
+                }
+                );
+
+                $resultsControlEvent = Cache::remember('search-ControlEvent-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return ControlEventService::search($term);
+                }
+                );
+
+                $resultsVerordnung = Cache::remember('search-Verordnung-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return RegulationService::search($term);
+                }
+                );
+
+                $resultsAnforderung = Cache::remember('search-Anforderung-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return RequirementService::search($term);
+                }
+                );
+
+                $resultsAnforderungItem = Cache::remember('search-AnforderungItem-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return RequirementService::search($term);
+                }
+                );
+
+                $resultsBuildung = Cache::remember('search-Buildung-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return BuildingService::search($term);
+                }
+                );
+
+                $resultsLocation = Cache::remember('search-Location-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return LocationService::search($term);
+                }
+                );
+
+                $resultsRoom = Cache::remember('search-Room-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return RoomService::search($term);
+                }
+                );
+
+                $resultsStellplatz = Cache::remember('search-Stellplatz-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return CompartmentService::search($term);
+                }
+                );
+
+                $resultsAdresse = Cache::remember('search-Adresse-' . $term, $cacheDuration, function () use ($term)
+                {
+                    return AddressService::search($term);
+                }
+                );
+
+                $numResults = $resultsProdukt->count()
+                    + $resultsVerordnung->count()
+                    + $resultsEquipment->count()
+                    + $resultsEquipmentEvent->count()
+                    + $resultsControlEvent->count()
+                    + $resultsAnforderung->count()
+                    + $resultsAnforderungItem->count()
+                    + $resultsBuildung->count()
+                    + $resultsLocation->count()
+                    + $resultsRoom->count()
+                    + $resultsStellplatz->count()
+                    + $resultsAdresse->count()
+                    + $resultsEquipmentEventItem->count();
+
+                $resArray = [
+                    'term'                      => $term,
+                    'numResults'                => $numResults,
+                    'resultsEquipment'          => $resultsEquipment,
+                    'resultsProdukt'            => $resultsProdukt,
+                    'resultsEquipmentEvent'     => $resultsEquipmentEvent,
+                    'resultsEquipmentEventItem' => $resultsEquipmentEventItem,
+                    'resultsControlEvent'       => $resultsControlEvent,
+                    'resultsVerordnung'         => $resultsVerordnung,
+                    'resultsAnforderung'        => $resultsAnforderung,
+                    'resultsAnforderungItem'    => $resultsAnforderungItem,
+                    'resultsBuildung'           => $resultsBuildung,
+                    'resultsLocation'           => $resultsLocation,
+                    'resultsRoom'               => $resultsRoom,
+                    'resultsStellplatz'         => $resultsStellplatz,
+                    'resultsAdresse'            => $resultsAdresse,
+                ];
+            } else {
+                $resArray = ['term' => false];
+            }
+
+            return view('search', $resArray);
+        }
+
+        public function searchInModules(): array
+        {
+            $term = request('term');
+
+            $data = [];
+
+            $data + EquipmentService::getSearchResults($term);
+
+            $data + ProductService::getSearchResults($term);
+
+            $data + EquipmentEventService::getSearchResults($term);
+
+            $data + EquipmentEventItemService::getSearchResults($term);
+
+            $data + RegulationService::getSearchResults($term);
+
+            $data + RequirementService::getSearchResults($term);
+
+            $data + RequirementControlItemService::getSearchResults($term);
+
+            $data + BuildingService::getSearchResults($term);
+
+            $data + RoomService::getSearchResults($term);
+
+            $data + CompartmentService::getSearchResults($term);
+
+            $data + AddressService::getSearchResults($term);
+
+            return empty($data)
+                ? [
+                    'link'  => '#',
+                    'label' => 'Keine Ergebnisse gefunden'
+                ]
+                : $data;
+        }
+
+        public function search()
+        {
+            return view('location.index');
+        }
+
+        public function acAdminLocations(Request $request)
+        {
+            $search = $request->get('term');
+
+            $dataLoc = Location::select('id', 'l_label', 'l_name')
+                ->where('l_label', 'LIKE', "%$search%")
+                ->orWhere('l_name', 'LIKE', "%$search%")
+                ->orWhere('l_beschreibung', 'LIKE', "%$search%")
+                ->get();
+
+            //        dd($data);
+            $l = [];
+            foreach ($dataLoc as $item) {
+                $l[] = array(
+                    'value' => $item->id,
+                    'group' => 'location',
+                    'name'  => $item->l_label,
+                    'label' => $item->l_label . ' - ' . substr($item->l_name, 0, 5)
+                );
+            }
+
+            $dataBuilding = Building::select([
+                'id',
+                'b_label',
+                'b_raum_ort'
+            ])
+                ->where('b_label', 'LIKE', "%$search%")
+                ->orWhere('b_raum_ort', 'LIKE', "%$search%")
+                ->orWhere('b_raum_lang', 'LIKE', "%$search%")
+                ->orWhere('b_beschreibung', 'LIKE', "%$search%")
+                ->orWhere('b_we_name', 'LIKE', "%$search%")
+                ->get();
+
+            foreach ($dataBuilding as $item) {
+                $l[] = array(
+                    'value' => $item->id,
+                    'group' => 'building',
+                    'name'  => $item->b_label,
+                    'label' => $item->b_label . ' - Ort ' . $item->b_raum_ort
+                );
+            }
+
+            $dataRoom = Room::select([
+                'id',
+                'r_label',
+                'r_name'
+            ])
+                ->where('r_label', 'LIKE', "%$search%")
+                ->orWhere('r_name', 'LIKE', "%$search%")
+                ->orWhere('r_description', 'LIKE', "%$search%")
+                ->get();
+
+            foreach ($dataRoom as $item) {
+                $l[] = array(
+                    'value' => $item->id,
+                    'name'  => $item->r_label,
+                    'label' => $item->r_label . ' - ' . substr($item->r_name, 0, 5)
+                );
+            }
+
+
+            return response()->json($l);
+        }
+
+        public function searchInDocumentation(Request $request): Request
+        {
+            return $request;
+        }
     }
-
-    public function index(Request $request)
-    {
-
-        if (isset($request->srchTopMenuTerm)) {
-            $term = $request->srchTopMenuTerm;
-
-            $cacheDuration = 9;
-
-            $resultsEquipment = Cache::remember(
-                'search-Equipment-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Equipment();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsProdukt = Cache::remember(
-                'search-Produkt-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Produkt();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsEquipmentEvent = Cache::remember(
-                'search-EquipmentEvent-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new EquipmentEvent();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsEquipmentEventItem = Cache::remember(
-                'search-EquipmentEventItem-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new EquipmentEventItem();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsControlEvent = Cache::remember(
-                'search-ControlEvent-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new ControlEvent();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsVerordnung = Cache::remember(
-                'search-Verordnung-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Verordnung();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsAnforderung = Cache::remember(
-                'search-Anforderung-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Anforderung();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsAnforderungItem = Cache::remember(
-                'search-AnforderungItem-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new AnforderungControlItem();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsBuildung = Cache::remember(
-                'search-Buildung-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Building();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsLocation = Cache::remember(
-                'search-Location-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Location();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsRoom = Cache::remember(
-                'search-Room-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Room();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsStellplatz = Cache::remember(
-                'search-Stellplatz-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Stellplatz();
-                    return $obj->search($term);
-                }
-            );
-
-            $resultsAdresse = Cache::remember(
-                'search-Adresse-' . $term,
-                now()->addSeconds($cacheDuration),
-                function () use ($term) {
-                    $obj = new Adresse();
-                    return $obj->search($term);
-                }
-            );
-
-            $numResults = $resultsProdukt->count()
-                + $resultsVerordnung->count()
-                + $resultsEquipment->count()
-                + $resultsEquipmentEvent->count()
-                + $resultsControlEvent->count()
-                + $resultsAnforderung->count()
-                + $resultsAnforderungItem->count()
-                + $resultsBuildung->count()
-                + $resultsLocation->count()
-                + $resultsRoom->count()
-                + $resultsStellplatz->count()
-                + $resultsAdresse->count()
-                + $resultsEquipmentEventItem->count();
-
-            $resArray = [
-                'term'                      => $term,
-                'numResults'                => $numResults,
-                'resultsEquipment'          => $resultsEquipment,
-                'resultsProdukt'            => $resultsProdukt,
-                'resultsEquipmentEvent'     => $resultsEquipmentEvent,
-                'resultsEquipmentEventItem' => $resultsEquipmentEventItem,
-                'resultsControlEvent'       => $resultsControlEvent,
-                'resultsVerordnung'         => $resultsVerordnung,
-                'resultsAnforderung'        => $resultsAnforderung,
-                'resultsAnforderungItem'    => $resultsAnforderungItem,
-                'resultsBuildung'           => $resultsBuildung,
-                'resultsLocation'           => $resultsLocation,
-                'resultsRoom'               => $resultsRoom,
-                'resultsStellplatz'         => $resultsStellplatz,
-                'resultsAdresse'            => $resultsAdresse,
-            ];
-        } else {
-            $resArray = ['term' => false];
-        }
-
-        return view('search', $resArray);
-    }
-
-    public function searchInModules()
-    {
-        $term = request('term');
-        $data = [];
-
-        $obj = new Equipment();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('equipment.show', $ret),
-                'label' => '[' . __('Gerät') . '] Inv-#: ' . $ret->eq_inventar_nr . ' SN-#: ' . $ret->eq_serien_nr
-            ];
-        }
-
-        $obj = new Produkt();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('produkt.show', $ret),
-                'label' => '[' . __('Produkt') . '] ' . $ret->prod_label . ' ' . $ret->prod_nummer
-            ];
-        }
-
-        $obj = new EquipmentEvent();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('equipmentevent.show', $ret),
-                'label' => '[' . __('Ereignis') . '] vom ' . $ret->created_at . ' Meldung: ' . str_limit($ret->equipment_event_text, 10)
-            ];
-        }
-
-        $obj = new EquipmentEventItem();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('equipmenteventitem.show', $ret),
-                'label' => '[' . __('Meldung') . '] ' . $ret->updated_at . ' Text: ' . str_limit($ret->equipment_event_item_text, 20)
-            ];
-        }
-
-        $obj = new ControlEvent();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('controlevent.show', $ret),
-                'label' => '[' . __('Prüfung') . '] ' . $ret->control_event_date . ' Text: ' . str_limit($ret->control_event_text, 20)
-            ];
-        }
-
-        $obj = new Verordnung();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('verordnung.show', $ret),
-                'label' =>  '[' . __('Verordnung') . '] ' . str_limit($ret->vo_name, 30)
-            ];
-        }
-
-        $obj = new Anforderung();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('anforderung.show', $ret),
-                'label' => '[' . __('Anforderung') . '] ' . str_limit($ret->an_name, 30)
-            ];
-        }
-
-        $obj = new AnforderungControlItem();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('anforderungcontrolitem.show', $ret),
-                'label' => '[' . __('Vorgang') . '] ' . str_limit($ret->aci_name, 30)
-            ];
-        }
-
-        $obj = new Location();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('location.show', $ret),
-                'label' => '[' . __('Standort') . '] ' . $ret->l_label
-            ];
-        }
-
-        $obj = new Building();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('building.show', $ret),
-                'label' => '[' . __('Gebäude') . '] ' . $ret->b_label
-            ];
-        }
-
-
-        $obj = new Room();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('room.show', $ret),
-                'label' => '[' . __('Raum') . '] ' . $ret->r_label
-            ];
-        }
-
-        $obj = new Stellplatz();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('room.show', $ret),
-                'label' => '[' . __('Stellplatz') . '] ' . $ret->sp_label
-            ];
-        }
-
-        $obj = new Adresse();
-        $return = $obj->search($term);
-        foreach ($return as $ret) {
-            $data[] = [
-                'link' => route('adresse.show', $ret),
-                'label' => '[' . __('Adresse') . '] ' . $ret->ad_label . ' ' . $ret->ad_anschrift_strasse . ' / ' . $ret->ad_anschrift_hausnummer
-            ];
-        }
-
-        return $data;
-    }
-
-    public function search()
-    {
-        return view('location.index');
-    }
-
-    public function acAdminLocations(Request $request)
-    {
-        $search = $request->get('term');
-
-        $dataLoc = Location::select('id', 'l_label', 'l_name')
-            ->where('l_label', 'LIKE', "%$search%")
-            ->orWhere('l_name', 'LIKE', "%$search%")
-            ->orWhere('l_beschreibung', 'LIKE', "%$search%")
-            ->get();
-
-        //        dd($data);
-        $l = [];
-        foreach ($dataLoc as $item) {
-            $l[] = array('value' => $item->id, 'group' => 'location', 'name' => $item->l_label, 'label' => $item->l_label . ' - ' . substr($item->l_name, 0, 5));
-        }
-
-        $dataBuilding = Building::select('id', 'b_label', 'b_raum_ort')
-            ->where('b_label', 'LIKE', "%$search%")
-            ->orWhere('b_raum_ort', 'LIKE', "%$search%")
-            ->orWhere('b_raum_lang', 'LIKE', "%$search%")
-            ->orWhere('b_beschreibung', 'LIKE', "%$search%")
-            ->orWhere('b_we_name', 'LIKE', "%$search%")
-            ->get();
-
-        foreach ($dataBuilding as $item) {
-            $l[] = array('value' => $item->id, 'group' => 'building', 'name' => $item->b_label, 'label' => $item->b_label . ' - Ort ' . $item->b_raum_ort);
-        }
-
-        $dataRoom = Room::select('id', 'r_label', 'r_name')
-            ->where('r_label', 'LIKE', "%$search%")
-            ->orWhere('r_name', 'LIKE', "%$search%")
-            ->orWhere('r_description', 'LIKE', "%$search%")
-            ->get();
-
-        foreach ($dataRoom as $item) {
-            $l[] = array('value' => $item->id, 'name' => $item->r_label, 'label' => $item->r_label . ' - ' . substr($item->r_name, 0, 5));
-        }
-
-
-        return response()->json($l);
-    }
-
-    public function searchInDocumentation(Request $request): Request
-    {
-        return $request;
-    }
-}

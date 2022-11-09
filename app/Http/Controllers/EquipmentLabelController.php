@@ -111,11 +111,17 @@ class EquipmentLabelController extends Controller
      *
      * @param EquipmentLabel $equipmentlabel
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy(EquipmentLabel $equipmentlabel)
     {
-        //
+        if ($equipmentlabel->delete()){
+            request()->session()->flash('status', __('Label erfolgreich gelöscht'));
+        } else {
+            request()->session()->flash('status', __('Label konnte leider nicht gelöscht werden :('));
+
+        }
+        return back();
     }
 
     /**

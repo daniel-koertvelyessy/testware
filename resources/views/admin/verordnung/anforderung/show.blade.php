@@ -12,18 +12,28 @@
 
 @section('modals')
 
-    <div class="modal fade" id="modalAddNewAnforderungType" tabindex="-1" aria-labelledby="modalAddNewAnforderungTypeLabel" aria-hidden="true">
+    <div class="modal fade"
+         id="modalAddNewAnforderungType"
+         tabindex="-1"
+         aria-labelledby="modalAddNewAnforderungTypeLabel"
+         aria-hidden="true"
+    >
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{__('Neuen Anforderungstyp anlegen')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('addNewAnforderungType') }}"
-                          method="post" id="frmAddNewAnforderungsType"
+                          method="post"
+                          id="frmAddNewAnforderungsType"
                     >
                         @csrf
                         <x-rtextfield id="at_label"
@@ -36,7 +46,9 @@
                                     label="{{__('Beschreibung')}}"
                         />
 
-                        <x-btnMain>{{__('Anforderungstyp anlegen')}} <span class="fas fa-download"></span></x-btnMain>
+                        <x-btnMain>{{__('Anforderungstyp anlegen')}}
+                            <span class="fas fa-download"></span>
+                        </x-btnMain>
                     </form>
                 </div>
             </div>
@@ -54,7 +66,11 @@
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <form action="{{ route('anforderung.update',$anforderung) }}" method="POST" id="frmEditVerordnungen" name="frmEditVerordnungen">
+                <form action="{{ route('anforderung.update',$anforderung) }}"
+                      method="POST"
+                      id="frmEditVerordnungen"
+                      name="frmEditVerordnungen"
+                >
                     @csrf
                     @method('PUT')
                     <input type="hidden"
@@ -62,34 +78,74 @@
                            value="{{ $anforderung->id }}"
                     >
 
-                    <x-selectfield name="verordnung_id" id="verordnung_id" label="{{__('Gehört zu Verordnung')}}">
+                    <x-selectfield name="verordnung_id"
+                                   id="verordnung_id"
+                                   label="{{__('Gehört zu Verordnung')}}"
+                    >
                         @foreach (App\Verordnung::all() as $ad)
                             <option value="{{ $ad->id }}"
                                     @if ($ad->id === $anforderung->verordnung_id)
-                                    selected
-                                @endif
+                                        selected
+                                    @endif
                             >{{ $ad->vo_label }}</option>
                         @endforeach
                     </x-selectfield>
 
 
-                        <x-selectModalgroup id="anforderung_type_id" label="{{__('Anforderung Typ')}}"
-                                            modalid="modalAddNewAnforderungType">
-                            @foreach(App\AnforderungType::all() as $anforderungType)
-                                <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name }}</option>
-                            @endforeach
-                        </x-selectModalgroup>
+                    <x-selectModalgroup id="anforderung_type_id"
+                                        label="{{__('Anforderung Typ')}}"
+                                        modalid="modalAddNewAnforderungType"
+                    >
+                        @foreach(App\AnforderungType::all() as $anforderungType)
+                            <option value="{{ $anforderungType->id }}">{{ $anforderungType->at_name }}</option>
+                        @endforeach
+                    </x-selectModalgroup>
 
-                    <x-rtextfield id="updt_an_label" name="an_label" label="{{__('Kürzel')}}" value="{{ $anforderung->an_label }}" />
+                    <div class="row">
+                        <div class="col-md-7">
+                            <x-rtextfield id="updt_an_label"
+                                          name="an_label"
+                                          label="{{__('Kürzel')}}"
+                                          value="{{ $anforderung->an_label }}"
+                            />
+                        </div>
+                        <div class="col-md-5 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="is_initial_test"
+                                       name="is_initial_test"
+                                       value="{{ $anforderung->is_initial_test ? ' 1 ' : '0'  }}"
+                                        {{ $anforderung->is_initial_test ? ' checked ' : ''  }}
+                                >
+                                <label class="form-check-label"
+                                       for="is_initial_test"
+                                >
+                                    {{ __('Ist initiale Funktionsprüfung?') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                    <x-textfield id="updt_an_name" name="an_name" label="{{__('Name')}}" value="{{ $anforderung->an_name }}" />
+
+                    <x-textfield id="updt_an_name"
+                                 name="an_name"
+                                 label="{{__('Name')}}"
+                                 value="{{ $anforderung->an_name }}"
+                    />
 
                     <div class="row">
                         <div class="col-md-6">
-                            <x-textfield id="updt_an_control_interval" name="an_control_interval" label="{{__('Prüfinterval')}}" value="{{ $anforderung->an_control_interval }}" />
+                            <x-textfield id="updt_an_control_interval"
+                                         name="an_control_interval"
+                                         label="{{__('Prüfinterval')}}"
+                                         value="{{ $anforderung->an_control_interval }}"
+                            />
                         </div>
                         <div class="col-md-6">
-                            <x-selectfield id="control_interval_id" label="{{__('Zeit')}}">
+                            <x-selectfield id="control_interval_id"
+                                           label="{{__('Zeit')}}"
+                            >
                                 @foreach (App\ControlInterval::all() as $controlInterval)
                                     <option value="{{ $controlInterval->id }}"
                                             @if ($controlInterval->id === $anforderung->control_interval_id)
@@ -105,15 +161,20 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <x-textfield id="an_date_warn" label="{{__('Vorwarnzeit für Prüfungen')}}" value="{{ $anforderung->an_date_warn }}" />
+                            <x-textfield id="an_date_warn"
+                                         label="{{__('Vorwarnzeit für Prüfungen')}}"
+                                         value="{{ $anforderung->an_date_warn }}"
+                            />
                         </div>
                         <div class="col-md-6">
-                            <x-selectfield id="warn_interval_id" label="{{__('Zeit')}}">
+                            <x-selectfield id="warn_interval_id"
+                                           label="{{__('Zeit')}}"
+                            >
                                 @foreach (App\ControlInterval::all() as $controlInterval)
                                     <option value="{{ $controlInterval->id }}"
                                             @if ($controlInterval->id === $anforderung->warn_interval_id)
-                                            selected
-                                        @endif
+                                                selected
+                                            @endif
                                     >
                                         {{ $controlInterval->ci_label }}
                                     </option>
@@ -122,7 +183,11 @@
                         </div>
                     </div>
 
-                    <x-textarea id="updt_an_description" name="an_description" label="{{__('Beschreibung')}}" value="{{ $anforderung->an_description }}"/>
+                    <x-textarea id="updt_an_description"
+                                name="an_description"
+                                label="{{__('Beschreibung')}}"
+                                value="{{ $anforderung->an_description }}"
+                    />
 
                     <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>
 
@@ -156,9 +221,9 @@
                         <tr>
                             <td colspan="3">
                                 <div class="align-items-center justify-content-between d-flex">
-                                <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
+                                    <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
 
-                                <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}">{{ __('erstellen') }}</a>
+                                    <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}">{{ __('erstellen') }}</a>
                                 </div>
 
                             </td>

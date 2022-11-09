@@ -14,6 +14,8 @@ class ControlEquipment extends Model
 {
     use SoftDeletes, Sortable;
 
+    protected $guarded= [];
+
     public $sortable = [
         'id',
         'qe_control_date_due',
@@ -66,6 +68,13 @@ class ControlEquipment extends Model
         $hasTestItemMsg = '';
         $hasControlItems = 0;
 
+
+        if (!$this->Anforderung){
+            return [
+                'success' => false,
+                'html'    => $this->makeHtmlWarning(__('Keine Anforderung mit Gerät verknüpft'),'#')
+            ];
+        }
 
         if ($this->countControlItems() > 0) {
             $hasControlItems = $this->countControlItems();
@@ -120,7 +129,7 @@ class ControlEquipment extends Model
 
     public function countControlItems()
     {
-        return $this->Anforderung->AnforderungControlItem->count();
+        return ($this->Anforderung) ? $this->Anforderung->AnforderungControlItem->count() : -1;
     }
 
     public function makeHtmlWarning($msg, $link)
