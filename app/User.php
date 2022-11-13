@@ -295,7 +295,7 @@ class User extends Authenticatable
         $this->password = Hash::make($details['password']);
         $this->save();
 
-   //     $this->roles()->attach([1]);
+        $this->roles()->attach([1]);
     //    $this->roles()->attach([4]);
 
         return $this->id;
