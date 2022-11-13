@@ -42,7 +42,7 @@
         public function add(Request $request)
         {
 
-            //    dd($request);
+//                dd($request);
 
             $msg = '';
 
@@ -57,7 +57,7 @@
              */
             foreach ($request->filename as $key => $filename) {
 
-                if ($request->setDocTypeID[$key] === 0) {
+                if ($request->setDocTypeID[$key] === "0") {
                     /**
                      * delete file from storage
                      */

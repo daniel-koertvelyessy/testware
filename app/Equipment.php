@@ -65,7 +65,8 @@
          */
         public function getRouteKeyName()
         {
-            return 'eq_inventar_nr';
+            return 'eq_uid';
+//            return 'eq_inventar_nr';
         }
 
         public function produkt()

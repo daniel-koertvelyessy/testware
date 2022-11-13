@@ -23,6 +23,7 @@
 
         public static function getSearchResults(string $term): array
         {
+
             $data = [];
             foreach ((new ProductService)->query($term) as $ret) {
                 $data[] = [

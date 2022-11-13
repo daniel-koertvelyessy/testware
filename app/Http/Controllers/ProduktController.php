@@ -138,8 +138,9 @@
                 ? 1
                 : 0;
 
+//            dd($request);
 
-            $produkt->update($this->validateProdukt());
+            $produkt->update($this->validateProdukt($request));
 
             //        dd(isset($request->pp_label));
             if (isset($request->pp_label) && count($request->pp_label) > 0) {
@@ -161,22 +162,23 @@
          */
         public function validateProdukt(): array
         {
+//            dd($request->id);
             return request()->validate([
                 'prod_label'           => [
                     'bail',
                     'min:2',
                     'max:20',
                     'required',
-                    Rule::unique('produkts')->ignore(\request('id'))
+                    Rule::unique('produkts')->ignore(request('id'))
                 ],
+                'prod_uuid'            => '',
                 'prod_name'            => '',
                 'prod_description'     => '',
                 'prod_nummer'          => [
                     'bail',
                     'required',
-                    'alpha_dash',
                     'max:100',
-                    Rule::unique('produkts')->ignore(\request('id'))
+                    Rule::unique('produkts')->ignore(request('id'))
                 ],
                 'prod_active'          => '',
                 'produkt_kategorie_id' => 'nullable',

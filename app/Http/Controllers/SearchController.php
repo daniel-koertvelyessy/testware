@@ -167,36 +167,25 @@
         {
             $term = request('term');
 
-            $data = [];
+            $data[] = EquipmentService::getSearchResults($term);
 
-            $data + EquipmentService::getSearchResults($term);
-
-            $data + ProductService::getSearchResults($term);
-
-            $data + EquipmentEventService::getSearchResults($term);
-
-            $data + EquipmentEventItemService::getSearchResults($term);
-
-            $data + RegulationService::getSearchResults($term);
-
-            $data + RequirementService::getSearchResults($term);
-
-            $data + RequirementControlItemService::getSearchResults($term);
-
-            $data + BuildingService::getSearchResults($term);
-
-            $data + RoomService::getSearchResults($term);
-
-            $data + CompartmentService::getSearchResults($term);
-
-            $data + AddressService::getSearchResults($term);
+             $data[] = (ProductService::getSearchResults($term));
+             $data[] = (EquipmentEventService::getSearchResults($term));
+             $data[] = (EquipmentEventItemService::getSearchResults($term));
+             $data[] = (RegulationService::getSearchResults($term));
+             $data[] = (RequirementService::getSearchResults($term));
+             $data[] = (RequirementControlItemService::getSearchResults($term));
+             $data[] = (BuildingService::getSearchResults($term));
+             $data[] = (RoomService::getSearchResults($term));
+             $data[] = (CompartmentService::getSearchResults($term));
+             $data[] = (AddressService::getSearchResults($term));
 
             return empty($data)
                 ? [
                     'link'  => '#',
                     'label' => 'Keine Ergebnisse gefunden'
                 ]
-                : $data;
+                : array_flatten($data,1);
         }
 
         public function search()

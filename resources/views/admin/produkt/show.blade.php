@@ -581,9 +581,14 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row mb-2 d-md-block d-none">
-            <div class="col">
+        <div class="row mb-2 d-md-flex d-none">
+            <div class="col-md-6">
                 <h1 class="h4">{{ __('Produktübersicht') }}</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <p class="text-muted small">
+                    {{ __('Produkt') }}-UUID <br>{{ $produkt->prod_uuid }}
+                </p>
             </div>
         </div>
         <div class="row">
@@ -798,10 +803,11 @@
                                             />
                                         </div>
                                     </div>
-                                    <x-btnMain>
-                                        {{__('Produkt speichern')}}
-                                        <span class="fas fa-download ml-3"></span>
-                                    </x-btnMain>
+
+                                            <x-btnMain>
+                                                {{__('Produkt speichern')}}
+                                                <span class="fas fa-download ml-3"></span>
+                                            </x-btnMain>
                                 </form>
 
                             </div>

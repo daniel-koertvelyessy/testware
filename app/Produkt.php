@@ -43,7 +43,8 @@ class Produkt extends Model
      */
     public function getRouteKeyName()
     {
-        return 'prod_nummer';
+        return 'prod_uuid';
+      //  return 'prod_nummer';
     }
 
     public function ProduktKategorie()

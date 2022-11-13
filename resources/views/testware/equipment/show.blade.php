@@ -765,9 +765,14 @@
 @section('content')
 
     <div class="container-fluid">
-        <div class="row mb-2 d-md-block d-none">
+        <div class="row mb-2 d-md-flex d-none">
             <div class="col">
                 <h1 class="h4">{{ __('Geräteübersicht')}}</h1>
+            </div>
+            <div class="col">
+                <div class="text-muted small text-right">
+                    {{ __('Gerät') }}-UUID:<br>{{ $equipment->eq_uid }}
+                </div>
             </div>
         </div>
         <div class="row">
@@ -961,10 +966,16 @@
                                 @endif
 
                                 @if($upcomingControlList->count()>0 && ! $loggedInUserIsQualified)
-                                        <h3 class="h6">{{ __('Anstehende Prüfungen') }}</h3>
-                                    <div class="alert alert-info small alert-dismissible fade show" role="alert">
+                                    <h3 class="h6">{{ __('Anstehende Prüfungen') }}</h3>
+                                    <div class="alert alert-info small alert-dismissible fade show"
+                                         role="alert"
+                                    >
                                         {{ __('Sie sind nicht als befähigte Person für dieses Gerät eingetragen und dürfen daher keine Prüfung ausführen.') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <button type="button"
+                                                class="close"
+                                                data-dismiss="alert"
+                                                aria-label="Close"
+                                        >
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -1005,18 +1016,18 @@
                                     </div>
                                 @endif
 
-                                    @if($recentControlList->count()>0)
-                                        <h3 class="h6">{{ __('Durchgeführte Prüfungen') }}</h3>
-                                @forelse($recentControlList as $control_equipment_item)
-                                    @if (\App\ControlEvent::where('control_equipment_id',$control_equipment_item->id)->count()>0)
-                                        <x-equipment_control_card :cei="$control_equipment_item"
-                                                                  :is-sys-admin="Auth::user()->isSysAdmin()"
-                                        />
-                                    @endif
-                                @empty
-                                    <x-notifyer>{{__('keine Prüfberichte hinterlegt')}}</x-notifyer>
-                                @endforelse
+                                @if($recentControlList->count()>0)
+                                    <h3 class="h6">{{ __('Durchgeführte Prüfungen') }}</h3>
+                                    @forelse($recentControlList as $control_equipment_item)
+                                        @if (\App\ControlEvent::where('control_equipment_id',$control_equipment_item->id)->count()>0)
+                                            <x-equipment_control_card :cei="$control_equipment_item"
+                                                                      :is-sys-admin="Auth::user()->isSysAdmin()"
+                                            />
                                         @endif
+                                    @empty
+                                        <x-notifyer>{{__('keine Prüfberichte hinterlegt')}}</x-notifyer>
+                                    @endforelse
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -1491,12 +1502,12 @@
 
         }
 
-        $('#function_control_profil').change(function () {
+        $("function_control_profil").change(function () {
             checkFunctionControl();
             $('#function_control_firma').val('void');
         });
 
-        $('#function_control_firma').change(function () {
+        $("function_control_firma").change(function () {
             checkFunctionControl();
             $('#function_control_profil').val('void');
         });

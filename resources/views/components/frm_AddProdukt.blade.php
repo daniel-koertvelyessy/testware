@@ -1,5 +1,10 @@
 <div class="row">
     <div class="col-md-6">
+        <input type="hidden"
+               name="prod_uuid"
+               id="prod_uuid"
+               value="{{ old('prod_uuid') ?? \Illuminate\Support\Str::uuid() }}"
+        >
         <x-textfield id="prod_name"
                      label="{{__('Bezeichnung')}}"
         />
