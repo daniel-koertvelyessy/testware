@@ -15,7 +15,7 @@
         {
             Schema::table('produkts', function (Blueprint $table)
             {
-                $table->uuid('prod_uuid');
+                $table->uuid('prod_uuid')->nullable();
             });
 
 
