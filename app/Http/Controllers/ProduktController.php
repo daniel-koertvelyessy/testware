@@ -162,7 +162,6 @@
          */
         public function validateProdukt(): array
         {
-//            dd($request->id);
             return request()->validate([
                 'prod_label'           => [
                     'bail',
@@ -197,7 +196,6 @@
          */
         public function store(Request $request)
         {
-//        $this->authorize('isAdmin', Auth()->user());
 
             $produkt = Produkt::create($this->validateProdukt());
 

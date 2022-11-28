@@ -1,5 +1,6 @@
 <?php
 
+    use App\Produkt;
     use Illuminate\Database\Migrations\Migration;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@
             });
 
 
-            foreach (\App\Produkt::all() as $produkt) {
+            foreach (Produkt::all() as $produkt) {
                 if (!$produkt->prod_uuid) {
                     $produkt->prod_uuid = \Illuminate\Support\Str::uuid();
                     $produkt->save();
