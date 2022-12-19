@@ -59,6 +59,7 @@
                 <i class="ml-2 fas fa-print mr-2 fa-fw"></i>
                 {{__('Datenblatt drucken')}}
             </a>
+            @if(\App\EquipmentLabel::select('id')->count() >0 )
             <a class="dropdown-item"
                href="{{ route('makePDFEquipmentLabel',$equipment->id) }}"
                target="_blank"
@@ -66,6 +67,7 @@
                 <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
                 {{__('QR-Code drucken')}}
             </a>
+            @endif
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"
                href="{{ route('produkt.show',['produkt'=>$equipment->produkt]) }}"

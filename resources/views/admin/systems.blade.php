@@ -1289,6 +1289,12 @@
                                                          label="{{ __('Name') }}"
                                             />
                                         </div>
+                                        <div class="col">
+                                            <x-textfield id="tld_string"
+                                                         label="{{ __('Domainname') }}"
+                                                         placeholder="https://domain.com"
+                                            />
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
@@ -2340,6 +2346,7 @@
                     $('#label_id').val(res.id);
                     $('#label').val(res.label);
                     $('#name').val(res.name);
+                    $('#tld_string').val(res.tld_string);
                     (res.show_labels) ? $('#show_labels').prop('checked', true) : $('#show_labels').prop('checked',false);
                     (res.show_inventory) ? $('#show_inventory').prop('checked', true) : $('#show_inventory').prop('checked',false);
                     (res.show_location) ? $('#show_location').prop('checked', true) : $('#show_location').prop('checked',false);

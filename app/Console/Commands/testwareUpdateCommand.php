@@ -40,10 +40,25 @@ class testwareUpdateCommand extends Command
      */
     public function handle()
     {
-        $this->info('Start working ... ');
+      //  $this->execPrint("git pull https://user:password@bitbucket.org/user/repo.git master");
+        $update_git = $this->execPrint("git status");
         $output = '';
         Artisan::call('migrate',[],$output);
         $this->info(Artisan::output());
-        return 0;
+        return $update_git;
     }
+
+    private function execPrint($command) {
+        $result = array();
+        exec($command, $result);
+        $res = ("<pre>");
+        foreach ($result as $line) {
+            $res .=($line . "\n");
+        }
+        $res .=("</pre>");
+        return $res;
+    }
+
+
+
 }

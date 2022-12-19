@@ -16,6 +16,7 @@
                 <h1 class="h3">{{ $edata->eq_name }}</h1>
             </div>
         </div>
+
         @if(Auth::user())
         <div class="row">
             <div class="col-md-6">

@@ -33,6 +33,7 @@ class EquipmentEventCreated extends Notification
      */
     public function via($notifiable)
     {
+   //     return ['database'];
         return ['mail','database'];
     }
 
@@ -45,12 +46,11 @@ class EquipmentEventCreated extends Notification
     public function toMail($notifiable)
     {
         $equipment = Equipment::find($this->equipmentEvent->equipment_id)->first();
-        $url = env('APP_URL').'/equipment/'.$equipment->eq_inventar_nr;
         return (new MailMessage)
             ->subject('testWare Serviceinfo: Neue Schadensmeldung eingegangen!')
             ->greeting('Hallo !')
                     ->line('Es wurde eine Schadensmeldung für ein Geräte erzeugt. Bitte prüfen Sie den Vorgang in der testWare.')
-                    ->action('Direkter Link zum Gerät', url($url))
+                    ->action('Direkter Link zum Gerät', route('equipment.show',$equipment))
                     ->line('Diese Meldung erscheint auch in Ihrem Dashboard, wenn Sie sich das nächste mal anmelden!')
                     ->line('Ihr testWare Team');
     }

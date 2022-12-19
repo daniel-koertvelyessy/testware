@@ -51,7 +51,9 @@
                 $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y'), 0, 1);
                 //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
                 $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
-                $pdf->write2DBarcode($val, 'QRCODE,M', 180, 5, 20, 20, $style, 'N');
+
+
+                $pdf->write2DBarcode($val, 'QRCODE,L', 180, 5, 20, 20, $style, 'N');
             });
             PDF::setFooterCallback(function ($pdf)
             {
@@ -136,7 +138,6 @@
 
         static function makePDFLabel(int $label_id, int $equipment_id = NULL)
         {
-
             if (!$label_id) return false;
             if (isset($equipment_id)) {
                 $equipment = Equipment::find($equipment_id);
@@ -172,8 +173,9 @@
                 $thRatio = 8;
                 $valRatio = 5;
 
-                $val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
-
+                $val = env('APP_URL') . '/edata/' . $data['uid'];
+                //$val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
+// dd($val);
                 $style = [
                     'border'        => 0,
                     'vpadding'      => 0,
@@ -185,9 +187,9 @@
                     ],
                     'bgcolor'       => false,
                     //array(255,255,255)
-                    'module_width'  => 1,
+                    'module_width'  => 0.1,
                     // width of a single module in points
-                    'module_height' => 1
+                    'module_height' => 0.1
                     // height of a single module in points
                 ];
 
@@ -196,8 +198,7 @@
                 }
 
                 $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr - 2;
-
-                $pdf->write2DBarcode($val, 'QRCODE,H', ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt), ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml), $qrCodeQidth, $qrCodeQidth, $style, 'N');
+                $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt), ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml), $qrCodeQidth, $qrCodeQidth, $style, 'N');
 
                 if ($equipmentLabel->show_labels) {
                     $pdf->SetFont('Helvetica', '', $equipmentLabel->Label_h / $thRatio);
