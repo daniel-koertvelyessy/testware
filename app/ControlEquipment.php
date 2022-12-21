@@ -68,18 +68,19 @@ class ControlEquipment extends Model
         $hasTestItemMsg = '';
         $hasControlItems = 0;
 
+        $Anforderung = Anforderung::find($this->anforderungs_id);
 
-        if (!$this->Anforderung){
+        if (!$Anforderung){
             return [
                 'success' => false,
                 'html'    => $this->makeHtmlWarning(__('Keine Anforderung mit Gerät verknüpft'),'#')
             ];
         }
 
-        if ($this->countControlItems() > 0) {
-            $hasControlItems = $this->countControlItems();
+        if ($this->countControlItems($Anforderung) > 0) {
+            $hasControlItems = $this->countControlItems($Anforderung);
         } else {
-            $controlItemMsg = $this->makeHtmlWarning(__('Keine Prüfschritte gefunden!'), route('anforderungcontrolitem.create', ['anforderung_id' => $this->Anforderung->id]));
+            $controlItemMsg = $this->makeHtmlWarning(__('Keine Prüfschritte gefunden!'), route('anforderungcontrolitem.create', ['anforderung_id' => $Anforderung->id]));
 
         }
 
@@ -89,14 +90,18 @@ class ControlEquipment extends Model
         } else {
             $hasQualifiedUsersMsg = $this->makeHtmlWarning(__('Keine befähigte Person gefunden!'), route('produkt.index'));
         }
+
         $testProductsAvaliable = true;
         $hasTestItem = false;
         $controlProductsAvaliable = ControlProdukt::all()->count();
 
-        foreach ($this->Anforderung->AnforderungControlItem as $aci) {
+        $countControlEquipment = Equipment::getControlEquipmentList();
+
+
+        foreach ($Anforderung->AnforderungControlItem as $aci) {
             $hasTestItem = true;
             if ($aci->aci_control_equipment_required) {
-                if ($controlProductsAvaliable === 0) {
+                if ($countControlEquipment->count() == 0) {
                     $testProductsAvaliable = false;
                     $hasTestItemMsg = $this->makeHtmlWarning(__('Keine Prüfmittel vorhanden!'), route('produkt.index'));
                 }
@@ -127,9 +132,10 @@ class ControlEquipment extends Model
 
     }
 
-    public function countControlItems()
+    public function countControlItems(Anforderung $anforderung)
     {
-        return ($this->Anforderung) ? $this->Anforderung->AnforderungControlItem->count() : -1;
+
+        return ($anforderung) ? $anforderung->AnforderungControlItem->count() : -1;
     }
 
     public function makeHtmlWarning($msg, $link)
@@ -139,6 +145,7 @@ class ControlEquipment extends Model
 
     public function countQualifiedUser()
     {
+
         $qualifiedUser = 0;
         $qualifiedUser += $this->Equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $this->Equipment->countQualifiedUser();

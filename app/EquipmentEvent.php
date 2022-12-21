@@ -40,4 +40,10 @@ class EquipmentEvent extends Model
         return $this->hasMany(EquipmentEventItem::class);
     }
 
+    public function markAsRead() :bool
+    {
+        $this->read = now();
+        return $this->save();
+    }
+
 }

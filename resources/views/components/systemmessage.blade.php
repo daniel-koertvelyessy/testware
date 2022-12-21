@@ -18,17 +18,21 @@
                   <div class="dropdown-menu"
                        aria-labelledby="dropdownMenuButton"
                   >
-                      @if (isset($link))
+                      @if (isset($linkshow))
                           <a class="dropdown-item  justify-content-between d-flex align-items-center"
-                             href="{{ $link }}"
-                          >{{ $linkText }} <i class="fas fa-chevron-right"></i></a>
+                             href="{{ $linkshow }}"
+                          >{{ $linkshowtext ?? __('öffnen') }} <i class="fas fa-chevron-right"></i></a>
                       @endif
-                      <a href="#"
-                         class="dropdown-item  justify-content-between d-flex align-items-center"
-                      >Bestätigen <i class="fas fa-check"></i></a>
-                      <a href="#"
+                      @if (isset($linkconfirm))
+                          <a class="dropdown-item  justify-content-between d-flex align-items-center"
+                             href="{{ $linkconfirm }}"
+                          >{{ $linkconfirmtext ?? __('bestätigen') }} <i class="fas fa-check"></i></a>
+                      @endif
+                      @if( isset($linkdelete))
+                      <a href="{{ $linkdelete }}"
                          class="dropdown-item  justify-content-between d-flex align-items-center"
                       >Löschen <i class="far fa-trash-alt"></i></a>
+                          @endif
                   </div>
                 </div>
            </span>

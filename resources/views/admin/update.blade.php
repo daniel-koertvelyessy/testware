@@ -10,9 +10,6 @@
 
     <div class="container-fluid">
 
-
-        @dump($dumpSQL)
-        @dump($result_sql_dump)
         <div class="bg-light p-7">
             <samp>@foreach ($result_sql_dump as $line)
                     {{ $line}}

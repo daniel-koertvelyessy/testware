@@ -147,7 +147,7 @@
     >
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body bg-light">
                     @forelse(auth()->user()->unreadNotifications()->get() as $notification)
                         <x-message_modal :notification="$notification" />
                     @empty

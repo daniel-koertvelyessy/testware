@@ -2,15 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 
 class EquipmentLabel extends Model
 {
-    use HasFactory;
-
     protected $guarded=[];
 
     protected $casts=[
@@ -43,6 +40,7 @@ class EquipmentLabel extends Model
         $this->logo_h = $request->logo_h;
         $this->logo_w = $request->logo_w;
         $this->logo_svg = $request->logo_svg;
+        $this->tld_string = $request->tld_string;
         return $this->save();
     }
 

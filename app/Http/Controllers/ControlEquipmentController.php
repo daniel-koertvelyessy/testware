@@ -57,6 +57,7 @@
          */
         public function create(Request $request)
         {
+         //   dd($request);
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             $controlEquipmentIsComplete = true;

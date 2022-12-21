@@ -23,32 +23,33 @@
         if ($objects['requirements'] === 0) $issueCounter++;
         if ($objects['requirements_items'] === 0) $issueCounter++;
         if ($objects['products'] === 0) $issueCounter++;
-        if ($objects['control_products'] === 0) $issueCounter++;
+        if ($objects['control_equipment'] == 0) $issueCounter++;
+        if ($objects['control_products'] == 0) $issueCounter++;
         if ($objects['storages'] === 0) $issueCounter++;
         if ($objects['incomplete_equipment']>0 && $objects['equipment']>0 ) $issueCounter++;
         if ($objects['incomplete_requirement']>0 && $objects['requirements']>0 ) $issueCounter++;
-
         if($issueCounter>0){
             $statusMsg = ($issueCounter===1) ? __('Problem beheben') : __('Probleme beheben');
 
             if (
-                $objects['incomplete_equipment']>0 && $objects['equipment']>0 ||
-                $objects['incomplete_requirement']>0 && $objects['requirements']>0 ||
-                $objects['equipment_qualified_user'] === 0 ||
-                $objects['product_qualified_user'] === 0 ||
-                $objects['regulations'] === 0 ||
-                $objects['requirements'] === 0 ||
-                $objects['requirements_items'] === 0 ||
-                $objects['products'] === 0 ||
-                $objects['control_products']===0 &&
-                $objects['storages'] === 0
+                $objects['incomplete_equipment']>0 && $objects['equipment']>0
+               || $objects['incomplete_requirement']>0 && $objects['requirements']>0
+               || $objects['equipment_qualified_user'] === 0
+               || $objects['product_qualified_user'] === 0
+               || $objects['regulations'] === 0
+               || $objects['requirements'] === 0
+               || $objects['requirements_items'] === 0
+               || $objects['products'] === 0
+               || $objects['control_equipment'] == 0
+               || $objects['control_products']===0
+               && $objects['storages'] === 0
                 )
                 $status .= '<a href="'.route('admin.index').'" class="btn-warning p-1"><span class="font-bold mx-2">'
                 . $issueCounter.'</span>'. $statusMsg .'</a>';
 
             if (
-                $objects['storages']===0||
-                $objects['products']===0
+                $objects['storages']===0
+                || $objects['products']===0
                 )
                 $status .= '<a href="'.route('admin.index').'" class="btn-danger p-1"><span class="font-bold mx-2">'.
                  $issueCounter.'</span>'. $statusMsg .'</a>';
@@ -74,6 +75,8 @@
 
     <div>
         {!! $status !!}
-        <a href="{{ route('imprint') }}" class="mr-2">{{ __('Impressum') }}</a>
+        <a href="{{ route('imprint') }}"
+           class="mr-2"
+        >{{ __('Impressum') }}</a>
     </div>
 </footer>

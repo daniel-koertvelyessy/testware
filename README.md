@@ -3,7 +3,7 @@
 ## Content
 testWare enables you manage the testing and maintanace of your location and equipment. 
 
-Current version: `1.70`
+Current version: `1.72.2`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
@@ -31,7 +31,7 @@ Make sure your server meets following requirements:
 #### Step 1: Clone repository
 
 ```bash
-git clone https://testware.hub.bitpack.io/testware.git
+git clone https://github.com/daniel-koertvelyessy/testware.git
 ```
 
 #### Step 2: setup database

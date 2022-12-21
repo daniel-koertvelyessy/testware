@@ -65,9 +65,9 @@ class EquipmentEventCreated extends Notification
     {
         return [
             'userid'=>$this->equipmentEvent->equipment_event_user,
-            'message'=>$this->equipmentEvent->equipment_event_item_text,
+            'message'=>'Meldung zum Gerät ' . $this->equipmentEvent->Equipment->eq_inventar_nr . ': ' . $this->equipmentEvent->equipment_event_text,
             'header'=>__('Neues Ereignis'),
-            'eventid'=>$this->equipmentEvent->equipment_event_id,
+            'eventid'=>$this->equipmentEvent->id,
             'detailLink'=>route('event.show',$this->equipmentEvent->id)
         ];
     }

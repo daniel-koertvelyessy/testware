@@ -319,8 +319,9 @@
                     <a href="{{ route('event.index') }}">{{__('Ereignisse')}}</a>
                 </h2>
                 @forelse(App\EquipmentEvent::where('read',null)->take(10)->latest()->get() as $equipmentEvent)
-                    <x-systemmessage link="{{ route('equipment.show', $equipmentEvent->equipment->eq_inventar_nr ) }}"
-                                     linkText="{{__('zum Gerät')}}"
+{{--                    @dump($equipmentEvent)--}}
+                    <x-systemmessage linkshow="{{ route('equipment.show', $equipmentEvent->equipment ) }}"
+                                     linkshowtext="{{__('zum Gerät')}}"
                                      date="{{ $equipmentEvent->created_at }}"
                                      subject="{{ $equipmentEvent->equipment->produkt->prod_name }}"
                     >

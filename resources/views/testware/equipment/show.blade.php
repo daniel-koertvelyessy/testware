@@ -67,6 +67,13 @@
                 <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
                 {{__('QR-Code drucken')}}
             </a>
+                @else
+                <a class="dropdown-item disabled"
+                   title="{{ __('Es sind keine Labels vorhanden.') }}"
+                >
+                    <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
+                    {{__('QR-Code drucken')}}
+                </a>
             @endif
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"
@@ -280,14 +287,14 @@
                         </thead>
                         <tbody>
                         @forelse ($upcomingControlList as $controlItem)
-                            @if(!$controlItem->Anforderung->is_initial_test)
+                            @if(!$controlItem->is_initial_test)
                                 <tr style="vertical-align: middle;">
-                                    <td>{{ $controlItem->Anforderung->an_name ?? 'nicht definiert' }}</td>
+                                    <td>{{ $controlItem->an_name ?? 'nicht definiert' }}</td>
                                     <td>{!!  $controlItem->checkDueDate($controlItem) !!} </td>
                                     <td class="">
                                         @if($controlItem->checkControlRequirementsMet()['success'])
                                             @if($loggedInUserIsQualified)
-                                                <a href="{{ route('control.create',['test_id' => $controlItem]) }}"
+                                                <a href="{{ route('control.create', ['test_id' =>  $controlItem->id]) }}"
                                                    class="btn btn-sm btn-outline-primary"
                                                 > {{__('Prüfung starten')}}
                                                 </a>
@@ -599,7 +606,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit"
-                                id="btnAddEquipmentFunctionTest"
+                                id="btnAddEquipmentControlTest"
                                 class="btn btn-primary"
                         >{{ __('Prüfung starten') }}</button>
                     </div>
@@ -744,7 +751,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button"
-                                id="btnAddEquipmentFunctionTest"
+                                id="^"
                                 class="btn btn-primary"
                         >{{ __('Funktionsprüfung erfassen') }}</button>
                     </div>

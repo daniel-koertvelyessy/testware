@@ -133,6 +133,16 @@ class EquipmentEventController extends Controller
         return view('testware.events.show', compact('event'));
     }
 
+    public function read(EquipmentEvent $event, $notification = NULL)
+    {
+        foreach(\Auth::user()->unreadNotifications()->get() as $note){
+            if ($notification == $note->id) $note->markAsRead();
+        }
+
+        $event->markAsRead();
+        return redirect()->route('event.show', $event);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

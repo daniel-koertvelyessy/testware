@@ -74,7 +74,7 @@
                     </a>
                 </li>
                 <li class="bg-primary">
-                    <a class="dropdown-item disabled small text-light">testWare version: 1.71</a>
+                    <a class="dropdown-item disabled small text-light">testWare version: 1.72.2</a>
                 </li>
             </ul>
 

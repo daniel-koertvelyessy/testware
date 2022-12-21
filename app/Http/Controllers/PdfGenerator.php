@@ -172,10 +172,7 @@
                 $hRatio = 12;
                 $thRatio = 8;
                 $valRatio = 5;
-
-                $val = env('APP_URL') . '/edata/' . $data['uid'];
-                //$val = env('APP_URL') . '/edata/' . env('APP_HSKEY') . $data['uid'];
-// dd($val);
+                $val = $equipmentLabel->tld_string . '/edata/' . $data['uid'];
                 $style = [
                     'border'        => 0,
                     'vpadding'      => 0,
@@ -187,9 +184,9 @@
                     ],
                     'bgcolor'       => false,
                     //array(255,255,255)
-                    'module_width'  => 0.1,
+                    'module_width'  => 1,
                     // width of a single module in points
-                    'module_height' => 0.1
+                    'module_height' => 1
                     // height of a single module in points
                 ];
 
@@ -198,7 +195,7 @@
                 }
 
                 $qrCodeQidth = $equipmentLabel->label_w - $equipmentLabel->label_ml - $equipmentLabel->label_mr - 2;
-                $pdf->write2DBarcode($val, 'QRCODE,M', ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt), ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml), $qrCodeQidth, $qrCodeQidth, $style, 'N');
+                $pdf->write2DBarcode($val, 'QRCODE,L', ($equipmentLabel->qrcode_x + $equipmentLabel->label_mt), ($equipmentLabel->qrcode_y + $equipmentLabel->label_ml), $qrCodeQidth, $qrCodeQidth, $style, 'N');
 
                 if ($equipmentLabel->show_labels) {
                     $pdf->SetFont('Helvetica', '', $equipmentLabel->Label_h / $thRatio);

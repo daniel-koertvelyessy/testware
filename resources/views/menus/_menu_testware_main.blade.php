@@ -64,10 +64,13 @@
             >{{__('Neu')}}</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">{{__('Letze Ereignisse')}}</h6>
-            @foreach (\App\EquipmentEvent::where('read','<>',NULL)->take(5)->latest()->get() as $equipMen)
+            @foreach (\App\EquipmentEvent::select(['id','created_at','read'])->take(5)->latest()->get() as $equipMen)
                 <a class="dropdown-item"
                    href="{{ route('event.show',$equipMen) }}"
-                >{{ $equipMen->created_at }}</a>
+                >
+                    <i class="far {{ $equipMen->read ? 'fa-envelope-open' : 'fa-envelope' }}"></i>
+                    {{ $equipMen->created_at->diffForHumans() }}
+                </a>
             @endforeach
         </div>
     </li>

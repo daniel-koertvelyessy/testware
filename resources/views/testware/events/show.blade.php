@@ -403,6 +403,7 @@
 
             <div class="row">
                 <div class="col">
+                    <section class="bg-light px-2 rounded shadow-sm">
                     <h2 class="h5 mt-3">{{__('Details zur Meldung')}} </h2>
                     <dl class="row">
                         <dt class="col-sm-3">{{__('Erstellt')}}</dt>
@@ -428,10 +429,11 @@
                         <dt class="col-sm-3">{{__('Meldung')}}</dt>
                         <dd class="col-sm-9">{{ $event->equipment_event_text }}</dd>
                     </dl>
+                    </section>
                 </div>
             </div>
             <div class="row">
-                <div class="col d-flex justify-content-start">
+                <div class="col d-flex justify-content-between mt-4">
                     <button type="button"
                             class="btn btn-danger mr-2"
                             data-toggle="modal"

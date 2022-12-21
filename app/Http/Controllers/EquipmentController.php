@@ -165,6 +165,7 @@
 
             EquipmentAction::deleteLoseProductDocumentEntries($equipment);
 
+
             return view('testware.equipment.show', [
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
                 'upcomingControlList'     => $service->getUpcomingControlItems($equipment),
@@ -174,8 +175,8 @@
                 'euqipmentDocumentList'   => $serviceDocument->getDocumentList($equipment),
                 'functionDocumentList'    => $serviceDocument->getFunctionTestDocumentList($equipment),
                 'newFileList'             => $serviceDocument->checkStorageSyncDB($equipment),
+                'companyString'           => $service->makeCompanyString($equipment),
                 'equipment'               => $equipment,
-                'companyString'           => $service->makeCompanyString($equipment)
             ]);
         }
 

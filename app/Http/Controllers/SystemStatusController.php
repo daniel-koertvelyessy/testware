@@ -73,11 +73,11 @@ class SystemStatusController  extends Controller
                 $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id',$item->id)->count() === 0 ? 1:0;
             }
 
-            $countControlEquipment = Equipment::with('produkt')->get()->map(function ($value, $item) {
-                return $value->produkt->ControlProdukt === null ? 1 : 0;
+            $countControlEquipment = Equipment::with('produkt')->get()->map(function ($value) {
+                return $value->produkt->ControlProdukt != null;
             })->sum();
-            $countProducts = Produkt::all()->count();
 
+            $countProducts = Produkt::all()->count();
             return [
                 'products'                 => $countProducts,
                 'equipment'                => $countEquipment,

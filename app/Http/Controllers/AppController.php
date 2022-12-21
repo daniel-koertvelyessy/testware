@@ -51,8 +51,9 @@ class AppController extends Controller
         }
 
         $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
-        return redirect()->route('portal-main');
+        return \Auth::user() ?  redirect()->route('dashboard') : redirect()->route('portal-main');
     }
+
     /**
      * @return array
      */

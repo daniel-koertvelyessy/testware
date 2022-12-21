@@ -20,35 +20,35 @@
     Route::get('/update', function ()
     {
 
+        return redirect()->route('dashboard');
+        /*   if (Auth::user()->isSysAdmin()) {
+              $result_git = exec('git pull https://github.com/daniel-koertvelyessy/testware.git', $res_git_pull);
+               $result_migrate = Artisan::call('migrate',[]);
+               $output = Artisan::output();
 
-        if (Auth::user()->isSysAdmin()) {
-           $result_git = exec('git pull https://github.com/daniel-koertvelyessy/testware.git', $res_git_pull);
-            $result_migrate = Artisan::call('migrate',[]);
-            $output = Artisan::output();
+               $database = env('DB_DATABASE');
+               $path     =  storage_path().'/dbbk/';
+               $ip       = env('DB_HOST');
+               $port     = env('DB_PORT');
+               $user    = env('DB_USERNAME');
+               $passw    = env('DB_PASSWORD');
 
-            $database = env('DB_DATABASE');
-            $path     =  storage_path().'/dbbk/';
-            $ip       = env('DB_HOST');
-            $port     = env('DB_PORT');
-            $user    = env('DB_USERNAME');
-            $passw    = env('DB_PASSWORD');
+               $cmd = "docker-compose exec db pg_dump -U $user -P $passw  -h db $database > $path/dump.sql";
 
-            $cmd = "docker-compose exec db pg_dump -U $user -P $passw  -h db $database > $path/dump.sql";
+               $dumpSQL = exec($cmd,$result_sql_dump);
 
-            $dumpSQL = exec($cmd,$result_sql_dump);
+               return view('admin.update', [
+                   'result_sql_dump' => $result_sql_dump,
+                   'dumpSQL' => $dumpSQL,
+                   'result_git' => $result_git,
+                   'res_git_pull' => $res_git_pull,
+                   'response_migrate' => $output,
+                   'result_migrate' => $result_migrate,
+               ]);
 
-            return view('admin.update', [
-                'result_sql_dump' => $result_sql_dump,
-                'dumpSQL' => $dumpSQL,
-                'result_git' => $result_git,
-                'res_git_pull' => $res_git_pull,
-                'response_migrate' => $output,
-                'result_migrate' => $result_migrate,
-            ]);
-
-        } else {
-            return back();
-        }
+           } else {
+               return back();
+           }*/
     })->middleware('auth');
 
     Route::get('/', function ()
@@ -95,28 +95,28 @@
             return redirect()->route('app');
         }
 
-   /*     $str = str_split($ident, strlen(env('APP_HSKEY')));
-        if ($str[0] === env('APP_HSKEY')) {
-            $e = explode(env('APP_HSKEY'), $ident);
-            $uid = $e[1];
+        /*     $str = str_split($ident, strlen(env('APP_HSKEY')));
+             if ($str[0] === env('APP_HSKEY')) {
+                 $e = explode(env('APP_HSKEY'), $ident);
+                 $uid = $e[1];
 
-            $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
-            if ($equipment) {
-                $edata = Equipment::findOrFail($equipment->equipment_id);
-                return view('testware.app.equipmentdata', [
-                    'edata' => $edata,
-                    'ident' => $ident
-                ]);
-            } else {
-                $request->session()->flash('status',
-                    __('Das Gerät konnte nicht gefunden werden!'));
-                return redirect()->route('app');
-            }
-        } else {
-            $request->session()->flash('status',
-                __('Das Gerät konnte nicht gefunden werden!'));
-            return redirect()->route('app');
-        }*/
+                 $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
+                 if ($equipment) {
+                     $edata = Equipment::findOrFail($equipment->equipment_id);
+                     return view('testware.app.equipmentdata', [
+                         'edata' => $edata,
+                         'ident' => $ident
+                     ]);
+                 } else {
+                     $request->session()->flash('status',
+                         __('Das Gerät konnte nicht gefunden werden!'));
+                     return redirect()->route('app');
+                 }
+             } else {
+                 $request->session()->flash('status',
+                     __('Das Gerät konnte nicht gefunden werden!'));
+                 return redirect()->route('app');
+             }*/
     })->name('edata');
 
     Route::get('edmg/{ident}', function ($ident, Request $request)
@@ -139,31 +139,31 @@
         }
 
 
-     /*   $str = str_split($ident, strlen(env('APP_HSKEY')));
+        /*   $str = str_split($ident, strlen(env('APP_HSKEY')));
 
-        if ($str[0] === env('APP_HSKEY')) {
-            $e = explode(env('APP_HSKEY'), $ident);
-            $uid = $e[1];
-            $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
+           if ($str[0] === env('APP_HSKEY')) {
+               $e = explode(env('APP_HSKEY'), $ident);
+               $uid = $e[1];
+               $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
 
 
-            if ($equipment) {
-                $edata = Equipment::findOrFail($equipment->equipment_id);
-                //            dd($edata);
-                return view('testware.app.reportdamage', [
-                    'edata' => $edata,
-                    'ident' => $ident
-                ]);
-            } else {
-                $request->session()->flash('status',
-                    __('Das Gerät konnte nicht gefunden werden!'));
-                return redirect()->route('app');
-            }
-        } else {
-            $request->session()->flash('status',
-                __('Das Gerät konnte nicht gefunden werden!'));
-            return redirect()->route('app');
-        }*/
+               if ($equipment) {
+                   $edata = Equipment::findOrFail($equipment->equipment_id);
+                   //            dd($edata);
+                   return view('testware.app.reportdamage', [
+                       'edata' => $edata,
+                       'ident' => $ident
+                   ]);
+               } else {
+                   $request->session()->flash('status',
+                       __('Das Gerät konnte nicht gefunden werden!'));
+                   return redirect()->route('app');
+               }
+           } else {
+               $request->session()->flash('status',
+                   __('Das Gerät konnte nicht gefunden werden!'));
+               return redirect()->route('app');
+           }*/
     })->name('edmg');
 
     /**
@@ -243,6 +243,8 @@
     {
         Route::post('app.store', 'AppController@store')->name('app.store');
     });
+
+    Route::get('event/read/{event}/{notification?}', 'EquipmentEventController@read')->name('event.read');
     Route::put('event.accept',
         'EquipmentEventController@accept')->name('event.accept');
 
@@ -349,7 +351,7 @@
     Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment)
     {
         $equip = Equipment::find($equipment);
-        if($equip->produkt->equipment_label_id) {
+        if ($equip->produkt->equipment_label_id) {
             App\Http\Controllers\PdfGenerator::makePDFLabel($equip->produkt->equipment_label_id, $equipment);
         } elseif (EquipmentLabel::count() > 0) {
             $latestEquipmentlabelId = EquipmentLabel::first()->id;

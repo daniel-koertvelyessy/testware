@@ -64,8 +64,7 @@
          */
         public function update(Request $request, EquipmentLabel $equipmentlabel)
         {
-
-
+            $this->validateEquipmentLabel();
             $equipmentlabel->name = $request->name;
             $equipmentlabel->tld_string = $request->tld_string ?? env('APP_URL');
             $equipmentlabel->label = $request->label;
