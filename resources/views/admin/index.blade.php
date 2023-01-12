@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{ __('Systemstatus') }} &triangleright; {{__('Systemeinstellungen')}}
-@endsection
+    {{ __('Systemstatus') }} &triangleright; {{__('Systemeinstellungen')}}@endsection
 
 @section('mainSection')
     {{__('Systemstatus')}}
@@ -12,19 +11,7 @@
     @include('menus._menuAdmin')
 @endsection
 
-{{--@section('breadcrumbs')--}}
-{{--    <nav aria-label="breadcrumb">--}}
-{{--        <ol class="breadcrumb">--}}
-{{--            <li class="breadcrumb-item">--}}
-{{--                <a href="/">{{__('Portal')}}</a>--}}
-{{--            </li>--}}
-{{--            <li class="breadcrumb-item active"--}}
-{{--                aria-current="page"--}}
-{{--            >{{__('Verwaltung')}}--}}
-{{--            </li>--}}
-{{--        </ol>--}}
-{{--    </nav>--}}
-{{--@endsection--}}
+{{--@section('breadcrumbs')--}}{{--    <nav aria-label="breadcrumb">--}}{{--        <ol class="breadcrumb">--}}{{--            <li class="breadcrumb-item">--}}{{--                <a href="/">{{__('Portal')}}</a>--}}{{--            </li>--}}{{--            <li class="breadcrumb-item active"--}}{{--                aria-current="page"--}}{{--            >{{__('Verwaltung')}}--}}{{--            </li>--}}{{--        </ol>--}}{{--    </nav>--}}{{--@endsection--}}
 
 @section('content')
     <div class="container-fluid">
@@ -71,8 +58,10 @@ $objects['storages'] === 0                                            )
                                 aria-controls="nav-dblinks"
                                 aria-selected="false"
                         >
-                            <span class="{{ $dbstatus['totalBrokenLinks']>0 ? 'text-danger' :
-                            'text-success'}}">{{__('Datenbank')}}</span></button>
+                            <span class="{{ $dbstatus['totalBrokenLinks']>0 || $dbstatus['brokenProducts']>0 ? 'text-danger' :
+                            'text-success'}}"
+                            >{{__('Datenbank')}}</span>
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content pt-3"
@@ -187,7 +176,8 @@ $objects['storages'] === 0                                            )
                                     />
                                 @endif
 
-                                <h2 class="h5">{{ __('Produkte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
+                                <h2 class="h5">{{ __('Produkte') }}
+                                    <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
                                 </h2>
                                 @if($objects['product_qualified_user']>0)
                                     <x-system-status-msg counter="{{ $objects['product_qualified_user'] }}"
@@ -247,7 +237,8 @@ $objects['storages'] === 0                                            )
                                     />
                                 @endif
                                 @if($objects['equipment_qualified_user']>0 && $objects['equipment']>0)
-                                    <h2 class="h5">{{ __('Geräte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
+                                    <h2 class="h5">{{ __('Geräte') }}
+                                        <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
                                     </h2>
                                     <x-system-status-msg counter="{{ $objects['equipment_qualified_user'] }}"
                                                          link="{{ route('equipment.index') }}"
@@ -255,7 +246,8 @@ $objects['storages'] === 0                                            )
                                                          msg="{{ __('Sehr gut! Benutzer sind befähigt!') }}"
                                     />
                                 @elseif($objects['equipment_qualified_user']===0 && $objects['equipment']>0)
-                                    <h2 class="h5">{{ __('Geräte') }} <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
+                                    <h2 class="h5">{{ __('Geräte') }}
+                                        <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}
                                     </h2>
                                     <x-system-status-msg link="{{ route('equipMain') }}"
                                                          type="warning"
@@ -270,18 +262,38 @@ $objects['storages'] === 0                                            )
                          role="tabpanel"
                          aria-labelledby="nav-dblinks-tab"
                     >
-                        <div class="row col">
-                            @if($dbstatus['totalBrokenLinks']>0)
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if($dbstatus['totalBrokenLinks']>0)
 
-                                Es sind {{$dbstatus['totalBrokenLinks']}} verwaiste Einträge gefunden worden.
+                                    Es sind {{$dbstatus['totalBrokenLinks']}} verwaiste Einträge gefunden worden.
 
-                            @else
-
-                                <div class="alert alert-success" role="alert">
-                                    <h4 class="alert-heading">{{__('Alles gut')}}</h4>
-                                    <p>{{__('Es konten keine verwaisten Datenbankeinträge gefunden werden.')}}</p>
-                                </div>
-                            @endif
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Keine verwaisen Prüfungen')}}</h4>
+                                        <p>{{__('Es konten keine verwaisten Prüfungen gefunden werden.')}}</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="col-md-6">
+                                @if($dbstatus['brokenProducts']>0)
+                                    @if($dbstatus['brokenProducts']>1)
+                                        <p class="lead text-danger">Es sind {{ $dbstatus['brokenProducts'] }} Produkte ohne UUID gefunden worden!</p>
+                                    @else
+                                        <p class="lead text-danger">Es ist ein Produkt ohne UUID gefunden worden!</p>
+                                    @endif
+                                        <a href="{{ route('products.setuuids') }}" class="btn btn-outline-primary">beheben</a>
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Keine Produkte ohne UUID')}}</h4>
+                                        <p>{{__('Es wurde keine Produkte ohne UUID gefunden.')}}</p>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

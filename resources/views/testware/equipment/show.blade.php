@@ -592,7 +592,7 @@
                         <input type="hidden"
                                name="equipment"
                                id="AddManualControl_equipment_id"
-                               value="{{ $equipment->id }}"
+                               value="{{ $equipment->eq_uid }}"
                         >
 
                         <x-selectfield id="requirement"

@@ -9,10 +9,11 @@
         $objects = $systemStatus->getObjectStatus();
 
 
-        if ($dbstatus['totalBrokenLinks']>0){
+
+        if (array_sum($dbstatus)>0){
             $status .= '<a href="'.route('admin.index').'"
            class="text-danger mr-2"
-           title="'. __('Mindestens :num verwaiste Einträge gefunden',['num'=>$dbstatus['totalBrokenLinks']]).'"
+           title="'. __('Mindestens :num verwaiste/fehlerhafte Einträge in der Datenbank gefunden',['num'=>array_sum($dbstatus)]).'"
         ><i class="fas fa-database"></i></a>';
         }
 
@@ -61,15 +62,14 @@
 <footer class="page-footer bg-light d-flex fixed-bottom align-items-center justify-content-between small">
     <div class="p-1">
         <span class="text-dark">
-            © 2020 - {{ date('Y') }}
-        <a href="https://bitpack.io/"
-           title="bitpack.io"
+            ©
+        <a href="https://testware.io"
+           title="thermo-control Körtvélyessy GmbH"
            target="_blank"
+           class="text-dark"
         >
-            <span style="color: #000000;">bitpack</span>
-                <span style="color: #c7d301;">.io</span>
+            thermo-control Körtvélyessy GmbH
         </a>
-        &nbsp; GmbH
         </span>
     </div>
 
@@ -78,5 +78,12 @@
         <a href="{{ route('imprint') }}"
            class="mr-2"
         >{{ __('Impressum') }}</a>
+        <a href="https://github.com/daniel-koertvelyessy/testware"
+           class="mx-2"
+           target="_blank"
+           title="participate on github"
+        >
+            <i class="fab fa-github"></i>
+        </a>
     </div>
 </footer>

@@ -190,9 +190,17 @@ Route::put('updateUserTheme', 'AdminController@updateUserTheme')->name('updateUs
 
 
 /**
+ *   Geräte
+ */
+
+Route::post('controlsync', 'ControlEquipmentController@sync')->name('control.sync');
+
+
+/**
  *   Produkt Kategorien
  */
 
+Route::put('updateProdKat', 'AdminController@updateProdKat')->name('updateProdKat');
 Route::put('updateProdKat', 'AdminController@updateProdKat')->name('updateProdKat');
 Route::post('createProdKat', 'AdminController@createProdKat')->name('createProdKat');
 Route::post('getProdKatData', 'AdminController@getProdKatData')->name('getProdKatData');

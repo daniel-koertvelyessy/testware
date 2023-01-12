@@ -39,13 +39,14 @@
                         <th>@sortablelink('prod_active', __('Aktiv'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ControlProdukt.id', __('Prüfmittel'))</th>
                         <th class="d-none d-md-table-cell">@sortablelink('ProduktState.ps_label', __('Status'))</th>
-                        @if(Auth::user()->isSysAdmin())
+                        @if($isSysAdmin)
                         <th></th>
                         @endif
                     </tr>
                     </thead>
                     <tbody>
                     @forelse ($produktList as $produkt)
+                        @if($produkt)
                         <tr>
                             <td>
                                 <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_label }}</a>
@@ -68,7 +69,7 @@
                                 @endif
 
                             </td>
-                            @if(Auth::user()->isSysAdmin())
+                            @if($isSysAdmin)
                             <td>
                                 <x-menu_context :object="$produkt"
                                                 routeOpen="{{ route('produkt.show',$produkt) }}"
@@ -80,6 +81,7 @@
                             </td>
                             @endif
                         </tr>
+                        @endif
                     @empty
                         <tr>
                             <td colspan="7">

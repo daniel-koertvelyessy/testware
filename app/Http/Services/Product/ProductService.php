@@ -8,6 +8,7 @@
     use App\Produkt;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Storage;
+    use Illuminate\Support\Str;
 
     class ProductService
     {
@@ -75,5 +76,20 @@
         public function getRequirementList(Produkt $produkt)
         {
             return \App\ProduktAnforderung::where('produkt_id', $produkt->id)->get();
+        }
+
+        public function setuuid()
+        {
+
+            $counter = Produkt::withTrashed()->where('prod_uuid', null)->get()->map(function ($product)
+            {
+                $product->prod_uuid = Str::uuid();
+                return $product->save();
+            });
+
+            $msg = ($counter->sum()==1) ? __('Es wurde ein Produkt mit einer neuen UUID vershen.') : __('Es wurden :num Produkte mit einer UUID versehen.', ['num' => $counter->sum()]);
+
+            request()->session()->flash('status', $msg);
+            return back();
         }
     }

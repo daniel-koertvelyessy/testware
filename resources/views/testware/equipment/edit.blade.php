@@ -128,7 +128,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <x-staticCheckfield id="eq_inventar_nr"
+                            <x-textfield id="eq_inventar_nr"
                                                 label="{{__('Inventarnummer')}}:"
                                                 max="100"
                                                 value="{{ $equipment->eq_inventar_nr }}"

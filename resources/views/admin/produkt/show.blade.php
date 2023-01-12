@@ -113,6 +113,112 @@
         </div>
     </div>
 
+    <div class="modal fade"
+         id="modalSyncRequirement"
+         tabindex="-1"
+         aria-labelledby="modalSyncRequirementLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">{{__('Prüfungen Syncronisieren')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Bitte die Geräte aussuchen, welche neue Prüftermine erhalten sollen.</p>
+                    <form action="{{ route('control.sync') }}"
+                          method="POST"
+                          class="needs-validation"
+                          id="frmSyncRequirement"
+                          name="frmSyncRequirement"
+                    >
+                        @csrf
+                        <table class="table table-responsive-md table-striped"
+                               id="tabProduktEquipmentListe"
+                        >
+                            <thead>
+                            <tr>
+                                <th> {{__('Inventarnummer')}}</th>
+                                <th> {{__('Seriennummer')}}</th>
+                                <th> <input class="form-check-input"
+                                            type="checkbox"
+                                            value="1"
+                                            id="selectAllSyncItems"
+                                    >
+                                    <label class="form-check-label"
+                                           for="selectAllSyncItems"
+                                    >
+                                        {{ __('auswählen') }}
+                                    </label></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($equipLists as $equipment)
+                                <tr>
+                                    <td>
+                                        {{ $equipment->eq_inventar_nr }}
+                                    </td>
+                                    <td>
+                                        {{ $equipment->eq_serien_nr }}
+                                    </td>
+                                    <td class="d-flex align-items-center justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input syncItem"
+                                                   type="checkbox"
+                                                   name="sycEquip[]"
+                                                   id="sycEquip{{ $equipment->eq_uid }}"
+                                                   value="{{ $equipment->eq_uid }}"
+                                            >
+                                            <label class="form-check-label"
+                                                   for="sycEquip{{ $equipment->eq_uid }}"
+                                            >auswählen
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4">
+                                        <x-notifyer>Keine Geräte mit diesem Produkt gefunden</x-notifyer>
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                        <div class="form-check my-2 my-md-4">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="1"
+                                   id="sycEquipWithDeletion"
+                                   name="sycEquipWithDeletion"
+                            >
+                            <label class="form-check-label"
+                                   for="sycEquipWithDeletion"
+                            >
+                                Existierende Prüfungen löschen
+                            </label>
+                        </div>
+
+                        <x-btnMain>{{__('Prüftermine syncronisieren')}}
+                            <span class="fas fa-download ml-2"></span>
+                        </x-btnMain>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal"
          id="modalAddDokumentType"
          tabindex="-1"
@@ -804,10 +910,10 @@
                                         </div>
                                     </div>
 
-                                            <x-btnMain>
-                                                {{__('Produkt speichern')}}
-                                                <span class="fas fa-download ml-3"></span>
-                                            </x-btnMain>
+                                    <x-btnMain>
+                                        {{__('Produkt speichern')}}
+                                        <span class="fas fa-download ml-3"></span>
+                                    </x-btnMain>
                                 </form>
 
                             </div>
@@ -866,24 +972,39 @@
                                     <h3 class="h5">{{__('Befähigte Personen')}}</h3>
 
                                     @if($hasExternalSupplier)
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-primary"
-                                            data-toggle="modal"
-                                            data-target="#addQualifiedUser"
-                                    >
-                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
-                                    </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-toggle="modal"
+                                                data-target="#addQualifiedUser"
+                                        >
+                                            {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                        </button>
                                     @else
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#noExternalCompanyFoundModal">
+                                        <button type="button"
+                                                class="btn btn-outline-warning btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#noExternalCompanyFoundModal"
+                                        >
                                             {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                         </button>
 
-                                        <div class="modal fade" id="noExternalCompanyFoundModal" tabindex="-1" aria-labelledby="noExternalCompanyFoundModalLabel" aria-hidden="true">
+                                        <div class="modal fade"
+                                             id="noExternalCompanyFoundModal"
+                                             tabindex="-1"
+                                             aria-labelledby="noExternalCompanyFoundModalLabel"
+                                             aria-hidden="true"
+                                        >
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header alert-warning">
-                                                        <h5 class="modal-title" id="noExternalCompanyFoundModalLabel">{{ __('Fehlende Voraussetzungen beheben') }}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <h5 class="modal-title"
+                                                            id="noExternalCompanyFoundModalLabel"
+                                                        >{{ __('Fehlende Voraussetzungen beheben') }}</h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                        >
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
@@ -891,13 +1012,16 @@
                                                         <p class="lead">{{ __('Diesem Produkt muss noch eine Firma zugeordnet werden, damit diese eine Person im Umgang mit dem Produkt befähigen kann.') }}</p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{ __('Alles klar') }}</button>
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary"
+                                                                data-dismiss="modal"
+                                                        >{{ __('Alles klar') }}</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        @endif
+                                    @endif
                                 </div>
                                 <table class="table table-responsive-md">
                                     <thead>
@@ -947,34 +1071,49 @@
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Unterwiesene Personen')}}</h3>
                                     @if($hasExternalSupplier && $hasQualifiedUser)
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-primary"
-                                            data-toggle="modal"
-                                            data-target="#addInstructedUser"
-                                    >
-                                        {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
-                                    </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-toggle="modal"
+                                                data-target="#addInstructedUser"
+                                        >
+                                            {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
+                                        </button>
                                     @else
-                                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#noExternalCompanyOrQualifiedUserFoundModal">
+                                        <button type="button"
+                                                class="btn btn-outline-warning btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#noExternalCompanyOrQualifiedUserFoundModal"
+                                        >
                                             {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                         </button>
 
-                                        <div class="modal fade" id="noExternalCompanyOrQualifiedUserFoundModal" tabindex="-1" aria-labelledby="noExternalCompanyOrQualifiedUserFoundModalLabel" aria-hidden="true">
+                                        <div class="modal fade"
+                                             id="noExternalCompanyOrQualifiedUserFoundModal"
+                                             tabindex="-1"
+                                             aria-labelledby="noExternalCompanyOrQualifiedUserFoundModalLabel"
+                                             aria-hidden="true"
+                                        >
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header alert-warning">
-                                                        <h5 class="modal-title" id="noExternalCompanyOrQualifiedUserFoundModalLabel">{{ __('Fehlende Voraussetzungen beheben') }}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <h5 class="modal-title"
+                                                            id="noExternalCompanyOrQualifiedUserFoundModalLabel"
+                                                        >{{ __('Fehlende Voraussetzungen beheben') }}</h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                        >
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                       <p class="lead">{{ __('Bitte die benötigten Voraussetzungen erfüllen, damit befähigte Personen angelegt werden können. ') }}</p>
+                                                        <p class="lead">{{ __('Bitte die benötigten Voraussetzungen erfüllen, damit befähigte Personen angelegt werden können. ') }}</p>
                                                         <ul class="list-unstyled">
                                                             <li>
                                                                 @if($hasExternalSupplier)
                                                                     <i class="far fa-check-square text-success mr-1"></i>
-                                                                    @else
+                                                                @else
                                                                     <i class="far fa-square text-muted mr-1"></i>
                                                                 @endif
                                                                 {{ __('Dem Produkt wurde mind. eine Firma zugeordet') }}
@@ -990,7 +1129,10 @@
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{ __('Alles klar') }}</button>
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary"
+                                                                data-dismiss="modal"
+                                                        >{{ __('Alles klar') }}</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1050,13 +1192,23 @@
                             <div class="col-md-5 mb-3">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h2 class="h5">{{__('Anforderungen')}}</h2>
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-toggle="modal"
-                                            data-target="#modalAddRequirement"
-                                    >
-                                        {{ __('hinzufügen') }}
-                                        <span class="fas fa-plus"></span>
-                                    </button>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                data-toggle="modal"
+                                                data-target="#modalAddRequirement"
+                                        >
+                                            {{ __('hinzufügen') }}
+                                            <span class="fas fa-plus ml-1"></span>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                data-toggle="modal"
+                                                data-target="#modalSyncRequirement"
+                                        >
+                                            {{ __('Prüfungen sync') }}
+                                            <span class="fas fa-sync ml-1"></span>
+                                        </button>
+                                    </div>
+
                                 </div>
 
                                 @forelse ($requirementList as $produktAnforderung)
@@ -1707,6 +1859,11 @@
     </script>
 
     <script>
+
+        $('#selectAllSyncItems').click(function () {
+             $('.syncItem').prop('checked',$(this).prop('checked'));
+        })
+
         $('#btnStoreInstructedUser').click(function () {
             let checkInstructorIsSelected = false;
             let checkTraneeHasSignature = false;

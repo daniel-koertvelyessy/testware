@@ -12,6 +12,7 @@
     use App\Equipment;
     use App\EquipmentHistory;
     use App\EquipmentQualifiedUser;
+    use App\Http\Services\Control\ControlEventService;
     use App\Http\Services\Equipment\EquipmentService;
     use App\ProductQualifiedUser;
     use App\User;
@@ -412,9 +413,23 @@
 
         }
 
+        public function sync(Request $request)
+        {
+            $set=[];
+            if (count($request->sycEquip)>0){
+                $service = new ControlEventService();
+                foreach ($request->sycEquip as $eq_uid){
+                  $res[$eq_uid] =  $service->syncEquipment($eq_uid, $request->has('sycEquipWithDeletion'));
+                }
+            }
+
+            $request->session()->flash('status', $service->makeSyncMessageText($res));
+           return back();
+        }
+
         public function manual()
         {
-            $equipment = Equipment::where('eq_inventar_nr', request('equipment'))->first();
+            $equipment = Equipment::where('eq_uid', request('equipment'))->first();
 
             if (!$equipment) {
                 $equipment = Equipment::find(request('equipment'));

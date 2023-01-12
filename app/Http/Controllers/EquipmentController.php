@@ -29,6 +29,7 @@
     use Illuminate\Support\Facades\DB;
     use Illuminate\Validation\Rule;
     use Illuminate\View\View;
+    use Str;
 
     class EquipmentController extends Controller
     {
@@ -226,14 +227,14 @@
             return request()->validate([
                 'eq_inventar_nr'     => [
                     'bail',
-                    'max:100',
+                    'max:250',
                     'required',
                     Rule::unique('equipment')->ignore(request('id'))
                 ],
                 'eq_serien_nr'       => [
                     'bail',
                     'nullable',
-                    'max:100',
+                    'max:250',
                     Rule::unique('equipment')->ignore(request('id'))
                 ],
                 'eq_uid'             => [
@@ -277,11 +278,11 @@
              *
              * Since the deletion of the equipment will set the deleted_at field with a timestamp
              * rather than deleting the database entry itself, the serial number and invertory id
-             * recieve a prefix to prevent the unique violation of the fields.
+             * recieve a postfix to prevent the unique violation of the fields.
              *
              */
-            $equipment->eq_serien_nr = 'del_' . $equipment->eq_serien_nr;
-            $equipment->eq_inventar_nr = 'del_' . $equipment->eq_inventar_nr;
+            $equipment->eq_serien_nr = substr($equipment->eq_serien_nr .'|'.Str::uuid(),0,250);
+            $equipment->eq_inventar_nr = substr($equipment->eq_inventar_nr.'|'.Str::uuid(),0,250);
             $equipment->save();
 
 

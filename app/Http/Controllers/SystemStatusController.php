@@ -9,6 +9,7 @@ use App\ControlProdukt;
 use App\Equipment;
 use App\EquipmentFuntionControl;
 use App\EquipmentQualifiedUser;
+use App\EquipmentUid;
 use App\ProductQualifiedUser;
 use App\Produkt;
 use App\Storage;
@@ -18,6 +19,15 @@ use Cache;
 class SystemStatusController  extends Controller
 {
 
+    public function getBrockenEquipmentUuids()
+    {
+
+        $counter = Equipment::withTrashed()->get()->map(function (Equipment $equipment){
+            return EquipmentUid::where('equipment_uid', $equipment->eq_uid)->count()==0 ? 1:0;
+        });
+        
+        return $counter->sum();
+    }
 
     public function getBrokenControlEquipmentItems()
     {
@@ -39,15 +49,23 @@ class SystemStatusController  extends Controller
         ];
     }
 
+    public function getBrokenProductItems()
+    {
+        return Produkt::withTrashed()->where('prod_uuid',null)->count();
+    }
+
     public function getBrokenDBLinks()
     {
         $brokenLinksCount = 0;
         $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
+        $brokenProducts = $this->getBrokenProductItems();
         $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
 
 
         //       return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($brokenEquipmentControl, $counter){
         return [
+            'missingEquipmentUuids' => $this->getBrockenEquipmentUuids(),
+            'brokenProducts' => $brokenProducts,
             'totalBrokenLinks' => $brokenLinksCount,
             'equipmentControl' => $brokenEquipmentControl
         ];

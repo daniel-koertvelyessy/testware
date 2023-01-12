@@ -16,7 +16,7 @@ Route::post('produkt.ajaxstore','ProduktController@ajaxstore')->name('produkt.aj
 Route::get('getUsedProduktsByPK','ProduktController@getUsedProduktsByPK')->name('getUsedProduktsByPK');
 Route::get('exportProduktToJson','DataportController@exportProduktToJson')->name('exportProduktToJson');
 
-
+Route::get('produktsetuuids', '\App\Http\Services\Product\ProductService@setuuid')->name('products.setuuids');
 
 Route::post('addProduktFirma','ProduktController@addProduktFirma')->name('addProduktFirma');
 Route::delete('removeFirmaFromProdukt','ProduktController@removeFirmaFromProdukt')->name('removeFirmaFromProdukt');

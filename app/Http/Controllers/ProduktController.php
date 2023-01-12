@@ -28,6 +28,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
     use Illuminate\Routing\Redirector;
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Storage;
@@ -54,7 +55,7 @@
         {
             $produktList = Produkt::with('ProduktKategorie', 'ProduktState',
                 'ControlProdukt')->sortable()->paginate(10);
-            return view('admin.produkt.index', compact('produktList'));
+            return view('admin.produkt.index', ['produktList'=>$produktList, 'isSysAdmin' => Auth::user()->isSysAdmin()]);
         }
 
         /**

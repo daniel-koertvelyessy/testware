@@ -108,6 +108,15 @@
                 $flag = true;
             }
 
+            if ($oldEquipment->eq_inventar_nr != $request->eq_inventar_nr) {
+                $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
+                        'fld' => __('Inventarnummer'),
+                        'old' => $oldEquipment->eq_inventar_nr,
+                        'new' => $request->eq_inventar_nr,
+                    ]) . '</li>';
+                $flag = true;
+            }
+
             if ($oldEquipment->eq_qrcode != $request->eq_qrcode) {
                 $feld .= '<li>' . __('Feld :fld von :old in :new geändert', [
                         'fld' => __('QR Code'),

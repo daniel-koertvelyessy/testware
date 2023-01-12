@@ -88,9 +88,19 @@
          */
         public function update(Request $request, Anforderung $anforderung)
         {
-            $anforderung->is_initial_test = $request->has('is_initial_test')?1:0; //?1:0;
+            $this->validateAnforderung();
+            $anforderung->an_label = $request->an_label;
+            $anforderung->an_name = $request->an_name;
+            $anforderung->an_description = $request->an_description;
+            $anforderung->an_control_interval = $request->an_control_interval;
+            $anforderung->control_interval_id = $request->control_interval_id;
+            $anforderung->verordnung_id = $request->verordnung_id;
+            $anforderung->an_date_warn = $request->an_date_warn;
+            $anforderung->warn_interval_id = $request->warn_interval_id;
+            $anforderung->anforderung_type_id = $request->anforderung_type_id;
+            $anforderung->is_initial_test = $request->has('is_initial_test'); //?1:0;
 
-            if ($anforderung->update($this->validateAnforderung($request))) {
+            if ($anforderung->save()) {
                 session()->flash('status', __('Die Anforderung <strong>:name</strong> wurde aktualisert!', ['name' => $anforderung->an_name]));
             }
 
@@ -115,11 +125,11 @@
         /**
          * @return array
          */
-        public function validateAnforderung(Request $request): array
+        public function validateAnforderung(): array
         {
 
            // dd($request);
-            return $request->validate([
+            return request()->validate([
                 'an_label'            => 'bail|required|max:20',
                 'an_name'             => 'bail|max:100',
                 'an_description'      => '',
@@ -128,7 +138,7 @@
                 'verordnung_id'       => 'integer',
                 'an_date_warn'        => '',
                 'warn_interval_id'    => 'integer',
-           //     'is_initial_test'     => '',
+                'is_initial_test'     => 'nullable|boolean',
                 'anforderung_type_id' => 'bail|required|integer',
             ],
                 [
