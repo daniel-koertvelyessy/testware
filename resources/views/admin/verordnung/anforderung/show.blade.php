@@ -55,6 +55,82 @@
         </div>
     </div>
 
+    <div class="modal fade"
+         id="modalSortControlItems"
+         tabindex="-1"
+         aria-labelledby="modalSortControlItemsLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{__('Prüfungen neu sortieren')}}</h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('anforderungcontrolitem.applySort',$anforderung) }}"
+                          method="post"
+                          id="frmSortControlItems"
+                    >
+                        @csrf
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{{__('Aufgabe')}}</th>
+                                <th>
+                                    <i class="fa fa-sort"></i>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->orderBy('aci_sort')->get() as $aci)
+                                <tr>
+                                    <td class="w-75">
+                                        {{ $aci->aci_name }}
+                                    </td>
+                                    <td class="w-25">
+                                        <input type="number"
+                                               size="4"
+                                               class="form-control form-control-sm"
+                                               id="aci_sort_{{$aci->id}}"
+                                               name="aci_sort[]"
+                                               value="{{ $aci->aci_sort }}"
+                                        />
+                                        <input type="hidden"
+                                               name="aci_id[]"
+                                               id="aci_id_{{ $aci->id }}"
+                                               value="{{ $aci->id }}"
+                                        >
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="align-items-center justify-content-between d-flex">
+                                            <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                        <x-btnMain>{{__('Sortierung anwenden')}}
+                            <span class="fas fa-refresh"></span>
+                        </x-btnMain>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('content')
@@ -200,10 +276,18 @@
                     <tr>
                         <th>{{__('Kürzel')}}</th>
                         <th>{{__('Aufgabe')}}</th>
+                        <th>
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    data-target="#modalSortControlItems"
+                                    data-toggle="modal"
+                            >
+                                <i class="fa fa-sort"></i>
+                            </button>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->get() as $aci)
+                    @forelse (App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->orderBy('aci_sort')->get() as $aci)
                         <tr>
                             <td>
                                 <a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{ $aci->aci_label }}</a>
@@ -215,6 +299,9 @@
                                         {!! $aci->isIncomplete($aci) !!}
                                     </ul>
                                 @endif
+                            </td>
+                            <td>
+                                {{ $aci->aci_sort }}
                             </td>
                         </tr>
                     @empty

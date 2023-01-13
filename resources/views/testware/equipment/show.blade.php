@@ -886,7 +886,7 @@
                                 />
                                 @php
                                     if (App\Storage::find($equipment->storage_id)) {
-                                        $value = App\Storage::find($equipment->storage_id)->storage_label;
+                                        $value = App\Storage::find($equipment->storage_id)->getStoragePath();
                                     } else {
                                         $value = __('nicht zugeordnet');
                                     }

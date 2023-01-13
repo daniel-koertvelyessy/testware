@@ -91,7 +91,7 @@
                             </td>
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
-                                    @if(! $controlItem->Anforderung->is_initial_test)
+                                    @if($controlItem->Anforderung && ! $controlItem->Anforderung->is_initial_test)
                                         <span class="p-1
                                         @if ($controlItem->qe_control_date_due <  now())
                                             bg-danger text-white

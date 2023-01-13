@@ -361,7 +361,7 @@
 
                                 <table class="table table-responsive-md table-borderless">
 
-                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->get() as $aci)
+                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$test->anforderung_id)->orderBy('aci_sort')->get() as $aci)
 
                                             <tr>
                                                 <td colspan="4"
@@ -585,8 +585,8 @@
                                             ><i class="fas fa-signature"></i> {{__('Unterschrift Prüfer')}}</button>
                                         </div>
                                         <div class="card-body">
-                                            <img src=""
-                                                 class="d-none img-fluid"
+                                            <img src="{{ Auth::user()->signature??'' }}"
+                                                 class="{{ Auth::user()->signature ? '':'d-none' }} img-fluid"
                                                  alt="Unterschriftbild Prüfer"
                                                  id="imgSignaturePruefer"
                                                  style="height:200px"
@@ -594,6 +594,7 @@
                                             <input type="hidden"
                                                    name="control_event_controller_signature"
                                                    id="control_event_controller_signature"
+                                                   value="{{ Auth::user()->signature??'' }}"
                                             >
                                             <label for="control_event_controller_name"
                                                    class="sr-only"
@@ -604,6 +605,7 @@
                                                    id="control_event_controller_name"
                                                    required
                                                    placeholder="{{__('Name Prüfer')}}"
+                                                   value="{{ Auth::user()->fullname() }}"
                                             >
                                         </div>
                                     </div>

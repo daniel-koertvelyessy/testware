@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Benutzer')}} &triangleright; {{ __('Systemverwaltung') }}
-@endsection
+    {{__('Benutzer')}} &triangleright; {{ __('Systemverwaltung') }}@endsection
 
 @section('mainSection')
     {{__('Benutzer')}}
@@ -16,7 +15,8 @@
     <x-breadcrumbs :breadlist="[
         ['name' => __('Systemverwaltung'),'link' => route('systems')],
         ['name' => __('Benutzer'),'link' => '#'],
-    ]"/>
+    ]"
+    />
 @endsection
 
 @section('modals')
@@ -148,7 +148,7 @@
         >
         <input type="hidden"
                name="user_id"
-               id="user_id"
+               id="user_id_revoke_sysadmin"
                value="{{ $user->id }}"
         >
     </x-modals.form_modal>
@@ -162,10 +162,61 @@
         @csrf
         <input type="hidden"
                name="user_id"
-               id="user_id"
+               id="user_id_grand_sysadmin"
                value="{{ $user->id }}"
         >
     </x-modals.form_modal>
+
+    <div class="modal fade "
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="signaturModalLabel"
+         aria-hidden="true"
+         id="signatureModal"
+    >
+        <div class="modal-dialog modal-xl"
+             role="document"
+        >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="signaturModalLabel"
+                    >{{__('Unterschrift')}}
+                        <span id="sigHead"></span>
+                    </h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="wrapper">
+                        <canvas id="signatureField"
+                                class="signature-pad"
+                        ></canvas>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-outline-warning btn-sm"
+                            id="btnClearCanvas"
+                    >{{__('Neu')}}</button>
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            id="btnSignZuruck"
+                    >{{__('Zurück')}}</button>
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            id="btnStoreSignature"
+                    >{{__('speichern')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -177,7 +228,11 @@
         >
             @csrf
             @method('put')
-            <input type="hidden" name="id" id="user_id" value="{{ $user->id }}">
+            <input type="hidden"
+                   name="id"
+                   id="user_id"
+                   value="{{ $user->id }}"
+            >
             <div class="row mb-4 d-md-block d-none">
                 <div class="col">
                     <h1 class="h3">
@@ -249,8 +304,42 @@
 
                 </div>
             </div>
-            @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
-                <x-btnMain>{{__('Nutzerdaten aktualisieren')}} <span class="fas fa-download ml-2"></span></x-btnMain>
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <button type="button"
+                            class="btn btn-outline-primary btnAddSiganture"
+                            data-toggle="modal"
+                            data-target="#signatureModal"
+                    ><i class="fas fa-signature"></i> {{__('Unterschrift erfassen')}}</button>
+                </div>
+                <div class="col-md-8 border rounded-lg p-4">
+                    @if($user->signature )
+                        <img src="{{ $user->signature }}"
+                             class="img-fluid"
+                             alt="Unterschriftbild Benutzer"
+                             id="imgSignatureUser"
+                        >
+                    @else
+                        <img class="img-fluid d-none"
+                             alt="Unterschriftbild Benutzer"
+                             id="imgSignatureUser"
+                        >
+                        <span id="emptySignaturNotice"
+                              class="text-muted small text-center"
+                        >{{ __('Die Unterschrift ist noch nicht erfasst worden.') }}</span>
+                    @endif
+
+                    <input type="hidden"
+                           name="signature"
+                           id="signature"
+                           value="{{ $user->signature }}"
+                    >
+                </div>
+            </div>
+            @if($isCurrentUser|| Auth::user()->isSysAdmin())
+                <x-btnMain>{{__('Nutzerdaten aktualisieren')}}
+                    <span class="fas fa-download ml-2"></span>
+                </x-btnMain>
             @endif
             @if(Auth::user()->isSysAdmin() && Auth::user()->id != $user->id)
                 <button type="button"
@@ -278,7 +367,7 @@
                                 @csrf
                                 <input type="hidden"
                                        name="user_id"
-                                       id="user_id"
+                                       id="user_id_setpassword"
                                        value="{{ $user->id }}"
                                 >
                                 @foreach($roles as $role)
@@ -329,7 +418,7 @@
                                     @csrf
                                     <input type="hidden"
                                            name="user_id"
-                                           id="user_id"
+                                           id="user_id_grand_sysadmin"
                                            value="{{ $user->id }}"
                                     >
                                     <x-btnSave>{{ __('Status setzen') }}</x-btnSave>
@@ -343,7 +432,7 @@
             </div>
         @endif
 
-        @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
+        @if($isCurrentUser|| Auth::user()->isSysAdmin())
             <div class="row my-5">
                 <div class="col">
                     <h2 class="h4">{{__('Passwort ändern')}}</h2>
@@ -352,7 +441,11 @@
                     >
                         @method('PUT')
                         @csrf
-                        <input type="hidden" name="id" id="set_user_id" value="{{ $user->id }}">
+                        <input type="hidden"
+                               name="id"
+                               id="set_user_id"
+                               value="{{ $user->id }}"
+                        >
                         <div class="row">
                             <div class="col-md-6">
                                 <x-textfield id="newPassword"
@@ -384,7 +477,7 @@
 
             <div class="row my-4">
                 <div class="col">
-                    @if(Auth::user()->id === $user->id && $user->api_token!==null)
+                    @if($isCurrentUser&& $user->api_token!==null)
                         <h2 class="h4">{{__('Token für API Zugang')}}</h2>
                         <p>{{ __('Ihr persönlicher API Token lautet') }}</p>
                         <form action="{{ route('addApiTokenToUser',$user) }}"
@@ -459,18 +552,18 @@
                                  </option>--}}
                                 <option value="css/tbs.css"
                                         data-asset="{{ asset('css/tbs.css') }}"
-                                    {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
+                                        {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
                                 >Twitter Bootstrap
                                 </option>
 
                                 <option value="css/darkmode.css"
                                         data-asset="{{ asset('css/darkmode.css') }}"
-                                    {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
+                                        {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
                                 >Dark
                                 </option>
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
-                                    {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
+                                        {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
                                 >Light
                                 </option>
                                 <option value="css/materia.css"
@@ -486,25 +579,19 @@
 
                     </div>
                 </div>
-                @if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin())
+                @if($isCurrentUser|| Auth::user()->isSysAdmin())
                     <x-btnSave>{{__('Einstellungen für Benutzer speichern')}}</x-btnSave>
                 @endif
             </form>
 
         @endif
 
-
-        <div class="row my-10">
-            <div class="col small pt-10 text-right">
-                testWare 1.70
-            </div>
-        </div>
-
     </div>
 
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/signatures.js') }}"></script>
     <script>
         $('#btnChangeDisplayTheme').click(function () {
             const theme = $('#systemTheme :selected').data('asset');
@@ -520,6 +607,71 @@
             } else {
                 $(this).removeClass('is-valid').addClass('is-invalid');
                 passmsg.text('{{ __('Die Passwörter stimmen nicht überein!') }}');
+            }
+        });
+
+
+        /**
+         *   Signatures
+         */
+        $('.btnAddSiganture').click(function () {
+            signaturePad.clear();
+        });
+
+        $('#btnStoreSignature').click(function () {
+            var data = signaturePad.toDataURL('image/png');
+            $('#signature').val(data);
+            $('#imgSignatureUser').removeClass('d-none').attr('src', signaturePad.toDataURL());
+            $('#emptySignaturNotice').remove();
+            $('#signatureModal').modal('hide');
+
+        });
+
+        function resizeCanvas() {
+// When zoomed out to less than 100%, for some very strange reason,
+// some browsers report devicePixelRatio as less than 1
+// and only part of the canvas is cleared then.
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+// This part causes the canvas to be cleared
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+
+// This library does not listen for canvas changes, so after the canvas is automatically
+// cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+// canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+// that the state of this library is consistent with visual state of the canvas, you
+// have to clear it manually.
+            signaturePad.clear();
+        }
+
+        var canvas = document.getElementById('signatureField'),
+            signaturePad = new SignaturePad(canvas, {
+                velocityFilterWeight: 0.5,
+                minWidth: 0.8,
+                maxWidth: 1.2,
+                backgroundColor: 'rgba(255, 255, 255)',
+                penColor: 'rgb(8, 139, 216)'
+            });
+
+        $('#signatureModal').on('shown.bs.modal', function () {
+            resizeCanvas();
+        });
+
+        // On mobile devices it might make more sense to listen to orientation change,
+        // rather than window resize events.
+        window.onresize = resizeCanvas;
+
+
+        $('#btnClearCanvas').click(function () {
+            signaturePad.clear();
+        });
+        $('#btnSignZuruck').click(function () {
+            var data = signaturePad.toData();
+            if (data) {
+                data.pop(); // remove the last dot or line\n'+
+                signaturePad.fromData(data);
             }
         });
 

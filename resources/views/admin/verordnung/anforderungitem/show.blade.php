@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-{{__('Prüfschritt')}} {{ $anforderungcontrolitem->aci_label }} &triangleright; testWare
-@endsection
+    {{__('Prüfschritt')}} {{ $anforderungcontrolitem->aci_label }} &triangleright; testWare@endsection
 
 @section('mainSection')
     {{__('Prüfschritt')}}
@@ -20,20 +19,29 @@
                          modalType="danger"
                          modalSize="lg"
                          modalRoute="{{ route('anforderungcontrolitem.destroy',$anforderungcontrolitem) }}"
-                         btnSubmit="{{ __('Prüfschritt entgültig löschen') }}">
-        <input type="hidden" name="id" id="id" value="{{$anforderungcontrolitem->id}}">
+                         btnSubmit="{{ __('Prüfschritt entgültig löschen') }}"
+    >
+        <input type="hidden"
+               name="id"
+               id="id"
+               value="{{$anforderungcontrolitem->id}}"
+        >
         @if($testEventFromItem->count()>0)
-        <h1 class="h3">{{ __('Vorsicht') }}</h1>
-        <p>{{ __('Folgende Prüfungen haben diesen Prüfschritt verwendet. Ein Löschung lässt deren Zuordnung nicht mehr nachvollziehen!') }}</p>
-        <ul class="list-unstyled">
-            @foreach($testEventFromItem as $item )
-                <li class="list-group-item"><span class="text-muted">{{ __('Datum') }} :</span> {{ $item->ControlEvent->control_event_date }} | <span class="text-muted">{{ __('Prüfer') }} :</span>{{ $item->ControlEvent->control_event_controller_name }} | <span class="text-muted">{{ __('Gerät') }} :</span> {{ $item->ControlEvent->Equipment->eq_name??'-' }}</li>
-            @endforeach
-        </ul>
+            <h1 class="h3">{{ __('Vorsicht') }}</h1>
+            <p>{{ __('Folgende Prüfungen haben diesen Prüfschritt verwendet. Ein Löschung lässt deren Zuordnung nicht mehr nachvollziehen!') }}</p>
+            <ul class="list-unstyled">
+                @foreach($testEventFromItem as $item )
+                    <li class="list-group-item">
+                        <span class="text-muted">{{ __('Datum') }} :</span> {{ $item->ControlEvent->control_event_date }} |
+                        <span class="text-muted">{{ __('Prüfer') }} :</span>{{ $item->ControlEvent->control_event_controller_name }} |
+                        <span class="text-muted">{{ __('Gerät') }} :</span> {{ $item->ControlEvent->Equipment->eq_name??'-' }}
+                    </li>
+                @endforeach
+            </ul>
 
-            @else
+        @else
             <p>{{ __('Es wurden keine vergangenen Prüfungen mit diesem Prüfschritt gefunden.') }}</p>
-            @endif
+        @endif
     </x-modals.form_modal>
 
 @endsection
@@ -64,7 +72,7 @@
                         @foreach (App\Anforderung::all() as $anforderung)
                             <option value="{{ $anforderung->id }}"
                                     @if ($anforderung->id === $anforderungcontrolitem->anforderung_id )
-                                    selected
+                                        selected
                                     @endif
                             >{{ $anforderung->an_name }}</option>
                         @endforeach
@@ -76,7 +84,7 @@
                                           value="{{ $anforderungcontrolitem->aci_label }}"
                             />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <x-rtextfield id="aci_name"
                                           label="{{__('Name')}}"
                                           max="150"
@@ -90,13 +98,20 @@
                                        name="aci_control_equipment_required"
                                        id="aci_control_equipment_required"
                                        @if ($anforderungcontrolitem->aci_control_equipment_required)
-                                       checked
+                                           checked
                                         @endif
                                 >
                                 <label class="custom-control-label"
                                        for="aci_control_equipment_required"
                                 >{{__('Prüfmittel benötigt')}}</label>
                             </div>
+                        </div>
+                        <div class="col-md-2">
+                            <x-textfield id="aci_sort"
+                                         type="number"
+                                         label="{{ __('Sortierung') }}"
+                                         :value="$anforderungcontrolitem->aci_sort"
+                            />
                         </div>
                     </div>
 
@@ -127,9 +142,11 @@
                                     class="custom-select"
                             >
                                 <option @if($anforderungcontrolitem->aci_value_target_mode === NULL) selected @endif
-                                value="">{{ __('Vorgang ohne Zielwert') }}</option>
-                                <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected @endif
-                                value="lt"
+                                    value=""
+                                >{{ __('Vorgang ohne Zielwert') }}</option>
+
+                                <option @if($anforderungcontrolitem->aci_value_target_mode ==='lt') selected
+                                        @endif value="lt"
                                 >{{__('Kleiner als Soll')}}
                                 </option>
                                 <option @if($anforderungcontrolitem->aci_value_target_mode ==='eq') selected
@@ -188,7 +205,7 @@
                                        class="custom-control-input"
                                        value="0"
                                        @if (!$anforderungcontrolitem->aci_execution)
-                                       checked
+                                           checked
                                         @endif
                                 >
                                 <label class="custom-control-label"
@@ -202,7 +219,7 @@
                                 @forelse (App\User::with('profile')->get() as $user)
                                     <option value="{{ $user->id }}"
                                             @if ($user->id === $anforderungcontrolitem->aci_contact_id)
-                                            selected
+                                                selected
                                             @endif
                                     >
                                         @if($user->profile)
@@ -227,7 +244,7 @@
                                        class="custom-control-input"
                                        value="1"
                                        @if ($anforderungcontrolitem->aci_execution)
-                                       checked
+                                           checked
                                         @endif
                                 >
                                 <label class="custom-control-label"
@@ -242,7 +259,7 @@
                                     @if ($firma->id !== 1)
                                         <option value="{{ $firma->id }}"
                                                 @if ($firma->id === $anforderungcontrolitem->firma_id)
-                                                selected
+                                                    selected
                                                 @endif
                                         >{{ $firma->fa_name }}</option>
                                     @endif

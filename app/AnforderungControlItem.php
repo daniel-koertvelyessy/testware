@@ -20,6 +20,7 @@
             'aci_label',
             'aci_name',
             'aci_task',
+            'aci_sort',
         ];
 
         protected $guarded = [];

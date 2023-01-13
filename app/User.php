@@ -18,7 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
     use Sortable;
-    use HasFactory;
+  //  use HasFactory;
 
     public const LOCALES = [
         'de' => 'Deutsch',
@@ -46,7 +46,8 @@ class User extends Authenticatable
         'email',
         'password',
         'username',
-        'locale'
+        'locale',
+        'signature',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -85,6 +86,7 @@ class User extends Authenticatable
         $user = User::find($request->id);
         $user->name = $request->name;
         $user->locale = $request->locales;
+        $user->signature = $request->signature;
         $user->username = $request->username;
         $user->email = $request->email;
         return $user->save();
@@ -206,6 +208,7 @@ class User extends Authenticatable
         $this->role_id = 0;
         $this->user_theme = 'css/tbs.css';
         $this->locale = $request->locales;
+        $this->signature = $request->signature;
         $this->password = Hash::make($request->password);
         $this->save();
 
@@ -349,6 +352,11 @@ class User extends Authenticatable
     {
         $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
         $user->update();
+    }
+
+    public function fullname()
+    {
+        return $this->profile ? $this->profile->fullName : $this->name;
     }
 
 }

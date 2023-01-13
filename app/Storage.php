@@ -53,6 +53,8 @@ class Storage extends Model
                 $spl = Stellplatz::where('storage_id', $this->storage_uid)->first();
                 return ($spl) ? $spl->sp_label . ' - ' . $spl->sp_name : 'com - ' . $this->storage_label;
 
+            default:
+                return $this->storage_label;
         }
 
     }
