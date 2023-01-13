@@ -35,9 +35,13 @@ class SystemStatusController  extends Controller
          * get all broken entries for equipment control
          */
         $counter = 0;
+
         $totalControlEquipment = ControlEquipment::withTrashed()->count();
+        $brokenItems=[];
+
         foreach(Anforderung::onlyTrashed()->get() as $anforderung){
             $count = ControlEquipment::withTrashed()->where('anforderung_id',$anforderung->id)->count();
+            $brokenItems[]=ControlEquipment::withTrashed()->where('anforderung_id',$anforderung->id)->first();
             $counter += $count;
         }
 
@@ -46,6 +50,7 @@ class SystemStatusController  extends Controller
             'totalControlEquipment'=> $totalControlEquipment,
             'brokenControlEquipment'=> $brokenEquipmentControl,
             'brokenControlEquipmenCount'=> $counter,
+            'brokenItems'=> $brokenItems,
         ];
     }
 
@@ -61,12 +66,14 @@ class SystemStatusController  extends Controller
         $brokenProducts = $this->getBrokenProductItems();
         $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
 
+        $brokenControlItems = $brokenEquipmentControl['brokenItems'];
 
         //       return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($brokenEquipmentControl, $counter){
         return [
             'missingEquipmentUuids' => $this->getBrockenEquipmentUuids(),
             'brokenProducts' => $brokenProducts,
             'totalBrokenLinks' => $brokenLinksCount,
+            'brokenControlItems' => $brokenControlItems,
             'equipmentControl' => $brokenEquipmentControl
         ];
         //       });

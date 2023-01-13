@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col">
                 <nav>
-                    <div class="nav nav-tabs"
+                    <div class="nav nav-tabs mainNavTab"
                          id="nav-tab"
                          role="tablist"
                     >
@@ -263,10 +263,96 @@ $objects['storages'] === 0                                            )
                          aria-labelledby="nav-dblinks-tab"
                     >
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="{{ $dbstatus['totalBrokenLinks']>0 ? 'col-md-8' : 'col-md-6' }}">
                                 @if($dbstatus['totalBrokenLinks']>0)
+                                    <h2 class="h4">Verwaiste Prüfungen
+                                        <span class="badge badge-info small">{{$dbstatus['totalBrokenLinks']}} </span>
+                                    </h2>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Erstellt</th>
+                                            <th>Fällig</th>
+                                            <th>Anforderung</th>
+                                            <th>Gerät</th>
+                                            <th>Aktion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($dbstatus['brokenControlItems'] as $controlItem)
+                                            <tr>
+                                                <td>{{ $controlItem->created_at }}</td>
+                                                <td>{{ $controlItem->qe_control_date_due }}</td>
+                                                <td>
+                                                    @if($controlItem->Anforderung)
+                                                        {{ $controlItem->Anforderung->an_name }}
+                                                    @else
+                                                        <select class="custom-select custom-select-sm setRequirement"
+                                                                data-controlid="{{ $controlItem->id }}"
+                                                        >
+                                                            <option value="0">neu zuordnen</option>
+                                                            @foreach($requirementList as $requirement)
+                                                                <option value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($controlItem->Equipment)
+                                                        {{ $controlItem->Equipment->eq_name }}
+                                                        {{ $controlItem->Equipment->eq_inventar_nr }}
+                                                    @else
+                                                        <select class="custom-select custom-select-sm setEquipment"
+                                                                data-controlid="{{ $controlItem->id }}"
+                                                        >
+                                                            <option value="0">neu zuordnen</option>
+                                                            @foreach($equipmentList as $equipment)
+                                                                <option value="{{ $equipment->id }}">{{ $equipment->eq_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <section class="d-flex">
+                                                        <form action="{{ route('control.fixbroken',$controlItem) }}"
+                                                              method="POST"
+                                                        >
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden"
+                                                                   name="anfoderung_id"
+                                                                   id="setRequirement{{$controlItem->id}}"
+                                                                   value="@if($controlItem->Anforderung) {{ $controlItem->Anforderung->id }} @endif"
+                                                            >
+                                                            <input type="hidden"
+                                                                   name="equipment_id"
+                                                                   id="setEquipment{{$controlItem->id}}"
+                                                                   value="@if($controlItem->Equipment) {{ $controlItem->Equipment->id }} @endif"
+                                                            >
+                                                            <button class="btn btn-sm btn-outline-primary mr-1"
+                                                                    id="btnUpdateControlItem{{$controlItem->id}}"
+                                                                    disabled>
+                                                                <i class="fa fa-save"></i>
+                                                            </button>
+                                                        </form>
+                                                        @if($isSysAdmin)
+                                                            <form action="{{ route('control.destroy',$controlItem) }}"
+                                                                  method="POST"
+                                                            >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="btn btn-sm btn-outline-danger">
+                                                                    <i class="fa fa-trash-alt"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </section>
 
-                                    Es sind {{$dbstatus['totalBrokenLinks']}} verwaiste Einträge gefunden worden.
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
 
                                 @else
                                     <div class="alert alert-success"
@@ -277,14 +363,17 @@ $objects['storages'] === 0                                            )
                                     </div>
                                 @endif
                             </div>
-                            <div class="col-md-6">
-                                @if($dbstatus['brokenProducts']>0)
+                            <div class="{{ $dbstatus['totalBrokenLinks']>0 ? 'col-md-4' : 'col-md-6' }}">
+                            @if($dbstatus['brokenProducts']>0)
                                     @if($dbstatus['brokenProducts']>1)
                                         <p class="lead text-danger">Es sind {{ $dbstatus['brokenProducts'] }} Produkte ohne UUID gefunden worden!</p>
                                     @else
                                         <p class="lead text-danger">Es ist ein Produkt ohne UUID gefunden worden!</p>
                                     @endif
-                                        <a href="{{ route('products.setuuids') }}" class="btn btn-outline-primary">beheben</a>
+                                    <a href="{{ route('products.setuuids') }}"
+                                       class="btn btn-outline-primary"
+                                    >beheben
+                                    </a>
                                 @else
                                     <div class="alert alert-success"
                                          role="alert"
@@ -301,4 +390,19 @@ $objects['storages'] === 0                                            )
         </div>
 
     </div>
+@endsection
+@section('scripts')
+    <script>
+        $('.setRequirement').change(function () {
+            const controlId=$(this).data('controlid');
+            $('#setRequirement'+controlId).val($(this).val());
+            $('#btnUpdateControlItem'+controlId).prop('disabled',$(this).val()==='0');
+        });
+
+        $('.setEquipment').change(function () {
+            const controlId=$(this).data('controlid');
+            $('#setEquipment'+controlId).val($(this).val());
+            $('#btnUpdateControlItem'+controlId).prop('disabled',$(this).val()==='0');
+        });
+    </script>
 @endsection

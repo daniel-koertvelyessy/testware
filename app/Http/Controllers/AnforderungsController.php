@@ -173,4 +173,5 @@
             $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde zugewiesen!');
             return back();
         }
+
     }

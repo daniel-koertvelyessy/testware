@@ -5,6 +5,7 @@
     use App\ControlEquipment;
     use App\ControlEvent;
     use App\Equipment;
+    use Illuminate\Http\Request;
     use Illuminate\Support\Collection;
 
     class ControlEventService
@@ -106,5 +107,6 @@
 
             return $msg;
         }
+
 
     }

@@ -36,6 +36,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -60,7 +61,10 @@ class AdminController extends Controller
         $systemStatus = new SystemStatusController();
         $objects = $systemStatus->getObjectStatus();
         $dbstatus = $systemStatus->getBrokenDBLinks();
-        return view('admin.index', compact('objects','dbstatus'));
+        $requirementList = Anforderung::select('id','an_name')->get();
+        $equipmentList = Equipment::select('id','eq_name','eq_inventar_nr')->get();
+        $isSysAdmin=Auth::user()->isSysAdmin();
+        return view('admin.index', compact('objects','dbstatus','requirementList','equipmentList','isSysAdmin'));
     }
 
     public function systems()

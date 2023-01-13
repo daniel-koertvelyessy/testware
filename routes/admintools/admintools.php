@@ -155,8 +155,10 @@ Route::get('getAnforderungControlItemData', 'AnforderungControlItemController@ge
 Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'AnforderungControlItemController@copy')->name('anforderungcontrolitem.copy');
 //Route::put('updateAnforderungControlItem', 'AdminController@updateAnforderungControlItem')->name('updateAnforderungControlItem');
 //Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderungControlItem')->name('deleteAnforderungControlItem');
+    Route::put('control/{control}/fix','ControlEquipmentController@fixbroken')->name('control.fixbroken');
 
-/**
+
+    /**
  *   INSTALLER
  */
 Route::get('/installer', 'InstallerController@index')->name('installer.start');
@@ -226,7 +228,6 @@ Route::put('updateAnforderung', 'AdminController@updateAnforderung')->name('upda
 Route::get('getAnforderungData', 'AdminController@getAnforderungData')->name('getAnforderungData');
 Route::delete('deleteAnforderung', 'AdminController@deleteAnforderung')->name('deleteAnforderung');
 Route::get('getUsedEquipmentByProdAnforderung', 'AdminController@getUsedEquipmentByProdAnforderung')->name('getUsedEquipmentByProdAnforderung');
-
 
 /**
  *   Verordnungen

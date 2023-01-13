@@ -496,4 +496,13 @@
 
         }*/
 
+        public function fixbroken(ControlEquipment $control,Request $request)
+        {
+            $control->anforderung_id = $request->anforderung_id;
+            $control->equipment_id = $request->equipment_id;
+            $msg = $control->save() ? 'Prüfung korrigiert' : 'Fehler beim Speichern';
+            $request->session()->flash('status',$msg);
+            return back();
+        }
+
     }
