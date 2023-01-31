@@ -9,9 +9,9 @@
 
         protected function getCompartmentItems(string $term)
         {
-            return Stellplatz::whereRaw('lower(sp_label) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(sp_name) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(sp_description) like ?', '%' . strtolower($term) . '%')
+            return Stellplatz::where('sp_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('sp_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('sp_description','ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 

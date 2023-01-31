@@ -166,10 +166,13 @@
 
             EquipmentAction::deleteLoseProductDocumentEntries($equipment);
 
+            EquipmentAction::deleteLoseRequirementEntries($equipment);
+
 
             return view('testware.equipment.show', [
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
                 'upcomingControlList'     => $service->getUpcomingControlItems($equipment),
+                'onetimeControlList'      => $service->getOntimeControlItems($equipment),
                 'instructedPersonList'    => $service->getInstruectedPersonList($equipment),
                 'requirementList'         => $service->getRequirementList($equipment),
                 'recentControlList'       => $service->getRecentExecutedControls($equipment),
@@ -281,8 +284,8 @@
              * recieve a postfix to prevent the unique violation of the fields.
              *
              */
-            $equipment->eq_serien_nr = substr($equipment->eq_serien_nr .'|'.Str::uuid(),0,250);
-            $equipment->eq_inventar_nr = substr($equipment->eq_inventar_nr.'|'.Str::uuid(),0,250);
+            $equipment->eq_serien_nr = substr($equipment->eq_serien_nr . '|' . Str::uuid(), 0, 250);
+            $equipment->eq_inventar_nr = substr($equipment->eq_inventar_nr . '|' . Str::uuid(), 0, 250);
             $equipment->save();
 
 

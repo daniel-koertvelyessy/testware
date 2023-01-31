@@ -11,7 +11,7 @@
 
         protected function query(string $term)
         {
-            return EquipmentEvent::whereRaw('lower(equipment_event_text) like ? ', '%' . strtolower($term) . '%')
+            return EquipmentEvent::where('equipment_event_text', 'ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 

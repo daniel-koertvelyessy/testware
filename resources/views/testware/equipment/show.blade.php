@@ -967,7 +967,7 @@
                                      @endforelse--}}
                                 <h2 class="h4 mt-5">{{__('Prüfungen')}} </h2>
                                 @if($loggedInUserIsQualified && $upcomingControlList->count()>0)
-                                    <button class="btn btn-primary btn-lg mb-3"
+                                    <button class="btn btn-primary btn-lg btn-block mb-3"
                                             data-toggle="modal"
                                             data-target="#modalStartControl"
                                     >{{__('Prüfung erfassen')}}
@@ -1025,8 +1025,17 @@
                                     </div>
                                 @endif
 
+                                    @if($onetimeControlList->count()>0)
+                                        <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
+                                        @foreach($onetimeControlList as $control_equipment_item)
+                                            <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,'requirement'=>$control_equipment_item->anforderungs_id ]) }}" class="btn btn-outline-primary btn-block" >
+                                                {{$control_equipment_item->an_name}}
+                                            </a>
+                                        @endforeach
+                                    @endif
+
                                 @if($recentControlList->count()>0)
-                                    <h3 class="h6">{{ __('Durchgeführte Prüfungen') }}</h3>
+                                    <h3 class="h6 mt-3">{{ __('Durchgeführte Prüfungen') }}</h3>
                                     @forelse($recentControlList as $control_equipment_item)
                                         @if (\App\ControlEvent::where('control_equipment_id',$control_equipment_item->id)->count()>0)
                                             <x-equipment_control_card :cei="$control_equipment_item"

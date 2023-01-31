@@ -15,10 +15,10 @@
 
         protected function query(string $term)
         {
-            return Produkt::whereRaw('LOWER(prod_label) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(prod_name) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(prod_description) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(prod_nummer) LIKE ?', '%' . strtolower($term) . '%')
+            return Produkt::where('prod_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_description','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_nummer','ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 
@@ -92,4 +92,5 @@
             request()->session()->flash('status', $msg);
             return back();
         }
+
     }

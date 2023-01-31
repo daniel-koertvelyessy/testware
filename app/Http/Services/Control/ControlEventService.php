@@ -13,9 +13,9 @@
 
         protected function query(string $term)
         {
-            return ControlEvent::whereRaw('lower(control_event_text) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(control_event_supervisor_name) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(control_event_controller_name) like ?', '%' . strtolower($term) . '%')
+            return ControlEvent::where('control_event_text', ' ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('control_event_supervisor_name', ' ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('control_event_controller_name', ' ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 

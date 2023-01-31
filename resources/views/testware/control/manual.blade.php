@@ -173,11 +173,6 @@
             >
                 @csrf
                 <input type="hidden"
-                       name="qe_control_date_warn"
-                       id="qe_control_date_warn"
-                       value="{{ $requirement->an_control_interval }}"
-                >
-                <input type="hidden"
                        name="anforderung_id"
                        id="anforderung_id"
                        value="{{ $requirement->id }}"
@@ -206,7 +201,7 @@
                                     >
                                         @foreach($userList as $qualified_user)
                                             <option value="{{ $qualified_user->id }}"
-                                                    {{ $qualified_user->id===$current_user_id ? ' selected ' : '' }}
+                                                    {{ $qualified_user->id===$current_user->id ? ' selected ' : '' }}
                                                     data-userid="{{ $qualified_user->id }}"
                                             >
                                                 {{ $qualified_user->name }}
@@ -218,7 +213,7 @@
                                                class="custom-control-input"
                                                id="setQualifiedUser"
                                                name="setQualifiedUser"
-                                               {{ \App\EquipmentQualifiedUser::where('user_id',$current_user_id)->count()>0 ? ' disabled ' : ''}}
+                                               {{ \App\EquipmentQualifiedUser::where('user_id',$current_user->id)->count()>0 ? ' disabled ' : ''}}
                                                 data-qualifieduserlist="@foreach($qualifieduserList as $user){{ $user['user_id'].',' }}@endforeach"
                                         >
                                         <label class="custom-control-label"
@@ -379,7 +374,7 @@
 
                                 <table class="table table-responsive-md table-borderless">
 
-                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$requirement->id)->get() as $aci)
+                                    @forelse (App\AnforderungControlItem::where('anforderung_id',$requirement->id)->orderBy('aci_sort')->get() as $aci)
 
                                         <tr>
                                             <td colspan="4"
@@ -607,8 +602,8 @@
                                             ><i class="fas fa-signature"></i> {{__('Unterschrift Prüfer')}}</button>
                                         </div>
                                         <div class="card-body">
-                                            <img src=""
-                                                 class="d-none img-fluid"
+                                            <img src="{{ $current_user->signature }}"
+                                                 class="{{ $current_user->signature ? '':'d-none' }} img-fluid"
                                                  alt="Unterschriftbild Prüfer"
                                                  id="imgSignaturePruefer"
                                                  style="height:200px"
@@ -616,6 +611,7 @@
                                             <input type="hidden"
                                                    name="control_event_controller_signature"
                                                    id="control_event_controller_signature"
+                                                   value="{{ $current_user->signature }}"
                                             >
                                             <label for="control_event_controller_name"
                                                    class="sr-only"
@@ -626,6 +622,7 @@
                                                    id="control_event_controller_name"
                                                    required
                                                    placeholder="{{__('Name Prüfer')}}"
+                                                   value="{{ $current_user->fullname() }}"
                                             >
                                         </div>
                                     </div>

@@ -9,9 +9,9 @@
 
         public function query(string $term)
         {
-            return Location::whereRaw('lower(l_label) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(l_name) like ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(l_beschreibung) like ?', '%' . strtolower($term) . '%')->get();
+            return Location::where('l_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('l_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('l_beschreibung','ILIKE', '%' . strtolower($term) . '%')->get();
         }
 
         public static function searchResults(sring $term): array

@@ -8,9 +8,9 @@
     {
 
         protected function getRequirementControlItemItems($term){
-            return AnforderungControlItem::whereRaw('lower(aci_label) like ? ', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(aci_name) like ? ', '%' . strtolower($term) . '%')
-                ->orWhereRaw('lower(aci_task) like ? ', '%' . strtolower($term) . '%')
+            return AnforderungControlItem::where('aci_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('aci_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('aci_task','ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 

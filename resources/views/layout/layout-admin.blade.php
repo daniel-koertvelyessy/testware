@@ -115,7 +115,13 @@
                          height="18px;"
                          alt="Icon der Systemmeldung "
                     >
-                    <strong class="mr-auto">{{__('Systemnachricht')}}</strong>
+                    <strong class="mr-auto">
+                        @if(is_array(session()->get('status')))
+                            {!! session()->get('status')['header'] !!}
+                        @else
+                            {{__('Systemnachricht')}}
+                        @endif
+                    </strong>
                     <button type="button"
                             class="ml-2 mb-1 close"
                             data-dismiss="toast"
@@ -126,7 +132,11 @@
                 </div>
                 <div class="toast-body">
                     <p id="toastMessageBody">
+                        @if(is_array(session()->get('status')))
+                            {!! session()->get('status')['body'] !!}
+                        @else
                         {!! session()->get('status') !!}
+                        @endif
                     </p>
                 </div>
             </div>

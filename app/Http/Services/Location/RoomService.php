@@ -9,9 +9,9 @@
 
         protected function query(string $term)
         {
-            return Room::whereRaw('LOWER(r_label) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(r_name) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(r_description) LIKE ?', '%' . strtolower($term) . '%')
+            return Room::where('r_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('r_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('r_description','ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 

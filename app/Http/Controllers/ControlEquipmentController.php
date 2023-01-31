@@ -23,6 +23,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
     use Illuminate\Routing\Redirector;
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\View\View;
     use Kyslik\ColumnSortable\Sortable;
 
@@ -58,7 +59,7 @@
          */
         public function create(Request $request)
         {
-         //   dd($request);
+            //   dd($request);
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             $controlEquipmentIsComplete = true;
@@ -415,16 +416,16 @@
 
         public function sync(Request $request)
         {
-            $set=[];
-            if (count($request->sycEquip)>0){
+            $set = [];
+            if (count($request->sycEquip) > 0) {
                 $service = new ControlEventService();
-                foreach ($request->sycEquip as $eq_uid){
-                  $res[$eq_uid] =  $service->syncEquipment($eq_uid, $request->has('sycEquipWithDeletion'));
+                foreach ($request->sycEquip as $eq_uid) {
+                    $res[$eq_uid] = $service->syncEquipment($eq_uid, $request->has('sycEquipWithDeletion'));
                 }
             }
 
             $request->session()->flash('status', $service->makeSyncMessageText($res));
-           return back();
+            return back();
         }
 
         public function manual()
@@ -434,14 +435,14 @@
             if (!$equipment) {
                 $equipment = Equipment::find(request('equipment'));
             };
-
+            $currentUser = Auth::user();
             $enabledUser = [];
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             if ($equipment) {
                 return view('testware.control.manual', [
                     'qualifieduserList'          => (new EquipmentService)->getQualifiedPersonList($equipment),
-                    'current_user_id'            => \Auth::user()->id,
+                    'current_user'               => $currentUser,
                     'userList'                   => User::select('id', 'name')->get(),
                     'equipment'                  => $equipment,
                     'requirement'                => Anforderung::find(request('requirement')),
@@ -496,12 +497,15 @@
 
         }*/
 
-        public function fixbroken(ControlEquipment $control,Request $request)
+        public function fixbroken(ControlEquipment $control, Request $request)
         {
+
             $control->anforderung_id = $request->anforderung_id;
             $control->equipment_id = $request->equipment_id;
-            $msg = $control->save() ? 'Prüfung korrigiert' : 'Fehler beim Speichern';
-            $request->session()->flash('status',$msg);
+            $msg = $control->save()
+                ? 'Prüfung korrigiert'
+                : 'Fehler beim Speichern';
+            $request->session()->flash('status', $msg);
             return back();
         }
 

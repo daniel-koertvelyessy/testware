@@ -605,7 +605,7 @@
                                                    id="control_event_controller_name"
                                                    required
                                                    placeholder="{{__('Name Prüfer')}}"
-                                                   value="{{ Auth::user()->fullname() }}"
+                                                   value="{{ Auth::user()->profile->fullName() }}"
                                             >
                                         </div>
                                     </div>

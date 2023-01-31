@@ -5,6 +5,10 @@
     use App\Anforderung;
     use App\AnforderungControlItem;
     use App\AnforderungObjekt;
+    use App\ControlEquipment;
+    use App\Http\Services\Product\ProductService;
+    use App\Http\Services\Regulation\RequirementService;
+    use App\ProduktAnforderung;
     use Exception;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
@@ -117,6 +121,10 @@
          */
         public function destroy(Anforderung $anforderung)
         {
+            $service = new RequirementService();
+
+            $service->deleteRelatedItems($anforderung);
+
             $anforderung->delete();
             session()->flash('status', 'Die Anforderung wurde gelöscht!');
             return redirect()->back();

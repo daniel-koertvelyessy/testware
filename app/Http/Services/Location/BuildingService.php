@@ -9,11 +9,11 @@
 
         public function query(string $term)
         {
-            return Building::whereRaw('LOWER(b_label) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(b_name_ort) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(b_name) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(b_description) LIKE ?', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(b_we_name) LIKE ?', '%' . strtolower($term) . '%')->get();
+            return Building::where('b_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('b_name_ort', 'ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('b_name', 'ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('b_description', 'ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('b_we_name', 'ILIKE', '%' . strtolower($term) . '%')->get();
         }
 
         public static function getSearchResults(string $term): array

@@ -22,6 +22,7 @@
 
     class UserController extends Controller
     {
+
         public function __construct()
         {
             $this->middleware('auth');
@@ -42,7 +43,8 @@
                 $userList = User::with('roles')->sortable()->paginate(15);
             }*/
             return view('admin.user.index',
-                ['userList' => User::with('roles')->sortable()->paginate(15)]);
+                ['userList' => User::with('roles')->sortable()->paginate(15)]
+            );
         }
 
         /**
@@ -52,7 +54,7 @@
          */
         public function ldap()
         {
-            return view('admin.user.ldap', ['users' => User::with('roles')->get()]);
+            return view('admin.user.ldap', ['userList' => User::with('roles')->sortable()->paginate(15)]);
         }
 
         /**
@@ -66,7 +68,7 @@
                 $request->session()->flash('status',
                     __('Sie haben keine Berechtigung Benutzer anzulegen!'));
                 return redirect()->route('user.index',
-                    ['users' => User::with('roles')->get()]);
+                    ['userList' => User::with('roles')->sortable()->paginate(15)]);
             }
         }
 
@@ -132,6 +134,7 @@
                 'user'  => $user,
                 'roles' => $user->roles,
                 'isCurrentUser' => Auth::user()->id === $user->id,
+                'isSysAdmin' => Auth::user()->isSysAdmin()
             ]);
         }
 
@@ -157,10 +160,16 @@
          */
         public function update(Request $request, User $user)
         {
-            $user->update($this->validateUser());
-            $request->session()->flash('status',
-                __('Ihr Konto wurde aktualisiert!'));
-            return redirect()->back();
+
+            if(Auth::user()->id === $user->id || Auth::user()->isSysAdmin()) {
+                $user->update($this->validateUser());
+                $request->session()->flash('status',
+                    __('Ihr Konto wurde aktualisiert!'));
+            } else {
+                $request->session()->flash('status',
+                    __('Sie haben keine Berechtigung zum Ändern der Benutzerdaten!'));
+            }
+            return back();
         }
 
         /**
@@ -172,12 +181,16 @@
          */
         public function updatedata(Request $request): RedirectResponse
         {
-            $msg = ((new User)->updateData($request))
-                ? __('Ihr Konto wurde aktualisiert!')
-                : __('Fehler!');
+            if(Auth::user()->id == $request->id || Auth::user()->isSysAdmin()) {
+                $msg = ((new User)->updateData($request))
+                    ? __('Die Benutzerdaten wurden aktualisiert!')
+                    : __('Fehler!');
 
-            $request->session()->flash('status', $msg);
-            return redirect()->back();
+            } else {
+                $msg = __('Sie haben keine Berechtigung zum Ändern der Benutzerdaten!');
+            }
+            $request->session()->flash('status', ['header'=>'Erfolg','body'=>$msg]);
+            return back();
         }
 
 
@@ -300,10 +313,15 @@
 
         public function resetPassword(Request $request): RedirectResponse
         {
-            if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
-                (new User)->updatePassword($request->newPassword, Auth::user());
-                session()->flash('status', __('Passwort wurde aktualisiert!'));
+            if(Auth::user()->id === $request->id || Auth::user()->isSysAdmin()) {
+                if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
+                    (new User)->updatePassword($request->newPassword, Auth::user());
+                    session()->flash('status', __('Passwort wurde aktualisiert!'));
+                }
+            } else{
+                session()->flash('status', __('Sie haben keine Berechtigung!'));
             }
+
             return back();
         }
 

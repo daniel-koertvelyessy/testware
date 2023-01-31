@@ -58,7 +58,10 @@ $objects['storages'] === 0                                            )
                                 aria-controls="nav-dblinks"
                                 aria-selected="false"
                         >
-                            <span class="{{ $dbstatus['totalBrokenLinks']>0 || $dbstatus['brokenProducts']>0 ? 'text-danger' :
+                        <span class="{{  $dbstatus['totalBrokenLinks']>0
+                                            || $dbstatus['brokenProducts']>0
+                                            || $dbstatus['brokenProductRequiremnets']>0
+                                            ? 'text-danger' :
                             'text-success'}}"
                             >{{__('Datenbank')}}</span>
                         </button>
@@ -320,7 +323,7 @@ $objects['storages'] === 0                                            )
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden"
-                                                                   name="anfoderung_id"
+                                                                   name="anforderung_id"
                                                                    id="setRequirement{{$controlItem->id}}"
                                                                    value="@if($controlItem->Anforderung) {{ $controlItem->Anforderung->id }} @endif"
                                                             >
@@ -381,6 +384,12 @@ $objects['storages'] === 0                                            )
                                         <h4 class="alert-heading">{{__('Keine Produkte ohne UUID')}}</h4>
                                         <p>{{__('Es wurde keine Produkte ohne UUID gefunden.')}}</p>
                                     </div>
+                                @endif
+                                @if($dbstatus['brokenProductRequiremnets']>0)
+                                    <p class="lead text-danger">{{ __('Es existieren Produktanforderungen die eine gelöschte Anfoderung referenzieren!') }}</p>
+                                    @foreach($dbstatus['brokenProductRequiremnetItems'] as $item)
+                                        {{ \App\Anforderung::withTrashed()->select('id','an_name')->where('id',$item->anforderung_id)->first()->an_name }}
+                                    @endforeach
                                 @endif
                             </div>
                         </div>

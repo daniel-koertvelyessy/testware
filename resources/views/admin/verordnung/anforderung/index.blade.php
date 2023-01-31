@@ -29,7 +29,6 @@
                     <th class="d-none d-md-table-cell">@sortablelink('updated_at', __('Bearbeitet'))</th>
                     <th class="d-none d-md-table-cell">@sortablelink('an_control_interval', __('Intervall'))</th>
                     <th class="text-center d-none d-md-table-cell">{{__('Vorgänge')}}</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,7 +67,7 @@
                                 {{ $anforderung->AnforderungControlItem->count() }}
                             </span>
                         </td>
-                        <td style="vertical-align: middle; text-align: right;">
+                      {{--  <td style="vertical-align: middle; text-align: right;">
                             <div class="btn-group dropleft">
                                 <button type="button"
                                         class="btn  m-0 "
@@ -102,7 +101,7 @@
 
                                 </form>
                             </div>
-                        </td>
+                        </td>--}}
                     </tr>
                 @empty
                     <tr>

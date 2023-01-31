@@ -2,6 +2,7 @@
 
     namespace App\Http\Actions\Equipment;
 
+    use App\Anforderung;
     use App\ControlEquipment;
     use App\Equipment;
     use App\EquipmentDoc;
@@ -10,11 +11,28 @@
     use App\EquipmentParam;
     use App\EquipmentQualifiedUser;
     use App\ProduktDoc;
+    use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Storage;
 
     class EquipmentAction
     {
+
+
+        public static function deleteLoseRequirementEntries(): void
+        {
+
+            foreach(ControlEquipment::withTrashed()->get() as $control){
+
+                if($control->anforderung_id == NULL) {
+                    Log::warning('Dateireferenz (' . $control->id . ') aus DB ControlEwuipment hat keine Anforderung verknüpft. Datensatz wird gelöscht!');
+                    $control->delete();
+                }
+
+            }
+
+        }
+
         public static function deleteLoseProductDocumentEntries(Equipment $equipment): void
         {
             foreach (ProduktDoc::where('produkt_id', $equipment->Produkt->id)->where('document_type_id', 1)->get() as $productDocFile) {

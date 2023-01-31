@@ -310,6 +310,7 @@
                             class="btn btn-outline-primary btnAddSiganture"
                             data-toggle="modal"
                             data-target="#signatureModal"
+                            {{ !$isCurrentUser ? 'disabled' : ''}}
                     ><i class="fas fa-signature"></i> {{__('Unterschrift erfassen')}}</button>
                 </div>
                 <div class="col-md-8 border rounded-lg p-4">
@@ -320,7 +321,8 @@
                              id="imgSignatureUser"
                         >
                     @else
-                        <img class="img-fluid d-none"
+                        <img src=""
+                             class="img-fluid d-none"
                              alt="Unterschriftbild Benutzer"
                              id="imgSignatureUser"
                         >
@@ -336,12 +338,12 @@
                     >
                 </div>
             </div>
-            @if($isCurrentUser|| Auth::user()->isSysAdmin())
+            @if($isCurrentUser|| $isSysAdmin)
                 <x-btnMain>{{__('Nutzerdaten aktualisieren')}}
                     <span class="fas fa-download ml-2"></span>
                 </x-btnMain>
             @endif
-            @if(Auth::user()->isSysAdmin() && Auth::user()->id != $user->id)
+            @if($isSysAdmin && Auth::user()->id != $user->id)
                 <button type="button"
                         data-toggle="modal"
                         data-target="#modalDeleteUser"
@@ -354,7 +356,7 @@
         {{--
         Set Userpassword
         --}}
-        @if(Auth::user()->isSysAdmin())
+        @if($isSysAdmin)
             <div class="row my-5">
                 <div class="col">
                     <h2 class="h4">{{__('Benutzerrollen ändern')}}</h2>
@@ -432,7 +434,7 @@
             </div>
         @endif
 
-        @if($isCurrentUser|| Auth::user()->isSysAdmin())
+        @if($isCurrentUser|| $isSysAdmin)
             <div class="row my-5">
                 <div class="col">
                     <h2 class="h4">{{__('Passwort ändern')}}</h2>
@@ -579,7 +581,7 @@
 
                     </div>
                 </div>
-                @if($isCurrentUser|| Auth::user()->isSysAdmin())
+                @if($isCurrentUser|| $isSysAdmin)
                     <x-btnSave>{{__('Einstellungen für Benutzer speichern')}}</x-btnSave>
                 @endif
             </form>

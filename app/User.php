@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -356,7 +355,8 @@ class User extends Authenticatable
 
     public function fullname()
     {
-        return $this->profile ? $this->profile->fullName : $this->name;
+
+        return $this->profile->fullName ?? $this->name;
     }
 
 }

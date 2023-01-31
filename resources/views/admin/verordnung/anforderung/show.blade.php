@@ -21,7 +21,9 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{__('Neuen Anforderungstyp anlegen')}}</h5>
+                    <h5 class="modal-title"
+                        id="modalAddNewAnforderungTypeLabel"
+                    >{{__('Neuen Anforderungstyp anlegen')}}</h5>
                     <button type="button"
                             class="close"
                             data-dismiss="modal"
@@ -64,7 +66,9 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{__('Prüfungen neu sortieren')}}</h5>
+                    <h5 class="modal-title"
+                        id="modalSortControlItemsLabel"
+                    >{{__('Prüfungen neu sortieren')}}</h5>
                     <button type="button"
                             class="close"
                             data-dismiss="modal"
@@ -127,6 +131,66 @@
                         </x-btnMain>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade"
+         id="modalDeleteRequirement"
+         tabindex="-1"
+         aria-labelledby="modalDeleteRequirementLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form action="{{ route('anforderung.destroy',$anforderung) }}"
+                      method="POST"
+                >
+                    @csrf
+                    @method('DELETE')
+                    <header class="modal-header">
+                        <h5 class="modal-title"
+                            id="modalDeleteRequirementLabel"
+                        >{{__('Löschung bestätigen')}}</h5>
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </header>
+                    <main class="modal-body">
+
+                        <p class="text-danger">{{ __('Die Löschung der Anforderung werden folgende Objekte ebenfalls gelöscht.') }}</p>
+
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{__('Prüfschritte')}}
+                                <span class="badge badge-danger badge-pill">{{ \App\AnforderungControlItem::where('anforderung_id',$anforderung->id)->count() }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{__('Produktanforderungen')}}
+                                <span class="badge badge-danger badge-pill">{{ \App\ProduktAnforderung::where('anforderung_id',$anforderung->id)->count() }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{__('Geräteprüfungen')}}
+                                <span class="badge badge-danger badge-pill">{{ \App\ControlEquipment::where('anforderung_id',$anforderung->id)->count() }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{__('Standortanforderungen')}}
+                                <span class="badge badge-danger badge-pill">{{ \App\AnforderungObjekt::where('anforderung_id',$anforderung->id)->count() }}</span>
+                            </li>
+
+                        </ul>
+
+                    </main>
+                    <footer class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Abbruch') }}</button>
+                        <x-btnMain class="btn-danger">{{ __('Anforderung mit abhängigen Obejkten löschen!') }}</x-btnMain>
+                    </footer>
+
+                </form>
             </div>
         </div>
     </div>
@@ -264,8 +328,16 @@
                                 label="{{__('Beschreibung')}}"
                                 value="{{ $anforderung->an_description }}"
                     />
+<div class="d-flex">
+    <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>
 
-                    <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>
+    <button type="button"
+            class="btn btn-outline-danger ml-1"
+            data-target="#modalDeleteRequirement"
+            data-toggle="modal"
+    >{{ __('Anforderung löschen') }} <i class="fa fa-trash-alt ml-1"></i></button>
+</div>
+
 
                 </form>
             </div>

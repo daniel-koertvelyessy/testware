@@ -12,6 +12,7 @@ use App\EquipmentQualifiedUser;
 use App\EquipmentUid;
 use App\ProductQualifiedUser;
 use App\Produkt;
+use App\ProduktAnforderung;
 use App\Storage;
 use App\Verordnung;
 use Cache;
@@ -40,18 +41,44 @@ class SystemStatusController  extends Controller
         $brokenItems=[];
 
         foreach(Anforderung::onlyTrashed()->get() as $anforderung){
-            $count = ControlEquipment::withTrashed()->where('anforderung_id',$anforderung->id)->count();
-            $brokenItems[]=ControlEquipment::withTrashed()->where('anforderung_id',$anforderung->id)->first();
-            $counter += $count;
+            $items = ControlEquipment::withTrashed()->where('anforderung_id',$anforderung->id);
+            $count = $items->count();
+            if ($count>0) {
+                $brokenItems[] = $items->first();
+                $counter += $count;
+            }
+        }
+
+        foreach(ControlEquipment::withTrashed()->where('anforderung_id',null)->get() as $control){
+            $brokenItems[]=$control;
+            $counter ++;
+
         }
 
         $brokenEquipmentControl = $counter >0;
+
+
         return [
             'totalControlEquipment'=> $totalControlEquipment,
             'brokenControlEquipment'=> $brokenEquipmentControl,
             'brokenControlEquipmenCount'=> $counter,
             'brokenItems'=> $brokenItems,
         ];
+    }
+
+    public function getBrokenProductRequirements()
+    {
+
+        $items=[];
+
+        foreach(ProduktAnforderung::withTrashed()->get() as $item){
+
+            if (Produkt::withTrashed()->where('id',$item->produkt_id)->count() == 0) $items[]= $item;
+            if (Anforderung::where('id',$item->anforderung_id)->count() == 0) $items[]= $item;
+        }
+
+        return $items;
+
     }
 
     public function getBrokenProductItems()
@@ -64,6 +91,7 @@ class SystemStatusController  extends Controller
         $brokenLinksCount = 0;
         $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
         $brokenProducts = $this->getBrokenProductItems();
+        $brokenProductRequiremnets = $this->getBrokenProductRequirements();
         $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
 
         $brokenControlItems = $brokenEquipmentControl['brokenItems'];
@@ -71,6 +99,8 @@ class SystemStatusController  extends Controller
         //       return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($brokenEquipmentControl, $counter){
         return [
             'missingEquipmentUuids' => $this->getBrockenEquipmentUuids(),
+            'brokenProductRequiremnets' => count($brokenProductRequiremnets),
+            'brokenProductRequiremnetItems' => $brokenProductRequiremnets,
             'brokenProducts' => $brokenProducts,
             'totalBrokenLinks' => $brokenLinksCount,
             'brokenControlItems' => $brokenControlItems,

@@ -21,11 +21,11 @@
 
         protected function query(string $term)
         {
-            return Equipment::whereRaw('LOWER(eq_serien_nr) LIKE (?)', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(eq_inventar_nr) LIKE (?)', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(eq_text) LIKE (?)', '%' . strtolower($term) . '%')
+            return Equipment::where('eq_serien_nr', 'ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('eq_inventar_nr', 'ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('eq_text', 'ILIKE', '%' . strtolower($term) . '%')
                 ->orWhere('eq_uid', 'like', '%' . strtolower($term) . '%')
-                ->orWhereRaw('LOWER(eq_name) LIKE (?)', '%' . strtolower($term) . '%')
+                ->orWhere('eq_name', 'ILIKE', '%' . strtolower($term) . '%')
                 ->get();
         }
 
@@ -89,6 +89,18 @@
                 ->select('control_equipment.id','anforderungs.id AS anforderungs_id','equipment_id','anforderungs.is_initial_test','anforderungs.an_name','control_equipment.qe_control_date_due')
                 ->where('equipment_id', $equipment->id)
                 ->where('is_initial_test', false)
+                ->orderBy('qe_control_date_due')
+                ->get();
+
+        }
+
+        public function getOntimeControlItems(Equipment $equipment)
+        {
+
+            return ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
+                ->select('control_equipment.id','anforderungs.id AS anforderungs_id','equipment_id','anforderungs.is_initial_test','anforderungs.an_name','control_equipment.qe_control_date_due')
+                ->where('equipment_id', $equipment->id)
+                ->where('is_initial_test', true)
                 ->orderBy('qe_control_date_due')
                 ->get();
 
