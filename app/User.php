@@ -206,7 +206,7 @@ class User extends Authenticatable
         $this->username = $request->username;
         $this->role_id = 0;
         $this->user_theme = 'css/tbs.css';
-        $this->locale = $request->locales;
+        $this->locale = $request->locales??'de';
         $this->signature = $request->signature;
         $this->password = Hash::make($request->password);
         $this->save();

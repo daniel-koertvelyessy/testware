@@ -236,11 +236,7 @@
             <div class="row mb-4 d-md-block d-none">
                 <div class="col">
                     <h1 class="h3">
-                        @if(Auth::user()->id === $user->id)
-                            {{__('Mein Konto')}}
-                        @else
-                            {{__('Übersicht Benutzer')}}
-                        @endif
+                        {{$isCurrentUser ? __('Mein Konto') : __('Übersicht Benutzer') }}
                     </h1>
                 </div>
             </div>
@@ -352,10 +348,6 @@
             @endif
         </form>
 
-
-        {{--
-        Set Userpassword
-        --}}
         @if($isSysAdmin)
             <div class="row my-5">
                 <div class="col">
@@ -437,7 +429,7 @@
         @if($isCurrentUser|| $isSysAdmin)
             <div class="row my-5">
                 <div class="col">
-                    <h2 class="h4">{{__('Passwort ändern')}}</h2>
+                    <h2 class="h4">{{$isSysAdmin ? __('Passwort setzen') :  __('Passwort ändern')}}</h2>
                     <form method="POST"
                           action="{{ route('user.setPassword') }}"
                     >
@@ -450,14 +442,14 @@
                         >
                         <div class="row">
                             <div class="col-md-6">
-                                <x-textfield id="newPassword"
+                                <x-textfield id="setpassword"
                                              type="password"
                                              required
                                              label="{{__('Neues Passwort')}}"
                                 />
                             </div>
                             <div class="col-md-6">
-                                <x-textfield id="confirmPassword"
+                                <x-textfield id="setpassword_confirmation"
                                              type="password"
                                              required
                                              label="{{__('Neues Passwort bestätigen')}}"
@@ -468,11 +460,7 @@
                             </div>
 
                         </div>
-                        <x-btnSave>{{__('Passwort setzen')}}</x-btnSave>
-
-                        {{--
-                        $2y$10$QTYenoYuRpR6Kp5e2UjidOZ8xRDlxnQjtdxFed/ecvfSzE3UVezna
-                        --}}
+                        <x-btnSave>{{$isSysAdmin ? __('Neues Passwort setzen') : __('Neues Passwort speichern')}}</x-btnSave>
                     </form>
                 </div>
             </div>
@@ -542,16 +530,6 @@
                                     id="systemTheme"
                                     class="custom-select"
                             >
-                                {{-- <option value="css/sand.css"
-                                         data-asset="{{ asset('css/sand.css') }}"
-                                         {{ $user->user_theme=='css/sand.css'? ' selected ' : '' }}
-                                 >Sandstone
-                                 </option>
-                                 <option value="css/minty.css"
-                                         data-asset="{{ asset('css/minty.css') }}"
-                                         {{ $user->user_theme=='css/minty.css'? ' selected ' : '' }}
-                                 >Mint
-                                 </option>--}}
                                 <option value="css/tbs.css"
                                         data-asset="{{ asset('css/tbs.css') }}"
                                         {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
@@ -570,6 +548,7 @@
                                 </option>
                                 <option value="css/materia.css"
                                         data-asset="{{ asset('css/materia.css') }}"
+                                        {{ $user->user_theme=='css/materia.css'? ' selected ' : '' }}
                                 >Material
                                 </option>
                             </select>

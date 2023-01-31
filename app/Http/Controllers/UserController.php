@@ -18,6 +18,7 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Str;
     use Illuminate\Validation\Rule;
+    use Illuminate\Validation\Rules\Password;
 
 
     class UserController extends Controller
@@ -88,6 +89,23 @@
 
         }
 
+
+        private function validateNewPassword()
+        {
+            return request()->validate([
+                'setpassword'          => [
+                    'required',
+                    'string',
+                    'confirmed',
+                    Password::default(),
+                ],
+                'setpassword_confirmation' => [
+                    'required',
+                    'string'
+                ]
+            ]);
+
+        }
         /**
          * @return array
          */
@@ -96,21 +114,28 @@
             return request()->validate([
                 'username'          => [
                     'bail',
+                    'string',
                     'required',
-                    'max:100',
+                    'max:255',
                     Rule::unique('users')->ignore(\request('id'))
                 ],
                 'email'             => [
                     'bail',
                     'required',
                     'email',
+                    'max:255',
                     Rule::unique('users')->ignore(\request('id'))
                 ],
                 'email_verified_at' => '',
-                'password'          => 'required',
+                'password'          => [
+                    'required',
+                    'string',
+                    'confirmed',
+                    Password::default(),
+                ],
                 'api_token'         => 'nullable',
                 'name'              => 'nullable',
-                'role_id'           => '',
+                'role_id'           => 'nullable',
                 'signature'         => 'nullable',
             ], [
                 'username.required' => __('Ihr Anzeigename ist notwendig'),
@@ -313,9 +338,10 @@
 
         public function resetPassword(Request $request): RedirectResponse
         {
+            $this->validateNewPassword();
             if(Auth::user()->id === $request->id || Auth::user()->isSysAdmin()) {
-                if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
-                    (new User)->updatePassword($request->newPassword, Auth::user());
+                if (isset($request->setpassword) && $request->setpassword_confirmation === $request->setpassword) {
+                    (new User)->updatePassword($request->setpassword, Auth::user());
                     session()->flash('status', __('Passwort wurde aktualisiert!'));
                 }
             } else{
@@ -327,9 +353,10 @@
 
         public function setPassword(Request $request): RedirectResponse
         {
-            if (isset($request->newPassword) && $request->confirmPassword === $request->newPassword) {
-                (new User)->updatePassword($request->newPassword, User::find($request->id));
-                session()->flash('status', __('Passwort wurde aktualisiert!'));
+            $this->validateNewPassword();
+            if (isset($request->setpassword) && $request->setpassword_confirmation === $request->setpassword) {
+               (new User)->updatePassword($request->setpassword, User::find($request->id));
+                session()->flash('status', __('Passwort wurde jetzt aktualisiert!'));
             }
             return back();
         }
