@@ -622,7 +622,7 @@
                                                    id="control_event_controller_name"
                                                    required
                                                    placeholder="{{__('Name Prüfer')}}"
-                                                   value="{{ $current_user->Profile->fullName() }}"
+                                                   value="{{ $current_user->fullname() }}"
                                             >
                                         </div>
                                     </div>

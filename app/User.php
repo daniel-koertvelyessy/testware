@@ -356,7 +356,7 @@ class User extends Authenticatable
     public function fullname()
     {
 
-        return $this->profile->fullName ?? $this->name;
+        return $this->Profile->fullName() ?? $this->name;
     }
 
 }
