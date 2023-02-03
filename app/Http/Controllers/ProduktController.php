@@ -32,6 +32,7 @@
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Storage;
+    use Illuminate\Support\Str;
     use Illuminate\Validation\Rule;
     use Illuminate\View\View;
 
@@ -55,7 +56,10 @@
         {
             $produktList = Produkt::with('ProduktKategorie', 'ProduktState',
                 'ControlProdukt')->sortable()->paginate(10);
-            return view('admin.produkt.index', ['produktList'=>$produktList, 'isSysAdmin' => Auth::user()->isSysAdmin()]);
+            return view('admin.produkt.index', [
+                'produktList' => $produktList,
+                'isSysAdmin'  => Auth::user()->isSysAdmin()
+            ]);
         }
 
         /**
@@ -238,6 +242,7 @@
             }
             $this->validateProdukt();
             $produkt = new Produkt();
+            $produkt->prod_uuid = Str::uuid();
             $produkt->prod_label = $request->prod_label;
             $produkt->prod_name = $request->prod_name;
             $produkt->produkt_state_id = $request->produkt_state_id;
