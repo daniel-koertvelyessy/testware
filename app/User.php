@@ -324,7 +324,7 @@ class User extends Authenticatable
 
     }
 
-    public function isAdmin()
+    public function isAdmin():bool
     {
         /**
          * check if user is a SysAdmin. If so skip further checks
@@ -342,7 +342,7 @@ class User extends Authenticatable
         return false;
     }
 
-    public function isSysAdmin()
+    public function isSysAdmin():bool
     {
         return $this->role_id === 1;
     }
@@ -353,10 +353,10 @@ class User extends Authenticatable
         $user->update();
     }
 
-    public function fullname()
+    public function fullname():string
     {
 
-        return $this->Profile->fullName() ?? $this->name;
+        return ($this->Profile) ? $this->Profile->fullName() : $this->name;
     }
 
 }
