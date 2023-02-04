@@ -127,7 +127,7 @@
 
             $anforderung->delete();
             session()->flash('status', 'Die Anforderung wurde gelöscht!');
-            return redirect()->back();
+            return redirect()->route('anforderung.index');
         }
 
         /**

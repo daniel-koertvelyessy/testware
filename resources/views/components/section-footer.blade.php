@@ -61,7 +61,7 @@
     <div class="p-1">
         <span class="text-dark">
             ©
-        <a href="https://testware.io"
+        <a href="https://thermo-control.com"
            title="thermo-control Körtvélyessy GmbH"
            target="_blank"
            class="text-dark"

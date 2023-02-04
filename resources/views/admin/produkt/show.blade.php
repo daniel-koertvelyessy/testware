@@ -134,7 +134,7 @@
                 </div>
                 <div class="modal-body">
                     <p class="lead">Bitte die Geräte aussuchen, welche neue Prüftermine erhalten sollen.</p>
-                    <form action="{{ route('control.sync') }}"
+                    <form action="{{ route('control.sync') }}#productRequirements"
                           method="POST"
                           class="needs-validation"
                           id="frmSyncRequirement"

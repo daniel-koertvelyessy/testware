@@ -28,7 +28,7 @@ class ProduktAnforderung extends Model
 
     public function Produkt()
     {
-        return $this->hasMany(Produkt::class);
+        return $this->belongsTo(Produkt::class);
     }
 
     public function Anforderung()

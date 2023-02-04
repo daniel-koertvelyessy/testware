@@ -795,6 +795,11 @@
             ]);
         }
 
+        public function updateProduktAnforderung(Request $request)
+        {
+            dd($request);
+        }
+
 
         /**
          *  Löscht die Zuordnung der Anforderung vom Produkt
@@ -805,6 +810,8 @@
          */
         public function deleteProduktAnfordrung(Request $request)
         {
+
+
 
             $anforderung = Anforderung::find($request->anforderung_id);
 
@@ -844,7 +851,7 @@
 
             if (ProduktAnforderung::find($request->id)->delete()) {
                 $request->session()->flash('status',
-                    'Das Anforderung  <strong>' . request('an_label') . '</strong> wurde vom Produkt entfernt!' . $euipUdate);
+                    'Die Anforderung  <strong>' . request('an_label') . '</strong> wurde vom Produkt entfernt!' . $euipUdate);
                 return redirect()->back();
             } else {
                 dd('nix da');

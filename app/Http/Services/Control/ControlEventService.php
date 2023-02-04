@@ -101,7 +101,9 @@
                 $msg .= $numDeletions > 0
                     ? __('<br>Insgesamt :num existierende Prüfungen gelöscht. ', ['num' => $numDeletions])
                     : __('Es wurden keine Prüfungen gelöscht. ');
-            } else {
+            } elseif (empty($results)) {
+                $msg.= __(' Es wurden keine Geräte ausgewählt!');
+            } else{
                 $msg.= __('Ausgewählten Geräte sind bereits synchron. Es wurden keine Aktionen ausgeführt!');
             }
 

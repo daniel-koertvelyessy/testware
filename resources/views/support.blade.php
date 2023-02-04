@@ -52,9 +52,9 @@
                             <ul class="list-unstyled">
                                 <li>{{ __('Daniel Körtvélyessy')}}</li>
                                 <li>Mobil: <a href="tel:+49173855998">+49 173 5779408</a></li>
-                                <li>E-Mail: <a href="mailto:daniel.koertvelyessy@bitpack.io">daniel.koertvelyessy@bitpack.io</a></li>
+                                <li>E-Mail: <a href="mailto:support@testware.io">support@testware.io</a></li>
                             </ul>
-                            <p>{{ __('Ihre Kundennummer')}}: <br><span class="lead" >556975</span></p>
+
                         </div>
                     </div>
                 </div>

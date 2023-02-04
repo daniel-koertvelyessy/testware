@@ -45,8 +45,7 @@
 
             $items = ProduktAnforderung::withTrashed()->where('anforderung_id',$anforderung->id);
             $counter = $items->count();
-            dd($counter);
-            return $items->delete() ? __() : __();
+            return $items->delete() ? __('Produktanforderung gelöscht') : __('Fehler beim Löschen der Produktanforderung');
         }
 
     }

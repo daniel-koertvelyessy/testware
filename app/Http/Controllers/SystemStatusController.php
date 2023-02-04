@@ -71,7 +71,7 @@ class SystemStatusController  extends Controller
 
         $items=[];
 
-        foreach(ProduktAnforderung::withTrashed()->get() as $item){
+        foreach(ProduktAnforderung::all() as $item){
 
             if (Produkt::withTrashed()->where('id',$item->produkt_id)->count() == 0) $items[]= $item;
             if (Anforderung::where('id',$item->anforderung_id)->count() == 0) $items[]= $item;

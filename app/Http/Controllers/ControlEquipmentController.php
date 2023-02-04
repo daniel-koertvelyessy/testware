@@ -416,9 +416,10 @@
 
         public function sync(Request $request)
         {
-            $set = [];
-            if (count($request->sycEquip) > 0) {
-                $service = new ControlEventService();
+            $service = new ControlEventService();
+            $res=[];
+            if (isset($request->sycEquip) && count($request->sycEquip) > 0) {
+
                 foreach ($request->sycEquip as $eq_uid) {
                     $res[$eq_uid] = $service->syncEquipment($eq_uid, $request->has('sycEquipWithDeletion'));
                 }

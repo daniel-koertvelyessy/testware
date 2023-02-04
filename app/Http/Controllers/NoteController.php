@@ -6,6 +6,7 @@ use App\Note;
 use App\NoteType;
 use App\ProduktDoc;
 use App\Tag;
+use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -108,22 +109,24 @@ class NoteController extends Controller
     public function update(Request $request, Note $note)
     : RedirectResponse
     {
-        $note->update($request->validate([
-            'label' => [
-                'required',
-                Rule::unique('note_types')->ignore($request->id)
-            ],
-            'uid'=>'required',
-            'description'=>'',
-            'note_type_id'=>'required',
-            'is_intern'=>'',
-            'file_name'=>'',
-            'file_path'=>'',
-            'user_id'=>'required',
-        ]));
+        if (Auth::user()->id === $request->user_id) {
+            $note->update($request->validate([
+                'label'        => [
+                    'required',
+                    Rule::unique('note_types')->ignore($request->id)
+                ],
+                'uid'          => 'required',
+                'description'  => '',
+                'note_type_id' => 'required',
+                'is_intern'    => '',
+                'file_name'    => '',
+                'file_path'    => '',
+                'user_id'      => 'required',
+            ]));
 
-        if (isset($request->tag)) {
-            $note->tags()->sync($request->tag);
+            if (isset($request->tag)) {
+                $note->tags()->sync($request->tag);
+            }
         }
         return back();
     }
@@ -139,7 +142,12 @@ class NoteController extends Controller
     public function destroy(Note $note)
     : RedirectResponse
     {
-        $note->delete();
+        if (Auth::user()->id === $note->user_id || Auth::user()->isSysAdmin())  {
+            $msg = $note->delete() ? __('Notiz gelöscht') : __('Notiz konnte nicht gelöscht werden');
+        } else {
+            $msg = __('Sie dürfen diese Notiz nicht löschen.');
+        }
+        session()->flash('status',$msg);
         return back();
     }
 

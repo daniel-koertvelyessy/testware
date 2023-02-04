@@ -22,7 +22,7 @@
 
 @if (\Auth::user()->id === $note->user_id)
     <div class="mt-4">
-        <form action="{{ route('note.destroy',$note) }}"
+        <form action="{{ route('note.destroy',$note) }}#notes"
               method="post"
         >
             @csrf

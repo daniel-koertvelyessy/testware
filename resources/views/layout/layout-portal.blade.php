@@ -49,11 +49,10 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand">
-                <img src="{{ asset('img/icon/bitpack_logo.svg') }}"
-                     alt="Icon bitpack"
-                     height="30px"
-                >
+            <a class="navbar-brand"
+               style="color:#c7d301;"
+            >
+                testWare
             </a>
             <button class="navbar-toggler"
                     type="button"

@@ -63,8 +63,9 @@ class AdminController extends Controller
         $dbstatus = $systemStatus->getBrokenDBLinks();
         $requirementList = Anforderung::select('id','an_name')->get();
         $equipmentList = Equipment::select('id','eq_name','eq_inventar_nr')->get();
+        $productList = Produkt::select('id','prod_name','prod_nummer')->get();
         $isSysAdmin=Auth::user()->isSysAdmin();
-        return view('admin.index', compact('objects','dbstatus','requirementList','equipmentList','isSysAdmin'));
+        return view('admin.index', compact('objects','dbstatus','requirementList','equipmentList','isSysAdmin','productList'));
     }
 
     public function systems()
