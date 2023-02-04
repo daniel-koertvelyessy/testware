@@ -27,78 +27,70 @@
             <div class="col-md-3">
                 <section class="card-body text-dark">
                     @can('isAdmin', Auth()->user())
-                        <a href="{{ route('lexplorer') }}"
-                           class="tile-small btn-outline-primary rounded mb-3"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="fas fa-project-diagram"></i></span> <span class="branding-bar text-center">{{__('Explorer')}}</span>
-                        </a>
+                        <nav class="row row-cols-1 px-1">
+                            <x-tile link="{{ route('lexplorer') }}"
+                                    :label="__('Explorer')"
+                            >
+                                <i class="fas fa-project-diagram fa-2x"></i>
+                            </x-tile>
+                        </nav>
+
+
                     @endcan
-                    <nav class="tiles-grid mb-3">
-                        <a href="{{ route('location.index') }}"
-                           class="tile-small rounded btn-outline-primary"
-                           data-role="tile"
+                    <x-sidetiles>
+
+                        <x-tile link="{{ route('location.index') }}"
+                                :label="__('Standorte')"
                         >
-                            <span class="icon"><i class="fas fa-industry"></i></span> <span class="branding-bar text-center">{{__('Standorte')}}</span>
-                        </a>
-                        @can('isAdmin', Auth()->user())
-                            <a href="{{ route('location.create') }}"
-                               class="tile-small rounded btn-outline-primary"
-                               data-role="tile"
-                            >
-                                <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Standort')}}</span>
-                            </a>
-                        @endcan
-                    </nav>
-                    <nav class="tiles-grid mb-3">
-                        <a href="{{ route('building.index') }}"
-                           class="tile-small rounded btn-outline-primary"
-                           data-role="tile"
-                           aria-label="Storagee"
+                            <i class="fas fa-industry fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('location.create') }}"
+                                :label="__('Standort')"
                         >
-                            <span class="icon"><i class="far fa-building"></i></span> <span class="branding-bar text-center">{{__('Gebäude')}}</span>
-                        </a>
-                        @can('isAdmin', Auth()->user())
-                            <a href="{{ route('building.create') }}"
-                               class="tile-small rounded btn-outline-primary"
-                               data-role="tile"
-                            >
-                                <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Gebäude')}}</span>
-                            </a>
-                        @endcan
-                    </nav>
-                    <nav class="tiles-grid mb-3">
-                        <a href="{{ route('room.index') }}"
-                           class="tile-small rounded btn-outline-primary"
-                           data-role="tile"
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('building.index') }}"
+                                :label="__('Gebäude')"
                         >
-                            <span class="icon"><i class="fas fa-door-open"></i></span> <span class="branding-bar text-center">{{__('Räume')}}</span>
-                        </a>
-                        @can('isAdmin', Auth()->user())
-                            <a href="{{ route('room.create') }}"
-                               class="tile-small rounded btn-outline-primary"
-                               data-role="tile"
-                            >
-                                <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Raum')}}</span>
-                            </a>
-                        @endcan
-                    </nav>
-                    <nav class="tiles-grid mb-3">
-                        <a href="{{ route('stellplatz.index') }}"
-                           class="tile-small rounded btn-outline-primary"
-                           data-role="tile"
+                            <i class="fas fa-building fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('building.create') }}"
+                                :label="__('Gebäude')"
                         >
-                            <span class="icon"><i class="fas fa-inbox"></i></span> <span class="branding-bar text-center">{{__('Stellplätze')}}</span>
-                        </a>
-                        @can('isAdmin', Auth()->user())
-                            <a href="{{ route('stellplatz.create') }}"
-                               class="tile-small rounded btn-outline-primary"
-                               data-role="tile"
-                            >
-                                <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Stellplatz')}}</span>
-                            </a>
-                        @endcan
-                    </nav>
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+
+                        <x-tile link="{{ route('room.index') }}"
+                                :label="__('Räume')"
+                        >
+                            <i class="fas fa-door-open fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('room.create') }}"
+                                :label="__('Raum')"
+                        >
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('stellplatz.index') }}"
+                                :label="__('Stellplätze')"
+                        >
+                            <i class="fas fa-inbox fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('stellplatz.create') }}"
+                                :label="__('Stellplatz')"
+                        >
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+
+                    </x-sidetiles>
+
                 </section>
             </div>
             <div class="col-md-9">

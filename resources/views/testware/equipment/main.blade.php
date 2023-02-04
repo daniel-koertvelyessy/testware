@@ -23,15 +23,9 @@
         <div class="row">
             <div class="col-md-2">
                 <section class="card-body text-dark">
-                    <nav class="d-felx justify-content-around">
-                        <a href="{{ route('equipment.maker') }}"
-                           class="tile-small rounded m-lg-3 btn-outline-primary"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="fas fa-box"></i></span>
-                            <span class="branding-bar text-center">{{__('Neu')}}</span>
-                        </a>
-                    </nav>
+                    <x-tile link="{{ route('equipment.maker') }}" label="{{__('Neu')}}">
+                        <i class="fas fa-box fa-2x"></i>
+                    </x-tile>
                 </section>
             </div>
             <div class="col-md-10">

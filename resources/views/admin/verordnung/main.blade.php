@@ -24,18 +24,18 @@
             <div class="col-md-2">
                 <section class="card-body text-dark">
 
-                    <nav class="tiles-grid">
+                    <nav class="row row-cols-md-1 row-cols-2 mb-4 px-1">
 
-                        <a href="{{ route('verordnung.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="fas fa-book"></i></span>
-                            <span class="branding-bar text-center">{{__('Übersicht')}}</span>
-                        </a>
-                        <a href="{{ route('verordnung.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Verordnung')}}</span>
-                        </a>
+                        <x-tile link="{{ route('verordnung.index') }}" label="{{__('Übersicht')}}">
+                            <i class="fas fa-book fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('verordnung.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
 
                     </nav>
+
                 </section>
             </div>
             <div class="col-md-10">
@@ -72,16 +72,15 @@
             <div class="col-md-2">
                 <section class="card-body text-dark">
 
-                    <nav class="tiles-grid">
+                    <nav class="row row-cols-md-1 row-cols-2 mb-4 px-1">
 
-                        <a href="{{ route('anforderung.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="far fa-list-alt"></i></span>
-                            <span class="branding-bar text-center">{{__('Übersicht')}}</span>
-                        </a>
-                        <a href="{{ route('anforderung.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Anforderung')}}</span>
-                        </a>
+                        <x-tile link="{{ route('anforderung.index') }}" label="{{__('Übersicht')}}">
+                            <i class="far fa-list-alt fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('anforderung.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
 
                     </nav>
 
@@ -119,15 +118,16 @@
         <div class="row">
             <div class="col-md-2">
                 <section class="card-body text-dark">
-                    <nav class="tiles-grid">
-                        <a href="{{ route('anforderungcontrolitem.index') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="far fa-list-alt"></i></span>
-                            <span class="branding-bar text-center">{{__('Übersicht')}}</span>
-                        </a>
-                        <a href="{{ route('anforderungcontrolitem.create') }}" class="tile-small btn-outline-primary rounded mb-lg-3 mb-sm-1" data-role="tile">
-                            <span class="icon"><i class="far fa-plus-square"></i></span>
-                            <span class="branding-bar text-center">{{__('Prüfung')}}</span>
-                        </a>
+
+                    <nav class="row row-cols-md-1 row-cols-2 mb-4 px-1">
+
+                        <x-tile link="{{ route('anforderungcontrolitem.index') }}" label="{{__('Übersicht')}}">
+                            <i class="far fa-list-alt fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('anforderungcontrolitem.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
 
                     </nav>
 

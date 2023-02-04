@@ -25,62 +25,43 @@
             <div class="col-md-3">
                 <section class="card-body text-dark">
 
-                    <nav class="tiles-grid mb-3">
-                        <a href="{{ route('firma.index') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="fas fa-industry"></i></span> <span class="branding-bar text-center">{{__('Firmen')}}</span>
-                        </a>
-                        <a href="{{ route('firma.create') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Firma')}}</span>
-                        </a>
+                    <x-sidetiles>
 
-                        <a href="{{ route('contact.index') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-id-badge"></i></span> <span class="branding-bar text-center">{{__('Kontakte')}}</span>
-                        </a>
-                        <a href="{{ route('contact.create') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Kontakt')}}</span>
-                        </a>
+                        <x-tile link="{{ route('profile.index') }}" label="{{__('Mitarbeiter')}}">
+                            <i class="fas fa-id-badge fa-2x"></i>
+                        </x-tile>
 
+                        <x-tile link="{{ route('profile.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+                        <hr>
+                        <hr>
 
+                        <x-tile link="{{ route('firma.index') }}" label="{{__('Firmen')}}">
+                            <i class="fas fa-industry fa-2x"></i>
+                        </x-tile>
 
-                        <a href="{{ route('adresse.index') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                           aria-label="Storagee"
-                        >
-                            <span class="icon"><i class="fas fa-map-marker-alt"></i></span> <span class="branding-bar text-center">{{__('Adressen')}}</span>
-                        </a>
+                        <x-tile link="{{ route('firma.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
 
-                        <a href="{{ route('adresse.create') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Adresse')}}</span>
-                        </a>
-                        <a href="{{ route('profile.index') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-address-card"></i></span> <span class="branding-bar text-center">{{__('Mitarbeiter')}}</span>
-                        </a>
-                        <a href="{{ route('profile.create') }}"
-                           class="tile-small btn-outline-primary rounded"
-                           data-role="tile"
-                        >
-                            <span class="icon"><i class="far fa-plus-square"></i></span> <span class="branding-bar text-center">{{__('Mitarbeiter')}}</span>
-                        </a>
-                    </nav>
+                        <x-tile link="{{ route('contact.index') }}" label="{{__('Kontakte')}}">
+                            <i class="fas fa-id-badge fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('contact.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('adresse.index') }}" label="{{__('Addressen')}}">
+                            <i class="fas fa-id-badge fa-2x"></i>
+                        </x-tile>
+
+                        <x-tile link="{{ route('adresse.create') }}" label="{{__('Neu')}}">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </x-tile>
+
+                    </x-sidetiles>
                 </section>
             </div>
             <div class="col-md-9">

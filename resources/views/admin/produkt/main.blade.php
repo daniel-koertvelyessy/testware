@@ -77,22 +77,15 @@
         </div>
         <div class="row">
             <div class="col-md-2">
-                <nav class="justify-content-around flex-md-column flex-sm-row mb-3">
-                    <a href="{{ route('produkt.index') }}"
-                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-2"
-                       data-role="tile"
-                    >
-                        <span class="icon"><i class="fas fa-boxes"></i></span>
-                        <span class="branding-bar text-center">{{__('Übersicht')}}</span>
-                    </a>
+                <nav class="row row-cols-md-1 row-cols-2 mb-4 px-1">
 
-                    <a href="{{ route('produkt.create') }}"
-                       class="tile-small btn-outline-primary rounded mb-lg-3 mb-2"
-                       data-role="tile"
-                    >
-                        <span class="icon"><i class="fas fa-box"></i></span>
-                        <span class="branding-bar text-center">{{__('Neu')}}</span>
-                    </a>
+                    <x-tile link="{{ route('produkt.index') }}"  :label="__('Übersicht')"      >
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </x-tile>
+
+                    <x-tile link="{{ route('produkt.create') }}"  :label="__('Neu')"      >
+                        <i class="fas fa-box fa-2x"></i>
+                    </x-tile>
 
                 </nav>
             </div>
@@ -129,7 +122,7 @@
             </div>
         </div>
         @can('isAdmin', Auth::user())
-            <div class="d-flex align-items-center justify-content-between my-3">
+            <div class="d-flex align-items-center justify-content-between my-3 flex-column flex-md-row">
                 <h3 class="h4">{{__('Neues Produkt aus Kategorie erstellen')}}</h3>
                 <button class="btn btn-sm btn-outline-primary"
                         data-toggle="modal"
@@ -141,18 +134,21 @@
 
             <div class="row">
                 <div class="col">
+
                     @php $produktKategories = App\ProduktKategorie::all(); @endphp
-                    <nav class="tiles-grid">
+                    <x-tiles>
+
                         @foreach ($produktKategories as $produktKategorie)
-                            <a href="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}"
-                               class="tile-small btn-outline-primary rounded mr-lg-3 mr-sm-2"
-                               data-role="tile"
-                            >
-                                <span class="icon"><i class="fas fa-box"></i></span>
-                                <span class="branding-bar text-center">{{$produktKategorie->pk_label}}</span>
-                            </a>
+
+                            <x-tile href="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}" label="{{$produktKategorie->pk_label}}">
+                                <i class="fas fa-box fa-2x"></i>
+                            </x-tile>
+
                         @endforeach
-                    </nav>
+
+
+                    </x-tiles>
+
                 </div>
             </div>
         @endcan
