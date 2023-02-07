@@ -3,7 +3,8 @@
 @section('mainSection', __('Gerät'))
 
 @section('pagetitle')
-    {{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}@endsection
+    {{__('Gerät bearbeiten')}} {{ $equipment->eq_inventar_nr }} &triangleright; {{__('Geräte')}}
+@endsection
 
 @section('menu')
     @include('menus._menu_testware_main')

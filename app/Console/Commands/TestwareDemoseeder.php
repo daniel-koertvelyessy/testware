@@ -57,8 +57,13 @@ class TestwareDemoseeder extends Command
     }
 
     protected function seedDatabase(){
+        $this->info('✓  Turning on maintenance mode');
+        Artisan::call('down');
         $output = '';
-        $this->info('* * * * *  Reset database and fill with Demo data');
+        $this->info('✓  Reset database and fill with Demo data');
         Artisan::call('migrate:fresh --seeder=DemodataSeeder', [], $output);
+        $this->info('✓  Task completed. Switching off maintenance mode');
+        Artisan::call('up');
+
     }
 }
