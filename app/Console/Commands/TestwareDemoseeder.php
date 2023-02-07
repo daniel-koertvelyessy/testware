@@ -61,7 +61,7 @@ class TestwareDemoseeder extends Command
         Artisan::call('down');
         $output = '';
         $this->info('✓  Reset database and fill with Demo data');
-        Artisan::call('migrate:fresh --seeder=DemodataSeeder', [], $output);
+        Artisan::call('migrate:fresh --seeder=DemodataSeeder --force', [], $output);
         $this->info('✓  Task completed. Switching off maintenance mode');
         Artisan::call('up');
 
