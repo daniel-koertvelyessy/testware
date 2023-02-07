@@ -204,13 +204,13 @@
 
             ]);
 
-            ProduktDoc::create([
+  /*          ProduktDoc::create([
                 'proddoc_label'     => 'HB_P2722HE',
                 'proddoc_name'      => 'acessaData_logo_sw-rd.pdf',
                 'proddoc_name_pfad' => 'product_files/' . $monitor_27->id . '/62jXwBRkghvy4fDpv5LvCQxpxXZZdmtpMSdUwuNL.pdf',
                 'produkt_id'        => $monitor_27->id,
                 'document_type_id'  => 1,
-            ]);
+            ]);*/
 
             \App\ProduktAnforderung::create([
                 'produkt_id'     => $monitor_27->id,
