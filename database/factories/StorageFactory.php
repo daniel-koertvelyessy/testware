@@ -1,15 +1,22 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Storage;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Storage::class, function (Faker $faker) {
-    return [
-        'storage_uid' => '',
-        'storage_label' => '',
-        'storage_object_type' => '',
-    ];
-});
+class StorageFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition():array
+    {
+        return [
+            'storage_uid'         => '',
+            'storage_label'       => '',
+            'storage_object_type' => '',
+        ];
+    }
+}

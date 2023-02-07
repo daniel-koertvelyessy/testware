@@ -20,6 +20,7 @@
     use App\ProductQualifiedUser;
     use App\Produkt;
     use App\ProduktAnforderung;
+    use App\Storage;
     use Exception;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
@@ -168,6 +169,11 @@
 
             EquipmentAction::deleteLoseRequirementEntries($equipment);
 
+            if (Storage::find($equipment->storage_id)) {
+                $value = Storage::find($equipment->storage_id)->getStoragePath();
+            } else {
+                $value = __('nicht zugeordnet');
+            }
 
             return view('testware.equipment.show', [
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
@@ -181,6 +187,7 @@
                 'newFileList'             => $serviceDocument->checkStorageSyncDB($equipment),
                 'companyString'           => $service->makeCompanyString($equipment),
                 'equipment'               => $equipment,
+                'locationpath' => $value
             ]);
         }
 

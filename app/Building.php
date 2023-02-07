@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Building extends Model
 {
-    use SoftDeletes, Sortable;
+    use SoftDeletes, Sortable, HasFactory;
 
     public $sortable = [
         'b_label',

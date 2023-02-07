@@ -4,6 +4,7 @@ namespace App\Console;
 
 //use App\Jobs\CheckEquipmentTestDueDates;
 use App\Jobs\CheckEquipmentTestDueDates;
+use Database\Seeders\DemodataSeeder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,7 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new CheckEquipmentTestDueDates())->daily();
+      //  $schedule->job(new CheckEquipmentTestDueDates())->daily();
+      //  $schedule->command('testware:demoseeder --force')->everyMinute()->withoutOverlapping(5);
     }
 
     /**

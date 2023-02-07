@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
 
-    use SoftDeletes, Sortable;
+    use SoftDeletes, Sortable, HasFactory;
 
     public $sortable = [
         'l_label',
         'l_name',
         'l_beschreibung',
-        'adress_id',
+        'adresse_id',
         'profile_id'
     ];
 

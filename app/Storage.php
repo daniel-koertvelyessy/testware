@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Storage extends Model
 {
-    use SoftDeletes, Sortable;
+    use SoftDeletes, Sortable, HasFactory;
 
     public $sortable = [
         'id',
@@ -125,6 +127,12 @@ class Storage extends Model
         $storage->save();
     }
 
+    /**
+     * @param $uid string 'UUID
+     * @param $label string 'Label'
+     * @param $type string 'Typ: locations, '
+     * @return int|mixed
+     */
     public function change($uid, $label, $type)
     {
         return $this->add($uid, $label, $type);

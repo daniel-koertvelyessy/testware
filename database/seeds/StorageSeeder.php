@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
+    use App\Location;
+    use App\Storage;
+    use Illuminate\Database\Seeder;
 
 class StorageSeeder extends Seeder
 {
@@ -11,10 +13,11 @@ class StorageSeeder extends Seeder
      */
     public function run()
     {
-        $location = factory(App\Location::class, 2)->create();
+
+        $location = Location::factory()->count(2)->create();
 
         foreach ($location as $loc)
-            factory(App\Storage::class)->create([
+            Storage::factory()->create([
                 'storage_uid' => $loc->storage_id,
                 'storage_label' => $loc->l_label,
                 'storage_object_type' => 'locations'

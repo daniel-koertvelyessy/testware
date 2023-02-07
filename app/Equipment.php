@@ -3,6 +3,7 @@
     namespace App;
 
     use DB;
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\SoftDeletes;
     use Illuminate\Support\Facades\Cache;
@@ -27,7 +28,7 @@
 
         //    protected $table = 'equipments';
 
-        use SoftDeletes, Sortable;
+        use SoftDeletes, Sortable, HasFactory;
 
         protected $guarded = [];
 

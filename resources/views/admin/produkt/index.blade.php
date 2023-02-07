@@ -49,7 +49,7 @@
                         @if($produkt)
                         <tr>
                             <td>
-                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_label }}</a>
+                                <a href="{{ route('produkt.show',$produkt) }}">{{ $produkt->prod_name }}</a>
                             </td>
                             <td class="d-none d-md-table-cell">{{ $produkt->prod_nummer }}</td>
                             <td class="d-none d-md-table-cell">{{ $produkt->ProduktKategorie->pk_label }}</td>

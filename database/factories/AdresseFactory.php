@@ -1,28 +1,35 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Adresse;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Adresse::class, function (Faker $faker) {
-    return [
-        'address_type_id' => 1,
-        'ad_label' => substr(substr($faker->companySuffix, 0, 3) . $faker->randomNumber(3) .  $faker->postcode, 0, 10),
-        'ad_name' => $faker->address,
-        'ad_name_firma' => $faker->company,
-        'ad_name_firma_2' => $faker->companySuffix,
-        'ad_name_firma_co' => $faker->companySuffix,
-        'ad_name_firma_abladestelle' => $faker->companySuffix,
-        'ad_name_firma_wareneingang' => $faker->companySuffix,
-        'ad_name_firma_abteilung' => $faker->swiftBicNumber,
-        'ad_anschrift_strasse' => $faker->streetName,
-        'ad_anschrift_hausnummer' => $faker->buildingNumber,
-        'ad_anschrift_etage' => '2',
-        'ad_anschrift_eingang' => '3',
-        'ad_anschrift_plz' => $faker->postcode,
-        'ad_anschrift_ort' => $faker->city,
-        'land_id' => 1
-    ];
-});
+class AdresseFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition():array
+    {
+        return [
+            'address_type_id'            => 1,
+            'ad_label'                   => substr(substr($this->faker->companySuffix, 0, 3) . $this->faker->randomNumber(3) . $this->faker->postcode, 0, 10),
+            'ad_name'                    => $this->faker->address,
+            'ad_name_firma'              => $this->faker->company,
+            'ad_name_firma_2'            => $this->faker->companySuffix,
+            'ad_name_firma_co'           => $this->faker->companySuffix,
+            'ad_name_firma_abladestelle' => $this->faker->companySuffix,
+            'ad_name_firma_wareneingang' => $this->faker->companySuffix,
+            'ad_name_firma_abteilung'    => $this->faker->swiftBicNumber,
+            'ad_anschrift_strasse'       => $this->faker->streetName,
+            'ad_anschrift_hausnummer'    => $this->faker->buildingNumber,
+            'ad_anschrift_etage'         => '2',
+            'ad_anschrift_eingang'       => '3',
+            'ad_anschrift_plz'           => $this->faker->postcode,
+            'ad_anschrift_ort'           => $this->faker->city,
+            'land_id'                    => 1
+        ];
+    }
+}

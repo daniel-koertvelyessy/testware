@@ -1,7 +1,6 @@
 # Korrektur von Typos und Übersetzungen
 Generell werden Typos in den Views, also den eigentlichen Seiten, und den Flash-Messages unterschieden, welche Meldungsfenster sind.
 
-h3WpraYEZOIWQRQHZwvpxHxYOBm8gdlxyZ9FcJqWgdZPg7mikcoTflBQk9roRE43soeQjSzuH6BNioTh
 
 ## Localizations
 Im Quellcode werden alle Texte, die übersetzt werden sollen in folgendem Format angegeben: 

@@ -1,22 +1,29 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Equipment;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use App\Produkt;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Equipment::class, function (Faker $faker) {
-    $uid = \Illuminate\Support\Str::uuid();
-    return [
-        'eq_inventar_nr' => 'inv20' . substr($uid, 0, 50),
-        'eq_serien_nr' => $faker->unique()->bankAccountNumber,
-        'installed_at' => $faker->date('Y-m-d'),
-        'eq_text' => $faker->text(100),
-        'eq_uid' => $uid,
-        'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),
-        'produkt_id' => NULL,
-        'storage_id' => NULL,
-        'eq_price' => random_int(20, 10000)
-    ];
-});
+class EquipmentFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'eq_inventar_nr'     => 'inv20' . substr($this->faker->uuid(), 0, 50),
+            'eq_serien_nr'       => $this->faker->unique()->bankAccountNumber,
+            'installed_at'       => $this->faker->date('Y-m-d'),
+            'eq_text'            => $this->faker->text(100),
+            'eq_uid'             => $this->faker->uuid(),
+            'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),
+            'produkt_id'         => 2,
+            'storage_id'         => NULL,
+            'eq_price'           => random_int(20, 10000)
+        ];
+    }
+}

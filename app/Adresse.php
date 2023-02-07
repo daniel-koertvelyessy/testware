@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Adresse extends Model
 {
@@ -29,7 +31,7 @@ class Adresse extends Model
     //        'land_id'
     //    ];
 
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $guarded = [];
 

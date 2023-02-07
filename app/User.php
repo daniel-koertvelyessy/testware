@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
     use Sortable;
-  //  use HasFactory;
+    use HasFactory;
 
     public const LOCALES = [
         'de' => 'Deutsch',

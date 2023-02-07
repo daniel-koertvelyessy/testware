@@ -92,14 +92,13 @@
                 $pdf->SetY(5);
                 $pdf->SetFont('Helvetica', '', 8);
                 $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Dokument-Nr') . ': ' . $reportNo, 0, 1);
-                $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             });
             PDF::setFooterCallback(function ($pdf) use ($controlEvent)
             {
                 $pdf->SetY(-15);
                 $pdf->SetFont('Helvetica', '', 8);
                 //Page number
-                $pdf->Cell(0, 5, '(c)' . date('Y') . ' bitpack GmbH - testWare', 0, 0, 'L');
+                $pdf->Cell(0, 5, '(c)' . date('Y') . ' thermo-control Körtvélyessy GmbH - testWare ', 0, 0, 'L');
                 $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
             });
 
@@ -246,14 +245,13 @@
                 $pdf->SetFont('Helvetica', '', 8);
                 $pdf->Cell(0, 5, __('Druckdatum') . ': ' . date('d.m.Y') . ' | ' . __('Lizenz-Nr') . ':  | ' . __('Dokument-Nr') . '.', 0, 1);
                 //        $pdf->write1DBarcode($pdf->anlagenID,'C39',150, 10,50,5);
-                $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             });
             PDF::setFooterCallback(function ($pdf)
             {
                 $pdf->SetY(-15);
                 $pdf->SetFont('Helvetica', '', 8);
                 //Page number
-                $pdf->Cell(0, 5, '(c) 2020 - ' . date('Y') . ' bitpack.io GmbH - testWare', 0, 0, 'L');
+                $pdf->Cell(0, 5, '(c) 2020 - ' . date('Y') . ' thermo-control Körtvélyessy GmbH - testWare', 0, 0, 'L');
                 $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
             });
             PDF::startPageGroup();
@@ -282,16 +280,13 @@
                 $pdf->Cell(100, 14, $report->label, 0, 0, 'L');
                 $pdf->Cell(0, 14, $report->name, 0, 1, 'R');
                 $pdf->SetFont('Helvetica', '', 8);
-                ($report->orientation === 'P')
-                    ? $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 24, $y = 282, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false)
-                    : $pdf->ImageSVG($file = '/img/icon/bitpackio.svg', $x = 10, $y = 195, $w = '', $h = 15, '', $align = '', $palign = '', $border = 0, $fitonpage = false);
             });
             PDF::setFooterCallback(function ($pdf)
             {
                 $pdf->SetY(-15);
                 $pdf->SetFont('Helvetica', '', 8);
                 //Page number
-                $pdf->Cell(0, 5, '(c) 2020 - ' . date('Y') . ' bitpack.io GmbH - testWare', 0, 0, 'L');
+                $pdf->Cell(0, 5, '(c) 2020 - ' . date('Y') . ' thermo-control Körtvélyessy GmbH - testWare', 0, 0, 'L');
                 $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
             });
             PDF::startPageGroup();

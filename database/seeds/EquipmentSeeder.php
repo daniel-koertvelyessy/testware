@@ -1,152 +1,409 @@
 <?php
 
-use App\Produkt;
-use Illuminate\Database\Seeder;
+    use App\ControlEquipment;
+    use App\ControlEvent;
+    use App\ControlEventItem;
+    use App\Equipment;
+    use App\EquipmentFuntionControl;
+    use App\EquipmentHistory;
+    use App\EquipmentQualifiedUser;
+    use App\EquipmentUid;
+    use App\Produkt;
+    use App\ProduktDoc;
+    use Illuminate\Database\Seeder;
 
 
-class EquipmentSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    class EquipmentSeeder extends Seeder
     {
-        $produkt = factory(App\Produkt::class, 100)->create();
-        $storage = \App\Storage::all();
-        $bul =  factory(App\Equipment::class, 2012)->make()->each(function ($equip) use ($produkt, $storage) {
-            $id = $produkt->random()->id;
-            $uid = \Illuminate\Support\Str::uuid();
-            $date = now()->addYears(-1 * random_int(1, 6));
 
-            $equip->purchased_at = $date;
-            $equip->installed_at = $date;
-            $equip->eq_price = Produkt::find($id)->prod_price;
-            $equip->eq_name = Produkt::find($id)->prod_name;
-            $equip->eq_uid = $uid;
-            $equip->storage_id =  $storage->random()->id;
-            $equip->produkt_id = $id;
-            $equip->save();
+        /**
+         * @param Produkt $produkt
+         * @param string $name
+         * @param string $invid
+         * @param string $serial
+         * @param int $storageid
+         * @return Equipment
+         */
+        public function addEquipment(Produkt $produkt, string $name, string $invid, int $storageid = 4): Equipment
+        {
+            return Equipment::create([
+                'purchased_at'       => now()->subDays(4),
+                'installed_at'       => now(),
+                'eq_inventar_nr'     => $invid,
+                'eq_serien_nr'       => $this->makeSerial(),
+                'eq_uid'             => \Illuminate\Support\Str::uuid(),
+                'eq_name'            => $name ?? $produkt->prod_name,
+                'eq_price'           => $produkt->prod_price,
+                'equipment_state_id' => 1,
+                'produkt_id'         => $produkt->id,
+                'storage_id'         => $storageid,
 
-            DB::table('equipment_uids')->insert([
-                'equipment_uid' => $uid,
-                'equipment_id' => $equip->id
+            ]);
+        }
+
+        /**
+         * @param Equipment $equipment
+         * @param String $header
+         * @param String $text
+         * @return void
+         */
+        public function addEquipHistory(Equipment $equipment, String $header, String $text)
+        {
+            EquipmentHistory::create([
+                'eqh_eintrag_kurz' => $header,
+                'eqh_eintrag_text' => $text,
+                'equipment_id' => $equipment->id,
+            ]);
+        }
+
+        public function addEquipmentUUid(Equipment $equipment): EquipmentUid
+        {
+            return EquipmentUid::create([
+                'equipment_uid' => $equipment->eq_uid,
+                'equipment_id'  => $equipment->id,
+            ]);
+        }
+
+        public function addEquipmentFunktionControl(Equipment $equipment): EquipmentFuntionControl
+        {
+            return EquipmentFuntionControl::create([
+                'controlled_at'           => now(),
+                'function_control_firma'  => NULL,
+                'function_control_profil' => $equipment->qualifiedUserList($equipment)[0]->id,
+                'function_control_pass'   => true,
+                'function_control_text'   => NULL,
+                'equipment_id'            => $equipment->id,
+            ]);
+        }
+
+        public function addControlEventItems(Equipment $equipment, ControlEvent $controlEvent,Int $aci, $read = NULL): ControlEventItem
+        {
+            return ControlEventItem::create([
+                'control_item_aci'  => $aci,
+                'control_item_read' => $read,
+                'control_item_pass' => true,
+                'equipment_id'      => $equipment->id,
+                'control_event_id'  => $controlEvent->id,
+            ]);
+        }
+
+        public function addControl(Equipment $equipment): ControlEquipment
+        {
+            return ControlEquipment::create([
+                'qe_control_date_last' => now(),
+                'qe_control_date_due'  => now()->addYear(),
+                'qe_control_date_warn' => 3,
+                'anforderung_id'       => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
+                'equipment_id'         => $equipment->id,
+
+            ]);
+        }
+
+        public function addControlEvent(Equipment $equipment, ControlEquipment $controlEquipment): ControlEvent
+        {
+            $user = $equipment->qualifiedUserList($equipment)[0];
+            return ControlEvent::create([
+                'control_event_date'                 => now(),
+                'control_event_next_due_date'        => now()->addYear(),
+                'control_event_pass'                 => true,
+                'control_event_controller_signature' => $user->signature,
+                'control_event_controller_name'      => $user->profile->fullname(),
+                'user_id'                            => $user->id,
+                'control_equipment_id'               => $controlEquipment->id
+            ]);
+        }
+
+        public function addOldControl(Equipment $equipment): ControlEquipment
+        {
+            return ControlEquipment::create([
+                'deleted_at'           => now()->subWeeks(2),
+                'qe_control_date_last' => now()->subWeeks(2),
+                'qe_control_date_due'  => now()->addYear(),
+                'qe_control_date_warn' => 3,
+                'anforderung_id'       => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
+                'equipment_id'         => $equipment->id,
+
+            ]);
+        }
+
+        public function makeSerial(): string
+        {
+            return Str::limit(\Illuminate\Support\Str::uuid(), 10);
+        }
+
+        public function addQualifiedUser(Equipment $equipment): EquipmentQualifiedUser
+        {
+            return EquipmentQualifiedUser::create([
+                'equipment_qualified_firma' => $equipment->produkt->firma->first()->id,
+                'equipment_qualified_date'  => now()->subDays(2),
+                'user_id'                   => 1,
+                'equipment_id'              => $equipment->id,
+            ]);
+        }
+
+        /**
+         * Run the database seeds.
+         *
+         * @return void
+         */
+        public function run()
+        {
+
+            /**
+             *
+             *
+             *    Zuerst Produkte erstellen, aus denen Geräte abgeleitet werden
+             *
+             *
+             */
+
+
+            $workstation = Produkt::create([
+                'prod_label'           => 'op-3000m',
+                'prod_name'            => 'OptiPlex 3000 Micro',
+                'prod_nummer'          => 's012o3000mff_vp',
+                'prod_active'          => 1,
+                'prod_price'           => 617.67,
+                'produkt_kategorie_id' => 3,
+                // Bürogeräte 230 VAC
+                'produkt_state_id'     => 1,
+                // freigegeben
+                'prod_uuid'            => \Illuminate\Support\Str::uuid(),
             ]);
 
-            DB::table('equipment_histories')->insert([
-                [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'deleted_at' => NULL,
-                    'eqh_eintrag_kurz' => 'Neu',
-                    'eqh_eintrag_text' => 'Das Gerät wurde angelegt',
-                    'equipment_id' => $equip->id,
-                ]
+            \App\ProduktAnforderung::create([
+                'produkt_id'     => $workstation->id,
+                'anforderung_id' => 1,
             ]);
 
-            DB::table('control_equipment')->insert([
-                [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'deleted_at' => NULL,
-                    'qe_control_date_last' => now()->addMonths(-2),
-                    'qe_control_date_due' => now()->addWeeks(random_int(3, 40)),
-                    'anforderung_id' => 1,
-                    'equipment_id' => $equip->id,
-                ]
+            \App\FirmaProdukt::create([
+                'firma_id'   => 1,
+                'produkt_id' => $workstation->id,
             ]);
-        });
+
+            \App\ProductQualifiedUser::create([
+                'produkt_id'              => $workstation->id,
+                'user_id'                 => 1,
+                'product_qualified_date'  => now()->subMonth(),
+                'product_qualified_firma' => 1
+            ]);
 
 
+            $monitor_27 = Produkt::create([
+                'prod_label'           => 'P2722HE',
+                'prod_name'            => 'Dell 27-USB-C-Hub-Monitor',
+                'prod_nummer'          => 'P2722he',
+                'prod_active'          => 1,
+                'prod_price'           => 312.67,
+                'produkt_kategorie_id' => 3,
+                // Bürogeräte 230 VAC
+                'produkt_state_id'     => 1,
+                // freigegeben
+                'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+                'equipment_label_id' => 1
 
-        /*        DB::table('produkts')->insert([
-            [
-                'id' => '31',
-                'created_at' => '2020-09-28 13:03:00',
-                'updated_at' => '2020-09-28 13:17:27',
-                'deleted_at' => NULL,
-                'prod_label' => 'MED-288-U',
-                'prod_name' => 'Medikamenten-Kühlschrank MED 288 ULTIMATE',
-                'prod_description' => NULL,
-                'prod_nummer' => '92002652',
-                'prod_active' => '1',
-                'produkt_kategorie_id' => '1',
-                'produkt_state_id' => '1'
-            ]
-        ]);
+            ]);
 
-        DB::table('produkt_docs')->insert([
-            [
-                'id' => '1',
-                'created_at' => '2020-09-28 13:17:41',
-                'updated_at' => '2020-09-28 13:17:41',
-                'deleted_at' => NULL,
-                'proddoc_label' => 'Anleitung',
-                'proddoc_name' => 'MED_288_ULTIMATE.pdf',
-                'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
-                'proddoc_description' => NULL,
-                'produkt_id' => '31',
-                'document_type_id' => '1',
-            ]
-        ]);
+            ProduktDoc::create([
+                'proddoc_label'     => 'HB_P2722HE',
+                'proddoc_name'      => 'acessaData_logo_sw-rd.pdf',
+                'proddoc_name_pfad' => 'product_files/' . $monitor_27->id . '/62jXwBRkghvy4fDpv5LvCQxpxXZZdmtpMSdUwuNL.pdf',
+                'produkt_id'        => $monitor_27->id,
+                'document_type_id'  => 1,
+            ]);
 
-        DB::table('produkt_docs')->insert([
-            [
-                'proddoc_name' => 'MED_288_ULTIMATE.pdf',
-                'proddoc_name_pfad' => 'produkt_docu/31/ejhGroVPr8l1Kn7nsjp3V79ZBOLQ1vkBycnqn0ra.pdf',
+            \App\ProduktAnforderung::create([
+                'produkt_id'     => $monitor_27->id,
+                'anforderung_id' => 1,
+            ]);
 
-                'proddoc_label' => 'Anleitung',
-            ]
-        ]);
+            \App\FirmaProdukt::create([
+                'firma_id'   => 1,
+                'produkt_id' => $monitor_27->id,
+            ]);
 
-        DB::table('firma_produkt')->insert([
-            [
-                'id' => '1',
-                'created_at' => '2020-09-29 09:17:42',
-                'updated_at' => '2020-09-29 09:17:42',
-                'deleted_at' => NULL,
-                'firma_id' => '9',
-                'produkt_id' => '31',
-            ]
-        ]);
+            \App\ProductQualifiedUser::create([
+                'produkt_id'              => $monitor_27->id,
+                'user_id'                 => 1,
+                'product_qualified_date'  => now()->subMonth(),
+                'product_qualified_firma' => 1
+            ]);
 
-        $uid = \Illuminate\Support\Str::uuid();
-        DB::table('equipment')->insert([
-            [
-                'id' => '4',
-                'deleted_at' => NULL,
-                'created_at' => '2020-09-28 19:50:07',
-                'updated_at' => '2020-09-28 19:50:07',
-                'eq_inventar_nr' => '323134',
-                'eq_serien_nr' => '654367',
-                'eq_qrcode' => NULL,
-                'installed_at' => '2020-09-24',
-                'eq_text' => NULL,
-                'equipment_state_id' => '1',
-                'produkt_id' => '31',
-                'storage_id' => '4',
-                'eq_uid' => $uid,
-            ]
-        ]);
+            $mauskeyboard = Produkt::create([
+                'prod_label'           => 'KM5221W',
+                'prod_name'            => 'Dell Pro-Wireless-Tastatur und -Maus - KM5221W - deutsch',
+                'prod_nummer'          => '580-Ajrd',
+                'prod_active'          => 1,
+                'prod_price'           => 51.40,
+                'produkt_kategorie_id' => 1,
+                // ohne
+                'produkt_state_id'     => 1,
+                // freigegeben
+                'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+                'equipment_label_id' => 1
 
-        DB::table('equipment_uids')->insert([
-            [
-                'equipment_uid' => $uid,
-                'equipment_id' => '4'
-            ]
-        ]);
+            ]);
 
-        DB::table('equipment_histories')->insert([
-            [
-                'id' => '1',
-                'created_at' => '2020-09-29 15:30:36',
-                'updated_at' => '2020-09-29 15:30:36',
-                'deleted_at' => NULL,
-                'eqh_eintrag_kurz' => 'Neu',
-                'eqh_eintrag_text' => 'Das Gerät wurde angelegt',
-                'equipment_id' => '4',
-            ]
-        ]);*/
+            \App\ProduktAnforderung::create([
+                'produkt_id'     => $mauskeyboard->id,
+                'anforderung_id' => 3,
+            ]);
+
+            \App\FirmaProdukt::create([
+                'firma_id'   => 1,
+                'produkt_id' => $mauskeyboard->id,
+            ]);
+
+            \App\ProductQualifiedUser::create([
+                'produkt_id'              => $mauskeyboard->id,
+                'user_id'                 => 1,
+                'product_qualified_date'  => now()->subMonth(),
+                'product_qualified_firma' => 1
+            ]);
+
+            $siptelefon = Produkt::create([
+                'prod_label'           => 'YL-SIP-T42U',
+                'prod_name'            => 'Yealink SIP-T42U',
+                'prod_nummer'          => '5A24-01A',
+                'prod_active'          => 1,
+                'prod_price'           => 90.90,
+                'produkt_kategorie_id' => 1,
+                // ohne
+                'produkt_state_id'     => 1,
+                // freigegeben
+                'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+                'equipment_label_id' => 1
+
+            ]);
+
+            \App\ProduktAnforderung::create([
+                'produkt_id'     => $siptelefon->id,
+                'anforderung_id' => 3,
+            ]);
+
+            \App\FirmaProdukt::create([
+                'firma_id'   => 1,
+                'produkt_id' => $siptelefon->id,
+            ]);
+
+            \App\ProductQualifiedUser::create([
+                'produkt_id'              => $siptelefon->id,
+                'user_id'                 => 1,
+                'product_qualified_date'  => now()->subMonth(),
+                'product_qualified_firma' => 1
+            ]);
+
+            $flukeTester = Produkt::create([
+                'prod_label'           => 'Fluke-6500-2',
+                'prod_name'            => 'Gerätetester Fluke 6500-2',
+                'prod_nummer'          => 'F6500-2',
+                'prod_active'          => 1,
+                'prod_price'           => 903.90,
+                'produkt_kategorie_id' => 1,
+                // ohne
+                'produkt_state_id'     => 1,
+                // freigegeben
+                'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+                'equipment_label_id' => 1
+            ]);
+
+            \App\ControlProdukt::create(['produkt_id' => $flukeTester->id]);
+
+            \App\ProduktAnforderung::create([
+                'produkt_id'     => $flukeTester->id,
+                'anforderung_id' => 3,
+            ]);
+
+            \App\FirmaProdukt::create([
+                'firma_id'   => 2,
+                'produkt_id' => $flukeTester->id,
+            ]);
+
+            \App\ProductQualifiedUser::create([
+                'produkt_id'              => $flukeTester->id,
+                'user_id'                 => 1,
+                'product_qualified_date'  => now()->subMonth(),
+                'product_qualified_firma' => 2
+            ]);
+
+
+            /**
+             *
+             *   Jetzt ein paar Geräte ableiten
+             *
+             */
+            $workstationEmpfang = $this->addEquipment($workstation, $workstation->prod_name . ' Empfang', 'BM.1.001');
+            $monitorEmpfang = $this->addEquipment($monitor_27, $monitor_27->prod_name . ' Empfang', 'BM.1.002');
+            $siptelefonEmpfang = $this->addEquipment($siptelefon, $siptelefon->prod_name . ' Empfang', 'BM.1.003');
+
+
+            $workstationBuroI = $this->addEquipment($workstation, $workstation->prod_name . ' Büro AP 1', 'BM.1.004');
+            $monitorBuroI = $this->addEquipment($monitor_27, $monitor_27->prod_name . ' Büro AP 1', 'BM.1.005');
+            $siptelefonBuroI = $this->addEquipment($siptelefon, $siptelefon->prod_name . ' Büro AP 1', 'BM.1.006');
+
+            $workstationBuroII = $this->addEquipment($workstation, $workstation->prod_name . ' Büro AP 2', 'BM.1.007');
+            $monitorBuroII = $this->addEquipment($monitor_27, $monitor_27->prod_name . ' Büro AP 2', 'BM.1.008');
+            $siptelefonBuroII = $this->addEquipment($siptelefon, $siptelefon->prod_name . ' Büro AP 2', 'BM.1.009');
+
+            $workstationBuroIII = $this->addEquipment($workstation, $workstation->prod_name . ' Büro AP 3', 'BM.1.010');
+            $monitorBuroIII = $this->addEquipment($monitor_27, $monitor_27->prod_name . ' Büro AP 3', 'BM.1.011');
+            $siptelefonBuroIII = $this->addEquipment($siptelefon, $siptelefon->prod_name . ' Büro AP 3', 'BM.1.012');
+
+            $workstationBuroIV = $this->addEquipment($workstation, $workstation->prod_name . ' Büro AP 4', 'BM.1.013');
+            $monitorBuroIV = $this->addEquipment($monitor_27, $monitor_27->prod_name . ' Büro AP 4', 'BM.1.014');
+            $siptelefonBuroIV = $this->addEquipment($siptelefon, $siptelefon->prod_name . ' Büro AP 4', 'BM.1.015');
+
+
+            $pruefgeraet = $this->addEquipment($flukeTester, $flukeTester->prod_name, 'BM.3.0012');
+
+
+            $geraete = [
+                $workstationEmpfang,
+                $monitorEmpfang,
+                $siptelefonEmpfang,
+                $pruefgeraet,
+                $workstationBuroI,
+                $monitorBuroI,
+                $siptelefonBuroI,
+                $workstationBuroII,
+                $monitorBuroII,
+                $siptelefonBuroII,
+                $workstationBuroIII,
+                $monitorBuroIII,
+                $siptelefonBuroIII,
+                $workstationBuroIV,
+                $monitorBuroIV,
+                $siptelefonBuroIV,
+            ];
+
+
+            foreach ($geraete as $greaet) {
+
+                $this->addEquipHistory($greaet, 'Gerät angelegt', 'Das Gerät wurde vom System als Demogerät angelegt');
+
+                $this->addQualifiedUser($greaet);
+                $this->addEquipHistory($greaet, 'Befähigte Person hinzugefügt', 'Es wurde der Benutzer Demo User als befähigte Person angelegt.');
+
+                $this->addEquipmentUUid($greaet);
+                $this->addEquipmentFunktionControl($greaet);
+                $this->addEquipHistory($greaet, 'Funktionsprüfung', 'Die Funktionsprüfung ist erfolgreich durchgeführt worden.');
+
+                $control = $this->addOldControl($greaet);
+                $nextControl = $this->addControl($greaet);
+
+                $this->addEquipHistory($greaet, 'Prüfung erfolgt', 'Am '. $control->deleted_at . ' wurde das Gerät erfolgreich geprüft. Als neuer Prüftermin wurder der ' . $nextControl->qe_control_date_due . ' festgesetzt.');
+
+                $controlEvent = $this->addControlEvent($greaet, $control);
+                $this->addControlEventItems($greaet, $controlEvent, 1);
+                $this->addControlEventItems($greaet, $controlEvent, 2);
+                $this->addControlEventItems($greaet, $controlEvent, 3);
+                $this->addControlEventItems($greaet, $controlEvent, 4);
+                $this->addControlEventItems($greaet, $controlEvent, 5, 2.1);
+
+            }
+
+
+        }
+
+
     }
-}

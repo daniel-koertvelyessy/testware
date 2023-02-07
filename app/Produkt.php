@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -9,7 +10,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Produkt extends Model
 {
-    use SoftDeletes, Sortable;
+    use SoftDeletes, Sortable, HasFactory;
 
     public $sortable = [
         'id',

@@ -1,21 +1,29 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Profile;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Profile::class, function (Faker $faker) {
-    return [
-        'user_id' => factory(\App\User::class),
-        'ma_nummer' => $faker->numberBetween(1000, 2000),
-        'ma_name' => $faker->lastName,
-        'ma_name_2' => $faker->name,
-        'ma_vorname' => $faker->firstName(1),
-        'ma_geburtsdatum' => $faker->date('Y-m-d', time()),
-        'ma_eingetreten' => $faker->date('Y-m-d', time() - 60 * 60 * 24 * 18),
-        'ma_telefon' => $faker->phoneNumber,
-        'ma_mobil' => $faker->e164PhoneNumber,
-    ];
-});
+class ProfileFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'user_id'         => User::factory()->create(),
+            'ma_nummer'       => $this->faker->numberBetween(1000, 2000),
+            'ma_name'         => $this->faker->lastName,
+            'ma_name_2'       => $this->faker->name,
+            'ma_vorname'      => $this->faker->firstName(1),
+            'ma_geburtsdatum' => $this->faker->date('Y-m-d', time()),
+            'ma_eingetreten'  => $this->faker->date('Y-m-d', time() - 60 * 60 * 24 * 18),
+            'ma_telefon'      => $this->faker->phoneNumber,
+            'ma_mobil'        => $this->faker->e164PhoneNumber,
+        ];
+    }
+}

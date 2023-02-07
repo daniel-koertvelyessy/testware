@@ -39,7 +39,7 @@
                                  style="height: 2.9rem;"
                             >
                             @if(!Auth::user())
-                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-lock" style="position: absolute;top:10px;right:10px"></i>
                             @endif
                         </x-tile>
 

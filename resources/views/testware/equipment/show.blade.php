@@ -879,21 +879,15 @@
                     >
                         <div class="row">
                             <div class="col-md-7 mb-3">
+
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{__('Bezeichnung')}}:"
                                                value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
                                 />
-                                @php
-                                    if (App\Storage::find($equipment->storage_id)) {
-                                        $value = App\Storage::find($equipment->storage_id)->getStoragePath();
-                                    } else {
-                                        $value = __('nicht zugeordnet');
-                                    }
-                                @endphp
                                 <x-staticfield id="Storage"
                                                label="{{__('Aufstellplatz / Standort')}}:"
-                                               value="{{ $value }}"
+                                               value="{{ $locationpath }}"
                                 />
                                 <x-staticfield id="eq_inventar_nr"
                                                label="{{__('Inventarnummer')}}:"
