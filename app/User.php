@@ -201,7 +201,6 @@ class User extends Authenticatable
 
     public function addNew(Request $request)
     {
-
         $this->validateUser();
         $this->name = $request->name;
         $this->email = $request->email;
@@ -210,7 +209,7 @@ class User extends Authenticatable
         $this->user_theme = 'css/tbs.css';
         $this->locale = $request->locales??'de';
         $this->signature = $request->signature;
-        $this->password = Hash::make($request->password);
+        $this->password = Hash::make($request->setpassword);
         $this->save();
 
         $this->roles()->attach([1]);
@@ -235,7 +234,7 @@ class User extends Authenticatable
                 Rule::unique('users')->ignore(\request('id'))
             ],
             'email_verified_at' => '',
-            'password'          => 'required',
+            'setpassword'          => 'required',
             'api_token'         => 'nullable',
             'name'              => 'nullable',
             'role_id'           => ''

@@ -1,6 +1,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         @if (isset($breadlist) && count($breadlist)>0)
+
+
         <li class="breadcrumb-item">
             <a href="/">{{__('Portal')}}</a>
         </li>
@@ -11,7 +13,7 @@
                 >{{ $item['name'] }}</li>
             @else
                 <li class="breadcrumb-item">
-                    <a href="/{{ $item['link'] }}">{{$item['name']}}</a>
+                    <a href="{{ $item['link'] }}">{{$item['name']}}</a>
                 </li>
             @endif
         @endforeach

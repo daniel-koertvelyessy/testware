@@ -79,14 +79,14 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <x-textfield id="password"
+                    <x-textfield id="setpassword"
                                  type="password"
                                  required
                                  label="{{__('Neues Passwort')}}"
                     />
                 </div>
                 <div class="col-md-6">
-                    <x-textfield id="confirmPassword"
+                    <x-textfield id="setpassword_confirmation"
                                  type="password"
                                  required
                                  label="{{__('Neues Passwort bestätigen')}}"

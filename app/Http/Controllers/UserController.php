@@ -82,6 +82,7 @@
          */
         public function store(Request $request): RedirectResponse
         {
+
             $this->validateUser();
             (new User)->addNew($request);
             return redirect()->route('user.index',
@@ -127,7 +128,7 @@
                     Rule::unique('users')->ignore(\request('id'))
                 ],
                 'email_verified_at' => '',
-                'password'          => [
+                'setpassword'          => [
                     'required',
                     'string',
                     'confirmed',

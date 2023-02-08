@@ -3,7 +3,7 @@
 ## Content
 testWare enables you manage the testing and maintanace of your location and equipment. 
 
-Current version: `1.73.3`
+Current version: `1.74.8`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
