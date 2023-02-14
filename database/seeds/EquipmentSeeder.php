@@ -128,7 +128,7 @@
 
         public function makeSerial(): string
         {
-            return Str::limit(\Illuminate\Support\Str::uuid(), 10);
+            return Str::limit(\Illuminate\Support\Str::uuid(), 10,'');
         }
 
         public function addQualifiedUser(Equipment $equipment): EquipmentQualifiedUser

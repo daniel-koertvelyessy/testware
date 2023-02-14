@@ -82,6 +82,8 @@
 
         public function add(Request $request)
         {
+
+            $this->aci_sort = $request->aci_sort;
             $this->aci_label = $request->aci_label;
             $this->aci_name = $request->aci_name;
             $this->aci_task = $request->aci_task;

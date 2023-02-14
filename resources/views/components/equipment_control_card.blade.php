@@ -3,7 +3,7 @@
         <span class="small text-muted pl-2">
             {{$cei->deleted_at->diffForHumans()}}
         </span>
-        <span class="p-2">
+        <span class="p-2" title="{{ $cei->Anforderung->an_name }}">
             {{ str_limit($cei->Anforderung->an_name,20) }}
         </span>
     </div>
@@ -39,7 +39,7 @@
                 >
                     <div class="modal-header">
                         <h5 class="modal-title text-danger"
-                            id="deleteControlItemModalLabel"
+                            id="deleteControlItemModalLabel{{$cei->id}}"
                         ><i class="far fa-trash-alt
                     mr-1"
                             ></i>{{ __('Löschen bestätigen') }}</h5>
@@ -58,7 +58,7 @@
                         @method('DELETE')
                         <input type="hidden"
                                name="id"
-                               id="id"
+                               id="deleteControlItemid{{$cei->id}}"
                                value="{{$cei->id}}"
                         >
 
@@ -69,8 +69,7 @@
                                 class="btn btn-secondary"
                                 data-dismiss="modal"
                         >{{ __('Abbruch') }}</button>
-                        <button type="button"
-                                class="btn btn-danger"
+                        <button class="btn btn-danger"
                         >{{ __('Endgültig löschen') }}</button>
                     </div>
                 </form>

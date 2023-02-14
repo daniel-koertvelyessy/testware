@@ -1,7 +1,8 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{__('Prüfschritt')}} {{ $anforderungcontrolitem->aci_label }} &triangleright; testWare@endsection
+    {{__('Prüfschritt')}} {{ $anforderungcontrolitem->aci_label }} &triangleright; testWare
+@endsection
 
 @section('mainSection')
     {{__('Prüfschritt')}}

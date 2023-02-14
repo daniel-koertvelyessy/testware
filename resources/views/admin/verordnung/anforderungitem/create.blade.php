@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="col">
-                @include('components.addNewAnforderungControlItem')
+                <x-addNewAnforderungControlItem :rid="$rid" />
             </div>
         </div>
 

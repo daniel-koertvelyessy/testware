@@ -90,7 +90,6 @@
 
 @section('modals')
     @if($newFileList)
-
         <div class="modal show"
              id="syncNewFiles"
              tabindex="-1"
@@ -1580,6 +1579,7 @@
                 data: {id},
                 success: function (res) {
                     $('#controlEventModalBody').html(res.html);
+                    $('#controlEventModalLabel').html(res.header);
                     $('#controlEventModal').modal('show');
                 }
             });

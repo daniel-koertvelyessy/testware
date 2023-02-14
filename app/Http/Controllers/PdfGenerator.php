@@ -2,6 +2,8 @@
 
     namespace App\Http\Controllers;
 
+    use App\Anforderung;
+    use App\AnforderungControlItem;
     use App\ControlEquipment;
     use App\ControlEvent;
     use App\Equipment;
@@ -11,6 +13,7 @@
     use App\Produkt;
     use App\Report;
     use App\TestReportFormat;
+    use App\Verordnung;
     use Illuminate\Support\Facades\Storage;
     use PDF;
 
@@ -77,14 +80,23 @@
         {
             $controlEquipment = ControlEquipment::withTrashed()->find($controlEvent->control_equipment_id);
 
-            //   dd($controlEquipment->equipment_id);
+            $requirement = Anforderung::find($controlEquipment->anforderung_id);
 
             $reportNo = (new TestReportFormat)->makeTestreportNumber($controlEvent->id);
             $html = view('pdf.html.control_event_report', [
                 'controlEvent' => $controlEvent,
                 'reportNo'     => $reportNo,
+                'requirement' => $requirement,
+                'regulation' => Verordnung::find($requirement->verordnung_id),
+                'requirementitems' => AnforderungControlItem::where('anforderung_id',$requirement->id)->get()
             ])->render();
+
+
             PDF::SetLineWidth(1);
+            PDF::SetCellPadding(0);
+            PDF::setImageScale(1);
+        //    PDF::setImageScale(0.45);   as suggested by tcpdf example_061
+            PDF::setCellHeightRatio(1.25);
 
 
             PDF::setHeaderCallback(function ($pdf) use ($reportNo)
@@ -99,23 +111,15 @@
                 $pdf->SetFont('Helvetica', '', 8);
                 //Page number
                 $pdf->Cell(0, 5, '(c)' . date('Y') . ' thermo-control Körtvélyessy GmbH - testWare ', 0, 0, 'L');
-                $pdf->Cell(0, 5, __('Seite') . "{:png:} - {:ptg:}", 0, 1, 'R');
+                $pdf->Cell(0, 5, __('Seite') . ' ' . "{:png:} - {:ptg:}", 0, 1, 'R');
             });
 
             PDF::startPageGroup();
             PDF::SetTitle(__('Prüfbericht') . ' ' . $reportNo);
-            PDF::SetAutoPageBreak(true, 30);
+            PDF::SetAutoPageBreak(true, 10);
             PDF::SetMargins(24, 10, 10);
             PDF::AddPage();
 
-            if ($controlEvent->control_event_controller_signature) {
-                $img_base64_encoded = explode('data:image/png;base64,', $controlEvent->control_event_controller_signature);
-
-                PDF::Image('@' . base64_decode($img_base64_encoded[1]), 24, 170, 100, '');
-                //
-                //        $pdf->SetAbsXY($pdf->GetX(),$y1+40);
-                //        $pdf->Cell(90, 5, $sig->sigName, 0, 0, 'L');
-            }
             PDF::writeHTML($html, true, false, true, false, '');
             EquipmentDoc::addReport($controlEquipment->equipment_id, $reportNo . '.pdf', $reportNo);
 

@@ -12,6 +12,7 @@
 
 @section('modals')
 
+
     <div class="modal fade"
          id="modalAddNewAnforderungType"
          tabindex="-1"
@@ -186,7 +187,10 @@
 
                     </main>
                     <footer class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Abbruch') }}</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                        >{{ __('Abbruch') }}</button>
                         <x-btnMain class="btn-danger">{{ __('Anforderung mit abhängigen Obejkten löschen!') }}</x-btnMain>
                     </footer>
 
@@ -194,6 +198,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 
@@ -328,15 +333,15 @@
                                 label="{{__('Beschreibung')}}"
                                 value="{{ $anforderung->an_description }}"
                     />
-<div class="d-flex">
-    <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>
+                    <div class="d-flex">
+                        <x-btnMain>{{__('Anforderung aktualisieren')}} <i class="fas fa-download"></i></x-btnMain>
 
-    <button type="button"
-            class="btn btn-outline-danger ml-1"
-            data-target="#modalDeleteRequirement"
-            data-toggle="modal"
-    >{{ __('Anforderung löschen') }} <i class="fa fa-trash-alt ml-1"></i></button>
-</div>
+                        <button type="button"
+                                class="btn btn-outline-danger ml-1"
+                                data-target="#modalDeleteRequirement"
+                                data-toggle="modal"
+                        >{{ __('Anforderung löschen') }} <i class="fa fa-trash-alt ml-1"></i></button>
+                    </div>
 
 
                 </form>
@@ -379,17 +384,14 @@
                     @empty
                         <tr>
                             <td colspan="3">
-                                <div class="align-items-center justify-content-between d-flex">
-                                    <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
-
-                                    <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}">{{ __('erstellen') }}</a>
-                                </div>
-
+                                <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
                             </td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
+
+                <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}" class="btn btn-outline-primary">{{ __('Neue Prüfung erstellen') }} <i class="fa fa-angle-right ml-1"></i></a>
             </div>
         </div>
 

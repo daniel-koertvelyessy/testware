@@ -5,6 +5,7 @@
     use App\Anforderung;
     use App\AnforderungControlItem;
     use App\ControlEventItem;
+    use App\Http\Services\Regulation\RequirementControlItemService;
     use Exception;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
@@ -45,6 +46,8 @@
          */
         public function create(Request $request)
         {
+            $service = new RequirementControlItemService();
+
             return view('admin.verordnung.anforderungitem.create', ['rid' => $request->input('rid')]);
         }
 
@@ -55,7 +58,7 @@
          *
          * @return RedirectResponse
          */
-        public function store(Request $request): RedirectResponse
+        public function store(Anforderung $anforderung, Request $request): RedirectResponse
         {
 
             $this->validateAnforderungControlItem();
@@ -63,6 +66,11 @@
             $testStep = (new AnforderungControlItem)->add($request);
 
             if ($testStep) {
+
+                $service =  new RequirementControlItemService();
+                if ($request->sort !=NULL)
+                    $service->resortItems($request->sort,$request->placeafteritem,Anforderung::findOrFail($request->anforderung_id) );
+
                 $request->session()->flash('status', __('Der Prüfschritt <strong>:label</strong> wurde angelegt!', ['label' => request('aci_label')]));
                 return redirect()->route('anforderungcontrolitem.show', $testStep);
             } else {
@@ -155,6 +163,33 @@
             return AnforderungControlItem::findorFail($request->id);
         }
 
+        public function getAciList(Request $request)
+        {
+
+            $html  = '';
+            $pos = 5;
+
+            foreach(\App\Anforderung::find($request->id)->AnforderungControlItem as $aci) {
+                $pos = $aci->aci_sort ?? $pos;
+                             $html .= '
+                <label for="acilistitem' . $aci->id . '" class="acilistitem border border-primary px-2 py-1 rounded w-100 btn-outline-primary d-flex justify-content-between align-items-center">
+                    <span>
+                        <input type="radio"
+                           name="acilistitem[]"
+                           id="acilistitem' . $aci->id . '"
+                           value="'.$aci->id.'|' . $pos . '"                               
+                    >
+                    <span class="ml-3">' . $aci->aci_label . '</span>
+                    </span>
+                    <span>' . $pos . '</span>
+                </label>
+                ';
+                $pos = $pos + 5;
+            }
+
+            return $html;
+        }
+
         /**
          * @return array
          */
@@ -180,7 +215,7 @@
                 'firma_id'                       => 'int|nullable',
                 'aci_contact_id'                 => 'required',
                 'anforderung_id'                 => 'required',
-                'aci_sort'                       => 'numeric',
+                'aci_sort'                       => 'int',
             ]);
         }
     }
