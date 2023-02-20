@@ -13,6 +13,7 @@
     use App\EquipmentHistory;
     use App\EquipmentQualifiedUser;
     use App\Http\Services\Control\ControlEventService;
+    use App\Http\Services\Equipment\EquipmentEventService;
     use App\Http\Services\Equipment\EquipmentService;
     use App\ProductQualifiedUser;
     use App\User;
@@ -23,6 +24,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
     use Illuminate\Routing\Redirector;
+    use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\View\View;
     use Kyslik\ColumnSortable\Sortable;
@@ -59,16 +61,15 @@
          */
         public function create(Request $request)
         {
+            $service = new EquipmentEventService();
+            $controlItem = ControlEquipment::find($request->test_id);
+
             //   dd($request);
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             $controlEquipmentIsComplete = true;
             $controlEquipmentIsCompleteMsg = __('<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>');
             $controlEquipmentIsCompleteItem = '';
-            $controlItem = ControlEquipment::find($request->test_id);
-//        $qualifiedUser = 0;
-//        $qualifiedUser += $controlItem->Equipment->produkt->ProductQualifiedUser()->count();
-//        $qualifiedUser += $controlItem->Equipment->countQualifiedUser();
 
 
             if ($controlItem->countQualifiedUser() === 0) {
@@ -104,8 +105,14 @@
                     ];
                 }
 
+                $equipmentControlList = $service->makeEquipmentControlCollection();
+                $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
+
 
                 return view('testware.control.create', [
+                    'controlEquipmentAvaliable'  => $controlEquipmentAvaliable->contains(true),
+                    'equipmentControlList'       => $equipmentControlList,
+                    'equipment'                  => Equipment::find($controlItem->equipment_id),
                     'qualified_user_list'        => $enabledUser,
                     'test'                       => $controlItem,
                     'is_test_internal'           => !array_search(true, $check_aci_execution_is_external),
@@ -417,7 +424,7 @@
         public function sync(Request $request)
         {
             $service = new ControlEventService();
-            $res=[];
+            $res = [];
             if (isset($request->sycEquip) && count($request->sycEquip) > 0) {
 
                 foreach ($request->sycEquip as $eq_uid) {

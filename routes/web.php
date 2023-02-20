@@ -499,6 +499,8 @@
         return view('testware.equipment.maker', ['produktList' => $produktList]);
     })->name('equipment.maker')->middleware('auth');
 
+    Route::get('equipment.controlequipment', 'EquipmentController@controlequipment' )->name('equipment.controlequipment')->middleware('auth');
+
     Route::get('verordnung.main', function ()
     {
         return view('admin.verordnung.main');

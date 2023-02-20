@@ -2,8 +2,11 @@
 
     namespace App\Http\Services\Equipment;
 
+    use App\ControlProdukt;
+    use App\Equipment;
     use App\EquipmentEvent;
-    use App\EquipmentEventItem;
+    use Illuminate\Support\Collection;
+
 
     class EquipmentEventService
     {
@@ -30,6 +33,39 @@
         public static function search(string $term)
         {
             return (new EquipmentEventService)->query($term);
+        }
+
+        public function makeEquipmentControlCollection(): Collection
+        {
+
+            return ControlProdukt::select('id', 'produkt_id')->get()
+                ->map(function ($item)
+                {
+                    return Equipment::where('produkt_id', $item->produkt_id)->get();
+                })
+                ->flatten();
+
+        }
+
+        public function checkExpiredEquipmentControlItems(): Collection
+        {
+
+            return $this->makeEquipmentControlCollection()->map(function ($item)
+            {
+                return EquipmentEventService::checkControlDueDateExpired($item);
+            });
+
+        }
+
+
+
+        public static function checkControlDueDateExpired(Equipment $equipment): bool
+        {
+            $eq = $equipment->ControlEquipment()->first();
+            if ($eq){
+                return $eq->qe_control_date_due > now();
+            }
+            return false;
         }
 
 

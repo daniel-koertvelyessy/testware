@@ -15,6 +15,7 @@
     use App\FirmaProdukt;
     use App\Http\Actions\Equipment\EquipmentAction;
     use App\Http\Services\Equipment\EquipmentDocumentService;
+    use App\Http\Services\Equipment\EquipmentEventService;
     use App\Http\Services\Equipment\EquipmentService;
     use App\ProductInstructedUser;
     use App\ProductQualifiedUser;
@@ -47,7 +48,19 @@
          */
         public function index()
         {
-            return view('testware.equipment.index');
+            return view('testware.equipment.index',[
+                'equipmentlist'=>Equipment::all()->sortable()->paginate(10),
+                'header' => __('Übersicht Geräte')
+                ]);
+        }
+
+        public function controlequipment()
+        {
+            $service = new EquipmentEventService();
+            return view('testware.equipment.index',[
+                'equipmentlist' => $service->makeEquipmentControlCollection(),
+                'header' => __('Übersicht Prüfgeräte')
+            ]);
         }
 
         public function statuslist(EquipmentState $equipmentState)
@@ -60,13 +73,7 @@
 
         }
 
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @param Request $request
-         *
-         * @return Application|Factory|\Illuminate\Contracts\View\View
-         */
+
         public function create(Request $request)
         {
 
@@ -78,14 +85,7 @@
             ]);
         }
 
-        /**
-         * Store a newly created resource in storage.
-         *
-         * @param Request $request
-         *
-         * @return RedirectResponse
-         */
-        public function store(Request $request)
+        public function store(Request $request):RedirectResponse
         {
             $service = new EquipmentService();
 
@@ -326,14 +326,14 @@
             return DB::table('equipment')
                 ->select('eq_inventar_nr', 'equipment.id', 'equipment.eq_serien_nr', 'prod_name')
                 ->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')
-                ->whereRaw('lower(eq_serien_nr) LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('LOWER(eq_name) LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('lower(eq_inventar_nr) LIKE (?)', '%' . strtolower($request->term) . '%')
-                //  ->orWhereRaw('eq_uid LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('lower(prod_nummer) LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('lower(prod_name) LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('lower(prod_label) LIKE (?)', '%' . strtolower($request->term) . '%')
-                ->orWhereRaw('lower(prod_description) LIKE (?)', '%' . strtolower($request->term) . '%')
+                ->where('eq_serien_nr', 'ILIKE', '%' . strtolower($request->term) . '%')
+                ->orWhere('eq_name', 'ILIKE', '%' . strtolower($request->term) . '%')
+                ->orWhere('eq_inventar_nr', 'ILIKE', '%' . strtolower($request->term) . '%')
+                //  ->orWhere('eq_uid(?)',t, 'ILIKEolower($request->term) . '%')
+                ->orWhere('prod_nummer', 'ILIKE', '%' . strtolower($request->term) . '%')
+                ->orWhere('prod_name', 'ILIKE', '%' . strtolower($request->term) . '%')
+                ->orWhere('prod_label', 'ILIKE', '%' . strtolower($request->term) . '%')
+                ->orWhere('prod_description', 'ILIKE', '%' . strtolower($request->term) . '%')
                 ->get();
         }
     }

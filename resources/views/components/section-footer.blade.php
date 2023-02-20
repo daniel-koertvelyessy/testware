@@ -8,6 +8,9 @@
         $dbstatus = $systemStatus->getBrokenDBLinks();
         $objects = $systemStatus->getObjectStatus();
 
+
+
+
         if (array_sum($dbstatus)>0){
             $status .= '<a href="'.route('admin.index').'"
            class="text-danger mr-2"
@@ -16,6 +19,7 @@
         }
 
         $issueCounter = 0;
+        if (!$objects['controlEquipmentAvaliable']->contains('true')) $issueCounter++;
         if ($objects['equipment_qualified_user'] === 0 && $objects['equipment']>0) $issueCounter++;
         if ($objects['product_qualified_user'] === 0) $issueCounter++;
         if ($objects['regulations'] === 0) $issueCounter++;

@@ -239,6 +239,18 @@ $objects['storages'] === 0                                            )
                                                          msg="{{ __('Keine Prüfgeräte definiert') }}"
                                     />
                                 @endif
+                                    @if (!$objects['controlEquipmentAvaliable']->contains('true'))
+                                        <x-system-status-msg type="warning"
+                                                             link="{{ route('equipment.controlequipment') }}"
+                                                             msg="{{ __('Es sind keine Prüfgeräte mit gültigem Prüfstatus vorhanden') }}"
+                                        />
+                                    @else
+                                        <x-system-status-msg counter="{{ $objects['control_equipment'] }}"
+                                                             type="pass"
+                                                             link="{{ route('equipMain') }}"
+                                                             msg="{{ __('Sehr gut! Prüfgeräte sind angelegt') }}"
+                                        />
+                                    @endif
                                 @if($objects['equipment_qualified_user']>0 && $objects['equipment']>0)
                                     <h2 class="h5">{{ __('Geräte') }}
                                         <i class="fas fa-angle-right"></i> {{ __('Befähigte Benutzer') }}

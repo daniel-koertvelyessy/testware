@@ -10,12 +10,12 @@
     <div class="container-fluid">
         <div class="row d-md-block d-none">
             <div class="col">
-                <h1 class="h4">{{__('Übersicht aller Geräte')}}</h1>
+                <h1 class="h4">{{ $header }}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-responsive-md table-sm">
+                <table class="table table-responsive-md">
                     <thead>
                     <tr>
                         <th>{{__('Bezeichnung')}}</th>
@@ -23,13 +23,14 @@
                         <th>{{__('Stellplatz')}}</th>
                         <th>{{__('Status')}}</th>
                         <th>{{__('Prüfung fällig')}}</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse(App\Equipment::all() as $equipment)
+                    @forelse($equipmentlist as $equipment)
                         <tr>
-                            <td>{{ $equipment->produkt->prod_name }}</td>
+                            <td>
+                                <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">{{ $equipment->eq_name }}</a>
+                            </td>
                             <td>{{ $equipment->eq_inventar_nr }}</td>
                             <td>{{ $equipment->storage->storage_label }}</td>
                             <td style="vertical-align: middle;">
@@ -51,14 +52,13 @@
                                     </span>
                                     @if (!$loop->last) <br> @endif
                                 @empty
-                                    -
+                                   <i class="fa text-danger fa-times"></i>
                                 @endforelse
                             </td>
-                            <td style="vertical-align: middle;"><a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">{{__('öffnen')}}</a></td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">
+                            <td colspan="4">
                                 <p>
                                     <x-notifyer>{{__('Keine Geräte gefunden')}}</x-notifyer>
                                 </p>

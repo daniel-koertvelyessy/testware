@@ -22,10 +22,13 @@
         >
             <a class="dropdown-item"
                href="{{ route('equipMain') }}"
-            >{{__('Übersicht')}}</a>
+            >{{__('Alle Geräte')}}</a>
+            <a class="dropdown-item"
+               href="{{ route('equipment.controlequipment') }}"
+            >{{__('Prüfgeräte')}}</a>
             <a class="dropdown-item"
                href="{{ route('equipment.maker') }}"
-            >{{__('Neu')}}</a>
+            >{{__('Neu anlegen')}}</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header">{{__('Neueste Geräte')}}</h6>
             @foreach (\App\Equipment::take(5)->latest()->get() as $equipMen)
