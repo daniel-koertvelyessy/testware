@@ -41,7 +41,7 @@
         public function handle()
         {
 
-            if (env('APP_ENV') != 'debug'){
+            if (env('APP_ENV') != 'demo'){
 
                 if (! $this->loginSysAdmin()){
                     return 1;
