@@ -298,16 +298,17 @@
 
                                         @forelse ($equipmentControlList as $controlEquipment)
                                             @if( \App\Http\Services\Equipment\EquipmentEventService::checkControlDueDateExpired($controlEquipment))
-                                                <option value="{{ $controlEquipment->id }}">
-                                                    {{ $controlEquipment->eq_name  }}
-                                                </option>
-                                            @else
                                                 <option value="{{ $controlEquipment->id }}"
                                                         @if($controlEquipmentAvaliable)
-                                                        class="disabled"
+                                                            class="disabled"
                                                         disabled
                                                         @endif
                                                 >{{ $controlEquipment->eq_name }} => {{__('Prüfung überfällig!')}}
+                                                </option>
+
+                                            @else
+                                                <option value="{{ $controlEquipment->id }}">
+                                                    {{ $controlEquipment->eq_name  }}
                                                 </option>
                                             @endif
                                         @empty

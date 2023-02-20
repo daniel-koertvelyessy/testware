@@ -50,25 +50,44 @@
 
         }
 
-        public function checkExpiredEquipmentControlItems(): Collection
+        public function getExpiredEquipmentControlItems(): array
         {
-
             return $this->makeEquipmentControlCollection()->map(function ($item)
             {
                 return EquipmentEventService::checkControlDueDateExpired($item);
-            });
+            })->toArray();
 
         }
 
+        public function findExpiredEquipmentControlItems():bool
+        {
+            return gettype(array_search(true, $this->getExpiredEquipmentControlItems()))==='integer';
+        }
 
+
+        public function findAvaliableEquipmentControlItems():bool
+        {
+
+            return gettype(array_search(false, $this->getExpiredEquipmentControlItems()))==='integer';
+        }
 
         public static function checkControlDueDateExpired(Equipment $equipment): bool
         {
+            /**
+             * if equipment has an upcomming control item
+             * check if due date is expired = true
+             */
             $eq = $equipment->ControlEquipment()->first();
             if ($eq){
-                return $eq->qe_control_date_due > now();
+                return $eq->qe_control_date_due <= now();
             }
-            return false;
+
+            /**
+             *  if no upcomming control item was found
+             *  return true for an expired or not yet
+             *  controlled equipment
+             */
+            return true;
         }
 
 

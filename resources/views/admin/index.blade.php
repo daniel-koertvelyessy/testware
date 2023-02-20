@@ -241,14 +241,13 @@ $objects['storages'] === 0                                            )
                                 @endif
 
 
-                                @if ($objects['controlEquipmentAvaliable']->contains('false'))
+                                @if ($objects['foundExpiredControlEquipment'])
                                     <x-system-status-msg type="warning"
                                                          link="{{ route('equipment.controlequipment') }}"
                                                          msg="{{ __('Es sind Prüfgeräte mit ungültigem Prüfstatus vorhanden') }}"
                                     />
                                 @else
-                                    <x-system-status-msg counter="{{ $objects['control_equipment'] }}"
-                                                         type="pass"
+                                    <x-system-status-msg type="pass"
                                                          link="{{ route('equipment.controlequipment') }}"
                                                          msg="{{ __('Sehr gut! Alle Prüfgeräte sind geprüft') }}"
                                     />

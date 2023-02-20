@@ -17,6 +17,7 @@
     use App\Storage;
     use App\Verordnung;
     use Cache;
+    use function PHPUnit\Framework\isType;
 
     class SystemStatusController extends Controller
     {
@@ -145,23 +146,21 @@
 
                 $countProducts = Produkt::all()->count();
 
-                $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
-
 
                 return [
-                    'controlEquipmentAvaliable' => $controlEquipmentAvaliable,
-                    'products'                  => $countProducts,
-                    'equipment'                 => $countEquipment,
-                    'control_products'          => ControlProdukt::all()->count(),
-                    'control_equipment'         => $countControlEquipment,
-                    'storages'                  => Storage::all()->count(),
-                    'equipment_qualified_user'  => EquipmentQualifiedUser::all()->count(),
-                    'product_qualified_user'    => ProductQualifiedUser::all()->count(),
-                    'regulations'               => Verordnung::all()->count(),
-                    'requirements'              => Anforderung::all()->count(),
-                    'incomplete_requirement'    => $incomplete_requirement,
-                    'incomplete_equipment'      => $incomplete_equipment,
-                    'requirements_items'        => AnforderungControlItem::all()->count(),
+                    'foundExpiredControlEquipment' => $service->findExpiredEquipmentControlItems(),
+                    'products'                     => $countProducts,
+                    'equipment'                    => $countEquipment,
+                    'control_products'             => ControlProdukt::all()->count(),
+                    'control_equipment'            => $countControlEquipment,
+                    'storages'                     => Storage::all()->count(),
+                    'equipment_qualified_user'     => EquipmentQualifiedUser::all()->count(),
+                    'product_qualified_user'       => ProductQualifiedUser::all()->count(),
+                    'regulations'                  => Verordnung::all()->count(),
+                    'requirements'                 => Anforderung::all()->count(),
+                    'incomplete_requirement'       => $incomplete_requirement,
+                    'incomplete_equipment'         => $incomplete_equipment,
+                    'requirements_items'           => AnforderungControlItem::all()->count(),
                 ];
             });
 

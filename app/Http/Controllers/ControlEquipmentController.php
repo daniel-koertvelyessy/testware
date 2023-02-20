@@ -92,11 +92,12 @@
 
                 $enabledUser = $service->getQuaifiedUserList($controlItem);
                 $equipmentControlList = $service->makeEquipmentControlCollection();
-                $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
+
+//                dd($service->findAvaliableEquipmentControlItems());
 
                 return view('testware.control.create', [
                     'current_user'               => Auth::user(),
-                    'controlEquipmentAvaliable'  => $controlEquipmentAvaliable->contains(true),
+                    'controlEquipmentAvaliable'  => $service->findAvaliableEquipmentControlItems(),
                     'equipmentControlList'       => $equipmentControlList,
                     'equipment'                  => Equipment::find($controlItem->equipment_id),
                     'qualified_user_list'        => $enabledUser,
@@ -423,7 +424,6 @@
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
             $equipmentControlList = $service->makeEquipmentControlCollection();
-            $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
 
 
             $acidata = AnforderungControlItem::where('anforderung_id', $requirement->id)->get();
@@ -435,7 +435,7 @@
 
             if ($equipment) {
                 return view('testware.control.manual', [
-                    'controlEquipmentAvaliable'  => $controlEquipmentAvaliable->contains(true),
+                    'controlEquipmentAvaliable'  => $service->findAvaliableEquipmentControlItems(),
                     'equipmentControlList'       => $equipmentControlList,
                     'qualifieduserList'          => (new EquipmentService)->getQualifiedPersonList($equipment),
                     'current_user'               => Auth::user(),

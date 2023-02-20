@@ -19,7 +19,7 @@
         }
         $issueCounter = 0;
 
-        if ($objects['controlEquipmentAvaliable']->contains('false')) $issueCounter++;
+        if ($objects['foundExpiredControlEquipment']) $issueCounter++;
         if ($objects['equipment_qualified_user'] === 0 && $objects['equipment']>0) $issueCounter++;
         if ($objects['product_qualified_user'] === 0) $issueCounter++;
         if ($objects['regulations'] === 0) $issueCounter++;
@@ -36,7 +36,7 @@
             $statusMsg = ($issueCounter===1) ? __('Problem beheben') : __('Probleme beheben');
             if (
                 $objects['incomplete_equipment']>0 && $objects['equipment']>0
-               || $objects['controlEquipmentAvaliable']->contains('false')
+               || $objects['foundExpiredControlEquipment']
                || $objects['incomplete_requirement']>0 && $objects['requirements']>0
                || $objects['equipment_qualified_user'] === 0
                || $objects['product_qualified_user'] === 0
