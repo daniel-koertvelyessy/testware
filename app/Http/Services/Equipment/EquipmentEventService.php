@@ -2,9 +2,12 @@
 
     namespace App\Http\Services\Equipment;
 
+    use App\ControlEquipment;
     use App\ControlProdukt;
     use App\Equipment;
     use App\EquipmentEvent;
+    use App\EquipmentQualifiedUser;
+    use App\ProductQualifiedUser;
     use Illuminate\Support\Collection;
 
 
@@ -66,6 +69,26 @@
                 return $eq->qe_control_date_due > now();
             }
             return false;
+        }
+
+
+        public function getQuaifiedUserList(ControlEquipment $controlItem):array
+        {
+            $enabledUser=[];
+            foreach (ProductQualifiedUser::where('produkt_id', $controlItem->Equipment->produkt->id)->get() as $qualifiedUser) {
+                $enabledUser[] = [
+                    'id'   => $qualifiedUser->user_id,
+                    'name' => $qualifiedUser->user->name,
+                ];
+            }
+
+            foreach (EquipmentQualifiedUser::where('equipment_id', $controlItem->Equipment->id)->get() as $qualifiedUser) {
+                $enabledUser[] = [
+                    'id'   => $qualifiedUser->user_id,
+                    'name' => $qualifiedUser->user->name,
+                ];
+            }
+            return $enabledUser;
         }
 
 

@@ -147,6 +147,7 @@
 
                 $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
 
+
                 return [
                     'controlEquipmentAvaliable' => $controlEquipmentAvaliable,
                     'products'                  => $countProducts,

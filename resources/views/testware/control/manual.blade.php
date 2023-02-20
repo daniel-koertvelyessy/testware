@@ -316,18 +316,19 @@
                                                    btnL="{{__('hinzufügen')}}"
                                                    class="btnAddControlEquipmentToList"
                                     >
-                                        @forelse (App\Equipment::all() as $controlEquipment)
-                                            @if($controlEquipment->getControlProductData() !== null)
-                                                @if($controlEquipment->ControlEquipment->first()->qe_control_date_due > now())
-                                                    <option value="{{ $controlEquipment->id }}">
-                                                        {{ $controlEquipment->eq_name  }}
-                                                    </option>
-                                                @else
-                                                    <option value="{{ $controlEquipment->id }}"
-                                                            disabled
-                                                    >{{ $controlEquipment->eq_name.' - '. $controlEquipment->eq_inventar_nr }} {{__('Prüfung überfällig!')}}
-                                                    </option>
-                                                @endif
+                                        @forelse ($equipmentControlList as $controlEquipment)
+                                            @if( \App\Http\Services\Equipment\EquipmentEventService::checkControlDueDateExpired($controlEquipment))
+                                                <option value="{{ $controlEquipment->id }}">
+                                                    {{ $controlEquipment->eq_name  }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $controlEquipment->id }}"
+                                                        @if($controlEquipmentAvaliable)
+                                                            class="disabled"
+                                                        disabled
+                                                        @endif
+                                                >{{ $controlEquipment->eq_name }} => {{__('Prüfung überfällig!')}}
+                                                </option>
                                             @endif
                                         @empty
                                             <option value="void"
@@ -336,7 +337,18 @@
                                             >{{__('Keine Prüfmittel gefunden')}}
                                             </option>
                                         @endforelse
+
                                     </x-selectgroup>
+                                    <span class="text-danger small hidden"
+                                          id="notice_expired_item"
+                                    >{{ __('Das Geräte ist hat keine, oder keine gültige Prüfungen absolviert und kann nicht ausgewählt werden.') }}</span>
+
+                                    @if(!$controlEquipmentAvaliable)
+                                        <div class="alert alert-danger mt-5" role="alert">
+                                            <h4 class="alert-heading">Achtung!</h4>
+                                            <p>Es sind keine Prüfgeräte verfügbar, welche einen gültigen Prüfstatus besitzen. Sollte die Prüfung trotzdem durchgeführt werden, ist die Zustimmung der Leitung mit entsprechender Begründung benötigt.</p>
+                                        </div>
+                                    @endif
 
                                 </div>
                                 <div class="col-md-6">
@@ -634,6 +646,9 @@
                                                     data-target="#signatureModal"
                                                     data-sig="leit"
                                             ><i class="fas fa-signature"></i> {{__('Unterschrift Leitung')}}</button>
+                                            @if(!$controlEquipmentAvaliable)
+                                                <span class="text-danger lead ml-3">{{ __('erforderlich') }}</span>
+                                            @endif
                                         </div>
                                         <div class="card-body">
                                             <img src=""
@@ -752,9 +767,18 @@
                                     @endif
                                 </div>
                             </div>
-                            <x-textarea id="control_event_text"
-                                        label="{{__('Bemerkungen zur Prüfung')}}"
-                            />
+                            @if(!$controlEquipmentAvaliable)
+                                <x-textarea id="control_event_text"
+                                            label="{{__('Bemerkungen zur Prüfung')}}"
+                                            required
+                                />
+
+                            @else
+                                <x-textarea id="control_event_text"
+                                            label="{{__('Bemerkungen zur Prüfung')}}"
+                                />
+
+                            @endif
                         </div>
                     </div>
                     <button id="btnSubmitControlEvent"
@@ -868,8 +892,14 @@
         /**
          *   Handle control equipments
          */
+        let noteNode = $('#notice_expired_item');
+        noteNode.hide();
         $('.btnAddControlEquipmentToList').click(function () {
             const nd = $('#set_control_equipment :selected');
+            if (nd.prop('disabled')) {
+                noteNode.show();
+                return;
+            }
             const equip_id = nd.val();
             const text = nd.text();
             const html = `

@@ -90,26 +90,12 @@
                     $check_aci_control_equipment_required[] = $aci->aci_control_equipment_required;
                 }
 
-                $enabledUser = [];
-                foreach (ProductQualifiedUser::where('produkt_id', $controlItem->Equipment->produkt->id)->get() as $qualifiedUser) {
-                    $enabledUser[] = [
-                        'id'   => $qualifiedUser->user_id,
-                        'name' => $qualifiedUser->user->name,
-                    ];
-                }
-
-                foreach (EquipmentQualifiedUser::where('equipment_id', $controlItem->Equipment->id)->get() as $qualifiedUser) {
-                    $enabledUser[] = [
-                        'id'   => $qualifiedUser->user_id,
-                        'name' => $qualifiedUser->user->name,
-                    ];
-                }
-
+                $enabledUser = $service->getQuaifiedUserList($controlItem);
                 $equipmentControlList = $service->makeEquipmentControlCollection();
                 $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
 
-
                 return view('testware.control.create', [
+                    'current_user'               => Auth::user(),
                     'controlEquipmentAvaliable'  => $controlEquipmentAvaliable->contains(true),
                     'equipmentControlList'       => $equipmentControlList,
                     'equipment'                  => Equipment::find($controlItem->equipment_id),
@@ -334,26 +320,11 @@
             return ControlEvent::makeControlEventReport($request->id);
         }
 
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param ControlEquipment $control
-         *
-         * @return Application|Factory|\Illuminate\Contracts\View\View
-         */
         public function edit(ControlEquipment $control)
         {
             return view('testware.control.edit', compact('control'));
         }
 
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param Request $request
-         * @param ControlEquipment $control
-         *
-         * @return RedirectResponse
-         */
         public function update(Request $request, ControlEquipment $control)
         {
             //       dd($request);
@@ -438,22 +409,39 @@
 
         public function manual()
         {
-            $equipment = Equipment::where('eq_uid', request('equipment'))->first();
 
+
+            $requirement = Anforderung::find(request('requirement'));
+
+
+            $equipment = Equipment::where('eq_uid', request('equipment'))->first();
+            $service = new EquipmentEventService();
             if (!$equipment) {
                 $equipment = Equipment::find(request('equipment'));
             };
-            $currentUser = Auth::user();
             $enabledUser = [];
             $check_aci_execution_is_external = [];
             $check_aci_control_equipment_required = [];
+            $equipmentControlList = $service->makeEquipmentControlCollection();
+            $controlEquipmentAvaliable = $service->checkExpiredEquipmentControlItems();
+
+
+            $acidata = AnforderungControlItem::where('anforderung_id', $requirement->id)->get();
+
+            foreach ($acidata as $aci) {
+                $check_aci_execution_is_external[] = $aci->aci_execution;
+                $check_aci_control_equipment_required[] = $aci->aci_control_equipment_required;
+            }
+
             if ($equipment) {
                 return view('testware.control.manual', [
+                    'controlEquipmentAvaliable'  => $controlEquipmentAvaliable->contains(true),
+                    'equipmentControlList'       => $equipmentControlList,
                     'qualifieduserList'          => (new EquipmentService)->getQualifiedPersonList($equipment),
-                    'current_user'               => $currentUser,
+                    'current_user'               => Auth::user(),
                     'userList'                   => User::select('id', 'name')->get(),
                     'equipment'                  => $equipment,
-                    'requirement'                => Anforderung::find(request('requirement')),
+                    'requirement'                => $requirement,
                     'qualified_user_list'        => $enabledUser,
                     'is_test_internal'           => !array_search(true, $check_aci_execution_is_external),
                     'control_equipment_required' => array_search(true, $check_aci_control_equipment_required),

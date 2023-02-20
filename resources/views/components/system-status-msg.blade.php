@@ -32,12 +32,12 @@
     </div>
     @if($counter===0)
         <a href="{{ $link }}"
-           class="btn btn-sm {{ $btnclass[$type] }}"
+           class="btn btn-sm ml-1 {{ $btnclass[$type] }}"
         >{{ $labelBtn }}</a>
     @endif
     @if($counter>0)
         <a href="{{ $link }}"
-           class="btn btn-sm {{ $btnclass[$type] }}"
+           class="btn btn-sm ml-1 {{ $btnclass[$type] }}"
         >
             <span class="small">{{ $counter }}</span>
         </a>

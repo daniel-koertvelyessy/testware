@@ -194,17 +194,7 @@
 
                                         @endforeach
                                     </x-selectfield>
-                                    {{--
-                                                                        <x-staticfield id="controlUserName"
-                                                                                       label="{{__('Prüfer')}}"
-                                                                                       value="{{ auth()->user()->name }}"
-                                                                        />
 
-                                                                        <input type="hidden"
-                                                                               name="user_id"
-                                                                               id="user_id"
-                                                                               value="{{ auth()->user()->id }}"
-                                                                        >--}}
                                     <input type="hidden"
                                            name="equipment_id"
                                            id="equipment_id"
@@ -606,8 +596,8 @@
                                             ><i class="fas fa-signature"></i> {{__('Unterschrift Prüfer')}}</button>
                                         </div>
                                         <div class="card-body">
-                                            <img src="{{ Auth::user()->signature??'' }}"
-                                                 class="{{ Auth::user()->signature ? '':'d-none' }} img-fluid"
+                                            <img src="{{ $current_user->signature??'' }}"
+                                                 class="{{ $current_user->signature ? '':'d-none' }} img-fluid"
                                                  alt="Unterschriftbild Prüfer"
                                                  id="imgSignaturePruefer"
                                                  style="height:200px"
@@ -615,7 +605,7 @@
                                             <input type="hidden"
                                                    name="control_event_controller_signature"
                                                    id="control_event_controller_signature"
-                                                   value="{{ Auth::user()->signature??'' }}"
+                                                   value="{{ $current_user->signature??'' }}"
                                             >
                                             <label for="control_event_controller_name"
                                                    class="sr-only"
@@ -626,7 +616,7 @@
                                                    id="control_event_controller_name"
                                                    required
                                                    placeholder="{{__('Name Prüfer')}}"
-                                                   value="{{ Auth::user()->profile->fullName() }}"
+                                                   value="{{ $current_user->fullname()  }}"
                                             >
                                         </div>
                                     </div>
