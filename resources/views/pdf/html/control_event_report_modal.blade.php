@@ -18,9 +18,6 @@
 
     </dl>
 
-
-
-
     <h3>{{__('Vorschrift')}}</h3>
     <dl class="row">
         <dt class="col-sm-5">{{ __('Die Prüfunge erfolgte nach Vorschrift:')}}</dt>
@@ -38,19 +35,18 @@
 
     <article class="row">
         <section class="col">
-    <h2>{{ __('Abschluss') }}</h2>
-    <p>{{__('Basierend auf den Ergebnissen gilt die Prüfung als')}}
-        @if($controlEvent->control_event_pass)
-            <span class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>
-        @else
-            <span class="text-danger bold"><strong>{{ __('nicht bestanden') }}</strong></span>
-
-        @endif
-    </p>
-    <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
+            <h2>{{ __('Abschluss') }}</h2>
+            <p>{{__('Basierend auf den Ergebnissen gilt die Prüfung als')}}
+                @if($controlEvent->control_event_pass)
+                    <span class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>
+                @else
+                    <span class="text-danger bold"><strong>{{ __('nicht bestanden') }}</strong></span>
+                @endif
+            </p>
+            <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
         </section>
     </article>
-    @if (!$aci_execution->aci_execution)
+    @if (!$aci_execution->Anforderung->is_external)
 
         <div class="row">
             <div class="col-md-6">
@@ -99,37 +95,37 @@
     {{--    {{ $ControlEquipment->Anforderung->id }}--}}
 
     @if (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->count()>0)
-    <article class="row">
-        <section class="col">
-        <h2>{{__('Prüfmittel')}}</h2>
-        <p>{{__('Folgende Prüfmittel wurden verwendet:')}}</p>
+        <article class="row">
+            <section class="col">
+                <h2>{{__('Prüfmittel')}}</h2>
+                <p>{{__('Folgende Prüfmittel wurden verwendet:')}}</p>
 
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>{{__('Gerät')}}</th>
-                <th>{{__('Seriennummer')}}</th>
-                <th>{{__('Letzte Prüfung')}}</th>
-                <th>{{__('Nächste Prüfung')}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->get() as $coEvEquip)
-                @php
-                    $conEquip = App\ControlEquipment::where('equipment_id',$coEvEquip->Equipment->id )->first()
-                @endphp
-                <tr>
-                    <td>{{ $coEvEquip->Equipment->produkt->prod_name }}</td>
-                    <td>{{ $coEvEquip->Equipment->eq_serien_nr }}</td>
-                    <td>{{ $conEquip->qe_control_date_last  }}</td>
-                    <td>{{ $conEquip->qe_control_date_due  }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-        </section>
-    </article>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{__('Gerät')}}</th>
+                        <th>{{__('Seriennummer')}}</th>
+                        <th>{{__('Letzte Prüfung')}}</th>
+                        <th>{{__('Nächste Prüfung')}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (App\ControlEventEquipment::where('control_event_id',$controlEvent->id)->get() as $coEvEquip)
+                        @php
+                            $conEquip = App\ControlEquipment::where('equipment_id',$coEvEquip->Equipment->id )->first()
+                        @endphp
+                        <tr>
+                            <td>{{ $coEvEquip->Equipment->produkt->prod_name }}</td>
+                            <td>{{ $coEvEquip->Equipment->eq_serien_nr }}</td>
+                            <td>{{ $conEquip->qe_control_date_last  }}</td>
+                            <td>{{ $conEquip->qe_control_date_due  }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </section>
+        </article>
     @endif
 
 
@@ -175,12 +171,13 @@
                                         @elseif ($aci->aci_value_target_mode ==='gt')
                                             {{__('Soll')}} > {{__('Ist')}}
                                         @else
-                                                                   -
+                                            -
                                         @endif
                                     </td>
                                     <td>
                                         @if($ceitem->control_item_pass)
-                                            <span class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>
+                                            <span
+                                                class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>
                                         @else
                                             <span class="text-danger bold"><strong>{{ __('nicht bestanden') }}</strong></span>
 

@@ -8,7 +8,8 @@
             <td></td>
             <td align="right">
                 <h1>{{__('Prüfbericht')}} {{ $reportNo }}<br>
-                    <span style="font-size: small; margin: 0; padding: 0;">{{__('Prüfung vom:')}} {{ $controlEvent->control_event_date }}</span>
+                    <span
+                        style="font-size: small; margin: 0; padding: 0;">{{__('Prüfung vom:')}} {{ $controlEvent->control_event_date }}</span>
                 </h1>
 
             </td>
@@ -18,7 +19,7 @@
     @php
         $ControlEquipment = App\ControlEquipment::withTrashed()->where('id',$controlEvent->control_equipment_id)->first();
         $equipment = App\Equipment::find( $ControlEquipment->equipment_id);
-        $aci_execution = App\AnforderungControlItem::where('anforderung_id',$ControlEquipment->Anforderung->id)->first()
+        $controlStep = App\AnforderungControlItem::where('anforderung_id',$ControlEquipment->Anforderung->id)->first()
     @endphp
 
     <h2>{{ __('Übersicht') }}</h2>
@@ -33,7 +34,8 @@
             <td style="font-size: 14pt;">{{ $equipment->produkt->prod_name }}</td>
         </tr>
     </table>
-    <br><br><table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <br><br>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <tr>
             <th style="font-size: small; padding: 3px; font-weight: bold;">{{ __('Inventarnummer')}}</th>
             <th style="font-size: small; padding: 3px; font-weight: bold;">{{ __('Seriennummer')}}</th>
@@ -45,9 +47,11 @@
     </table>
 
     <h3>{{__('Vorschrift')}}</h3>
-   <span style="font-weight: bold; font-size: small;" >{{ __('Die Prüfunge erfolgte nach folgender Vorschrift:') }}</span>
+    <span
+        style="font-weight: bold; font-size: small;">{{ __('Die Prüfunge erfolgte nach folgender Vorschrift:') }}</span>
     <br>{{ $regulation->vo_label }} {{ $regulation->vo_name }}
-    <br><br><span style="font-weight: bold; font-size: small;" >{{ __('Hierbei wurde folgende Anforderung angewandt:') }}</span>
+    <br><br><span
+        style="font-weight: bold; font-size: small;">{{ __('Hierbei wurde folgende Anforderung angewandt:') }}</span>
     <br>{{ $requirement->an_label }} {{ $requirement->an_name }}
 
     @if($controlEvent->control_event_text)
@@ -61,7 +65,7 @@
         <strong>{{ $controlEvent->control_event_pass ? __('bestanden') : __('nicht bestanden') }}</strong></p>
     <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
     <br>
-    @if (!$aci_execution->aci_execution)
+    @if (!$controlStep->aci_execution)
         <table cellspacing="0" cellpadding="0" style="border-collapse: collapse">
             <tr>
                 <td>@if($controlEvent->control_event_controller_signature)
@@ -132,13 +136,14 @@
 
     @endif
 
+    @if (!$controlStep->Anforderung->is_external)
 
-
-    @if (!$aci_execution->aci_execution)
         <p style="page-break-before:always; margin:0;"></p>
         <p></p>
         <h2>{{__('Prüfschritte')}}</h2>
-        <p>{{ __('Die Anforderung')}} {{  $requirement->an_label }} {{ $requirement->an_name }} {{ $requirementitems->count() > 1 ?__('umfasst folgende Prüfungen:') : __('umfasst folgende Prüfung:')}}</p>
+        <p>{{ __('Die Anforderung')}} {{  $requirement->an_label }} {{ $requirement->an_name }} {{ $requirementitems->count() > 1 ?
+__('umfasst folgende Prüfungen:')
+: __('umfasst folgende Prüfung:')}}</p>
 
         @foreach ($requirementitems as $aci)
 
@@ -158,7 +163,8 @@
                                 {!! nl2br($aci->aci_name) !!}
                             </p>
 
-                            <p><span style="font-size: 11px; font-weight: bold;">{{ __('Beschreibung der Prüfung') }}:</span>
+                            <p><span
+                                    style="font-size: 11px; font-weight: bold;">{{ __('Beschreibung der Prüfung') }}:</span>
                                 <br/>
                                 {!!  nl2br($aci->aci_task) !!}
                             </p>
@@ -179,13 +185,14 @@
                                         <td>@if ($aci->aci_value_target_mode ==='eq')
                                                 @php
                                                     $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol
-                                                @endphp {{__('Soll')}} = {{__('Ist')}} ±{{ $tol??'' }} {{__('Toleranz')}}
+                                                @endphp {{__('Soll')}} = {{__('Ist')}}
+                                                ±{{ $tol??'' }} {{__('Toleranz')}}
                                             @elseif ($aci->aci_value_target_mode ==='lt')
                                                 {{__('Soll')}} < {{__('Ist')}}
                                             @elseif ($aci->aci_value_target_mode ==='gt')
                                                 {{__('Soll')}} > {{__('Ist')}}
                                             @else
-                                                                       -
+                                                -
                                             @endif
                                         </td>
                                         <td>
