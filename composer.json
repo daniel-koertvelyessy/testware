@@ -10,14 +10,14 @@
     "require": {
         "php": "^7.4|^8.0",
         "elibyy/tcpdf-laravel": "^9.3.0",
-        "fideloper/proxy": "^4.4.1",
-        "fruitcake/laravel-cors": "^2.0.4",
-        "guzzlehttp/guzzle": "^7.3.1",
-        "kyslik/column-sortable": "^6.4.1",
+        "fideloper/proxy": "^4.4.2",
+        "fruitcake/laravel-cors": "^v2.2.0",
+        "guzzlehttp/guzzle": "^7.7.0",
+        "kyslik/column-sortable": "^6.5.0",
         "laravel/framework": "^v8.83.27",
-        "laravel/helpers": "^v1.5.0",
-        "laravel/tinker": "^v2.7.3",
-        "laravel/ui": "^3.3",
+        "laravel/helpers": "^v1.6.0",
+        "laravel/tinker": "^v2.8.1",
+        "laravel/ui": "^v3.4.6",
         "simplesoftwareio/simple-qrcode": "^4.2.0"
     },
     "require-dev": {

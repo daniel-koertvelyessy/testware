@@ -19,10 +19,12 @@
             'an_label',
             'an_name',
             'an_description',
+            'is_external'
         ];
 
         protected $casts = [
-            'is_initial_test' => 'boolean'
+            'is_initial_test' => 'boolean',
+            'is_external' => 'boolean',
         ];
 
 
@@ -37,6 +39,7 @@
             'verordnung_id',
             'an_date_warn',
             'warn_interval_id',
+            'is_external',
         ];
 
         public static function boot()

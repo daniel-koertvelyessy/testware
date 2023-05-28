@@ -155,6 +155,7 @@ Route::get('getAnforderungControlItemData', 'AnforderungControlItemController@ge
 Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'AnforderungControlItemController@copy')->name('anforderungcontrolitem.copy');
 Route::post('anforderungcontrolitem/{anforderung}/applySort', 'AnforderungControlItemController@applySort')->name('anforderungcontrolitem.applySort');
 Route::get('anforderungcontrolitemlistitems', 'AnforderungControlItemController@getAciList')->name('anforderungcontrolitemlistitems');
+Route::put('anforderungcontrolitem/{aci}/fix', 'AnforderungControlItemController@fixbroken')->name('anforderungcontrolitem.fixbroken');
 
 
 

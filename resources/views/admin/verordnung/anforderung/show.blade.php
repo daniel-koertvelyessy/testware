@@ -247,26 +247,44 @@
                     </x-selectModalgroup>
 
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col">
                             <x-rtextfield id="updt_an_label"
                                           name="an_label"
                                           label="{{__('Kürzel')}}"
                                           value="{{ $anforderung->an_label }}"
                             />
                         </div>
-                        <div class="col-md-5 d-flex align-items-center">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 d-flex align-items-center">
                             <div class="form-check">
                                 <input class="form-check-input"
                                        type="checkbox"
                                        id="is_initial_test"
                                        name="is_initial_test"
                                        value="{{ $anforderung->is_initial_test ? ' 1 ' : '0'  }}"
-                                        {{ $anforderung->is_initial_test ? ' checked ' : ''  }}
+                                    {{ $anforderung->is_initial_test ? ' checked ' : ''  }}
                                 >
                                 <label class="form-check-label"
                                        for="is_initial_test"
                                 >
                                     {{ __('Ist initiale Funktionsprüfung?') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="is_external"
+                                       name="is_external"
+                                       value="{{ $anforderung->is_external ? ' 1 ' : '0'  }}"
+                                    {{ $anforderung->is_external ? ' checked ' : ''  }}
+                                >
+                                <label class="form-check-label"
+                                       for="is_external"
+                                >
+                                    {{ __('Extern durchgeführte Prüfung?') }}
                                 </label>
                             </div>
                         </div>
@@ -370,12 +388,18 @@
                                 <a href="{{ route('anforderungcontrolitem.show',$aci) }}">{{ $aci->aci_label }}</a>
                             </td>
                             <td>
-                                {{ $aci->aci_name }}
-                                @if ($aci->isIncomplete($aci))
-                                    <ul class="text-warning">
+                                <span class="d-flex justify-content-between">
+                                     {{ $aci->aci_name }}
+                                    @if($aci->aci_execution)
+                                        <abbr title="{{ __('Externer Prüfschritt') }}">(ext)</abbr>
+                                    @endif
+                                    @if ($aci->isIncomplete($aci))
+                                        <ul class="text-warning">
                                         {!! $aci->isIncomplete($aci) !!}
                                     </ul>
-                                @endif
+                                    @endif
+                                </span>
+
                             </td>
                             <td>
                                 {{ $aci->aci_sort }}

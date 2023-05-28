@@ -65,6 +65,7 @@
         public function store(Request $request)
         {
             $request->is_initial_test = $request->has('is_initial_test');
+            $request->is_external = $request->has('is_external');
             Anforderung::create($this->validateAnforderung());
             $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde angelegt!');
             return back();
@@ -103,6 +104,7 @@
             $anforderung->warn_interval_id = $request->warn_interval_id;
             $anforderung->anforderung_type_id = $request->anforderung_type_id;
             $anforderung->is_initial_test = $request->has('is_initial_test'); //?1:0;
+            $anforderung->is_external = $request->has('is_external'); //?1:0;
 
             if ($anforderung->save()) {
                 session()->flash('status', __('Die Anforderung <strong>:name</strong> wurde aktualisert!', ['name' => $anforderung->an_name]));
@@ -147,6 +149,7 @@
                 'an_date_warn'        => '',
                 'warn_interval_id'    => 'integer',
                 'is_initial_test'     => 'nullable|boolean',
+                'is_external'     => 'nullable|boolean',
                 'anforderung_type_id' => 'bail|required|integer',
             ],
                 [

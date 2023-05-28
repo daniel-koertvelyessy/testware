@@ -40,7 +40,7 @@
                         <tr>
                             <td style="vertical-align: middle;"
                                 class="d-none d-md-table-cell"
-                            >{{ $aci->Anforderung->an_label }}</td>
+                            >{{ $aci->Anforderung->an_label??'Ohne Anforderung' }}</td>
                             <td style="vertical-align: middle;">{{ $aci->aci_name }}</td>
                             <td style="vertical-align: middle;"
                                 class="d-none d-md-table-cell"

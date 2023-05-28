@@ -54,7 +54,7 @@
         {
             return $this->makeEquipmentControlCollection()->map(function ($item)
             {
-                return EquipmentEventService::checkControlDueDateExpired($item);
+                return EquipmentEventService::checkControlDueDateIsExpired($item);
             })->toArray();
 
         }
@@ -71,13 +71,14 @@
             return gettype(array_search(false, $this->getExpiredEquipmentControlItems()))==='integer';
         }
 
-        public static function checkControlDueDateExpired(Equipment $equipment): bool
+        public static function checkControlDueDateIsExpired(Equipment $equipment): bool
         {
             /**
              * if equipment has an upcomming control item
              * check if due date is expired = true
              */
             $eq = $equipment->ControlEquipment()->first();
+
             if ($eq){
                 return $eq->qe_control_date_due <= now();
             }

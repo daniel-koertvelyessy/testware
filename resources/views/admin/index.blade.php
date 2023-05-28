@@ -61,9 +61,10 @@ $objects['storages'] === 0                                            )
                         <span class="{{  $dbstatus['totalBrokenLinks']>0
                                             || $dbstatus['brokenProducts']>0
                                             || $dbstatus['brokenProductRequiremnets']>0
+                                            || $dbstatus['orphanRequirementItems']>0
                                             ? 'text-danger' :
                             'text-success'}}"
-                            >{{__('Datenbank')}}</span>
+                        >{{__('Datenbank')}}</span>
                         </button>
                     </div>
                 </nav>
@@ -281,7 +282,113 @@ $objects['storages'] === 0                                            )
                          aria-labelledby="nav-dblinks-tab"
                     >
                         <div class="row">
-                            <div class="{{ $dbstatus['totalBrokenLinks']>0 || $dbstatus['brokenProductRequiremnets']>0 ? 'col-md-8' : 'col-md-6' }}">
+                            <div class="{{ $dbstatus['totalBrokenLinks']>0 ||
+                            $dbstatus['brokenProductRequiremnets']>0 || $dbstatus['orphanRequirementItems']>0 ?
+                            'col-md-8' : 'col-md-6' }}">
+
+                                @if($dbstatus['brokenProductRequiremnets']>0)
+
+                                    <p class="lead text-danger">{{ __('Es existieren Produktanforderungen die eine gelöschte Anfoderung referenzieren!') }}</p>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Erstellt</th>
+                                            <th>Anforderung</th>
+                                            <th>Produkt</th>
+                                            <th>Aktion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($dbstatus['brokenProductRequiremnetItems'] as $productItem)
+                                            <tr>
+                                                <td>{{ $productItem->created_at }}</td>
+                                                <td>
+                                                    @if($productItem->Anforderung)
+                                                        {{ $productItem->Anforderung->an_name }}
+                                                    @else
+                                                        <select class="custom-select custom-select-sm setRequirement"
+                                                                data-controlid="{{ $productItem->id }}"
+                                                                aria-label="{{ __('Anforderung auswählen') }}"
+                                                        >
+                                                            <option value="0">neu zuordnen</option>
+                                                            @foreach($requirementList as $requirement)
+                                                                <option
+                                                                    value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($productItem->Produkt)
+                                                        {{ $productItem->Produkt->prod_name }}
+                                                        {{ $productItem->Produkt->prod_nummer }}
+                                                    @else
+                                                        <select class="custom-select custom-select-sm setEquipment"
+                                                                data-controlid="{{ $productItem->id }}"
+                                                                aria-label="{{ __('Gerät auswählen') }}"
+                                                        >
+                                                            <option value="0">neu zuordnen</option>
+                                                            @foreach($productList as $product)
+                                                                <option
+                                                                    value="{{ $product->id }}">{{ $product->prod_name . ' - ' . $product->prod_nummer }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <section class="d-flex">
+                                                        <form action="{{ route('control.fixbroken',$productItem) }}"
+                                                              method="POST"
+                                                        >
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="text"
+                                                                   name="anforderung_id"
+                                                                   id="setRequirement{{$productItem->id}}"
+                                                                   value="@if($productItem->Anforderung) {{ $productItem->Anforderung->id }} @endif"
+                                                            >
+                                                            <input type="text"
+                                                                   name="produkt_id"
+                                                                   id="setProduct{{$productItem->id}}"
+                                                                   value="@if($productItem->Produkt) {{ $productItem->Produkt->id }} @endif"
+                                                            >
+                                                            <button class="btn btn-sm btn-outline-primary mr-1"
+                                                                    id="btnUpdateControlItem{{$productItem->id}}"
+                                                                    disabled>
+                                                                <i class="fa fa-save"></i>
+                                                            </button>
+                                                        </form>
+                                                        @if($isSysAdmin)
+                                                            <form action="{{ route('deleteProduktAnfordrung') }}"
+                                                                  method="POST"
+                                                            >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <input type="text"
+                                                                       name="id"
+                                                                       id="id{{$productItem->id}}"
+                                                                       value="{{ $productItem->id }}"
+                                                                >
+                                                                <button class="btn btn-sm btn-outline-danger">
+                                                                    <i class="fa fa-trash-alt"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </section>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Keine verwaisten Produktanforderungen')}}</h4>
+                                        <p>{{__('Es wurde keine Produkte mit gelöschten / unbekannten Anforderungen gefunden.')}}</p>
+                                    </div>
+                                @endif
                                 @if($dbstatus['totalBrokenLinks']>0)
                                     <h2 class="h4">Verwaiste Prüfungen
                                         <span class="badge badge-info small">{{$dbstatus['totalBrokenLinks']}} </span>
@@ -311,7 +418,8 @@ $objects['storages'] === 0                                            )
                                                         >
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($requirementList as $requirement)
-                                                                <option value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                                <option
+                                                                    value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -327,7 +435,8 @@ $objects['storages'] === 0                                            )
                                                         >
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($equipmentList as $equipment)
-                                                                <option value="{{ $equipment->id }}">{{ $equipment->eq_name }}</option>
+                                                                <option
+                                                                    value="{{ $equipment->id }}">{{ $equipment->eq_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -382,113 +491,104 @@ $objects['storages'] === 0                                            )
                                         <p>{{__('Es konten keine verwaisten Prüfungen gefunden werden.')}}</p>
                                     </div>
                                 @endif
+                                @if($dbstatus['orphanRequirementItems']>0)
+                                    <h2 class="h4">{{ __('Verwaiste Prüfschritte') }}
+                                        <span
+                                            class="badge badge-info small">{{$dbstatus['orphanRequirementItems']}} </span>
+                                    </h2>
 
-                                    @if($dbstatus['brokenProductRequiremnets']>0)
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Erstellt</th>
+                                            <th>{{ __('Anforderung') }}</th>
+                                            <th>{{ __('Name') }}</th>
+                                            <th>{{ __('Kürzel') }}</th>
+                                            <th>{{ __('Aktion') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($dbstatus['orphanRequirementItemList'] as $item)
 
-                                        <p class="lead text-danger">{{ __('Es existieren Produktanforderungen die eine gelöschte Anfoderung referenzieren!') }}</p>
-                                        <table class="table">
-                                            <thead>
                                             <tr>
-                                                <th>Erstellt</th>
-                                                <th>Anforderung</th>
-                                                <th>Produkt</th>
-                                                <th>Aktion</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($dbstatus['brokenProductRequiremnetItems'] as $productItem)
-                                                <tr>
-                                                    <td>{{ $productItem->created_at }}</td>
-                                                    <td>
-                                                        @if($productItem->Anforderung)
-                                                            {{ $productItem->Anforderung->an_name }}
-                                                        @else
-                                                            <select class="custom-select custom-select-sm setRequirement"
-                                                                    data-controlid="{{ $productItem->id }}"
-                                                                    aria-label="{{ __('Anforderung auswählen') }}"
+                                                <td>
+                                                    {{ $item->created_at }}
+                                                </td>
+                                                <td>
+                                                    <select class="custom-select custom-select-sm setRequirement"
+                                                            data-controlid="{{ $item->id }}"
+                                                            aria-label="{{ __('Anforderung auswählen') }}"
+                                                    >
+                                                        <option value="0">neu zuordnen</option>
+                                                        @foreach($requirementList as $requirement)
+                                                            <option
+                                                                value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                </td>
+                                                <td>
+                                                    {{ $item->aci_name }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->aci_label }}
+                                                </td>
+                                                <td>
+                                                    <section class="d-flex">
+                                                        <form action="{{ route('anforderungcontrolitem.fixbroken',$item)
+                                                         }}"
+                                                              method="POST"
+                                                        >
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden"
+                                                                   name="anforderung_id"
+                                                                   id="setRequirement{{$item->id}}"
+                                                                   value="@if($item->Anforderung) {{
+                                                                   $item->Anforderung->id }} @endif"
                                                             >
-                                                                <option value="0">neu zuordnen</option>
-                                                                @foreach($requirementList as $requirement)
-                                                                    <option value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($productItem->Produkt)
-                                                            {{ $productItem->Produkt->prod_name }}
-                                                            {{ $productItem->Produkt->prod_nummer }}
-                                                        @else
-                                                            <select class="custom-select custom-select-sm setEquipment"
-                                                                    data-controlid="{{ $productItem->id }}"
-                                                                    aria-label="{{ __('Gerät auswählen') }}"
-                                                            >
-                                                                <option value="0">neu zuordnen</option>
-                                                                @foreach($productList as $product)
-                                                                    <option value="{{ $product->id }}">{{ $product->prod_name . ' - ' . $product->prod_nummer }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <section class="d-flex">
-                                                            <form action="{{ route('control.fixbroken',$productItem) }}"
-                                                                  method="POST"
+                                                            <button class="btn btn-sm btn-outline-primary mr-1"
+                                                                    id="btnUpdateControlItem{{$item->id}}"
+                                                                    disabled>
+                                                                <i class="fa fa-save"></i>
+                                                            </button>
+                                                        </form>
+                                                        @if($isSysAdmin)
+                                                            <form
+                                                                action="{{ route('anforderungcontrolitem.destroy',$item) }}"
+                                                                method="POST"
                                                             >
                                                                 @csrf
-                                                                @method('PUT')
-                                                                <input type="text"
-                                                                       name="anforderung_id"
-                                                                       id="setRequirement{{$productItem->id}}"
-                                                                       value="@if($productItem->Anforderung) {{ $productItem->Anforderung->id }} @endif"
-                                                                >
-                                                                <input type="text"
-                                                                       name="produkt_id"
-                                                                       id="setProduct{{$productItem->id}}"
-                                                                       value="@if($productItem->Produkt) {{ $productItem->Produkt->id }} @endif"
-                                                                >
-                                                                <button class="btn btn-sm btn-outline-primary mr-1"
-                                                                        id="btnUpdateControlItem{{$productItem->id}}"
-                                                                        disabled>
-                                                                    <i class="fa fa-save"></i>
+                                                                @method('DELETE')
+                                                                <button class="btn btn-sm btn-outline-danger">
+                                                                    <i class="fa fa-trash-alt"></i>
                                                                 </button>
                                                             </form>
-                                                            @if($isSysAdmin)
-                                                                <form action="{{ route('deleteProduktAnfordrung') }}"
-                                                                      method="POST"
-                                                                >
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <input type="text"
-                                                                           name="id"
-                                                                           id="id{{$productItem->id}}"
-                                                                           value="{{ $productItem->id }}"
-                                                                    >
-                                                                    <button class="btn btn-sm btn-outline-danger">
-                                                                        <i class="fa fa-trash-alt"></i>
-                                                                    </button>
-                                                                </form>
-                                                            @endif
-                                                        </section>
+                                                        @endif
+                                                    </section>
+                                                </td>
+                                            </tr>
 
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    @else
-                                        <div class="alert alert-success"
-                                             role="alert"
-                                        >
-                                            <h4 class="alert-heading">{{__('Keine verwaisten Produktanforderungen')}}</h4>
-                                            <p>{{__('Es wurde keine Produkte mit gelöschten / unbekannten Anforderungen gefunden.')}}</p>
-                                        </div>
-                                    @endif
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Keine verwaisen Prüfschritte')}}</h4>
+                                        <p>{{__('Es konten keine verwaisten Prüfschritte gefunden werden.')}}</p>
+                                    </div>
+                                @endif
+
                             </div>
-                            <div class="{{ $dbstatus['totalBrokenLinks']>0 ? 'col-md-4' : 'col-md-6' }}">
-                            @if($dbstatus['brokenProducts']>0)
+                            <div class="{{ $dbstatus['totalBrokenLinks']>0 ||
+                            $dbstatus['brokenProductRequiremnets']>0 || $dbstatus['orphanRequirementItems']>0 ?
+                            'col-md-4' : 'col-md-6' }}">
+                                @if($dbstatus['brokenProducts']>0)
                                     @if($dbstatus['brokenProducts']>1)
-                                        <p class="lead text-danger">Es sind {{ $dbstatus['brokenProducts'] }} Produkte ohne UUID gefunden worden!</p>
+                                        <p class="lead text-danger">Es sind {{ $dbstatus['brokenProducts'] }} Produkte
+                                            ohne UUID gefunden worden!</p>
                                     @else
                                         <p class="lead text-danger">Es ist ein Produkt ohne UUID gefunden worden!</p>
                                     @endif
@@ -516,15 +616,15 @@ $objects['storages'] === 0                                            )
 @section('scripts')
     <script>
         $('.setRequirement').change(function () {
-            const controlId=$(this).data('controlid');
-            $('#setRequirement'+controlId).val($(this).val());
-            $('#btnUpdateControlItem'+controlId).prop('disabled',$(this).val()==='0');
+            const controlId = $(this).data('controlid');
+            $('#setRequirement' + controlId).val($(this).val());
+            $('#btnUpdateControlItem' + controlId).prop('disabled', $(this).val() === '0');
         });
 
         $('.setEquipment').change(function () {
-            const controlId=$(this).data('controlid');
-            $('#setEquipment'+controlId).val($(this).val());
-            $('#btnUpdateControlItem'+controlId).prop('disabled',$(this).val()==='0');
+            const controlId = $(this).data('controlid');
+            $('#setEquipment' + controlId).val($(this).val());
+            $('#btnUpdateControlItem' + controlId).prop('disabled', $(this).val() === '0');
         });
     </script>
 @endsection

@@ -1,4 +1,4 @@
-@extends('layout.layout-admin')
+    @extends('layout.layout-admin')
 
 @section('pagetitle','Anforderung')
 
@@ -34,14 +34,20 @@
                 <tbody>
                 @forelse ($requirements as $anforderung)
                     <tr>
-                        <td style="vertical-align: middle;">
+                        <td>
+                            <span class="d-flex justify-content-between align-items-center">
+
+
                             @if ($anforderung->AnforderungControlItem->count()===0)
                                 <span class="fas fa-exclamation-triangle text-warning mr-1 d-md-none"></span>
                             @endif
                             <a href="{{ route('anforderung.show',$anforderung) }}">
                                 {{ $anforderung->an_name }}
                             </a>
-
+                                @if($anforderung->is_external)
+                                    <abbr title="{{ __('Diese Anforderung muss durch eine externe Firma ausgeführt werden') }}">ext</abbr>
+                                @endif
+                            </span>
                         </td>
                         <td style="vertical-align: middle;"
                             class="d-none d-md-table-cell"

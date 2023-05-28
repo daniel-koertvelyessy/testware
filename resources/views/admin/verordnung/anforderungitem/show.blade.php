@@ -197,7 +197,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                  {{--  <div class="row">
                         <div class="col-md-6">
                             <div class="custom-control custom-radio custom-control-inline mb-3">
                                 <input type="radio"
@@ -268,7 +268,7 @@
                                 @endforeach
                             </x-selectfield>
                         </div>
-                    </div>
+                    </div>--}}
 
                     <button class="btn btn-primary">{{__('Prüfschritt speichern')}}</button>
                     <button class="btn btn-outline-danger ml-2"
