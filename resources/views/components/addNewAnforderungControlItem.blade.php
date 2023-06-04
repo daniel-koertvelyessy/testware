@@ -237,7 +237,7 @@
                 <x-btnMain block="1" >{{__('Prüfschritt anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>
 
             </div>
-            
+
         </div>
     </div>
 </form>
