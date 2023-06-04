@@ -390,9 +390,7 @@
                             <td>
                                 <span class="d-flex justify-content-between">
                                      {{ $aci->aci_name }}
-                                    @if($aci->aci_execution)
-                                        <abbr title="{{ __('Externer Prüfschritt') }}">(ext)</abbr>
-                                    @endif
+
                                     @if ($aci->isIncomplete($aci))
                                         <ul class="text-warning">
                                         {!! $aci->isIncomplete($aci) !!}

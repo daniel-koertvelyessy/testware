@@ -33,14 +33,6 @@
                    aria-controls="nav-cicontrol"
                    aria-selected="false"
                 >{{__('Umfang')}}</a>
-                <a class="nav-link disabled"
-                   id="nav-cicontact-tab"
-                   data-toggle="tab"
-                   href="#nav-cicontact"
-                   role="tab"
-                   aria-controls="nav-cicontact"
-                   aria-selected="false"
-                >{{__('Ausführung')}}</a>
             </div>
         </nav>
         <div class="tab-content"
@@ -242,64 +234,10 @@
                         class="btn btn-sm btn-outline-secondary bentBackTab"
                         data-showtab="#nav-cianforderung-tab"
                 >{{__('zurück')}}</button>
-                <button type="button"
-                        class="btn btn-sm btn-primary bentNextTab"
-                        data-required="#aci_label,#aci_name"
-                        data-showtab="#nav-cicontact-tab"
-                >{{__('weiter')}}</button>
-            </div>
-            <div class="tab-pane fade p-2"
-                 id="nav-cicontact"
-                 role="tabpanel"
-                 aria-labelledby="nav-cicontact-tab"
-            >
-                <p class="lead text-primary">{{__('Legen Sie zum Abschluss fest, wer den Prüfschritt ausführen wird.')}}</p>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-control custom-radio custom-control-inline mb-3">
-                            <input type="radio"
-                                   id="aci_internal"
-                                   name="aci_execution"
-                                   class="custom-control-input"
-                                   value="0"
-                                   checked
-                            >
-                            <label class="custom-control-label"
-                                   for="aci_internal"
-                            >{{__('Interne Durchführung')}}</label>
-                        </div>
-                        <x-selectfield id="aci_contact_id"
-                                       label="{{__('Eingewiesener Mitarbeiter')}}:"
-                        >
-                            @foreach (App\User::with('Profile')->get() as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </x-selectfield>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-control custom-radio custom-control-inline mb-3">
-                            <input type="radio"
-                                   id="aci_external"
-                                   name="aci_execution"
-                                   class="custom-control-input"
-                                   value="1"
-                            >
-                            <label class="custom-control-label"
-                                   for="aci_external"
-                            >{{__('Externe Durchführung')}}</label>
-                        </div>
-                        <x-selectfield id="firma_id"
-                                       label="{{__('Firma')}}:"
-                        >
-                            @foreach (App\Firma::all() as $firma)
-                                <option value="{{ $firma->id }}">{{ $firma->fa_name }}</option>
-                            @endforeach
-                        </x-selectfield>
-                    </div>
-                </div>
                 <x-btnMain block="1" >{{__('Prüfschritt anlegen')}} <i class="fas fa-download ml-2"></i></x-btnMain>
+
             </div>
+            
         </div>
     </div>
 </form>

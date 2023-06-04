@@ -68,6 +68,7 @@ class AnforderungControlItemController extends Controller
         Request $request
     ): RedirectResponse {
 
+        //dd($request->sort != null && isset($request->placeafteritem));
         $this->validateAnforderungControlItem();
 
         $testStep = (new AnforderungControlItem)->add($request);
@@ -75,7 +76,7 @@ class AnforderungControlItemController extends Controller
         if ($testStep) {
 
             $service = new RequirementControlItemService();
-            if ($request->sort != null) {
+            if ($request->sort != null && isset($request->placeafteritem)) {
                 $service->resortItems($request->sort,
                     $request->placeafteritem,
                     Anforderung::findOrFail($request->anforderung_id));
