@@ -1,4 +1,4 @@
-<div class="btn-group dropleft">
+<div class="btn-group {{ (isset($right) ? 'dropright' : 'dropleft') }}">
     <button type="button"
             class="btn btn-sm m-0"
             id="editObjekt{{ $object->id }}"

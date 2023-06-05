@@ -73,14 +73,14 @@
                                 @elseif($aci->aci_value_target_mode==='eq')
                                     <span class="fas fa-equals mr-1"></span>
                                     <span class="text-nowrap">
-                                                                @if($aci->aci_value_target_mode==='eq')
+                                        @if($aci->aci_value_target_mode==='eq')
                                             @php
-                                                $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol;
+                                                $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :
+                                                $aci->aci_vaule_soll*$aci->aci_value_tol/100;
                                             @endphp
-                                            <span
-                                                class="small">±{{ $tol }}{{ $aci->aci_value_si }}</span>
+                                            <span class="small">±{{ $tol }} {{ $aci->aci_value_si }}</span>
                                         @endif
-                                                            </span>
+                                    </span>
                                 @endif
                             </div>
                         @endif

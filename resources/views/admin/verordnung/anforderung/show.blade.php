@@ -413,7 +413,8 @@
                     </tbody>
                 </table>
 
-                <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}" class="btn btn-outline-primary">{{ __('Neue Prüfung erstellen') }} <i class="fa fa-angle-right ml-1"></i></a>
+                <a href="{{ route('anforderungcontrolitem.create',['rid'=>$anforderung]) }}" class="btn
+                btn-outline-primary">{{ __('Neuen Prüfschritt erstellen') }} <i class="fa fa-angle-right ml-1"></i></a>
             </div>
         </div>
 

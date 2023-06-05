@@ -658,7 +658,7 @@
             const aci_value_target_mode = $(this).data('aci_value_target_mode');
             const aci_value_tol = parseFloat($(this).data('aci_value_tol'));
             const aci_value_tol_mod = $(this).data('aci_value_tol_mod');
-            const tol = (aci_value_tol_mod === 'abs') ? aci_value_tol : aci_value_tol / 100;
+            const tol = (aci_value_tol_mod === 'abs') ? aci_value_tol : aci_vaule_soll * aci_value_tol / 100;
 
             if (aci_value_target_mode === 'gt') {
                 if (aci_vaule_soll <= val) {
