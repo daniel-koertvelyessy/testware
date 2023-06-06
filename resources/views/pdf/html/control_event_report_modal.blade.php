@@ -46,6 +46,7 @@
             <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
         </section>
     </article>
+    
     @if (!$aci_execution->Anforderung->is_external)
 
         <div class="row">
@@ -130,7 +131,7 @@
 
 
 
-    @if (!$aci_execution->aci_execution)
+    @if (!$requirement->is_external)
         <h2 class="my-6">{{__('Prüfschritte')}}</h2>
         <p class="mb-3">{{ __('Die Anforderung')}} {{  $requirement->an_label }} {{ $requirement->an_name }} {{ $requirementitems->count() > 1 ?__('umfasst folgende Prüfungen:') : __('umfasst folgende Prüfung:')}}</p>
 

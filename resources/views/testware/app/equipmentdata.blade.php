@@ -103,8 +103,9 @@
                     @endif
                 </div>
             </div>
-            <div class="row mt-2 d-flex align-items-center">
-                <div class="col-6">
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <hr class="my-4">
                     <a href="{{ route('edmg',$ident) }}"
                        class="btn btn-lg btn-primary"
                     >{{__('Schaden melden')}} <i class="fas fa-angle-right ml-3"></i></a>
