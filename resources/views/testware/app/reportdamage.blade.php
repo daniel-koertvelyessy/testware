@@ -15,7 +15,7 @@
                 <h1 class="h3">{{__('Schaden am Gerät melden')}}</h1>
                 <x-staticfield id="setEquipmentName"
                                label="{{ __('Gerät') }}"
-                               value="{{ $edata->produkt->prod_name }}"
+                               value="{{ $edata->eq_name }}"
                 />
                 <form action="{{ route('app.store') }}"
                       method="post"

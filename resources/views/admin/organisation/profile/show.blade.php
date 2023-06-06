@@ -70,7 +70,7 @@
                                  value="{{ $profile->ma_nummer }}"
                     />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @if(isset($profile->user->id))
                         <x-selectfield id="adresse_id"
                                        label='Verknüpfter <a href="/user/{{ $profile->user->id }}">System Benutzer</a>'
@@ -78,7 +78,7 @@
                             @foreach(App\User::all() as $user)
                                 <option value="{{ $user->id }}"
                                         @if( $user->id === $profile->user_id ) selected @endif >
-                                    {{ $user->username }}
+                                    {{ $user->username??$user->name }}
                                 </option>
                             @endforeach
                         </x-selectfield>
@@ -95,17 +95,21 @@
                         </x-selectfield>
                     @endif
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-2">
                     <x-datepicker id="ma_eingetreten"
                                   label="{{__('Eingetreten')}}"
                                   value="{{ $profile->ma_eingetreten }}"
                     />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <x-datepicker id="ma_ausgetreten"
                                   label="{{__('Ausgetreten')}}"
                                   value="{{ $profile->ma_ausgetreten }}"
                     />
+                </div>
+                <div class="col-md-3">
+                    <x-emailfield id="ma_email" label="{{ __('E-Mail') }}" value="{{ $profile->ma_email }}"/>
                 </div>
             </div>
             <div class="row">

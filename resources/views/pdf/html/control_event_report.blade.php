@@ -141,9 +141,7 @@
         <p style="page-break-before:always; margin:0;"></p>
         <p></p>
         <h2>{{__('Prüfschritte')}}</h2>
-        <p>{{ __('Die Anforderung')}} {{  $requirement->an_label }} {{ $requirement->an_name }} {{ $requirementitems->count() > 1 ?
-__('umfasst folgende Prüfungen:')
-: __('umfasst folgende Prüfung:')}}</p>
+        <p>{{ __('Die Anforderung')}} {{  $requirement->an_label }} {{ $requirement->an_name }} {{ $requirementitems->count() > 1 ? __('umfasst folgende Prüfungen:') : __('umfasst folgende Prüfung:')}}</p>
 
         @foreach ($requirementitems as $aci)
 
@@ -177,33 +175,25 @@ __('umfasst folgende Prüfungen:')
                                         <td style="font-size: 11px; font-weight: bold;">{{ __('Bedingung') }}</td>
                                         <td style="font-size: 11px; font-weight: bold;">{{ __('Ergebnis') }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>{{ $aci->aci_vaule_soll??'-' }} {{ $aci->aci_value_si??'' }}
-                                        </td>
-                                        <td>{{ $ceitem->control_item_read??'-' }} {{ $aci->aci_value_si??'' }}
-                                        </td>
-                                        <td>@if ($aci->aci_value_target_mode ==='eq')
-                                                @php
-                                                    $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol
-                                                @endphp {{__('Soll')}} = {{__('Ist')}}
-                                                ±{{ $tol??'' }} {{__('Toleranz')}}
-                                            @elseif ($aci->aci_value_target_mode ==='lt')
-                                                {{__('Soll')}} < {{__('Ist')}}
-                                            @elseif ($aci->aci_value_target_mode ==='gt')
-                                                {{__('Soll')}} > {{__('Ist')}}
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $ceitem->control_item_pass? __('bestanden') : __('nicht bestanden') }}
-                                        </td>
+                                    <tr style="font-size: 11px;">
+                                        <td>{{ $aci->aci_vaule_soll??'-' }} {{ $aci->aci_value_si??'' }}</td>
+                                        <td>{{ $ceitem->control_item_read??'-' }} {{ $aci->aci_value_si??'' }}</td>
+                                        <td>@if ($aci->aci_value_target_mode ==='eq') @php
+                                                $tol = ($aci->aci_value_tol_mod==='abs')
+                                                ? $aci->aci_value_tol
+                                                : $aci->aci_vaule_soll*$aci->aci_value_tol/100
+                                            @endphp
+                                            {{__('Soll')}} = {{__('Ist')}} ±{{ $tol??'' }} {{ $aci->aci_value_si??'' }}
+                                            @elseif ($aci->aci_value_target_mode ==='lt'){{__('Soll')}} < {{__('Ist')}}
+                                            @elseif ($aci->aci_value_target_mode ==='gt'){{__('Soll')}} > {{__('Ist')}}
+                                            @else - @endif</td>
+                                        <td>{{ $ceitem->control_item_pass? __('bestanden') : __('nicht bestanden') }}</td>
                                     </tr>
                                 </table>
                             @else
                                 <p><span style="font-size: 11px; font-weight: bold;">{{ __('Ergebnis') }}:</span>
                                     <br/>
-                                    {{ $ceitem->control_item_pass? __('bestanden') : __('nicht bestanden') }}
+                                    {{ $ceitem->control_item_pass ? __('bestanden') : __('nicht bestanden') }}
                                 </p>
                             @endif
 

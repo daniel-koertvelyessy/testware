@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -73,7 +74,12 @@ class ProfileController extends Controller
     {
 
         return request()->validate([
-            'ma_name'         => 'required|unique:profiles,ma_name|max:20',
+            'ma_name'         => [
+                'bail',
+                'max:100',
+                'required',
+                Rule::unique('profiles')->ignore(\request('id'))
+            ],
             'ad_name'         => 'max:100',
             'ma_nummer'       => 'max:100',
             'ma_name_2'       => '',
@@ -87,7 +93,8 @@ class ProfileController extends Controller
             'ma_com_1'        => '',
             'ma_com_2'        => '',
             'group_id'        => '',
-            'user_id'         => ''
+            'user_id'         => '',
+            'ma_email'         => 'email'
         ]);
     }
 
@@ -140,7 +147,8 @@ class ProfileController extends Controller
             'ma_com_1'        => '',
             'ma_com_2'        => '',
             'group_id'        => '',
-            'user_id'         => ''
+            'user_id'         => '',
+            'ma_email'         => 'email'
         ]);
     }
 

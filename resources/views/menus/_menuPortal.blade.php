@@ -6,7 +6,8 @@
     </li>
     <li class="nav-item {{ Request::path() === 'docs' ? ' active ' : '' }}">
         <a class="nav-link "
-           href="/docs/"
+           href="https://docs.testware.io"
+           target="_blank"
         ><i class="fas fa-book"></i> {{__('Dokumentation')}}</a>
     </li>
     <li class="nav-item {{ Request::path() === 'support' ? ' active ' : '' }}">

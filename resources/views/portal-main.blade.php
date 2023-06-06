@@ -43,7 +43,7 @@
                             @endif
                         </x-tile>
 
-                        <x-tile link="{{ route('docs.start') }}"
+                        <x-tile link="https://docs.testware.io"
                                 :label="__('Dokumentation')"
                         >
                             <i class="fas fa-book fa-3x"></i>

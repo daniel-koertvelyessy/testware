@@ -1022,7 +1022,9 @@
                                     @if($onetimeControlList->count()>0)
                                         <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
                                         @foreach($onetimeControlList as $control_equipment_item)
-                                            <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,'requirement'=>$control_equipment_item->anforderungs_id ]) }}" class="btn btn-outline-primary btn-block" >
+                                            <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,
+                                            'requirement'=>$control_equipment_item->id ]) }}" class="btn
+                                            btn-outline-primary btn-block" >
                                                 {{$control_equipment_item->an_name}}
                                             </a>
                                         @endforeach
@@ -1049,7 +1051,7 @@
                          aria-labelledby="requirements-tab"
                     >
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-7 mt-3 mt-sm-0">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="h5">{{__('Befähigte Personen')}}</h3>
                                     <button type="button"
@@ -1060,7 +1062,7 @@
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
-                                <table class="table table-responsive-md">
+                                <table class="table">
                                     <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
@@ -1108,7 +1110,7 @@
                                         {{ __('Person hinzufügen') }} <i class="fas fa-user-plus ml-2"></i>
                                     </button>
                                 </div>
-                                <table class="table table-responsive-md">
+                                <table class="table">
                                     <thead>
                                     <tr>
                                         <th>{{__('Name')}}</th>
@@ -1159,6 +1161,7 @@
                                 </table>
                             </div>
                             <div class="col-md-5">
+                                <div class="dropdown-divider my-4 d-block d-sm-none"></div>
                                 <h3 class="h5">{{__('Anforderungen')}}</h3>
 
 

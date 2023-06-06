@@ -174,7 +174,6 @@
             } else {
                 $value = __('nicht zugeordnet');
             }
-
             return view('testware.equipment.show', [
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
                 'upcomingControlList'     => $service->getUpcomingControlItems($equipment),
@@ -297,13 +296,13 @@
 
 
             if ($equipment->delete()) {
-                $msg = __('Geräte wurde mit 
+                $msg = __('Geräte wurde mit
                  :eCon Prüfungen,
                  :eDoc Dokumenten,
                  :eEv Prüfungen,
                  :eQu Befähigten Personen,
-                 :eIn Eingewiesenen Personen und 
-                 :ePa Parameter 
+                 :eIn Eingewiesenen Personen und
+                 :ePa Parameter
                  erfolgreich gelöscht', [
                     'eCon' => $objects['eCon'],
                     'eDoc' => $objects['eDoc'],

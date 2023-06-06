@@ -97,12 +97,18 @@
         public function getOntimeControlItems(Equipment $equipment)
         {
 
-            return ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
-                ->select('control_equipment.id','anforderungs.id AS anforderungs_id','equipment_id','anforderungs.is_initial_test','anforderungs.an_name','control_equipment.qe_control_date_due')
+            return ProduktAnforderung::where('produkt_id',  $equipment->Produkt->id)->get()->map(function ($req){
+                if ($req->Anforderung->is_external === false) return $req->Anforderung;
+            });
+
+/*            return ControlEquipment::leftJoin('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
+                ->select(['control_equipment.id','anforderungs.id AS anforderungs_id','equipment_id','anforderungs.is_initial_test','anforderungs.an_name','control_equipment.qe_control_date_due'])
                 ->where('equipment_id', $equipment->id)
                 ->where('is_initial_test', true)
-                ->orderBy('qe_control_date_due')
-                ->get();
+                ->where('is_external', false)
+                ->groupBy(['anforderungs.id'])
+//                ->orderBy('qe_control_date_due')
+                ->get();*/
 
         }
 
@@ -262,7 +268,7 @@
 
         public function getInstruectedPersonList(Equipment $equipment)
         {
-            return EquipmentInstruction::select('id', 'equipment_instruction_trainee_id')->where('equipment_id', $equipment->id)->get();
+            return EquipmentInstruction::select('id', 'equipment_instruction_trainee_id','equipment_instruction_trainee_signature','equipment_instruction_date')->where('equipment_id', $equipment->id)->get();
         }
 
         public function getQualifiedPersonList(Equipment $equipment): array

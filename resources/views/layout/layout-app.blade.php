@@ -70,13 +70,6 @@
                         <i class="fas fa-chalkboard"></i> {{__('Portal')}}
                     </a>
                 </li>
-                <li class="nav-item {{ (strpos(Request::path(), 'app')!==false) ? ' active ' : '' }}">
-                    <a class="nav-link"
-                       href="{{ route('app') }}"
-                    >
-                        <i class="fas fa-qrcode"></i> {{__('Scan')}}
-                    </a>
-                </li>
                 @if(isset($edata)||isset($ident))
                     <li class="nav-item {{ (strpos(Request::path(), 'edata')!==false) ? ' active ' : '' }}">
                         <a class="nav-link"
