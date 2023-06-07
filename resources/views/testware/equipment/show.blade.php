@@ -36,7 +36,7 @@
                 <i class="ml-2 fas fa-upload mr-2 fa-fw"></i>
                 {{__('Datei hinzufügen')}}
             </a>
-            <a class="dropdown-item"
+            <a class="dropdown-item {{ ($loggedInUserIsQualified) ? '' : 'disabled' }}"
                href="#"
                data-toggle="modal"
                data-target="#modalStartManualControl"
@@ -44,7 +44,7 @@
                 <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
                 {{__('Prüfung manuell erfassen')}}
             </a>
-            <a class="dropdown-item"
+            <a class="dropdown-item {{  ($loggedInUserIsQualified )? '' : 'disabled' }}"
                href="#"
                data-toggle="modal"
                data-target="#modalAddEquipFuncTest"
@@ -878,8 +878,7 @@
                          aria-labelledby="base_data-tab"
                     >
                         <div class="row">
-                            <div class="col-md-7 mb-3">
-
+                            <div class="{{ $parameterListItems->count() > 0 ? 'col-md-5' : 'col-md-7' }} mb-3">
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten')}}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{__('Bezeichnung')}}:"
@@ -906,6 +905,16 @@
                                                value="{{ $companyString??'' }}"
                                 />
                             </div>
+                            @if($parameterListItems->count() > 0)
+                            <div class="col-md-2 mb-3">
+                                <h2 class="h4 mb-2">{{__('Parameter')}}</h2>
+
+                                @foreach($parameterListItems as $param)
+                                    <x-parameters.parameter-item-eq mode="display" :param="$param" />
+                                @endforeach
+
+                            </div>
+                            @endif
                             <div class="col-md-5 pl-3 mb-3">
                                 @if ($equipment->produkt->ControlProdukt)
                                     <h2 class="h4 mb-2">{{__('Prüfmittel - Gerätestatus')}}</h2>
@@ -1019,7 +1028,7 @@
                                     </div>
                                 @endif
 
-                                    @if($onetimeControlList->count()>0)
+                                    @if($loggedInUserIsQualified && $onetimeControlList->count()>0)
                                         <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
                                         @foreach($onetimeControlList as $control_equipment_item)
                                             <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,

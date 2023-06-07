@@ -195,4 +195,9 @@
         {
             return EquipmentFuntionControl::where('equipment_id', $this->id)->count() > 0;
         }
+
+        static public function countInstances(Equipment $equipment){
+            return Equipment::where('produkt_id',$equipment->produkt_id)->count();
+        }
+
     }

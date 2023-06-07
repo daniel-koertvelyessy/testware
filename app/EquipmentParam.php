@@ -3,17 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class EquipmentParam extends Model
 {
-    /**
-     * @param  int  $param_id
-     * @param  string  $param_value
-     * @param  int  $equipment_id
-     *
-     * @return bool
-     */
+
+    public function addParam(
+        string $label,
+        string $value,
+        string $name,
+        int $equipment_id
+    ):bool
+    {
+        $this->ep_label = $label;
+        $this->ep_name = $name;
+        $this->ep_value = $value;
+        $this->equipment_id = $equipment_id;
+        return $this->save();
+    }
+
     public function addEquipment(
         int $param_id,
         string $param_value,
@@ -28,19 +35,18 @@ class EquipmentParam extends Model
         return $this->save();
     }
 
-    /**
-     * @param  Request  $request
-     * @param  int  $equipment_id
-     *
-     * @return bool
-     */
     public function storeProductParameter(
         array $parameterData,
         int $equipment_id
     )
     : bool {
-        if (EquipmentParam::where('ep_label',
-                $parameterData['ep_label'] ?? $parameterData['pp_label'])->count() > 0) {
+
+
+        if (EquipmentParam::where('ep_label',$parameterData['ep_label'] ?? $parameterData['pp_label'])
+                ->where('equipment_id',$equipment_id)
+                ->count() > 0) {
+
+            $this->updateEquipmentParameter( $parameterData,  $equipment_id );
             return false;
         }
         $this->ep_label = $parameterData['ep_label'] ?? $parameterData['pp_label'];
@@ -54,12 +60,18 @@ class EquipmentParam extends Model
         }
     }
 
-    /**
-     * @param  Request  $request
-     * @param  int  $equipment_id
-     *
-     * @return bool
-     */
+    public function updateEquipmentParameter(Array $parameterData , Int $equipment_id):bool
+    {
+        $param = EquipmentParam::where('equipment_id',$equipment_id)
+            ->where('ep_label',$parameterData['ep_label'] ?? $parameterData['pp_label'])
+            ->first();
+        
+        $param->ep_name = $parameterData['ep_name'] ?? $parameterData['pp_name'];
+        $param->ep_value = $parameterData['ep_value'] ?? $parameterData['pp_value'];
+
+        return $param->update();
+    }
+
     public function deleteProductParameter(
         array $parameterData,
         int $equipment_id

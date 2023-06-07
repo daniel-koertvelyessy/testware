@@ -36,4 +36,20 @@ class ProduktParam extends Model
         return $this;
     }
 
+    public function addParam(
+        String $pp_label,
+        string $pp_name,
+        string $pp_value,
+        int $produkt_id
+    ):bool
+    {
+
+        $this->pp_label = $pp_label;
+        $this->pp_name = $pp_name;
+        $this->pp_value = $pp_value;
+        $this->produkt_id = $produkt_id;
+        return $this->save();
+
+    }
+
 }

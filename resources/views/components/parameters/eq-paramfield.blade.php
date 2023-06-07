@@ -7,7 +7,7 @@
         </div>
     @empty
         <div class="col">
-            <x-notifyer>{{ __('Die Kategorie hat keine Parameter') }}</x-notifyer>
+            <x-notifyer>{{ __('Das Gerät hat keine Parameter') }}</x-notifyer>
         </div>
     @endforelse
 </div>

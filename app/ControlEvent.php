@@ -47,7 +47,7 @@
                 'reportNo'         => $reportNo,
                 'requirement'      => $requirement,
                 'regulation'       => Verordnung::find($requirement->verordnung_id),
-                'requirementitems' => AnforderungControlItem::where('anforderung_id', $requirement->id)->get(),
+                'requirementitems' => AnforderungControlItem::where('anforderung_id', $requirement->id)->orderBy('aci_sort')->get(),
                 'ControlEquipment' => $controlEquipment,
                 'equipment'        => Equipment::find($controlEquipment->equipment_id),
                 'aci_execution'    => AnforderungControlItem::where('anforderung_id', $controlEquipment->Anforderung->id)->first()

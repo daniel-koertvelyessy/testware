@@ -64,7 +64,6 @@
     <input type="hidden"
            name="produkt_id"
            id="produkt_id_param_edit"
-           value=""
     >
     <input type="hidden"
            name="id"
@@ -82,7 +81,7 @@
             />
             <x-textfield id="pp_value_edit"
                          name="pp_value"
-                         label="{{__('Wert')}}"
+                         label="{{__('Standardwert')}}"
             />
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="checkUpdateEquipmentToo"

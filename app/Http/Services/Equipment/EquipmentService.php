@@ -112,6 +112,11 @@
 
         }
 
+        public function getParamList(Equipment $equipment)
+        {
+            return EquipmentParam::where('equipment_id',$equipment->id)->get();
+        }
+
         public function checkUpdatedFields(Request $request, Equipment $oldEquipment): array
         {
             $feld = '';
@@ -307,7 +312,7 @@
 
         public function getRecentExecutedControls(Equipment $equipment)
         {
-            return ControlEquipment::where('equipment_id',$equipment->id)->take(5)->latest()->onlyTrashed()->get();
+            return ControlEquipment::where('equipment_id',$equipment->id)->take(3)->latest()->onlyTrashed()->get();
         }
 
     }

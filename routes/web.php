@@ -276,6 +276,7 @@
         'ProductInstruction'     => 'ProductInstructedUserController',
         'ProductQualifiedUser'   => 'ProductQualifiedUserController',
         'productparameter'       => 'ProductParameterController',
+        'equipmentparameter'     => 'EquipmentParameterController',
         'lizenz'                 => 'LizenzController',
         'report'                 => 'ReportController',
         'search'                 => 'SearchController',

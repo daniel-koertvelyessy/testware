@@ -46,7 +46,7 @@
             <p>{!! __('Die nächste Prüfung wurde auf den <strong>:dueDate</strong> gesetzt.',['dueDate'=>$controlEvent->control_event_next_due_date]) !!}</p>
         </section>
     </article>
-    
+
     @if (!$aci_execution->Anforderung->is_external)
 
         <div class="row">

@@ -88,7 +88,7 @@
                 'reportNo'     => $reportNo,
                 'requirement' => $requirement,
                 'regulation' => Verordnung::find($requirement->verordnung_id),
-                'requirementitems' => AnforderungControlItem::where('anforderung_id',$requirement->id)->get()
+                'requirementitems' => AnforderungControlItem::where('anforderung_id',$requirement->id)->orderBy('aci_sort')->get()
             ])->render();
 
 

@@ -84,6 +84,60 @@
         </div>
     </div>
 
+    <x-modals.form_modal
+        title="{{ __('Parameter anlegen') }}"
+        method="POST"
+        modalId="modalAddEquipmentParameter"
+        modalRoute="{{ route('equipmentparameter.store') }}"
+        btnSubmit="{{ __('Parameter anlegen') }}"
+        modalType="sd"
+        modalCenter="true"
+    >
+        <input type="hidden"
+               name="equipment_id"
+               id="equipment_id"
+               value="{{ $equipment->id }}"
+        >
+        <div class="row">
+            <div class="col">
+                <x-rtextfield id="ep_label"
+                             name="ep_label"
+                             label="{{__('Label')}}"
+                />
+                <x-rtextfield id="ep_name"
+                             name="ep_name"
+                             label="{{__('Name')}}"
+                              max="150"
+                />
+                <x-rtextfield id="ep_value"
+                             name="ep_value"
+                             label="{{__('Wert')}}"
+                              max="150"
+                />
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox"
+                           class="custom-control-input"
+                           id="addParameterToProduct"
+                           name="addParameterToProduct"
+                    >
+                    <label class="custom-control-label"
+                           for="addParameterToProduct"
+                    >{{ __('Parameter auch dem Produkt anfügen') }}</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox"
+                           class="custom-control-input"
+                           id="polulateToAllEquipment"
+                           name="polulateToAllEquipment"
+                    >
+                    <label class="custom-control-label"
+                           for="polulateToAllEquipment"
+                    >{{ __('Alle Geräte des Produktes mit Parameter erweitern') }}</label>
+                </div>
+            </div>
+        </div>
+    </x-modals.form_modal>
+
 @endsection
 @section('content')
 
@@ -201,7 +255,7 @@
                             />
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col">
                             <h2 class="h4">{{ __('Parameter') }}</h2>
                         </div>
@@ -209,6 +263,11 @@
                     <x-parameters.eq-paramfield :params="\App\EquipmentParam::where('equipment_id',$equipment->id )->get()"
                                      mode="show"
                     />
+                    <button class="btn btn-sm btn-outline-secondary mt-3" id="addParameter" type="button" data-toggle="modal"
+                            data-target="#modalAddEquipmentParameter">{{ __('Neuen
+                    Parameter anlegen')
+                    }} <i class="fa fa-plus ml-1"></i></button>
+                    <hr class="my-3">
                     <div class="d-md-none">
                         <a role="button"
                            class="btn btn-outline-secondary mt-2 btn-block"
@@ -366,6 +425,17 @@
         $('.setFieldReadWrite').click(function () {
             ($(this).prop('checked')) ? $($(this).data('targetid')).attr('readonly', false) : $($(this).data('targetid')).attr('readonly', true)
         });
+
+        $(document).on("click","#polulateToAllEquipment",function () {
+            $("#addParameterToProduct").prop('checked',$(this).prop('checked'));
+        });
+
+        $(document).on("click","#addParameterToProduct",function () {
+            if (!$(this).prop('checked'))
+                $("#polulateToAllEquipment").prop('checked',false);
+        });
+
+
 
 
     </script>

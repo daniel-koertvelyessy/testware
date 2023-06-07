@@ -41,7 +41,7 @@
             </button>
         </div>
     </div>
-@else
+@elseif($mode==='show')
     <div class="input-group">
         <div class="input-group-prepend">
                     <span class="input-group-text"
@@ -49,7 +49,7 @@
                     >{{ $param->ep_name }}</span>
         </div>
         <input type="text"
-               class="form-control"
+               class="form-control text-right text-sm-left"
                placeholder="{{ $param->ep_name }}"
                aria-label="{{ $param->ep_name }}"
                id="{{ $param->ep_label . $param->id }}"
@@ -62,5 +62,9 @@
                value="{{ $param->id }}"
         >
     </div>
-
+@elseif($mode==='display')
+    <section class="p-2 border-bottom my-1">
+        <header class="small text-muted">{{ $param->ep_name }}:</header>
+        <span class="lead">{!! $param->ep_value !!}</span>
+    </section>
 @endif
