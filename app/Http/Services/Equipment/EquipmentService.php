@@ -262,7 +262,8 @@
         public function transferProductParameters(Request $request, Equipment $equipment)
         {
             if (isset($request->pp_id) && count($request->pp_id) > 0) {
-                for ($i = 0; $i < count($request->pp_id); $i++) (new EquipmentParam)->addEquipment($request->pp_id[$i], $request->ep_value[$i], $equipment->id);
+                for ($i = 0; $i < count($request->pp_id); $i++) (new EquipmentParam)->addEquipment(
+                    $request->pp_id[$i], $request->ep_value[$i], $equipment->id);
             }
         }
 
