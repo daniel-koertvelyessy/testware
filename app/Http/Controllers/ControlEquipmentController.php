@@ -210,29 +210,35 @@ class ControlEquipmentController extends Controller
 
         $control_event_id = $controlevent->id;
 
-        if (isset($request->event_item)) {
-            for ($i = 0; $i < count($request->event_item); $i++) {
-                $itemId = $request->event_item[$i];
-                $controlEventItem = new ControlEventItem();
-                $controlEventItem->control_item_aci = $itemId;
-                $controlEventItem->control_item_read = $request->control_item_read[$itemId][0] ?? null;
-                $controlEventItem->control_item_pass = $request->control_item_pass[$itemId][0];
-                ($request->control_item_pass[$itemId][0] === '1')
-                    ? $itempassed++
-                    : $itemfailed++;
-                $controlEventItem->control_event_id = $control_event_id;
-                $controlEventItem->equipment_id = $request->equipment_id;
-                $controlEventItem->save();
-            }
-        }
+        /**
+         *  Check, if control event is internaly executed and store values accordingly
+         */
+        if (! $controlEquipment->Anforderung->is_external) {
 
-        if (isset($request->control_event_equipment)) {
-            for ($i = 0; $i < count($request->control_event_equipment); $i++) {
-                if ($request->control_event_equipment[$i] !== '00') {
-                    $setControlEventEquipment = new ControlEventEquipment();
-                    $setControlEventEquipment->equipment_id = $request->control_event_equipment[$i];
-                    $setControlEventEquipment->control_event_id = $control_event_id;
-                    $setControlEventEquipment->save();
+            if (isset($request->event_item)) {
+                for ($i = 0; $i < count($request->event_item); $i++) {
+                    $itemId = $request->event_item[$i];
+                    $controlEventItem = new ControlEventItem();
+                    $controlEventItem->control_item_aci = $itemId;
+                    $controlEventItem->control_item_read = $request->control_item_read[$itemId][0] ?? null;
+                    $controlEventItem->control_item_pass = $request->control_item_pass[$itemId][0];
+                    ($request->control_item_pass[$itemId][0] === '1')
+                        ? $itempassed++
+                        : $itemfailed++;
+                    $controlEventItem->control_event_id = $control_event_id;
+                    $controlEventItem->equipment_id = $request->equipment_id;
+                    $controlEventItem->save();
+                }
+            }
+
+            if (isset($request->control_event_equipment)) {
+                for ($i = 0; $i < count($request->control_event_equipment); $i++) {
+                    if ($request->control_event_equipment[$i] !== '00') {
+                        $setControlEventEquipment = new ControlEventEquipment();
+                        $setControlEventEquipment->equipment_id = $request->control_event_equipment[$i];
+                        $setControlEventEquipment->control_event_id = $control_event_id;
+                        $setControlEventEquipment->save();
+                    }
                 }
             }
         }

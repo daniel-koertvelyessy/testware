@@ -772,7 +772,6 @@
 @endsection
 
 @section('content')
-
     <div class="container-fluid">
         <div class="row mb-2 d-md-flex d-none">
             <div class="col">
@@ -1031,11 +1030,13 @@
                                     @if($loggedInUserIsQualified && $onetimeControlList->count()>0)
                                         <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
                                         @foreach($onetimeControlList as $control_equipment_item)
+                                            @if($control_equipment_item)
                                             <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,
                                             'requirement'=>$control_equipment_item->id ]) }}" class="btn
                                             btn-outline-primary btn-block" >
                                                 {{$control_equipment_item->an_name}}
                                             </a>
+                                            @endif
                                         @endforeach
                                     @endif
 

@@ -193,11 +193,12 @@ class EquipmentController extends Controller {
         } else {
             $value = __('nicht zugeordnet');
         }
+
         return view('testware.equipment.show',
             [
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
                 'upcomingControlList' => $service->getUpcomingControlItems($equipment),
-                'onetimeControlList' => $service->getOntimeControlItems($equipment),
+                'onetimeControlList' => $service->getOneTimeControlItems($equipment),
                 'instructedPersonList' => $service->getInstruectedPersonList($equipment),
                 'requirementList' => $service->getRequirementList($equipment),
                 'recentControlList' => $service->getRecentExecutedControls($equipment),
