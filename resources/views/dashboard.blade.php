@@ -158,7 +158,7 @@
                             </thead>
                             <tbody>
                             @forelse(\App\ControlEquipment::join('anforderungs','anforderung_id','=','anforderungs.id')->with('Equipment')->take(10)->where('qe_control_date_due','<=',now()->addWeeks(4))->where('is_initial_test',false)->orderBy('qe_control_date_due')->get() as $controlEquipment)
-                                @if($controlEquipment->Equipment)
+                                @if($controlEquipment->Equipment && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
 
@@ -206,7 +206,7 @@
                             ->orderBy('qe_control_date_due')
                             ->take(10)->get() as $controlEquipment)
 
-                                @if($controlEquipment->Equipment)
+                                @if($controlEquipment->Equipment  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -245,7 +245,8 @@
                             </thead>
                             <tbody>
                             @forelse(\App\ControlEquipment::join('anforderungs','control_equipment.anforderung_id','=','anforderungs.id')->where('is_initial_test',false)->whereBetween('qe_control_date_due',[now(),date('Y'.'-12-31')])->orderBy('qe_control_date_due')->take(10)->get() as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && !$controlEquipment->Anforderung->is_initial_test)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
+                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -287,7 +288,7 @@
                             ->where('is_initial_test',false)
                             ->orderBy('qe_control_date_due')
                             ->get() as $controlEquipment)
-                                @if($controlEquipment->Equipment )
+                                @if($controlEquipment->Equipment  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>

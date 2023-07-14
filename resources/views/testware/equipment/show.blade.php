@@ -831,7 +831,7 @@
                 <x-datepicker
                         id="qe_control_date_last"
                         label="{{ __('Letzte Prüfung') }}"
-                        :value="$recentControlList->last()->deleted_at->toDateString()"
+                        value="{{  $recentControlList ?  $recentControlList->last()->deleted_at->toDateString() :'' }}"
                 />
             </div>
             <div class="col-md-6">
@@ -839,7 +839,8 @@
                         id="qe_control_date_due"
                         label="{{ __('Prüfung ist fällig zum') }}"
                         required="true"
-                        :value="now()->addWeeks($requirementList->first()->anforderung->an_date_warn)->toDateString()"
+                        value="{{ $recentControlList ?  now()->addWeeks($requirementList->first()->anforderung->an_date_warn)->toDateString
+                        () : '' }}"
                 />
             </div>
         </div>
