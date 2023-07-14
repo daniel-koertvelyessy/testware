@@ -19,6 +19,11 @@ class ControlEquipment extends Model
     public $sortable = [
         'id',
         'qe_control_date_due',
+        'archived_at',
+    ];
+
+    protected $casts = [
+        'archived_at' =>'date'
     ];
 
     public function Equipment()

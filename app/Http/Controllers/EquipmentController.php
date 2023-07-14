@@ -199,6 +199,7 @@ class EquipmentController extends Controller {
                 'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
                 'upcomingControlList' => $service->getUpcomingControlItems($equipment),
                 'onetimeControlList' => $service->getOneTimeControlItems($equipment),
+                'controlList' => $service->getAllControlItems($equipment),
                 'instructedPersonList' => $service->getInstruectedPersonList($equipment),
                 'requirementList' => $service->getRequirementList($equipment),
                 'recentControlList' => $service->getRecentExecutedControls($equipment),

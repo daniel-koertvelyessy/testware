@@ -127,6 +127,16 @@ class EquipmentService {
 
     }
 
+    public function getAllControlItems(Equipment $equipment)
+    {
+
+        return ControlEquipment::withTrashed()
+            ->where('equipment_id',$equipment->id)
+            ->orderBy('updated_at')
+            ->get();
+
+    }
+
     public function getParamList(Equipment $equipment)
     {
         return EquipmentParam::where('equipment_id',

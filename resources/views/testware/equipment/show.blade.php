@@ -52,6 +52,14 @@
                 <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
                 {{__('Funktionstest erfassen')}}
             </a>
+            <a class="dropdown-item {{  ($loggedInUserIsQualified )? '' : 'disabled' }}"
+               href="#"
+               data-toggle="modal"
+               data-target="#modalAddEquipControl"
+            >
+                <i class="ml-2 fas fa-calendar-alt mr-2 fa-fw"></i>
+                {{__('Prüfung planen')}}
+            </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"
                href="{{ route('makePDFEquipmentDataSheet',$equipment->id) }}"
@@ -61,14 +69,14 @@
                 {{__('Datenblatt drucken')}}
             </a>
             @if(\App\EquipmentLabel::select('id')->count() >0 )
-            <a class="dropdown-item"
-               href="{{ route('makePDFEquipmentLabel',$equipment->id) }}"
-               target="_blank"
-            >
-                <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
-                {{__('QR-Code drucken')}}
-            </a>
-                @else
+                <a class="dropdown-item"
+                   href="{{ route('makePDFEquipmentLabel',$equipment->id) }}"
+                   target="_blank"
+                >
+                    <i class="ml-2 fas fa-qrcode mr-2 fa-fw"></i>
+                    {{__('QR-Code drucken')}}
+                </a>
+            @else
                 <a class="dropdown-item disabled"
                    title="{{ __('Es sind keine Labels vorhanden.') }}"
                 >
@@ -476,7 +484,9 @@
                                 >
                                     @foreach(App\Profile::select('id','ma_name','ma_vorname')->get() as $trainee)
                                         @if(! $trainee->isInstructed($equipment->id))
-                                            <option value="{{ $trainee->id }}">{{ $trainee->ma_vorname . ' '. $trainee->ma_name }}</option>
+                                            <option
+                                                    value="{{ $trainee->id }}"
+                                            >{{ $trainee->ma_vorname . ' '. $trainee->ma_name }}</option>
                                         @endif
                                     @endforeach
                                 </x-selectfield>
@@ -488,7 +498,9 @@
                                 >
                                     <option value="0">{{ __('bitte auswählen') }}</option>
                                     @foreach(App\EquipmentQualifiedUser::where('equipment_id',$equipment->id)->with('user')->get() as $qualifiedUser)
-                                        <option value="{{ $qualifiedUser->user->id }}">{{ $qualifiedUser->user->name }}</option>
+                                        <option
+                                                value="{{ $qualifiedUser->user->id }}"
+                                        >{{ $qualifiedUser->user->name }}</option>
                                     @endforeach
                                 </x-selectfield>
                                 <x-selectfield id="equipment_instruction_instructor_firma_id"
@@ -560,7 +572,6 @@
             </form>
         </div>
     </div>
-
 
     <div class="modal fade"
          id="modalStartManualControl"
@@ -760,6 +771,82 @@
         </div>
     </div>
 
+    <x-modals.form_modal method="POST"
+                         modalId="modalAddEquipControl"
+                         title="{{ __('Neue Prüfung anlegen') }}"
+                         btnSubmit="{{ __('Prüfung anlegen') }}"
+                         modalRoute="{{ route('control.add') }}"
+    >
+        <input type="hidden"
+               name="equipment_id"
+               id="equipment_id"
+               value="{{ $equipment->id }}"
+        >
+        <div class="row">
+            <div class="col">
+                <x-selectfield id="anforderung_id"
+                               required="true"
+                               label="{{ __('Anforderung') }}"
+                >
+                    @forelse($requirementList as $item)
+                        <option value="{{ $item->anforderung_id }}">
+                            {{ $item->Anforderung->an_label }}
+                        </option>
+                    @empty
+                        <option value="">noper</option>
+                    @endforelse
+                </x-selectfield>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <x-rnumberfield id="qe_control_date_warn"
+                                label="{{ __('Vorwarnzeit') }}"
+                                value="{{
+                $requirementList->first()->anforderung->an_date_warn
+                 }}"
+                />
+            </div>
+            <div class="col-md-6">
+                <x-selectfield id="control_interval_id"
+                               required="true"
+                               label="{{ __('Zeitraum') }}"
+                >
+                    @forelse(\App\ControlInterval::all() as $item)
+                        <option value="{{ $item->id }}"
+                                @if($item->id === $requirementList->first()->anforderung->warn_interval_id)
+                                    selected
+                                @endif
+                        >
+                            {{ $item->ci_label }}
+                        </option>
+                    @empty
+                        <option value="">noper</option>
+                    @endforelse
+                </x-selectfield>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <x-datepicker
+                        id="qe_control_date_last"
+                        label="{{ __('Letzte Prüfung') }}"
+                        :value="$recentControlList->last()->deleted_at->toDateString()"
+                />
+            </div>
+            <div class="col-md-6">
+                <x-datepicker
+                        id="qe_control_date_due"
+                        label="{{ __('Prüfung ist fällig zum') }}"
+                        required="true"
+                        :value="now()->addWeeks($requirementList->first()->anforderung->an_date_warn)->toDateString()"
+                />
+            </div>
+        </div>
+
+
+    </x-modals.form_modal>
+
     <x-modals.form_modal methode="DELETE"
                          modalRoute="{{ route('equipment.destroy',$equipment) }}"
                          modalId="modalDeleteThisEuipment"
@@ -769,6 +856,7 @@
     >
         <p class="lead">{{__('Das Löschen des Gerätes kann nicht rückgängig gemacht werden.')}}</p>
     </x-modals.form_modal>
+
 @endsection
 
 @section('content')
@@ -905,14 +993,16 @@
                                 />
                             </div>
                             @if($parameterListItems->count() > 0)
-                            <div class="col-md-2 mb-3">
-                                <h2 class="h4 mb-2">{{__('Parameter')}}</h2>
+                                <div class="col-md-2 mb-3">
+                                    <h2 class="h4 mb-2">{{__('Parameter')}}</h2>
 
-                                @foreach($parameterListItems as $param)
-                                    <x-parameters.parameter-item-eq mode="display" :param="$param" />
-                                @endforeach
+                                    @foreach($parameterListItems as $param)
+                                        <x-parameters.parameter-item-eq mode="display"
+                                                                        :param="$param"
+                                        />
+                                    @endforeach
 
-                            </div>
+                                </div>
                             @endif
                             <div class="col-md-5 pl-3 mb-3">
                                 @if ($equipment->produkt->ControlProdukt)
@@ -921,11 +1011,15 @@
                                     <h2 class="h4 mb-2">{{__('Gerätestatus')}}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                    <span
+                                            class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    ></span>
                                     <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"></span>
+                                    <span
+                                            class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    ></span>
                                     <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
 
@@ -944,7 +1038,9 @@
                                         />
                                     @endif
                                 @empty
-                                    <span class="text-muted text-center small">{{__('keine Anleitungen hinterlegt')}}</span>
+                                    <span
+                                            class="text-muted text-center small"
+                                    >{{__('keine Anleitungen hinterlegt')}}</span>
                                 @endforelse
                                 {{--     <h2 class="h4 mt-5">{{__('Funktionstest')}}</h2>
                                      @forelse(App\EquipmentDoc::where('equipment_id',$equipment->id)->where('document_type_id',2)->get() as $bda)
@@ -1027,18 +1123,20 @@
                                     </div>
                                 @endif
 
-                                    @if($loggedInUserIsQualified && $onetimeControlList->count()>0)
-                                        <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
-                                        @foreach($onetimeControlList as $control_equipment_item)
-                                            @if($control_equipment_item)
+                                @if($loggedInUserIsQualified && $onetimeControlList->count()>0)
+                                    <h3 class="h6">{{ __('Einmalige Prüfungen') }}</h3>
+                                    @foreach($onetimeControlList as $control_equipment_item)
+                                        @if($control_equipment_item)
                                             <a href="{{ route('control.manual',['equipment'=> $equipment->eq_uid,
-                                            'requirement'=>$control_equipment_item->id ]) }}" class="btn
-                                            btn-outline-primary btn-block" >
+                                            'requirement'=>$control_equipment_item->id ]) }}"
+                                               class="btn
+                                            btn-outline-primary btn-block"
+                                            >
                                                 {{$control_equipment_item->an_name}}
                                             </a>
-                                            @endif
-                                        @endforeach
-                                    @endif
+                                        @endif
+                                    @endforeach
+                                @endif
 
                                 @if($recentControlList->count()>0)
                                     <h3 class="h6 mt-3">{{ __('Durchgeführte Prüfungen') }}</h3>
@@ -1089,8 +1187,9 @@
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
                                             <td>{{ $equipmentUser->firma->fa_name ?? '-' }}</td>
                                             <td style="padding: 0; vertical-align: middle; text-align: right;">
-                                                <form action="{{ route('EquipmentQualifiedUser.destroy',$equipmentUser) }}"
-                                                      method="post"
+                                                <form
+                                                        action="{{ route('EquipmentQualifiedUser.destroy',$equipmentUser) }}"
+                                                        method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
@@ -1135,15 +1234,17 @@
                                             <td style="vertical-align: middle;">{{ $instructedUser->profile->ma_name }}</td>
                                             <td style="vertical-align: middle;">{{ $instructedUser->equipment_instruction_date }}</td>
                                             <td>
-                                                <img src="{{ $instructedUser->equipment_instruction_trainee_signature }}"
-                                                     class="img-fluid"
-                                                     style="max-height: 40px"
-                                                     alt="unterschrift"
+                                                <img
+                                                        src="{{ $instructedUser->equipment_instruction_trainee_signature }}"
+                                                        class="img-fluid"
+                                                        style="max-height: 40px"
+                                                        alt="unterschrift"
                                                 >
                                             </td>
                                             <td style="vertical-align: middle; text-align:right; padding:0">
-                                                <form action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}#requirements"
-                                                      method="post"
+                                                <form
+                                                        action="{{ route('EquipmentInstruction.destroy',$instructedUser) }}#requirements"
+                                                        method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
@@ -1170,7 +1271,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-5 pb-3">
                                 <div class="dropdown-divider my-4 d-block d-sm-none"></div>
                                 <h3 class="h5">{{__('Anforderungen')}}</h3>
 
@@ -1186,6 +1287,184 @@
                                 @empty
                                     <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft')}}
                                         !</p>
+                                @endforelse
+
+                                <div class="dropdown-divider my-4"></div>
+                                <h3 class="h5">{{__('Prüfungen')}}</h3>
+                                @forelse($controlList as $item)
+
+                                    <div class="modal fade"
+                                         id="editControlItemModal{{$item->id}}"
+                                         tabindex="-1"
+                                         aria-labelledby="editControlItemModalLabel{{$item->id}}"
+                                         aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <form action="{{ route('control.update',$item->id) }}#requirements"
+                                                      method="POST"
+                                                >
+                                                    @csrf
+                                                    @method('PUT')
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="editControlItemModalLabel{{$item->id}}"
+                                                        >{{ __('Prüfungsdaten bearbeiten') }}</h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <div class="row">
+                                                            <div class="form-group col">
+                                                                <label for="anforderung_id_{{$item->id}}">{{ __
+                                                                    ('Anforderung') }}</label>
+                                                                {!! (new \App\Http\Services\Control\ControlEquipmentService)->setRequirementSelector(
+                                                                    'anforderung_id',
+                                                                    $item->id,
+                                                                    $item->anforderung_id
+                                                                ) !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="qe_control_date_last_{{$item->id}}">
+                                                                    {{ __('Letzte Prüfung') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control datepicker"
+                                                                       id="qe_control_date_last_{{$item->id}}"
+                                                                       name="qe_control_date_last"
+                                                                       value="{{ $item->qe_control_date_last }}"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label for="qe_control_date_due_{{$item->id}}">{{
+                                                                     __('Prüfung fällig') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control datepicker"
+                                                                       id="qe_control_date_due_{{$item->id}}"
+                                                                       name="qe_control_date_due"
+                                                                       value="{{ $item->qe_control_date_due }}"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label for="control_archived_at_{{$item->id}}">{{
+                                                                     __('Prüfung archiviert') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control datepicker"
+                                                                       id="control_archived_at_{{$item->id}}"
+                                                                       name="archived_at"
+                                                                       value="{{ $item->archived_at ?
+                                                                       $item->archived_at->toDateString() :''
+                                                                        }}"
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4">
+                                                                <label
+                                                                        for="qe_control_date_warn_{{$item->id}}">{{ __('Vorlauf') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control"
+                                                                       id="qe_control_date_warn_{{$item->id}}"
+                                                                       name="qe_control_date_warn"
+                                                                       value="{{ $item->qe_control_date_warn }}"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group col-md-8">
+                                                                <label for="control_interval_id_{{$item->id}}">{{
+                                                                     __('Intervall') }}</label>
+                                                                {!! (new \App\Http\Services\Control\ControlEquipmentService)->setIntervalTypeSelector(
+                                                                    'control_interval_id',
+                                                                    $item->id,
+                                                                    $item->control_interval_id
+                                                                ) !!}
+                                                            </div>
+
+                                                        </div>
+                                                        <input type="hidden"
+                                                               name="equipment_id"
+                                                               id="equipment_id_{{ $item->id }}"
+                                                               value="{{ $item->equipment_id }}"
+                                                        >
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"
+                                                                class="btn btn-secondary"
+                                                                data-dismiss="modal"
+                                                        >{{ __('Abbruch') }}
+                                                        </button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary"
+                                                        >{{ __('Aktualisieren') }}
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="d-flex justify-content-between align-items-center px-2">
+                                        <span class="{{  !$item->deleted_at && $item->qe_control_date_due < now() ?
+                                        'text-danger' : ''}}"
+                                        >
+                                            {{ $item->anforderung->an_label }} / {{ $item->qe_control_date_due }}
+                                        </span>
+                                        <span class="d-flex align-items-center">
+
+                                            @if($item->deleted_at)
+                                                <span class="disabled mx-1">
+                                                    <i class="fas fa-edit text-muted"
+                                                       title="{{ __('Prüfung abgeschlossen') }}"
+                                                    ></i>
+                                                </span>
+                                                <span class="disabled mx-1">
+                                                    <i class="fas fa-external-link-alt text-muted"
+                                                       title="{{ __('Prüfung abgeschlossen') }}"
+                                                    ></i>
+                                                </span>
+                                                <i class="fas fa-check-square text-success mx-1"
+                                                   title="{{ __('Prüfung wurde :am durchgeführt',
+                                                   ['am'=>$item->deleted_at->toDateString()]) }}"
+                                                ></i>
+                                            @else
+                                                <a role="button"
+                                                   class="mx-1"
+                                                   data-toggle="modal"
+                                                   data-target="#editControlItemModal{{$item->id}}"
+                                                >
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{{ route('control.create', ['test_id' =>  $item->id]) }}"
+                                                   target="_blank"
+                                                   title="{{ __('Prüfung durchführen') }}"
+                                                   class="mx-1"
+                                                >
+                                                   <i class="fas fa-external-link-alt text-success"></i>
+                                                </a>
+                                                <i class="far fa-square text-muted mx-1"></i>
+                                            @endif
+
+                                            @if($item->archived_at)
+                                                <i class="fas fa-archive text-success mx-1"
+                                                   title="{{ __('Prüfung wurde archiviert') }}"
+                                                ></i>
+                                            @else
+                                                <i class="fas fa-archive text-muted mx-1"
+                                                   title="{{ __('Prüfung nicht archiviert') }}"
+                                                ></i>
+                                            @endif
+
+                                        </span>
+                                    </p>
+                                @empty
+                                    <p class="text-muted small">{{ __('Bislang sind keine Prüfungen angelegt')}}!</p>
                                 @endforelse
                             </div>
                         </div>
@@ -1251,9 +1530,10 @@
                                                     @if(Storage::disk('local')->exists($equipDoc->eqdoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                      method="get"
-                                                                      id="downloadEquipmentDoku_{{ $equipDoc->id }}"
+                                                                <form
+                                                                        action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                        method="get"
+                                                                        id="downloadEquipmentDoku_{{ $equipDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1265,8 +1545,12 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                    <span
+                                                                            class="d-md-none"
+                                                                    >{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                    <span
+                                                                            class="d-none d-md-inline"
+                                                                    >{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell">{{ $equipDoc->DocumentType->doctyp_label }}</td>
@@ -1274,10 +1558,11 @@
                                                                 {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
                                                             </td>
                                                             <td>
-                                                                <x-deletebutton action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
-                                                                                tabtarget="documents"
-                                                                                prefix="EquipmentDoku"
-                                                                                id="{{ $equipDoc->id }}"
+                                                                <x-deletebutton
+                                                                        action="{{ route('equipDoku.destroy',$equipDoc->id) }}"
+                                                                        tabtarget="documents"
+                                                                        prefix="EquipmentDoku"
+                                                                        id="{{ $equipDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1307,9 +1592,10 @@
                                                     @if(Storage::disk('local')->exists($equipFunctionDoc->eqdoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                      method="get"
-                                                                      id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
+                                                                <form
+                                                                        action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                        method="get"
+                                                                        id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1321,8 +1607,12 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $equipDoc->eqdoc_label }}</span>
+                                                                    <span
+                                                                            class="d-md-none"
+                                                                    >{{ str_limit($equipDoc->eqdoc_label,20) }}</span>
+                                                                    <span
+                                                                            class="d-none d-md-inline"
+                                                                    >{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell"> {{ $equipFunctionDoc->DocumentType->doctyp_label }}</td>
@@ -1330,10 +1620,11 @@
                                                                 {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                             </td>
                                                             <td>
-                                                                <x-deletebutton action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
-                                                                                tabtarget="documents"
-                                                                                prefix="EquipmentFunction"
-                                                                                id="{{ $equipFunctionDoc->id }}"
+                                                                <x-deletebutton
+                                                                        action="{{ route('equipDoku.destroy',$equipFunctionDoc->id) }}#documents"
+                                                                        tabtarget="documents"
+                                                                        prefix="EquipmentFunction"
+                                                                        id="{{ $equipFunctionDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1363,9 +1654,10 @@
                                                     @if(Storage::disk('local')->exists($produktDoc->proddoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form action="{{ route('downloadProduktDokuFile') }}#documents"
-                                                                      method="get"
-                                                                      id="downloadProdDoku_{{ $produktDoc->id }}"
+                                                                <form
+                                                                        action="{{ route('downloadProduktDokuFile') }}#documents"
+                                                                        method="get"
+                                                                        id="downloadProdDoku_{{ $produktDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1377,8 +1669,12 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
                                                                 >
-                                                                    <span class="d-md-none">{{ str_limit($produktDoc->proddoc_label,20) }}</span>
-                                                                    <span class="d-none d-md-inline">{{ $produktDoc->proddoc_label }}</span>
+                                                                    <span
+                                                                            class="d-md-none"
+                                                                    >{{ str_limit($produktDoc->proddoc_label,20) }}</span>
+                                                                    <span
+                                                                            class="d-none d-md-inline"
+                                                                    >{{ $produktDoc->proddoc_label }}</span>
                                                                 </a>
                                                             </td>
                                                             <td class="d-none d-md-table-cell">

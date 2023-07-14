@@ -296,6 +296,8 @@
     require __DIR__ . '/produkttools/produkttools.php';
 
     Route::post('equip_document_add', 'EquipmentDocController@add')->name('equipdoc.add');
+    Route::post('control_add', 'ControlEquipmentController@add')->name('control.add');
+    Route::put('control_archive/{controlequipment}', 'ControlEquipmentController@archive')->name('control.archive');
 
     Route::get('equipment/status/{equipmentState}', 'EquipmentController@statuslist')->name('equipment.statuslist');
 

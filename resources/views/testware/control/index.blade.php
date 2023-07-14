@@ -38,7 +38,8 @@
                     </thead>
                     <tbody>
                     @forelse ($controlItems as $controlItem)
-                        @if($controlItem->Equipment && $controlItem->Anforderung && !$controlItem->Anforderung->is_initial_test)
+                        @if($controlItem->Equipment && $controlItem->Anforderung &&
+                        !$controlItem->Anforderung->is_initial_test && ! $controlItem->archived_at)
                             <tr>
                                 <td>
                                     <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
@@ -197,23 +198,76 @@
 
                                         <a role="button"
                                            class="small text-danger mx-1"
-                                           onclick="$('#deleteEquipmentControlItem{{$controlItem->id}}').submit()"
+                                           data-toggle="modal"
+                                           data-target="#deleteControlItemModal{{$controlItem->id}}"
                                         >
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
 
-                                        <form action="{{ route('control.destroy',$controlItem) }}"
-                                              id="deleteEquipmentControlItem{{$controlItem->id}}"
-                                              method="POST"
+                                        <div class="modal fade"
+                                             id="deleteControlItemModal{{$controlItem->id}}"
+                                             tabindex="-1"
+                                             aria-labelledby="deleteControlItemModalLabel{{$controlItem->id}}"
+                                             aria-hidden="true"
                                         >
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden"
-                                                   name="id"
-                                                   id="deleteEquipmentControlId{{$controlItem->id}}"
-                                                   value="{{$controlItem->id}}"
-                                            >
-                                        </form>
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title text-white"
+                                                            id="deleteControlItemModalLabel{{$controlItem->id}}"
+                                                        >{{ __('Eintrag löschen') }}</h5>
+                                                        <button type="button"
+                                                                class="close text-white"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <p class="lead">Die Prüfung wird aus der Datenbank
+                                                                    entfernt und kann
+                                                                    nicht wierder hergestellt werden. Als Alternative
+                                                                    kann die Prüfung auch archiviert werden. Sie tauch
+                                                                    damit nicht mehr in den aktiven Listen auf.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col d-flex justify-content-between">
+                                                                <form action="{{ route('control.archive',$controlItem)
+                                                                 }}"
+                                                                      method="POST"
+                                                                >
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <button class="btn btn-outline-secondary"
+                                                                    >Prüfung archivieren
+                                                                    </button>
+                                                                </form>
+
+                                                                <form action="{{ route('control.destroy',$controlItem) }}"
+                                                                      id="deleteEquipmentControlItem{{$controlItem->id}}"
+                                                                      method="POST"
+                                                                >
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <input type="hidden"
+                                                                           name="id"
+                                                                           id="deleteEquipmentControlId{{$controlItem->id}}"
+                                                                           value="{{$controlItem->id}}"
+                                                                    >
+                                                                    <button class="btn btn-outline-danger">Endgültig
+                                                                        löschen
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </td>
                                 @endif
