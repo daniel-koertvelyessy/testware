@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col-md-7">
                 <form action="{{ route('verordnung.update',$verordnung) }}" method="POST" id="frmEditVerordnungen" name="frmEditVerordnungen">
                     @csrf
                     @method('PUT')
@@ -47,6 +47,41 @@
                     <x-btnMain>{{__('Verordnung aktualisieren')}}</x-btnMain>
 
                 </form>
+            </div>
+            <div class="col-md-5">
+                <h2 class="h4">Anforderungen in der Verordnung</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Erstellt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @forelse(\App\Anforderung::where('verordnung_id',$verordnung->id)->get() as $requirement)
+                        <tr>
+                            <td>
+                                <a href="{{ route('anforderung.show', $requirement) }}">{{ $requirement->an_name }}</a></td>
+                            <td>{{ $requirement->created_at->DiffForHumans() }}</td>
+                            <td></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2">
+                                <x-notifyer>Keine Anforderungen gefunden</x-notifyer>
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                    <tfooter>
+                        <tr>
+                            <td colspan="2">
+                                <a href="{{ route('anforderung.create') }}?v={{ $verordnung->id }}">Neue Anforderung
+                                    anlegen</a>
+                            </td>
+                        </tr>
+                    </tfooter>
+                </table>
             </div>
         </div>
 

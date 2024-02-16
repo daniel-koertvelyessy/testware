@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AciDataSet;
 use App\Anforderung;
 use App\AnforderungControlItem;
 use App\ControlEventItem;
@@ -12,11 +13,14 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AnforderungControlItemController extends Controller
 {
+
+    private int $keepChars = 5;
 
     public function __construct(
     )
@@ -97,6 +101,29 @@ class AnforderungControlItemController extends Controller
         }
     }
 
+    public function copy(AnforderungControlItem $anforderungcontrolitem, Request $request)
+    {
+
+        $copy = $this->findCopies($anforderungcontrolitem->aci_label);
+
+        $copy_aci = $anforderungcontrolitem->replicate()->fill([
+            'aci_label' => substr($anforderungcontrolitem->aci_label,0,$this->keepChars).'_copy_' . $copy+1,
+            'aci_sort' => $anforderungcontrolitem->aci_sort + 5
+                                                               ]);
+
+        $msg = ($copy_aci->save())
+            ? __('Der Prüfschritt <strong>:label</strong> wurde kopiert',
+                 ['label' => request('aci_label')])
+            : __('Fehler beim Kopieren von Prüfschritt <strong>:label</strong>!',
+                 ['label' => request('aci_label')]);
+        $request->session()->flash('status', $msg);
+        return back();
+    }
+
+    private function findCopies(String $label):Int{
+        return AnforderungControlItem::withTrashed()->where('aci_label','ILIKE',substr($label,0,$this->keepChars).'%' )->count();
+    }
+
     public function fixbroken(
         AnforderungControlItem $aci, Request $request
     ) {
@@ -112,7 +139,7 @@ class AnforderungControlItemController extends Controller
         return back();
     }
 
-    /**
+     /**
      * Copy an existing resource in storage.
      *
      * @param  AnforderungControlItem  $anforderungcontrolitem
@@ -120,6 +147,9 @@ class AnforderungControlItemController extends Controller
      *
      * @return RedirectResponse
      */
+
+     /*
+
     public function copy(
         AnforderungControlItem $anforderungcontrolitem,
         Request $request
@@ -135,6 +165,7 @@ class AnforderungControlItemController extends Controller
         return redirect()->route('anforderungcontrolitem.show',
             ['anforderungcontrolitem' => $newAci]);
     }
+    */
 
     /**
      * Display the specified resource.
@@ -149,8 +180,12 @@ class AnforderungControlItemController extends Controller
         return view('admin.verordnung.anforderungitem.show',
             [
                 'anforderungcontrolitem' => $anforderungcontrolitem,
-                'testEventFromItem' => ControlEventItem::withTrashed()->with('ControlEvent')->where('control_item_aci',
-                    $anforderungcontrolitem->id)->get()
+                'testEventFromItem' => ControlEventItem::withTrashed()
+                                                       ->with('ControlEvent')
+                                                       ->where('control_item_aci', $anforderungcontrolitem->id)
+                                                       ->get(),
+                'dataSetItems' => AciDataSet::all()
+                                            ->sortBy('data_point_sort')
             ]);
     }
 
@@ -184,11 +219,17 @@ class AnforderungControlItemController extends Controller
     public function destroy(
         AnforderungControlItem $anforderungcontrolitem
     ) {
-        request()->session()->flash('status',
-            __('Der Prüfschritt <strong>:name</strong> wurde gelöscht!',
-                ['name' => $anforderungcontrolitem->aci_name]));
-        $anforderungcontrolitem->delete();
-        return redirect()->route('anforderungcontrolitem.index');
+
+       $msg =( $this->renameLabelPriorSoftDelete($anforderungcontrolitem) && $anforderungcontrolitem->delete() )
+           ?  __('Der Prüfschritt <strong>:name</strong> wurde gelöscht!',['name' => $anforderungcontrolitem->aci_name])
+           :  __('Der Prüfschritt <strong>:name</strong> konnte nicht gelöscht werden!',['name' => $anforderungcontrolitem->aci_name]);
+        request()->session()->flash('status', $msg);
+        return back();
+    }
+
+    private function renameLabelPriorSoftDelete(AnforderungControlItem $aci):bool{
+        $aci->aci_label = substr(Str::uuid(), 0,19);
+        return $aci->save();
     }
 
     public function applySort(

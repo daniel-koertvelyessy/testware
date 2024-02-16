@@ -1975,6 +1975,10 @@
                     data: {id: ui.item.id},
                     success: function (res) {
 
+                        $('#ckAddNewFirma').prop('checked', false)
+                        $('#ckAddNewAddress').prop('checked', false)
+                        $('#ckAddNewContact').prop('checked', false)
+
                         $('#adress_id').val(res.adresse.id);
                         $('#ad_labels').val(res.adresse.ad_label);
                         $('#address_type_id').val(res.adresse.address_type_id);
@@ -1992,12 +1996,15 @@
                         $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
                         $('#fa_vat').val(res.firma.fa_vat);
 
-                        $('#anrede_id').val(res.contact.anrede_id);
-                        $('#con_label').val(res.contact.con_label);
-                        $('#con_vorname').val(res.contact.con_vorname);
-                        $('#con_name').val(res.contact.con_name);
-                        $('#con_telefon').val(res.contact.con_telefon);
-                        $('#con_email').val(res.contact.con_email);
+                        if (res.contact) {
+                            $('#anrede_id').val(res.contact.anrede_id);
+                            $('#con_label').val(res.contact.con_label);
+                            $('#con_vorname').val(res.contact.con_vorname);
+                            $('#con_name').val(res.contact.con_name);
+                            $('#con_telefon').val(res.contact.con_telefon);
+                            $('#con_email').val(res.contact.con_email);
+                        }
+
 
                     }
                 });

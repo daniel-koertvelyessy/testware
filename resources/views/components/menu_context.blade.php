@@ -1,6 +1,6 @@
 <div class="btn-group {{ (isset($right) ? 'dropright' : 'dropleft') }}">
     <button type="button"
-            class="btn btn-sm m-0"
+            class="btn btn-sm m-0 mx-lg-2 p-0"
             id="editObjekt{{ $object->id }}"
             data-toggle="dropdown"
             aria-haspopup="true"
@@ -11,6 +11,17 @@
     <div class="dropdown-menu"
          aria-labelledby="editObjekt{{ $object->id }}"
     >
+        @if(isset($modalOpen))
+            <button type="button"
+               id="context_item_openmodal_{{ $object->id }}"
+               class="dropdown-item context_item_open btn-link"
+               data-toggle="modal"
+               data-target="{{ $modalOpen }}"
+            >
+                <i class="fas fa-folder-open mr-2 fa-fw"></i>
+                {{__('Öffnen')}}
+            </button>
+        @endif
         @if($routeOpen!=='#')
             <a href="{{ $routeOpen }}"
                id="context_item_open_{{ $object->id }}"
@@ -65,7 +76,7 @@
         @if($routeCopy!=='#')
             <form action="{{ $routeCopy }}#{{$tabName??''}}"
                   id="frm_copy_object_{{ $object->id }}"
-                  method="post"
+                  method="get"
             >
                 @csrf
                 <input type="hidden"

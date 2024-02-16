@@ -152,7 +152,7 @@ Route::get('getUsedAdressesByAdressType', 'AdminController@getUsedAdressesByAdre
 //Route::post('createAnforderung', 'AdminController@createAnforderung')->name('createAnforderung');
 //Route::post('addNewAnforderungControlItem', 'AdminController@addNewAnforderungControlItem')->name('addNewAnforderungControlItem');
 Route::get('getAnforderungControlItemData', 'AnforderungControlItemController@getAnforderungControlItemData')->name('getAnforderungControlItemData');
-Route::post('anforderungcontrolitem.copy/{anforderungcontrolitem}', 'AnforderungControlItemController@copy')->name('anforderungcontrolitem.copy');
+Route::get('anforderungcontrolitem/{anforderungcontrolitem}/copy', 'AnforderungControlItemController@copy')->name('anforderungcontrolitem.copy');
 Route::post('anforderungcontrolitem/{anforderung}/applySort', 'AnforderungControlItemController@applySort')->name('anforderungcontrolitem.applySort');
 Route::get('anforderungcontrolitemlistitems', 'AnforderungControlItemController@getAciList')->name('anforderungcontrolitemlistitems');
 Route::put('anforderungcontrolitem/{aci}/fix', 'AnforderungControlItemController@fixbroken')->name('anforderungcontrolitem.fixbroken');
@@ -264,3 +264,9 @@ Route::get('checkStorageValid', 'AdminController@checkStorageValid')->name('chec
 
 Route::delete('deleteTypeLager', 'AdminController@deleteTypeLager')->name('deleteTypeLager');
 Route::delete('deleteTypeEquip', 'AdminController@deleteTypeEquip')->name('deleteTypeEquip');
+
+
+/**
+ *      Tests
+ */
+//Route::get('', 'AdminController@checkStorageValid')->name('checkStorageValid');

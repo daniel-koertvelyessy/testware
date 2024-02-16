@@ -379,6 +379,7 @@
                                 <i class="fa fa-sort"></i>
                             </button>
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -402,10 +403,20 @@
                             <td>
                                 {{ $aci->aci_sort }}
                             </td>
+                            <td>
+                                <x-menu_context
+                                        :object="$aci"
+                                        route-open="{{ route('anforderungcontrolitem.show',$aci) }}"
+                                        route-copy="{{ route('anforderungcontrolitem.copy',$aci) }}"
+                                        routeDestory="{{ route('anforderungcontrolitem.destroy',$aci) }}"
+                                        object-name="{{ $aci->name }}"
+                                        object-val="{{ $aci->name }}"
+                                />
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                                 <span class="text-muted">{{__('Keine Prüfungen gefunden')}}</span>
                             </td>
                         </tr>

@@ -209,6 +209,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+        dd($request->number);
         if ($this->checkProductExists($request->number))
             return response()->json([
                 'error'=>'',
