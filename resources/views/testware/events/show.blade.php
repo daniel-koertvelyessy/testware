@@ -69,6 +69,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal"
          id="modalAcceptEvent"
          tabindex="-1"

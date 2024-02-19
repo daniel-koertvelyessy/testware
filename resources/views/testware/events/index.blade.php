@@ -37,7 +37,8 @@
                                 </td>
                                 <td class="d-none d-md-table-cell">{{ Carbon\Carbon::parse($equipmentEvent->read)->DiffForHumans() ?? __('offen') }}</td>
                                 <td>
-                                    {{ $equipmentEvent->equipment->produkt->prod_label }} /
+                                    {{ $equipmentEvent->equipment->eq_name ??
+                                    $equipmentEvent->equipment->produkt->prod_label }} /
                                     {{ $equipmentEvent->equipment->eq_inventar_nr }}
                                 </td>
                                 <td class="d-none d-md-table-cell">{{ $equipmentEvent->User->name }}</td>

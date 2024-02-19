@@ -97,7 +97,7 @@ class EquipmentEventController extends Controller
 
         $event_item = (new EquipmentEventItem)->addItem($request);
 
-        $equipment = Equipment::find($request->equipment_id)->first();
+        $equipment = Equipment::where('id',$request->equipment_id)->first();
         $euipStatIsNotChanged = ($equipment->equipment_state_id == $request->equipment_state_id);
 
         if (!$euipStatIsNotChanged) {

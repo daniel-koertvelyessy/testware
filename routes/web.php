@@ -1,6 +1,7 @@
 <?php
 
 use App\Contact;
+use App\ControlEquipment;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
@@ -203,8 +204,47 @@ Route::get('docs/api/endpoints/events', function () {
 })->name('docs.api.events');
 
 Route::get('/dashboard', function () {
+
+    $maxListItems = 15;
+
+    $equipmentTestFourWeekList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
+                                                 ->with('Equipment')->take($maxListItems)
+                                                 ->where('qe_control_date_due', '<=', now()->addWeeks(4))
+                                                 ->where('is_initial_test', false)
+                                                 ->orderBy('qe_control_date_due')
+                                                 ->get();
+
+    $equipmentTestMonthList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
+                                              ->with('Equipment')
+                                              ->take($maxListItems)
+                                              ->where('qe_control_date_due', '>', now()->addWeeks(4))
+                                              ->where('qe_control_date_due', '<=', now()->addMonths(4))
+                                              ->where('is_initial_test', false)
+                                              ->orderBy('qe_control_date_due')
+                                              ->get();
+
+    $equipmentTestYearList = ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
+                                             ->where('is_initial_test', false)
+                                             ->whereBetween('qe_control_date_due', [now(), date('Y' . '-12-31')])
+                                             ->orderBy('qe_control_date_due')
+                                             ->take($maxListItems)
+                                             ->get();
+
+    $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
+                                         ->with('Equipment')
+                                         ->where('is_initial_test', false)
+                                         ->orderBy('qe_control_date_due')
+                                         ->get();
+
     $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
-    return view('dashboard', compact('initialiseApp'));
+    return view('dashboard', [
+        'initialiseApp'             => $initialiseApp,
+        'maxListItems'              => $maxListItems,
+        'equipmentTestFourWeekList' => $equipmentTestFourWeekList,
+        'equipmentTestMonthList'    => $equipmentTestMonthList,
+        'equipmentTestYearList'     => $equipmentTestYearList,
+        'equipmentTestList'         => $equipmentTestList,
+    ]);
 })->name('dashboard')->middleware('auth');
 
 Route::put('user.resetPassword',
