@@ -139,7 +139,7 @@
                            role="tab"
                            aria-controls="controlAll"
                            aria-selected="false"
-                        >{{__('Alle')}}  <x-notifyer>({{ $equipmentTestYearList->count() }})</x-notifyer></a>
+                        >{{__('Alle')}}  <x-notifyer>({{ $equipmentTestList->count() }})</x-notifyer></a>
                     </div>
                 </nav>
                 <div class="tab-content"
