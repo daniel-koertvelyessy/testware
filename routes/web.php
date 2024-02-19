@@ -205,10 +205,10 @@ Route::get('docs/api/endpoints/events', function () {
 
 Route::get('/dashboard', function () {
 
-    $maxListItems = 15;
+    $maxListItems = 10;
 
     $equipmentTestFourWeekList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                                 ->with('Equipment')->take($maxListItems)
+                                                 ->with('Equipment')
                                                  ->where('qe_control_date_due', '<=', now()->addWeeks(4))
                                                  ->where('is_initial_test', false)
                                                  ->orderBy('qe_control_date_due')
@@ -216,7 +216,7 @@ Route::get('/dashboard', function () {
 
     $equipmentTestMonthList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
                                               ->with('Equipment')
-                                              ->take($maxListItems)
+                                              
                                               ->where('qe_control_date_due', '>', now()->addWeeks(4))
                                               ->where('qe_control_date_due', '<=', now()->addMonths(4))
                                               ->where('is_initial_test', false)
@@ -227,7 +227,7 @@ Route::get('/dashboard', function () {
                                              ->where('is_initial_test', false)
                                              ->whereBetween('qe_control_date_due', [now(), date('Y' . '-12-31')])
                                              ->orderBy('qe_control_date_due')
-                                             ->take($maxListItems)
+                                             
                                              ->get();
 
     $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')

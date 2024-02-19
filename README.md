@@ -3,7 +3,7 @@
 ## Content
 testWare enables you manage the testing and maintanace of your location and equipment. 
 
-Current version: `1.74.27`
+Current version: `1.74.28`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
@@ -11,6 +11,9 @@ Current version: `1.74.27`
 
 1. [Install testWare instance](#install-testware-instance)
 2. [Run the web-installer](#run-the-web-installer)
+
+
+View the complete documentation at [https://docs.testware.io](https://docs.testware.io)
 
 
 ## Install testWare instance

@@ -45,7 +45,7 @@ class EquipmentEventCreated extends Notification
      */
     public function toMail($notifiable)
     {
-        $equipment = Equipment::find($this->equipmentEvent->equipment_id)->first();
+        $equipment = Equipment::where('id',$this->equipmentEvent->equipment_id)->first();
         return (new MailMessage)
             ->subject('testWare Serviceinfo: Neue Schadensmeldung eingegangen!')
             ->greeting('Hallo !')

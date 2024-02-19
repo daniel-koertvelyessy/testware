@@ -46,7 +46,7 @@ class AppController extends Controller
         $eh->save();
 
 
-        foreach((new Equipment)->qualifiedUserList(Equipment::find($equipment->equipment_id)) as $qualifiedUser){
+        foreach((new Equipment)->qualifiedUserList(Equipment::where('id',$equipment->equipment_id)) as $qualifiedUser){
             Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
         }
 

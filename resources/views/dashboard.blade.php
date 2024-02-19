@@ -160,8 +160,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($equipmentTestFourWeekList as $controlEquipment)
-                                @if($controlEquipment->Equipment && ! $controlEquipment->archived_at)
+                            @forelse($equipmentTestFourWeekList->take($maxListItems) as $controlEquipment)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
+                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}">
@@ -182,6 +183,15 @@
                                     </td>
                                 </tr>
                             @endforelse
+                            @if($equipmentTestFourWeekList->count()>0 && $equipmentTestFourWeekList->count() > $maxListItems)
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
+                                            ['num' => $equipmentTestFourWeekList->count()-$maxListItems])
+                                            }}</a>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -201,9 +211,9 @@
                             </thead>
                             <tbody>
 
-                            @forelse($equipmentTestMonthList as $controlEquipment)
-
-                                @if($controlEquipment->Equipment  && ! $controlEquipment->archived_at)
+                            @forelse($equipmentTestMonthList->take($maxListItems) as $controlEquipment)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
+                                                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -216,6 +226,7 @@
                                         <td></td>
                                     </tr>
                                 @endif
+
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -223,6 +234,15 @@
                                     </td>
                                 </tr>
                             @endforelse
+                            @if($equipmentTestMonthList->count()>0 && $equipmentTestMonthList->count() > $maxListItems)
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
+                                            ['num' => $equipmentTestMonthList->count()-$maxListItems])
+                                            }}</a>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -241,7 +261,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($equipmentTestYearList as $controlEquipment)
+                            @forelse($equipmentTestYearList->take($maxListItems) as $controlEquipment)
                                 @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
                                 !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
                                     <tr>
@@ -263,6 +283,15 @@
                                     </td>
                                 </tr>
                             @endforelse
+                            @if($equipmentTestYearList->count()>0 && $equipmentTestYearList->count() > $maxListItems)
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
+                                            ['num' => $equipmentTestYearList->count()-$maxListItems])
+                                            }}</a>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -281,7 +310,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($equipmentTestList as $controlEquipment)
+                            @forelse($equipmentTestList->take($maxListItems) as $controlEquipment)
                                 @if($controlEquipment->Equipment  && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
@@ -302,6 +331,15 @@
                                     </td>
                                 </tr>
                             @endforelse
+                            @if($equipmentTestList->count()>0 && $equipmentTestList->count() > $maxListItems)
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
+                                            ['num' => $equipmentTestList->count()-$maxListItems])
+                                            }}</a>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>

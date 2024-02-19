@@ -56,6 +56,7 @@ class EquipmentEventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     *
      * @param  Request $request
      *
      * @return RedirectResponse
