@@ -41,16 +41,16 @@ class AppController extends Controller
         $eh = new EquipmentHistory();
 
         $eh->eqh_eintrag_kurz = __('Schadensmeldung');
-        $eh->eqh_eintrag_text = 'Gerät wurde über die App als beschädigt gemeldet. Das Event wurde ausgelöst und wird nachverfolgt.';
+        $eh->eqh_eintrag_text = __('Gerät wurde über die App als beschädigt gemeldet. Das Event wurde ausgelöst und wird nachverfolgt.');
         $eh->equipment_id = $equipment->equipment_id;
         $eh->save();
 
 
-        foreach((new Equipment)->qualifiedUserList(Equipment::where('id',$equipment->equipment_id)) as $qualifiedUser){
+        foreach((new Equipment)->qualifiedUserList(Equipment::where('id',$equipment->equipment_id)->first()) as $qualifiedUser){
             Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
         }
 
-        $request->session()->flash('status', 'Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!');
+        $request->session()->flash('status', __('Schadensmeldung wurde erfolgreich eingereicht. Vielen Dank!'));
         return \Auth::user() ?  redirect()->route('dashboard') : redirect()->route('portal-main');
     }
 

@@ -115,7 +115,7 @@
                            role="tab"
                            aria-controls="controlWeek"
                            aria-selected="true"
-                        >4 {{__('Wochen')}} <x-notifyer>({{ $equipmentTestFourWeekList->count() }})</x-notifyer></a>
+                        >4 {{__('Wochen')}} <x-notifyer>({{ $equipmentTestWeekList->count() }})</x-notifyer></a>
                         <a class="nav-link"
                            id="controlMonth-tab"
                            data-toggle="tab"
@@ -139,7 +139,7 @@
                            role="tab"
                            aria-controls="controlAll"
                            aria-selected="false"
-                        >{{__('Alle')}}  <x-notifyer>({{ $equipmentTestList->count() }})</x-notifyer></a>
+                        >{{__('Alle')}} <x-notifyer>({{ $equipmentTestList->count() }})</x-notifyer></a>
                     </div>
                 </nav>
                 <div class="tab-content"
@@ -160,9 +160,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($equipmentTestFourWeekList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
-                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
+                            @forelse($equipmentTestWeekList->take($maxListItems) as $controlEquipment)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}">
@@ -183,11 +182,11 @@
                                     </td>
                                 </tr>
                             @endforelse
-                            @if($equipmentTestFourWeekList->count()>0 && $equipmentTestFourWeekList->count() > $maxListItems)
+                            @if($equipmentTestWeekList->count()>0 && $equipmentTestWeekList->count() > $maxListItems)
                                 <tr>
                                     <td colspan="4" class="text-center">
                                         <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
-                                            ['num' => $equipmentTestFourWeekList->count()-$maxListItems])
+                                            ['num' => $equipmentTestWeekList->count()-$maxListItems])
                                             }}</a>
                                     </td>
                                 </tr>
@@ -212,8 +211,7 @@
                             <tbody>
 
                             @forelse($equipmentTestMonthList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
-                                                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
@@ -262,8 +260,7 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestYearList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung &&
-                                !$controlEquipment->Anforderung->is_initial_test  && ! $controlEquipment->archived_at)
+                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
                                             <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>

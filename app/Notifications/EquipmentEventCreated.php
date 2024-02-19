@@ -47,10 +47,10 @@ class EquipmentEventCreated extends Notification
     {
         $equipment = Equipment::where('id',$this->equipmentEvent->equipment_id)->first();
         return (new MailMessage)
-            ->subject('testWare Serviceinfo: Neue Schadensmeldung eingegangen!')
-            ->greeting('Hallo !')
-                    ->line('Es wurde eine Schadensmeldung für ein Geräte erzeugt. Bitte prüfen Sie den Vorgang in der testWare.')
-                    ->action('Direkter Link zum Gerät', route('equipment.show',$equipment))
+            ->subject(__('testWare Serviceinfo: Neue Schadensmeldung eingegangen!'))
+            ->greeting(__('Hallo !'))
+                    ->line(__('Es wurde eine Schadensmeldung für ein Geräte erzeugt. Bitte prüfen Sie den Vorgang in der testWare.'))
+                    ->action(__('Direkter Link zum Gerät '),route('equipment.show',$equipment))
                     ->line('Diese Meldung erscheint auch in Ihrem Dashboard, wenn Sie sich das nächste mal anmelden!')
                     ->line('Ihr testWare Team');
     }
