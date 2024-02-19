@@ -47,8 +47,9 @@ class ControlEquipmentController extends Controller
     public function index()
     {
         $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
+        $archivedControlItems = ControlEquipment::with('Equipment', 'Anforderung')->whereNotNull('archived_at')->get();
         $isSysAdmin = \Auth::user()->isSysAdmin();
-        return view('testware.control.index', compact('controlItems', 'isSysAdmin'));
+        return view('testware.control.index', compact('controlItems', 'isSysAdmin', 'archivedControlItems'));
 
     }
 
@@ -125,6 +126,19 @@ class ControlEquipmentController extends Controller
 
         return back();
     }
+    public function reactivate(Request $request, ControlEquipment $controlequipment)
+    {
+        $controlequipment->archived_at = NULL;
+        $msg = $controlequipment->save()
+            ? __('Prüfung wurde reaktiviert')
+            : __('Die Prüfung konnte nicht reaktiviert werden');
+
+        session()->flash('status', $msg);
+
+        return back();
+    }
+
+
 
     public function add(Request $request): RedirectResponse
     {

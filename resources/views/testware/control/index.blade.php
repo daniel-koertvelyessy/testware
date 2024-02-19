@@ -284,7 +284,6 @@
                                     </blockquote>
                                 </td>
                             </tr>
-
                         @endif
                     @empty
                         <tr>
@@ -299,6 +298,241 @@
                     <div class="d-flex justify-content-center">
                         {!! $controlItems->withQueryString()->onEachSide(2)->links()??'' !!}
                     </div>
+                @endif
+
+                @if($isSysAdmin && $archivedControlItems->count()>0)
+                    <hr class="my-4">
+                    <h2 class="h4" >{{__('Archivierte Prüfungen')}}</h2>
+                    <table class="table table-striped"
+                           id="tabControlListe"
+                    >
+                        <thead>
+                        <tr>
+                            <th>@sortablelink('Anforderung.an_name', __('Prüfung'))</th>
+                            <th class="d-none d-md-table-cell">@sortablelink('Equipment.eq_name', __('Gerät'))</th>
+                            <th>@sortablelink('Equipment.eq_inventar_nr', __('Inventarnummer'))</th>
+                            <th>@sortablelink('qe_control_date_due', __('Fällig'))</th>
+                            @if($isSysAdmin)
+                                <th>
+
+                                </th>
+                            @endif
+                        </tr>
+                        </thead>
+                        <tbody>
+                    @foreach($archivedControlItems as $controlItem)
+                        @if($controlItem->archived_at!==NULL)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('control.create',['test_id' => $controlItem]) }}">
+                                    <span class="d-md-none">
+                                        {{ $controlItem->Anforderung->an_label??'n.a.' }}
+                                    </span>
+                                        <span class="d-none d-md-table-cell">
+                                    @if($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
+                                                <a href="{{ route('anforderung.show',$controlItem->Anforderung) }}">
+                                        {{ $controlItem->Anforderung->an_name }}
+                                        </a>
+                                                <span>
+                                        {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
+                                        </span>
+                                            @else
+                                                {{ $controlItem->Anforderung->an_name ?? 'na'}}
+                                            @endif
+                                    </span>
+                                    </a>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    {{ $controlItem->Equipment->eq_name }}
+                                </td>
+                                <td>
+                                    <a href="{{ route('equipment.show',['equipment' => $controlItem->Equipment]) }}">{{ $controlItem->Equipment->eq_inventar_nr }} </a>
+                                </td>
+                                <td>
+                                    {!! $controlItem->checkDueDate($controlItem) !!}
+                                    @if ($controlItem->Anforderung->isInComplete($controlItem->Anforderung))
+                                        <span class="d-md-none">
+                                        {!! $controlItem->Anforderung->isInComplete($controlItem->Anforderung)['msg'] !!}
+                                    </span>
+                                    @endif
+                                </td>
+                                <td>
+
+                                    <a role="button"
+                                       class="small"
+                                       data-toggle="modal"
+                                       data-target="#editControlItemModal{{$controlItem->id}}"
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <div class="modal fade"
+                                         id="editControlItemModal{{$controlItem->id}}"
+                                         tabindex="-1"
+                                         aria-labelledby="editControlItemModalLabel{{$controlItem->id}}"
+                                         aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                                            <div class="modal-content">
+                                                <form action="{{ route('control.update',$controlItem) }}"
+                                                      method="POST"
+                                                >
+                                                    @csrf
+                                                    @method('PUT')
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="editControlItemModalLabel{{$controlItem->id}}"
+                                                        >{{ __('Eintrag bearbeiten') }}</h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="form-group col">
+                                                                <label for="qe_control_eq_name_{{$controlItem->id}}">{{ __('Zu prüfendes Gerät') }}</label>
+                                                                <input type="text"
+                                                                       readonly
+                                                                       class="form-control-plaintext"
+                                                                       id="qe_control_eq_name_{{$controlItem->id}}"
+                                                                       name="qe_control_eq_name"
+                                                                       value="{{ $controlItem->Equipment->eq_name }}"
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col">
+                                                                <label for="anforderung_id_{{$controlItem->id}}">{{ __('Anforderung') }}</label>
+                                                                {!! (new \App\Http\Services\Control\ControlEquipmentService)->setRequirementSelector(
+                                                                    'anforderung_id',
+                                                                    $controlItem->id,
+                                                                    $controlItem->anforderung_id
+                                                                ) !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="qe_control_date_last_{{$controlItem->id}}">{{ __('Letzte Prüfung') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control datepicker"
+                                                                       id="qe_control_date_last_{{$controlItem->id}}"
+                                                                       name="qe_control_date_last"
+                                                                       value="{{ $controlItem->qe_control_date_last }}"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="qe_control_date_due_{{$controlItem->id}}">{{ __('Prüfung fällig') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control datepicker"
+                                                                       id="qe_control_date_due_{{$controlItem->id}}"
+                                                                       name="qe_control_date_due"
+                                                                       value="{{ $controlItem->qe_control_date_due }}"
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="qe_control_date_warn_{{$controlItem->id}}">{{ __('Vorlauf') }}</label>
+                                                                <input type="text"
+                                                                       class="form-control"
+                                                                       id="qe_control_date_warn_{{$controlItem->id}}"
+                                                                       name="qe_control_date_warn"
+                                                                       value="{{ $controlItem->qe_control_date_warn }}"
+                                                                >
+                                                            </div>
+                                                            <div class="form-group col-md-8">
+                                                                <label for="control_interval_id_{{$controlItem->id}}">{{ __('Intervall') }}</label>
+                                                                {!! (new \App\Http\Services\Control\ControlEquipmentService)->setIntervalTypeSelector(
+                                                                    'control_interval_id',
+                                                                    $controlItem->id,
+                                                                    $controlItem->control_interval_id
+                                                                ) !!}
+                                                            </div>
+
+                                                        </div>
+                                                        <input type="hidden"
+                                                               name="equipment_id"
+                                                               id="equipment_id_{{ $controlItem->id }}"
+                                                               value="{{ $controlItem->equipment_id }}"
+                                                        >
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"
+                                                                class="btn btn-secondary"
+                                                                data-dismiss="modal"
+                                                        >{{ __('Abbruch') }}
+                                                        </button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary"
+                                                        >{{ __('Aktualisieren') }}
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a role="button"
+                                       class="small text-success mx-1"
+                                       data-toggle="modal"
+                                       data-target="#reactivateControlItem{{$controlItem->id}}"
+                                    >
+                                        <i class="fas fa-redo"></i>
+                                    </a>
+
+                                    <div class="modal fade"
+                                         id="reactivateControlItem{{$controlItem->id}}"
+                                         tabindex="-1"
+                                         aria-labelledby="reactivateControlItemLabel{{$controlItem->id}}"
+                                         aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"
+                                                        id="reactivateControlItemLabel{{$controlItem->id}}"
+                                                    >{{ __('Eintrag wiederherstellen') }}</h5>
+                                                    <button type="button"
+                                                            class="close text-white"
+                                                            data-dismiss="modal"
+                                                            aria-label="Close"
+                                                    >
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <div class="row">
+                                                        <div class="col d-flex justify-content-between">
+                                                            <form action="{{ route('control.reactivate',$controlItem)
+                                                                 }}"
+                                                                  method="POST"
+                                                            >
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button class="btn btn-outline-secondary"
+                                                                >Prüfung wiederherstellen
+                                                                </button>
+                                                            </form>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @endif
+                    @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
         </div>

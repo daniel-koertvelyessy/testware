@@ -205,17 +205,19 @@ Route::get('docs/api/endpoints/events', function () {
 
 Route::get('/dashboard', function () {
 
-    $maxListItems = 5;
+    $maxListItems = 15;
 
     $equipmentTestWeekList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                                 ->with('Equipment')
-                                                 ->where('qe_control_date_due', '<=', now()->addWeeks(4))
-                                                 ->where('is_initial_test', false)
-                                                 ->orderBy('qe_control_date_due')
-                                                 ->get();
+                                             ->with('Equipment')
+                                             ->where('qe_control_date_due', '<=', now()->addWeeks(4))
+                                             ->where('archived_at', NULL)
+                                             ->where('is_initial_test', false)
+                                             ->orderBy('qe_control_date_due')
+                                             ->get();
 
     $equipmentTestMonthList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
                                               ->with('Equipment')
+                                              ->where('archived_at', NULL)
                                               ->where('qe_control_date_due', '>', now()->addWeeks(4))
                                               ->where('qe_control_date_due', '<=', now()->addMonths(4))
                                               ->where('is_initial_test', false)
@@ -224,24 +226,26 @@ Route::get('/dashboard', function () {
 
     $equipmentTestYearList = ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
                                              ->where('is_initial_test', false)
+                                             ->where('archived_at', NULL)
                                              ->whereBetween('qe_control_date_due', [now(), date('Y' . '-12-31')])
                                              ->orderBy('qe_control_date_due')
                                              ->get();
 
     $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
                                          ->with('Equipment')
+                                         ->where('archived_at', NULL)
                                          ->where('is_initial_test', false)
                                          ->orderBy('qe_control_date_due')
                                          ->get();
 
     $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
     return view('dashboard', [
-        'initialiseApp'             => $initialiseApp,
-        'maxListItems'              => $maxListItems,
-        'equipmentTestWeekList' => $equipmentTestWeekList,
-        'equipmentTestMonthList'    => $equipmentTestMonthList,
-        'equipmentTestYearList'     => $equipmentTestYearList,
-        'equipmentTestList'         => $equipmentTestList,
+        'initialiseApp'          => $initialiseApp,
+        'maxListItems'           => $maxListItems,
+        'equipmentTestWeekList'  => $equipmentTestWeekList,
+        'equipmentTestMonthList' => $equipmentTestMonthList,
+        'equipmentTestYearList'  => $equipmentTestYearList,
+        'equipmentTestList'      => $equipmentTestList,
     ]);
 })->name('dashboard')->middleware('auth');
 
@@ -315,6 +319,7 @@ require __DIR__ . '/produkttools/produkttools.php';
 Route::post('equip_document_add', 'EquipmentDocController@add')->name('equipdoc.add');
 Route::post('control_add', 'ControlEquipmentController@add')->name('control.add');
 Route::put('control_archive/{controlequipment}', 'ControlEquipmentController@archive')->name('control.archive');
+Route::put('control/{controlequipment}/reactivate', 'ControlEquipmentController@reactivate')->name('control.reactivate');
 
 Route::get('equipment/status/{equipmentState}', 'EquipmentController@statuslist')->name('equipment.statuslist');
 
