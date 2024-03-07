@@ -253,8 +253,10 @@
                         <div class="col mb-3 flex justify-content-between">
                             <p class="lead p-3 border d-flex justify-content-between align-items-center">
                                 <span>{{ $test->Anforderung->an_name }}</span>
-                                <a href="{{ route('anforderung.show',$test->Anforderung) }}" class="btn btn-sm"
-                                   target="_blank">Öffnen <i class="fa fa-external-link-square-alt"></i></a>
+                                <a href="{{ route('anforderung.show',$test->Anforderung) }}"
+                                   class="btn btn-sm"
+                                   target="_blank"
+                                >{{__('Öffnen')}} <i class="fa fa-external-link-square-alt"></i></a>
                             </p>
 
                         </div>
@@ -295,7 +297,7 @@
                          aria-labelledby="controlEquipment-tab"
                     >
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-3">
                                 <h2 class="h5">{{__('Verwendete Prüfmittel')}}</h2>
 
                                 <x-selectgroup id="set_control_equipment"
@@ -310,7 +312,7 @@
                                                     @if($controlEquipmentAvaliable)
                                                         class="disabled"
                                                     disabled
-                                                @endif
+                                                    @endif
                                             >{{ $controlEquipment->eq_name }} => {{__('Prüfung überfällig!')}}
                                             </option>
 
@@ -333,7 +335,9 @@
                                 >{{ __('Das Geräte ist hat keine, oder keine gültige Prüfungen absolviert und kann nicht ausgewählt werden.') }}</span>
 
                                 @if(!$controlEquipmentAvaliable)
-                                    <div class="alert alert-danger mt-5" role="alert">
+                                    <div class="alert alert-danger mt-5"
+                                         role="alert"
+                                    >
                                         <h4 class="alert-heading">Achtung!</h4>
                                         <p>Es sind keine Prüfgeräte verfügbar, welche einen gültigen Prüfstatus
                                             besitzen. Sollte die Prüfung trotzdem durchgeführt werden, ist die
@@ -360,10 +364,9 @@
                                     data-showtab="#controlHead-tab"
                             >{{__('zurück')}}</button>
                             <button type="button"
-                                    class="btn btn-sm btn-primary bentNextTab btnCheckPMList disabled"
+                                    class="btn btn-sm btn-primary bentNextTab btnCheckPMListMal was ganz anderes: "
                                     data-showtab="#controlSteps-tab"
                                     id="btn-controlSteps-tab"
-                                    disabled
                             >{{__('weiter')}}</button>
                         </div>
                     </div>
@@ -422,7 +425,7 @@
                                        accept=".pdf,.tif,.tiff,.png,.jpg,jpeg"
                                        @if (! $is_external)
                                            required
-                                    @endif
+                                        @endif
                                 >
                                 <label class="custom-file-label"
                                        for="prodDokumentFile"
@@ -493,7 +496,7 @@
                                                    id="control_event_supervisor_signature"
                                                    @if(!$controlEquipmentAvaliable)
                                                        required
-                                                @endif
+                                                    @endif
                                             >
                                             <label for="control_event_supervisor_name"
                                                    class="sr-only"
@@ -529,20 +532,20 @@
                         <div class="col">
                             <h2 class="h4">{{__('Abschluss')}}</h2>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-3">
                                     <p class="lead">{{__('Basieren auf den Ergebnissen hat das Gerät die Prüfung')}}
                                         : </p>
                                     <div class="btn-group btn-group-toggle mt-md-4"
                                          data-toggle="buttons"
                                     >
-                                        <label class="btn btn-outline-success active">
+                                        <label class="btn btn-lg btn-outline-success active">
                                             <input type="radio"
                                                    id="controlEquipmentPassed"
                                                    name="control_event_pass"
                                                    value="1"
                                             > {{__('Bestanden')}}
                                         </label>
-                                        <label class="btn btn-outline-danger">
+                                        <label class="btn btn-lg btn-outline-danger">
                                             <input type="radio"
                                                    id="controlEquipmentNotPassed"
                                                    name="control_event_pass"
@@ -567,7 +570,7 @@
                                     <p class="lead">{{__('Erinnerung setzen')}}</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <x-textfield id="qe_control_date_warn"
+                                            <x-rnumberfield id="qe_control_date_warn"
                                                          label="{{ __('Anzahl') }}"
                                                          value="{{ $test->Anforderung->an_date_warn }}"
                                             />
@@ -578,7 +581,7 @@
                                             >
                                                 @foreach(\App\ControlInterval::all() as $CIitem)
                                                     <option
-                                                        value="{{ $CIitem->id }}" {{ $test->Anforderung->warn_interval_id === $CIitem->id ? ' selected ' : '' }}>{{ $CIitem->ci_name }}</option>
+                                                            value="{{ $CIitem->id }}" {{ $test->Anforderung->warn_interval_id === $CIitem->id ? ' selected ' : '' }}>{{ $CIitem->ci_name }}</option>
                                                 @endforeach
                                             </x-selectfield>
                                         </div>
@@ -704,48 +707,70 @@
          *   Handle control equipments
          */
         let noteNode = $('#notice_expired_item');
+        let ControlEquipmentToListContent = '';
         noteNode.hide();
-        $('.btnAddControlEquipmentToList').click(function () {
+        const ControlEquipmentToList = $('#ControlEquipmentToList');
+
+        /**
+         *  Check local storage, if it has content to be displayed
+         */
+
+        if(sessionStorage.getItem('ControlEquipmentToListContent')){
+            ControlEquipmentToList.html(sessionStorage.getItem('ControlEquipmentToListContent'));
+        }
+
+
+        $(document).on('click', '.btnAddControlEquipmentToList', function () {
             const nd = $('#set_control_equipment :selected');
+            const controlEquipmentListItem = $('.controlEquipmentListItem');
             if (nd.prop('disabled')) {
                 noteNode.show();
                 return;
             }
+            const btnControlSteps = $('#btn-controlSteps-tab');
             const equip_id = nd.val();
             const text = nd.text();
             const html = `
-<li class="controlEquipmentListItem list-group-item d-flex justify-content-between align-items-center" id="control_equipment_item_${equip_id}">
-<span>${text}</span>
-<input type="hidden"
-name="control_event_equipment[]"
-id="control_event_equipment_${equip_id}"
-value="${equip_id}"
->
-<button type="button"
-class="btn btn-sm m-0 btnDeleteControlEquipItem"
-data-targetid="#control_equipment_item_${equip_id}"
->
-<i class="fas fa-times"></i>
-</button>
-</li>
+    <li class="controlEquipmentListItem list-group-item d-flex justify-content-between align-items-center" id="control_equipment_item_${equip_id}">
+        <span>${text}</span>
+        <input type="hidden"
+               name="control_event_equipment[]"
+               id="control_event_equipment_${equip_id}"
+               value="${equip_id}"
+        >
+        <button type="button"
+                class="btn btn-sm m-0 btnDeleteControlEquipItem"
+                data-targetid="#control_equipment_item_${equip_id}"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+    </li>
 `;
             $('.controlEquipmentListInitialItem').remove();
             $('#set_control_equipment').removeClass('is-invalid');
             $('#ControlEquipmentToList').append(html);
 
-            if ($('.controlEquipmentListItem').length > 0) $('#btn-controlSteps-tab').prop('disabled', false).removeClass('disabeld');
+
+            btnControlSteps.prop('disabled', false);
+            if (btnControlSteps.hasClass('disabled'))
+                btnControlSteps.removeClass('disabeld');
+
+            sessionStorage.setItem('ControlEquipmentToListContent',ControlEquipmentToList.html());
 
         });
+
         $(document).on('click', '.btnDeleteControlEquipItem', function () {
             $($(this).data('targetid')).remove();
             if ($('.controlEquipmentListItem').length === 0) {
                 $('#ControlEquipmentToList').append(`
 <li class="controlEquipmentListInitialItem list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
-<span>{{__('Keine Prüfmittel ausgewählt')}}</span>
-<span class="fas fa-exclamation"></span>
+    <span>{{__('Keine Prüfmittel ausgewählt')}}</span>
+    <span class="fas fa-exclamation"></span>
 </li>
 `);
+                $('#btn-controlSteps-tab').prop('disabled', true).addClass('disabeld');
             }
+            sessionStorage.setItem('ControlEquipmentToListContent',ControlEquipmentToList.html());
         });
 
 

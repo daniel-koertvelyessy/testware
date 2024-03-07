@@ -74,13 +74,13 @@ class AciDataSetController extends Controller
      * @param \App\AciDataSet $acidataset
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, AciDataSet $acidataset)
+    public function update(AciDataSet $acidataset)
     {
       //  dd($request);
        $msg = $acidataset->update($this->validateAciDataSet())
            ? __('Datensatz wurde aktualisiert')
            : __('Fehler beim Aktualisieren');
-        $request->session()->flash('status', $msg);
+        session()->flash('status', $msg);
 
         return back();
     }
@@ -88,12 +88,18 @@ class AciDataSetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\AciDataSet $aciDataSet
-     * @return \Illuminate\Http\Response
+     * @param \App\AciDataSet $acidataset
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(AciDataSet $aciDataSet)
+    public function destroy(AciDataSet $acidataset)
     {
-        //
+        $msg = $acidataset->delete()
+            ? __('Datensatz wurde gelöscht')
+            : __('Fehler beim Löschen');
+        session()->flash('status', $msg);
+
+        return back();
+
     }
 
 

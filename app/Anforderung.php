@@ -117,4 +117,10 @@
                 ]
                 : false;
         }
+
+        public function isInternal(): bool
+        {
+
+            return ! $this->is_external;
+        }
     }

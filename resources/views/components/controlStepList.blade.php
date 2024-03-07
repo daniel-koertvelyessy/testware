@@ -6,7 +6,7 @@
             @forelse (App\AnforderungControlItem::where('anforderung_id',$requirement->id)->orderBy('aci_sort')->get() as $aci)
 
                 <tr>
-                    <td colspan="4"
+                    <td colspan="5"
                         class="m-0 p-0"
                     >
                         <input type="hidden"
@@ -40,101 +40,128 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="col"
-                        class="d-none d-md-table-cell"
-                    >{{__('Beschreibung der Prüfung')}}
-                    </th>
-                    <th scope="col"
-                        colspan="2"
-                    >{{__('Soll')}}
-                    </th>
-                    <th scope="col">{{__('Ist')}}</th>
-                    <th scope="col">{{__('Bestanden')}}</th>
-                </tr>
-                <tr>
-                    <td class="d-none d-md-table-cell">{{ $aci->aci_task }}</td>
-                    <td style="min-width: 100px;"
-                        class="pt-4"
-                    >
-                        @if($aci->aci_vaule_soll !== null)
-                            <strong>{{ $aci->aci_vaule_soll }}</strong> {{ $aci->aci_value_si }}
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td class="pt-4">
-                        @if($aci->aci_vaule_soll !== null)
-                            <div class="d-flex flex-column">
-                                @if($aci->aci_value_target_mode==='gt')
-                                    <span class="fas fa-less-than mr-1"></span>
-                                @elseif($aci->aci_value_target_mode==='lt')
-                                    <span class="fas fa-greater-than mr-1"></span>
-                                @elseif($aci->aci_value_target_mode==='eq')
-                                    <span class="fas fa-equals mr-1"></span>
-                                    <span class="text-nowrap">
-                                        @if($aci->aci_value_target_mode==='eq')
-                                            @php
-                                                $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :
-                                                $aci->aci_vaule_soll*$aci->aci_value_tol/100;
-                                            @endphp
-                                            <span class="small">±{{ $tol }} {{ $aci->aci_value_si }}</span>
-                                        @endif
-                                    </span>
-                                @endif
-                            </div>
-                        @endif
-                    </td>
-                    <td style="min-width: 95px;"
-                        class="px-0"
-                    >
-                        @if($aci->aci_vaule_soll !== null)
-                            <label for="control_item_read_{{ $aci->id }}"
-                                   class="sr-only"
-                            >{{__('Ist-Wert')}}
-                            </label>
-                            <input type="text"
-                                   placeholder="{{__('Wert')}}"
-                                   class="form-control decimal checkSollValue"
-                                   id="control_item_read_{{ $aci->id }}"
-                                   name="control_item_read[{{ $aci->id }}][]"
-                                   data-aci_id="{{ $aci->id }}"
-                                   data-aci_vaule_soll="{{ $aci->aci_vaule_soll }}"
-                                   data-aci_value_target_mode="{{ $aci->aci_value_target_mode??'' }}"
-                                   data-aci_value_tol="{{ $aci->aci_value_tol??'' }}"
-                                   data-aci_value_tol_mod="{{ $aci->aci_value_tol_mod??'' }}"
-                                   required
-                            >
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-toggle"
-                             data-toggle="buttons"
+                @if( $aci->aci_value_target_mode === 'dp' )
+                    <tr>
+                        <th scope="col"
+                            colspan="5"
+                            class="d-none d-md-table-cell px-0"
                         >
-                            <label class="btn btn-outline-success">
-                                <input type="radio"
-                                       id="aci_Passed_{{ $aci->id }}"
-                                       name="control_item_pass[{{ $aci->id }}][]"
-                                       value="1"
-                                       class="checkControlItem itemPassed"
-                                >
-                                {{ __('JA')}}
-                            </label>
-                            <label class="btn btn-outline-danger">
-                                <input type="radio"
-                                       id="aci_notPassed_{{ $aci->id }}"
-                                       name="control_item_pass[{{ $aci->id }}][]"
-                                       value="0"
-                                       class="checkControlItem itemFailed"
-                                >
-                                {{ __('NEIN')}}
-                            </label>
-                        </div>
+                            {{__('Beschreibung der Prüfung')}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="5"
+                            class="d-none d-md-table-cell px-0"
+                        >{{ $aci->aci_task }}</td>
+                    </tr>
 
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="5"
+                            class="p-0"
+                        >
+                            <x-controlDataSet :aci="$aci"/>
+                        </td>
+                    </tr>
+
+                @else
+                    <tr>
+                        <th scope="col"
+                            class="d-none d-md-table-cell px-0"
+                        >{{__('Beschreibung der Prüfung')}}
+                        </th>
+                        <th scope="col"
+                            colspan="2"
+                        >{{__('Soll')}}
+                        </th>
+                        <th scope="col">{{__('Ist')}}</th>
+                        <th scope="col"
+                            class="text-right"
+                        >{{__('Bestanden')}}</th>
+                    </tr>
+                    <tr>
+                        <td class="d-none d-md-table-cell px-0">{{ $aci->aci_task }}</td>
+                        <td style="min-width: 100px;"
+                            class="pt-4"
+                        >
+                            @if($aci->aci_vaule_soll !== null)
+                                <strong>{{ $aci->aci_vaule_soll }}</strong> {{ $aci->aci_value_si }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td class="pt-4">
+                            @if($aci->aci_vaule_soll !== null)
+                                <div class="d-flex flex-column">
+                                    @if($aci->aci_value_target_mode==='gt')
+                                        <span class="fas fa-less-than mr-1"></span>
+                                    @elseif($aci->aci_value_target_mode==='lt')
+                                        <span class="fas fa-greater-than mr-1"></span>
+                                    @elseif($aci->aci_value_target_mode==='eq')
+                                        <span class="fas fa-equals mr-1"></span>
+                                        <span class="text-nowrap">
+                                        @if($aci->aci_value_target_mode==='eq')
+                                                @php
+                                                    $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :
+                                                    $aci->aci_vaule_soll*$aci->aci_value_tol/100;
+                                                @endphp
+                                                <span class="small">±{{ $tol }} {{ $aci->aci_value_si }}</span>
+                                            @endif
+                                    </span>
+                                    @endif
+                                </div>
+                            @endif
+                        </td>
+                        <td style="min-width: 95px;"
+                            class="px-0"
+                        >
+                            @if($aci->aci_vaule_soll !== null)
+                                <label for="control_item_read_{{ $aci->id }}"
+                                       class="sr-only"
+                                >{{__('Ist-Wert')}}
+                                </label>
+                                <input type="text"
+                                       placeholder="{{__('Wert')}}"
+                                       class="form-control decimal checkSollValue"
+                                       id="control_item_read_{{ $aci->id }}"
+                                       name="control_item_read[{{ $aci->id }}][]"
+                                       data-aci_id="{{ $aci->id }}"
+                                       data-aci_vaule_soll="{{ $aci->aci_vaule_soll }}"
+                                       data-aci_value_target_mode="{{ $aci->aci_value_target_mode??'' }}"
+                                       data-aci_value_tol="{{ $aci->aci_value_tol??'' }}"
+                                       data-aci_value_tol_mod="{{ $aci->aci_value_tol_mod??'' }}"
+                                       required
+                                >
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group btn-group-toggle"
+                                 data-toggle="buttons"
+                            >
+                                <label class="btn btn-outline-success">
+                                    <input type="radio"
+                                           id="aci_Passed_{{ $aci->id }}"
+                                           name="control_item_pass[{{ $aci->id }}][]"
+                                           value="1"
+                                           class="checkControlItem itemPassed"
+                                    >
+                                    {{ __('JA')}}
+                                </label>
+                                <label class="btn btn-outline-danger">
+                                    <input type="radio"
+                                           id="aci_notPassed_{{ $aci->id }}"
+                                           name="control_item_pass[{{ $aci->id }}][]"
+                                           value="0"
+                                           class="checkControlItem itemFailed"
+                                    >
+                                    {{ __('NEIN')}}
+                                </label>
+                            </div>
+
+                        </td>
+                    </tr>
+                @endif
                 @if (!$loop->last)
                     <tr>
                         <td colspan="5"

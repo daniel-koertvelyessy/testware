@@ -50,9 +50,9 @@
          *
          * @return Application|Factory|Response|View
          */
-        public function create()
+        public function create(Request $request)
         {
-            return view('admin.verordnung.anforderung.create');
+            return view('admin.verordnung.anforderung.create',['vid' => (int)$request->v]);
         }
 
         /**

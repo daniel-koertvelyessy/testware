@@ -60,7 +60,9 @@
                     @csrf
                     <x-selectfield id="verordnung_id" label="Gehört zu Verordnung">
                         @foreach (App\Verordnung::all() as $ad)
-                            <option value="{{ $ad->id }}">{{ $ad->vo_label }}</option>
+                            <option value="{{ $ad->id }}" @if($vid === $ad->id) selected @endif >{{ $ad->vo_label
+                            }}
+                            </option>
                         @endforeach
                     </x-selectfield>
 

@@ -143,7 +143,9 @@
                         <div class="col-md-3">
                             <x-tolModeSelect
                                     id="aci_value_target_mode"
-                                    mode="{{ $anforderungcontrolitem->aci_value_target_mode }}"
+                                    mode="{{ $dataSetItems->count() >0 ? 'dp' :
+                                    $anforderungcontrolitem->aci_value_target_mode
+                                     }}"
                                     :setdp="true"
                             />
                         </div>
@@ -265,7 +267,9 @@
                     >{{ __('Prüfschritt löschen') }}</button>
                 </form>
             </div>
-            <div class="col-md-5 d-flex flex-column justify-content-between">
+            <div class="col-md-5 d-flex flex-column justify-content-between"
+                 id="tblDataSetTable"
+            >
                 <main>
                     <h2 class="h4">{{ __('Datenpunkte') }}</h2>
                     <p>{{ __('Es können verschiedene Datenpunkte einem Prüfschritt zugeordnet werden.')
@@ -276,25 +280,24 @@
                         <table class="table">
                             <tr>
                                 <th>Soll-Wert</th>
-                                <th>Ziel</th>
+                                <th>Tol</th>
                                 <th></th>
                             </tr>
                             @foreach($dataSetItems as $item)
                                 <tr>
                                     <td>
                                         {{ $item->data_point_value }}
-                                        {{ $item->data_point_sort }}
                                     </td>
                                     <td>
                                         {{ $item->data_point_tol }}
-                                        {{ $item->data_point_tol_mod === 'pro' ? '%':'' }}
+                                        {{ $item->data_point_tol_mod === 'pro' ? '%':'abs' }}
                                     </td>
                                     <td>
                                         <x-menu_context :object="$item"
                                                         modal-open="#modalEditDatensatz{{ $item->id }}"
                                                         route-open="#"
                                                         route-copy="#"
-                                                        route-destory=""
+                                                        :route-destory="route('acidataset.destroy',$item->id)"
                                                         objectName="aci_name"
                                                         objectVal="{{ $item->id }}"
                                                         right="true"

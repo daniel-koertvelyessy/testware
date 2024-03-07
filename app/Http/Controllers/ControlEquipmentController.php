@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AciDataSet;
 use App\Anforderung;
 use App\AnforderungControlItem;
 use App\ControlDoc;
 use App\ControlEquipment;
 use App\ControlEvent;
+use App\ControlEventDataset;
 use App\ControlEventEquipment;
 use App\ControlEventItem;
 use App\Equipment;
@@ -167,7 +169,25 @@ class ControlEquipmentController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
+
+
+        for ($i = 0; $i < count($request->event_item); $i++) {
+            $itemId = $request->event_item[$i];
+            //dataset_item_read
+
+            foreach(AciDataSet::where('anforderung_control_item_id',$itemId)->get() as $dataset){
+                $addDataSet = ControlEventDataset::create();
+            }
+
+
+
+        }
+
+
+        dd();
+
         $controlEquipment = ControlEquipment::find($request->control_equipment_id);
+
         $equipment = Equipment::find($request->equipment_id);
         $changeEquipmentStatus = false;
         $itempassed = 0;
@@ -257,7 +277,7 @@ class ControlEquipmentController extends Controller
         /**
          *  Check, if control event is internaly executed and store values accordingly
          */
-        if (!$controlEquipment->Anforderung->is_external) {
+        if ($controlEquipment->Anforderung->isInternal()) {
 
             if (isset($request->event_item)) {
                 for ($i = 0; $i < count($request->event_item); $i++) {
@@ -285,6 +305,9 @@ class ControlEquipmentController extends Controller
                     }
                 }
             }
+
+
+
         }
 
         if ($request->hasFile('controlDokumentFile')) {

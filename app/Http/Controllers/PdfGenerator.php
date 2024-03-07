@@ -14,6 +14,7 @@
     use App\Report;
     use App\TestReportFormat;
     use App\Verordnung;
+    use Illuminate\Support\Env;
     use Illuminate\Support\Facades\Storage;
     use PDF;
 
@@ -82,8 +83,15 @@
 
             $requirement = Anforderung::find($controlEquipment->anforderung_id);
 
+            $ControlEquipment = ControlEquipment::withTrashed()->where('id',$controlEvent->control_equipment_id)->first();
+            $equipment = Equipment::find( $ControlEquipment->equipment_id);
+            $controlStep = AnforderungControlItem::where('anforderung_id',$ControlEquipment->Anforderung->id)->first();
+
             $reportNo = (new TestReportFormat)->makeTestreportNumber($controlEvent->id);
             $html = view('pdf.html.control_event_report', [
+                'controlStep' => $controlStep,
+                'equipment' => $equipment,
+                'ControlEquipment' => $ControlEquipment,
                 'controlEvent' => $controlEvent,
                 'reportNo'     => $reportNo,
                 'requirement' => $requirement,
@@ -110,7 +118,7 @@
                 $pdf->SetY(-15);
                 $pdf->SetFont('Helvetica', '', 8);
                 //Page number
-                $pdf->Cell(0, 5, '(c)' . date('Y') . ' thermo-control Körtvélyessy GmbH - testWare ', 0, 0, 'L');
+                $pdf->Cell(0, 5, '(c) thermo-control Körtvélyessy GmbH - testWare ' , 0, 0, 'L');
                 $pdf->Cell(0, 5, __('Seite') . ' ' . "{:png:} - {:ptg:}", 0, 1, 'R');
             });
 
