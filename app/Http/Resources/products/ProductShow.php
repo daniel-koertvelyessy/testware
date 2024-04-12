@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\products;
 
-use App\Http\Resources\locations\LocationShort;
+use App\Http\Resources\locations\EquipmentShort;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

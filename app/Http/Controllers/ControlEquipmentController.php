@@ -67,7 +67,11 @@ class ControlEquipmentController extends Controller
         $service = new EquipmentEventService();
         $controlItem = ControlEquipment::find($request->test_id);
 
-        //   dd($request);
+        if (is_null($controlItem)) {
+            $request->session()->flash('status', __('Die gesuchte Prüfung wurde nicht gefunden!'));
+            return redirect(route('control.index'));
+        }
+
         $check_aci_execution_is_external = [];
         $check_aci_control_equipment_required = [];
         $controlEquipmentIsComplete = true;
@@ -128,6 +132,7 @@ class ControlEquipmentController extends Controller
 
         return back();
     }
+
     public function reactivate(Request $request, ControlEquipment $controlequipment)
     {
         $controlequipment->archived_at = NULL;
@@ -139,7 +144,6 @@ class ControlEquipmentController extends Controller
 
         return back();
     }
-
 
 
     public function add(Request $request): RedirectResponse
@@ -169,22 +173,7 @@ class ControlEquipmentController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-
-
-        for ($i = 0; $i < count($request->event_item); $i++) {
-            $itemId = $request->event_item[$i];
-            //dataset_item_read
-
-            foreach(AciDataSet::where('anforderung_control_item_id',$itemId)->get() as $dataset){
-                $addDataSet = ControlEventDataset::create();
-            }
-
-
-
-        }
-
-
-        dd();
+//            dd($request);
 
         $controlEquipment = ControlEquipment::find($request->control_equipment_id);
 
@@ -284,14 +273,47 @@ class ControlEquipmentController extends Controller
                     $itemId = $request->event_item[$i];
                     $controlEventItem = new ControlEventItem();
                     $controlEventItem->control_item_aci = $itemId;
-                    $controlEventItem->control_item_read = $request->control_item_read[$itemId][0] ?? null;
-                    $controlEventItem->control_item_pass = $request->control_item_pass[$itemId][0];
-                    ($request->control_item_pass[$itemId][0] === '1')
-                        ? $itempassed++
-                        : $itemfailed++;
+                    $controlEventItem->control_item_read = $request->control_item_read[$itemId] ?? null;
+
+                    if (is_array($request->control_item_pass[$itemId])) {
+                        $controlEventItem->control_item_pass = $request->control_item_pass[$itemId]['main'];
+                        ($request->control_item_pass[$itemId]['main'] === '1')
+                            ? $itempassed++
+                            : $itemfailed++;
+                    } else {
+                        $controlEventItem->control_item_pass = $request->control_item_pass[$itemId];
+                        ($request->control_item_pass[$itemId] === '1')
+                            ? $itempassed++
+                            : $itemfailed++;
+                    }
+
                     $controlEventItem->control_event_id = $control_event_id;
                     $controlEventItem->equipment_id = $request->equipment_id;
                     $controlEventItem->save();
+
+                    if (isset($request->dataset_item_read[$request->event_item[$i]])) {
+
+                        foreach ($request->dataset_item_read as $dataset) {
+
+                            foreach ($dataset as $aci_data_set_id => $datasetItem) {
+
+                                $setresult = new ControlEventDataset();
+                                ($request->control_item_pass[$itemId][$aci_data_set_id] === '1')
+                                    ? $itempassed++
+                                    : $itemfailed++;
+                                $setresult->control_event_dataset_read = $datasetItem;
+                                $setresult->control_event_dataset_pass = $request->control_item_pass[$itemId][$aci_data_set_id];
+
+                                $setresult->aci_dataset_id = $aci_data_set_id;
+                                $setresult->control_event_item_id = $controlEventItem->id;
+                                $setresult->save();
+
+
+                            }
+
+                        }
+
+                    }
                 }
             }
 
@@ -305,7 +327,6 @@ class ControlEquipmentController extends Controller
                     }
                 }
             }
-
 
 
         }
@@ -358,12 +379,12 @@ class ControlEquipmentController extends Controller
     {
         return request()->validate([
                                        'control_event_next_due_date' => 'date|required|after_or_equal::control_event_date',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'control_event_pass' => 'required',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'control_event_date' => 'date|required',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'control_event_controller_signature' => '',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'control_event_controller_name' => 'required',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'control_event_supervisor_signature' => '',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          'control_event_supervisor_name' => '',
+                                 'control_event_pass' => 'required',
+                                 'control_event_date' => 'date|required',
+                                 'control_event_controller_signature' => '',
+                                 'control_event_controller_name' => 'required',
+                                       'control_event_supervisor_signature' => '',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'control_event_supervisor_name' => '',
                                        'user_id'                     => '',
                                        'control_event_text'          => '',
                                        'control_equipment_id'        => ''
@@ -408,21 +429,20 @@ class ControlEquipmentController extends Controller
     public function validateEquipmentControl(): array
     {
         return request()->validate([
-                                       'archived_at' => 'nullable|date',
-                                       'qe_control_date_last' => 'date',
-                                       'qe_control_date_due'  => 'date',
-                                       'qe_control_date_warn' => '',
-                                       'control_interval_id'  => '',
-                                       'anforderung_id'       => 'required',
-                                       'equipment_id'         => 'required',
-
-                                   ], [
-                                       'control_event_pass.required'                => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
-                                       'control_event_controller_name.required'     => __('Der Name des Prüfers ist nicht gegeben!'),
-                                       'control_event_next_due_date.required'       => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
-                                       'control_event_next_due_date.after_or_equal' => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
-                                       'control_event_date.required'                => __('Bitte tragen Sie das Datum der Prüfung ein!'),
-                                   ]);
+            'archived_at' => 'nullable|date',
+            'qe_control_date_last' => 'date',
+            'qe_control_date_due' => 'date',
+            'qe_control_date_warn' => '',
+            'control_interval_id' => '',
+            'anforderung_id' => 'required',
+            'equipment_id' => 'required',
+        ], [
+               'control_event_pass.required'                => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
+               'control_event_controller_name.required'     => __('Der Name des Prüfers ist nicht gegeben!'),
+               'control_event_next_due_date.required'       => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
+               'control_event_next_due_date.after_or_equal' => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
+               'control_event_date.required'                => __('Bitte tragen Sie das Datum der Prüfung ein!'),
+        ]);
     }
 
     /**
@@ -434,13 +454,13 @@ class ControlEquipmentController extends Controller
     public function destroy(Request $request)
     {
 
-        //        dd($request);
+       //       dd($request);
 
         if (!\Auth::user()->isSysAdmin()) {
             request()->session()->flash('status', 'Keine Berechtigung zum Löschen des Eintrages!');
             return redirect()->back();
         }
-        $controlEquipment = ControlEquipment::withTrashed()->find($request->id);
+        $controlEquipment = ControlEquipment::withTrashed()->find($request->control_id);
 
         $equipment_id = $controlEquipment->equipment_id;
         $control_date = $controlEquipment->created_at;
@@ -565,7 +585,6 @@ class ControlEquipmentController extends Controller
 
     public function fixbroken(ControlEquipment $control, Request $request)
     {
-
         $control->anforderung_id = $request->anforderung_id;
         $control->equipment_id = $request->equipment_id;
         $msg = $control->save()

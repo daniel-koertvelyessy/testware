@@ -436,7 +436,8 @@ $objects['storages'] === 0                                            )
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($equipmentList as $equipment)
                                                                 <option
-                                                                    value="{{ $equipment->id }}">{{ $equipment->eq_name }}</option>
+                                                                    value="{{ $equipment->id }}">{{
+                                                                    $equipment->eq_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -456,7 +457,8 @@ $objects['storages'] === 0                                            )
                                                             <input type="hidden"
                                                                    name="equipment_id"
                                                                    id="setEquipment{{$controlItem->id}}"
-                                                                   value="@if($controlItem->Equipment) {{ $controlItem->Equipment->id }} @endif"
+                                                                   value="@if($controlItem->Equipment) {{
+                                                                   $controlItem->Equipment->id }} @endif"
                                                             >
                                                             <button class="btn btn-sm btn-outline-primary mr-1"
                                                                     id="btnUpdateControlItem{{$controlItem->id}}"
@@ -470,6 +472,11 @@ $objects['storages'] === 0                                            )
                                                             >
                                                                 @csrf
                                                                 @method('DELETE')
+                                                                <input type="hidden"
+                                                                       name="control_id"
+                                                                       id="control_id"
+                                                                       value="{{ $controlItem->id }}"
+                                                                >
                                                                 <button class="btn btn-sm btn-outline-danger">
                                                                     <i class="fa fa-trash-alt"></i>
                                                                 </button>

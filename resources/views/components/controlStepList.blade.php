@@ -15,7 +15,7 @@
                                value="{{ $aci->id }}"
                         >
                         <input type="hidden"
-                               name="control_item_aci[{{ $aci->id }}][]"
+                               name="control_item_aci[{{ $aci->id }}]"
                                id="control_item_aci_{{ $aci->id }}"
                                value="{{ $aci->id }}"
                         >
@@ -60,6 +60,45 @@
                             class="p-0"
                         >
                             <x-controlDataSet :aci="$aci"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"  class="p-0">
+                            <table class="table">
+                                <tr>
+                                    <th class="text-right">
+                                        {{ __('Ergebnis der Datenreihe') }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <div class="btn-group btn-group-toggle"
+                                             data-toggle="buttons"
+                                        >
+                                            <label class="btn btn-outline-success">
+                                                <input type="radio"
+                                                       id="aci_Passed_{{ $aci->id }}"
+                                                       name="control_item_pass[{{ $aci->id }}][main]"
+                                                       value="1"
+                                                       class="checkControlItem itemPassed"
+                                                >
+                                                {{ __('JA')}}
+                                            </label>
+                                            <label class="btn btn-outline-danger">
+                                                <input type="radio"
+                                                       id="aci_notPassed_{{ $aci->id }}"
+                                                       name="control_item_pass[{{ $aci->id }}][main]"
+                                                       value="0"
+                                                       class="checkControlItem itemFailed"
+                                                >
+                                                {{ __('NEIN')}}
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+
                         </td>
                     </tr>
 
@@ -123,7 +162,7 @@
                                        placeholder="{{__('Wert')}}"
                                        class="form-control decimal checkSollValue"
                                        id="control_item_read_{{ $aci->id }}"
-                                       name="control_item_read[{{ $aci->id }}][]"
+                                       name="control_item_read[{{ $aci->id }}]"
                                        data-aci_id="{{ $aci->id }}"
                                        data-aci_vaule_soll="{{ $aci->aci_vaule_soll }}"
                                        data-aci_value_target_mode="{{ $aci->aci_value_target_mode??'' }}"
@@ -142,7 +181,8 @@
                                 <label class="btn btn-outline-success">
                                     <input type="radio"
                                            id="aci_Passed_{{ $aci->id }}"
-                                           name="control_item_pass[{{ $aci->id }}][]"
+                                           name="control_item_pass[{{ $aci->id }}]"
+                                           name="control_item_pass[{{ $aci->id }}]"
                                            value="1"
                                            class="checkControlItem itemPassed"
                                     >
@@ -151,7 +191,7 @@
                                 <label class="btn btn-outline-danger">
                                     <input type="radio"
                                            id="aci_notPassed_{{ $aci->id }}"
-                                           name="control_item_pass[{{ $aci->id }}][]"
+                                           name="control_item_pass[{{ $aci->id }}]"
                                            value="0"
                                            class="checkControlItem itemFailed"
                                     >

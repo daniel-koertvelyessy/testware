@@ -27,7 +27,7 @@ class LocationFull extends JsonResource
             'description' => $this->l_beschreibung,
             'address' => new AddressFull($this->Adresse),
             'manager' => new ProfileFull($this->Profile),
-            'location_objects' => new LocationStats($this)
+            'location_objects' => new EquimentStats($this)
         ];
     }
 }

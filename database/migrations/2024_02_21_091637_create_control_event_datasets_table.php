@@ -17,14 +17,17 @@ class CreateControlEventDatasetsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('control_event_dataset_aci');
             $table->decimal('control_event_dataset_read')->nullable();
             $table->boolean('control_event_dataset_pass');
-            $table->foreignId('control_event_id')
+            $table->foreignId('aci_dataset_id')
                   ->nullable()
-                  ->constrained()
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+            $table->foreignId('control_event_item_id')
+                  ->nullable()
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+
         });
     }
 

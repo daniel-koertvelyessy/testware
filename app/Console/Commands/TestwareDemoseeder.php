@@ -80,27 +80,40 @@
 
         protected function loginSysAdmin()
         {
-            $this->error('                                                            ');
-            $this->error('                        W A R N I N G                       ');
-            $this->error('                                                            ');
-            $this->error('     Your testware instance is not running in demo mode.    ');
-            $this->error('         Please use a SysAdmin account to continue.         ');
-            $this->error('                                                            ');
+            $this->warn('                                                            ');
+            $this->warn('                        W A R N I N G                       ');
+            $this->warn('                                                            ');
+            $this->warn('     Your testware instance is not running in demo mode.    ');
+            $this->warn('         Please use a SysAdmin account to continue.         ');
+            $this->warn('                                                            ');
 
-            $username = $this->ask('email ');
+            $username = $this->ask('SysAdmin e-mail address');
+
+            while(is_null($username)){
+                $this->warn('Please provide an e-mail address. Press Crtl and C to cancel seeder.');
+                $username = $this->ask('e-mail address ');
+            }
 
             for ($k = 0; $k < 3; $k++) {
-                $password = $this->secret('password ');
+                $password = $this->secret('Respective password ');
+                while(is_null($password)){
+                    $this->warn('Please provide the password of the chosen account. Press Crtl and C to cancel seeder.');
+                    $password = $this->secret('password ');
+                }
 
                 if ($this->verifySysAdmin($username, $password)) {
                     return true;
                 } else {
-                    $this->error('Incorrect login. ');
+                    $this->warn('Login failed');
                 }
 
             }
 
-            $this->error('Seeding command caneceld.');
+            $this->warn('                           ');
+            $this->error('                          ');
+            $this->error('Too many incorrect login. ');
+            $this->error('                          ');
+            $this->error('Seeding command caneceld. ');
 
             return false;
 

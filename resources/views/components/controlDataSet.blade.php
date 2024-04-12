@@ -24,7 +24,7 @@
                    placeholder="{{__('Wert')}}"
                    class="form-control decimal checkSollValue"
                    id="dataset_item_read{{ $setItem->id }}"
-                   name="dataset_item_read[{{ $setItem->id }}][]"
+                   name="dataset_item_read[{{ $aci->id }}][{{ $setItem->id }}]"
                    data-aci_id="{{ $setItem->id }}"
                    data-aci_vaule_soll="{{ $setItem->data_point_value }}"
                    data-aci_value_target_mode="{{ $setItem->data_point_tol_target_mode??'' }}"
@@ -40,7 +40,7 @@
                 <label class="btn btn-outline-success">
                     <input type="radio"
                            id="aci_Passed_{{ $setItem->id }}"
-                           name="control_item_pass[{{ $setItem->id }}][]"
+                           name="control_item_pass[{{ $aci->id }}][{{ $setItem->id }}]"
                            value="1"
                            class="checkControlItem itemPassed"
                     >
@@ -49,7 +49,7 @@
                 <label class="btn btn-outline-danger">
                     <input type="radio"
                            id="aci_notPassed_{{ $setItem->id }}"
-                           name="control_item_pass[{{ $setItem->id }}][]"
+                           name="control_item_pass[{{ $aci->id }}][{{ $setItem->id }}]"
                            value="0"
                            class="checkControlItem itemFailed"
                     >

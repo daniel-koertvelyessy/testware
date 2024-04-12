@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\buildings;
 
-use App\Http\Resources\locations\LocationShort;
+use App\Http\Resources\locations\EquipmentShort;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,7 +27,7 @@ class BuildingShow extends JsonResource
             'goods_income_has'  => ($this->b_we_has === 0) ? false : true,
             'goods_income_name' => $this->b_we_name,
             'type'              => new BuildingType($this->BuildingType),
-            'location'          => new LocationShort($this->location),
+            'location'          => new EquipmentShort($this->location),
         ];
     }
 }

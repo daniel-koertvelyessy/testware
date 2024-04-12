@@ -150,7 +150,7 @@
                     <dd class="col-sm-8">{!!  nl2br($aci->aci_task) !!}</dd>
                     <dt class="col-md-4">{{ __('Ergebnis:')}}</dt>
                     <dd class="col-sm-8">
-                        @if($aci->aci_value_target_mode)
+                        @if($aci->aci_value_target_mode && $aci->aci_value_target_mode !== 'dp')
                             <table class="table-sm table-responsive">
                                 <tr>
                                     <th>{{ __('Sollwert') }}</th>
@@ -163,18 +163,7 @@
                                     </td>
                                     <td>{{ $ceitem->control_item_read??'-' }} {{ $aci->aci_value_si??'' }}
                                     </td>
-                                    <td>@if ($aci->aci_value_target_mode ==='eq')
-                                            @php
-                                                $tol = ($aci->aci_value_tol_mod==='abs') ? $aci->aci_value_tol :  $aci->aci_vaule_soll*$aci->aci_value_tol
-                                            @endphp {{__('Soll')}} = {{__('Ist')}} ±{{ $tol??'' }} {{__('Toleranz')}}
-                                        @elseif ($aci->aci_value_target_mode ==='lt')
-                                            {{__('Soll')}} < {{__('Ist')}}
-                                        @elseif ($aci->aci_value_target_mode ==='gt')
-                                            {{__('Soll')}} > {{__('Ist')}}
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
+                                    <td>{{ $aci->makeTolString() }}</td>
                                     <td>
                                         @if($ceitem->control_item_pass)
                                             <span
@@ -186,6 +175,46 @@
                                     </td>
                                 </tr>
                             </table>
+
+                            @elseif($aci->aci_value_target_mode === 'dp')
+                            <table class="table">
+                                <tr>
+                                    <th style="font-weight: bold;text-align: right;">{{ __('Sollwert') }}</th>
+                                    <th style="font-weight: bold;text-align: right;">{{ __('Ist') }}</th>
+                                    <th style="font-weight: bold;text-align: right;">{{ __('Abweichung') }}</th>
+                                    <th style="font-weight: bold;text-align: right;">{{ __('Tol') }}</th>
+                                    <th style="font-weight: bold; text-align: right;">{{ __('Result') }}</th>
+                                </tr>
+                                @foreach(\App\ControlEventDataset::where('control_event_item_id',$ceitem->id)->orderBy('id')->get() as
+                                $datasetItem )
+                                    <tr>
+                                        <td style="text-align: right;">{{
+                                            $datasetItem->valueString($datasetItem->AciDataSet->data_point_value)
+                                            }}</td>
+                                        <td style="text-align: right;">{{ $datasetItem->valueString($datasetItem->control_event_dataset_read)
+                                            }}</td>
+                                        <td style="text-align: right;">{{ $datasetItem->valueString
+                                            ($datasetItem->AciDataSet->data_point_value - $datasetItem->control_event_dataset_read)
+                                            }}</td>
+                                        <td style="text-align: right;">{{ $datasetItem->AciDataSet->makeTolString()
+                                            }}</td>
+                                        <td style="text-align: right;">@if($datasetItem->control_event_dataset_pass)
+                                                <span style="color:#3fb618;">{{ __('bestanden') }}</span>
+                                            @else
+                                                <span style="color:red;">{{__('nicht bestanden')}}</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+
+                                @endforeach
+                            </table>
+                            @if($ceitem->control_item_pass)
+                                <span class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>
+                            @else
+                                <span class="text-danger bold"><strong>{{ __('nicht bestanden') }}</strong></span>
+
+                            @endif
+
                         @else
                             @if($ceitem->control_item_pass)
                                 <span class="text-success bold"><strong>{{ __('bestanden') }}</strong></span>

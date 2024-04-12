@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
 use App\Http\Resources\AddressFull;
 use App\Http\Resources\locations\Location as LocationResource;
 use App\Http\Resources\locations\LocationFull as LocationFullResource;
-use App\Http\Resources\locations\LocationShow as LocationShowResource;
+use App\Http\Resources\locations\EquipmentShow as LocationShowResource;
 use Illuminate\Support\Str;
 
 class LocationController extends Controller

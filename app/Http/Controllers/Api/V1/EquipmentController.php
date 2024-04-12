@@ -7,7 +7,11 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+
+use App\Http\Resources\equipment\Equipment as EquipmentResource;
+use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
 
 class EquipmentController extends Controller
 {
@@ -19,11 +23,14 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->input('per_page')) {
+            return EquipmentResource::collection(Equipment::with('EquipmentState'))->paginate($request->input('per_page'));
+        }
+        return EquipmentResource::collection(Equipment::with('EquipmentState')->get());
     }
 
     /**
@@ -42,11 +49,11 @@ class EquipmentController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return EquipmentShowResource
      */
     public function show(Equipment $equipment)
     {
-        //
+        return new EquipmentShowResource($equipment);
     }
 
     /**

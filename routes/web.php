@@ -369,7 +369,7 @@ Route::get('/makePDF/{view}/{title}', function ($view, $title) {
 
 Route::get('/report.print/{id}', function ($id) {
     App\Http\Controllers\PdfGenerator::printReport($id);
-})->name('printReport');
+})->name('printReport')->middleware('auth');
 
 Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
     $equip = Equipment::find($equipment);
@@ -394,7 +394,7 @@ Route::get('test_equipment_label/{label}', function ($label) {
 Route::get('makePDFEquipmentControlReport/{controlEvent}',
     function ($controlEvent) {
         App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
-    })->name('makePDFEquipmentControlReport');
+    })->name('makePDFEquipmentControlReport')->middleware('auth');
 
 //Auth::routes();
 

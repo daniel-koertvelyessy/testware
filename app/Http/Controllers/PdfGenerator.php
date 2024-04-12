@@ -79,6 +79,7 @@
 
         static function makePDFEquipmentControlReport(ControlEvent $controlEvent)
         {
+
             $controlEquipment = ControlEquipment::withTrashed()->find($controlEvent->control_equipment_id);
 
             $requirement = Anforderung::find($controlEquipment->anforderung_id);
@@ -88,6 +89,7 @@
             $controlStep = AnforderungControlItem::where('anforderung_id',$ControlEquipment->Anforderung->id)->first();
 
             $reportNo = (new TestReportFormat)->makeTestreportNumber($controlEvent->id);
+
             $html = view('pdf.html.control_event_report', [
                 'controlStep' => $controlStep,
                 'equipment' => $equipment,
