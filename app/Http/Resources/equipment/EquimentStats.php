@@ -24,7 +24,7 @@ class EquimentStats extends JsonResource
             'status' => $this->EquipmentState->eqs_label,
             'tested_at' => $this->tested_at,
             'test_due_at' => $this->test_due_at,
-            'equipment_link' => route('api.v1.equipment.show',$this)
+            'link' => route('api.v1.equipment.show',$this)
         ];
     }
 }

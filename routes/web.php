@@ -511,6 +511,9 @@ Route::get('equipment.maker', function () {
 
 Route::get('equipment.controlequipment', 'EquipmentController@controlequipment')->name('equipment.controlequipment')->middleware('auth');
 
+Route::post('equipment/fixuid', 'EquipmentController@fixuid')->name('equipment.fixuid')->middleware('auth');
+Route::post('equipment/syncuid', 'EquipmentController@syncuid')->name('equipment.syncuid')->middleware('auth');
+
 Route::get('verordnung.main', function () {
     return view('admin.verordnung.main');
 })->name('verordnung.main')->middleware('auth');

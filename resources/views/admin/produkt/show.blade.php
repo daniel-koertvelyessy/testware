@@ -194,6 +194,9 @@
                             @endforelse
                             </tbody>
                         </table>
+
+
+
                         <div class="form-check my-2 my-md-4">
                             <input class="form-check-input"
                                    type="checkbox"
@@ -1691,11 +1694,11 @@
                                     @endforelse
                                     </tbody>
                                 </table>
-                                @if($equipLists->count() > 10)
+{{ $equipLists->count() }}
                                     <div class="d-flex justify-content-center">
                                         {!! $equipLists->withQueryString()->onEachSide(2)->links() !!}
                                     </div>
-                                @endif
+                                    @if($equipLists->count() > 10) @endif
                             </div>
                         </div>
                     </div>

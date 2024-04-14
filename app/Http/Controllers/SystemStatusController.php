@@ -50,6 +50,41 @@ class SystemStatusController extends Controller
         return $counter->sum();
     }
 
+    public function getDuplicateUuIds()
+    {
+
+        $groupEqUid = Equipment::select('eq_uid')->groupBy('eq_uid')->get();
+
+        $allEquipUid = Equipment::select('id','eq_uid','eq_name','eq_inventar_nr','created_at')->get();
+
+        $grpList = $allEquipUid->map(function ($item,$key){
+            if (Equipment::where('eq_uid',$item->eq_uid)->count() > 1) return $item ;
+        });
+
+        return [
+            'hasDuplicateIds' => $groupEqUid->count()< $allEquipUid->count(),
+            'duplicateEquipmentUidList' => $grpList->groupBy('eq_uid')
+        ];
+
+
+
+
+    }
+
+    public function getAstrayEquipmentUids():int
+    {
+        $astrayUidCounter = 0;
+        foreach(Equipment::select(['id','eq_uid'])->get() as $equipment) {
+            $equipmentUid = EquipmentUid::where('equipment_id',$equipment->id)->first();
+            if ($equipmentUid){
+                if ($equipmentUid->equipment_uid !== $equipment->eq_uid) {
+                    $astrayUidCounter++;
+                }
+            }
+        }
+        return $astrayUidCounter;
+    }
+
     public function getBrokenControlEquipmentItems()
     {
         /**
@@ -154,6 +189,8 @@ class SystemStatusController extends Controller
             'orphanRequirementItems'        => count($orphanACI),
             'orphanRequirementItemList'     => $orphanACI,
             'orphanEquipmentUids'           => $orphanEquipmentUids,
+            'duplicate_uuids'               => $this->getDuplicateUuIds(),
+            'astrayEquipmentUids'           => $this->getAstrayEquipmentUids(),
         ];
         //       });
 

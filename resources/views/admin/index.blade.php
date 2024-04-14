@@ -62,6 +62,8 @@ $objects['storages'] === 0                                            )
                                             || $dbstatus['brokenProducts']>0
                                             || $dbstatus['brokenProductRequiremnets']>0
                                             || $dbstatus['orphanRequirementItems']>0
+                                            || $dbstatus['duplicate_uuids']['hasDuplicateIds']
+                                            || $dbstatus['missingEquipmentUuids']>0
                                             ? 'text-danger' :
                             'text-success'}}"
                         >{{__('Datenbank')}}</span>
@@ -284,7 +286,8 @@ $objects['storages'] === 0                                            )
                         <div class="row">
                             <div class="{{ $dbstatus['totalBrokenLinks']>0 ||
                             $dbstatus['brokenProductRequiremnets']>0 || $dbstatus['orphanRequirementItems']>0 ?
-                            'col-md-8' : 'col-md-6' }}">
+                            'col-md-8' : 'col-md-6' }}"
+                            >
 
                                 @if($dbstatus['brokenProductRequiremnets']>0)
 
@@ -313,7 +316,8 @@ $objects['storages'] === 0                                            )
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($requirementList as $requirement)
                                                                 <option
-                                                                    value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                                        value="{{ $requirement->id }}"
+                                                                >{{ $requirement->an_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -330,7 +334,8 @@ $objects['storages'] === 0                                            )
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($productList as $product)
                                                                 <option
-                                                                    value="{{ $product->id }}">{{ $product->prod_name . ' - ' . $product->prod_nummer }}</option>
+                                                                        value="{{ $product->id }}"
+                                                                >{{ $product->prod_name . ' - ' . $product->prod_nummer }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -354,7 +359,8 @@ $objects['storages'] === 0                                            )
                                                             >
                                                             <button class="btn btn-sm btn-outline-primary mr-1"
                                                                     id="btnUpdateControlItem{{$productItem->id}}"
-                                                                    disabled>
+                                                                    disabled
+                                                            >
                                                                 <i class="fa fa-save"></i>
                                                             </button>
                                                         </form>
@@ -419,7 +425,8 @@ $objects['storages'] === 0                                            )
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($requirementList as $requirement)
                                                                 <option
-                                                                    value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                                        value="{{ $requirement->id }}"
+                                                                >{{ $requirement->an_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     @endif
@@ -436,7 +443,8 @@ $objects['storages'] === 0                                            )
                                                             <option value="0">neu zuordnen</option>
                                                             @foreach($equipmentList as $equipment)
                                                                 <option
-                                                                    value="{{ $equipment->id }}">{{
+                                                                        value="{{ $equipment->id }}"
+                                                                >{{
                                                                     $equipment->eq_name }}</option>
                                                             @endforeach
                                                         </select>
@@ -462,7 +470,8 @@ $objects['storages'] === 0                                            )
                                                             >
                                                             <button class="btn btn-sm btn-outline-primary mr-1"
                                                                     id="btnUpdateControlItem{{$controlItem->id}}"
-                                                                    disabled>
+                                                                    disabled
+                                                            >
                                                                 <i class="fa fa-save"></i>
                                                             </button>
                                                         </form>
@@ -501,7 +510,8 @@ $objects['storages'] === 0                                            )
                                 @if($dbstatus['orphanRequirementItems']>0)
                                     <h2 class="h4">{{ __('Verwaiste Prüfschritte') }}
                                         <span
-                                            class="badge badge-info small">{{$dbstatus['orphanRequirementItems']}} </span>
+                                                class="badge badge-info small"
+                                        >{{$dbstatus['orphanRequirementItems']}} </span>
                                     </h2>
 
                                     <table class="table">
@@ -529,7 +539,8 @@ $objects['storages'] === 0                                            )
                                                         <option value="0">neu zuordnen</option>
                                                         @foreach($requirementList as $requirement)
                                                             <option
-                                                                value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
+                                                                    value="{{ $requirement->id }}"
+                                                            >{{ $requirement->an_name }}</option>
                                                         @endforeach
                                                     </select>
 
@@ -556,14 +567,15 @@ $objects['storages'] === 0                                            )
                                                             >
                                                             <button class="btn btn-sm btn-outline-primary mr-1"
                                                                     id="btnUpdateControlItem{{$item->id}}"
-                                                                    disabled>
+                                                                    disabled
+                                                            >
                                                                 <i class="fa fa-save"></i>
                                                             </button>
                                                         </form>
                                                         @if($isSysAdmin)
                                                             <form
-                                                                action="{{ route('anforderungcontrolitem.destroy',$item) }}"
-                                                                method="POST"
+                                                                    action="{{ route('anforderungcontrolitem.destroy',$item) }}"
+                                                                    method="POST"
                                                             >
                                                                 @csrf
                                                                 @method('DELETE')
@@ -591,7 +603,8 @@ $objects['storages'] === 0                                            )
                             </div>
                             <div class="{{ $dbstatus['totalBrokenLinks']>0 ||
                             $dbstatus['brokenProductRequiremnets']>0 || $dbstatus['orphanRequirementItems']>0 ?
-                            'col-md-4' : 'col-md-6' }}">
+                            'col-md-4' : 'col-md-6' }}"
+                            >
                                 @if($dbstatus['brokenProducts']>0)
                                     @if($dbstatus['brokenProducts']>1)
                                         <p class="lead text-danger">Es sind {{ $dbstatus['brokenProducts'] }} Produkte
@@ -611,7 +624,81 @@ $objects['storages'] === 0                                            )
                                         <p>{{__('Es wurde keine Produkte ohne UUID gefunden.')}}</p>
                                     </div>
                                 @endif
+
+                                @if($dbstatus['missingEquipmentUuids']>0)
+                                        <form action="{{ route('equipment.syncuid') }}" method="post"  class="card p-2 mb-2">
+                                            @csrf
+                                            <button class="btn btn-lg btn-outline-primary">
+                                              <i class="fa fa-sync"></i>  Geräte-UID syncronisieren
+                                            </button>
+                                        </form>
+
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Geräte UID ohne Fehler')}}</h4>
+                                        <p>{{__('Alle Geräte-UID sind syncronisiert.')}}</p>
+                                    </div>
+                                @endif
+
+                                @if($dbstatus['duplicate_uuids']['hasDuplicateIds'])
+                                    <form id="frmSetUIDToEquipment"
+                                          action="{{ route('equipment.fixuid') }}"
+                                          method="POST"
+                                    >
+                                        @csrf
+                                        <p class="lead text-danger">Diese Geräte haben eine identische UID!</p>
+                                        <p>{{ __('Bitte angeben welches Geräte seine UID behalten soll.') }}</p>
+                                        @foreach($dbstatus['duplicate_uuids']['duplicateEquipmentUidList'] as
+                                        $uidEquipmentList)
+                                            @if(!$uidEquipmentList->contains(null))
+
+                                                <section class="card p-2 mb-2">
+                                                    <p>{{ __('Identische UID ') }} <span><strong>{{$uidEquipmentList->first()
+                                                   ->eq_uid }}</strong></span></p>
+                                                    @foreach($uidEquipmentList as $equipment)
+
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio"
+                                                                   id="keepThisUid{{ $equipment->id }}"
+                                                                   name="keepThisUid[{{ $equipment->eq_uid }}]"
+                                                                   class="custom-control-input"
+                                                                   value="{{ $equipment->id }}"
+                                                            >
+                                                            <label class="custom-control-label"
+                                                                   for="keepThisUid{{ $equipment->id }}"
+                                                            >
+                                                                <span class="d-block">{{ $equipment->eq_name }}</span>
+                                                                <span class="small text-mute">
+                                                                {{ $equipment->eq_inventar_nr }}
+                                                            </span> <span class="small text-mute ml-2">
+                                                                {{ $equipment->created_at->diffForHumans() }}
+                                                            </span>
+                                                            </label>
+                                                        </div>
+
+                                                    @endforeach
+                                                </section>
+
+                                            @endif
+                                        @endforeach
+
+                                        <button class="btn btn-small">
+                                            {{ __('UIds neu vergeben') }}
+                                        </button>
+                                    </form>
+                                @else
+                                    <div class="alert alert-success"
+                                         role="alert"
+                                    >
+                                        <h4 class="alert-heading">{{__('Keine Geräte mit doppelter UUID')}}</h4>
+                                        <p>{{__('Es wurde keine Geräte mit UUID gefunden.')}}</p>
+                                    </div>
+                                @endif
+
                             </div>
+
                         </div>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                 <i class="ml-2 fas fa-stethoscope mr-2 fa-fw"></i>
                 {{__('Funktionstest erfassen')}}
             </a>
-            <a class="dropdown-item {{  ($loggedInUserIsQualified )? '' : 'disabled' }}"
+            <a class="dropdown-item {{  ($loggedInUserIsQualified || $isSysadmin)? '' : 'disabled' }}"
                href="#"
                data-toggle="modal"
                data-target="#modalAddEquipControl"

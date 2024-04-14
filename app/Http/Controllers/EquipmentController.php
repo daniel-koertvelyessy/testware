@@ -22,12 +22,14 @@ use App\ProductQualifiedUser;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\Storage;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -209,7 +211,8 @@ class EquipmentController extends Controller {
                 'companyString' => $service->makeCompanyString($equipment),
                 'equipment' => $equipment,
                 'parameterListItems' => $service->getParamList($equipment),
-                'locationpath' => $value
+                'locationpath' => $value,
+                'isSysadmin' => Auth::user()->isSysAdmin()
             ]);
     }
 
@@ -355,6 +358,75 @@ class EquipmentController extends Controller {
             $msg);
 
         return redirect()->route('equipMain');
+    }
+
+    public function fixuid(Request $request)
+    {
+        $changeCounter = 0;
+        foreach ($request->keepThisUid as $uid => $id){
+
+            foreach (Equipment::where('eq_uid', $uid)->get() as $equipment){
+
+            if($equipment->id != $id){
+                $equipment->eq_uid = \Illuminate\Support\Str::uuid();
+               if ($equipment->save() ) $changeCounter++;
+            }
+
+            }
+
+        }
+
+        $request->session()->flash('status',__('Es wurden :num Uid geändert!', ['num' => $changeCounter]));
+
+        return back();
+    }
+
+    public function syncuid()
+    {
+
+        $syncCounter = 0;
+        $newCounter = 0;
+
+        foreach (Equipment::select('id', 'eq_uid')->get() as $equipment) {
+
+            $equipmentUid = EquipmentUid::where('equipment_id', $equipment->id)->where('equipment_uid', $equipment->eq_uid)->first();
+
+            if ($equipmentUid) {
+                if ($equipmentUid->equipment_uid !== $equipment->eq_uid) {
+                    $equipmentUid->equipment_uid = $equipment->eq_uid;
+                    $syncCounter += $equipmentUid->save() ? 1 : 0;
+                }
+            } elseif(EquipmentUid::where('equipment_id', $equipment->id)->count() > 0){
+                $checkIdOnly = EquipmentUid::where('equipment_id', $equipment->id)->first();
+                if ($checkIdOnly) {
+                    if($checkIdOnly->equipment_uid!== $equipment->eq_uid){
+                        $checkIdOnly->equipment_uid= $equipment->eq_uid;
+                        $syncCounter += $checkIdOnly->save() ? 1 : 0;
+                    }
+                }
+            } else {
+                $new_equipment_uid = new EquipmentUid();
+                $new_equipment_uid->equipment_id = $equipment->id;
+                $new_equipment_uid->equipment_uid = $equipment->eq_uid;
+                $newCounter += $new_equipment_uid->save() ? 1 : 0;
+            }
+
+        }
+        if ($syncCounter > 0)
+            $msg = $syncCounter > 1
+                ? __('Es wurden :numSync Einträge synchronisiert!', ['numSync' => $syncCounter])
+                : __('Es wurde ein Eintrag synchronisiert.');
+
+        if ($newCounter > 0)
+            $msg .= $newCounter > 1
+                ? __('Es wurden :numNew Einträger vorgenommen!', ['numNew' => $newCounter])
+                : __('Es wurde ein neuer Eintrag erstellt.');
+
+        request()->session()->flash('status', $msg);
+
+
+        return back();
+
     }
 
     public function getEquipmentAjaxListe(Request $request)

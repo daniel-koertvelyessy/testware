@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Resources\locations;
+namespace App\Http\Resources\equipment;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AddressShort as AdresseKurzResource;
 
 class EquipmentShort extends JsonResource
 {
@@ -14,11 +13,12 @@ class EquipmentShort extends JsonResource
      * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'label' => $this->l_label,
-            'name' => $this->l_name,
+            'id' => $this->eq_uid,
+            'name' => $this->eq_name,
+            'link' => route('api.v1.equipment.show',$this)
         ];
     }
 }

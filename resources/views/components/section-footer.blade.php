@@ -8,9 +8,6 @@
         $dbstatus = $systemStatus->getBrokenDBLinks();
         $objects = $systemStatus->getObjectStatus();
 
-
-
-
         if (array_sum($dbstatus)>0){
             $status .= '<a href="'.route('admin.index').'"
            class="text-danger mr-2"
