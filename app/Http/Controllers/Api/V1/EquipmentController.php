@@ -11,7 +11,9 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 use App\Http\Resources\equipment\Equipment as EquipmentResource;
+use App\Http\Resources\equipment\TestEquipment as TestEquipmentResource;
 use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
+use App\Http\Resources\equipment\EquipmentStats as EquipmentStatsResource;
 
 class EquipmentController extends Controller
 {
@@ -83,4 +85,21 @@ class EquipmentController extends Controller
             'status' => 'eqipment deleted'
         ]);
     }
+
+    public function status()
+    {
+        return EquipmentStatsResource::collection(Equipment::with('EquipmentState')->get());
+    }
+
+    public function testEquipment()
+    {
+       return TestEquipmentResource::collection(Equipment::with('EquipmentState')->get()->filter(function($equipment){
+            if($equipment->produkt->ControlProdukt) return $equipment;
+        })
+       );
+
+
+    }
+
+
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\equipment;
+namespace App\Http\Resources\control;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Equipment extends JsonResource
+class Control extends JsonResource
 {
     /**
      * Transform the resource into an array.

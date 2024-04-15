@@ -63,6 +63,7 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
 //    Route::post('/product/add/instructed_employee/', 'ProductController@addInstructedUser')->name('product.add.instructed_user');
 
 
+    Route::get('/testequipment', 'EquipmentController@testEquipment')->name('equipment.testequipment');
 
 
 

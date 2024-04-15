@@ -27,7 +27,8 @@ class SystemStatusController extends Controller
     public function getOrphanEquipmentIds()
     {
 
-        $counter = DB::table('equipment_uids')->select('equipment_uid', 'equipment_id')->get()->map(function ($uid) {
+
+        $counter = DB::table('equipment_uids')->select('equipment_uid', 'equipment_id')->get()->filter(function ($uid) {
             return Equipment::where('eq_uid', $uid->equipment_uid)->count() > 1 ? 1 : 0;
         });
 
@@ -41,8 +42,7 @@ class SystemStatusController extends Controller
         $counter = Equipment::withTrashed()->get()->map(function (
             Equipment $equipment
         ) {
-            return EquipmentUid::where('equipment_uid',
-                                       $equipment->eq_uid)->count() == 0
+            return EquipmentUid::where('equipment_uid', $equipment->eq_uid)->count() == 0
                 ? 1
                 : 0;
         });
@@ -55,28 +55,26 @@ class SystemStatusController extends Controller
 
         $groupEqUid = Equipment::select('eq_uid')->groupBy('eq_uid')->get();
 
-        $allEquipUid = Equipment::select('id','eq_uid','eq_name','eq_inventar_nr','created_at')->get();
+        $allEquipUid = Equipment::select('id', 'eq_uid', 'eq_name', 'eq_inventar_nr', 'created_at')->get();
 
-        $grpList = $allEquipUid->map(function ($item,$key){
-            if (Equipment::where('eq_uid',$item->eq_uid)->count() > 1) return $item ;
+        $grpList = $allEquipUid->map(function ($item, $key) {
+            if (Equipment::where('eq_uid', $item->eq_uid)->count() > 1) return $item;
         });
 
         return [
-            'hasDuplicateIds' => $groupEqUid->count()< $allEquipUid->count(),
+            'hasDuplicateIds'           => $groupEqUid->count() < $allEquipUid->count(),
             'duplicateEquipmentUidList' => $grpList->groupBy('eq_uid')
         ];
 
 
-
-
     }
 
-    public function getAstrayEquipmentUids():int
+    public function getAstrayEquipmentUids(): int
     {
         $astrayUidCounter = 0;
-        foreach(Equipment::select(['id','eq_uid'])->get() as $equipment) {
-            $equipmentUid = EquipmentUid::where('equipment_id',$equipment->id)->first();
-            if ($equipmentUid){
+        foreach (Equipment::select(['id', 'eq_uid'])->get() as $equipment) {
+            $equipmentUid = EquipmentUid::where('equipment_id', $equipment->id)->first();
+            if ($equipmentUid) {
                 if ($equipmentUid->equipment_uid !== $equipment->eq_uid) {
                     $astrayUidCounter++;
                 }
@@ -105,8 +103,7 @@ class SystemStatusController extends Controller
             }
         }
 
-        foreach (ControlEquipment::withTrashed()->where('anforderung_id',
-                                                        null)->get() as $control) {
+        foreach (ControlEquipment::withTrashed()->where('anforderung_id', null)->get() as $control) {
             $brokenItems[] = $control;
             $counter++;
 
@@ -130,12 +127,10 @@ class SystemStatusController extends Controller
 
         foreach (ProduktAnforderung::all() as $item) {
 
-            if (Produkt::withTrashed()->where('id',
-                                              $item->produkt_id)->count() == 0) {
+            if (Produkt::withTrashed()->where('id', $item->produkt_id)->count() == 0) {
                 $items[] = $item;
             }
-            if (Anforderung::where('id',
-                                   $item->anforderung_id)->count() == 0) {
+            if (Anforderung::where('id', $item->anforderung_id)->count() == 0) {
                 $items[] = $item;
             }
         }
@@ -146,19 +141,13 @@ class SystemStatusController extends Controller
 
     public function getBrokenProductItems()
     {
-        return Produkt::withTrashed()->where('prod_uuid',
-                                             null)->count();
+        return Produkt::withTrashed()->where('prod_uuid', null)->count();
     }
 
     public function getOrphanRequirementItems(): array
     {
         $orphanRequirementItems = [];
-        foreach (AnforderungControlItem::select('id',
-                                                'anforderung_id',
-                                                'created_at',
-                                                'updated_at',
-                                                'aci_label',
-                                                'aci_name')->get() as $aci) {
+        foreach (AnforderungControlItem::select('id', 'anforderung_id', 'created_at', 'updated_at', 'aci_label', 'aci_name')->get() as $aci) {
             if ($aci->anforderung_id === null) {
                 $orphanRequirementItems[] = $aci;
             }
@@ -216,8 +205,7 @@ class SystemStatusController extends Controller
                 $equipment = Equipment::select('id')->get();
                 $countEquipment = $equipment->count();
                 foreach ($equipment as $item) {
-                    $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id',
-                                                                                   $item->id)->count() === 0
+                    $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id', $item->id)->count() === 0
                         ? 1
                         : 0;
                 }

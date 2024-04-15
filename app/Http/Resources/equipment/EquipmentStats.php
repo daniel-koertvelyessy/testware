@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 //use App\Http\Resources\AddressShort as AdresseKurzResource;
 
-class EquimentStats extends JsonResource
+class EquipmentStats extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,7 +24,8 @@ class EquimentStats extends JsonResource
             'status' => $this->EquipmentState->eqs_label,
             'tested_at' => $this->tested_at,
             'test_due_at' => $this->test_due_at,
-            'link' => route('api.v1.equipment.show',$this)
+            'link_api' => route('api.v1.equipment.show',$this),
+            'link_web' => route('equipment.show',$this)
         ];
     }
 }

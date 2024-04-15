@@ -18,7 +18,8 @@ class EquipmentShort extends JsonResource
         return [
             'id' => $this->eq_uid,
             'name' => $this->eq_name,
-            'link' => route('api.v1.equipment.show',$this)
+            'link_api' => route('api.v1.equipment.show',$this),
+            'link_web' => route('equipment.show',$this)
         ];
     }
 }
