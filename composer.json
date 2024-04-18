@@ -9,7 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.4|^8.1",
-        "elibyy/tcpdf-laravel": "^9.3.0",
+        "elibyy/tcpdf-laravel": "^11.1.0",
         "fideloper/proxy": "^4.4.2",
         "fruitcake/laravel-cors": "^v2.2.0",
         "guzzlehttp/guzzle": "^7.7.0",
