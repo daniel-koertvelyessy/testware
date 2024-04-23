@@ -59,7 +59,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'user_lock_pin',
-        'role_id'
+        'role_id',
+        'api_token'
     ];
     /**
      * The attributes that should be cast to native types.
