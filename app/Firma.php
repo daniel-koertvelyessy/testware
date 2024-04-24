@@ -36,6 +36,11 @@ class Firma extends Model
         return $this->belongsTo(Adresse::class);
     }
 
+    public function equipmentInstructor()
+    {
+        return $this->hasMany(EquipmentInstruction::class,'equipment_instruction_instructor_firma_id');
+    }
+
     public function contact()
     {
         return $this->hasMany(Contact::class);

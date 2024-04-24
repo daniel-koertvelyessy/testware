@@ -34,6 +34,22 @@ class EquipmentInstruction extends Model
         return $this->belongsTo(Profile::class, 'equipment_instruction_trainee_id');
     }
 
+    public function trainee()
+    {
+        return $this->belongsTo(Profile::class, 'equipment_instruction_trainee_id');
+    }
+
+    public function firma()
+    {
+        return $this->belongsTo(Firma::class, 'equipment_instruction_instructor_firma_id');
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Profile::class, 'equipment_instruction_instructor_profile_id');
+
+    }
+
     public function addEquipment(ProductInstructedUser $productInstructedUser, $equipment_id)
     {
         $this->equipment_instruction_date = $productInstructedUser->product_instruction_date;

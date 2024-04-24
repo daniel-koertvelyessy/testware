@@ -57,7 +57,7 @@ class Profile extends Model
         return route('profile.show', $this);
     }
 
-    public function fullName()
+    public function fullName():string
     {
         return $this->ma_vorname . ' ' . $this->ma_name ;
     }
