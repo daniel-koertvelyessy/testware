@@ -48,9 +48,7 @@
         <div class="row">
             @foreach (App\EquipmentState::select('id','estat_color','estat_label','estat_icon')->get() as $equipmentState)
                 @php
-                    $equipmentStateList = App\Equipment::select('id')
-                    ->where('equipment_state_id',$equipmentState->id)
-                    ->get()
+                    $equipmentStateList = App\Equipment::select('id')->where('equipment_state_id',$equipmentState->id)->get()
                 @endphp
                 <div class="col-lg-3 col-md-6">
                     <div class="border rounded p-2 mb-3 d-flex justify-content-between align-items-center"
@@ -60,11 +58,11 @@
                              style="display: flex; flex-direction: column;"
                         >
                             <span>{{__('Status')}}: <strong><a href="equipment/status/{{$equipmentState->id}}">{{
-                            ucwords
-                            ($equipmentState->estat_label)
-                            }}</a></strong>
+                            ucwords($equipmentState->estat_label) }}</a></strong>
                             </span>
-                            <span class="mt-2 display-4 text-{{ $equipmentState->estat_color }}"><i class="{{ $equipmentState->estat_icon }}"></i></span>
+                            <span class="mt-2 display-4 text-{{ ($equipmentStateList->count()>0)
+                            ? $equipmentState->estat_color : 'light' }}"><i class="{{
+                            $equipmentState->estat_icon }}"></i></span>
                         </div>
                         <div class="d-lg-none"
                              style="display: flex; flex-direction: column;"
@@ -81,7 +79,8 @@
                         </span>
                         @else
                             <span style="font-size: 3rem;"
-                                  class="ml-2 text-{{ ($equipmentStateList->count()>0) ? 'warning ' : 'success ' }}"
+                                  class="ml-2 text-{{ ($equipmentStateList->count()>0) ? 'warning ' : 'muted '
+                                   }}"
                             >{{$equipmentStateList->count()}}
                         </span>
                         @endif

@@ -3,6 +3,8 @@
 namespace App\Http\Resources\equipment;
 
 use App\ControlEquipment;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TestEquipment extends JsonResource
@@ -10,8 +12,8 @@ class TestEquipment extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param Request $request
+     * @return array|Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
@@ -23,13 +25,14 @@ class TestEquipment extends JsonResource
             'inventory'  => $this->eq_inventar_nr,
             'serial'     => $this->eq_serien_nr,
             'status'     => $this->EquipmentState->estat_label,
-            'teststatus' => ControlEquipment::where('equipment_id', $this->id)->get()->map(function ($testStatusItem) {
+            'teststatus' => ControlEquipment::with('Anforderung')->where('equipment_id', $this->id)->get()->map(function ($testStatusItem) {
+
                 return [
                     'last_at'     => $testStatusItem->qe_control_date_due,
                     'due_at'      => $testStatusItem->qe_control_date_last,
                     'requirement' => $testStatusItem->Anforderung->an_label,
                     'initial'     => $testStatusItem->Anforderung->is_initial_test,
-                    'external'    => $testStatusItem->Anforderung->is_external_test === true,
+                    'external'    => $testStatusItem->Anforderung->is_external,
                 ];
             }),
             'link_api'   => route('api.v1.equipment.show', $this),

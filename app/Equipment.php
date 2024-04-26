@@ -12,7 +12,7 @@
 
     class Equipment extends Model
     {
-        public $sortable = [
+        public array $sortable = [
             'id',
             'eq_inventar_nr',
             'eq_serien_nr',

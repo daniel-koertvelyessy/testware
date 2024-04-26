@@ -74,6 +74,10 @@
         }
 
 
+        public function ControlEquipment(){
+            return $this->hasMany(ControlEquipment::class);
+        }
+
         public function Equipment()
         {
             return $this->hasMany(Equipment::class);
