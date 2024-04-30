@@ -208,7 +208,7 @@ Route::get('/dashboard', function () {
     $maxListItems = 15;
 
     $equipmentTestWeekList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                             ->with('Equipment')
+                                             ->with('Equipment','Anforderung')
                                              ->where('qe_control_date_due', '<=', now()->addWeeks(4))
                                              ->where('archived_at', NULL)
                                              ->where('is_initial_test', false)
@@ -216,7 +216,7 @@ Route::get('/dashboard', function () {
                                              ->get();
 
     $equipmentTestMonthList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                              ->with('Equipment')
+                                              ->with('Equipment','Anforderung')
                                               ->where('archived_at', NULL)
                                               ->where('qe_control_date_due', '>', now()->addWeeks(4))
                                               ->where('qe_control_date_due', '<=', now()->addMonths(4))
@@ -232,7 +232,7 @@ Route::get('/dashboard', function () {
                                              ->get();
 
     $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                         ->with('Equipment')
+                                         ->with('Equipment','Anforderung')
                                          ->where('archived_at', NULL)
                                          ->where('is_initial_test', false)
                                          ->orderBy('qe_control_date_due')
@@ -322,6 +322,8 @@ Route::put('control_archive/{controlequipment}', 'ControlEquipmentController@arc
 Route::put('control/{controlequipment}/reactivate', 'ControlEquipmentController@reactivate')->name('control.reactivate');
 
 Route::get('equipment/status/{equipmentState}', 'EquipmentController@statuslist')->name('equipment.statuslist');
+
+Route::post('equipment/{equipment}/sync/requirements', 'EquipmentController@syncRequirements')->name('equipment.syncrequirements');
 
 Route::post('user.setMsgRead',
             'UserController@setMsgRead')->name('user.setMsgRead');

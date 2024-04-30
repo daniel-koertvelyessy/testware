@@ -30,12 +30,12 @@ class Location extends Model
         static::saving(function (Location $location) {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
         static::updating(function (Location $location) {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
     }
 

@@ -1,4 +1,7 @@
 @if(Auth::user())
+@php
+$hasUnreadNotifications = Auth::user()->unreadNotifications()->count()>0
+ @endphp
     <ul class="navbar-nav">
         <li class="nav-item {{ Request::routeIs('firma')  ? ' active ' : '' }} dropdown dropleft">
             <a class="nav-link "
@@ -8,9 +11,9 @@
                data-toggle="dropdown"
                aria-expanded="false"
             >
-                @if (Auth::user()->unreadNotifications()->count()>0)
+                @if ($hasUnreadNotifications)
                     <i class="fas fa-envelope text-info"
-                       title="{{ Auth::user()->unreadNotifications()->count() }} {{ __(' neue Nachrichten') }}"
+                       title="{{ $hasUnreadNotifications }} {{ __(' neue Nachrichten') }}"
                     ></i>
                 @else
                     {!! Auth::user()->isSysAdmin() ? '<i class="fas fa-user-shield" title="SysAdmin-User"></i>' : '<i class="fas fa-user"></i>' !!}
@@ -42,7 +45,7 @@
                        href="#" data-toggle="modal" data-target="#userMsgModal"
                     >
                         <i class="fas fa-inbox fa-fw mr-2"></i>
-                        <span><span class="badge badge-light ">{{ Auth::user()->unreadNotifications()->count() }}</span> {{__('Nachrichten')}}</span>
+                        <span><span class="badge badge-light ">{{ $hasUnreadNotifications }}</span> {{__('Nachrichten')}}</span>
                     </a>
                 </li>
                 <li>

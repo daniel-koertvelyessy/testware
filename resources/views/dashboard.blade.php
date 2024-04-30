@@ -210,20 +210,23 @@
                             <tbody>
 
                             @forelse($equipmentTestMonthList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
+                                @php
+                                    $equipment = $controlEquipment->Equipment;
+                                    $requirement = $controlEquipment->Anforderung;
+                                @endphp
+                                @if($equipment && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
+                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
                                             <br>
                                             <x-notifyer>
-                                                Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
                                         </td>
-                                        <td>{{ $controlEquipment->Anforderung->an_name }}</td>
+                                        <td>{{ $requirement->an_name }}</td>
                                         <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                         <td></td>
                                     </tr>
                                 @endif
-
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -259,15 +262,19 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestYearList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
+                                @php
+                                    $equipment = $controlEquipment->Equipment;
+                                    $requirement = $controlEquipment->Anforderung;
+                                @endphp
+                                @if($equipment && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
+                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
                                             <br>
-                                            <x-notifyer>{{ __('Inventar-Nr')}}
-                                                : {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                            <x-notifyer>
+                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
                                         </td>
-                                        <td>{{ $controlEquipment->Anforderung->an_name }}</td>
+                                        <td>{{ $requirement->an_name }}</td>
                                         <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                         <td></td>
                                     </tr>
@@ -307,15 +314,19 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment  && ! $controlEquipment->archived_at)
+                                @php
+$equipment = $controlEquipment->Equipment;
+$requirement = $controlEquipment->Anforderung;
+                                @endphp
+                                @if($equipment && ! $controlEquipment->archived_at)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}"> {{ $controlEquipment->Equipment->eq_name }}</a>
+                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
                                             <br>
                                             <x-notifyer>
-                                                Inventar-Nr: {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
+                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
                                         </td>
-                                        <td>{{ $controlEquipment->Anforderung->an_name }}</td>
+                                        <td>{{ $requirement->an_name }}</td>
                                         <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
                                         <td></td>
                                     </tr>
@@ -382,46 +393,7 @@
 
 @section('scripts')
 
-    {{--    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>--}}
     <script>
-        /*
-                let equipmentStateNumbers = [
-@foreach(App\EquipmentState::all() as $eqs)
-        {{ App\Equipment::where('equipment_state_id',$eqs->id)->count() }},  // freigegeben
-            @endforeach
-        ];
-        let equipmentStateColors = [
-            "rgb(84,177,25)",
-            "rgb(208,191,31)",
-            "rgb(191,78,33)",
-            "rgb(193,8,8)"
-        ];
-        let equipmentStateLabels = [
-            "Freigegegben",
-            "Beschädigt",
-            "Reparatur",
-            "Gesperrt"
-        ];
-        const options = {
-            chart: {
-                type: 'pie'
-            },
-            colors: equipmentStateColors,
-
-            series: equipmentStateNumbers,
-
-            labels: [
-                "Freigegegben",
-                "Beschädigt",
-                "Reparatur",
-                "Gesperrt"
-            ]
-
-        }
-
-        var chart = new ApexCharts(document.querySelector("#myChart"), options);
-
-        chart.render();*/
 
         $('#datepicker').datepicker({
             format: "yyyy-mm-dd",

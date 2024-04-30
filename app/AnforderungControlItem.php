@@ -61,14 +61,14 @@ class AnforderungControlItem extends Model
         return $this->hasMany(AciDataSet::class);
     }
 
-    public function isIncomplete(AnforderungControlItem $anforderungControlItem)
+    public function isIncomplete(AnforderungControlItem $anforderungControlItem, int $countControlProducts): bool|string
     {
         $isInComplete = false;
         $msgPG = '';
         $msgTo = '';
         if ($anforderungControlItem->aci_control_equipment_required === 1) {
 
-            if (ControlProdukt::all()->count() === 0) {
+            if ($countControlProducts === 0) {
                 $msgPG = '<li>' . __('Kein Prüfgerät vorhanden!') . '</li>';
                 $isInComplete = true;
             }

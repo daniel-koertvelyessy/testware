@@ -38,13 +38,15 @@
             static::saving(function (Equipment $equipment)
             {
                 Cache::forget('app-get-current-amount-Equipment');
-                Cache::forget('system-status-counter');
+                Cache::forget('system-status-database');
+                Cache::forget('system-status-objects');
 
             });
             static::updating(function (Equipment $equipment)
             {
                 Cache::forget('app-get-current-amount-Equipment');
-                Cache::forget('system-status-counter');
+                Cache::forget('system-status-database');
+                Cache::forget('system-status-objects');
 
             });
         }
@@ -73,6 +75,13 @@
         public function produkt()
         {
             return $this->belongsTo(Produkt::class);
+        }
+
+        public function requirement(Produkt $produkt)
+        {
+            return ProduktAnforderung::with('Anforderung')->where('produkt_id',$produkt->id)->get()->map(function($produktAnforderung){
+                return Anforderung::find($produktAnforderung->anforderung_id);
+            });
         }
 
         public function produktDetails()
@@ -119,6 +128,10 @@
         public function ControlEquipment()
         {
             return $this->hasMany(ControlEquipment::class);
+        }
+
+        public function Anforderung(){
+            return $this->hasOneThrough(Anforderung::class,ProduktAnforderung::class,'eq_uid','produkt_id','id');
         }
 
         public function EquipmentUid()

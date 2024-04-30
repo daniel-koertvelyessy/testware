@@ -28,7 +28,7 @@ class ControlEquipment extends Model
 
     public function Equipment()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(Equipment::class,'equipment_id');
     }
 
     public function DelayedControlEquipment()
@@ -151,9 +151,11 @@ class ControlEquipment extends Model
     public function countQualifiedUser()
     {
 
+        $equipment = $this->Equipment;
+
         $qualifiedUser = 0;
-        $qualifiedUser += $this->Equipment->produkt->ProductQualifiedUser()->count();
-        $qualifiedUser += $this->Equipment->countQualifiedUser();
+        $qualifiedUser += $equipment->produkt->ProductQualifiedUser()->count();
+        $qualifiedUser += $equipment->countQualifiedUser();
 
         return $qualifiedUser;
     }

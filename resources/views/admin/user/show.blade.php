@@ -535,21 +535,25 @@
                                         {{ $user->user_theme=='css/tbs.css'? ' selected ' : '' }}
                                 >Twitter Bootstrap
                                 </option>
-
-                                <option value="css/darkmode.css"
-                                        data-asset="{{ asset('css/darkmode.css') }}"
-                                        {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
-                                >Dark
-                                </option>
                                 <option value="css/flatly.css"
                                         data-asset="{{ asset('css/flatly.css') }}"
                                         {{ $user->user_theme=='css/flatly.css'? ' selected ' : '' }}
                                 >Light
                                 </option>
-                                <option value="css/materia.css"
-                                        data-asset="{{ asset('css/materia.css') }}"
-                                        {{ $user->user_theme=='css/materia.css'? ' selected ' : '' }}
-                                >Material
+                                <option value="css/space.css"
+                                        data-asset="{{ asset('css/space.css') }}"
+                                        {{ $user->user_theme=='css/space.css'? ' selected ' : '' }}
+                                >Space
+                                </option>
+                                <option value="css/darkmode.css"
+                                        data-asset="{{ asset('css/darkmode.css') }}"
+                                        {{ $user->user_theme=='css/darkmode.css'? ' selected ' : '' }}
+                                >Dark
+                                </option>
+                                <option value="css/dark.css"
+                                        data-asset="{{ asset('css/dark.css') }}"
+                                        {{ $user->user_theme=='css/dark.css'? ' selected ' : '' }}
+                                >Dark II
                                 </option>
                             </select>
                         </div>

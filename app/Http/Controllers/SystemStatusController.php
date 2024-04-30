@@ -24,12 +24,12 @@ use function PHPUnit\Framework\isType;
 class SystemStatusController extends Controller
 {
 
-    public function getOrphanEquipmentIds()
+    public function countOrphanEquipmentUids()
     {
 
 
-        $counter = DB::table('equipment_uids')->select('equipment_uid', 'equipment_id')->get()->filter(function ($uid) {
-            return Equipment::where('eq_uid', $uid->equipment_uid)->count() > 1 ? 1 : 0;
+        $counter = EquipmentUid::with('Equipment')->select('equipment_uid', 'equipment_id')->get()->filter(function ($equipmenetUid) {
+            return $equipmenetUid->Equipment->where('eq_uid', $equipmenetUid->equipment_uid)->count()> 1 ? 1 : 0;
         });
 
         return $counter->sum();
@@ -53,17 +53,17 @@ class SystemStatusController extends Controller
     public function getDuplicateUuIds()
     {
 
-        $groupEqUid = Equipment::select('eq_uid')->groupBy('eq_uid')->get();
-
         $allEquipUid = Equipment::select('id', 'eq_uid', 'eq_name', 'eq_inventar_nr', 'created_at')->get();
 
-        $grpList = $allEquipUid->map(function ($item, $key) {
-            if (Equipment::where('eq_uid', $item->eq_uid)->count() > 1) return $item;
+        $groupEqUid = $allEquipUid->groupBy('eq_uid');
+
+        $grpList = $allEquipUid->filter(function ($equipment) {
+            if (Equipment::where('eq_uid', $equipment->eq_uid)->count() > 1) return $equipment;
         });
 
         return [
             'hasDuplicateIds'           => $groupEqUid->count() < $allEquipUid->count(),
-            'duplicateEquipmentUidList' => $grpList->groupBy('eq_uid')
+            'duplicateEquipmentUidList' => $grpList
         ];
 
 
@@ -125,7 +125,7 @@ class SystemStatusController extends Controller
 
         $items = [];
 
-        foreach (ProduktAnforderung::all() as $item) {
+        foreach (ProduktAnforderung::with(['Produkt','Anforderung'])->get() as $item) {
 
             if (Produkt::withTrashed()->where('id', $item->produkt_id)->count() == 0) {
                 $items[] = $item;
@@ -157,6 +157,7 @@ class SystemStatusController extends Controller
 
     public function getBrokenDBLinks()
     {
+        return Cache::remember('system-status-database', now()->addSeconds(60), function (){
         $brokenLinksCount = 0;
         $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
         $brokenProducts = $this->getBrokenProductItems();
@@ -164,9 +165,9 @@ class SystemStatusController extends Controller
         $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
         $orphanACI = $this->getOrphanRequirementItems();
         $brokenControlItems = $brokenEquipmentControl['brokenItems'];
-        $orphanEquipmentUids = $this->getOrphanEquipmentIds();
+        $orphanEquipmentUids = $this->countOrphanEquipmentUids();
 
-        //       return Cache::remember('system-status-counter', now()->addSeconds(10), function () use ($brokenEquipmentControl, $counter){
+
         return [
             'missingEquipmentUuids'         => $this->getBrockenEquipmentUuids(),
             'brokenProductRequiremnets'     => count($brokenProductRequiremnets),
@@ -181,7 +182,8 @@ class SystemStatusController extends Controller
             'duplicate_uuids'               => $this->getDuplicateUuIds(),
             'astrayEquipmentUids'           => $this->getAstrayEquipmentUids(),
         ];
-        //       });
+      });
+
 
 
     }
@@ -189,8 +191,8 @@ class SystemStatusController extends Controller
     public function getObjectStatus(): array
     {
 
-        return Cache::remember('system-status-counter',
-                               now()->addSeconds(10),
+        return Cache::remember('system-status-objects',
+                               now()->addSeconds(60),
             function () {
                 $incomplete_equipment = false;
                 $incomplete_requirement = 0;

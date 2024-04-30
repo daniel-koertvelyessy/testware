@@ -18,11 +18,13 @@ class Stellplatz extends Model
         parent::boot();
         static::saving(function (Stellplatz $stellplatz) {
             Cache::forget('app-get-current-amount-Stellplatz');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function (Stellplatz $stellplatz) {
             Cache::forget('app-get-current-amount-Stellplatz');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 

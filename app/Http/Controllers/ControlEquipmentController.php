@@ -11,6 +11,8 @@ use App\ControlEvent;
 use App\ControlEventDataset;
 use App\ControlEventEquipment;
 use App\ControlEventItem;
+use App\ControlInterval;
+use App\ControlProdukt;
 use App\Equipment;
 use App\EquipmentHistory;
 use App\EquipmentQualifiedUser;
@@ -48,10 +50,13 @@ class ControlEquipmentController extends Controller
      */
     public function index()
     {
-        $controlItems = ControlEquipment::with('Equipment', 'Anforderung')->sortable()->paginate(20);
+        $controlItems = ControlEquipment::with(['Equipment', 'Anforderung'])->sortable()->paginate(20);
         $archivedControlItems = ControlEquipment::with('Equipment', 'Anforderung')->whereNotNull('archived_at')->get();
         $isSysAdmin = \Auth::user()->isSysAdmin();
-        return view('testware.control.index', compact('controlItems', 'isSysAdmin', 'archivedControlItems'));
+        $controlIntervalList = ControlInterval::select('id', 'ci_label')->get();
+        $requirements = Anforderung::select(['id','an_label'])->get();
+        $countControlProducts = ControlProdukt::all()->count();
+        return view('testware.control.index', compact('controlItems', 'isSysAdmin', 'archivedControlItems','controlIntervalList','requirements','countControlProducts'));
 
     }
 
@@ -454,14 +459,14 @@ class ControlEquipmentController extends Controller
     public function destroy(Request $request)
     {
 
-        //       dd($request);
+        //    dd($request);
 
         if (!\Auth::user()->isSysAdmin()) {
             request()->session()->flash('status', 'Keine Berechtigung zum Löschen des Eintrages!');
             return redirect()->back();
         }
-        $controlEquipment = ControlEquipment::withTrashed()->find($request->control_id);
-
+        $controlEquipment = ControlEquipment::withTrashed()->find($request->id);
+// dd($controlEquipment);
         $equipment_id = $controlEquipment->equipment_id;
         $control_date = $controlEquipment->created_at;
 

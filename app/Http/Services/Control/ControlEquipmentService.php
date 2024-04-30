@@ -32,7 +32,7 @@
             <select class="custom-select" id="' .$idname . $item_id . '" name="'.$idname.'">
             ';
 
-            foreach (Anforderung::select('id', 'an_label')->get() as $requirement) {
+            foreach (Anforderung::select(['id', 'an_label'])->get() as $requirement) {
 
                 $html .= '<option '.($selectedId === $requirement->id ? "selected" : "" ).' value="' . $requirement->id . '">' . $requirement->an_label . '</option>';
 

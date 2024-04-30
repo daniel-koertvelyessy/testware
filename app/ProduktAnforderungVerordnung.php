@@ -12,10 +12,10 @@ class ProduktAnforderungVerordnung extends Model
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
     }
 

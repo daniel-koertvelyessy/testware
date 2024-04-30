@@ -429,6 +429,11 @@ class EquipmentController extends Controller {
 
     }
 
+    public function syncRequirements(Request $request)
+    {
+        dd($request);
+    }
+
     public function getEquipmentAjaxListe(Request $request)
     {
         return DB::table('equipment')

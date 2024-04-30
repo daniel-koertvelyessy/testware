@@ -29,12 +29,12 @@ class Room extends Model
         static::saving(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
         static::updating(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
-            Cache::forget('system-status-counter');
+            Cache::forget('system-status-database');Cache::forget('system-status-objects');
         });
     }
 
