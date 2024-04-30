@@ -3,7 +3,7 @@
 ## Content
 testWare enables you to manage the testing and maintenance of your location and equipment.
 
-Current version: `1.80.6`
+Current version: `1.80.7`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
@@ -23,7 +23,7 @@ There are mainly two ways to install your instance of testWare:
 Make sure your server meets following requirements:
 - Linux based system (Ubuntu or Debian)
 - Apache server (or nginx reverse proxy)
-- php min. version 7.3
+- php min. version 8.2
 - SQL database system such as PostgreSQL or MariaDB / mySQL
 - Composer installed
 - npm installed
