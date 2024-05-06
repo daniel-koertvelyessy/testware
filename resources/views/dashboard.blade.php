@@ -167,20 +167,7 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestWeekList->take($maxListItems) as $controlEquipment)
-                                @if($controlEquipment->Equipment && $controlEquipment->Anforderung && ! $controlEquipment->archived_at)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('equipment.show',$controlEquipment->Equipment) }}">
-                                                {{ $controlEquipment->Equipment->eq_name }}</a>
-                                            <br>
-                                            <x-notifyer>{{__('Inventar-Nr')}}
-                                                : {{ str_limit($controlEquipment->Equipment->eq_inventar_nr,30) }}</x-notifyer>
-                                        </td>
-                                        <td>{{ $controlEquipment->Anforderung->an_name }}</td>
-                                        <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
-                                        <td></td>
-                                    </tr>
-                                @endif
+                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -219,23 +206,7 @@
                             <tbody>
 
                             @forelse($equipmentTestMonthList->take($maxListItems) as $controlEquipment)
-                                @php
-                                    $equipment = $controlEquipment->Equipment;
-                                    $requirement = $controlEquipment->Anforderung;
-                                @endphp
-                                @if($equipment && ! $controlEquipment->archived_at)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
-                                            <br>
-                                            <x-notifyer>
-                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
-                                        </td>
-                                        <td>{{ $requirement->an_name }}</td>
-                                        <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
-                                        <td></td>
-                                    </tr>
-                                @endif
+                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -273,23 +244,7 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestYearList->take($maxListItems) as $controlEquipment)
-                                @php
-                                    $equipment = $controlEquipment->Equipment;
-                                    $requirement = $controlEquipment->Anforderung;
-                                @endphp
-                                @if($equipment && ! $controlEquipment->archived_at)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
-                                            <br>
-                                            <x-notifyer>
-                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
-                                        </td>
-                                        <td>{{ $requirement->an_name }}</td>
-                                        <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
-                                        <td></td>
-                                    </tr>
-                                @endif
+                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -327,23 +282,7 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestList->take($maxListItems) as $controlEquipment)
-                                @php
-                                    $equipment = $controlEquipment->Equipment;
-                                    $requirement = $controlEquipment->Anforderung;
-                                @endphp
-                                @if($equipment && ! $controlEquipment->archived_at)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('equipment.show',$equipment) }}"> {{ $equipment->eq_name }}</a>
-                                            <br>
-                                            <x-notifyer>
-                                                Inventar-Nr: {{ str_limit($equipment->eq_inventar_nr,30) }}</x-notifyer>
-                                        </td>
-                                        <td>{{ $requirement->an_name }}</td>
-                                        <td>{!! $controlEquipment->checkDueDate($controlEquipment) !!}</td>
-                                        <td></td>
-                                    </tr>
-                                @endif
+                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>¡
                             @empty
                                 <tr>
                                     <td colspan="4">

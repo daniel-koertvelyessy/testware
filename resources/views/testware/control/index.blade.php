@@ -125,12 +125,10 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="form-group col">
-                                                                        <label
-                                                                            for="anforderung_id_{{ $controlItem->id }}">{{ __('Anforderung') }}</label>
                                                                         <x-lists.requirementSelector
                                                                                 :requirements="$requirements"
                                                                                 :id="$controlItem->id"
-                                                                                :selected="$controlItem->id"
+                                                                                :selected="$controlItem->anforderung_id"
                                                                                 name="anforderung_id"
                                                                         />
                                                                     </div>

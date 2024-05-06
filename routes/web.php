@@ -193,6 +193,7 @@ Route::get('/dashboard', function () {
                                               ->get();
 
     $equipmentTestYearList = ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
+                                             ->with('Equipment','Anforderung')
                                              ->where('is_initial_test', false)
                                              ->where('archived_at', NULL)
                                              ->whereBetween('qe_control_date_due', [now(), date('Y' . '-12-31')])
