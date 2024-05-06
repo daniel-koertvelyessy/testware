@@ -899,7 +899,7 @@ class AdminController extends Controller
 
     public function getUsedStellplatzByType(Equipment $equipment, Request $request)
     {
-        return $equipment->with('produkt')->where('storage_id', $request->id)->get();
+        return $equipment->with('Produkt')->where('storage_id', $request->id)->get();
     }
 
     public function getUsedEquipmentByProdAnforderung(Produkt $room, Request $btid)

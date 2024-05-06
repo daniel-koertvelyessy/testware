@@ -5,6 +5,8 @@
     use DB;
     use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Relations\BelongsTo;
+    use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Database\Eloquent\SoftDeletes;
     use Illuminate\Support\Facades\Cache;
     use Illuminate\Support\Facades\Request;
@@ -25,6 +27,8 @@
             'created_at',
             'updated_at'
         ];
+
+//        protected $with = ['Produkt'];
 
         //    protected $table = 'equipments';
 
@@ -72,15 +76,23 @@
 //            return 'eq_inventar_nr';
         }
 
-        public function produkt()
+        public function Produkt()
         {
             return $this->belongsTo(Produkt::class);
+        }
+        public function isControlProdukt(Equipment $equipment)
+        {
+
+            $produkt = $equipment->Produkt;
+
+            return ControlProdukt::where('produkt_id', $produkt->id)->get();
+
         }
 
         public function requirement(Produkt $produkt)
         {
-            return ProduktAnforderung::with('Anforderung')->where('produkt_id',$produkt->id)->get()->map(function($produktAnforderung){
-                return Anforderung::find($produktAnforderung->anforderung_id);
+            return ProduktAnforderung::with('Anforderung')->where('produkt_id',$produkt->id)->get()->filter(function($produktAnforderung){
+                return $produktAnforderung->Anforderung;
             });
         }
 
@@ -104,28 +116,33 @@
             return $this->hasMany(EquipmentHistory::class);
         }
 
-        public function showStatus()
+        public function showStatus(): string
         {
             return '<span class="' . $this->EquipmentState->estat_icon . ' text-' . $this->EquipmentState->estat_color . '"></span>';
         }
 
-        public function priceTag()
+        public function priceTag(): string
         {
 //        return (float)$this->eq_price;
             return number_format($this->eq_price, 2, '.', '');
         }
 
-        public function storage()
+        public function storage(): BelongsTo
         {
             return $this->belongsTo(Storage::class);
         }
 
-        public function control()
+        public function getStorageLabel()
+        {
+          return  Storage::findOrFail($this->storage_id)->storage_label;
+        }
+
+        public function control(): HasMany
         {
             return $this->hasMany(ControlEvent::class);
         }
 
-        public function ControlEquipment()
+        public function ControlEquipment(): HasMany
         {
             return $this->hasMany(ControlEquipment::class);
         }
@@ -194,7 +211,7 @@
 
         public function isControlProduct()
         {
-            return ($this->produkt->ControlProdukt)
+            return (ControlProdukt::where('produkt_id',$this->produkt_id)->first())
                 ? '<i class="fas fa-check text-success"></i>'
                 : '<i class="fas fa-times text-muted"></i>';
         }

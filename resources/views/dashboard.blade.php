@@ -46,7 +46,7 @@
             </span>
         </h2>
         <div class="row">
-            @foreach (App\EquipmentState::select('id','estat_color','estat_label','estat_icon')->get() as $equipmentState)
+            @foreach (App\EquipmentState::all() as $equipmentState)
                 @php
                     $equipmentStateList = App\Equipment::select('id')->where('equipment_state_id',$equipmentState->id)->get()
                 @endphp
@@ -57,20 +57,19 @@
                         <div class="d-none d-lg-inline-flex align-items-center"
                              style="display: flex; flex-direction: column;"
                         >
-                            <span>{{__('Status')}}: <strong><a href="equipment/status/{{$equipmentState->id}}">{{
-                            ucwords($equipmentState->estat_label) }}</a></strong>
+                            <span>{{__('Status')}}: <strong><a href="equipment/status/{{$equipmentState->id}}">{{ucwords($equipmentState->estat_label) }}</a></strong>
                             </span>
-                            <span class="mt-2 display-4 text-{{ ($equipmentStateList->count()>0)
-                            ? $equipmentState->estat_color : 'light' }}"><i class="{{
-                            $equipmentState->estat_icon }}"></i></span>
+                            <span class="mt-2 display-4 text-{{ ($equipmentStateList->count()>0) ? $equipmentState->estat_color : 'light' }}">
+                                <i class="{{$equipmentState->estat_icon }}"></i></span>
                         </div>
                         <div class="d-lg-none"
                              style="display: flex; flex-direction: column;"
                         >
-                            <span>{{__('Status')}}: <strong><a href="equipment/status/{{$equipmentState->id}}">
-                                    {{ ucwords($equipmentState->estat_label) }}
-                                    </a></strong></span>
-                            <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,40) }}</span>
+                            <span>{{__('Status')}}:
+                                <strong><a href="equipment/status/{{$equipmentState->id}}"> {{ ucwords($equipmentState->estat_label) }} </a></strong>
+                            </span>
+{{--                            <span class="lead mt-2">{{ $equipmentState->estat_name }}</span>--}}
+                                                        <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,40) }}</span>
                         </div>
                         @if ($equipmentState->id === 1)
                             <span style="font-size: 3rem;"
@@ -114,7 +113,9 @@
                            role="tab"
                            aria-controls="controlWeek"
                            aria-selected="true"
-                        >4 {{__('Wochen')}} <x-notifyer>({{ $equipmentTestWeekList->count() }})</x-notifyer></a>
+                        >4 {{__('Wochen')}}
+                            <x-notifyer>({{ $equipmentTestWeekList->count() }})</x-notifyer>
+                        </a>
                         <a class="nav-link"
                            id="controlMonth-tab"
                            data-toggle="tab"
@@ -122,7 +123,9 @@
                            role="tab"
                            aria-controls="controlMonth"
                            aria-selected="false"
-                        >3 {{__('Monate')}} <x-notifyer>({{ $equipmentTestMonthList->count() }})</x-notifyer></a>
+                        >3 {{__('Monate')}}
+                            <x-notifyer>({{ $equipmentTestMonthList->count() }})</x-notifyer>
+                        </a>
                         <a class="nav-link"
                            id="controlYear-tab"
                            data-toggle="tab"
@@ -130,7 +133,9 @@
                            role="tab"
                            aria-controls="controlYear"
                            aria-selected="false"
-                        >{{__('dieses Jahr')}} <x-notifyer>({{ $equipmentTestYearList->count() }})</x-notifyer></a>
+                        >{{__('dieses Jahr')}}
+                            <x-notifyer>({{ $equipmentTestYearList->count() }})</x-notifyer>
+                        </a>
                         <a class="nav-link"
                            id="controlAll-tab"
                            data-toggle="tab"
@@ -138,7 +143,9 @@
                            role="tab"
                            aria-controls="controlAll"
                            aria-selected="false"
-                        >{{__('Alle')}} <x-notifyer>({{ $equipmentTestList->count() }})</x-notifyer></a>
+                        >{{__('Alle')}}
+                            <x-notifyer>({{ $equipmentTestList->count() }})</x-notifyer>
+                        </a>
                     </div>
                 </nav>
                 <div class="tab-content"
@@ -183,7 +190,9 @@
                             @endforelse
                             @if($equipmentTestWeekList->count()>0 && $equipmentTestWeekList->count() > $maxListItems)
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="4"
+                                        class="text-center"
+                                    >
                                         <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
                                             ['num' => $equipmentTestWeekList->count()-$maxListItems])
                                             }}</a>
@@ -236,7 +245,9 @@
                             @endforelse
                             @if($equipmentTestMonthList->count()>0 && $equipmentTestMonthList->count() > $maxListItems)
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="4"
+                                        class="text-center"
+                                    >
                                         <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
                                             ['num' => $equipmentTestMonthList->count()-$maxListItems])
                                             }}</a>
@@ -288,7 +299,9 @@
                             @endforelse
                             @if($equipmentTestYearList->count()>0 && $equipmentTestYearList->count() > $maxListItems)
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="4"
+                                        class="text-center"
+                                    >
                                         <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
                                             ['num' => $equipmentTestYearList->count()-$maxListItems])
                                             }}</a>
@@ -315,8 +328,8 @@
                             <tbody>
                             @forelse($equipmentTestList->take($maxListItems) as $controlEquipment)
                                 @php
-$equipment = $controlEquipment->Equipment;
-$requirement = $controlEquipment->Anforderung;
+                                    $equipment = $controlEquipment->Equipment;
+                                    $requirement = $controlEquipment->Anforderung;
                                 @endphp
                                 @if($equipment && ! $controlEquipment->archived_at)
                                     <tr>
@@ -340,7 +353,9 @@ $requirement = $controlEquipment->Anforderung;
                             @endforelse
                             @if($equipmentTestList->count()>0 && $equipmentTestList->count() > $maxListItems)
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="4"
+                                        class="text-center"
+                                    >
                                         <a href="{{ route('control.index') }}">{{ __(':num weitere Prüfungen',
                                             ['num' => $equipmentTestList->count()-$maxListItems])
                                             }}</a>

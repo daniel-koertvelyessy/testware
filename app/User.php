@@ -123,7 +123,7 @@ class User extends Authenticatable
 
     public function hasEquipment()
     {
-        return $this->hasManyThrough('Equipment', 'EquipmentQualifiedUser');
+        return $this->hasManyThrough(Equipment::class, EquipmentQualifiedUser::class,'user_id','id','equipment_id');
     }
 
     public function instructedOnEquipment()

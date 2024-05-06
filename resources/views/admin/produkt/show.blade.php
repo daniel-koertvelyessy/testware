@@ -1656,6 +1656,9 @@
                     >
                         <div class="row">
                             <div class="col">
+                                <a href="{{ route('equipment.create',['produkt_id' => $produkt->id]) }}"
+                                   class="btn btn-outline-primary mb-3"
+                                >{{ __('Gerät aus Produkt erstellen') }}</a>
                                 <table class="table table-responsive-md table-striped"
                                        id="tabProduktEquipmentListe"
                                 >
@@ -1694,7 +1697,6 @@
                                     @endforelse
                                     </tbody>
                                 </table>
-{{ $equipLists->count() }}
                                     <div class="d-flex justify-content-center">
                                         {!! $equipLists->withQueryString()->onEachSide(2)->links() !!}
                                     </div>

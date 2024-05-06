@@ -37,7 +37,7 @@ class AnforderungControlItemController extends Controller
 
         return view('admin.verordnung.anforderungitem.index',
                     [
-                        'aciitems' => AnforderungControlItem::sortable()->paginate(10)
+                        'aciitems' => AnforderungControlItem::with('Anforderung')->sortable()->paginate(10)
                     ]);
 
     }

@@ -392,9 +392,9 @@
                                 <span class="d-flex justify-content-between">
                                      {{ $aci->aci_name }}
 
-                                    @if ($aci->isIncomplete($aci))
+                                    @if ($aci->isIncomplete($aci,$countControlProducts))
                                         <ul class="text-warning">
-                                        {!! $aci->isIncomplete($aci) !!}
+                                        {!! $aci->isIncomplete($aci,$countControlProducts) !!}
                                     </ul>
                                     @endif
                                 </span>

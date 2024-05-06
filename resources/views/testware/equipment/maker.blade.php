@@ -192,26 +192,38 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col">
                 <h1 class="h4">{{__('Neues Gerät anlegen')}}</h1>
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-4 mb-2">
                 @if(App\Produkt::all()->count() >0)
                     <label for="setNewEquipmentFromProdukt">{{__('Neues Gerät aus Produkt erstellen')}}</label>
                     <form autocomplete="off">
                         <div class="input-group">
-                            <input type="text"
-                                   name="setNewEquipmentFromProdukt"
-                                   id="setNewEquipmentFromProdukt"
-                                   placeholder="{{__('Bitte Produkt- / Artikelnummer oder Name eingeben')}}"
-                                   class="form-control getProduktListe"
-                                   value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
-                                   autocomplete="off"
-                            >
+                            @if($produkt)
+                                <input type="text"
+                                       name="setNewEquipmentFromProdukt"
+                                       id="setNewEquipmentFromProdukt"
+                                       placeholder="{{__('Bitte Produkt- / Artikelnummer oder Name eingeben')}}"
+                                       class="form-control getProduktListe"
+                                       value="{{ old('setNewEquipmentFrom' ) ?? $produkt->prod_nummer }}"
+                                       autocomplete="off"
+                                >
+                            @else
+                                <input type="text"
+                                       name="setNewEquipmentFromProdukt"
+                                       id="setNewEquipmentFromProdukt"
+                                       placeholder="{{__('Bitte Produkt- / Artikelnummer oder Name eingeben')}}"
+                                       class="form-control getProduktListe"
+                                       value="{{ old('setNewEquipmentFrom' ) ?? '' }}"
+                                       autocomplete="off"
+                                >
+                            @endif
+
                             <button type="button"
                                     class="btn btn-primary ml-2"
                                     onclick="frmSubmitNewEquipment()"
@@ -230,6 +242,7 @@
                                required
                                name="produkt_id"
                                id="produkt_id"
+                               value="{{ $produkt->id ?? '' }}"
                         >
                     </form>
                 @else
@@ -241,7 +254,7 @@
                     >{{__('Neues Produkt anlegen')}}</a>
                 @endif
             </div>
-            <div class="col-md-6 mb-2">
+            <div class="col-md-8 mb-2">
                 <h2 class="h4">{{__('Verfügbare Produkte')}}</h2>
                 <table class="table table-responsive-md table-sm">
                     <thead>

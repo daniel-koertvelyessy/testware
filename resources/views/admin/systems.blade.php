@@ -859,7 +859,7 @@
                                                             id="getProduktKategorieParams"
                                                             class="custom-select"
                                                     >
-                                                        @foreach (App\ProduktKategorie::all() as $ad)
+                                                        @foreach (App\ProduktKategorie::with('ProduktKategorieParam')->get() as $ad)
                                                             <option value="{{ $ad->id }}">
                                                                 {{ $ad->pk_label }} {{ ($ad->ProduktKategorieParam->count()>0) ? ' ('.$ad->ProduktKategorieParam->count() . ')' :'' }}
                                                             </option>

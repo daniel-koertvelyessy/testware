@@ -135,12 +135,13 @@
             <div class="row">
                 <div class="col">
 
-                    @php $produktKategories = App\ProduktKategorie::all(); @endphp
+                    @php $produktKategories = App\ProduktKategorie::select('id','pk_label')->get(); @endphp
                     <x-tiles>
 
                         @foreach ($produktKategories as $produktKategorie)
 
-                            <x-tile href="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}" label="{{$produktKategorie->pk_label}}">
+                            <x-tile link="{{ route('produkt.create',['pk'=> $produktKategorie->id]) }}"
+                                    label="{{$produktKategorie->pk_label}}">
                                 <i class="fas fa-box fa-2x"></i>
                             </x-tile>
 

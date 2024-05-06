@@ -6,6 +6,7 @@
     use App\AnforderungControlItem;
     use App\AnforderungObjekt;
     use App\ControlEquipment;
+    use App\ControlProdukt;
     use App\Http\Services\Product\ProductService;
     use App\Http\Services\Regulation\RequirementService;
     use App\ProduktAnforderung;
@@ -40,7 +41,7 @@
         public function index()
         {
             return view('admin.verordnung.anforderung.index', [
-                'requirements' => Anforderung::with('ControlInterval')->sortable()->paginate(10)
+                'requirements' => Anforderung::with('ControlInterval', 'AnforderungControlItem')->sortable()->paginate(10)
             ]);
 
         }
@@ -80,7 +81,7 @@
          */
         public function show(Anforderung $anforderung)
         {
-            return view('admin.verordnung.anforderung.show', ['anforderung' => $anforderung]);
+            return view('admin.verordnung.anforderung.show', ['anforderung' => $anforderung, 'countControlProducts' => ControlProdukt::all()->count()]);
         }
 
         /**

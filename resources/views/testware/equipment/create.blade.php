@@ -108,7 +108,7 @@
                             <x-textfield id="eq_name"
                                          placeholder="{{ __('Eingabe startet Suche') }}"
                                          label="{{__('Bezeichnung')}}"
-                                         value="{{ App\Produkt::find($produkt->id)->prod_name  }}"
+                                         value="{{ $produkt->prod_name  }}"
                             />
                         </div>
                         <div class="col-md-6">
@@ -161,7 +161,7 @@
                             <x-selectfield id="equipment_state_id"
                                            label="{{__('Geräte Status')}}"
                             >
-                                @foreach (App\EquipmentState::all() as $equipmentState)
+                                @foreach (App\EquipmentState::select('id','estat_color','estat_label')->get() as $equipmentState)
                                     <option value="{{ $equipmentState->id }}"
                                             class="text-{{ $equipmentState->estat_color }}"
                                             @if($equipmentState->id===4) selected @endif
@@ -175,7 +175,7 @@
                             <x-textfield id="eq_price"
                                          class="decimal"
                                          label="{{__('Kaufpreis')}}"
-                                         value="{{ App\Produkt::find($produkt->id)->prod_price }}"
+                                         value="{{ $produkt->prod_price }}"
                             />
                         </div>
                         <div class="col-md-2">
@@ -233,8 +233,9 @@
                         <x-selectfield id="anforderung_id"
                                        label="{{ __('Anforderung für Funktionstest auswählen') }}"
                         >
-                            @foreach($produkt->ProduktAnforderung as $anforderung)
-                                <option value="{{ $anforderung->anforderung_id }}">{{ $anforderung->Anforderung->an_name }}</option>
+                            @foreach($produkt->ProduktAnforderung as $produktAnforderung)
+                                <option value="{{ $produktAnforderung->anforderung_id }}">{{
+                                $produktAnforderung->Anforderung->an_name }}</option>
                             @endforeach
                         </x-selectfield>
                     @else

@@ -84,7 +84,8 @@ class Anforderung extends Model
         $msg = '<ul class="list-unstyled text-warning">';
         $msgAci = '';
         $isInComplete = false;
-        foreach ($anforderung->AnforderungControlItem as $aci) {
+
+        foreach (AnforderungControlItem::where('anforderung_id',$anforderung->id)->get() as $aci) {
             $msgAci = $aci->isIncomplete($aci, $countControlProducts);
             $isInComplete = $msgAci;
         }

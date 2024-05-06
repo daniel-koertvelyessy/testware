@@ -14,6 +14,6 @@ class Location extends TestCase
 
         $response = $this->get('/location');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
 }

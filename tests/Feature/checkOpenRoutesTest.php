@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class checkOpenRoutesTest extends TestCase
@@ -18,7 +19,7 @@ class checkOpenRoutesTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSeeText('Verwaltung');
+        $response->assertSeeText('Dashboard');
     }
 
     public function test_Docs_isReachableAndRendersCorrectly() {
@@ -37,12 +38,20 @@ class checkOpenRoutesTest extends TestCase
         $response->assertSeeText('Senden Sie uns Ihr Anliegen');
     }
 
-    public function test_RegisterPhone_isReachableAndRendersCorrectly() {
-        $response = $this->get('/registerphone');
+    public function testRoutes()
+    {
+        $routeCollection = Route::getRoutes();
+        foreach ($routeCollection as $value) {
+            if($value->methods[0]==='GET'){
+                if(!starts_with($value->uri,'_')) {
+                    $response = $this->get($value->uri);
+                    $response->assertSuccessful();
+                }
+            }
+        }
 
-        $response->assertStatus(200);
-
-        $response->assertSeeText('Phono');
+        dump($res);
     }
+
 
 }

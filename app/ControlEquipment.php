@@ -26,6 +26,10 @@ class ControlEquipment extends Model
         'archived_at' =>'date'
     ];
 
+//    protected $with = [
+//        'Equipment','Anforderung'
+//    ];
+
     public function Equipment()
     {
         return $this->belongsTo(Equipment::class,'equipment_id');
@@ -89,9 +93,9 @@ class ControlEquipment extends Model
 
         }
 
-        $hasQualifiedUsers = 0;
-        if ($this->countQualifiedUser() > 0) {
-            $hasQualifiedUsers = $this->countQualifiedUser();
+        $qualifiedUser = $this->countQualifiedUser();
+        if ($qualifiedUser > 0) {
+            $hasQualifiedUsers = $qualifiedUser;
         } else {
             $hasQualifiedUsersMsg = $this->makeHtmlWarning(__('Keine befähigte Person gefunden!'), route('produkt.index'));
         }
@@ -151,14 +155,20 @@ class ControlEquipment extends Model
     public function countQualifiedUser()
     {
 
-        $equipment = $this->Equipment;
-
+        $equipment = Equipment::where('id',$this->equipment_id)->first();
         $qualifiedUser = 0;
         $qualifiedUser += $equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $equipment->countQualifiedUser();
 
         return $qualifiedUser;
     }
+
+    public function isInitialTest():bool
+    {
+        $anforderung = Anforderung::select('is_initial_test')->where('id',$this->anforderung_id)->first();
+        return $anforderung->is_initial_test;
+    }
+
 
     public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, Request $request)
     {

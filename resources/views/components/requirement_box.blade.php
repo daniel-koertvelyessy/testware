@@ -1,5 +1,4 @@
 @if($requirement)
-
     <div class="d-flex align-items-center justify-content-between px-2 mt-3">
         @if($requirement->AnforderungControlItem->count()>0)
             <span>{{ $requirement->an_label }}</span>

@@ -144,7 +144,7 @@ class SystemStatusController extends Controller
 
     public function getBrokenDBLinks()
     {
-        return Cache::remember('system-status-database', now()->addSeconds(60), function () {
+        return Cache::remember('system-status-database', now()->addMinutes(60), function () {
             $brokenLinksCount = 0;
             $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
             $brokenProducts = $this->getBrokenProductItems();
@@ -164,7 +164,7 @@ class SystemStatusController extends Controller
     public function getObjectStatus(): array
     {
 
-        return Cache::remember('system-status-objects', now()->addSeconds(60), function () {
+        return Cache::remember('system-status-objects', now()->addMinutes(60), function () {
             $incomplete_equipment = false;
             $incomplete_requirement = 0;
             foreach (Anforderung::all() as $requirement) {
@@ -179,11 +179,12 @@ class SystemStatusController extends Controller
                 $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id', $item->id)->count() === 0 ? 1 : 0;
             }
 
-            $countControlEquipment = Equipment::with('produkt')->get()->map(function ($value) {
-                return $value->produkt->ControlProdukt != null;
+            $countControlEquipment = Equipment::with(['Produkt'])->get()->map(function ($value) {
+
+                return $value->isControlProdukt($value) != null;
             })->sum();
 
-            $countProducts = Produkt::all()->count();
+            $countProducts = Produkt::count();
 
 
             return ['foundExpiredControlEquipment' => $service->findExpiredEquipmentControlItems(), 'products' => $countProducts, 'equipment' => $countEquipment, 'control_products' => ControlProdukt::all()->count(), 'control_equipment' => $countControlEquipment, 'storages' => Storage::all()->count(), 'equipment_qualified_user' => EquipmentQualifiedUser::all()->count(), 'product_qualified_user' => ProductQualifiedUser::all()->count(), 'regulations' => Verordnung::all()->count(), 'requirements' => Anforderung::all()->count(), 'incomplete_requirement' => $incomplete_requirement, 'incomplete_equipment' => $incomplete_equipment, 'requirements_items' => AnforderungControlItem::all()->count(),];

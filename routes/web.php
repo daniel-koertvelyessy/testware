@@ -51,13 +51,9 @@ Route::get('/update', function () {
        }*/
 })->middleware('auth');
 
-Route::get('/', function () {
-    return view('portal-main');
-})->name('portal-main');
+Route::view('/', 'portal-main')->name('portal-main');
 
-Route::get('support', function () {
-    return view('support');
-})->name('support');
+Route::view('support', 'support')->name('support');
 
 Route::get('imprint', function () {
     $firma = \App\Location::with('Adresse', 'Profile')->first();
@@ -71,9 +67,7 @@ Route::get('imprint', function () {
     ]);
 })->name('imprint');
 
-Route::get('app', function () {
-    return view('testware.app.index');
-})->name('app');
+Route::view('app', 'testware.app.index')->name('app');
 
 Route::get('edata/{ident}', function ($ident, Request $request) {
 
@@ -163,45 +157,19 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 /**
  * Documentation-Routes
  */
-Route::get('docs', function () {
-    return view('docs.index');
-})->name('docs.start');
-Route::get('docs/modules', function () {
-    return view('docs.modules');
-})->name('docs.modules');
-Route::get('docs/testware', function () {
-    return view('docs.testware.index');
-})->name('docs.testware.index');
-Route::get('docs/backend', function () {
-    return view('docs.backend.index');
-})->name('docs.backend.index');
-Route::get('docs/backend/locations', function () {
-    return view('docs.backend.locations');
-})->name('docs.backend.locations');
-Route::get('docs/api', function () {
-    return view('docs.api.index');
-})->name('docs.api.index');
-Route::get('docs/api/endpoints', function () {
-    return view('docs.api.endpoints.index');
-})->name('docs.api.endpoints');
-Route::get('docs/api/endpoints/backend', function () {
-    return view('docs.api.endpoints.backend');
-})->name('docs.api.backend');
-Route::get('docs/api/endpoints/products', function () {
-    return view('docs.api.endpoints.products');
-})->name('docs.api.products');
-Route::get('docs/api/endpoints/equipment', function () {
-    return view('docs.api.endpoints.equipment');
-})->name('docs.api.equipment');
-Route::get('docs/api/endpoints/control', function () {
-    return view('docs.api.endpoints.control');
-})->name('docs.api.control');
-Route::get('docs/api/endpoints/requirements', function () {
-    return view('docs.api.endpoints.requirements');
-})->name('docs.api.requirements');
-Route::get('docs/api/endpoints/events', function () {
-    return view('docs.api.endpoints.events');
-})->name('docs.api.events');
+Route::view('docs', 'docs.index')->name('docs.start');
+Route::view('docs/modules', 'docs.modules')->name('docs.modules');
+Route::view('docs/testware', 'docs.testware.index')->name('docs.testware.index');
+Route::view('docs/backend', 'docs.backend.index')->name('docs.backend.index');
+Route::view('docs/backend/locations', 'docs.backend.locations')->name('docs.backend.locations');
+Route::view('docs/api', 'docs.api.index')->name('docs.api.index');
+Route::view('docs/api/endpoints', 'docs.api.endpoints.index')->name('docs.api.endpoints');
+Route::view('docs/api/endpoints/backend', 'docs.api.endpoints.backend')->name('docs.api.backend');
+Route::view('docs/api/endpoints/products', 'docs.api.endpoints.products')->name('docs.api.products');
+Route::view('docs/api/endpoints/equipment', 'docs.api.endpoints.equipment')->name('docs.api.equipment');
+Route::view('docs/api/endpoints/control', 'docs.api.endpoints.control')->name('docs.api.control');
+Route::view('docs/api/endpoints/requirements', 'docs.api.endpoints.requirements')->name('docs.api.requirements');
+Route::view('docs/api/endpoints/events', 'docs.api.endpoints.events')->name('docs.api.events');
 
 Route::get('/dashboard', function () {
 
@@ -501,14 +469,13 @@ Route::get('produktMain', function () {
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    $equipmentList = Equipment::with('produkt', 'storage', 'EquipmentState',
-                                     'ControlEquipment')->sortable()->paginate(10);
+    $equipmentList = Equipment::with('Produkt', 'storage', 'EquipmentState','EquipmentQualifiedUser','ControlEquipment')->sortable()->paginate(10);
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 
-Route::get('equipment.maker', function () {
+Route::get('equipment.maker/{produkt?}', function (Produkt $produkt = null) {
     $produktList = Produkt::where('prod_active', '1')->with('ProduktAnforderung')->sortable()->paginate(10);
-    return view('testware.equipment.maker', ['produktList' => $produktList]);
+    return view('testware.equipment.maker', compact('produktList','produkt'));
 })->name('equipment.maker')->middleware('auth');
 
 Route::get('equipment.controlequipment', 'EquipmentController@controlequipment')->name('equipment.controlequipment')->middleware('auth');

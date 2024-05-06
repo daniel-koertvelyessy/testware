@@ -171,9 +171,9 @@ class Storage extends Model
         return $this->delete();
     }
 
-    public function Equipment()
+    public function equipment()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->hasMany(Equipment::class);
     }
 
     public function location()

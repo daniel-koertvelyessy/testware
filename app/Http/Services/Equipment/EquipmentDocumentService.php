@@ -30,12 +30,12 @@
 
         public function getFunctionTestDocumentList(Equipment $equipment)
         {
-          return  EquipmentDoc::where('equipment_id', $equipment->id)->where('document_type_id', 2)->get();
+          return  EquipmentDoc::with('DocumentType')->where('equipment_id', $equipment->id)->where('document_type_id', 2)->get();
         }
 
         public function getDocumentList(Equipment $equipment)
         {
-          return  EquipmentDoc::where('equipment_id', $equipment->id)->get();
+          return  EquipmentDoc::with('DocumentType')->where('equipment_id', $equipment->id)->get();
         }
 
         public function getEquipmentDocList(Equipment $equipment): array

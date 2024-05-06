@@ -1,3 +1,7 @@
+@php
+$controlEvent = \App\ControlEvent::where('control_equipment_id',$cei->id)->first();
+$id = $controlEvent->id;
+ @endphp
 <div class="border rounded p-1 mb-1 d-flex justify-content-between align-items-center">
     <div class="d-flex flex-column">
         <span class="small text-muted pl-2">
@@ -10,9 +14,9 @@
     <div class="pr-2 d-flex justify-content-between align-items-center">
         <button type="button"
                 class="btn btn-sm btn-outline-primary btnOpenControlEventModal mr-1"
-                data-control-event-id="{{ \App\ControlEvent::where('control_equipment_id',$cei->id)->first()->id  }}"
+                data-control-event-id="{{ $id  }}"
         ><i class="far fa-folder-open"></i></button>
-        <a href="{{ route('makePDFEquipmentControlReport',\App\ControlEvent::where('control_equipment_id',$cei->id)->first()->id ) }}"
+        <a href="{{ route('makePDFEquipmentControlReport', $id) }}"
            class="btn btn-sm btn-outline-primary mr-1"
            target="_blank"
         ><i class="far fa-file-pdf"></i></a>

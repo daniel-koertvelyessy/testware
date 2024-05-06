@@ -30,11 +30,11 @@
                         <tr>
                             <td>
                                 <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
-                                {{ $equipment->produkt->prod_name }}
+                                    {{ $equipment->eq_name }}
                                 </a>
                             </td>
                             <td>{{ $equipment->eq_inventar_nr }}</td>
-                            <td>{{ $equipment->storage->storage_label }}</td>
+                            <td>{{ $equipment->storage->storage_label}}</td>
                             <td style="vertical-align: middle;">
                                 <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-light">{{ $equipment->EquipmentState->estat_label }}</span>
 
@@ -42,7 +42,7 @@
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
                                     <span
-                                        class="p-1
+                                            class="p-1
                                         @if ($controlItem->qe_control_date_due <  now())
                                             bg-danger text-white
                                         @else
@@ -52,7 +52,9 @@
                                     >
                                         {{ $controlItem->qe_control_date_due }}
                                     </span>
-                                    @if (!$loop->last) <br> @endif
+                                    @if (!$loop->last)
+                                        <br>
+                                    @endif
                                 @empty
                                     -
                                 @endforelse
@@ -64,7 +66,9 @@
                                 <p>
                                     <x-notifyer>{{__('Keine Geräte gefunden')}}</x-notifyer>
                                 </p>
-                                <a href="{{ route('equipment.maker') }}" class="btn mt-2 btn-outline-primary">{{__('neues Gerät anlegen')}}</a>
+                                <a href="{{ route('equipment.maker') }}"
+                                   class="btn mt-2 btn-outline-primary"
+                                >{{__('neues Gerät anlegen')}}</a>
                             </td>
                         </tr>
                     @endforelse

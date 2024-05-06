@@ -275,7 +275,7 @@ class RoomController extends Controller
             //';
             if (Stellplatz::where('room_id', $request->id)->count() > 0) {
                 $n = 0;
-                foreach (Stellplatz::where('room_id', $request->id)->get() as $stellplatz) {
+                foreach (Stellplatz::with('rooms','StellplatzTyp')->where('room_id', $request->id)->get() as $stellplatz) {
                     $data['select'] .= '
 <option value="' . $stellplatz->id . '">[' . $stellplatz->StellplatzTyp->spt_label . '] ' . $stellplatz->sp_label . ' / ' . $stellplatz->sp_name . '</option>
 ';
@@ -330,7 +330,7 @@ class RoomController extends Controller
         }
 
         if ($request->modalType === 'edit') {
-            $room = Room::find($request->id);
+            $room = Room::with('building')->find($request->id);
             if ($room->r_label !== $request->r_label) {
                 $storage = Storage::where('storage_uid', $request->storage_id)->first();
                 $storage->storage_label = $request->r_label;
@@ -357,7 +357,8 @@ class RoomController extends Controller
 
     public function getRoomData(Request $request)
     {
-        return Room::find($request->id);
+        return Room::with('building')->find($request->id);
+
     }
 
     public function getRoomListeAsTable()
@@ -376,7 +377,7 @@ class RoomController extends Controller
 <tbody>
         ';
 
-        foreach (Room::all() as $room) {
+        foreach (Room::with('building')->get()  as $room) {
             $html .= '
             <tr>
             <td><a href="/location/' . $room->building->location->id . '">' . $room->building->location->l_label . '</a></td>
@@ -399,7 +400,7 @@ class RoomController extends Controller
     public function getRoomListeAsKachel()
     {
         $html = '';
-        foreach (Room::all() as $room) {
+        foreach (Room::with('building')->get() as $room) {
             $html .= '<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_' . $room->id . '">
                         <div class="card" style="height:20em;">
                             <div class="card-header">

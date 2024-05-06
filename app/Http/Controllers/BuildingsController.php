@@ -242,9 +242,9 @@
 
             $data['radio'] = '';
             if ($request->id !== 'void') {
-                if (Room::where('building_id', $request->id)->count() > 0) {
+                if (Room::with('building')->where('building_id', $request->id)->count() > 0) {
                     $n = 0;
-                    foreach (Room::where('building_id', $request->id)->get() as $room) {
+                    foreach (Room::with('building','RoomType')->where('building_id', $request->id)->get() as $room) {
                         $data['select'] .= '
 <option value="' . $room->id . '">[' . $room->RoomType->rt_label . '] ' . $room->r_label . ' / ' . $room->r_name . '</option>
 ';
