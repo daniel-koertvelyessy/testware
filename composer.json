@@ -12,20 +12,20 @@
         "elibyy/tcpdf-laravel": "^11.1.0",
         "guzzlehttp/guzzle": "^7.7.0",
         "kyslik/column-sortable": "^6.6.0",
-        "laravel/framework": "^v10.48.8",
+        "laravel/framework": "^v10.48.10",
         "laravel/helpers": "^v1.7.0",
         "laravel/tinker": "^v2.9.0",
         "laravel/ui": "^v4.5.1",
         "simplesoftwareio/simple-qrcode": "^4.2.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.13",
-        "barryvdh/laravel-ide-helper": "^v2.15.1",
+        "barryvdh/laravel-debugbar": "^v3.13.5",
+        "barryvdh/laravel-ide-helper": "^v3.0.0",
         "fakerphp/faker": "^1.16.1",
         "mockery/mockery": "^1.4.31",
         "nunomaduro/collision": "^v7.10.0",
-        "phpunit/phpunit": "^10.5.19",
-        "spatie/laravel-ignition": "^2.5.2"
+        "phpunit/phpunit": "^10.5.20",
+        "spatie/laravel-ignition": "^2.7.0"
     },
     "config": {
         "optimize-autoloader": true,

@@ -1,6 +1,6 @@
 @if($requirement)
     <div class="d-flex align-items-center justify-content-between px-2 mt-3">
-        @if($requirement->AnforderungControlItem->count()>0)
+        @if($requirement->countControlItems()>0)
             <span>{{ $requirement->an_label }}</span>
         @else
             <span class="text-warning"><span class="fas fa-fw fa-exclamation-triangle"></span> {{ $requirement->an_label }} </span>
@@ -18,7 +18,7 @@
     >
         <dl class="row lead">
             <dt class="col-md-5 col-lg-4">{{ __('Verordnung')}}</dt>
-            <dd class="col-md-7 col-lg-8">{{ $requirement->Verordnung->vo_label }}</dd>
+            <dd class="col-md-7 col-lg-8">{{ $requirement->getVerordnungLabel() }}</dd>
         </dl>
         <dl class="row">
             <dt class="col-md-5 col-lg-4">{{__('Anforderung')}}</dt>
@@ -34,7 +34,7 @@
             <dt class="col-md-5 col-lg-4">{{ __('Intervall')}}</dt>
             <dd class="col-md-7 col-lg-8">
                 {{ $requirement->an_control_interval }}
-                {{ $requirement->ControlInterval->ci_label }}
+                {{ $requirement->getControlIntervalLabel() }}
             </dd>
         </dl>
         <dl class="row">

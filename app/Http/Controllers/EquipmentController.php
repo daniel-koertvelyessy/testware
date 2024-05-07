@@ -187,27 +187,28 @@ class EquipmentController extends Controller
         }
 
         return view('testware.equipment.show', [
-            'productDocuments'        => ProduktDoc::where('produkt_id', $equipment->produkt_id)->get(),
-            'controlIntervalList'     => ControlInterval::select('id', 'ci_label')->get(),
-            'qualifiedUserList'       => EquipmentQualifiedUser::with('firma', 'user')->where('equipment_id', $equipment->id)->get(),
-            'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
-            'upcomingControlList'     => $service->getUpcomingControlItems($equipment),
-            'onetimeControlList'      => $service->getOneTimeControlItems($equipment),
-            'controlList'             => $service->getAllControlItems($equipment),
-            'instructedPersonList'    => $service->getInstruectedPersonList($equipment),
-            'equipmentRequirementList'         => $service->getRequirementList($equipment),
-            'requirementList'         => Anforderung::select('id','an_label')->get(),
-            'recentControlList'       => $service->getRecentExecutedControls($equipment),
-            'euqipmentDocumentList'   => $serviceDocument->getDocumentList($equipment),
-            'functionDocumentList'    => $serviceDocument->getFunctionTestDocumentList($equipment),
-            'newFileList'             => $serviceDocument->checkStorageSyncDB($equipment),
-            'companyString'           => $service->makeCompanyString($equipment),
-            'equipment'               => $equipment,
-            'parameterListItems'      => $service->getParamList($equipment),
-            'locationpath'            => $value,
-            'isSysadmin'              => Auth::user()->isSysAdmin(),
-            'documentTypes'           => DocumentType::all(),
-            'intervalTypeList'        => ControlInterval::select('id', 'ci_label')->get()
+            'userList'                 => User::select('id','name')->get(),
+            'productDocuments'         => ProduktDoc::where('produkt_id', $equipment->produkt_id)->get(),
+            'controlIntervalList'      => ControlInterval::select('id', 'ci_label')->get(),
+            'qualifiedUserList'        => EquipmentQualifiedUser::with('firma', 'user')->where('equipment_id', $equipment->id)->get(),
+            'loggedInUserIsQualified'  => $service->checkUserQualified($equipment),
+            'upcomingControlList'      => $service->getUpcomingControlItems($equipment),
+            'onetimeControlList'       => $service->getOneTimeControlItems($equipment),
+            'controlList'              => $service->getAllControlItems($equipment),
+            'instructedPersonList'     => $service->getInstruectedPersonList($equipment),
+            'equipmentRequirementList' => $service->getRequirementList($equipment),
+            'requirementList'          => Anforderung::select('id', 'an_label')->get(),
+            'recentControlList'        => $service->getRecentExecutedControls($equipment),
+            'euqipmentDocumentList'    => $serviceDocument->getDocumentList($equipment),
+            'functionDocumentList'     => $serviceDocument->getFunctionTestDocumentList($equipment),
+            'newFileList'              => $serviceDocument->checkStorageSyncDB($equipment),
+            'companyString'            => $service->makeCompanyString($equipment),
+            'equipment'                => $equipment,
+            'parameterListItems'       => $service->getParamList($equipment),
+            'locationpath'             => $value,
+            'isSysadmin'               => Auth::user()->isSysAdmin(),
+            'documentTypes'            => DocumentType::all(),
+            //            'intervalTypeList'         => ControlInterval::select('id', 'ci_label')->get()
         ]);
     }
 
@@ -423,7 +424,7 @@ class EquipmentController extends Controller
     public function syncRequirements(Request $request)
     {
 
-//        dd($request);
+        //        dd($request);
         $countr = 0;
         foreach ($request->anforderung_id as $key => $id) {
             $controlEquipment = new ControlEquipment();
@@ -433,10 +434,14 @@ class EquipmentController extends Controller
             $controlEquipment->qe_control_date_due = $request->qe_control_date_due[$key];
             $controlEquipment->qe_control_date_warn = $request->qe_control_date_warn[$key];
             $controlEquipment->control_interval_id = $request->control_interval_id[$key];
-            $countr +=  $controlEquipment->save() ? 1:0;
+            $countr += $controlEquipment->save()
+                ? 1
+                : 0;
         }
 
-        $msg = $countr > 1 ?  __('Es wurden :num Prüfungen angelegt', ['num' => $countr]) : __('Es wurde eine Prüfung angelegt');
+        $msg = $countr > 1
+            ? __('Es wurden :num Prüfungen angelegt', ['num' => $countr])
+            : __('Es wurde eine Prüfung angelegt');
 
         $request->session()->flash('status', $msg);
 

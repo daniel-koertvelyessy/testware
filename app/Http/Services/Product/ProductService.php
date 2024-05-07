@@ -75,7 +75,7 @@
 
         public function getRequirementList(Produkt $produkt)
         {
-            return \App\ProduktAnforderung::where('produkt_id', $produkt->id)->get();
+            return \App\ProduktAnforderung::with('Produkt','Anforderung')->where('produkt_id', $produkt->id)->get();
         }
 
         public function setuuid()

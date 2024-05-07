@@ -28,12 +28,14 @@ class Produkt extends Model
         static::saving(function () {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 
@@ -45,7 +47,7 @@ class Produkt extends Model
     public function getRouteKeyName()
     {
         return 'prod_uuid';
-      //  return 'prod_nummer';
+        //  return 'prod_nummer';
     }
 
     public function ProduktKategorie()

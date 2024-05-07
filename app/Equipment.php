@@ -91,7 +91,7 @@
 
         public function requirement(Produkt $produkt)
         {
-            return ProduktAnforderung::with('Anforderung')->where('produkt_id',$produkt->id)->get()->filter(function($produktAnforderung){
+            return ProduktAnforderung::with('Anforderung')->where('produkt_id',$produkt->id)->get()->map(function($produktAnforderung){
                 return $produktAnforderung->Anforderung;
             });
         }
@@ -148,7 +148,7 @@
         }
 
         public function Anforderung(){
-            return $this->hasOneThrough(Anforderung::class,ProduktAnforderung::class,'eq_uid','produkt_id','id');
+            return $this->hasManyThrough(Anforderung::class,ProduktAnforderung::class,'produkt_id','id','produkt_id');
         }
 
         public function EquipmentUid()

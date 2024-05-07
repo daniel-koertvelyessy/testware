@@ -3,8 +3,7 @@
 @section('mainSection', __('Gerät'))
 
 @section('pagetitle')
-    {{ __('Gerät bearbeiten') }} {{ $equipment->eq_inventar_nr }} &triangleright; {{ __('Geräte') }}
-@endsection
+    {{ __('Gerät bearbeiten') }} {{ $equipment->eq_inventar_nr }} &triangleright; {{ __('Geräte') }}@endsection
 
 @section('menu')
     @include('menus._menu_testware_main')
@@ -425,7 +424,7 @@
                                 <x-selectfield id="user_id"
                                                label="{{ __('Mitarbeiter') }}"
                                 >
-                                    @foreach (App\User::all() as $user)
+                                    @foreach ($userList as $user)
                                         @if (!$user->isQualified($equipment->id))
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                                         @endif
@@ -708,7 +707,7 @@
                                                        label="{{ __('durch befähigte Person') }}"
                                         >
                                             <option value="void">{{ __('Bitte wählen') }}</option>
-                                            @foreach (\App\User::all() as $user)
+                                            @foreach ($userList as $user)
                                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                                             @endforeach
                                         </x-selectfield>
@@ -818,7 +817,7 @@
                                 >
                                 <label class="custom-control-label"
                                        for="anfoderung_id_{{ $requirement->id }}"
-                                >{{ $requirement->anforderung->an_name }}</label>
+                                >{{ $requirement->an_name }}</label>
                             </div>
                             <section class="d-flex justify-content-between mb-3 mb-lg-9">
                                 <x-datepicker id="last_date{{ $requirement->id }}"
@@ -832,13 +831,13 @@
                                 <x-textfield id="qe_control_date_warn"
                                              name="qe_control_date_warn[]"
                                              label="{{ __('Vorlauf') }}"
-                                             :value="$requirement->anforderung->an_date_warn"
+                                             :value="$requirement->an_date_warn"
                                 />
-                                <x-lists.intervalTypeSelector :selected="$requirement->anforderung->warn_interval_id"
+                                <x-lists.intervalTypeSelector :selected="$requirement->warn_interval_id"
                                                               id="control_interval_id{{ $requirement->id }}"
                                                               name="control_interval_id[]"
                                                               label="{{ __('Zeitraum') }}"
-                                                              :intervalTypeList="$intervalTypeList"
+                                                              :intervalTypeList="$controlIntervalList"
                                 />
                             </section>
 
@@ -876,7 +875,7 @@
                 >
                     @forelse($equipmentRequirementList as $item)
                         <option value="{{ $item->anforderung_id }}">
-                            {{ $item->Anforderung->an_label }}
+                            {{ $item->an_label }}
                         </option>
                     @empty
                         <option value="">noper</option>
@@ -888,7 +887,7 @@
             <div class="col-md-6">
                 <x-rnumberfield id="qe_control_date_warn"
                                 label="{{ __('Vorwarnzeit') }}"
-                                value="{{ $equipmentRequirementList->first()->anforderung->an_date_warn }}"
+                                value="{{ $equipmentRequirementList->first()->an_date_warn }}"
                 />
             </div>
             <div class="col-md-6">
@@ -898,7 +897,7 @@
                 >
                     @forelse(\App\ControlInterval::all() as $item)
                         <option value="{{ $item->id }}"
-                                @if ($item->id === $equipmentRequirementList->first()->anforderung->warn_interval_id)
+                                @if ($item->id === $equipmentRequirementList->first()->warn_interval_id)
                                     selected @endif>
                             {{ $item->ci_label }}
                         </option>
@@ -1089,14 +1088,12 @@
                                     <h2 class="h4 mb-2">{{ __('Gerätestatus') }}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span
-                                            class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
                                     ></span>
                                     <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span
-                                            class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
                                     ></span>
                                     <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
                                 </div>
@@ -1118,8 +1115,7 @@
                                         />
                                     @endif
                                 @empty
-                                    <span
-                                            class="text-muted text-center small"
+                                    <span class="text-muted text-center small"
                                     >{{ __('keine Anleitungen hinterlegt') }}</span>
                                 @endforelse
                                 {{--     <h2 class="h4 mt-5">{{__('Funktionstest')}}</h2>
@@ -1273,9 +1269,8 @@
                                             <td>{{ $equipmentUser->equipment_qualified_date }}</td>
                                             <td>{{ $equipmentUser->firma->fa_name ?? '-' }}</td>
                                             <td style="padding: 0; vertical-align: middle; text-align: right;">
-                                                <form
-                                                        action="{{ route('EquipmentQualifiedUser.destroy', $equipmentUser) }}"
-                                                        method="post"
+                                                <form action="{{ route('EquipmentQualifiedUser.destroy', $equipmentUser) }}"
+                                                      method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
@@ -1285,8 +1280,7 @@
                                                            value="{{ $equipmentUser->id }}"
                                                     >
                                                     <button class="btn btn-sm btn-outline-primary">
-                                                            <span
-                                                                    class="d-none d-lg-inline mr-2"
+                                                            <span class="d-none d-lg-inline mr-2"
                                                             >{{ __('Löschen') }}</span>
                                                         <span class="far fa-trash-alt"></span>
                                                     </button>
@@ -1333,9 +1327,8 @@
                                                 >
                                             </td>
                                             <td style="vertical-align: middle; text-align:right; padding:0">
-                                                <form
-                                                        action="{{ route('EquipmentInstruction.destroy', $instructedUser) }}#requirements"
-                                                        method="post"
+                                                <form action="{{ route('EquipmentInstruction.destroy', $instructedUser) }}#requirements"
+                                                      method="post"
                                                 >
                                                     @csrf
                                                     @method('delete')
@@ -1376,15 +1369,16 @@
                                     @endif
                                 </div>
 
-                                @forelse ($equipmentRequirementList as $produktAnforderung)
-                                    <x-requirement_box :requirement="$produktAnforderung->Anforderung"
+                                @forelse ($equipmentRequirementList as $requiremnet)
+                                    <x-requirement_box :requirement="$requiremnet"
                                                        isProduct="false"
-                                                       :produktAnforderungId="$produktAnforderung->id"
+                                                       :produktAnforderungId="$requiremnet->id"
                                     />
 
                                 @empty
-                                    <p class="text-muted small">{{ __('Bislang sind keine Anforderungen verknüpft') }}
-                                        !</p>
+                                    <p class="text-muted small">
+                                        {{ __('Bislang sind keine Anforderungen verknüpft') }}!
+                                    </p>
                                 @endforelse
 
                                 <div class="dropdown-divider my-4"></div>
@@ -1421,11 +1415,10 @@
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="form-group col">
-                                                                <x-lists.requirementSelector
-                                                                        id="anforderung_id_{{$item->id}}"
-                                                                        name="anforderung_id"
-                                                                        :requirements="$requirementList"
-                                                                        :selected="$item->anforderung_id"
+                                                                <x-lists.requirementSelector id="anforderung_id_{{$item->id}}"
+                                                                                             name="anforderung_id"
+                                                                                             :requirements="$requirementList"
+                                                                                             :selected="$item->anforderung_id"
                                                                 />
 
                                                             </div>
@@ -1442,8 +1435,7 @@
                                                                 >
                                                             </div>
                                                             <div class="form-group col-md-4">
-                                                                <label
-                                                                        for="qe_control_date_due_{{ $item->id }}"
+                                                                <label for="qe_control_date_due_{{ $item->id }}"
                                                                 >{{ __('Prüfung fällig') }}</label>
                                                                 <input type="text"
                                                                        class="form-control datepicker"
@@ -1453,8 +1445,7 @@
                                                                 >
                                                             </div>
                                                             <div class="form-group col-md-4">
-                                                                <label
-                                                                        for="control_archived_at_{{ $item->id }}"
+                                                                <label for="control_archived_at_{{ $item->id }}"
                                                                 >{{ __('Prüfung archiviert') }}</label>
                                                                 <input type="text"
                                                                        class="form-control datepicker"
@@ -1466,8 +1457,7 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="form-group col-md-4">
-                                                                <label
-                                                                        for="qe_control_date_warn_{{ $item->id }}"
+                                                                <label for="qe_control_date_warn_{{ $item->id }}"
                                                                 >{{ __('Vorlauf') }}</label>
                                                                 <input type="text"
                                                                        class="form-control"
@@ -1627,10 +1617,9 @@
                                                     @if (Storage::disk('local')->exists($equipDoc->eqdoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form
-                                                                        action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                        method="get"
-                                                                        id="downloadEquipmentDoku_{{ $equipDoc->id }}"
+                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadEquipmentDoku_{{ $equipDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1642,11 +1631,9 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentDoku_{{ $equipDoc->id }}').submit();"
                                                                 >
-                                                                        <span
-                                                                                class="d-md-none"
+                                                                        <span class="d-md-none"
                                                                         >{{ str_limit($equipDoc->eqdoc_label, 20) }}</span>
-                                                                    <span
-                                                                            class="d-none d-md-inline"
+                                                                    <span class="d-none d-md-inline"
                                                                     >{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
@@ -1656,11 +1643,10 @@
                                                                 {{ $equipDoc->getSize($equipDoc->eqdoc_name_pfad) }}
                                                             </td>
                                                             <td>
-                                                                <x-deletebutton
-                                                                        action="{{ route('equipDoku.destroy', $equipDoc->id) }}"
-                                                                        tabtarget="documents"
-                                                                        prefix="EquipmentDoku"
-                                                                        id="{{ $equipDoc->id }}"
+                                                                <x-deletebutton action="{{ route('equipDoku.destroy', $equipDoc->id) }}"
+                                                                                tabtarget="documents"
+                                                                                prefix="EquipmentDoku"
+                                                                                id="{{ $equipDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1690,10 +1676,9 @@
                                                     @if (Storage::disk('local')->exists($equipFunctionDoc->eqdoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form
-                                                                        action="{{ route('downloadEquipmentDokuFile') }}#documents"
-                                                                        method="get"
-                                                                        id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
+                                                                <form action="{{ route('downloadEquipmentDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadEquipmentFunction_{{ $equipFunctionDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1705,11 +1690,9 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadEquipmentFunction_{{ $equipFunctionDoc->id }}').submit();"
                                                                 >
-                                                                        <span
-                                                                                class="d-md-none"
+                                                                        <span class="d-md-none"
                                                                         >{{ str_limit($equipDoc->eqdoc_label, 20) }}</span>
-                                                                    <span
-                                                                            class="d-none d-md-inline"
+                                                                    <span class="d-none d-md-inline"
                                                                     >{{ $equipDoc->eqdoc_label }}</span>
                                                                 </a>
                                                             </td>
@@ -1720,11 +1703,10 @@
                                                                 {{ $equipFunctionDoc->getSize($equipFunctionDoc->eqdoc_name_pfad) }}
                                                             </td>
                                                             <td>
-                                                                <x-deletebutton
-                                                                        action="{{ route('equipDoku.destroy', $equipFunctionDoc->id) }}#documents"
-                                                                        tabtarget="documents"
-                                                                        prefix="EquipmentFunction"
-                                                                        id="{{ $equipFunctionDoc->id }}"
+                                                                <x-deletebutton action="{{ route('equipDoku.destroy', $equipFunctionDoc->id) }}#documents"
+                                                                                tabtarget="documents"
+                                                                                prefix="EquipmentFunction"
+                                                                                id="{{ $equipFunctionDoc->id }}"
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1754,10 +1736,9 @@
                                                     @if (Storage::disk('local')->exists($produktDoc->proddoc_name_pfad))
                                                         <tr>
                                                             <td>
-                                                                <form
-                                                                        action="{{ route('downloadProduktDokuFile') }}#documents"
-                                                                        method="get"
-                                                                        id="downloadProdDoku_{{ $produktDoc->id }}"
+                                                                <form action="{{ route('downloadProduktDokuFile') }}#documents"
+                                                                      method="get"
+                                                                      id="downloadProdDoku_{{ $produktDoc->id }}"
                                                                 >
                                                                     @csrf
                                                                     <input type="hidden"
@@ -1769,11 +1750,9 @@
                                                                 <a href="#"
                                                                    onclick="event.preventDefault(); document.getElementById('downloadProdDoku_{{ $produktDoc->id }}').submit();"
                                                                 >
-                                                                        <span
-                                                                                class="d-md-none"
+                                                                        <span class="d-md-none"
                                                                         >{{ str_limit($produktDoc->proddoc_label, 20) }}</span>
-                                                                    <span
-                                                                            class="d-none d-md-inline"
+                                                                    <span class="d-none d-md-inline"
                                                                     >{{ $produktDoc->proddoc_label }}</span>
                                                                 </a>
                                                             </td>

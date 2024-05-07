@@ -58,7 +58,11 @@ class EquipmentService
     public function getOneTimeControlItems(Equipment $equipment)
     {
 
-        return ProduktAnforderung::leftJoin('anforderungs', 'produkt_anforderungs.anforderung_id', '=', 'anforderungs.id')->where('produkt_id', $equipment->Produkt->id)->get();
+        return $equipment->Anforderung->filter(function ($anforderung) {
+            return $anforderung->is_initial_test;
+        });
+
+   //     return ProduktAnforderung::leftJoin('anforderungs', 'produkt_anforderungs.anforderung_id', '=', 'anforderungs.id')->where('produkt_id', $equipment->Produkt->id)->get();
 
     }
 
@@ -176,7 +180,10 @@ class EquipmentService
 
     public function getRequirementList(Equipment $equipment)
     {
-        return ProduktAnforderung::with('Anforderung', 'Produkt','Anforderung.Verordnung', 'Anforderung.ControlInterval')->where('produkt_id', $equipment->produkt_id)->get();
+
+        return $equipment->Anforderung;
+
+//        return ProduktAnforderung::with('Anforderung', 'Produkt','Anforderung.Verordnung', 'Anforderung.ControlInterval')->where('produkt_id', $equipment->produkt_id)->get();
     }
 
     public function getInstruectedPersonList(Equipment $equipment)
@@ -200,9 +207,14 @@ class EquipmentService
 
     public function makeCompanyString(Equipment $equipment, string $companyString = ''): string
     {
+        $companies = $equipment->produkt->firma;
 
-        foreach ($equipment->produkt->firma as $firma) {
-            $companyString .= $firma->fa_name . ' ';
+        if ($companies->count() === 1)
+            return $companies->first()->fa_name;
+
+
+        foreach ($companies as $company) {
+            $companyString .= $company->fa_name . ' ';
         }
 
         return $companyString;

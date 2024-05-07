@@ -1,7 +1,7 @@
 
 @php
 
-$requirementControlItems = $requirement->AnforderungControlItem;
+$requirementControlItems = \App\AnforderungControlItem::where('anforderung_id',$requirement->id)->get();
 
 @endphp
 <dl class="row">
