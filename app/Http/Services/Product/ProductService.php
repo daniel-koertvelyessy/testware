@@ -4,23 +4,16 @@
 
     use App\Equipment;
     use App\FirmaProdukt;
+    use App\ProductInstructedUser;
     use App\ProductQualifiedUser;
     use App\Produkt;
+    use App\ProduktAnforderung;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Storage;
     use Illuminate\Support\Str;
 
     class ProductService
     {
-
-        protected function query(string $term)
-        {
-            return Produkt::where('prod_label','ILIKE', '%' . strtolower($term) . '%')
-                ->orWhere('prod_name','ILIKE', '%' . strtolower($term) . '%')
-                ->orWhere('prod_description','ILIKE', '%' . strtolower($term) . '%')
-                ->orWhere('prod_nummer','ILIKE', '%' . strtolower($term) . '%')
-                ->get();
-        }
 
         public static function getSearchResults(string $term): array
         {
@@ -33,6 +26,15 @@
                 ];
             }
             return $data;
+        }
+
+        protected function query(string $term)
+        {
+            return Produkt::where('prod_label','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_name','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_description','ILIKE', '%' . strtolower($term) . '%')
+                ->orWhere('prod_nummer','ILIKE', '%' . strtolower($term) . '%')
+                ->get();
         }
 
         public static function search(string $term)
@@ -70,12 +72,17 @@
 
         public function getProductQualifiedUserList(Produkt $produkt)
         {
-            return ProductQualifiedUser::where('produkt_id', $produkt->id)->with('user')->get();
+            return ProductQualifiedUser::where('produkt_id', $produkt->id)->with('user','firma')->get();
         }
 
         public function getRequirementList(Produkt $produkt)
         {
-            return \App\ProduktAnforderung::with('Produkt','Anforderung')->where('produkt_id', $produkt->id)->get();
+            return ProduktAnforderung::with('Produkt','Anforderung')->where('produkt_id', $produkt->id)->get();
+        }
+
+        public function getInstructedUserList(Produkt $produkt)
+        {
+            return ProductInstructedUser::with('Profile','Firma')->where('produkt_id', $produkt->id)->get();
         }
 
         public function setuuid()

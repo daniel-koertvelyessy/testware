@@ -14,6 +14,7 @@ use App\EquipmentParam;
 use App\Firma;
 use App\FirmaProdukt;
 use App\Http\Services\Product\ProductService;
+use App\ProductInstructedUser;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktDoc;
@@ -78,7 +79,7 @@ class ProduktController extends Controller
      */
     public function importProdukt()
     {
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         return view('admin.produkt.import');
     }
 
@@ -89,7 +90,7 @@ class ProduktController extends Controller
      */
     public function exportProdukt()
     {
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         return view('admin.produkt.export');
     }
 
@@ -106,6 +107,7 @@ class ProduktController extends Controller
         $this->service->deleteEmptyStorageDBItems($produkt);
 
         return view('admin.produkt.show', [
+            'instructedUserList'  => $this->service->getInstructedUserList($produkt),
             'qualifiedUserList'   => $this->service->getProductQualifiedUserList($produkt),
             'hasQualifiedUser'    => $this->service->hasQualifiedUsers($produkt),
             'hasExternalSupplier' => $this->service->hasExternalSupplier($produkt),
@@ -131,7 +133,7 @@ class ProduktController extends Controller
     {
 
 
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
             ControlProdukt::updateOrInsert(['produkt_id' => $request->id]);
         } else {
@@ -142,7 +144,7 @@ class ProduktController extends Controller
             ? 1
             : 0;
 
-//            dd($request);
+        //            dd($request);
 
         $produkt->update($this->validateProdukt($request));
 
@@ -432,8 +434,9 @@ class ProduktController extends Controller
 
     protected function checkProduktFirmaExists(int $firma_id, int $produkt_id): bool
     {
-        return FirmaProdukt::where(['firma_id'   => $firma_id,
-                                    'produkt_id' => $produkt_id
+        return FirmaProdukt::where([
+                'firma_id'   => $firma_id,
+                'produkt_id' => $produkt_id
             ])->count() > 0;
 
     }
@@ -500,7 +503,7 @@ class ProduktController extends Controller
 
     public function removeFirmaFromProdukt(Request $request)
     {
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         $faprod = FirmaProdukt::where([
             [
                 'produkt_id',
@@ -667,9 +670,9 @@ class ProduktController extends Controller
                                 if ($ep->save()) {
                                     $updated_equipment_counter++;
                                     (new EquipmentHistory)->add(__('Parameter Texte aktualisiert'), __('Der Parameter <strong>:paraname</strong> der verknüpfte Produktkategorie wurde in <span class="text-info">:paramNeu</span> geändert. Die Änderung wurde für dieses Gerät übernommen.', [
-                                                'paraname' => $old_name,
-                                                'paramNeu' => $request->pkp_name,
-                                            ]), $equipment->id);
+                                        'paraname' => $old_name,
+                                        'paramNeu' => $request->pkp_name,
+                                    ]), $equipment->id);
                                 }
                             }
                         }
@@ -681,9 +684,9 @@ class ProduktController extends Controller
         }
 
         $msg .= __('<p>Es wurden :numProduct Produkte und :numEquipment Geräte aktualisiert</p>', [
-                'numProduct'   => $updated_product_counter,
-                'numEquipment' => $updated_equipment_counter
-            ]);
+            'numProduct'   => $updated_product_counter,
+            'numEquipment' => $updated_equipment_counter
+        ]);
 
         $request->session()->flash('status', $msg);
         return back();
@@ -717,7 +720,7 @@ class ProduktController extends Controller
      */
     public function addProduktKategorieParam(Request $request): RedirectResponse
     {
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::create($this->validateProduktKategorieParam());
         $request->session()->flash('status', __('Der Parameter <strong>:name</strong> wurde angelegt!', ['name' => request('pkp_name')]));
         return back();
@@ -732,7 +735,7 @@ class ProduktController extends Controller
      */
     public function deleteProduktKategorieParam(Request $request)
     {
-//        $this->authorize('isAdmin', Auth()->user());
+        //        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::find($request->id)->delete();
         $request->session()->flash('status', __('Der Parameter <strong>:name</strong> wurde gelöscht!', ['name' => request('pkp_name')]));
         return back();

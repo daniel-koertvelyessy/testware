@@ -148,10 +148,10 @@
                             <tr>
                                 <th> {{__('Inventarnummer')}}</th>
                                 <th> {{__('Seriennummer')}}</th>
-                                <th> <input class="form-check-input"
-                                            type="checkbox"
-                                            value="1"
-                                            id="selectAllSyncItems"
+                                <th><input class="form-check-input"
+                                           type="checkbox"
+                                           value="1"
+                                           id="selectAllSyncItems"
                                     >
                                     <label class="form-check-label"
                                            for="selectAllSyncItems"
@@ -194,7 +194,6 @@
                             @endforelse
                             </tbody>
                         </table>
-
 
 
                         <div class="form-check my-2 my-md-4">
@@ -1036,7 +1035,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse (\App\ProductQualifiedUser::where('produkt_id',$produkt->id)->get() as $qualifiedUser)
+                                    @forelse($qualifiedUserList as $qualifiedUser)
                                         <tr>
                                             <td>{{ $qualifiedUser->user->name }} </td>
                                             <td>{{ $qualifiedUser->product_qualified_date }}</td>
@@ -1152,7 +1151,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse (\App\ProductInstructedUser::where('produkt_id',$produkt->id)->get() as $instructedUser)
+                                    @forelse ($instructedUserList as $instructedUser)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $instructedUser->profile->fullName() }}</td>
                                             <td style="vertical-align: middle;">{{ $instructedUser->product_instruction_date }}</td>
@@ -1697,10 +1696,10 @@
                                     @endforelse
                                     </tbody>
                                 </table>
-                                    <div class="d-flex justify-content-center">
-                                        {!! $equipLists->withQueryString()->onEachSide(2)->links() !!}
-                                    </div>
-                                    @if($equipLists->count() > 10) @endif
+                                <div class="d-flex justify-content-center">
+                                    {!! $equipLists->withQueryString()->onEachSide(2)->links() !!}
+                                </div>
+                                @if($equipLists->count() > 10) @endif
                             </div>
                         </div>
                     </div>
@@ -1866,7 +1865,7 @@
     <script>
 
         $('#selectAllSyncItems').click(function () {
-             $('.syncItem').prop('checked',$(this).prop('checked'));
+            $('.syncItem').prop('checked', $(this).prop('checked'));
         })
 
         $('#btnStoreInstructedUser').click(function () {

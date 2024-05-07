@@ -18,9 +18,8 @@
         >
             <h2 class="h5">Initialisierung</h2>
             <p>Sie sind noch als
-                <span class="badge badge-dark">testware</span>
-                Benutzer angemeldet.
-            </p>
+                <span class="badge badge-dark">testWare</span>
+                Benutzer angemeldet. </p>
             <p>Ergänzen Sie Ihre Firmierung und Benutzerdaten. Dies können Sie entweder über die jeweiligen Seiten
                 vornehmen oder einfach den Installer aufrufen.</p>
             <a href="{{ route('installer.company') }}"
@@ -60,7 +59,8 @@
                             <span>{{__('Status')}}: <strong><a href="equipment/status/{{$equipmentState->id}}">{{ucwords($equipmentState->estat_label) }}</a></strong>
                             </span>
                             <span class="mt-2 display-4 text-{{ ($equipmentStateList->count()>0) ? $equipmentState->estat_color : 'light' }}">
-                                <i class="{{$equipmentState->estat_icon }}"></i></span>
+                                <i class="{{$equipmentState->estat_icon }}"></i>
+                            </span>
                         </div>
                         <div class="d-lg-none"
                              style="display: flex; flex-direction: column;"
@@ -68,8 +68,8 @@
                             <span>{{__('Status')}}:
                                 <strong><a href="equipment/status/{{$equipmentState->id}}"> {{ ucwords($equipmentState->estat_label) }} </a></strong>
                             </span>
-{{--                            <span class="lead mt-2">{{ $equipmentState->estat_name }}</span>--}}
-                                                        <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,40) }}</span>
+                            {{--                            <span class="lead mt-2">{{ $equipmentState->estat_name }}</span>--}}
+                            <span class="lead mt-2">{{ str_limit($equipmentState->estat_name,40) }}</span>
                         </div>
                         @if ($equipmentState->id === 1)
                             <span style="font-size: 3rem;"
@@ -282,7 +282,7 @@
                             </thead>
                             <tbody>
                             @forelse($equipmentTestList->take($maxListItems) as $controlEquipment)
-                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>¡
+                                <x-dashboardTestitemList :controlEquipment="$controlEquipment"/>
                             @empty
                                 <tr>
                                     <td colspan="4">
@@ -329,18 +329,7 @@
                     <x-notifyer>{{__('Keine ungelesenen Meldungen gefunden!')}}</x-notifyer>
                 @endforelse
             </x-dashborarditem>
-
-            {{--            <x-dashborarditem>
-                            <h2 class="h5">{{ __('Status') }}
-                                <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
-                            </h2>
-                            <div id="myChart"
-                                 style="max-width: 350px;"
-                            ></div>
-
-                        </x-dashborarditem>--}}
         </div>
-        {{--        {!!  App\Testware::checkTWStatus() !!}--}}
     </div>
 @endsection
 
