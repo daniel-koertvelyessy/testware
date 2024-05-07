@@ -142,9 +142,7 @@ class SystemStatusController extends Controller
                 $items[] = $item;
             }
         }
-
-        dd($items);
-
+        
         return $items;
 
     }
