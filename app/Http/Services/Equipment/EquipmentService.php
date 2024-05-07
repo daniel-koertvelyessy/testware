@@ -69,7 +69,7 @@ class EquipmentService
     public function getAllControlItems(Equipment $equipment)
     {
 
-        return ControlEquipment::withTrashed()->with(['Anforderung', 'Equipment'])->where('equipment_id', $equipment->id)->orderBy('updated_at')->get();
+        return ControlEquipment::withTrashed()->with('Anforderung', 'Equipment')->where('equipment_id', $equipment->id)->orderBy('updated_at')->get();
 
     }
 

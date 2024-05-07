@@ -197,7 +197,7 @@ class EquipmentController extends Controller
             'controlList'              => $service->getAllControlItems($equipment),
             'instructedPersonList'     => $service->getInstruectedPersonList($equipment),
             'equipmentRequirementList' => $service->getRequirementList($equipment),
-            'requirementList'          => Anforderung::select('id', 'an_label')->get(),
+            'requirementList'          => Anforderung::select(['id', 'an_label'])->get(),
             'recentControlList'        => $service->getRecentExecutedControls($equipment),
             'euqipmentDocumentList'    => $serviceDocument->getDocumentList($equipment),
             'functionDocumentList'     => $serviceDocument->getFunctionTestDocumentList($equipment),

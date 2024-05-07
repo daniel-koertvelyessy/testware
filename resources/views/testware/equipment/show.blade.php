@@ -608,13 +608,12 @@
                                value="{{ $equipment->eq_uid }}"
                         >
 
-                        <x-selectfield id="requirement"
-                                       label="{{ __('Prüfung auswählen') }}"
-                        >
-                            @foreach (\App\Anforderung::select('id', 'an_name')->get() as $requirement)
-                                <option value="{{ $requirement->id }}">{{ $requirement->an_name }}</option>
-                            @endforeach
-                        </x-selectfield>
+                        <x-lists.requirementSelector id="requirement"
+                                                     name="requirement"
+                                                     :requirements="$requirementList"
+                                                     :selected="1"
+                                                     label="{{ __('Prüfung auswählen') }}"
+                        />
 
                     </div>
                     <div class="modal-footer">
@@ -867,44 +866,31 @@
                id="equipment_id"
                value="{{ $equipment->id }}"
         >
-        <div class="row">
+        <div class="row mb-2">
             <div class="col">
-                <x-selectfield id="anforderung_id"
-                               required="true"
-                               label="{{ __('Anforderung') }}"
-                >
-                    @forelse($equipmentRequirementList as $item)
-                        <option value="{{ $item->anforderung_id }}">
-                            {{ $item->an_label }}
-                        </option>
-                    @empty
-                        <option value="">noper</option>
-                    @endforelse
-                </x-selectfield>
+                <x-lists.requirementSelector id="anforderung_id"
+                                             name="anforderung_id"
+                                             :requirements="$requirementList"
+                                             :selected="1"
+                                             label="{{ __('Prüfung auswählen') }}"
+                />
+
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <x-rnumberfield id="qe_control_date_warn"
                                 label="{{ __('Vorwarnzeit') }}"
-                                value="{{ $equipmentRequirementList->first()->an_date_warn }}"
+                                value="{{ $equipmentRequirementList->first()?->an_date_warn }}"
                 />
             </div>
             <div class="col-md-6">
-                <x-selectfield id="control_interval_id"
-                               required="true"
-                               label="{{ __('Zeitraum') }}"
-                >
-                    @forelse(\App\ControlInterval::all() as $item)
-                        <option value="{{ $item->id }}"
-                                @if ($item->id === $equipmentRequirementList->first()->warn_interval_id)
-                                    selected @endif>
-                            {{ $item->ci_label }}
-                        </option>
-                    @empty
-                        <option value="">noper</option>
-                    @endforelse
-                </x-selectfield>
+
+                <x-lists.intervalTypeSelector name="control_interval_id" id="control_interval_id"
+                                              label="{{ __('Zeitraum') }}"
+                                              :interval-type-list="$controlIntervalList"
+                                              :selected="$equipmentRequirementList->first()?->warn_interval_id"
+                />
             </div>
         </div>
         <div class="row">
@@ -1046,7 +1032,7 @@
                                 <h2 class="h4">{{ __('Übersicht / Stammdaten') }}</h2>
                                 <x-staticfield id="Bezeichnung"
                                                label="{{ __('Bezeichnung') }}:"
-                                               value="{{ $equipment->eq_name ?? $equipment->produkt->prod_name }}"
+                                               value="{{ $equipment->eq_name ?? $equipment->produkt?->prod_name }}"
                                 />
                                 <x-staticfield id="Storage"
                                                label="{{ __('Aufstellplatz / Standort') }}:"
@@ -1088,14 +1074,16 @@
                                     <h2 class="h4 mb-2">{{ __('Gerätestatus') }}</h2>
                                 @endif
                                 <div class="align-items-center justify-content-between mb-3 d-none d-md-flex">
-                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    <span class=" fas fa-4x fa-border {{ $equipment->EquipmentState?->estat_icon }}
+                                    text-{{ $equipment->EquipmentState->estat_color }}"
                                     ></span>
-                                    <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class="lead mx-3">{{ $equipment->EquipmentState?->estat_name }}</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-3 d-md-none">
-                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState->estat_icon }} text-{{ $equipment->EquipmentState->estat_color }}"
+                                    <span class=" fas fa-2x fa-border {{ $equipment->EquipmentState?->estat_icon }}
+                                    text-{{ $equipment->EquipmentState->estat_color }}"
                                     ></span>
-                                    <span class="lead mx-3">{{ $equipment->EquipmentState->estat_name }}</span>
+                                    <span class="lead mx-3">{{ $equipment->EquipmentState?->estat_name }}</span>
                                 </div>
 
                                 <h2 class="h4 mt-5">
@@ -1500,7 +1488,8 @@
                                     <p class="d-flex justify-content-between align-items-center px-2">
                                         <span class="{{ !$item->deleted_at && $item->qe_control_date_due < now() ?
                                         'text-danger' : '' }}"
-                                        >{{ $item->Anforderung->an_label }} / <span class="small">{{ __('fällig') }}</span>
+                                        >{{ $item->Anforderung?->an_label }} / <span class="small">{{ __('fällig')
+                                        }}</span>
                                             {{
                                         $item->qe_control_date_due }}
                                         </span>
