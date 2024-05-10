@@ -1,8 +1,7 @@
 @extends('layout.layout-admin')
 
 @section('pagetitle')
-    {{ __('Systemstatus') }} &triangleright; {{ __('Systemeinstellungen') }}
-@endsection
+    {{ __('Systemstatus') }} &triangleright; {{ __('Systemeinstellungen') }}@endsection
 
 @section('mainSection')
     {{ __('Systemstatus') }}
@@ -49,7 +48,7 @@
                                 <span class="text-warning">{{ __('Objekte') }}</span>
                         </button>
                         @else
-                            Objekte
+                        {{ __('Objekte') }}
                         @endif
                         <button class="nav-link"
                                 id="nav-dblinks-tab"
@@ -60,8 +59,7 @@
                                 aria-controls="nav-dblinks"
                                 aria-selected="false"
                         >
-                            <span
-                                    class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
+                            <span class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
                                 $dbstatus['brokenProducts'] > 0 ||
                                 $dbstatus['brokenProductRequiremnets'] > 0 ||
                                 $dbstatus['orphanRequirementItems'] > 0 ||
@@ -284,8 +282,7 @@
                          aria-labelledby="nav-dblinks-tab"
                     >
                         <div class="row">
-                            <div
-                                    class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
+                            <div class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
                                 $dbstatus['brokenProductRequiremnets'] > 0 ||
                                 $dbstatus['orphanRequirementItems'] > 0
                                     ? 'col-md-8'
@@ -400,7 +397,7 @@
                                     </div>
                                 @endif
                                 @if ($dbstatus['totalBrokenLinks'] > 0)
-                                    <h2 class="h4">Verwaiste Prüfungen
+                                    <h2 class="h4">{{ __('Verwaiste Prüfungen') }}
                                         <span class="badge badge-info small">{{ $dbstatus['totalBrokenLinks'] }} </span>
                                     </h2>
                                     <table class="table">
@@ -453,11 +450,15 @@
                                                 </td>
                                                 <td>
                                                     <section class="d-flex">
-                                                        <form action="{{ route('control.fixbroken', $controlItem) }}"
+                                                        <form action="{{ route('control.fixbroken',$controlItem) }}"
                                                               method="POST"
                                                         >
                                                             @csrf
-                                                            @method('PUT')
+                                                            <input type="hidden"
+                                                                   name="control_equipment_id"
+                                                                   id="control_equipment_id_{{ $controlItem->id }}"
+                                                                   value="{{ $controlItem->id }}"
+                                                            >
                                                             <input type="hidden"
                                                                    name="anforderung_id"
                                                                    id="setRequirement{{ $controlItem->id }}"
@@ -476,9 +477,8 @@
                                                             </button>
                                                         </form>
                                                         @if ($isSysAdmin)
-                                                            <form
-                                                                    action="{{ route('control.destroy', $controlItem) }}"
-                                                                    method="POST"
+                                                            <form action="{{ route('control.destroy', $controlItem) }}"
+                                                                  method="POST"
                                                             >
                                                                 @csrf
                                                                 @method('DELETE')
@@ -550,9 +550,8 @@
                                                 </td>
                                                 <td>
                                                     <section class="d-flex">
-                                                        <form
-                                                                action="{{ route('anforderungcontrolitem.fixbroken', $item) }}"
-                                                                method="POST"
+                                                        <form action="{{ route('anforderungcontrolitem.fixbroken', $item) }}"
+                                                              method="POST"
                                                         >
                                                             @csrf
                                                             @method('PUT')
@@ -569,9 +568,8 @@
                                                             </button>
                                                         </form>
                                                         @if ($isSysAdmin)
-                                                            <form
-                                                                    action="{{ route('anforderungcontrolitem.destroy', $item) }}"
-                                                                    method="POST"
+                                                            <form action="{{ route('anforderungcontrolitem.destroy', $item) }}"
+                                                                  method="POST"
                                                             >
                                                                 @csrf
                                                                 @method('DELETE')
@@ -596,8 +594,7 @@
                                 @endif
 
                             </div>
-                            <div
-                                    class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
+                            <div class="{{ $dbstatus['totalBrokenLinks'] > 0 ||
                                 $dbstatus['brokenProductRequiremnets'] > 0 ||
                                 $dbstatus['orphanRequirementItems'] > 0
                                     ? 'col-md-4'
@@ -705,13 +702,13 @@
 @endsection
 @section('scripts')
     <script>
-        $('.setRequirement').change(function() {
+        $('.setRequirement').change(function () {
             const controlId = $(this).data('controlid');
             $('#setRequirement' + controlId).val($(this).val());
             $('#btnUpdateControlItem' + controlId).prop('disabled', $(this).val() === '0');
         });
 
-        $('.setEquipment').change(function() {
+        $('.setEquipment').change(function () {
             const controlId = $(this).data('controlid');
             $('#setEquipment' + controlId).val($(this).val());
             $('#btnUpdateControlItem' + controlId).prop('disabled', $(this).val() === '0');

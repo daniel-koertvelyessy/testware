@@ -156,12 +156,12 @@ Route::get('anforderungcontrolitem/{anforderungcontrolitem}/copy', 'AnforderungC
 Route::post('anforderungcontrolitem/{anforderung}/applySort', 'AnforderungControlItemController@applySort')->name('anforderungcontrolitem.applySort');
 Route::get('anforderungcontrolitemlistitems', 'AnforderungControlItemController@getAciList')->name('anforderungcontrolitemlistitems');
 Route::put('anforderungcontrolitem/{aci}/fix', 'AnforderungControlItemController@fixbroken')->name('anforderungcontrolitem.fixbroken');
-
+Route::post('anforderung/restore','AnforderungsController@restore')->name('anforderung.restore');
 
 
 //Route::put('updateAnforderungControlItem', 'AdminController@updateAnforderungControlItem')->name('updateAnforderungControlItem');
 //Route::delete('deleteAnforderungControlItem', 'AdminController@deleteAnforderungControlItem')->name('deleteAnforderungControlItem');
-    Route::put('control/{control}/fix','ControlEquipmentController@fixbroken')->name('control.fixbroken');
+Route::post('control/fix','ControlEquipmentController@fixbroken')->name('control.fixbroken');
 
 
     /**

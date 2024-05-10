@@ -424,7 +424,7 @@ class EquipmentController extends Controller
     public function syncRequirements(Request $request)
     {
 
-        //        dd($request);
+        //dd($request);
         $countr = 0;
         foreach ($request->anforderung_id as $key => $id) {
             $controlEquipment = new ControlEquipment();
@@ -438,6 +438,12 @@ class EquipmentController extends Controller
                 ? 1
                 : 0;
         }
+
+        (new EquipmentHistory)->add(
+            __('Anforderungen synchronisieren'),
+            trans('Insgesamt :num Anforderungen wuden synchronisiert.',['num' => $countr]),
+            $request->equipment_id[0]
+        );
 
         $msg = $countr > 1
             ? __('Es wurden :num Prüfungen angelegt', ['num' => $countr])

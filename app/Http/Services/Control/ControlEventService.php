@@ -39,12 +39,14 @@
         public function syncEquipment(string $uuid, bool $deleteExistingControlItems=false): array
         {
             $dataset = [];
-            $equipment = Equipment::where('eq_uid', $uuid)->first();
+            $equipment = Equipment::with('produkt.ProduktAnforderung.Anforderung.ControlInterval')->where('eq_uid', $uuid)->first();
+
+
 
             if ($deleteExistingControlItems) $dataset['deleted'] = count( $this->deleteControlItems($equipment));
 
-            foreach ($equipment->produkt->ProduktAnforderung as $requirement) {
-                $anforderung = $requirement->Anforderung;
+            foreach ($equipment->produkt->ProduktAnforderung as $produktAnforderung) {
+                $anforderung = $produktAnforderung->Anforderung;
 
                 if (ControlEquipment::where([
                         'anforderung_id' => $anforderung->id,

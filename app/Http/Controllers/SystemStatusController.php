@@ -142,7 +142,7 @@ class SystemStatusController extends Controller
                 $items[] = $item;
             }
         }
-        
+
         return $items;
 
     }
@@ -165,7 +165,7 @@ class SystemStatusController extends Controller
 
     public function getBrokenDBLinks()
     {
-        return Cache::remember('system-status-database', now()->addHours(12), function () {
+//        return Cache::remember('system-status-database', now()->addHours(12), function () {
             $brokenLinksCount = 0;
             $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
             $brokenProducts = $this->getBrokenProductItems();
@@ -174,7 +174,6 @@ class SystemStatusController extends Controller
             $orphanACI = $this->getOrphanRequirementItems();
             $brokenControlItems = $brokenEquipmentControl['brokenItems'];
             $orphanEquipmentUids = $this->countOrphanEquipmentUids();
-
 
             return [
                 'missingEquipmentUuids'         => $this->getBrockenEquipmentUuids(),
@@ -190,7 +189,7 @@ class SystemStatusController extends Controller
                 'duplicate_uuids'               => $this->getDuplicateUuIds(),
                 'astrayEquipmentUids'           => $this->getAstrayEquipmentUids(),
             ];
-        });
+//        });
 
 
     }
@@ -198,7 +197,7 @@ class SystemStatusController extends Controller
     public function getObjectStatus(): array
     {
 
-        return Cache::remember('system-status-objects', now()->addHours(12), function () {
+//        return Cache::remember('system-status-objects', now()->addHours(12), function () {
             $incomplete_equipment = false;
             $incomplete_requirement = 0;
             foreach (Anforderung::all() as $requirement) {
@@ -240,7 +239,7 @@ class SystemStatusController extends Controller
                 'incomplete_equipment'         => $incomplete_equipment,
                 'requirements_items'           => AnforderungControlItem::all()->count(),
             ];
-        });
+//        });
 
     }
 

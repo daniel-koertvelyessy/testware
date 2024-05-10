@@ -594,8 +594,9 @@ class ControlEquipmentController extends Controller
 
     }*/
 
-    public function fixbroken(ControlEquipment $control, Request $request)
+    public function fixbroken(Request $request)
     {
+        $control = ControlEquipment::withTrashed()->findOrFail($request->control_equipment_id);
         $control->anforderung_id = $request->anforderung_id;
         $control->equipment_id = $request->equipment_id;
         $msg = $control->save()

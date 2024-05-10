@@ -41,7 +41,8 @@
         public function index()
         {
             return view('admin.verordnung.anforderung.index', [
-                'requirements' => Anforderung::with('ControlInterval', 'AnforderungControlItem')->sortable()->paginate(10)
+                'requirements' => Anforderung::with('ControlInterval', 'AnforderungControlItem')->sortable()->paginate(10),
+                'isSysAdmin' => \Auth::user()->isSysAdmin()
             ]);
 
         }
@@ -131,6 +132,18 @@
             $anforderung->delete();
             session()->flash('status', 'Die Anforderung wurde gelöscht!');
             return redirect()->route('anforderung.index');
+        }
+
+        public function restore(Request $request)
+        {
+
+            $msg = (Anforderung::withTrashed()->find($request->id)->restore())
+                ? __('Anforderung wurde wiederhergestellt')
+                : __('Anforderung konnte nicht wiederhergestellt werden!');
+
+            $request->session()->flash('status', $msg);
+            return back();
+
         }
 
         /**

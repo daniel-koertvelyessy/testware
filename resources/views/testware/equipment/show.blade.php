@@ -812,7 +812,7 @@
                                        class="custom-control-input"
                                        id="anfoderung_id_{{ $requirement->id }}"
                                        name="anforderung_id[]"
-                                       value="{{ $requirement->anforderung_id }}"
+                                       value="{{ $requirement->id }}"
                                 >
                                 <label class="custom-control-label"
                                        for="anfoderung_id_{{ $requirement->id }}"
