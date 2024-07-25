@@ -14,7 +14,7 @@
         if ($dbstatus['countIssues']>0 ){
             $status .= '<a href="'.route('admin.index').'"
            class="text-danger mr-2"
-           title="'. __('Mindestens :num verwaiste/fehlerhafte Einträge in der Datenbank gefunden',['num'=>array_sum($dbstatus['countIssues'])]).'"
+           title="'. __('Mindestens :num verwaiste/fehlerhafte Einträge in der Datenbank gefunden',['num'=>$dbstatus['countIssues']]).'"
         ><i class="fas fa-database"></i></a>';
         }
         $issueCounter = 0;
