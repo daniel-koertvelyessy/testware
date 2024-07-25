@@ -85,7 +85,7 @@
 
             $produkt = $equipment->Produkt;
 
-            return ControlProdukt::where('produkt_id', $produkt->id)->get();
+            return ControlProdukt::where('produkt_id', $produkt->id)->count()>0;
 
         }
 

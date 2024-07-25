@@ -165,31 +165,34 @@ class SystemStatusController extends Controller
 
     public function getBrokenDBLinks()
     {
-//        return Cache::remember('system-status-database', now()->addHours(12), function () {
-            $brokenLinksCount = 0;
-            $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
-            $brokenProducts = $this->getBrokenProductItems();
-            $brokenProductRequiremnets = $this->getBrokenProductRequirements();
-            $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
-            $orphanACI = $this->getOrphanRequirementItems();
-            $brokenControlItems = $brokenEquipmentControl['brokenItems'];
-            $orphanEquipmentUids = $this->countOrphanEquipmentUids();
+        //        return Cache::remember('system-status-database', now()->addHours(12), function () {
+        $brokenLinksCount = 0;
+        $brokenEquipmentControl = $this->getBrokenControlEquipmentItems();
+        $brokenProducts = $this->getBrokenProductItems();
+        $brokenProductRequiremnets = $this->getBrokenProductRequirements();
+        $brokenLinksCount += $brokenEquipmentControl['brokenControlEquipmenCount'];
+        $orphanACI = $this->getOrphanRequirementItems();
+        $brokenControlItems = $brokenEquipmentControl['brokenItems'];
+        $orphanEquipmentUids = $this->countOrphanEquipmentUids();
 
-            return [
-                'missingEquipmentUuids'         => $this->getBrockenEquipmentUuids(),
-                'brokenProductRequiremnets'     => count($brokenProductRequiremnets),
-                'brokenProductRequiremnetItems' => $brokenProductRequiremnets,
-                'brokenProducts'                => $brokenProducts,
-                'totalBrokenLinks'              => $brokenLinksCount,
-                'brokenControlItems'            => $brokenControlItems,
-                'equipmentControl'              => $brokenEquipmentControl,
-                'orphanRequirementItems'        => count($orphanACI),
-                'orphanRequirementItemList'     => $orphanACI,
-                'orphanEquipmentUids'           => $orphanEquipmentUids,
-                'duplicate_uuids'               => $this->getDuplicateUuIds(),
-                'astrayEquipmentUids'           => $this->getAstrayEquipmentUids(),
-            ];
-//        });
+        $countIssues = $brokenLinksCount + count($orphanACI) + count($brokenControlItems) + $orphanEquipmentUids + $this->getAstrayEquipmentUids();
+
+        return [
+            'countIssues'                   => $countIssues,
+            'missingEquipmentUuids'         => $this->getBrockenEquipmentUuids(),
+            'brokenProductRequiremnets'     => count($brokenProductRequiremnets),
+            'brokenProductRequiremnetItems' => ($brokenProductRequiremnets),
+            'brokenProducts'                => $brokenProducts,
+            'totalBrokenLinks'              => $brokenLinksCount,
+            'brokenControlItems'            => $brokenControlItems,
+            'equipmentControl'              => $brokenEquipmentControl,
+            'orphanRequirementItems'        => count($orphanACI),
+            'orphanRequirementItemList'     => $orphanACI,
+            'orphanEquipmentUids'           => $orphanEquipmentUids,
+            'duplicate_uuids'               => $this->getDuplicateUuIds(),
+            'astrayEquipmentUids'           => $this->getAstrayEquipmentUids(),
+        ];
+        //        });
 
 
     }
@@ -197,49 +200,48 @@ class SystemStatusController extends Controller
     public function getObjectStatus(): array
     {
 
-//        return Cache::remember('system-status-objects', now()->addHours(12), function () {
-            $incomplete_equipment = false;
-            $incomplete_requirement = 0;
-            foreach (Anforderung::all() as $requirement) {
-                $incomplete_requirement += $requirement->AnforderungControlItem()->count() > 0
-                    ? 0
-                    : 1;
-            }
+        //        return Cache::remember('system-status-objects', now()->addHours(12), function () {
+        $incomplete_equipment = false;
+        $incomplete_requirement = 0;
+        foreach (Anforderung::all() as $requirement) {
+            $incomplete_requirement += $requirement->AnforderungControlItem()->count() > 0
+                ? 0
+                : 1;
+        }
 
-            $service = new EquipmentEventService();
+        $service = new EquipmentEventService();
 
-            $equipment = Equipment::select('id')->get();
-            $countEquipment = $equipment->count();
-            foreach ($equipment as $item) {
-                $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id', $item->id)->count() === 0
-                    ? 1
-                    : 0;
-            }
+        $equipment = Equipment::select('id')->get();
+        $countEquipment = $equipment->count();
+        foreach ($equipment as $item) {
+            $incomplete_equipment += ControlEquipment::select('id')->where('equipment_id', $item->id)->count() === 0
+                ? 1
+                : 0;
+        }
 
-            $countControlEquipment = Equipment::with(['Produkt'])->get()->map(function ($value) {
+        $countControlEquipment = Equipment::with(['Produkt'])->get()->filter(function ($value) {
+            return $value->isControlProdukt($value);
+        });
 
-                return $value->isControlProdukt($value) != null;
-            })->sum();
-
-            $countProducts = Produkt::count();
+        $countProducts = Produkt::count();
 
 
-            return [
-                'foundExpiredControlEquipment' => $service->findExpiredEquipmentControlItems(),
-                'products'                     => $countProducts,
-                'equipment'                    => $countEquipment,
-                'control_products'             => ControlProdukt::all()->count(),
-                'control_equipment'            => $countControlEquipment,
-                'storages'                     => Storage::all()->count(),
-                'equipment_qualified_user'     => EquipmentQualifiedUser::all()->count(),
-                'product_qualified_user'       => ProductQualifiedUser::all()->count(),
-                'regulations'                  => Verordnung::all()->count(),
-                'requirements'                 => Anforderung::all()->count(),
-                'incomplete_requirement'       => $incomplete_requirement,
-                'incomplete_equipment'         => $incomplete_equipment,
-                'requirements_items'           => AnforderungControlItem::all()->count(),
-            ];
-//        });
+        return [
+            'foundExpiredControlEquipment' => $service->findExpiredEquipmentControlItems(),
+            'products'                     => $countProducts,
+            'equipment'                    => $countEquipment,
+            'control_products'             => ControlProdukt::all()->count(),
+            'control_equipment'            => count($countControlEquipment),
+            'storages'                     => Storage::all()->count(),
+            'equipment_qualified_user'     => EquipmentQualifiedUser::all()->count(),
+            'product_qualified_user'       => ProductQualifiedUser::all()->count(),
+            'regulations'                  => Verordnung::all()->count(),
+            'requirements'                 => Anforderung::all()->count(),
+            'incomplete_requirement'       => $incomplete_requirement,
+            'incomplete_equipment'         => $incomplete_equipment,
+            'requirements_items'           => AnforderungControlItem::all()->count(),
+        ];
+        //        });
 
     }
 

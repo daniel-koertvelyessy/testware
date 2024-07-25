@@ -8,10 +8,13 @@
         $dbstatus = $systemStatus->getBrokenDBLinks();
         $objects = $systemStatus->getObjectStatus();
 
-        if (array_sum($dbstatus)>0){
+
+
+
+        if ($dbstatus['countIssues']>0 ){
             $status .= '<a href="'.route('admin.index').'"
            class="text-danger mr-2"
-           title="'. __('Mindestens :num verwaiste/fehlerhafte Einträge in der Datenbank gefunden',['num'=>array_sum($dbstatus)]).'"
+           title="'. __('Mindestens :num verwaiste/fehlerhafte Einträge in der Datenbank gefunden',['num'=>array_sum($dbstatus['countIssues'])]).'"
         ><i class="fas fa-database"></i></a>';
         }
         $issueCounter = 0;
