@@ -412,7 +412,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach ($dbstatus['brokenControlItems'] as $controlItem)
-                                            <tr>
+                                            <tr {{ ( $controlItem->deleted_at != null )? 'class=""' : '' }}>
                                                 <td>{{ $controlItem->created_at }}</td>
                                                 <td>{{ $controlItem->qe_control_date_due }}</td>
                                                 <td>

@@ -110,9 +110,10 @@ class SystemStatusController extends Controller
         }
 
         foreach (ControlEquipment::with('Anforderung','Equipment')->withTrashed()->where('anforderung_id', null)->get() as $control) {
-            $brokenItems[] = $control;
-            $counter++;
-
+            if ($control->deletd_at !== NULL) {
+                $brokenItems[] = $control;
+                $counter++;
+            }
         }
 
         $brokenEquipmentControl = $counter > 0;
