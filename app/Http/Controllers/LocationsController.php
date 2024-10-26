@@ -52,12 +52,12 @@ class LocationsController extends Controller
     {
 
 
-        if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
+        if (Location::with('Building')->get()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('<span class="lead">Es existieren noch keine Standorte!</span> <br>Erstellen Sie Ihren ersten Standort!'));
             return redirect()->route('location.create');
         }
 
-        $locationList = Location::with('Adresse', 'Profile')->sortable()->paginate(10);
+        $locationList = Location::with('Building','Adresse', 'Profile')->sortable()->paginate(10);
         return view('admin.standorte.location.index', compact('locationList'));
     }
 
@@ -74,11 +74,7 @@ class LocationsController extends Controller
         return response()->json($locresults);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|Response|View
-     */
+
     public function create()
     {
         return view('admin.standorte.location.create');
@@ -288,7 +284,7 @@ class LocationsController extends Controller
     public function getLocationListeAsKachel(): array
     {
         $html = '';
-        foreach (Location::all() as $location) {
+        foreach (Location::with('Building')->get() as $location) {
             $html .= view('components.object_tile', ['object' => $location])->render();
         }
 
@@ -392,7 +388,7 @@ class LocationsController extends Controller
         $data['select'] = '<option value="void">' . __('Bitte Gebäude auswählen') . '</option>';
         $data['radio'] = '';
         if ($request->id !== 'void') {
-            foreach (Building::where('location_id', $request->id)->get() as $building) {
+            foreach (Building::with('BuildingType')->where('location_id', $request->id)->get() as $building) {
                 $data['select'] .= '<option value="' . $building->id . '">[' . $building->BuildingType->btname . '] ' . $building->b_label . ' / ' . $building->b_name . '</option>';
                 $data['radio'] .= '
                 <label class="btn btn-outline-primary"

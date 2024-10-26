@@ -1484,7 +1484,7 @@
                                     <div class="list-group">
                                         @forelse ($produkt->firma as $firma)
                                             <x-addresslabel firma="{!!  $firma->fa_name !!}"
-                                                            address="{{ $firma->Adresse->ad_anschrift_strasse }} - {{ $firma->Adresse->ad_anschrift_ort }}"
+                                                            address="{{ \App\Firma::getAddressLabel($firma) }}"
                                                             firmaid="{{ $firma->id }}"
                                                             produktid="{{ $produkt->id }}"
                                             ></x-addresslabel>

@@ -138,4 +138,9 @@ class Produkt extends Model
         ])->first();
         return $product->id;
     }
+
+    public function EquipmentCount(): int
+    {
+        return Equipment::where('produkt_id',$this->id)->get()->count();
+    }
 }

@@ -86,7 +86,7 @@ class EquipmentController extends Controller
         $companyList = FirmaProdukt::where('produkt_id', $request->produkt_id)->get();
         return view('testware.equipment.create', [
             'pk'        => $request->pk,
-            'produkt'   => Produkt::find(request('produkt_id')),
+            'produkt'   => Produkt::with('ProduktAnforderung')->find(request('produkt_id')),
             'companies' => $companyList
         ]);
     }

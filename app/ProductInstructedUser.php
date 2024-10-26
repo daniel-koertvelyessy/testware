@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
@@ -21,7 +22,7 @@ class ProductInstructedUser extends Model
     ];
 
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
         static::saving(function () {
@@ -32,17 +33,22 @@ class ProductInstructedUser extends Model
         });
     }
 
-    public function profile()
+    public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class, 'product_instruction_trainee_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'product_instruction_trainee_id');
     }
 
-    public function product()
+    public function Firma(): BelongsTo
+    {
+        return $this->belongsTo(Firma::class, 'product_instruction_firma_id');
+    }
+
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Produkt::class);
     }

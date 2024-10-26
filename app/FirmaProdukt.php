@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FirmaProdukt extends Model
 {
@@ -16,4 +17,8 @@ class FirmaProdukt extends Model
     public function Produkt() {
         return $this->belongsTo(Produkt::class);
     }
+
+
+
+
 }

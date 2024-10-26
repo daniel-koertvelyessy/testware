@@ -31,6 +31,16 @@ class Firma extends Model
         return $this->belongsTo(Adresse::class);
     }
 
+    public static function getAddressLabel(Firma $firma):string
+    {
+
+      $address =   Adresse::find($firma->adresse_id);
+
+      return $address->ad_anschrift_strasse . ' - ' . $address->ad_anschrift_ort;
+
+
+    }
+
     public function address()
     {
         return $this->belongsTo(Adresse::class);

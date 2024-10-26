@@ -36,11 +36,11 @@
 
         <p class="mt-3">{{ __('Betroffene Produkte') }}</p>
         <ul class="list-group">
-            @forelse(App\FirmaProdukt::where('firma_id',$firma->id)->get() as $product)
+            @forelse(App\FirmaProdukt::with('Produkt')->where('firma_id',$firma->id)->get() as $product)
                 <li class="list-group-item d-flex align-items-center justify-content-between">
                     {{ $product->Produkt->prod_label }}
                     <span>verknüpfte Geräte <span
-                                class="badge badge-danger">{{ $product->Produkt->Equipment->count() }}</span> </span>
+                                class="badge badge-danger">{{ $product->Produkt->EquipmentCount() }}</span> </span>
                 </li>
             @empty
                 <li class="list-group-item list-group-item-success">{{ __('Keine Produkte mit der Firma gefunden!') }}</li>
@@ -50,8 +50,8 @@
         <p class="mt-3">{{ __('Betroffene befähigte Personen') }}</p>
         <ul class="list-group list-group-horizontal">
             @forelse(App\ProductQualifiedUser::where('product_qualified_firma',$firma->id)->take(5)->get() as $user)
-                <li class="list-group-item d-flex align-items-center justify-content-between">
-                    {{ $user->user->name }}
+                <li class="list-group-item">
+                    {{ \App\User::find($user)->first()->name }}
                 </li>
             @empty
                 <li class="list-group-item list-group-item-success">{{ __('Keine befähigte Person gefunden!') }}</li>
@@ -62,7 +62,7 @@
         <ul class="list-group list-group-horizontal">
             @forelse(App\ProductInstructedUser::where('product_instruction_instructor_firma_id',$firma->id)->take(5)->get() as $user)
                 <li class="list-group-item d-flex align-items-center justify-content-between">
-                    {{ $user->user->name }}
+                    {{ \App\User::find($user)->first()->name }}
                 </li>
             @empty
                 <li class="list-group-item list-group-item-success">{{ __('Keine eingewiesne Person gefunden!') }}</li>

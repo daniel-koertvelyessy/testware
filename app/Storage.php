@@ -205,4 +205,10 @@ class Storage extends Model
     {
         return Storage::where('storage_uid', $uid)->count() > 0;
     }
+
+    public static function countEquipment(Location $location){
+
+
+        return Equipment::where('storage_id', $location->id)->count();
+    }
 }
