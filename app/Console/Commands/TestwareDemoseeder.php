@@ -38,10 +38,12 @@
          *
          * @return int
          */
-        public function handle()
+        public function handle():int
         {
 
-            if (env('APP_ENV') != 'demo'){
+        //    dd(getenv('APP_ENV'));
+
+            if (getenv('APP_ENV') != 'demo'){
 
                 if (! $this->loginSysAdmin()){
                     return 1;
@@ -64,9 +66,11 @@
                 $this->seedDatabase();
                 return 0;
             }
+
+            return 1;
         }
 
-        protected function seedDatabase()
+        protected function seedDatabase():void
         {
             $this->info('✓  Turning on maintenance mode');
             Artisan::call('down');
@@ -78,7 +82,7 @@
 
         }
 
-        protected function loginSysAdmin()
+        protected function loginSysAdmin():bool
         {
             $this->warn('                                                            ');
             $this->warn('                        W A R N I N G                       ');

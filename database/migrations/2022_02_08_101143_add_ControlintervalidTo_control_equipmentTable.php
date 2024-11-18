@@ -27,9 +27,9 @@
             /**
              * Collect existing data
              */
-            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
-                $qe_control_date_warn[$controlEquipmentItem->id] = $controlEquipmentItem->qe_control_date_warn;
-            }
+//            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
+//                $qe_control_date_warn[$controlEquipmentItem->id] = $controlEquipmentItem->qe_control_date_warn;
+//            }
 
             /**
              *  Change table
@@ -58,11 +58,11 @@
              * if a new dataset is found or empty, add default value of (int) 4
              *
              */
-            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
-                $id = $controlEquipmentItem->id;
-                $controlEquipmentItem->qe_control_date_warn = $qe_control_date_warn[$id] ?? 4;
-                $controlEquipmentItem->save();
-            }
+//            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
+//                $id = $controlEquipmentItem->id;
+//                $controlEquipmentItem->qe_control_date_warn = $qe_control_date_warn[$id] ?? 4;
+//                $controlEquipmentItem->save();
+//            }
 
 
         }
@@ -77,9 +77,9 @@
             /**
              * Collect existing data
              */
-            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
-                $qe_control_date_warn[$controlEquipmentItem->id] = $controlEquipmentItem->qe_control_date_warn;
-            }
+//            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
+//                $qe_control_date_warn[$controlEquipmentItem->id] = $controlEquipmentItem->qe_control_date_warn;
+//            }
 
             Schema::table('control_equipment', function (Blueprint $table)
             {
@@ -98,11 +98,11 @@
              * if a new dataset is found or empty, add default value of (int) 4
              *
              */
-            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
-                $id = $controlEquipmentItem->id;
-                $controlEquipmentItem->qe_control_date_warn = $qe_control_date_warn[$id] ?? 4;
-                $controlEquipmentItem->save();
-            }
+//            foreach(\App\ControlEquipment::all() as $controlEquipmentItem){
+//                $id = $controlEquipmentItem->id;
+//                $controlEquipmentItem->qe_control_date_warn = $qe_control_date_warn[$id] ?? 4;
+//                $controlEquipmentItem->save();
+//            }
 
         }
     }

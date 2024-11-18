@@ -6,6 +6,7 @@ use Carbon\Carbon;
 
 //use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Http\Request;
@@ -30,17 +31,17 @@ class ControlEquipment extends Model
 //        'Equipment','Anforderung'
 //    ];
 
-    public function Equipment()
+    public function Equipment(): BelongsTo
     {
         return $this->belongsTo(Equipment::class,'equipment_id');
     }
 
-    public function DelayedControlEquipment()
+    public function DelayedControlEquipment(): BelongsTo
     {
         return $this->belongsTo(DelayedControlEquipment::class);
     }
 
-    public function Anforderung()
+    public function Anforderung(): BelongsTo
     {
         return $this->belongsTo(Anforderung::class);
     }

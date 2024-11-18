@@ -20,12 +20,12 @@
             });
 
 
-            foreach (Produkt::all() as $produkt) {
-                if (!$produkt->prod_uuid) {
-                    $produkt->prod_uuid = \Illuminate\Support\Str::uuid();
-                    $produkt->save();
-                }
-            }
+//            foreach (Produkt::all() as $produkt) {
+//                if (!$produkt->prod_uuid) {
+//                    $produkt->prod_uuid = \Illuminate\Support\Str::uuid();
+//                    $produkt->save();
+//                }
+//            }
         }
 
         /**

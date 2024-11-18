@@ -157,12 +157,12 @@
     };
 })(jQuery);
 $(".mainNavTab").stickyTabs();
-$('[data-toggle="tooltip"]').tooltip();
+$("[data-toggle=\"tooltip\"]").tooltip();
 bsCustomFileInput.init();
 $('#btnLockScreen').click(function () {
-    localStorage.setItem('testware-lockscreen', '1');
+    localStorage.setItem("testware-lockscreen", "1");
     // data-toggle="modal" data-target="#lockUserView"
-    $('#lockscreen').fadeIn('fast');
+    $("#lockscreen").fadeIn('fast');
     $("#lockUserView").modal("show");
 });
 
