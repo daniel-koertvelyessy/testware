@@ -12,7 +12,7 @@
         "elibyy/tcpdf-laravel": "^11.1.0",
         "guzzlehttp/guzzle": "^7.7.0",
         "kyslik/column-sortable": "^6.6.0",
-        "laravel/framework": "^v10.48.10",
+        "laravel/framework": "^v10.48.23",
         "laravel/helpers": "^v1.7.0",
         "laravel/tinker": "^v2.9.0",
         "laravel/ui": "^v4.5.1",
