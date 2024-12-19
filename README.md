@@ -3,7 +3,7 @@
 ## Content
 testWare enables you to manage the testing and maintenance of your location and equipment.
 
-Current version: `1.81.15`
+Current version: `1.81.16`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
@@ -77,11 +77,9 @@ Make sure you have docker and docker-compose installed on your host system. All 
 ### docker-compose.yml
 Your example for a `docker-compose.yml` file with an external env files:
 ```
-version: "3.1"  #  3.1 is the minimum version
-
 services:
   app:
-    image: bitpackio/testware
+    image: thermocontrol/testware
     restart: always
     container_name: testware-app
     env_file:
@@ -383,7 +381,7 @@ You are welcome to add issues to the repository. Pull request are welcomed 😄
 
 ## Support
 
-For support, please issue an e-mail to [testware@bitpack.io](mailto:testware@bitpack.io)
+For support, please issue an e-mail to [hallo@testware.io](mailto:halloe@testware.io)
 
 ## License
 

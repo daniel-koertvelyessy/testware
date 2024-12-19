@@ -26,6 +26,14 @@ app.env
 docker-compose.yml
 *.env
 *.yml
-.DS_Store
 package-lock.json
 .styleci.yml
+/typocorrection.md
+/README-setup.txt
+.editorconfig
+/composer.lock
+/.phpstorm.meta.php
+/phpunit.xml.bak
+/docker/
+/.run/
+/.phpunit.cache/

@@ -517,7 +517,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <label>{{ __('Unterschrift Unterwiesener') }}</label>
+                                    <span class="small">{{ __('Unterschrift Unterwiesener') }}</span>
                                     <div>
                                         <button type="button"
                                                 class="btn btn-link btn-sm btnClearCanvas"
@@ -542,7 +542,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <label>{{ __('Unterschrift Einweiser') }}</label>
+                                    <span class="small">{{ __('Unterschrift Einweiser') }}</span>
                                     <div>
                                         <button type="button"
                                                 class="btn btn-link btn-sm btnClearCanvas"
@@ -804,36 +804,38 @@
                         @forelse($equipment->requirement($equipment->produkt) as $requirement)
                             <input type="hidden"
                                    name="equipment_id[]"
-                                   id="equipment_id_{{ $requirement->id }}"
+                                   id="sync_requirement_modal_equipment_id_{{ $requirement->id }}"
                                    value="{{ $equipment->id }}"
                             >
                             <div class="custom-control custom-checkbox mb-2">
                                 <input type="checkbox"
                                        class="custom-control-input"
-                                       id="anfoderung_id_{{ $requirement->id }}"
+                                       id="sync_requirement_modal_anfoderung_id_{{ $requirement->id }}"
                                        name="anforderung_id[]"
                                        value="{{ $requirement->id }}"
                                 >
                                 <label class="custom-control-label"
-                                       for="anfoderung_id_{{ $requirement->id }}"
+                                       for="sync_requirement_modal_anfoderung_id_{{ $requirement->id }}"
                                 >{{ $requirement->an_name }}</label>
                             </div>
                             <section class="d-flex justify-content-between mb-3 mb-lg-9">
-                                <x-datepicker id="last_date{{ $requirement->id }}"
+                                <x-datepicker id="sync_requirement_modal_last_date{{ $requirement->id }}"
                                               name="qe_control_date_last[]"
                                               label="{{ __('letzte Prüfung am')}}"
                                 />
-                                <x-datepicker id="due_date{{ $requirement->id }}"
+                                <x-datepicker id="sync_requirement_modal_due_date{{ $requirement->id }}"
                                               name="qe_control_date_due[]"
                                               label="{{ __('nächte fällig am')}}"
                                 />
-                                <x-textfield id="qe_control_date_warn"
+                                <x-textfield id="sync_requirement_modal_qe_control_date_warn"
                                              name="qe_control_date_warn[]"
                                              label="{{ __('Vorlauf') }}"
                                              :value="$requirement->an_date_warn"
                                 />
                                 <x-lists.intervalTypeSelector :selected="$requirement->warn_interval_id"
-                                                              id="control_interval_id{{ $requirement->id }}"
+                                                              id="sync_requirement_modal_control_interval_id{{
+                                                              $requirement->id
+                                                               }}"
                                                               name="control_interval_id[]"
                                                               label="{{ __('Zeitraum') }}"
                                                               :intervalTypeList="$controlIntervalList"
@@ -1456,7 +1458,6 @@
                                                             </div>
                                                             <div class="form-group col-md-8">
                                                                 <x-lists.intervalTypeSelector :selected="$item->control_interval_id"
-                                                                                              name="wedwqe"
                                                                                               :id="$item->id"
                                                                                               :intervalTypeList="$controlIntervalList"
                                                                 />
