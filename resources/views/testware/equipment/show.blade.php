@@ -1374,7 +1374,6 @@
                                 <div class="dropdown-divider my-4"></div>
                                 <h3 class="h5">{{ __('Prüfungen') }}</h3>
                                 @forelse($controlList as $item)
-                                    {{--                                                                        @dd($item)--}}
                                     <div class="modal fade"
                                          id="editControlItemModal{{ $item->id }}"
                                          tabindex="-1"
@@ -1526,6 +1525,7 @@
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
                                                 <i class="far fa-square text-muted mx-1"></i>
+
                                             @endif
 
                                             @if ($item->archived_at)

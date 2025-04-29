@@ -86,16 +86,23 @@
                             <td>
                                 @forelse ($equipment->ControlEquipment as $controlItem)
                                     @if(! $controlItem->isInitialTest())
-                                        <span class="p-1
-                                        @if ($controlItem->qe_control_date_due <  now())
-                                            bg-danger text-white
-                                        @else
-                                        {{ ($controlItem->qe_control_date_due <  now()->addWeeks($controlItem->qe_control_date_warn)) ? 'bg-warning text-white' : '' }}
+                                        @if(is_null($controlItem->archived_at))
+                                            <span class="p-1
+                                                @if ($controlItem->qe_control_date_due <  now())
+                                                    bg-danger text-white
+                                                @else
+                                                {{ ($controlItem->qe_control_date_due <  now()->addWeeks($controlItem->qe_control_date_warn)) ? 'bg-warning text-white' : '' }}
+                                                @endif
+                                                    "
+                                                >
+                                                {{ $controlItem->qe_control_date_due }}
+                                            </span>
+                                        {{--@else
+                                            <span class="text-muted d-flex align-items-center">
+                                                <span>{{ $controlItem->archived_at->format('Y-m-d') }}</span>
+                                                <i class="fas fa-archive fa-sm ml-2"></i> </span>
+--}}
                                         @endif
-                                            "
-                                        >
-                                        {{ $controlItem->qe_control_date_due }}
-                                    </span>
                                         @if (!$loop->last)
                                             <br>
                                         @endif

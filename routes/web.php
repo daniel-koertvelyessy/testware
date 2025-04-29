@@ -470,7 +470,7 @@ Route::get('produktMain', function () {
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', function () {
-    $equipmentList = Equipment::with('Produkt', 'storage', 'EquipmentState','EquipmentQualifiedUser','ControlEquipment')->sortable()->paginate(10);
+    $equipmentList = Equipment::with('Produkt.ControlProdukt','Produkt', 'storage', 'EquipmentState','EquipmentQualifiedUser','ControlEquipment')->sortable()->paginate(10);
     return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
 })->name('equipMain')->middleware('auth');
 

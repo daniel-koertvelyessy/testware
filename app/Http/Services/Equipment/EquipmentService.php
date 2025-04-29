@@ -51,7 +51,7 @@ class EquipmentService
     public function getUpcomingControlItems(Equipment $equipment)
     {
 
-        return ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')->select('control_equipment.id', 'anforderungs.id AS anforderungs_id', 'equipment_id', 'anforderungs.is_initial_test', 'anforderungs.an_name', 'control_equipment.qe_control_date_due')->where('equipment_id', $equipment->id)->where('is_initial_test', false)->orderBy('qe_control_date_due')->get();
+        return ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')->select('control_equipment.id', 'anforderungs.id AS anforderungs_id', 'equipment_id', 'anforderungs.is_initial_test', 'anforderungs.an_name', 'control_equipment.qe_control_date_due','control_equipment.archived_at')->whereNull('archived_at')->where('equipment_id', $equipment->id)->where('is_initial_test', false)->orderBy('qe_control_date_due')->get();
 
     }
 
