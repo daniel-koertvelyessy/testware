@@ -466,18 +466,19 @@ class ControlEquipmentController extends Controller
      * @param  Request  $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, $control)
     {
-
-        //    dd($request);
 
         if (!\Auth::user()->isSysAdmin()) {
             request()->session()->flash('status', 'Keine Berechtigung zum Löschen des Eintrages!');
             return redirect()->back();
         }
-        $controlEquipment = ControlEquipment::withTrashed()->find($request->id);
-// dd($controlEquipment);
+
+
+        $controlEquipment = ControlEquipment::withTrashed()->findOrFail($control);
+
         $equipment_id = $controlEquipment->equipment_id;
+
         $control_date = $controlEquipment->created_at;
 
 

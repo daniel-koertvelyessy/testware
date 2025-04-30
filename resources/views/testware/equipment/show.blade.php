@@ -888,7 +888,8 @@
             </div>
             <div class="col-md-6">
 
-                <x-lists.intervalTypeSelector name="control_interval_id" id="control_interval_id"
+                <x-lists.intervalTypeSelector name="control_interval_id"
+                                              id="control_interval_id"
                                               label="{{ __('Zeitraum') }}"
                                               :interval-type-list="$controlIntervalList"
                                               :selected="$equipmentRequirementList->first()?->warn_interval_id"
@@ -1367,179 +1368,273 @@
 
                                 @empty
                                     <p class="text-muted small">
-                                        {{ __('Bislang sind keine Anforderungen verknüpft') }}!
-                                    </p>
+                                        {{ __('Bislang sind keine Anforderungen verknüpft') }}! </p>
                                 @endforelse
 
                                 <div class="dropdown-divider my-4"></div>
                                 <h3 class="h5">{{ __('Prüfungen') }}</h3>
                                 @forelse($controlList as $item)
-                                    <div class="modal fade"
-                                         id="editControlItemModal{{ $item->id }}"
-                                         tabindex="-1"
-                                         aria-labelledby="editControlItemModalLabel{{ $item->id }}"
-                                         aria-hidden="true"
-                                    >
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <form action="{{ route('control.update', $item->id) }}#requirements"
-                                                      method="POST"
-                                                >
-                                                    @csrf
-                                                    @method('PUT')
+                                    <!-- START NEW CONTROL-LIST-ITEM ID:{{$item->id}} -->
 
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title"
-                                                            id="editControlItemModalLabel{{ $item->id }}"
-                                                        >
-                                                            {{ __('Prüfungsdaten bearbeiten') }}</h5>
-                                                        <button type="button"
-                                                                class="close"
-                                                                data-dismiss="modal"
-                                                                aria-label="Close"
-                                                        >
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="form-group col">
-                                                                <x-lists.requirementSelector id="anforderung_id_{{$item->id}}"
-                                                                                             name="anforderung_id"
-                                                                                             :requirements="$requirementList"
-                                                                                             :selected="$item->anforderung_id"
-                                                                />
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="form-group col-md-4">
-                                                                <label for="qe_control_date_last_{{ $item->id }}">
-                                                                    {{ __('Letzte Prüfung') }}</label>
-                                                                <input type="text"
-                                                                       class="form-control datepicker"
-                                                                       id="qe_control_date_last_{{ $item->id }}"
-                                                                       name="qe_control_date_last"
-                                                                       value="{{ $item->qe_control_date_last }}"
-                                                                >
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label for="qe_control_date_due_{{ $item->id }}"
-                                                                >{{ __('Prüfung fällig') }}</label>
-                                                                <input type="text"
-                                                                       class="form-control datepicker"
-                                                                       id="qe_control_date_due_{{ $item->id }}"
-                                                                       name="qe_control_date_due"
-                                                                       value="{{ $item->qe_control_date_due }}"
-                                                                >
-                                                            </div>
-                                                            <div class="form-group col-md-4">
-                                                                <label for="control_archived_at_{{ $item->id }}"
-                                                                >{{ __('Prüfung archiviert') }}</label>
-                                                                <input type="text"
-                                                                       class="form-control datepicker"
-                                                                       id="control_archived_at_{{ $item->id }}"
-                                                                       name="archived_at"
-                                                                       value="{{ $item->archived_at ? $item->archived_at->toDateString() : '' }}"
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="form-group col-md-4">
-                                                                <label for="qe_control_date_warn_{{ $item->id }}"
-                                                                >{{ __('Vorlauf') }}</label>
-                                                                <input type="text"
-                                                                       class="form-control"
-                                                                       id="qe_control_date_warn_{{ $item->id }}"
-                                                                       name="qe_control_date_warn"
-                                                                       value="{{ $item->qe_control_date_warn }}"
-                                                                >
-                                                            </div>
-                                                            <div class="form-group col-md-8">
-                                                                <x-lists.intervalTypeSelector :selected="$item->control_interval_id"
-                                                                                              :id="$item->id"
-                                                                                              :intervalTypeList="$controlIntervalList"
-                                                                />
-                                                            </div>
-
-                                                        </div>
-                                                        <input type="hidden"
-                                                               name="equipment_id"
-                                                               id="equipment_id_{{ $item->id }}"
-                                                               value="{{ $item->equipment_id }}"
-                                                        >
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button"
-                                                                class="btn btn-secondary"
-                                                                data-dismiss="modal"
-                                                        >{{ __('Abbruch') }}
-                                                        </button>
-                                                        <button type="submit"
-                                                                class="btn btn-primary"
-                                                        >{{ __('Aktualisieren') }}
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p class="d-flex justify-content-between align-items-center px-2">
-                                        <span class="{{ !$item->deleted_at && $item->qe_control_date_due < now() ?
+                                    <section class="d-flex justify-content-between align-items-center px-2 my-2">
+                                        @if(is_null($item->deleted_at) && is_null($item->archived_at))
+                                            <div class="{{  $item->qe_control_date_due < now() ?
                                         'text-danger' : '' }}"
-                                        >{{ $item->Anforderung?->an_label }} / <span class="small">{{ __('fällig')
+                                            >{{ $item->Anforderung?->an_label }} / <span class="small">{{ __('fällig')
                                         }}</span>
                                             {{
                                         $item->qe_control_date_due }}
-                                        </span>
-                                        <span class="d-flex align-items-center">
+                                        </div>
 
-                                            @if ($item->deleted_at)
-                                                <span class="disabled mx-1 btn btn-sm btn-outline-secondary">
-                                                    <i class="fas fa-edit text-muted"
-                                                       title="{{ __('Prüfung abgeschlossen') }}"
-                                                    ></i>
-                                                </span>
-                                                <span class="disabled mx-1 btn btn-sm btn-outline-secondary">
-                                                    <i class="fas fa-external-link-alt text-muted"
-                                                       title="{{ __('Prüfung abgeschlossen') }}"
-                                                    ></i>
-                                                </span>
-                                                <i class="fas fa-check-square text-success mx-1"
-                                                   title="{{ __('Prüfung wurde :am durchgeführt', ['am' => $item->deleted_at->toDateString()]) }}"
-                                                ></i>
-                                            @else
-                                                <a role="button"
-                                                   class="mx-1 btn btn-sm btn-outline-primary"
-                                                   data-toggle="modal"
-                                                   data-target="#editControlItemModal{{ $item->id }}"
+                                        @else
+
+                                            <div class="d-flex align-items-center">
+
+                                                <span>{{ optional($item->Anforderung)->an_label }}</span>
+                                                @if($item->archived_at)
+                                                    <i class="fas fa-archive fa-sm ml-1"></i>
+                                                @endif
+                                                @if($item->deleted_at)
+                                                    <i class="fas fa-check fa-sm ml-1"></i>
+                                                @endif
+                                            </div>
+
+                                        @endif
+
+                                        <aside class="d-felx align-items-center">
+
+                                            <div class="dropdown dropleft">
+                                                <button class="btn btn-outline-primary btn-sm"
+                                                        type="button"
+                                                        data-toggle="dropdown"
+                                                        aria-expanded="false"
                                                 >
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="{{ route('control.create', ['test_id' => $item->id]) }}"
-                                                   target="_blank"
-                                                   title="{{ __('Prüfung durchführen') }}"
-                                                   class="mx-1 btn btn-sm btn-outline-success"
-                                                >
-                                                    <i class="fas fa-external-link-alt"></i>
-                                                </a>
-                                                <i class="far fa-square text-muted mx-1"></i>
+                                                    <span class="sr-only">{{ __('Optionen zur Prüfung') }}</span>
+                                                    <i class="fas fa-ellipsis"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
 
-                                            @endif
+                                                    @if ($item->deleted_at)
+                                                        <div class="dropdown-item-text">
+                                                        {{ __('Prüfung wurde am :dat ausgeführt',['dat'=>$item->deleted_at]) }}
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>
+                                                    @endif
 
-                                            @if ($item->archived_at)
-                                                <i class="fas fa-archive text-success mx-1"
-                                                   title="{{ __('Prüfung wurde archiviert') }}"
-                                                ></i>
-                                            @else
-                                                <i class="fas fa-archive text-muted mx-1"
-                                                   title="{{ __('Prüfung nicht archiviert') }}"
-                                                ></i>
-                                            @endif
+                                                    @if ($item->archived_at)
+                                                        <span class="dropdown-item-text">
+                                                        {{ __('Prüfung wurde am :dat archiviert',
+                                                        ['dat'=>$item->archived_at]) }}
+                                                        </span>
+                                                        <div class="dropdown-divider"></div>
+                                                    @endif
 
-                                        </span>
-                                    </p>
+
+
+                                                    @if(is_null($item->deleted_at))
+                                                        <a href="{{ route('control.create', ['test_id' => $item->id]) }}"
+                                                           target="_blank"
+                                                           title="{{ __('Prüfung durchführen') }}"
+                                                           class="dropdown-item"
+                                                        >
+                                                            {{ __('Prüfung durchführen') }}
+                                                        </a>
+
+
+                                                        <a role="button"
+                                                           data-toggle="modal"
+                                                           data-target="#editControlItemModal{{ $item->id }}"
+                                                           class="dropdown-item"
+                                                        >
+                                                            {{ __('Bearbeiten') }}
+                                                        </a>
+
+                                                    @endif
+
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->isSysAdmin())
+
+                                                        <a role="button"
+                                                           data-toggle="modal"
+                                                           data-target="#forceDeleteControlItemModal{{ $item->id }}"
+                                                           class="dropdown-item text-danger"
+                                                        >
+                                                            {{ __('Löschen') }}
+                                                        </a>
+
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </aside>
+
+
+                                    </section>
+
+                                    <aside>
+                                        <div class="modal fade"
+                                             id="forceDeleteControlItemModal{{ $item->id }}"
+                                             tabindex="-1"
+                                             aria-labelledby="deleteControlItemModalLabel{{ $item->id }}"
+                                             aria-hidden="true"
+                                        >
+                                            <div class="modal-dialog  modal-dialog-centered">
+                                                <div class="modal-content border-danger">
+                                                    <form action="{{ route('control.destroy', $item->id) }}#requirements"
+                                                          method="POST"
+                                                    >
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="deleteControlItemModalLabel{{ $item->id }}"
+                                                            >
+                                                                {{ __('Prüfung löschen') }}</h5>
+                                                            <button type="button"
+                                                                    class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close"
+                                                            >
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h3 class="text-danger">Wichtig</h3>
+                                                            <p class="lead">Die Löschung erfolgt entgültig. Alle Werte gehen
+                                                                verloren
+                                                                und können nicht wiederhergestellt werden!</p>
+                                                            <p>Es wird empfohlen die Prüfung zu archivieren, damit diese
+                                                                von den Prüfmechanismen ignoriert werden kann.</p>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-dismiss="modal"
+                                                            >{{ __('Abbruch') }}
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-danger"
+                                                            >{{ __('Endgültig löschen') }}
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade"
+                                             id="editControlItemModal{{ $item->id }}"
+                                             tabindex="-1"
+                                             aria-labelledby="editControlItemModalLabel{{ $item->id }}"
+                                             aria-hidden="true"
+                                        >
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <form action="{{ route('control.update', $item->id) }}#requirements"
+                                                          method="POST"
+                                                    >
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="editControlItemModalLabel{{ $item->id }}"
+                                                            >
+                                                                {{ __('Prüfungsdaten bearbeiten') }}</h5>
+                                                            <button type="button"
+                                                                    class="close"
+                                                                    data-dismiss="modal"
+                                                                    aria-label="Close"
+                                                            >
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="form-group col">
+                                                                    <x-lists.requirementSelector id="anforderung_id_{{$item->id}}"
+                                                                                                 name="anforderung_id"
+                                                                                                 :requirements="$requirementList"
+                                                                                                 :selected="$item->anforderung_id"
+                                                                    />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="qe_control_date_last_{{ $item->id }}">
+                                                                        {{ __('Letzte Prüfung') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker"
+                                                                           id="qe_control_date_last_{{ $item->id }}"
+                                                                           name="qe_control_date_last"
+                                                                           value="{{ $item->qe_control_date_last }}"
+                                                                    >
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="qe_control_date_due_{{ $item->id }}"
+                                                                    >{{ __('Prüfung fällig') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker"
+                                                                           id="qe_control_date_due_{{ $item->id }}"
+                                                                           name="qe_control_date_due"
+                                                                           value="{{ $item->qe_control_date_due }}"
+                                                                    >
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="control_archived_at_{{ $item->id }}"
+                                                                    >{{ __('Prüfung archiviert') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control datepicker"
+                                                                           id="control_archived_at_{{ $item->id }}"
+                                                                           name="archived_at"
+                                                                           value="{{ $item->archived_at ? $item->archived_at->toDateString() : '' }}"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-md-4">
+                                                                    <label for="qe_control_date_warn_{{ $item->id }}"
+                                                                    >{{ __('Vorlauf') }}</label>
+                                                                    <input type="text"
+                                                                           class="form-control"
+                                                                           id="qe_control_date_warn_{{ $item->id }}"
+                                                                           name="qe_control_date_warn"
+                                                                           value="{{ $item->qe_control_date_warn }}"
+                                                                    >
+                                                                </div>
+                                                                <div class="form-group col-md-8">
+                                                                    <x-lists.intervalTypeSelector :selected="$item->control_interval_id"
+                                                                                                  :id="$item->id"
+                                                                                                  :intervalTypeList="$controlIntervalList"
+                                                                    />
+                                                                </div>
+
+                                                            </div>
+                                                            <input type="hidden"
+                                                                   name="equipment_id"
+                                                                   id="equipment_id_{{ $item->id }}"
+                                                                   value="{{ $item->equipment_id }}"
+                                                            >
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-dismiss="modal"
+                                                            >{{ __('Abbruch') }}
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-primary"
+                                                            >{{ __('Aktualisieren') }}
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </aside>
+
                                 @empty
                                     <p class="text-muted small">{{ __('Bislang sind keine Prüfungen angelegt') }}!</p>
                                 @endforelse
