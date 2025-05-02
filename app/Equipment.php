@@ -7,7 +7,10 @@
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\BelongsTo;
     use Illuminate\Database\Eloquent\Relations\HasMany;
+    use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+    use Illuminate\Database\Eloquent\Relations\HasOne;
     use Illuminate\Database\Eloquent\SoftDeletes;
+    use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Cache;
     use Illuminate\Support\Facades\Request;
     use Kyslik\ColumnSortable\Sortable;
@@ -36,26 +39,22 @@
 
         protected $guarded = [];
 
-        public static function boot()
+        public static function boot(): void
         {
             parent::boot();
-            static::saving(function (Equipment $equipment)
+            static::saving(function ()
             {
-                Cache::forget('app-get-current-amount-Equipment');
-                Cache::forget('system-status-database');
-                Cache::forget('system-status-objects');
+                $this->clearCache();
 
             });
-            static::updating(function (Equipment $equipment)
+            static::updating(function ()
             {
-                Cache::forget('app-get-current-amount-Equipment');
-                Cache::forget('system-status-database');
-                Cache::forget('system-status-objects');
+                $this->clearCache();
 
             });
         }
 
-        static function getControlEquipmentList()
+        static function getControlEquipmentList(): Collection
         {
             return DB::table('equipment')->select('equipment.eq_inventar_nr', 'equipment.id', 'equipment.eq_name', 'produkts.prod_label')->join('produkts', 'equipment.produkt_id', '=', 'produkts.id')->join('control_produkts', 'equipment.produkt_id', '=', 'control_produkts.produkt_id')->get();
         }
@@ -65,29 +64,58 @@
             return $this->Produkt->ControlProdukt;
         }
 
+        public function controlProdukte(): HasManyThrough
+        {
+            return $this->hasManyThrough(
+                ControlProdukt::class,
+                Produkt::class,
+                'id',           // Foreign key on Produkt
+                'produkt_id',   // Foreign key on ControlProdukt
+                'produkt_id',   // Local key on Equipment
+                'id'            // Local key on Produkt
+            );
+        }
+
+        public function controlProdukt(): HasOne
+        {
+            return $this->hasOne(ControlProdukt::class, 'produkt_id', 'produkt_id');
+        }
+
         /**
          * Get the route key for the model.
          *
          * @return string
          */
-        public function getRouteKeyName()
+        public function getRouteKeyName(): string
         {
             return 'eq_uid';
 //            return 'eq_inventar_nr';
         }
 
-        public function Produkt()
+        public function Produkt(): BelongsTo
         {
             return $this->belongsTo(Produkt::class);
         }
-        public function isControlProdukt(Equipment $equipment)
+
+
+        public function isControlProdukt():bool
         {
 
-            $produkt = $equipment->Produkt;
+            if (is_null($this->produkt_id)) {
+                return false;
+            }
 
-            return ControlProdukt::where('produkt_id', $produkt->id)->count()>0;
+            return $this->relationLoaded('controlProdukte')
+                ? $this->controlProdukte->isNotEmpty()
+                : ControlProdukt::where('produkt_id', $this->produkt_id)->exists();
 
         }
+
+        public function getIsTestedAttribute(): bool
+        {
+            return $this->tested_count > 0;
+        }
+
 
         public function requirement(Produkt $produkt)
         {
@@ -96,22 +124,22 @@
             });
         }
 
-        public function produktDetails()
+        public function produktDetails(): BelongsTo
         {
             return $this->belongsTo(Produkt::class, 'produkt_id', 'id', 'EquipmentDetails');
         }
 
-        public function EquipmentParam()
+        public function EquipmentParam(): HasMany
         {
             return $this->hasMany(EquipmentParam::class);
         }
 
-        public function EquipmentState()
+        public function EquipmentState(): BelongsTo
         {
             return $this->belongsTo(EquipmentState::class);
         }
 
-        public function EquipmentHistory()
+        public function EquipmentHistory(): HasMany
         {
             return $this->hasMany(EquipmentHistory::class);
         }
@@ -147,16 +175,25 @@
             return $this->hasMany(ControlEquipment::class);
         }
 
-        public function Anforderung(){
-            return $this->hasManyThrough(Anforderung::class,ProduktAnforderung::class,'produkt_id','id','produkt_id');
+
+        public function Anforderung(): HasManyThrough
+        {
+            return $this->hasManyThrough(
+                Anforderung::class,
+                ProduktAnforderung::class,
+                'produkt_id', // Foreign key on ProduktAnforderung
+                'id',         // Foreign key on Anforderung
+                'produkt_id', // Local key on Equipment
+                'anforderung_id' // Local key on Equipment
+            );
         }
 
-        public function EquipmentUid()
+        public function EquipmentUid(): HasOne
         {
             return $this->hasOne(EquipmentUid::class);
         }
 
-        public function hasUser()
+        public function hasUser(): HasManyThrough
         {
             return $this->hasManyThrough(User::class, EquipmentQualifiedUser::class);
         }
@@ -172,25 +209,19 @@
             return $equipment->save();
         }
 
-        public function EquipmentQualifiedUser()
+        public function EquipmentQualifiedUser(): HasMany
         {
             return $this->hasMany(EquipmentQualifiedUser::class);
         }
 
-        public function qualifiedUserList(Equipment $equipment)
+        public function qualifiedUserList(Equipment $equipment): Collection
         {
 
-            $userList = [];
-            if ($equipment->countQualifiedUser() > 0)
-                foreach ($equipment->EquipmentQualifiedUser as $quUser) {
-                    $userList[] = User::find($quUser->user_id);
-                }
-
-            return $userList;
+            return $equipment->EquipmentQualifiedUser()->with('user')->get()->pluck('user');
 
         }
 
-        public function countQualifiedUser()
+        public function countQualifiedUser(): int
         {
             return $this->EquipmentQualifiedUser->count();
         }
@@ -209,16 +240,11 @@
         }
 
 
-        public function isControlProduct()
+        public function controlProductIcon():string
         {
-            return (ControlProdukt::where('produkt_id',$this->produkt_id)->first())
+            return $this->isControlProdukt()
                 ? '<i class="fas fa-check text-success"></i>'
                 : '<i class="fas fa-times text-muted"></i>';
-        }
-
-        public function addNew(Request $request)
-        {
-
         }
 
         public function hasFunctionTest(): bool
@@ -226,8 +252,18 @@
             return EquipmentFuntionControl::where('equipment_id', $this->id)->count() > 0;
         }
 
-        static public function countInstances(Equipment $equipment){
+        static public function countInstances(Equipment $equipment): int
+        {
             return Equipment::where('produkt_id',$equipment->produkt_id)->count();
         }
+
+        function clearCache(): void
+        {
+            Cache::forget('app-get-current-amount-Equipment');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
+            Cache::forget('equipment.count');
+        }
+
 
     }

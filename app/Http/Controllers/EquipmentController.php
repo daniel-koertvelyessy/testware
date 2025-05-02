@@ -27,6 +27,7 @@ use App\ProduktAnforderung;
 use App\ProduktDoc;
 use App\Storage;
 use App\User;
+use App\ViewModel\EquipmentViewModel;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -67,6 +68,58 @@ class EquipmentController extends Controller
             'equipmentlist' => $service->makeEquipmentControlCollection(),
             'header'        => __('Übersicht Prüfgeräte')
         ]);
+    }
+
+    public function main(): View
+    {
+
+        //        $equipmentList = Equipment::query()->select([
+        //            'id',
+        //            'eq_name',
+        //            'eq_inventar_nr',
+        //            'equipment_state_id',
+        //            'eq_uid',
+        //            'storage_id'
+        //        ])->with([
+        //            'Produkt.ControlProdukt',
+        //            'Produkt',
+        //            'storage',
+        //            'EquipmentState',
+        //            'EquipmentQualifiedUser',
+        //            'ControlEquipment',
+        //        ])->withCount(['ControlEquipment as tested_count' => fn($q) => $q->onlyTrashed()])->sortable()->paginate(10);
+        //
+        //        $equipmentViewModels = EquipmentViewModel::collection($equipmentList);
+        //
+        //        return view('testware.equipment.main', [
+        //            'equipmentList'       => $equipmentList,
+        //            'equipmentViewModels' => $equipmentViewModels,
+        //        ]);
+
+        $equipmentList = Equipment::query()->select([
+            'id',
+            'eq_name',
+            'eq_inventar_nr',
+            'equipment_state_id',
+            'eq_uid',
+            'storage_id'
+        ])->with([
+           'produkt.controlprodukt',
+            'storage',
+            'EquipmentState',
+            'EquipmentQualifiedUser',
+            'ControlEquipment.Anforderung',
+        ])->withCount(['ControlEquipment as tested_count' => fn($q) => $q->onlyTrashed()])->sortable()->paginate(10);
+
+        // Replace the internal collection with ViewModels, keep pagination
+        $equipmentList->setCollection(EquipmentViewModel::collection($equipmentList->getCollection()));
+
+        return view('testware.equipment.main', [
+            'equipmentList' => $equipmentList,
+            // Now contains EquipmentViewModels
+        ]);
+
+
     }
 
     public function statuslist(EquipmentState $equipmentState)
@@ -187,7 +240,7 @@ class EquipmentController extends Controller
         }
 
         return view('testware.equipment.show', [
-            'userList'                 => User::select('id','name')->get(),
+            'userList'                 => User::select('id', 'name')->get(),
             'productDocuments'         => ProduktDoc::where('produkt_id', $equipment->produkt_id)->get(),
             'controlIntervalList'      => ControlInterval::select('id', 'ci_label')->get(),
             'qualifiedUserList'        => EquipmentQualifiedUser::with('firma', 'user')->where('equipment_id', $equipment->id)->get(),
@@ -197,10 +250,13 @@ class EquipmentController extends Controller
             'controlList'              => $service->getAllControlItems($equipment),
             'instructedPersonList'     => $service->getInstruectedPersonList($equipment),
             'equipmentRequirementList' => $service->getRequirementList($equipment),
-            'requirementList'          => Anforderung::select(['id', 'an_label'])->get(),
+            'requirementList'          => Anforderung::select([
+                'id',
+                'an_label'
+            ])->get(),
             'recentControlList'        => $service->getRecentExecutedControls($equipment),
             'euqipmentDocumentList'    => $serviceDocument->getDocumentList($equipment),
-            'functionDocumentList'     => $serviceDocument->getFunctionTestDocumentList($equipment),
+            'functionDocumentList'     => $serviceDocument::getFunctionTestDocumentList($equipment),
             'newFileList'              => $serviceDocument->checkStorageSyncDB($equipment),
             'companyString'            => $service->makeCompanyString($equipment),
             'equipment'                => $equipment,
@@ -439,11 +495,7 @@ class EquipmentController extends Controller
                 : 0;
         }
 
-        (new EquipmentHistory)->add(
-            __('Anforderungen synchronisieren'),
-            trans('Insgesamt :num Anforderungen wuden synchronisiert.',['num' => $countr]),
-            $request->equipment_id[0]
-        );
+        (new EquipmentHistory)->add(__('Anforderungen synchronisieren'), trans('Insgesamt :num Anforderungen wuden synchronisiert.', ['num' => $countr]), $request->equipment_id[0]);
 
         $msg = $countr > 1
             ? __('Es wurden :num Prüfungen angelegt', ['num' => $countr])

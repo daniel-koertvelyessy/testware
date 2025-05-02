@@ -41,7 +41,7 @@
             <a href="{{ route('equipMain') }}">{{ __('Geräte')}}</a>
             <br>
             <span class="small">
-                {{ __('Anzahl') }}: <span class="badge badge-info">{{ App\Equipment::select('id')->count() }}</span>
+                {{ __('Anzahl') }}: <span class="badge badge-info">{{ \App\Http\Services\Equipment\EquipmentService::count() }}</span>
             </span>
         </h2>
         <div class="row">

@@ -24,7 +24,8 @@ class ControlEquipment extends Model
     ];
 
     protected $casts = [
-        'archived_at' =>'date'
+        'archived_at' =>'date',
+        'qe_control_date_due' => 'date',
     ];
 
 //    protected $with = [
@@ -166,8 +167,8 @@ class ControlEquipment extends Model
 
     public function isInitialTest():bool
     {
-        $anforderung = Anforderung::select('is_initial_test')->where('id',$this->anforderung_id)->first();
-        return $anforderung->is_initial_test;
+        return $this->Anforderung->is_initial_test;
+
     }
 
 
@@ -187,6 +188,15 @@ class ControlEquipment extends Model
         $this->save();
 
         return $dueDate;
+    }
+
+    public function getIsOverdueAttribute() :bool
+    {
+        return $this->qe_control_date_due < now();
+    }
+    public function getIsDueAttribute() :bool
+    {
+        return $this->qe_control_date_due <  now()->addWeeks($this->qe_control_date_warn);
     }
 
 }

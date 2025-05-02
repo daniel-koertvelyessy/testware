@@ -10,6 +10,7 @@ use App\EquipmentEvent;
 use App\EquipmentInstruction;
 use App\EquipmentParam;
 use App\EquipmentQualifiedUser;
+use App\Http\Services\Equipment\EquipmentDocumentService;
 use App\ProduktDoc;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,7 @@ class EquipmentAction
 
     public static function deleteLoseEquipmentDocumentEntries(Equipment $equipment): void
     {
-        foreach (EquipmentDoc::where('equipment_id', $equipment->id)->where('document_type_id', 2)->get() as $equipmentDocFile) {
+        foreach (EquipmentDocumentService::getFunctionTestDocumentList($equipment) as $equipmentDocFile) {
             if (Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)) {
                 Log::warning('Dateireferenz für Funktionsprüfung ('.$equipmentDocFile->eqdoc_name_pfad.') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
 //                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);

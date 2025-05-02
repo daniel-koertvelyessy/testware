@@ -171,52 +171,7 @@ Route::view('docs/api/endpoints/control', 'docs.api.endpoints.control')->name('d
 Route::view('docs/api/endpoints/requirements', 'docs.api.endpoints.requirements')->name('docs.api.requirements');
 Route::view('docs/api/endpoints/events', 'docs.api.endpoints.events')->name('docs.api.events');
 
-Route::get('/dashboard', function () {
-
-    $maxListItems = 15;
-
-    $equipmentTestWeekList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                             ->with('Equipment','Anforderung')
-                                             ->where('qe_control_date_due', '<=', now()->addWeeks(4))
-                                             ->where('archived_at', NULL)
-                                             ->where('is_initial_test', false)
-                                             ->orderBy('qe_control_date_due')
-                                             ->get();
-
-    $equipmentTestMonthList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                              ->with('Equipment','Anforderung')
-                                              ->where('archived_at', NULL)
-                                              ->where('qe_control_date_due', '>', now()->addWeeks(4))
-                                              ->where('qe_control_date_due', '<=', now()->addMonths(4))
-                                              ->where('is_initial_test', false)
-                                              ->orderBy('qe_control_date_due')
-                                              ->get();
-
-    $equipmentTestYearList = ControlEquipment::join('anforderungs', 'control_equipment.anforderung_id', '=', 'anforderungs.id')
-                                             ->with('Equipment','Anforderung')
-                                             ->where('is_initial_test', false)
-                                             ->where('archived_at', NULL)
-                                             ->whereBetween('qe_control_date_due', [now(), date('Y' . '-12-31')])
-                                             ->orderBy('qe_control_date_due')
-                                             ->get();
-
-    $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                         ->with('Equipment','Anforderung')
-                                         ->where('archived_at', NULL)
-                                         ->where('is_initial_test', false)
-                                         ->orderBy('qe_control_date_due')
-                                         ->get();
-
-    $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
-    return view('dashboard', [
-        'initialiseApp'          => $initialiseApp,
-        'maxListItems'           => $maxListItems,
-        'equipmentTestWeekList'  => $equipmentTestWeekList,
-        'equipmentTestMonthList' => $equipmentTestMonthList,
-        'equipmentTestYearList'  => $equipmentTestYearList,
-        'equipmentTestList'      => $equipmentTestList,
-    ]);
-})->name('dashboard')->middleware('auth');
+Route::get('/dashboard','TestwareController@dashboard' )->name('dashboard')->middleware('auth');
 
 Route::put('user.resetPassword',
            'UserController@resetPassword')->name('user.resetPassword');
@@ -469,10 +424,7 @@ Route::get('produktMain', function () {
                 ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
-Route::get('equipMain', function () {
-    $equipmentList = Equipment::with('Produkt.ControlProdukt','Produkt', 'storage', 'EquipmentState','EquipmentQualifiedUser','ControlEquipment')->sortable()->paginate(10);
-    return view('testware.equipment.main', ['equipmentList' => $equipmentList]);
-})->name('equipMain')->middleware('auth');
+Route::get('equipMain', 'EquipmentController@main')->name('equipMain')->middleware('auth');
 
 Route::get('equipment.maker/{produkt?}', function (Produkt $produkt = null) {
     $produktList = Produkt::where('prod_active', '1')->with('ProduktAnforderung')->sortable()->paginate(10);

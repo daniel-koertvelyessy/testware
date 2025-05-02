@@ -56,59 +56,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($equipmentList as $equipment)
+                    @forelse($equipmentList as $equipmentVM)
                         <tr>
                             <td>
-                                <a href="{{ route('equipment.show',['equipment'=>$equipment]) }}">
-                                    {{ $equipment->eq_name }}
-                                </a>
+                                <a href="{{ $equipmentVM->link() }}">{{ $equipmentVM->name() }}</a>
                             </td>
-                            <td class="d-none d-md-table-cell">{{ $equipment->eq_inventar_nr }}</td>
-                            <td class="d-none d-md-table-cell">{!! ($equipment->storage) ? $equipment->storage->storage_label : '<span class="fas fa-exclamation-circle text-warning"></span> <span class="text-warning text-sm">keine Zuordnung</span>'!!}</td>
+                            <td>{{ $equipmentVM->inventoryNumber() }}</td>
+                            <td class="d-none d-md-table-cell">{!! $equipmentVM->storageLabel() !!}</td>
                             <td class="d-none d-lg-table-cell">
-                                <span class="p-1 bg-{{ $equipment->EquipmentState->estat_color }} text-white">{{ $equipment->EquipmentState->estat_label }}</span>
-                                @if($equipment->EquipmentQualifiedUser->count()===0)
-                                    <span class="fas fa-user-times text-warning"
-                                          title="{{ __('Es ist keine befähigte Person hinterlegt') }}"
-                                    ></span>
-                                @endif
-                                @if(!\App\Http\Services\Equipment\EquipmentService::isTested($equipment))
-                                    <i class="fas fa-exclamation-circle text-warning"
-                                       title="{{__('Dieses Gerät hat noch keine Funktionsprüfung')}}"
-                                    ></i>
-                                @endif
+                                <span class="p-1 bg-{{ $equipmentVM->stateColor() }} text-white">{{ $equipmentVM->stateLabel() }}</span>
+                                @unless($equipmentVM->hasQualifiedUsers())
+                                    <span class="fas fa-user-times text-warning" title="Keine befähigte Person hinterlegt"></span>
+                                @endunless
+                                @unless($equipmentVM->isTested())
+                                    <i class="fas fa-exclamation-circle text-warning" title="Noch keine Funktionsprüfung"></i>
+                                @endunless
                             </td>
-                            <td class="d-none d-md-table-cell"
-                                style="text-align: center;"
-                            >
-                                {!! $equipment->isControlProduct() !!}
-                            </td>
+                            <td class="d-none d-md-table-cell" style="text-align: center;">{!! $equipmentVM->controlProductLabel() !!}</td>
                             <td>
-                                @forelse ($equipment->ControlEquipment as $controlItem)
-                                    @if(! $controlItem->isInitialTest())
-                                        @if(is_null($controlItem->archived_at))
-                                            <span class="p-1
-                                                @if ($controlItem->qe_control_date_due <  now())
-                                                    bg-danger text-white
-                                                @else
-                                                {{ ($controlItem->qe_control_date_due <  now()->addWeeks($controlItem->qe_control_date_warn)) ? 'bg-warning text-white' : '' }}
-                                                @endif
-                                                    "
-                                                >
-                                                {{ $controlItem->qe_control_date_due }}
-                                            </span>
-                                        {{--@else
-                                            <span class="text-muted d-flex align-items-center">
-                                                <span>{{ $controlItem->archived_at->format('Y-m-d') }}</span>
-                                                <i class="fas fa-archive fa-sm ml-2"></i> </span>
---}}
-                                        @endif
-                                        @if (!$loop->last)
-                                            <br>
-                                        @endif
-                                    @endif
+                                @forelse ($equipmentVM->controlDueDates() as $due)
+                                    <span class="p-1 {{ $due['class'] }}">{{ $due['date'] }}</span>
+                                    @if (!$loop->last)<br>@endif
                                 @empty
-                                    -
+                                    –
                                 @endforelse
                             </td>
                         </tr>

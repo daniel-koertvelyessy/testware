@@ -51,9 +51,9 @@ class ControlEquipmentController extends Controller
     public function index()
     {
         $controlItems = ControlEquipment::with([
-            'Equipment',
-            'Anforderung'
-        ])->sortable()->paginate(20);
+            'Equipment:id,eq_name,eq_inventar_nr,eq_name,eq_uid',
+            'Anforderung:id,an_label,an_name'
+        ])->sortable()->paginate(10);
         $archivedControlItems = ControlEquipment::with('Equipment', 'Anforderung')->whereNotNull('archived_at')->get();
         $isSysAdmin = \Auth::user()->isSysAdmin();
         $controlIntervalList = ControlInterval::select('id', 'ci_label')->get();
@@ -61,10 +61,11 @@ class ControlEquipmentController extends Controller
             'id',
             'an_label'
         ])->get();
-        $countControlProducts = ControlProdukt::all()->count();
+        $countControlProducts = ControlProdukt::count();
         return view('testware.control.index', compact('controlItems', 'isSysAdmin', 'archivedControlItems', 'controlIntervalList', 'requirements', 'countControlProducts'));
 
     }
+
 
     /**
      * Show the form for creating a new resource.

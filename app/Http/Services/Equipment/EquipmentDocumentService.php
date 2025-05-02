@@ -7,14 +7,17 @@
     use App\EquipmentDoc;
     use App\EquipmentQualifiedUser;
     use App\ProductQualifiedUser;
+    use Illuminate\Database\Eloquent\Collection;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Cache;
     use Illuminate\Support\Facades\Storage;
 
     class EquipmentDocumentService
     {
         public $prefix = 'equipment_files/';
 
-        public static function getEquipmentPathName(Equipment $equipment){
+        public static function getEquipmentPathName(Equipment $equipment): string
+        {
             return (new EquipmentDocumentService)->getEquipmentPath($equipment);
         }
 
@@ -23,17 +26,24 @@
             return $this->prefix . $equipment->id . '/';
         }
 
-        public function generateFilePath(Equipment $equipment, string $name)
+        public function generateFilePath(Equipment $equipment, string $name): string
         {
             return $this->prefix . $equipment->id . '/' . $name;
         }
 
-        public function getFunctionTestDocumentList(Equipment $equipment)
+        public static function getFunctionTestDocumentList(Equipment $equipment): Collection
         {
-          return  EquipmentDoc::with('DocumentType')->where('equipment_id', $equipment->id)->where('document_type_id', 2)->get();
+          return Cache::remember(
+              'getFunctionTestDocumentList.Equipment' . $equipment->id,
+              now()->addMinutes(10),
+              function () use ($equipment) {
+                  return EquipmentDoc::with('DocumentType')->where('equipment_id', $equipment->id)->where('document_type_id', 2)->get();
+              }
+
+          );
         }
 
-        public function getDocumentList(Equipment $equipment)
+        public function getDocumentList(Equipment $equipment): Collection
         {
           return  EquipmentDoc::with('DocumentType')->where('equipment_id', $equipment->id)->get();
         }
