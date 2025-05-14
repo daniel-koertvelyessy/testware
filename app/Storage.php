@@ -22,16 +22,19 @@ class Storage extends Model
     public static function boot()
     {
         parent::boot();
-        static::saving(function () {
-            Cache::forget('app-get-current-amount-Location');
-            Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+        static::saved(function () {
+            $cacheKeys = [
+                'app-get-current-amount-Location',
+                'countTotalEquipmentInLocation',
+                'system-status-database',
+                'system-status-objects'
+            ];
+
+            foreach ($cacheKeys as $key) {
+                Cache::forget($key);
+            }
         });
-        static::updating(function () {
-            Cache::forget('app-get-current-amount-Location');
-            Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
-        });
+
     }
 
     public function getStoragePath()

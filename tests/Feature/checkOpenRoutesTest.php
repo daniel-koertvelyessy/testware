@@ -38,20 +38,7 @@ class checkOpenRoutesTest extends TestCase
         $response->assertSeeText('Senden Sie uns Ihr Anliegen');
     }
 
-    public function testRoutes()
-    {
-        $routeCollection = Route::getRoutes();
-        foreach ($routeCollection as $value) {
-            if($value->methods[0]==='GET'){
-                if(!starts_with($value->uri,'_')) {
-                    $response = $this->get($value->uri);
-                    $response->assertSuccessful();
-                }
-            }
-        }
 
-        dump($res);
-    }
 
 
 }

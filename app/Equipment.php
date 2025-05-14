@@ -44,13 +44,11 @@
             parent::boot();
             static::saving(function ()
             {
-                $this->clearCache();
-
+               Equipment::clearCache();
             });
             static::updating(function ()
             {
-                $this->clearCache();
-
+               Equipment::clearCache();
             });
         }
 
@@ -257,7 +255,7 @@
             return Equipment::where('produkt_id',$equipment->produkt_id)->count();
         }
 
-        function clearCache(): void
+     public static function clearCache(): void
         {
             Cache::forget('app-get-current-amount-Equipment');
             Cache::forget('system-status-database');

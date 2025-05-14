@@ -154,48 +154,56 @@
 
             DB::table('control_intervals')->insert([
                 [
+                    'id' =>1,
                     'ci_label' => 'Sekunde',
                     'ci_name'  => 'Sekunden',
                     'ci_si'    => 's',
                     'ci_delta' => 'SECOND',
                 ],
                 [
+                    'id' =>2,
                     'ci_label' => 'Minute',
                     'ci_name'  => 'Minuten',
                     'ci_si'    => 'min',
                     'ci_delta' => 'MINUTE',
                 ],
                 [
+                    'id' =>3,
                     'ci_label' => 'Stunde',
                     'ci_name'  => 'Stunden',
                     'ci_si'    => 'h',
                     'ci_delta' => 'HOUR',
                 ],
                 [
+                    'id' =>4,
                     'ci_label' => 'Tag',
                     'ci_name'  => 'Tage',
                     'ci_si'    => 'd',
                     'ci_delta' => 'DAY',
                 ],
                 [
+                    'id' =>5,
                     'ci_label' => 'Woche',
                     'ci_name'  => 'Wochen',
                     'ci_si'    => 'w',
                     'ci_delta' => 'WEEK',
                 ],
                 [
+                    'id' =>6,
                     'ci_label' => 'Monat',
                     'ci_name'  => 'Monate',
                     'ci_si'    => 'm',
                     'ci_delta' => 'MONTH',
                 ],
                 [
+                    'id' =>7,
                     'ci_label' => 'Quartal',
                     'ci_name'  => 'Quartale',
                     'ci_si'    => '4m',
                     'ci_delta' => 'QUARTER',
                 ],
                 [
+                    'id' =>8,
                     'ci_label' => 'Jahr',
                     'ci_name'  => 'Jahre',
                     'ci_si'    => 'Y',
@@ -284,16 +292,21 @@
 
             DB::table('produkt_kategories')->insert([
                 [
+                    'id'=>1,
                     'pk_label'       => 'ohne',
                     'pk_name_nummer' => '-',
                     'pk_name'        => 'Keine Zuordnung'
                 ],
                 [
+                    'id'=>2,
+
                     'pk_label'       => 'bm230',
                     'pk_name_nummer' => 'm230',
                     'pk_name'        => 'Betriebsmittel 230 VAC'
                 ],
                 [
+                    'id'=>3,
+
                     'pk_label'       => 'edv230',
                     'pk_name_nummer' => 'e230',
                     'pk_name'        => 'Bürogeräte 230 VAC'
@@ -303,24 +316,28 @@
 
             DB::table('equipment_states')->insert([
                 [
+                    'id'        => 1,
                     'estat_label' => 'freigegeben',
                     'estat_name'  => 'Gerät kann verwendet werden',
                     'estat_color' => 'success',
                     'estat_icon'  => 'fas fa-check',
                 ],
                 [
+                    'id'        => 2,
                     'estat_label' => 'beschädigt',
                     'estat_name'  => 'Gerät ist beschädigt, kann aber verwendet werden',
                     'estat_color' => 'warning',
                     'estat_icon'  => 'fas fa-exclamation-circle',
                 ],
                 [
+                    'id'        => 3,
                     'estat_label' => 'reparatur',
                     'estat_name'  => 'Gerät wird repariert und kann nicht verwendet werden',
                     'estat_color' => 'warning',
                     'estat_icon'  => 'fas fa-exclamation-triangle',
                 ],
                 [
+                    'id'        => 4,
                     'estat_label' => 'gesperrt',
                     'estat_name'  => 'Gerät ist gesperrt und darf nicht verwendet werden',
                     'estat_color' => 'danger',
@@ -330,6 +347,7 @@
 
             DB::table('verordnungs')->insert([
                 [
+                    'id'=>1,
                     'created_at'     => now(),
                     'updated_at'     => now(),
                     'vo_label'       => 'VDE 0701-0702',
@@ -339,6 +357,7 @@
                     'vo_description' => 'Errichten von Niederspannungsanlagen - Teil 6: Prüfungen (IEC 60364-6:2016); Deutsche Übernahme HD 60364-6:2016 + A11:2017',
                 ],
                 [
+                    'id'=>2,
                     'created_at'     => now(),
                     'updated_at'     => now(),
                     'vo_label'       => 'MPBetreibV',
@@ -348,6 +367,7 @@
                     'vo_description' => 'Verordnung über das Errichten, Betreiben und Anwenden von Medizinprodukten',
                 ],
                 [
+                    'id'=>3,
                     'created_at'     => now(),
                     'updated_at'     => now(),
                     'vo_label'       => 'MPSV',
@@ -357,6 +377,7 @@
                     'vo_description' => 'Verordnung über die Erfassung, Bewertung und Abwehr von Risiken bei Medizinprodukten',
                 ],
                 [
+                    'id'=>4,
                     'created_at'     => now(),
                     'updated_at'     => now(),
                     'vo_label'       => 'iso9001',
@@ -371,16 +392,19 @@ Entwicklungsinitiativen bereitstellt.',
 
             DB::table('anforderung_types')->insert([
                 [
+                    'id'=>1,
                     'at_label'       => 'control',
                     'at_name'        => 'Prüfung',
                     'at_description' => 'Überprüfung eines Gerätes entsprechend den Vorgaben. Beispiel eine Aufnahme eines Kontrollwertes oder eine visuelle Prüfung',
                 ],
                 [
+                    'id'=>2,
                     'at_label'       => 'wartung',
                     'at_name'        => 'Wartung',
                     'at_description' => 'Die regelmäßige Wartung von Geräten ermöglicht deren sicheren Gebrauch.',
                 ],
                 [
+                    'id'=>3,
                     'at_label'       => 'kalibrierung',
                     'at_name'        => 'Kalibrierung',
                     'at_description' => 'Die regelmäßige Kalibrierung von Geräten ermöglicht eine genaue Bewertung der Messergebnisse.',
@@ -391,6 +415,7 @@ Entwicklungsinitiativen bereitstellt.',
 
             DB::table('anforderungs')->insert([
                 [
+                    'id' => 1,
                     'created_at'          => now(),
                     'updated_at'          => now(),
                     'an_label'            => 'VDE Klasse 1',
@@ -401,6 +426,7 @@ Entwicklungsinitiativen bereitstellt.',
                     'control_interval_id' => 8,
                 ],
                 [
+                    'id' => 2,
                     'created_at'          => now(),
                     'updated_at'          => now(),
                     'an_label'            => 'VDE Klasse 2',
@@ -411,6 +437,7 @@ Entwicklungsinitiativen bereitstellt.',
                     'control_interval_id' => 8,
                 ],
                 [
+                    'id' => 3,
                     'created_at'          => now(),
                     'updated_at'          => now(),
                     'an_label'            => 'VDE Klasse 3',
@@ -421,6 +448,7 @@ Entwicklungsinitiativen bereitstellt.',
                     'control_interval_id' => 8,
                 ],
                 [
+                    'id' => 4,
                     'created_at'          => now(),
                     'updated_at'          => now(),
                     'an_label'            => 'VDE Leitungen',

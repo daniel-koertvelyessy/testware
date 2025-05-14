@@ -25,7 +25,8 @@
         "mockery/mockery": "^1.4.31",
         "nunomaduro/collision": "^v8.8.0",
         "phpunit/phpunit": "^11.5.18",
-        "spatie/laravel-ignition": "^2.7.0"
+        "spatie/laravel-ignition": "^2.7.0",
+      "ext-pdo": "*"
     },
     "config": {
         "optimize-autoloader": true,

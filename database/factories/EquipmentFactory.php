@@ -21,7 +21,7 @@ class EquipmentFactory extends Factory
             'eq_text'            => $this->faker->text(100),
             'eq_uid'             => $this->faker->uuid(),
             'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),
-            'produkt_id'         => 2,
+            'produkt_id'         => Produkt::factory()->create(),
             'storage_id'         => NULL,
             'eq_price'           => random_int(20, 10000)
         ];

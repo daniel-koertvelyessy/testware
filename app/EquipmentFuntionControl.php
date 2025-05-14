@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -10,13 +11,14 @@ use Illuminate\Support\Facades\Cache;
 class EquipmentFuntionControl extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'function_control_date',
-        'function_control_firma',
-        'function_control_pass',
-        'equipment_id',
         'controlled_at',
+        'function_control_firma',
+        'function_control_profil',
+        'function_control_pass',
+        'function_control_text',
     ];
 
     public static function boot()

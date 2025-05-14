@@ -9,15 +9,13 @@
     </testsuite>
   </testsuites>
   <php>
-    <server name="APP_ENV" value="testing"/>
-    <server name="BCRYPT_ROUNDS" value="4"/>
-    <server name="CACHE_DRIVER" value="array"/>
-    <server name="DB_CONNECTION" value="mysql"/>
-    <server name="DB_DATABASE" value="testware_unittest"/>
-    <server name="MAIL_MAILER" value="array"/>
-    <server name="QUEUE_CONNECTION" value="sync"/>
-    <server name="SESSION_DRIVER" value="array"/>
-    <server name="TELESCOPE_ENABLED" value="false"/>
+    <env name="APP_ENV" value="testing"/>
+    <env name="DB_CONNECTION" value="pgsql"/>
+    <env name="DB_HOST" value="127.0.0.1"/>
+    <env name="DB_PORT" value="5432"/>
+    <env name="DB_DATABASE" value="testware_unittest"/>
+    <env name="DB_USERNAME" value="testWareDbUser"/>
+    <env name="DB_PASSWORD" value="yourMostSecurePasswordYouCanThinkOf"/>
   </php>
   <source>
     <include>

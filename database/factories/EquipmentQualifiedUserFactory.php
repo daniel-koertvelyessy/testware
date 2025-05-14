@@ -1,13 +1,25 @@
 <?php
+// database/factories/EquipmentQualifiedUserFactory.php
+namespace Database\Factories;
 
-/** @var Factory $factory */
 
+use App\Equipment;
 use App\EquipmentQualifiedUser;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(EquipmentQualifiedUser::class, function (Faker $faker) {
-    return [
-        //
-    ];
-});
+class EquipmentQualifiedUserFactory extends Factory
+{
+    protected $model = EquipmentQualifiedUser::class;
+
+    public function definition(): array
+    {
+        return [
+            'equipment_id' => Equipment::factory(),
+            'user_id' => User::factory(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+
+}

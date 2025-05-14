@@ -3,7 +3,7 @@
 ## Content
 testWare enables you to manage the testing and maintenance of your location and equipment.
 
-Current version: `1.81.19`
+Current version: `1.81.20`
 
 - [Install testWare instance](#install-testware-instance)
 - [testWare commands](#testware-commands)
@@ -20,8 +20,8 @@ There are mainly two ways to install your instance of testWare:
 - [Docker](#docker)
 
 ### LAPP/LAMP stack
-Make sure your server meets following requirements:
-- Linux based system (Ubuntu or Debian)
+Make sure your server meets the following requirements:
+- Linux-based system (Ubuntu or Debian)
 - Apache server (or nginx reverse proxy)
 - php min. version 8.2
 - SQL database system such as PostgreSQL or MariaDB / mySQL

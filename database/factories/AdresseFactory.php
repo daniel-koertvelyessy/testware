@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\AddressType;
+use App\Land;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AdresseFactory extends Factory
@@ -14,7 +16,7 @@ class AdresseFactory extends Factory
     public function definition():array
     {
         return [
-            'address_type_id'            => 1,
+            'address_type_id'            => AddressType::first()->id,
             'ad_label'                   => substr(substr($this->faker->companySuffix, 0, 3) . $this->faker->randomNumber(3) . $this->faker->postcode, 0, 10),
             'ad_name'                    => $this->faker->address,
             'ad_name_firma'              => $this->faker->company,
@@ -29,7 +31,7 @@ class AdresseFactory extends Factory
             'ad_anschrift_eingang'       => '3',
             'ad_anschrift_plz'           => $this->faker->postcode,
             'ad_anschrift_ort'           => $this->faker->city,
-            'land_id'                    => 1
+            'land_id'                    => Land::first()->id,
         ];
     }
 }

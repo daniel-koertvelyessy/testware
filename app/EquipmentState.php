@@ -11,6 +11,8 @@ class EquipmentState extends Model
 {
     use Sortable, SoftDeletes;
 
+    protected $guarded=[];
+
     public function Equipment(): HasMany
     {
         return $this->hasMany(Equipment::class);

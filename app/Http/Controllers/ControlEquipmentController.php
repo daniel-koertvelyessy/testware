@@ -30,6 +30,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Kyslik\ColumnSortable\Sortable;
 
@@ -491,6 +492,8 @@ class ControlEquipmentController extends Controller
             $msg = 'Fehler beim Löschen der Prüfung!';
         }
 
+        Cache::forget('system-status-database');
+
         request()->session()->flash('status', $msg);
         return redirect()->back();
 
@@ -605,6 +608,7 @@ class ControlEquipmentController extends Controller
             ? 'Prüfung korrigiert'
             : 'Fehler beim Speichern';
         $request->session()->flash('status', $msg);
+        Cache::forget('system-status-database');
         return back();
     }
 

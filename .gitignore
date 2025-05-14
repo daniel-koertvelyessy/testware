@@ -37,3 +37,4 @@ package-lock.json
 /docker/
 /.run/
 /.phpunit.cache/
+/.env.testing

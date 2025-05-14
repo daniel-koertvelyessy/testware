@@ -2,6 +2,7 @@
 
     namespace App;
 
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\SoftDeletes;
     use Illuminate\Notifications\Notifiable;
@@ -9,7 +10,9 @@
 
     class EquipmentQualifiedUser extends Model
     {
-        use SoftDeletes, Notifiable;
+        use SoftDeletes;
+        use Notifiable;
+        use HasFactory;
 
         protected $fillable = [
             'user_id',
