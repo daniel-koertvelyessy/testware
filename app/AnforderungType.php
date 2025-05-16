@@ -8,7 +8,8 @@ class AnforderungType extends Model
 {
     protected $guarded = [];
 
-    public function anforderung() {
+    public function anforderung()
+    {
         return $this->belongsTo(Anforderung::class);
     }
 }

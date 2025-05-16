@@ -13,11 +13,12 @@ class Tag extends Model
         $this->name = $request->name;
         $this->color = $request->color;
         $this->save();
+
         return $this->id;
     }
 
     public function notes()
     {
-        return $this->belongsToMany(Note::class,'note_tag')->withTimestamps();
+        return $this->belongsToMany(Note::class, 'note_tag')->withTimestamps();
     }
 }

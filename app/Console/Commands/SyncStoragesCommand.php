@@ -47,11 +47,9 @@ class SyncStoragesCommand extends Command
             Stellplatz::all()->count()
         );
 
-
         /**
          *   Search for location objects wich are not stored in the Storage table
          */
-
         $missingLocation = [];
         $missingBuilding = [];
         $missingRoom = [];
@@ -98,31 +96,30 @@ class SyncStoragesCommand extends Command
             }
 
             if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingBuilding[$place->storage_id] = $this->sycStorage($place->storage_id, $place->b_label, 'buildings');;
+                $missingBuilding[$place->storage_id] = $this->sycStorage($place->storage_id, $place->b_label, 'buildings');
             }
             $bar->advance();
         }
 
         foreach (Room::select('id', 'r_label', 'storage_id')->get() as $place) {
             if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingRoom[$place->storage_id] = $this->sycStorage($place->storage_id, $place->r_label, 'rooms');;
+                $missingRoom[$place->storage_id] = $this->sycStorage($place->storage_id, $place->r_label, 'rooms');
             }
             $bar->advance();
         }
 
         foreach (Stellplatz::select('id', 'sp_label', 'storage_id')->get() as $place) {
             if (Storage::where('storage_uid', $place->storage_id)->count() === 0) {
-                $missingCompartment[$place->storage_id] = $this->sycStorage($place->storage_id, $place->sp_label, 'stellplatzs');;
+                $missingCompartment[$place->storage_id] = $this->sycStorage($place->storage_id, $place->sp_label, 'stellplatzs');
             }
             $bar->advance();
         }
-
 
         $bar->finish();
         $this->newLine();
         $this->info('search for uid\'s in storages which do not have a matching location object');
         $this->newLine();
-     //   $bar->start();
+        //   $bar->start();
         /**
          * search for uid's in storages which do not have a matching location object
          */
@@ -159,20 +156,18 @@ class SyncStoragesCommand extends Command
             }
         }
 
-
         $this->info('Application hskey set successfully.');
     }
 
     /**
-     * @param String $type
-     * @param String $label
-     * @return String
+     * @return string
      */
     protected function getStorageUUID(string $type, string $label)
     {
         $storages = Storage::where('storage_label', $label);
         if ($storages->count() > 0) {
             $storage = $storages->first();
+
             /**
              * check if found $storage is of given $type
              * and return its uuid or make a new on
@@ -187,16 +182,13 @@ class SyncStoragesCommand extends Command
 
     public function sycStorage($uid, $label, $table)
     {
-        $storeage = new Storage();
+        $storeage = new Storage;
         $storeage->storage_uid = $uid;
         $storeage->storage_label = $label;
         $storeage->storage_object_type = $table;
+
         return $storeage->save();
     }
 
-    public function sycStorages()
-    {
-
-
-    }
+    public function sycStorages() {}
 }

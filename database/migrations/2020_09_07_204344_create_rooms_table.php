@@ -24,13 +24,12 @@ class CreateRoomsTable extends Migration
             $table->foreignId('building_id')->constrained()->onDelete('cascade')
                 ->onUpdate('cascade');
 
-/*            $table->unsignedBigInteger('building_id')->nullable();
+            /*            $table->unsignedBigInteger('building_id')->nullable();
 
-            $table->foreign('building_id')
-                ->references('id')
-                ->on('buildings')
-                ;*/
-
+                        $table->foreign('building_id')
+                            ->references('id')
+                            ->on('buildings')
+                            ;*/
 
             $table->unsignedBigInteger('room_type_id')->nullable();
 

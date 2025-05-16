@@ -17,9 +17,9 @@ class CreateProduktParamsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('pp_label',20);
-            $table->string('pp_name',150)->nullable();
-            $table->string('pp_value',150)->nullable();
+            $table->string('pp_label', 20);
+            $table->string('pp_name', 150)->nullable();
+            $table->string('pp_value', 150)->nullable();
             $table->foreignId('produkt_id');
         });
     }

@@ -14,12 +14,10 @@ use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -29,7 +27,8 @@ class ReportController extends Controller
     public function index()
     {
         $reports = Report::with('types')->sortable()->paginate(10);
-        return view('reports.index',['reports'=>$reports]);
+
+        return view('reports.index', ['reports' => $reports]);
     }
 
     /**
@@ -41,7 +40,6 @@ class ReportController extends Controller
     {
         return view('reports.template');
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -56,9 +54,8 @@ class ReportController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
+     * @param  Request  $request
      *L
-     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
@@ -69,65 +66,60 @@ class ReportController extends Controller
             'report_type_id' => '',
             'description' => '',
         ]));
-        $request->session()->flash('status', __('Der Bericht <strong>:label</strong> wurde angelegt!',['label'=>request('l_label')]));
+        $request->session()->flash('status', __('Der Bericht <strong>:label</strong> wurde angelegt!', ['label' => request('l_label')]));
+
         return redirect()->route('report.index', ['reports' => Report::with('types')->sortable()->paginate(10)]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Report $report
      *
      * @return Application|Factory|Response|View
      */
     public function show(Report $report)
     {
 
-     return view('reports.view.'.$report->view);
+        return view('reports.view.'.$report->view);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Report $report
      *
      * @return Application|Factory|Response|View
      */
     public function edit(Report $report)
     {
-        return view('reports.edit',['report'=>$report]);
+        return view('reports.edit', ['report' => $report]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Report  $report
      *
      * @return RedirectResponse
      */
     public function update(Request $request, Report $report)
     {
         $report->update($this->validateReportData());
-        $request->session()->flash('status', __('Der Bericht <strong>:label</strong> wurde aktualisiert!',['label'=>$request->label]));
+        $request->session()->flash('status', __('Der Bericht <strong>:label</strong> wurde aktualisiert!', ['label' => $request->label]));
+
         return redirect()->route('report.index', ['reports' => Report::with('types')->sortable()->paginate(10)]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Report  $report
-     * @param  Request $request
      *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(Report $report, Request $request)
-    : RedirectResponse
+    public function destroy(Report $report, Request $request): RedirectResponse
     {
         $report->delete();
         $request->session()->flash('status', 'Der Bericht wurde gelöscht!');
+
         return redirect()->back();
     }
 

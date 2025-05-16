@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 
 class TagController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -36,13 +35,8 @@ class TagController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request $request
-     *
-     * @return array
      */
-    public function store(Request $request)
-    : array
+    public function store(Request $request): array
     {
         $tagid = (new Tag)->addNew($request);
         $data['html'] = '
@@ -53,13 +47,13 @@ class TagController extends Controller
           </button>
           <input type="hidden" name="tag[]" id="note_tag_'.$tagid.'" value="'.$tagid.'">
         </div>';
+
         return $data;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Tag  $tag
      *
      * @return Response
      */
@@ -71,7 +65,6 @@ class TagController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Tag  $tag
      *
      * @return Response
      */
@@ -83,8 +76,6 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Tag $tag
      *
      * @return Response
      */
@@ -96,7 +87,6 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Tag  $tag
      *
      * @return Response
      */

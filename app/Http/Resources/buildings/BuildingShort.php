@@ -10,15 +10,15 @@ class BuildingShort extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'label'       => $this->b_label,
-            'uid'         => $this->storage_id,
-            'name'        => $this->b_name,
+            'label' => $this->b_label,
+            'uid' => $this->storage_id,
+            'name' => $this->b_name,
             'description' => $this->b_description,
         ];
     }

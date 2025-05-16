@@ -15,7 +15,7 @@ class ProduktDocController extends Controller
     {
         $this->middleware('auth')->except([
             'downloadProduktDokuFile',
-            'index'
+            'index',
         ]);
     }
 
@@ -42,33 +42,32 @@ class ProduktDocController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
 
         if ($request->hasFile('prodDokumentFile')) {
-//mkdir('/var/www/html/storage/app/product_files/');
-            $proDocFile = new ProduktDoc();
+            // mkdir('/var/www/html/storage/app/product_files/');
+            $proDocFile = new ProduktDoc;
             $file = $request->file('prodDokumentFile');
             $val = $this->validateNewProduktDokument();
 
             $validation = $request->validate([
-                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:20480'
+                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg|max:20480',
                 // size:2048 => 2048kB
             ]);
 
-            //dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
+            // dd($file->getClientMimeType(),$file->getClientOriginalExtension(),$file->getClientOriginalName());
 
             $proDocFile->proddoc_name = $file->getClientOriginalName();
-            $proDocFile->proddoc_name_pfad = $file->store('/product_files/'. \request('produkt_id'));
-//            $proDocFile->proddoc_name_pfad = $file->storeAs('product_docu/' . \request('produkt_id'),$file->getClientOriginalName());
+            $proDocFile->proddoc_name_pfad = $file->store('/product_files/'.\request('produkt_id'));
+            //            $proDocFile->proddoc_name_pfad = $file->storeAs('product_docu/' . \request('produkt_id'),$file->getClientOriginalName());
             $proDocFile->document_type_id = request('document_type_id');
             $proDocFile->produkt_id = request('produkt_id');
             $proDocFile->proddoc_description = request('proddoc_description');
             $proDocFile->proddoc_label = request('proddoc_label');
-            $request->session()->flash('status', 'Das Dokument <strong>' . $file->getClientOriginalName() . '</strong> wurde hochgeladen!');
+            $request->session()->flash('status', 'Das Dokument <strong>'.$file->getClientOriginalName().'</strong> wurde hochgeladen!');
             $proDocFile->save();
             // $file->storeAs($pfad, $Dateiname->guessExtention() ); => Storage::disk('local')->putFileAs($pfad, $file, $Dateiname->guessExtention());
             // $file->store($pfad) => Storage::disk('local')->puFile($pfad, $file);
@@ -76,8 +75,9 @@ class ProduktDocController extends Controller
 
         } else {
             Log::warning('Fehler beim Hochladen einer Datei. Es wurde kein $_FILE übergeben!');
-            $request->session()->flash('status', 'Das Dokument <strong>' . request('doctyp_label') . '</strong> konnte nicht hochgeladen werden!');
+            $request->session()->flash('status', 'Das Dokument <strong>'.request('doctyp_label').'</strong> konnte nicht hochgeladen werden!');
         }
+
         //
         return redirect()->back();
         //
@@ -94,13 +94,12 @@ class ProduktDocController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', Storage::mimeType($doc->proddoc_name_pfad))
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . str_replace(',', '_', $doc->proddoc_name));
+            ->header('Content-disposition', 'attachment; filename='.str_replace(',', '_', $doc->proddoc_name));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  ProduktDoc $produktDoc
      * @return Response
      */
     public function show(ProduktDoc $produktDoc)
@@ -111,7 +110,6 @@ class ProduktDocController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  ProduktDoc $produktDoc
      * @return Response
      */
     public function edit(ProduktDoc $produktDoc)
@@ -122,8 +120,6 @@ class ProduktDocController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request    $request
-     * @param  ProduktDoc $produktDoc
      * @return Response
      */
     public function update(Request $request, ProduktDoc $produktDoc)
@@ -134,7 +130,6 @@ class ProduktDocController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
      * @return RedirectResponse
      */
     public function destroy(Request $request)
@@ -144,13 +139,11 @@ class ProduktDocController extends Controller
         $file = $prodDoku->proddoc_name;
         Storage::delete($prodDoku->proddoc_name_pfad);
         $prodDoku->delete();
-        session()->flash('status', 'Das Dokument <strong>' . $file . '</strong> wurde gelöscht!');
+        session()->flash('status', 'Das Dokument <strong>'.$file.'</strong> wurde gelöscht!');
+
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
     public function validateNewProduktDokument(): array
     {
         return request()->validate([
@@ -159,7 +152,7 @@ class ProduktDocController extends Controller
             'proddoc_name_pfad' => 'max:150',
             'produkt_id' => 'required',
             'document_type_id' => 'required',
-            'proddoc_description' => ''
+            'proddoc_description' => '',
         ]);
     }
 }

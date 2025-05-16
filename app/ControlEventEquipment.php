@@ -9,14 +9,17 @@ class ControlEventEquipment extends Model
 {
     protected $guarded = [];
 
-//    protected $table = 'equipments';
+    //    protected $table = 'equipments';
 
     use SoftDeletes;
-    public function Equipment() {
+
+    public function Equipment()
+    {
         return $this->belongsTo(Equipment::class);
     }
 
-    public function ControlEvent() {
+    public function ControlEvent()
+    {
         return $this->hasMany(ControlEvent::class);
     }
 }

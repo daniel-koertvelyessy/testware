@@ -7,9 +7,7 @@ use App\EquipmentEvent;
 use App\EquipmentEventItem;
 use App\EquipmentHistory;
 use App\EquipmentState;
-use App\EquipmentUid;
 use App\Notifications\EquipmentEventChanged;
-use App\Notifications\EquipmentEventCreated;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -36,9 +34,11 @@ class EquipmentEventController extends Controller
     {
         if (EquipmentEvent::count() > 10) {
             $eventList = EquipmentEvent::with('Equipment', 'User')->sortable()->paginate(10);
+
             return view('testware.events.index', ['eventListItems' => $eventList]);
         } else {
             $eventList = EquipmentEvent::with('Equipment', 'User')->sortable()->get();
+
             return view('testware.events.index', ['eventListItems' => $eventList]);
         }
     }
@@ -57,7 +57,6 @@ class EquipmentEventController extends Controller
      * Store a newly created resource in storage.
      *
      *
-     * @param  Request $request
      *
      * @return RedirectResponse
      */
@@ -65,26 +64,22 @@ class EquipmentEventController extends Controller
     {
 
         $event = EquipmentEvent::create($this->validateNewEquipmentEvent());
+
         return redirect()->route('event.show', $event);
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewEquipmentEvent()
-    : array
+    public function validateNewEquipmentEvent(): array
     {
         return request()->validate([
             'equipment_event_text' => '',
             'equipment_event_user' => '',
-            'equipment_id'         => 'required',
+            'equipment_id' => 'required',
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return RedirectResponse
      */
@@ -98,14 +93,14 @@ class EquipmentEventController extends Controller
 
         $event_item = (new EquipmentEventItem)->addItem($request);
 
-        $equipment = Equipment::where('id',$request->equipment_id)->first();
+        $equipment = Equipment::where('id', $request->equipment_id)->first();
         $euipStatIsNotChanged = ($equipment->equipment_state_id == $request->equipment_state_id);
 
-        if (!$euipStatIsNotChanged) {
+        if (! $euipStatIsNotChanged) {
             $stat = EquipmentState::find($request->equipment_state_id)->first();
             (new EquipmentHistory)->add(
                 __('Gerätestatus geändert'),
-                __('Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf :label geändert',['label'=>$stat->estat_label]),
+                __('Auf Grund einer Schadensbegutachtung wurde der Status des Gerätes auf :label geändert', ['label' => $stat->estat_label]),
                 $equipment->equipment_id
             );
 
@@ -125,7 +120,6 @@ class EquipmentEventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  EquipmentEvent $event
      *
      * @return Application|Factory|Response|View
      */
@@ -134,20 +128,22 @@ class EquipmentEventController extends Controller
         return view('testware.events.show', compact('event'));
     }
 
-    public function read(EquipmentEvent $event, $notification = NULL)
+    public function read(EquipmentEvent $event, $notification = null)
     {
-        foreach(\Auth::user()->unreadNotifications()->get() as $note){
-            if ($notification == $note->id) $note->markAsRead();
+        foreach (\Auth::user()->unreadNotifications()->get() as $note) {
+            if ($notification == $note->id) {
+                $note->markAsRead();
+            }
         }
 
         $event->markAsRead();
+
         return redirect()->route('event.show', $event);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  EquipmentEvent $event
      *
      * @return Response
      */
@@ -159,8 +155,6 @@ class EquipmentEventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request        $request
-     * @param  EquipmentEvent $event
      *
      * @return Response
      */
@@ -172,22 +166,18 @@ class EquipmentEventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentEvent $event
-     * @param  Request        $request
      *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(EquipmentEvent $event, Request $request)
-    : RedirectResponse
+    public function destroy(EquipmentEvent $event, Request $request): RedirectResponse
     {
 
         if (isset($request->event_decline_text)) {
             $eqh_eintrag_kurz = __('Schadensmeldung - Abgelehnt');
-            $eqh_eintrag_text = __('Die Schadensmeldung wurde abgelehnt. Begründung: ') . request('event_decline_text');
+            $eqh_eintrag_text = __('Die Schadensmeldung wurde abgelehnt. Begründung: ').request('event_decline_text');
         } else {
             $eqh_eintrag_kurz = __('Schadensmeldung - Abgeschlossen');
-            $eqh_eintrag_text = __('Die Schadensmeldung wurde geschlossen. Bemerkung: ') . request('equipment_event_item_text');
+            $eqh_eintrag_text = __('Die Schadensmeldung wurde geschlossen. Bemerkung: ').request('equipment_event_item_text');
         }
 
         (new EquipmentEventItem)->addItem($request);
@@ -206,20 +196,18 @@ class EquipmentEventController extends Controller
         }
 
         $event->delete();
+
         return redirect()->route('dashboard');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentEvent $event
-     * @param  Request        $request
+     * @param  EquipmentEvent  $event
      *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function close(Request $request)
-    : RedirectResponse
+    public function close(Request $request): RedirectResponse
     {
 
         EquipmentEvent::destroy($request->equipment_event_id);
@@ -241,11 +229,11 @@ class EquipmentEventController extends Controller
         return redirect()->route('dashboard');
     }
 
-
     public function restore(Request $request)
     {
         $event = EquipmentEvent::withTrashed()->find($request->id);
         $event->restore();
+
         return redirect()->route('event.show', $event);
     }
 }

@@ -1,18 +1,11 @@
 <?php
 
-use App\Contact;
-use App\ControlEquipment;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
 use App\EquipmentLabel;
 use App\EquipmentUid;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Produkt;
-use App\ProduktAnforderung;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,10 +53,10 @@ Route::get('imprint', function () {
 
     return view('imprint', [
         'company_name' => $firma->ad_name_firma ?? '',
-        'address'      => $firma->Adresse->postalAddress(),
-        'contact'      => $firma->Profile->fullName(),
-        'telefon'      => $firma->Profile->ma_telefon,
-        'email'        => $firma->Profile->ma_email
+        'address' => $firma->Adresse->postalAddress(),
+        'contact' => $firma->Profile->fullName(),
+        'telefon' => $firma->Profile->ma_telefon,
+        'email' => $firma->Profile->ma_email,
     ]);
 })->name('imprint');
 
@@ -74,13 +67,15 @@ Route::get('edata/{ident}', function ($ident, Request $request) {
     $equipment = EquipmentUid::where('equipment_uid', $ident)->first();
     if ($equipment) {
         $edata = Equipment::findOrFail($equipment->equipment_id);
+
         return view('testware.app.equipmentdata', [
             'edata' => $edata,
-            'ident' => $ident
+            'ident' => $ident,
         ]);
     } else {
         $request->session()->flash('status',
-                                   __('Das Gerät konnte nicht gefunden werden!'));
+            __('Das Gerät konnte nicht gefunden werden!'));
+
         return redirect()->route('app');
     }
 
@@ -112,20 +107,20 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 
     $equipment = EquipmentUid::where('equipment_uid', $ident)->first();
 
-
     if ($equipment) {
         $edata = Equipment::findOrFail($equipment->equipment_id);
+
         //            dd($edata);
         return view('testware.app.reportdamage', [
             'edata' => $edata,
-            'ident' => $ident
+            'ident' => $ident,
         ]);
     } else {
         $request->session()->flash('status',
-                                   __('Das Gerät konnte nicht gefunden werden!'));
+            __('Das Gerät konnte nicht gefunden werden!'));
+
         return redirect()->route('app');
     }
-
 
     /*   $str = str_split($ident, strlen(env('APP_HSKEY')));
 
@@ -171,18 +166,18 @@ Route::view('docs/api/endpoints/control', 'docs.api.endpoints.control')->name('d
 Route::view('docs/api/endpoints/requirements', 'docs.api.endpoints.requirements')->name('docs.api.requirements');
 Route::view('docs/api/endpoints/events', 'docs.api.endpoints.events')->name('docs.api.events');
 
-Route::get('/dashboard','TestwareController@dashboard' )->name('dashboard')->middleware('auth');
+Route::get('/dashboard', 'TestwareController@dashboard')->name('dashboard')->middleware('auth');
 
 Route::put('user.resetPassword',
-           'UserController@resetPassword')->name('user.resetPassword');
+    'UserController@resetPassword')->name('user.resetPassword');
 
 Route::put('user.setPassword',
-           'UserController@setPassword')->name('user.setPassword');
+    'UserController@setPassword')->name('user.setPassword');
 
 Route::post('event.restore',
-            'EquipmentEventController@restore')->name('event.restore');
+    'EquipmentEventController@restore')->name('event.restore');
 Route::delete('event.close',
-              'EquipmentEventController@close')->name('event.close');
+    'EquipmentEventController@close')->name('event.close');
 
 Route::middleware('throttle:5|60,1')->group(function () {
     Route::post('app.store', 'AppController@store')->name('app.store');
@@ -190,55 +185,55 @@ Route::middleware('throttle:5|60,1')->group(function () {
 
 Route::get('event/read/{event}/{notification?}', 'EquipmentEventController@read')->name('event.read');
 Route::put('event.accept',
-           'EquipmentEventController@accept')->name('event.accept');
+    'EquipmentEventController@accept')->name('event.accept');
 
 Route::resources([
-                     'location'               => 'LocationsController',
-                     'building'               => 'BuildingsController',
-                     'room'                   => 'RoomController',
-                     'contact'                => 'ContactController',
-                     'profile'                => 'ProfileController',
-                     'produkt'                => 'ProduktController',
-                     'produktDoku'            => 'ProduktDocController',
-                     'equipDoku'              => 'EquipmentDocController',
-                     'firma'                  => 'FirmaController',
-                     'adresse'                => 'AdresseController',
-                     //    'testware'               => 'TestwareController',
-                     'equipment'              => 'EquipmentController',
-                     'control'                => 'ControlEquipmentController',
-                     'user'                   => 'UserController',
-                     'role'                   => 'RoleController',
-                     'stellplatz'             => 'StellplatzController',
-                     'anforderung'            => 'AnforderungsController',
-                     'verordnung'             => 'VerordnungController',
-                     'anforderungcontrolitem' => 'AnforderungControlItemController',
-                     'event'                  => 'EquipmentEventController',
-                     'eventitem'              => 'EquipmentEventItemController',
-                     'EquipmentInstruction'   => 'EquipmentInstructionController',
-                     'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
-                     'equipmentlabel'         => 'EquipmentLabelController',
-                     'ProductInstruction'     => 'ProductInstructedUserController',
-                     'ProductQualifiedUser'   => 'ProductQualifiedUserController',
-                     'productparameter'       => 'ProductParameterController',
-                     'equipmentparameter'     => 'EquipmentParameterController',
-                     'lizenz'                 => 'LizenzController',
-                     'report'                 => 'ReportController',
-                     'search'                 => 'SearchController',
-                     'tag'                    => 'TagController',
-                     'note'                   => 'NoteController',
-                     'note-type'              => 'NoteTypeController',
-                     'testreportformat'       => 'TestReportFormatController',
-                     'acidataset'             => 'AciDataSetController'
-                 ]);
+    'location' => 'LocationsController',
+    'building' => 'BuildingsController',
+    'room' => 'RoomController',
+    'contact' => 'ContactController',
+    'profile' => 'ProfileController',
+    'produkt' => 'ProduktController',
+    'produktDoku' => 'ProduktDocController',
+    'equipDoku' => 'EquipmentDocController',
+    'firma' => 'FirmaController',
+    'adresse' => 'AdresseController',
+    //    'testware'               => 'TestwareController',
+    'equipment' => 'EquipmentController',
+    'control' => 'ControlEquipmentController',
+    'user' => 'UserController',
+    'role' => 'RoleController',
+    'stellplatz' => 'StellplatzController',
+    'anforderung' => 'AnforderungsController',
+    'verordnung' => 'VerordnungController',
+    'anforderungcontrolitem' => 'AnforderungControlItemController',
+    'event' => 'EquipmentEventController',
+    'eventitem' => 'EquipmentEventItemController',
+    'EquipmentInstruction' => 'EquipmentInstructionController',
+    'EquipmentQualifiedUser' => 'EquipmentQualifiedUserController',
+    'equipmentlabel' => 'EquipmentLabelController',
+    'ProductInstruction' => 'ProductInstructedUserController',
+    'ProductQualifiedUser' => 'ProductQualifiedUserController',
+    'productparameter' => 'ProductParameterController',
+    'equipmentparameter' => 'EquipmentParameterController',
+    'lizenz' => 'LizenzController',
+    'report' => 'ReportController',
+    'search' => 'SearchController',
+    'tag' => 'TagController',
+    'note' => 'NoteController',
+    'note-type' => 'NoteTypeController',
+    'testreportformat' => 'TestReportFormatController',
+    'acidataset' => 'AciDataSetController',
+]);
 
 /**
  * Verwaltung/Admin routes laden
  */
-require __DIR__ . '/admintools/admintools.php';
+require __DIR__.'/admintools/admintools.php';
 /**
  *  Produkt routes laden
  */
-require __DIR__ . '/produkttools/produkttools.php';
+require __DIR__.'/produkttools/produkttools.php';
 
 Route::post('equip_document_add', 'EquipmentDocController@add')->name('equipdoc.add');
 Route::post('control_add', 'ControlEquipmentController@add')->name('control.add');
@@ -250,36 +245,36 @@ Route::get('equipment/status/{equipmentState}', 'EquipmentController@statuslist'
 Route::post('equipment/{equipment}/sync/requirements', 'EquipmentController@syncRequirements')->name('equipment.syncrequirements');
 
 Route::post('user.setMsgRead',
-            'UserController@setMsgRead')->name('user.setMsgRead');
+    'UserController@setMsgRead')->name('user.setMsgRead');
 Route::delete('user.deleteMsg',
-              'UserController@deleteMsg')->name('user.deleteMsg');
+    'UserController@deleteMsg')->name('user.deleteMsg');
 Route::delete('user.revokerole',
-              'UserController@revokerole')->name('user.revokerole');
+    'UserController@revokerole')->name('user.revokerole');
 Route::post('user.grantrole',
-            'UserController@grantrole')->name('user.grantrole');
+    'UserController@grantrole')->name('user.grantrole');
 Route::delete('user.revokeSysAdmin/{user}',
-              'UserController@revokeSysAdmin')->name('user.revokeSysAdmin');
+    'UserController@revokeSysAdmin')->name('user.revokeSysAdmin');
 Route::post('user.grantSysAdmin/{user}',
-            'UserController@grantSysAdmin')->name('user.grantSysAdmin');
+    'UserController@grantSysAdmin')->name('user.grantSysAdmin');
 
 Route::get('getFirmenAjaxListe',
-           'FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
+    'FirmaController@getFirmenAjaxListe')->name('getFirmenAjaxListe');
 Route::get('getFirmenDaten',
-           'FirmaController@getFirmenDaten')->name('getFirmenDaten');
+    'FirmaController@getFirmenDaten')->name('getFirmenDaten');
 
 Route::get('getAddressenAjaxListe',
-           'AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
+    'AdresseController@getAddressenAjaxListe')->name('getAddressenAjaxListe');
 Route::get('getAddressDaten',
-           'AdresseController@getAddressDaten')->name('getAddressDaten');
+    'AdresseController@getAddressDaten')->name('getAddressDaten');
 Route::get('getControlEventDataSheet',
-           'ControlEquipmentController@getControlEventDataSheet')->name('getControlEventDataSheet');
+    'ControlEquipmentController@getControlEventDataSheet')->name('getControlEventDataSheet');
 
 Route::get('getEquipmentAjaxListe',
-           'EquipmentController@getEquipmentAjaxListe')->name('getEquipmentAjaxListe');
+    'EquipmentController@getEquipmentAjaxListe')->name('getEquipmentAjaxListe');
 Route::get('searchInModules',
-           'SearchController@searchInModules')->name('searchInModules');
+    'SearchController@searchInModules')->name('searchInModules');
 Route::get('searchInDocumentation',
-           'SearchController@searchInDocumentation')->name('searchInDocumentation');
+    'SearchController@searchInDocumentation')->name('searchInDocumentation');
 
 /*
 
@@ -287,7 +282,7 @@ PDF GENERATORS
 
 */
 Route::get('pdf.storageListe',
-           'PdfGenerator@storageListe')->name('pdf.storageListe');
+    'PdfGenerator@storageListe')->name('pdf.storageListe');
 
 Route::get('/makePDF/{view}/{title}', function ($view, $title) {
     App\Http\Controllers\PdfGenerator::makePDF($view, $title);
@@ -322,22 +317,22 @@ Route::get('makePDFEquipmentControlReport/{controlEvent}',
         App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
     })->name('makePDFEquipmentControlReport')->middleware('auth');
 
-//Auth::routes();
+// Auth::routes();
 
 Route::get('/expired', function (Request $request) {
     Auth::guard('web')->logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
     return view('auth.expired');
 })->name('auth.expired');
-
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
 Route::get('organisationMain', function () {
     return view('admin.organisation.index', [
-        'firmas'   => App\Firma::take(5)->latest()->get(),
+        'firmas' => App\Firma::take(5)->latest()->get(),
         'adresses' => App\Adresse::take(5)->latest()->get(),
         'profiles' => App\Profile::take(5)->latest()->get(),
         'contacts' => App\Contact::take(5)->latest()->get(),
@@ -351,8 +346,8 @@ Route::get('unlockScreen', function () {
 Route::post('equipmentlabel/copy/{id}', function ($id) {
     $label = EquipmentLabel::find($id);
     $copyLabel = $label->replicate()->fill([
-                                               'label' => 'copy_' . $label->label
-                                           ]);
+        'label' => 'copy_'.$label->label,
+    ]);
     if ($copyLabel->save()) {
         $msg = __('Das Label wurde kopiert');
     } else {
@@ -360,15 +355,16 @@ Route::post('equipmentlabel/copy/{id}', function ($id) {
         Log::warning('error on copying an existing label');
     }
     request()->session()->flash('status', $msg);
+
     return back();
 
 })->name('equipmentlabel.copy')->middleware('auth');
 
 Route::get('storageMain', function () {
     return view('admin.standorte.index', [
-        'locations'    => App\Location::take(5)->latest()->get(),
-        'buildings'    => App\Building::take(5)->latest()->get(),
-        'rooms'        => App\Room::take(5)->latest()->get(),
+        'locations' => App\Location::take(5)->latest()->get(),
+        'buildings' => App\Building::take(5)->latest()->get(),
+        'rooms' => App\Room::take(5)->latest()->get(),
         'compartments' => App\Stellplatz::take(5)->latest()->get(),
     ]);
 })->name('storageMain')->middleware('auth');
@@ -380,19 +376,19 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
     $equipment_id = $request->equipment_id;
     $equipment = Equipment::find($equipment_id);
 
-    (new EquipmentFuntionControl())->addControlEvent($request, $equipment_id);
+    (new EquipmentFuntionControl)->addControlEvent($request, $equipment_id);
 
     if ($request->hasFile('equipDokumentFile')) {
-        $proDocFile = new EquipmentDoc();
+        $proDocFile = new EquipmentDoc;
         $file = $request->file('equipDokumentFile');
         $request->validate([
-                               'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
-                               // size:2048 => 2048kB
-                               'eqdoc_label'       => 'required|max:150'
-                           ]);
+            'equipDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
+            // size:2048 => 2048kB
+            'eqdoc_label' => 'required|max:150',
+        ]);
 
         $proDocFile->eqdoc_name = $file->getClientOriginalName();
-        $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/' . $equipment_id);
+        $proDocFile->eqdoc_name_pfad = $file->store('equipment_docu/'.$equipment_id);
 
         $proDocFile->document_type_id = request('document_type_id');
         $proDocFile->equipment_id = $equipment_id;
@@ -403,7 +399,7 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
             $msg = __(' ohne Fehler ');
         } else {
             $msg = __(' mit Fehler ');
-            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: ' . $file);
+            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: '.$file);
         }
         $equipment->equipment_state_id = 1;
         $equipment->save();
@@ -414,21 +410,22 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
     }
 
     $request->session()->flash('status',
-                               __('Die Funktionsprüfung wurde :msg angelegt!', ['msg' => $msg]));
+        __('Die Funktionsprüfung wurde :msg angelegt!', ['msg' => $msg]));
 
     return back();
 })->name('addEquipmentFunctionControl')->middleware('auth');
 
 Route::get('produktMain', function () {
     return view('admin.produkt.main',
-                ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
+        ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', 'EquipmentController@main')->name('equipMain')->middleware('auth');
 
-Route::get('equipment.maker/{produkt?}', function (Produkt $produkt = null) {
+Route::get('equipment.maker/{produkt?}', function (?Produkt $produkt = null) {
     $produktList = Produkt::where('prod_active', '1')->with('ProduktAnforderung')->sortable()->paginate(10);
-    return view('testware.equipment.maker', compact('produktList','produkt'));
+
+    return view('testware.equipment.maker', compact('produktList', 'produkt'));
 })->name('equipment.maker')->middleware('auth');
 
 Route::get('equipment.controlequipment', 'EquipmentController@controlequipment')->name('equipment.controlequipment')->middleware('auth');
@@ -440,29 +437,28 @@ Route::get('verordnung.main', function () {
     return view('admin.verordnung.main');
 })->name('verordnung.main')->middleware('auth');
 
-//Route::get('getKategorieProducts', function () {
+// Route::get('getKategorieProducts', function () {
 //    return view('admin.produkt.kategorie.index');
-//})->name('getKategorieProducts')->middleware('auth');
+// })->name('getKategorieProducts')->middleware('auth');
 
 Route::get('firma.checkCompanyLabel',
-           'FirmaController@checkCompanyLabel')->name('firma.checkCompanyLabel')->middleware('auth');
+    'FirmaController@checkCompanyLabel')->name('firma.checkCompanyLabel')->middleware('auth');
 Route::get('firma.checkCompanyKreditor',
-           'FirmaController@checkCompanyKreditor')->name('firma.checkCompanyKreditor')->middleware('auth');
+    'FirmaController@checkCompanyKreditor')->name('firma.checkCompanyKreditor')->middleware('auth');
 
 Route::post('addApiTokenToUser/{user}',
-            'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
+    'UserController@addTokenToUser')->name('addApiTokenToUser')->middleware('auth');
 
 Route::get('/report/template',
-           'ReportController@template')->name('report.template');
+    'ReportController@template')->name('report.template');
 
 Route::get('/notes/file/{id}',
-           'NoteController@downloadNotesFile')->name('downloadNotesFile');
+    'NoteController@downloadNotesFile')->name('downloadNotesFile');
 
-//Route::get('getTestingCalender/{setdate}', function ($setdate) {
+// Route::get('getTestingCalender/{setdate}', function ($setdate) {
 //    $data['html'] = view('components.testcalendar', compact('setdate'))->render();
 //    return json_encode($data);
 //
-//});
+// });
 
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

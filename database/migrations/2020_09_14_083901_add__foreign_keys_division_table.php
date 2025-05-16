@@ -15,29 +15,29 @@ class AddForeignKeysDivisionTable extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
 
-//            $table->foreign('group_id')
-//                ->references('id')
-//                ->on('groups')
-//                ->onDelete('set null')
-//                ->onUpdate('cascade');
+            //            $table->foreign('group_id')
+            //                ->references('id')
+            //                ->on('groups')
+            //                ->onDelete('set null')
+            //                ->onUpdate('cascade');
 
         });
 
         Schema::table('groups', function (Blueprint $table) {
 
-//            $table->unsignedBigInteger('profile_id')->nullable();
-//            $table->foreign('profile_id')
-//                ->references('id')
-//                ->on('profiles')
-//                ->onUpdate('set null')
-//                ->onDelete('cascade');
-//
-//            $table->unsignedBigInteger('division_id')->nullable();
-//            $table->foreign('division_id')
-//                ->references('id')
-//                ->on('divisons')
-//                ->onUpdate('set null')
-//                ->onDelete('cascade');
+            //            $table->unsignedBigInteger('profile_id')->nullable();
+            //            $table->foreign('profile_id')
+            //                ->references('id')
+            //                ->on('profiles')
+            //                ->onUpdate('set null')
+            //                ->onDelete('cascade');
+            //
+            //            $table->unsignedBigInteger('division_id')->nullable();
+            //            $table->foreign('division_id')
+            //                ->references('id')
+            //                ->on('divisons')
+            //                ->onUpdate('set null')
+            //                ->onDelete('cascade');
 
         });
     }

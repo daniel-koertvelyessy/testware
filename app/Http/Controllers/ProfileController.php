@@ -29,6 +29,7 @@ class ProfileController extends Controller
     public function index()
     {
         $profileList = Profile::with('user')->paginate(10);
+
         return view('admin.organisation.profile.index', compact('profileList'));
     }
 
@@ -44,13 +45,8 @@ class ProfileController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request $request
-     *
-     * @return RedirectResponse
      */
-    public function store(Request $request)
-    : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $profile = Profile::create($this->validateNewProfile());
         $text = '';
@@ -59,49 +55,45 @@ class ProfileController extends Controller
             $location = Location::find($request->setProfileAsNewMain);
             $location->profile_id = $profile->id;
             $location->save();
-            $text = __(' und als neue Leitung des Standortes :locName gesetzt',['locname'=>$location->l_label]);
+            $text = __(' und als neue Leitung des Standortes :locName gesetzt', ['locname' => $location->l_label]);
         }
-        $request->session()->flash('status', __('Der Mitarbeiter wurde angelegt') . $text);
+        $request->session()->flash('status', __('Der Mitarbeiter wurde angelegt').$text);
+
         //        return view('admin.organisation.profile.show',['profile'=>$profile]);
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewProfile()
-    : array
+    public function validateNewProfile(): array
     {
 
         return request()->validate([
-            'ma_name'         => [
+            'ma_name' => [
                 'bail',
                 'max:100',
                 'required',
-                Rule::unique('profiles')->ignore(\request('id'))
+                Rule::unique('profiles')->ignore(\request('id')),
             ],
-            'ad_name'         => 'max:100',
-            'ma_nummer'       => 'max:100',
-            'ma_name_2'       => '',
-            'ma_vorname'      => '',
+            'ad_name' => 'max:100',
+            'ma_nummer' => 'max:100',
+            'ma_name_2' => '',
+            'ma_vorname' => '',
             'ma_geburtsdatum' => '',
-            'ma_eingetreten'  => '',
-            'ma_ausgetreten'  => '',
-            'ma_telefon'      => '',
-            'ma_mobil'        => '',
-            'ma_fax'          => '',
-            'ma_com_1'        => '',
-            'ma_com_2'        => '',
-            'group_id'        => '',
-            'user_id'         => '',
-            'ma_email'         => 'email'
+            'ma_eingetreten' => '',
+            'ma_ausgetreten' => '',
+            'ma_telefon' => '',
+            'ma_mobil' => '',
+            'ma_fax' => '',
+            'ma_com_1' => '',
+            'ma_com_2' => '',
+            'group_id' => '',
+            'user_id' => '',
+            'ma_email' => 'email',
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Profile $profile
      *
      * @return Application|Factory|Response|View
      */
@@ -113,8 +105,6 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Profile $profile
      *
      * @return Application|Factory|Response|View
      */
@@ -122,49 +112,46 @@ class ProfileController extends Controller
     {
         $profile->update($this->validateProfile());
         $request->session()->flash('status', __('Der Mitarbeiter wurde aktualisiert!'));
+
         return view('admin.organisation.profile.show', compact('profile'));
     }
 
-    /**
-     * @return array
-     */
-    public function validateProfile()
-    : array
+    public function validateProfile(): array
     {
 
         return request()->validate([
-            'ma_name'         => 'required|max:20',
-            'ad_name'         => 'max:100',
-            'ma_nummer'       => 'max:100',
-            'ma_name_2'       => '',
-            'ma_vorname'      => '',
+            'ma_name' => 'required|max:20',
+            'ad_name' => 'max:100',
+            'ma_nummer' => 'max:100',
+            'ma_name_2' => '',
+            'ma_vorname' => '',
             'ma_geburtsdatum' => '',
-            'ma_eingetreten'  => '',
-            'ma_ausgetreten'  => '',
-            'ma_telefon'      => '',
-            'ma_mobil'        => '',
-            'ma_fax'          => '',
-            'ma_com_1'        => '',
-            'ma_com_2'        => '',
-            'group_id'        => '',
-            'user_id'         => '',
-            'ma_email'         => 'email'
+            'ma_eingetreten' => '',
+            'ma_ausgetreten' => '',
+            'ma_telefon' => '',
+            'ma_mobil' => '',
+            'ma_fax' => '',
+            'ma_com_1' => '',
+            'ma_com_2' => '',
+            'group_id' => '',
+            'user_id' => '',
+            'ma_email' => 'email',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
-     * @param  Profile $profile
      *
      * @return Application|RedirectResponse|Response|Redirector
+     *
      * @throws Exception
      */
     public function destroy(Request $request, Profile $profile)
     {
         $profile->delete();
         $request->session()->flash('status', __('Der Mitarbeiter wurde gelöscht!'));
+
         return redirect(route('profile.index'));
     }
 }

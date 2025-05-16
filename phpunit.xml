@@ -10,6 +10,7 @@
   </testsuites>
   <php>
     <env name="APP_ENV" value="testing"/>
+    <env name="CACHE_DRIVER" value="array"/>
     <env name="DB_CONNECTION" value="pgsql"/>
     <env name="DB_HOST" value="127.0.0.1"/>
     <env name="DB_PORT" value="5432"/>
@@ -17,6 +18,7 @@
     <env name="DB_USERNAME" value="testWareDbUser"/>
     <env name="DB_PASSWORD" value="yourMostSecurePasswordYouCanThinkOf"/>
   </php>
+
   <source>
     <include>
       <directory suffix=".php">./app</directory>

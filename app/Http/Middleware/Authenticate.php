@@ -17,12 +17,14 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            if (Auth::guard()->check())
+            if (Auth::guard()->check()) {
                 dd('redirectTo');
-//            if(!Auth::user())
-//                $request->session()->flash('expired','the session has expired!');
-//
-////            return route('auth.expired');
+            }
+
+            //            if(!Auth::user())
+            //                $request->session()->flash('expired','the session has expired!');
+            //
+            // //            return route('auth.expired');
             return route('login');
         }
     }

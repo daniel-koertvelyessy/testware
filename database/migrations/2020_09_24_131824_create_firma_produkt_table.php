@@ -32,7 +32,7 @@ class CreateFirmaProduktTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('set null');
 
-            $table->unique(['firma_id','produkt_id']);
+            $table->unique(['firma_id', 'produkt_id']);
         });
     }
 

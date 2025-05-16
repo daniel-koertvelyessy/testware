@@ -39,13 +39,13 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
-//        HandleCors::class,
+        //        HandleCors::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-//        \App\Http\Middleware\SessionExpired::class,
+        //        \App\Http\Middleware\SessionExpired::class,
     ];
 
     /**
@@ -58,7 +58,7 @@ class Kernel extends HttpKernel
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-             AuthenticateSession::class,
+            AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,

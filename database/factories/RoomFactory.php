@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Room::class, function (Faker $faker) {
     return [
-        'r_label' => substr('rm-' . rand(100, 200), 0, 10),
+        'r_label' => substr('rm-'.rand(100, 200), 0, 10),
         'r_name' => $faker->slug(1),
         'r_description' => $faker->paragraph(5),
         'room_type_id' => rand(1, 3),

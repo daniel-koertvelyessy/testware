@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\User;
 use Artisan;
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 
 class testwareUpdateCommand extends Command
 {
@@ -40,25 +39,25 @@ class testwareUpdateCommand extends Command
      */
     public function handle()
     {
-      //  $this->execPrint("git pull https://user:password@bitbucket.org/user/repo.git master");
-        $update_git = $this->execPrint("git status");
+        //  $this->execPrint("git pull https://user:password@bitbucket.org/user/repo.git master");
+        $update_git = $this->execPrint('git status');
         $output = '';
-        Artisan::call('migrate',[],$output);
+        Artisan::call('migrate', [], $output);
         $this->info(Artisan::output());
+
         return $update_git;
     }
 
-    private function execPrint($command) {
-        $result = array();
+    private function execPrint($command)
+    {
+        $result = [];
         exec($command, $result);
-        $res = ("<pre>");
+        $res = ('<pre>');
         foreach ($result as $line) {
-            $res .=($line . "\n");
+            $res .= ($line."\n");
         }
-        $res .=("</pre>");
+        $res .= ('</pre>');
+
         return $res;
     }
-
-
-
 }

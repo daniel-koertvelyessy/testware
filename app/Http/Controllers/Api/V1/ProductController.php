@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Equipment;
-use App\EquipmentQualifiedUser;
 use App\Firma;
 use App\FirmaProdukt;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\products\Product as ProductResource;
 use App\Http\Resources\products\ProductFull as ProductFullResource;
-use App\Http\Resources\products\ProductShow as ProductShowResource;
 use App\ProductQualifiedUser;
 use App\Produkt;
 use App\ProduktKategorie;
@@ -24,12 +21,10 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -41,6 +36,7 @@ class ProductController extends Controller
         if ($request->input('per_page')) {
             return ProductResource::collection(Produkt::with('ProduktKategorie', 'ProduktState', 'ProduktParam', 'ProduktAnforderung', 'firma', 'Equipment', 'ControlProdukt')->paginate($request->input('per_page')));
         }
+
         return ProductResource::collection(Produkt::with('ProduktKategorie', 'ProduktState', 'ProduktParam', 'ProduktAnforderung', 'firma', 'Equipment', 'ControlProdukt')->get());
         //
     }
@@ -48,7 +44,6 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
      *
      * @return AnonymousResourceCollection
      */
@@ -57,12 +52,13 @@ class ProductController extends Controller
         if ($request->input('per_page')) {
             return ProductFullResource::collection(Produkt::with('ProduktKategorie', 'ProduktState', 'ProduktParam', 'ProduktAnforderung', 'firma', 'Equipment', 'ControlProdukt')->paginate($request->input('per_page')));
         }
+
         return ProductFullResource::collection(Produkt::with('ProduktKategorie', 'ProduktState', 'ProduktParam', 'ProduktAnforderung', 'firma', 'Equipment', 'ControlProdukt')->get());
     }
 
     public function storemany(Request $request)
     {
-        $jsondata = (object)$request->json()->all();
+        $jsondata = (object) $request->json()->all();
         if (isset($jsondata->label)) {
             return $this->store($request);
         } else {
@@ -75,9 +71,10 @@ class ProductController extends Controller
                 /**
                  *    label is a required field. Skipp this dataset
                  */
-                if (!isset($data['label'])) {
+                if (! isset($data['label'])) {
                     $skippedObjectIdList[] = ['error' => 'no required items found in given dataset (missing item [label])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -100,13 +97,15 @@ class ProductController extends Controller
                         $produkt_kategorie_id = $data['produkt_kategorie_id'];
                         $produkt_kategorie_id_list[] = ['produkt_kategorie_id' => $produkt_kategorie_id];
                     } else {
-                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [produkt_kategorie_id])'];
+                        $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (invalid item [produkt_kategorie_id])'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
-                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [category])'];
+                    $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (missing item [category])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -129,23 +128,24 @@ class ProductController extends Controller
                         $produkt_state_id = $data['produkt_state_id'];
                         $produkt_state_id_list[] = ['produkt_state_id' => $produkt_state_id];
                     } else {
-                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [produkt_state_id])'];
+                        $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (invalid item [produkt_state_id])'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
-                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [category])'];
+                    $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (missing item [category])'];
                     $countSkipped++;
+
                     continue;
                 }
 
-
-                if ($this->checkProductExists($data['number'])){
-                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['number'] . ' dataset already existent in database'];
+                if ($this->checkProductExists($data['number'])) {
+                    $skippedObjectIdList[] = ['error' => 'skipp '.$data['number'].' dataset already existent in database'];
                     $countSkipped++;
+
                     continue;
                 }
-
 
                 /**
                  *  Check if given product exists in database and decide to
@@ -160,7 +160,7 @@ class ProductController extends Controller
                     $updateDataset = true;
                     $countUpdate++;
                 } else {
-                    $product = new Produkt();
+                    $product = new Produkt;
                     $updateDataset = false;
                 }
 
@@ -174,25 +174,26 @@ class ProductController extends Controller
 
                 if ($product->save()) {
                     $msg = $updateDataset ? 'updated' : 'new';
-                    Log::info($msg . ' product ' . $data['label'] . ' via API/V1');
+                    Log::info($msg.' product '.$data['label'].' via API/V1');
                 } else {
-                    Log::error('Faild to add/update product ' . $data['label']);
+                    Log::error('Faild to add/update product '.$data['label']);
                 }
 
                 $idList[] = [
-                    'product' => $product->id
+                    'product' => $product->id,
                 ];
 
             }
+
             return response()->json([
                 'updated_objects' => $countUpdate,
                 'skipped_objects' => [
-                    'total'   => $countSkipped,
-                    'id_list' => $skippedObjectIdList
+                    'total' => $countSkipped,
+                    'id_list' => $skippedObjectIdList,
                 ],
-                'new_objects'     => [
-                    'total'      => $countNew,
-                    'product_id' => $idList
+                'new_objects' => [
+                    'total' => $countNew,
+                    'product_id' => $idList,
                 ],
             ]);
         }
@@ -202,7 +203,6 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return ProductResource|JsonResponse
      */
@@ -210,29 +210,29 @@ class ProductController extends Controller
     {
 
         dd($request->number);
-        if ($this->checkProductExists($request->number))
+        if ($this->checkProductExists($request->number)) {
             return response()->json([
-                'error'=>'',
-                'product' => new ProductResource(Produkt::where('prod_nummer',$request->number)->first())
+                'error' => '',
+                'product' => new ProductResource(Produkt::where('prod_nummer', $request->number)->first()),
             ], 422);
-
+        }
 
         $request->validate([
-            'label'          => 'required',
-            'number'         => 'required',
-            'active'         => 'required',
-            'uid'            => '',
-            'name'           => '',
-            'description'    => '',
-            'category_id'    => 'exclude_unless:category.label,true|required',
+            'label' => 'required',
+            'number' => 'required',
+            'active' => 'required',
+            'uid' => '',
+            'name' => '',
+            'description' => '',
+            'category_id' => 'exclude_unless:category.label,true|required',
             'category.label' => 'exclude_unless:category_id,true|required',
-            'status_id'      => 'exclude_unless:status.label,true|required',
-            'status.label'   => 'exclude_unless:status_id,true|required',
+            'status_id' => 'exclude_unless:status.label,true|required',
+            'status.label' => 'exclude_unless:status_id,true|required',
         ]);
 
         $error = false;
 
-        $product = new Produkt();
+        $product = new Produkt;
 
         $product->prod_label = $request->label;
         $product->prod_name = $request->name;
@@ -245,9 +245,11 @@ class ProductController extends Controller
             $category_id = (new ProduktKategorie)->apiAdd($request->category);
         } elseif (isset($request->category_id)) {
             $category_id = (new ProduktKategorie)->apiCheck($request->category_id);
-            if ($category_id === 0) $error['error'] = [
-                'category' => 'Referenced category could not be found'
-            ];
+            if ($category_id === 0) {
+                $error['error'] = [
+                    'category' => 'Referenced category could not be found',
+                ];
+            }
         } else {
             $category_id = 0;
         }
@@ -259,22 +261,26 @@ class ProductController extends Controller
                 $status_id = (new ProduktState)->apiAdd($request->status);
             } else {
                 $error['error'] = [
-                    'status' => 'No data was submitted for product status. Object expected.'
+                    'status' => 'No data was submitted for product status. Object expected.',
                 ];
                 $status_id = 0;
             }
         } elseif (isset($request->status_id)) {
             $status_id = (new ProduktKategorie)->apiCheck($request->status_id);
-            if ($status_id === 0) $error['error'] = [
-                'status' => 'Referenced product state could not be found'
-            ];
+            if ($status_id === 0) {
+                $error['error'] = [
+                    'status' => 'Referenced product state could not be found',
+                ];
+            }
         } else {
             $status_id = 0;
         }
 
         $product->produkt_state_id = $status_id;
 
-        if ($error) return response()->json($error, 422);
+        if ($error) {
+            return response()->json($error, 422);
+        }
 
         $product->save();
 
@@ -284,13 +290,8 @@ class ProductController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  Produkt $product
-     *
-     * @return ProductResource
      */
-    public function show(Produkt $product)
-    : ProductResource
+    public function show(Produkt $product): ProductResource
     {
         return new ProductResource($product);
     }
@@ -299,9 +300,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *a
      *
-     * @param  Request $request
-     * @param  int     $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -312,29 +311,25 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Produkt $produkt
      *
-     * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Produkt $produkt)
-    : JsonResponse
+    public function destroy(Produkt $produkt): JsonResponse
     {
         $produkt->delete();
+
         return response()->json([
-            'status' => 'product deleted'
+            'status' => 'product deleted',
         ]);
     }
 
     /**
      * Bind a company to a given product.
      *
-     * @param  Request $request
      *
      * @return ProductResource|JsonResponse
      */
-    public function addCompany(Request $request)
-    : JsonResponse
+    public function addCompany(Request $request): JsonResponse
     {
         dd($request->product);
 
@@ -348,7 +343,7 @@ class ProductController extends Controller
         if (isset($request->ckAddNewAddress)) {
 
             $this->validateAdresse();
-            $addresse = new Adresse();
+            $addresse = new Adresse;
             $addresse->ad_label = $request->ad_label;
             $addresse->ad_anschrift_strasse = $request->ad_anschrift_strasse;
             $addresse->ad_anschrift_plz = $request->ad_anschrift_plz;
@@ -368,9 +363,9 @@ class ProductController extends Controller
             $st['firma'][] = 'Neue Firma anlegen';
             //            $firma_id = 59;
             if ($address_id !== false) {
-                $st['firma'][] = '$address_id -> ' . $address_id;
+                $st['firma'][] = '$address_id -> '.$address_id;
                 $this->validateFirma();
-                $fa = new Firma();
+                $fa = new Firma;
                 $fa->fa_label = $request->fa_label;
                 $fa->fa_name = $request->fa_name;
                 $fa->fa_kreditor_nr = $request->fa_kreditor_nr;
@@ -380,13 +375,13 @@ class ProductController extends Controller
                 $fa->save();
                 $firma_id = $fa->id;
             } else {
-                $st['firma'][] = '$address_id wird übernommen ->' . $request->adress_id;
+                $st['firma'][] = '$address_id wird übernommen ->'.$request->adress_id;
                 $firma = Firma::create($this->validateFirma());
                 $firma_id = $firma->id;
             }
 
             $st['FirmaProdukt'][] = 'Baue neues FirmaProdukt aus neuer Firma';
-            $faprod = new FirmaProdukt();
+            $faprod = new FirmaProdukt;
             $faprod->firma_id = $firma_id;
             $faprod->produkt_id = $request->produkt_id;
             $faprod->save();
@@ -400,7 +395,7 @@ class ProductController extends Controller
                 $st['contact'] = 'Baue neuen Kontakt mit neuer Firma';
                 $this->validateContact();
 
-                $con = new Contact();
+                $con = new Contact;
 
                 $con->con_label = $request->con_label;
                 $con->con_vorname = $request->con_vorname;
@@ -416,17 +411,15 @@ class ProductController extends Controller
             }
         }
 
-
         FirmaProdukt::updateOrInsert([
-            'firma_id'   => $company_id,
-            'produkt_id' => $product_id
+            'firma_id' => $company_id,
+            'produkt_id' => $product_id,
         ]);
 
         return response()->json([
-            'status' => __('Das Produkt wurde der Firma :name zugeordnet!', ['name' => $request->fa_name])
+            'status' => __('Das Produkt wurde der Firma :name zugeordnet!', ['name' => $request->fa_name]),
         ]);
     }
-
 
     /**
      * Set an employee/user as qualified for a product.
@@ -447,24 +440,24 @@ class ProductController extends Controller
      *       }
      *   }
      *
-     * @param  Request $request
      *
      * @return ProductResource|JsonResponse
      */
-    public function addQualifiedEmployee(Request $request)
-    : JsonResponse
+    public function addQualifiedEmployee(Request $request): JsonResponse
     {
 
         /**
          *   Check if an equivalent dataset exists
          */
         if ((new ProductQualifiedUser)->checkEntry([
-            'product_label'  => $request->product_label,
+            'product_label' => $request->product_label,
             'product_number' => $request->product_number,
-            'qualified_at'   => $request->qualified_at,
-            'company'        => $request->company,
-            'employee'       => $request->employee,
-        ])) return response()->json(__('Der Eintrag existiert bereits. Vorgang wird abgebrochen.'), 422);
+            'qualified_at' => $request->qualified_at,
+            'company' => $request->company,
+            'employee' => $request->employee,
+        ])) {
+            return response()->json(__('Der Eintrag existiert bereits. Vorgang wird abgebrochen.'), 422);
+        }
 
         $msg = '';
         $productFound = false;
@@ -490,11 +483,11 @@ class ProductController extends Controller
             $getEmployee = Profile::where([
                 [
                     'ma_name',
-                    $request->employee['last_name']
+                    $request->employee['last_name'],
                 ],
                 [
                     'ma_vorname',
-                    $request->employee['first_name']
+                    $request->employee['first_name'],
                 ],
             ]);
 
@@ -508,7 +501,6 @@ class ProductController extends Controller
         } else {
             $msg = __('Es wurde kein Mitarbeiter übergeben!');
         }
-
 
         /**
          * Check if an employee was submitted and if it exists in DB
@@ -530,16 +522,17 @@ class ProductController extends Controller
         if ($productFound && $employeeFound && $companyFound) {
             if ((new ProductQualifiedUser)->addApi([
                 'product_qualified_firma' => $company_id,
-                'product_qualified_date'  => $request->qualified_at,
-                'user_id'                 => $employee_id,
-                'produkt_id'              => $product_id,
+                'product_qualified_date' => $request->qualified_at,
+                'user_id' => $employee_id,
+                'produkt_id' => $product_id,
             ])) {
-                $msg .= $request->employee['last_name'] . ' ' . __('wurde als befähigte Person hinzugefügt.', ['name' => $request->employee['last_name']]);
+                $msg .= $request->employee['last_name'].' '.__('wurde als befähigte Person hinzugefügt.', ['name' => $request->employee['last_name']]);
                 Log::info($msg);
             } else {
                 $msg .= __('Es gab einen Fehler bei der Verarbeitung');
                 Log::error(__('API Fehler beim Anlegen ProductQualifiedUser '));
             }
+
             return response()->json(['status' => $msg]);
         } else {
             return response()->json($msg, 422);
@@ -548,6 +541,6 @@ class ProductController extends Controller
 
     protected function checkProductExists(string $product_number)
     {
-        return (Produkt::where('prod_nummer', $product_number)->count() > 0) ;
+        return Produkt::where('prod_nummer', $product_number)->count() > 0;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Adresse;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -27,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-//    protected $redirectTo = route('location.index');
+    //    protected $redirectTo = route('location.index');
     protected $redirectTo;
 
     /**
@@ -42,8 +41,9 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        $path = (Adresse::all()->count()>0) ? route('dashboard') : route('installer.company');
-        return  $this->redirectTo = $path;
-//        return $this->redirectTo = route($for[auth()->user()->role]);
+        $path = (Adresse::all()->count() > 0) ? route('dashboard') : route('installer.company');
+
+        return $this->redirectTo = $path;
+        //        return $this->redirectTo = route($for[auth()->user()->role]);
     }
 }

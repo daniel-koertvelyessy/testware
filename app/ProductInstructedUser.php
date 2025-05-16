@@ -21,15 +21,16 @@ class ProductInstructedUser extends Model
         'produkt_id',
     ];
 
-
     public static function boot(): void
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 

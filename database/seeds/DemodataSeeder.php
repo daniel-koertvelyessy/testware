@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use InitialValueSeeder;
-use StorageSeeder;
 
 class DemodataSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class DemodataSeeder extends Seeder
             \UsersTableSeeder::class,
             \FirmaSeeder::class,
             LocationsSeeder::class,
-            \EquipmentSeeder::class
+            \EquipmentSeeder::class,
         ]);
     }
 }

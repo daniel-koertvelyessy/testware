@@ -31,7 +31,6 @@ class ControlDocController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      *
      * @return Response
      */
@@ -43,7 +42,6 @@ class ControlDocController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  ControlDoc  $controlDoc
      *
      * @return Response
      */
@@ -55,7 +53,6 @@ class ControlDocController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  ControlDoc  $controlDoc
      *
      * @return Response
      */
@@ -67,8 +64,6 @@ class ControlDocController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  ControlDoc  $controlDoc
      *
      * @return Response
      */
@@ -80,7 +75,6 @@ class ControlDocController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  ControlDoc  $controlDoc
      *
      * @return Response
      */

@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\AddressType;
 use App\Adresse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\locations\EquipmentShow as LocationShowResource;
+use App\Http\Resources\locations\Location as LocationResource;
+use App\Http\Resources\locations\LocationFull as LocationFullResource;
 use App\Location;
 use App\Profile;
 use App\Storage;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
-use App\Http\Resources\AddressFull;
-use App\Http\Resources\locations\Location as LocationResource;
-use App\Http\Resources\locations\LocationFull as LocationFullResource;
-use App\Http\Resources\locations\EquipmentShow as LocationShowResource;
 use Illuminate\Support\Str;
 
 class LocationController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -38,6 +33,7 @@ class LocationController extends Controller
         if ($request->input('per_page')) {
             return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')->paginate($request->input('per_page')));
         }
+
         return LocationResource::collection(Location::with('Profile', 'Adresse', 'Building')->get());
     }
 
@@ -51,12 +47,13 @@ class LocationController extends Controller
         if ($request->input('per_page')) {
             return LocationFullResource::collection(Location::with('Profile', 'Adresse', 'Building')->paginate($request->input('per_page')));
         }
+
         return LocationFullResource::collection(Location::with('Adresse', 'Profile')->get());
     }
 
     public function storemany(Request $request)
     {
-        $jsondata = (object)$request->json()->all();
+        $jsondata = (object) $request->json()->all();
         if (isset($jsondata->label)) {
             return $this->store($request);
         } else {
@@ -69,9 +66,10 @@ class LocationController extends Controller
                 /**
                  *    label is a required field. Skipp this dataset
                  */
-                if (!isset($data['label'])) {
+                if (! isset($data['label'])) {
                     $skippedObjectIdList[] = ['error' => 'no required items found in given dataset (missing item [label])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -93,13 +91,15 @@ class LocationController extends Controller
                         $address_id = $data['address_id'];
                         $address_id_list[] = ['address_id' => $address_id];
                     } else {
-                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [address_id])'];
+                        $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (invalid item [address_id])'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
-                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [address])'];
+                    $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (missing item [address])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -120,13 +120,15 @@ class LocationController extends Controller
                         $profile = Profile::find($data['profile_id']);
                         $profile_id = $profile->id;
                     } else {
-                        $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (invalid item [profile_id])'];
+                        $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (invalid item [profile_id])'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
-                    $skippedObjectIdList[] = ['error' => 'skipp ' . $data['name'] . ' dataset (missing item [manager/profile_id])'];
+                    $skippedObjectIdList[] = ['error' => 'skipp '.$data['name'].' dataset (missing item [manager/profile_id])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -143,7 +145,7 @@ class LocationController extends Controller
                     $updateDataset = true;
                     $countUpdate++;
                 } else {
-                    $location = new Location();
+                    $location = new Location;
                     $updateDataset = false;
                 }
 
@@ -165,30 +167,29 @@ class LocationController extends Controller
                 $location->save();
 
                 $idList[] = [
-                    'location' => $location->id
+                    'location' => $location->id,
                 ];
 
             }
+
             return response()->json([
                 'updated_objects' => $countUpdate,
                 'skipped_objects' => [
-                    'total'   => $countSkipped,
-                    'id_list' => $skippedObjectIdList
+                    'total' => $countSkipped,
+                    'id_list' => $skippedObjectIdList,
                 ],
-                'new_objects'     => [
-                    'total'       => $countNew,
-                    'location_id' => $idList
+                'new_objects' => [
+                    'total' => $countNew,
+                    'location_id' => $idList,
                 ],
             ]);
         }
 
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return array
      */
@@ -198,10 +199,10 @@ class LocationController extends Controller
         $adresse_id = (new Adresse)->addLocationAddress($request);
         $profile_id = (new Profile)->addProfile($request);
 
-        $storage_id = (!isset($request->uid)) ? Str::uuid() : $request->uid;
+        $storage_id = (! isset($request->uid)) ? Str::uuid() : $request->uid;
         (new Storage)->add($storage_id, $request->label, 'locations');
 
-        $location = new Location();
+        $location = new Location;
         $location->l_label = $request->label;
         $location->l_name = $request->name;
         $location->l_beschreibung = $request->description;
@@ -214,32 +215,27 @@ class LocationController extends Controller
         $profile_id = ($profile_id === null) ? 'referenced id not found' : $profile_id;
 
         return [
-            'status'   => true,
-            'id'       => $location->id,
-            'uid'      => $storage_id,
-            'address'  => $adresse_id,
+            'status' => true,
+            'id' => $location->id,
+            'uid' => $storage_id,
+            'address' => $adresse_id,
             'employee' => $profile_id,
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewLocation()
-    : array
+    public function validateNewLocation(): array
     {
         return request()->validate([
-            'label'       => 'bail|unique:locations,l_label|min:2|max:20|required',
-            'name'        => '',
+            'label' => 'bail|unique:locations,l_label|min:2|max:20|required',
+            'name' => '',
             'description' => '',
-            'uid'         => 'unique:locations,storage_id',
+            'uid' => 'unique:locations,storage_id',
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Location $location
      *
      * @return LocationShowResource
      */
@@ -251,8 +247,6 @@ class LocationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Location $location
-     * @param  Request  $request
      *
      * @return LocationResource
      */
@@ -269,16 +263,17 @@ class LocationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Location $location
      *
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function destroy(Location $location)
     {
         $location->delete();
+
         return response()->json([
-            'status' => 'location deleted'
+            'status' => 'location deleted',
         ]);
     }
 }

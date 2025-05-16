@@ -20,6 +20,7 @@ class RoomType extends Model
         $this->rt_name = (isset($request->type['name'])) ? $request->type['name'] : null;
         $this->rt_description = (isset($request->type['description'])) ? $request->type['description'] : null;
         $this->save();
+
         return $this->id;
     }
 
@@ -29,6 +30,7 @@ class RoomType extends Model
         $this->rt_name = (isset($data['name'])) ? $data['name'] : null;
         $this->rt_description = (isset($data['description'])) ? $data['description'] : null;
         $this->save();
+
         return $this->id;
     }
 }

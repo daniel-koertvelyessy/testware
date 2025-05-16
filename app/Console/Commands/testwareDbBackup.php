@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class testwareDbBackup extends Command
 {
@@ -21,6 +21,7 @@ class testwareDbBackup extends Command
      * @var string
      */
     protected $description = 'Make a dump of the postgreSQL databse and store it';
+
     /**
      * @var Process
      */
@@ -44,8 +45,9 @@ class testwareDbBackup extends Command
      */
     public function handle()
     {
-        if (!is_dir(storage_path('app/backups')))
+        if (! is_dir(storage_path('app/backups'))) {
             mkdir(storage_path('app/backups'));
+        }
         try {
             $this->info('The backup has been started');
             $this->process->mustRun();

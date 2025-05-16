@@ -7,13 +7,9 @@ use QRcode;
 
 class Qrcodes extends Model
 {
-
-    static function makeQRCode($size,$value)
+    public static function makeQRCode($size, $value)
     {
         return QrCode::size($size)->generate($value);
 
     }
-
-
-
 }

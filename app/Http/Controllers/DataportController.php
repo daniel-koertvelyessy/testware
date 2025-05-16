@@ -11,8 +11,6 @@ use Illuminate\Http\Request;
 
 class DataportController extends Controller
 {
-
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,7 +23,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_storage_" . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_storage_'.time().'.json');
     }
 
     public function importLocationJSON(Request $request)
@@ -36,10 +34,10 @@ class DataportController extends Controller
             $file = $request->file('importDataPortFile');
 
             $request->validate([
-                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048' // size:2048 => 2048kB
+                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048', // size:2048 => 2048kB
             ]);
 
-            $json = file_get_contents($file->getPath() . '\\' . $file->getFilename(), true);
+            $json = file_get_contents($file->getPath().'\\'.$file->getFilename(), true);
             $jsonObjekt = json_decode($json);
             $duplikat = 0;
             $fehler = 0;
@@ -53,14 +51,14 @@ class DataportController extends Controller
                     $flagNoObjekt = Location::where('l_label', $jo->l_label)->count() === 0;
 
                     $location = [
-                        'l_name'    => $jo->l_name,
+                        'l_name' => $jo->l_name,
                         'l_beschreibung' => $jo->l_beschreibung,
-                        'profile_id'     => $jo->profile_id,
-                        'adresse_id'     => $jo->adresse_id,
-                        'storage_id'    => $jo->storage_id,
+                        'profile_id' => $jo->profile_id,
+                        'adresse_id' => $jo->adresse_id,
+                        'storage_id' => $jo->storage_id,
                     ];
 
-                    if ($request->handleImportData === 'append' && !$flagNoObjekt) {
+                    if ($request->handleImportData === 'append' && ! $flagNoObjekt) {
                         $newName = $this->makeCopyName($jo->l_label);
                         if (Location::where('l_label', $newName)->count() === 0) {
                             $location['l_label'] = $this->makeCopyName($jo->l_label);
@@ -75,7 +73,9 @@ class DataportController extends Controller
                             $fehler++;
                             $fehlerItem[] = $jo->l_label;
                         }
-                        if ($mkObjekt) $this->addLocation($location);
+                        if ($mkObjekt) {
+                            $this->addLocation($location);
+                        }
                     }
 
                     if ($request->handleImportData === 'append' && $flagNoObjekt) {
@@ -102,6 +102,7 @@ class DataportController extends Controller
             $res = '<p class="text-warning">Keine Datei zum Auswerten gefunden!</p>';
         }
         $request->session()->flash('status', $res);
+
         return redirect()->back();
     }
 
@@ -110,12 +111,13 @@ class DataportController extends Controller
         $neuName = '';
         switch (true) {
             case strlen($name) <= 20 && strlen($name) > 14:
-                $neuName = substr($name, 0, 13) . '_1';
+                $neuName = substr($name, 0, 13).'_1';
                 break;
             case strlen($name) <= 14:
-                $neuName = $name . '_1';
+                $neuName = $name.'_1';
                 break;
         }
+
         return $neuName;
     }
 
@@ -130,40 +132,44 @@ class DataportController extends Controller
         $res = '<ul class="list-group">
                       <li class="list-group-item d-flex justify-content-between align-items-center">
                         Insgesamt  Objekte zum Import übertragen
-                        <span class="badge badge-primary badge-pill">' . $numObjekte . '</span>
+                        <span class="badge badge-primary badge-pill">'.$numObjekte.'</span>
                       </li>';
 
-        if ($neuObjekt > 0)
+        if ($neuObjekt > 0) {
             $res .= '<li class="list-group-item d-flex justify-content-between align-items-center">
                         Neu angelegt
-                        <span class="badge badge-success badge-pill">' . $neuObjekt . '</span>
+                        <span class="badge badge-success badge-pill">'.$neuObjekt.'</span>
                       </li>';
+        }
 
-        if ($flagNoObjekt)
+        if ($flagNoObjekt) {
             $res .= '  <li class="list-group-item d-flex justify-content-between align-items-center">
                         Es wurden keine passenden Objektdaten gefunden!
                         <span class="badge badge-light badge-pill">&times</span>
                       </li>';
+        }
 
-        if ($duplikat > 0)
+        if ($duplikat > 0) {
             $res .= '<li class="list-group-item d-flex justify-content-between align-items-center">
                         Übersprungene Duplikate
-                        <span class="badge badge-primary badge-pill">' . $duplikat . '</span>
+                        <span class="badge badge-primary badge-pill">'.$duplikat.'</span>
                       </li>';
+        }
 
         if ($fehler > 0) {
             $res .= '<li class="list-group-item d-flex justify-content-between align-items-center">
                         Fehler beim Einfügen in Datenbank
-                        <span class="badge badge-danger badge-pill">' . $fehler . '</span>
+                        <span class="badge badge-danger badge-pill">'.$fehler.'</span>
                         <p style="flex:none; display: block!important;flex-direction: column;">';
             foreach ($fehlerItem as $item) {
-                $res .= '<span>Kürzel => ' . $item . '</span><br>';
+                $res .= '<span>Kürzel => '.$item.'</span><br>';
             }
             $res .= '        </p>
                       </li>';
         }
 
         $res .= '</ul>';
+
         return $res;
     }
 
@@ -174,7 +180,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_gebaude_" . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_gebaude_'.time().'.json');
     }
 
     public function importBuildingJSON(Request $request)
@@ -183,10 +189,10 @@ class DataportController extends Controller
         if ($request->hasFile('importDataPortFile')) {
             $file = $request->file('importDataPortFile');
             $request->validate([
-                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048' // size:2048 => 2048kB
+                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048', // size:2048 => 2048kB
             ]);
 
-            $json = file_get_contents($file->getPath() . '\\' . $file->getFilename(), true);
+            $json = file_get_contents($file->getPath().'\\'.$file->getFilename(), true);
             $jsonObjekt = json_decode($json);
 
             $duplikat = 0;
@@ -201,17 +207,17 @@ class DataportController extends Controller
                     $flagNoObjekt = Building::where('b_label', $jo->b_label)->count() === 0;
 
                     $objekt = [
-                        'b_name_ort'       => $jo->b_name_ort,
-                        'b_name'      => $jo->b_name,
-                        'b_description'      => $jo->b_description,
-                        'b_we_has'         => $jo->b_we_has,
-                        'b_we_name'        => $jo->b_we_name,
-                        'location_id'      => $jo->location_id,
+                        'b_name_ort' => $jo->b_name_ort,
+                        'b_name' => $jo->b_name,
+                        'b_description' => $jo->b_description,
+                        'b_we_has' => $jo->b_we_has,
+                        'b_we_name' => $jo->b_we_name,
+                        'location_id' => $jo->location_id,
                         'building_type_id' => $jo->building_type_id,
-                        'storage_id'      => $jo->storage_id,
+                        'storage_id' => $jo->storage_id,
                     ];
 
-                    if ($request->handleImportData === 'append' && !$flagNoObjekt) {
+                    if ($request->handleImportData === 'append' && ! $flagNoObjekt) {
                         $newName = $this->makeCopyName($jo->b_label);
                         if (Building::where('b_label', $newName)->count() === 0) {
                             $objekt['b_label'] = $this->makeCopyName($jo->b_label);
@@ -226,7 +232,9 @@ class DataportController extends Controller
                             $fehler++;
                             $fehlerItem[] = $jo->b_label;
                         }
-                        if ($mkObjekt) $this->addBuilding($objekt);
+                        if ($mkObjekt) {
+                            $this->addBuilding($objekt);
+                        }
                     }
 
                     if ($request->handleImportData === 'append' && $flagNoObjekt) {
@@ -256,6 +264,7 @@ class DataportController extends Controller
             $res = '<p class="text-warning">Keine Datei zum Auswerten gefunden!</p>';
         }
         $request->session()->flash('status', $res);
+
         return redirect()->back();
     }
 
@@ -271,7 +280,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_raume_" . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_raume_'.time().'.json');
     }
 
     public function importRoomJSON(Request $request)
@@ -279,10 +288,10 @@ class DataportController extends Controller
         if ($request->hasFile('importDataPortFile')) {
             $file = $request->file('importDataPortFile');
             $request->validate([
-                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048' // size:2048 => 2048kB
+                'importDataPortFile' => 'required|file|mimes:json,xml|max:2048', // size:2048 => 2048kB
             ]);
 
-            $json = file_get_contents($file->getPath() . '\\' . $file->getFilename(), true);
+            $json = file_get_contents($file->getPath().'\\'.$file->getFilename(), true);
             $jsonObjekt = json_decode($json);
 
             $duplikat = 0;
@@ -304,7 +313,7 @@ class DataportController extends Controller
                         'room_type_id' => $jo->room_type_id,
                     ];
 
-                    if ($request->handleImportData === 'append' && !$flagNoObjekt) {
+                    if ($request->handleImportData === 'append' && ! $flagNoObjekt) {
                         $newName = $this->makeCopyName($jo->r_label);
                         if (Room::where('r_label', $newName)->count() === 0) {
                             $objekt['r_label'] = $this->makeCopyName($jo->r_label);
@@ -319,7 +328,9 @@ class DataportController extends Controller
                             $fehler++;
                             $fehlerItem[] = $jo->r_label;
                         }
-                        if ($mkObjekt) $this->addRoom($objekt);
+                        if ($mkObjekt) {
+                            $this->addRoom($objekt);
+                        }
                     }
 
                     if ($request->handleImportData === 'append' && $flagNoObjekt) {
@@ -349,6 +360,7 @@ class DataportController extends Controller
             $res = '<p class="text-warning">Keine Datei zum Auswerten gefunden!</p>';
         }
         $request->session()->flash('status', $res);
+
         return redirect()->back();
     }
 
@@ -359,7 +371,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_stellplatzliste_" . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_stellplatzliste_'.time().'.json');
     }
 
     public function importStellplatzJSON(Request $request)
@@ -367,10 +379,10 @@ class DataportController extends Controller
         if ($request->hasFile('importDataPortFile')) {
             $file = $request->file('importDataPortFile');
             $request->validate([
-                'importDataPortFile' => 'required|file|mimes:json|max:2048' // size:2048 => 2048kB
+                'importDataPortFile' => 'required|file|mimes:json|max:2048', // size:2048 => 2048kB
             ]);
 
-            $json = file_get_contents($file->getPath() . '\\' . $file->getFilename(), true);
+            $json = file_get_contents($file->getPath().'\\'.$file->getFilename(), true);
             $jsonObjekt = json_decode($json);
 
             $duplikat = 0;
@@ -392,7 +404,7 @@ class DataportController extends Controller
                         'stellplatz_typ_id' => $jo->stellplatz_typ_id,
                     ];
 
-                    if ($request->handleImportData === 'append' && !$flagNoObjekt) {
+                    if ($request->handleImportData === 'append' && ! $flagNoObjekt) {
                         $newName = $this->makeCopyName($jo->sp_label);
                         if (Stellplatz::where('sp_label', $newName)->count() === 0) {
                             $objekt['sp_label'] = $this->makeCopyName($jo->sp_label);
@@ -407,7 +419,9 @@ class DataportController extends Controller
                             $fehler++;
                             $fehlerItem[] = $jo->sp_label;
                         }
-                        if ($mkObjekt) $this->addStellplatz($objekt);
+                        if ($mkObjekt) {
+                            $this->addStellplatz($objekt);
+                        }
                     }
 
                     if ($request->handleImportData === 'append' && $flagNoObjekt) {
@@ -437,6 +451,7 @@ class DataportController extends Controller
             $res = '<p class="text-warning">Keine Datei zum Auswerten gefunden!</p>';
         }
         $request->session()->flash('status', $res);
+
         return redirect()->back();
     }
 
@@ -452,7 +467,7 @@ class DataportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_produkte_" . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_produkte_'.time().'.json');
     }
 
     protected function addRoom($jo)

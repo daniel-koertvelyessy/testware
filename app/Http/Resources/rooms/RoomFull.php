@@ -3,7 +3,6 @@
 namespace App\Http\Resources\rooms;
 
 use App\Http\Resources\buildings\BuildingShort;
-use App\Http\Resources\buildings\ProductShort;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,15 +18,15 @@ class RoomFull extends JsonResource
     {
         return [
             'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
+            'created' => (string) $this->created_at,
+            'updated' => (string) $this->updated_at,
             'label' => $this->r_label,
             'uid' => $this->storage_id,
             'name' => $this->r_name,
             'description' => $this->r_description,
             'type' => new RoomTypeShort($this->RoomType),
             'building' => new BuildingShort($this->building),
-            'room_objects' => new RoomStats($this)
+            'room_objects' => new RoomStats($this),
         ];
     }
 }

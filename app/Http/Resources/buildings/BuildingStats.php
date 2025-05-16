@@ -6,16 +6,17 @@ use App\Room;
 use App\Stellplatz;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AddressShort as AdresseKurzResource;
 
-class BuildingStats extends JsonResource {
+class BuildingStats extends JsonResource
+{
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request) {
+    public function toArray($request)
+    {
 
         $roomCount = 0;
         $compartmentCount = 0;
@@ -28,9 +29,9 @@ class BuildingStats extends JsonResource {
         }
 
         return [
-            'rooms'        => $roomCount,
+            'rooms' => $roomCount,
             'compartments' => $compartmentCount,
-            'equipment'    => $this->countTotalEquipmentInBuilding()
+            'equipment' => $this->countTotalEquipmentInBuilding(),
         ];
     }
 }

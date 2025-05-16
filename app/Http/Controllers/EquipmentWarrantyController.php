@@ -8,13 +8,10 @@ use Illuminate\Http\Response;
 
 class EquipmentWarrantyController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
-
 
     /**
      * Display a listing of the resource.
@@ -39,7 +36,6 @@ class EquipmentWarrantyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      *
      * @return Response
      */
@@ -51,7 +47,6 @@ class EquipmentWarrantyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  EquipmentWarranty  $equipmentWarranty
      *
      * @return Response
      */
@@ -63,7 +58,6 @@ class EquipmentWarrantyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  EquipmentWarranty  $equipmentWarranty
      *
      * @return Response
      */
@@ -75,8 +69,6 @@ class EquipmentWarrantyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  EquipmentWarranty  $equipmentWarranty
      *
      * @return Response
      */
@@ -88,7 +80,6 @@ class EquipmentWarrantyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  EquipmentWarranty  $equipmentWarranty
      *
      * @return Response
      */

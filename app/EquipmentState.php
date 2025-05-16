@@ -9,14 +9,12 @@ use Kyslik\ColumnSortable\Sortable;
 
 class EquipmentState extends Model
 {
-    use Sortable, SoftDeletes;
+    use SoftDeletes, Sortable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function Equipment(): HasMany
     {
         return $this->hasMany(Equipment::class);
     }
-
-
 }

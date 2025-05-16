@@ -14,7 +14,6 @@ use App\EquipmentParam;
 use App\Firma;
 use App\FirmaProdukt;
 use App\Http\Services\Product\ProductService;
-use App\ProductInstructedUser;
 use App\Produkt;
 use App\ProduktAnforderung;
 use App\ProduktDoc;
@@ -31,7 +30,6 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -39,13 +37,12 @@ use Illuminate\View\View;
 
 class ProduktController extends Controller
 {
-
     protected $service;
 
     public function __construct()
     {
         $this->middleware('auth');
-        $this->service = new ProductService();
+        $this->service = new ProductService;
     }
 
     /**
@@ -56,9 +53,10 @@ class ProduktController extends Controller
     public function index()
     {
         $produktList = Produkt::with('ProduktKategorie', 'ProduktState', 'ProductQualifiedUser', 'ProduktAnforderung', 'ControlProdukt')->sortable()->paginate(10);
+
         return view('admin.produkt.index', [
             'produktList' => $produktList,
-            'isSysAdmin'  => Auth::user()->isSysAdmin()
+            'isSysAdmin' => Auth::user()->isSysAdmin(),
         ]);
     }
 
@@ -97,7 +95,6 @@ class ProduktController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Produkt  $produkt
      *
      * @return Application|Factory|Response|View
      */
@@ -107,15 +104,15 @@ class ProduktController extends Controller
         $this->service->deleteEmptyStorageDBItems($produkt);
 
         return view('admin.produkt.show', [
-            'instructedUserList'  => $this->service->getInstructedUserList($produkt),
-            'qualifiedUserList'   => $this->service->getProductQualifiedUserList($produkt),
-            'hasQualifiedUser'    => $this->service->hasQualifiedUsers($produkt),
+            'instructedUserList' => $this->service->getInstructedUserList($produkt),
+            'qualifiedUserList' => $this->service->getProductQualifiedUserList($produkt),
+            'hasQualifiedUser' => $this->service->hasQualifiedUsers($produkt),
             'hasExternalSupplier' => $this->service->hasExternalSupplier($produkt),
-            'requirementList'     => $this->service->getRequirementList($produkt),
-            'produkt'             => $produkt,
-            'labels'              => EquipmentLabel::all(),
-            'params'              => $produkt->ProduktParam,
-            'equipLists'          => $this->service->getChildEquipmentList($produkt)
+            'requirementList' => $this->service->getRequirementList($produkt),
+            'produkt' => $produkt,
+            'labels' => EquipmentLabel::all(),
+            'params' => $produkt->ProduktParam,
+            'equipLists' => $this->service->getChildEquipmentList($produkt),
         ]);
 
     }
@@ -123,15 +120,11 @@ class ProduktController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Produkt  $produkt
      * @param  ProduktParam ProduktParam
-     *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Produkt $produkt)
     {
-
 
         //        $this->authorize('isAdmin', Auth()->user());
         if (isset($request->control_product)) {
@@ -157,46 +150,43 @@ class ProduktController extends Controller
             }
         }
 
-
         $request->session()->flash('status', 'Das Produkt <strong>'.$produkt->prod_nummer.'</strong> wurde aktualisiert!');
+
         return redirect($produkt->path());
     }
 
-    /**
-     * @return array
-     */
     public function validateProdukt(): array
     {
         return request()->validate([
-            'prod_label'           => [
+            'prod_label' => [
                 'bail',
                 'min:2',
                 'max:20',
                 'required',
-                Rule::unique('produkts')->ignore(request('id'))
+                Rule::unique('produkts')->ignore(request('id')),
             ],
-            'prod_uuid'            => '',
-            'prod_name'            => '',
-            'prod_description'     => '',
-            'prod_nummer'          => [
+            'prod_uuid' => '',
+            'prod_name' => '',
+            'prod_description' => '',
+            'prod_nummer' => [
                 'bail',
                 'required',
                 'max:100',
-                Rule::unique('produkts')->ignore(request('id'))
+                Rule::unique('produkts')->ignore(request('id')),
             ],
-            'prod_active'          => '',
+            'prod_active' => '',
             'produkt_kategorie_id' => 'nullable',
-            'equipment_label_id'   => '',
-            'produkt_state_id'     => 'required',
+            'equipment_label_id' => '',
+            'produkt_state_id' => 'required',
         ]);
     }
 
     /**
      * Speichere neuen Produktstamm
      *
-     * @param  Request  $request
      *
      * @return Application|Response
+     *
      * @throws AuthorizationException
      */
     public function store(Request $request)
@@ -218,12 +208,13 @@ class ProduktController extends Controller
         }
 
         if (request()->has('control_product')) {
-            $controlProduct = new ControlProdukt();
+            $controlProduct = new ControlProdukt;
             $controlProduct->produkt_id = $produkt->id;
             $controlProduct->save();
         }
 
         $request->session()->flash('status', __('Das Produkt <strong>:label</strong> wurde angelegt!', ['label' => request('prod_nummer')]));
+
         return redirect($produkt->path());
     }
 
@@ -231,7 +222,7 @@ class ProduktController extends Controller
     {
 
         if (isset($request->produkt_kategorie_id) && $request->produkt_kategorie_id === 'new') {
-            $prodKat = new ProduktKategorie();
+            $prodKat = new ProduktKategorie;
             $prodKat->pk_label = $request->newProduktKategorie;
             $prodKat->save();
             $produkt_kategorie_id = $prodKat->id;
@@ -239,7 +230,7 @@ class ProduktController extends Controller
             $produkt_kategorie_id = $request->produkt_kategorie_id;
         }
         $this->validateProdukt();
-        $produkt = new Produkt();
+        $produkt = new Produkt;
         $produkt->prod_uuid = Str::uuid();
         $produkt->prod_label = $request->prod_label;
         $produkt->prod_name = $request->prod_name;
@@ -250,9 +241,8 @@ class ProduktController extends Controller
         $produkt->produkt_kategorie_id = $produkt_kategorie_id;
         $produkt->save();
 
-
         if (request()->has('control_product')) {
-            $controlProduct = new ControlProdukt();
+            $controlProduct = new ControlProdukt;
             $controlProduct->produkt_id = $produkt->id;
             $controlProduct->save();
         }
@@ -260,7 +250,7 @@ class ProduktController extends Controller
 
         if (is_array($request->anforderung_id)) {
             for ($i = 0; $i < count($request->anforderung_id); $i++) {
-                $prodAnfor = new ProduktAnforderung();
+                $prodAnfor = new ProduktAnforderung;
                 $prodAnfor->produkt_id = $produkt_id;
                 $prodAnfor->anforderung_id = $request->anforderung_id[$i];
                 $prodAnfor->save();
@@ -269,11 +259,11 @@ class ProduktController extends Controller
 
         if ($request->hasFile('prodDokumentFile')) {
 
-            $proDocFile = new ProduktDoc();
+            $proDocFile = new ProduktDoc;
             $file = $request->file('prodDokumentFile');
             $this->validateProduktDokument();
             $request->validate([
-                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg'
+                'prodDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg,gif,svg',
                 // size:2048 => 2048kB
             ]);
 
@@ -289,25 +279,20 @@ class ProduktController extends Controller
         return redirect()->route('equipment.create', ['produkt_id' => $produkt->id]);
     }
 
-    /**
-     * @return array
-     */
     public function validateProduktDokument(): array
     {
         return request()->validate([
-            'proddoc_label'       => 'bail|required|max:150',
-            'proddoc_name'        => 'max:100',
-            'proddoc_name_pfad'   => 'max:150',
-            'document_type_id'    => 'required',
-            'proddoc_description' => ''
+            'proddoc_label' => 'bail|required|max:150',
+            'proddoc_name' => 'max:100',
+            'proddoc_name_pfad' => 'max:150',
+            'document_type_id' => 'required',
+            'proddoc_description' => '',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Produkt  $produkt
-     * @param  Request  $request
      *
      * @return Application|Redirector|RedirectResponse
      */
@@ -316,29 +301,24 @@ class ProduktController extends Controller
 
         $produkt->delete();
         $request->session()->flash('status', __('Das Produkt wurde gelöscht!'));
+
         return redirect(route('produkt.index'));
     }
 
     /**
      * Copy the specified resource including .
      *
-     * @param  Produkt  $produkt
-     * @param  Request  $request
      *
      * @return Application|Redirector|RedirectResponse
      */
-    public function copy(Produkt $produkt, Request $request)
-    {
-
-    }
-
+    public function copy(Produkt $produkt, Request $request) {}
 
     /**
      * Bind a company to a given product.
      *
-     * @param  Request  $request
      *
      * @return Application|RedirectResponse|Response|Redirector
+     *
      * @throws AuthorizationException
      */
     public function addProduktFirma(Request $request): RedirectResponse
@@ -354,7 +334,7 @@ class ProduktController extends Controller
         if (isset($request->ckAddNewAddress)) {
 
             $this->validateAdresse();
-            $addresse = new Adresse();
+            $addresse = new Adresse;
             $addresse->ad_label = $request->ad_label;
             $addresse->ad_anschrift_strasse = $request->ad_anschrift_strasse;
             $addresse->ad_anschrift_plz = $request->ad_anschrift_plz;
@@ -376,7 +356,7 @@ class ProduktController extends Controller
             if ($address_id !== false) {
                 $st['firma'][] = '$address_id -> '.$address_id;
                 $this->validateFirma();
-                $fa = new Firma();
+                $fa = new Firma;
                 $fa->fa_label = $request->fa_label;
                 $fa->fa_name = $request->fa_name;
                 $fa->fa_kreditor_nr = $request->fa_kreditor_nr;
@@ -392,7 +372,7 @@ class ProduktController extends Controller
             }
 
             $st['FirmaProdukt'][] = 'Baue neues FirmaProdukt aus neuer Firma';
-            $faprod = new FirmaProdukt();
+            $faprod = new FirmaProdukt;
             $faprod->firma_id = $firma_id;
             $faprod->produkt_id = $request->produkt_id;
             $faprod->save();
@@ -400,6 +380,7 @@ class ProduktController extends Controller
             $st['FirmaProdukt'][] = 'Baue neue FirmaProdukt aus bestehender Firma';
             if ($this->checkProduktFirmaExists($request->firma_id, $request->produkt_id)) {
                 $request->session()->flash('status', __('Die Firma :name ist bereits zugeordnet!', ['name' => $request->fa_name]));
+
                 return redirect()->back();
             } else {
                 FirmaProdukt::create($this->validateFirmaProdukt());
@@ -411,7 +392,7 @@ class ProduktController extends Controller
                 $st['contact'] = 'Baue neuen Kontakt mit neuer Firma';
                 $this->validateContact();
 
-                $con = new Contact();
+                $con = new Contact;
 
                 $con->con_label = $request->con_label;
                 $con->con_vorname = $request->con_vorname;
@@ -435,51 +416,51 @@ class ProduktController extends Controller
     protected function checkProduktFirmaExists(int $firma_id, int $produkt_id): bool
     {
         return FirmaProdukt::where([
-                'firma_id'   => $firma_id,
-                'produkt_id' => $produkt_id
-            ])->count() > 0;
+            'firma_id' => $firma_id,
+            'produkt_id' => $produkt_id,
+        ])->count() > 0;
 
     }
 
     public function validateAdresse(): array
     {
         return request()->validate([
-            'ad_label'                => [
+            'ad_label' => [
                 'bail',
                 'max:20',
                 'required',
                 Rule::unique('adresses')->ignore(\request('id')),
             ],
-            'ad_anschrift_strasse'    => 'bail|required|max:100',
-            'ad_anschrift_plz'        => 'bail|required|max:100',
-            'ad_anschrift_ort'        => 'bail|required|max:100',
+            'ad_anschrift_strasse' => 'bail|required|max:100',
+            'ad_anschrift_plz' => 'bail|required|max:100',
+            'ad_anschrift_ort' => 'bail|required|max:100',
             'ad_anschrift_hausnummer' => 'max:100',
-            'land_id'                 => 'max:100',
-            'address_type_id'         => '',
+            'land_id' => 'max:100',
+            'address_type_id' => '',
         ]);
     }
 
     public function validateFirma(): array
     {
         return request()->validate([
-            'fa_label'       => [
+            'fa_label' => [
                 'bail',
                 'max:20',
                 'required',
                 Rule::unique('firmas')->ignore(\request('id')),
             ],
-            'fa_name'        => 'max:100',
+            'fa_name' => 'max:100',
             'fa_kreditor_nr' => 'max:100',
-            'fa_debitor_nr'  => 'max:100',
-            'fa_vat'         => 'max:30',
-            'adress_id'      => '',
+            'fa_debitor_nr' => 'max:100',
+            'fa_vat' => 'max:30',
+            'adress_id' => '',
         ]);
     }
 
     public function validateFirmaProdukt(): array
     {
         return request()->validate([
-            'firma_id'   => 'required',
+            'firma_id' => 'required',
             'produkt_id' => 'required',
         ]);
     }
@@ -487,17 +468,17 @@ class ProduktController extends Controller
     public function validateContact(): array
     {
         return request()->validate([
-            'con_label'   => [
+            'con_label' => [
                 'bail',
                 'max:20',
                 'required',
                 Rule::unique('contacts')->ignore(\request('id')),
             ],
             'con_vorname' => 'max:100',
-            'con_name'    => 'max:100',
+            'con_name' => 'max:100',
             'con_telefon' => 'max:100',
-            'con_email'   => 'max:100',
-            'anrede_id'   => '',
+            'con_email' => 'max:100',
+            'anrede_id' => '',
         ]);
     }
 
@@ -507,11 +488,11 @@ class ProduktController extends Controller
         $faprod = FirmaProdukt::where([
             [
                 'produkt_id',
-                request('produktid')
+                request('produktid'),
             ],
             [
                 'firma_id',
-                request('firmaid')
+                request('firmaid'),
             ],
         ])->delete();
 
@@ -524,9 +505,10 @@ class ProduktController extends Controller
     {
 
         $prodList = Produkt::where('produkt_kategorie_id', $id)->sortable()->paginate(20);
+
         return view('admin.produkt.kategorie.index', [
             'prodList' => $prodList,
-            'id'       => $id
+            'id' => $id,
         ]);
     }
 
@@ -538,7 +520,6 @@ class ProduktController extends Controller
     /**
      *   Liefert die JSON-Daten für die Übersichtstablle in /produkt -> index.blade.php
      *
-     * @param  Request  $request
      *
      * @return array JSON
      */
@@ -555,17 +536,18 @@ class ProduktController extends Controller
                 ? '<i class="fas fa-check text-success"  data-toggle="tooltip" data-placement="top" ></i>'
                 : '<i class="fas fa-times text-danger"  data-toggle="tooltip" data-placement="top"></i>';
             $data[] = [
-                'term'           => $request->id,
-                'id'             => $produkt->id,
+                'term' => $request->id,
+                'id' => $produkt->id,
                 'prod_kategorie' => $produkt->ProduktKategorie->pk_label,
-                'created_at'     => date('d.m.Y H:s', strtotime($produkt->created_at)),
-                'prod_nummer'    => $produkt->prod_nummer,
-                'prod_label'     => $produkt->prod_label,
-                'prod_active'    => $icon,
-                'prod_status'    => '<i class="'.$produkt->ProduktState->ps_icon.' text-'.$produkt->ProduktState->ps_color.'"  data-toggle="tooltip" data-placement="top" title="'.$produkt->ProduktState->ps_name.'"></i>',
-                'prod_link'      => '<a href="/produkt/'.$produkt->id.'" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>'
+                'created_at' => date('d.m.Y H:s', strtotime($produkt->created_at)),
+                'prod_nummer' => $produkt->prod_nummer,
+                'prod_label' => $produkt->prod_label,
+                'prod_active' => $icon,
+                'prod_status' => '<i class="'.$produkt->ProduktState->ps_icon.' text-'.$produkt->ProduktState->ps_color.'"  data-toggle="tooltip" data-placement="top" title="'.$produkt->ProduktState->ps_name.'"></i>',
+                'prod_link' => '<a href="/produkt/'.$produkt->id.'" class="btn btn-outline-secondary btn-sm"><i class="fas fa-angle-right"></i></a>',
             ];
         }
+
         //        dd(DB::getQueryLog());
         return $data;
     }
@@ -574,7 +556,7 @@ class ProduktController extends Controller
     {
         $data['htmlList'] = view('components.parameters.pk-paramfield', [
             'params' => ProduktKategorieParam::where('produkt_kategorie_id', $request->id)->get(),
-            'mode'   => 'edit'
+            'mode' => 'edit',
         ])->render();
 
         return $data;
@@ -585,11 +567,6 @@ class ProduktController extends Controller
         return Produkt::where('produkt_kategorie_id', $request->id)->count();
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
     public function updateProduktKategorieParams(Request $request): RedirectResponse
     {
         /**
@@ -597,7 +574,6 @@ class ProduktController extends Controller
          */
         $updated_product_counter = 0;
         $updated_equipment_counter = 0;
-
 
         /**
          * Update the parameter itself
@@ -612,7 +588,6 @@ class ProduktController extends Controller
         $msg = ($param->save())
             ? __('<p>Der Parameter wurde aktualisiert</p>')
             : __('<p>Keine Aktualisierung</p>');
-
 
         if ($request->checkUpdateRelatedObjects) {
             /**
@@ -629,12 +604,12 @@ class ProduktController extends Controller
                     $product_params = ProduktParam::where([
                         [
                             'pp_label',
-                            $old_label
+                            $old_label,
                         ],
                         [
                             'produkt_id',
-                            $product->id
-                        ]
+                            $product->id,
+                        ],
                     ]);
                     if ($product_params->count() > 0) {
                         $pp = $product_params->first();
@@ -656,12 +631,12 @@ class ProduktController extends Controller
                             $equipment_params = EquipmentParam::where([
                                 [
                                     'ep_label',
-                                    $old_label
+                                    $old_label,
                                 ],
                                 [
                                     'equipment_id',
-                                    $equipment->id
-                                ]
+                                    $equipment->id,
+                                ],
                             ]);
                             if ($equipment_params->count() > 0) {
                                 $ep = $equipment_params->first();
@@ -684,52 +659,46 @@ class ProduktController extends Controller
         }
 
         $msg .= __('<p>Es wurden :numProduct Produkte und :numEquipment Geräte aktualisiert</p>', [
-            'numProduct'   => $updated_product_counter,
-            'numEquipment' => $updated_equipment_counter
+            'numProduct' => $updated_product_counter,
+            'numEquipment' => $updated_equipment_counter,
         ]);
 
         $request->session()->flash('status', $msg);
+
         return back();
 
     }
 
-    /**
-     * @return array
-     */
     public function validateProduktKategorieParam(): array
     {
         return request()->validate([
-            'pkp_label'            => [
+            'pkp_label' => [
                 'bail',
                 'required',
                 'max:20',
                 Rule::unique('produkt_kategorie_params')->ignore(\request('id')),
             ],
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
-            'produkt_kategorie_id' => 'required'
+            'pkp_name' => 'bail|string|max:100',
+            'pkp_value' => '',
+            'produkt_kategorie_id' => 'required',
         ]);
     }
 
     /**
      * Speichere neuen Produktstamm
-     *
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
      */
     public function addProduktKategorieParam(Request $request): RedirectResponse
     {
         //        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::create($this->validateProduktKategorieParam());
         $request->session()->flash('status', __('Der Parameter <strong>:name</strong> wurde angelegt!', ['name' => request('pkp_name')]));
+
         return back();
     }
 
     /**
      *  Löscht den Param von der Produk-Kategorie
      *
-     * @param  Request  $request
      *
      * @return RedirectResponse
      */
@@ -738,13 +707,13 @@ class ProduktController extends Controller
         //        $this->authorize('isAdmin', Auth()->user());
         ProduktKategorieParam::find($request->id)->delete();
         $request->session()->flash('status', __('Der Parameter <strong>:name</strong> wurde gelöscht!', ['name' => request('pkp_name')]));
+
         return back();
     }
 
     /**
      * Fügt neue Kategorie für Produktstamm hinzu
      *
-     * @param  Request  $request
      *
      * @return Application|Response
      */
@@ -752,24 +721,22 @@ class ProduktController extends Controller
     {
         $produkt = ProduktKategorie::create($this->validateProduktKategorie());
         $request->session()->flash('status', 'Die Produktkategorie  <strong>'.request('prod_nummer').'</strong> wurde angelegt!');
+
         return view('admin.produkt.show', ['produkt' => $produkt]);
     }
 
-    /**
-     * @return array
-     */
     public function validateProduktKategorie(): array
     {
         return request()->validate([
-            'pkp_label'            => [
+            'pkp_label' => [
                 'bail',
                 'min:2',
                 'max:20',
-                'required'
+                'required',
             ],
-            'pkp_name'             => 'bail|string|max:100',
-            'pkp_value'            => '',
-            'produkt_kategorie_id' => 'required'
+            'pkp_name' => 'bail|string|max:100',
+            'pkp_value' => '',
+            'produkt_kategorie_id' => 'required',
         ]);
     }
 
@@ -778,24 +745,20 @@ class ProduktController extends Controller
         dd($request);
     }
 
-
     /**
      *  Löscht die Zuordnung der Anforderung vom Produkt
      *
-     * @param  Request  $request
      *
      * @return RedirectResponse
      */
     public function deleteProduktAnfordrung(Request $request)
     {
 
-
         $anforderung = Anforderung::find($request->anforderung_id);
 
         $euipUdate = '';
 
-
-        if (!ProduktAnforderung::find($request->id)) {
+        if (! ProduktAnforderung::find($request->id)) {
             return redirect()->back();
         }
 
@@ -805,7 +768,7 @@ class ProduktController extends Controller
 
                 ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->delete();
 
-                $equipHistory = new EquipmentHistory();
+                $equipHistory = new EquipmentHistory;
                 $equipHistory->eqh_eintrag_kurz = 'Anforderung gelöscht';
                 $equipHistory->eqh_eintrag_text = 'Die Anforderung '.$anforderung->an_name.' wurde dem Produkt entfernt. Die Prüfungstabelle der abhängigen Geräten wurde aktualisiert.';
                 $equipHistory->equipment_id = $equipment->id;
@@ -820,14 +783,13 @@ class ProduktController extends Controller
             }
         }
 
-
         if (ProduktAnforderung::find($request->id)->delete()) {
             $request->session()->flash('status', 'Die Anforderung  <strong>'.request('an_label').'</strong> wurde vom Produkt entfernt!'.$euipUdate);
+
             return redirect()->back();
         } else {
             dd('nix da');
         }
-
 
     }
 
@@ -845,7 +807,7 @@ class ProduktController extends Controller
         foreach (Equipment::where('produkt_id', request('produkt_id'))->get() as $equipment) {
 
             if (ControlEquipment::where('anforderung_id', $request->anforderung_id)->where('equipment_id', $equipment->id)->count() === 0) {
-                $equipControlItem = new ControlEquipment();
+                $equipControlItem = new ControlEquipment;
                 $equipControlItem->qe_control_date_last = now();
                 $equipControlItem->qe_control_date_due = now()->add('P'.$interval.$dateSting[0]);
                 $equipControlItem->qe_control_date_warn = 4;
@@ -853,8 +815,7 @@ class ProduktController extends Controller
                 $equipControlItem->equipment_id = $equipment->id;
                 $equipControlItem->save();
 
-
-                $equipHistory = new EquipmentHistory();
+                $equipHistory = new EquipmentHistory;
                 $equipHistory->eqh_eintrag_kurz = 'Neue Anforderung erhalten';
                 $equipHistory->eqh_eintrag_text = 'Die Anforderung '.$anforderung->an_name.' wurde dem Produkt angefügt. Die Prüfungstabelle der abhängigen Geräten wurde aktualisiert.';
                 $equipHistory->equipment_id = $equipment->id;
@@ -869,25 +830,20 @@ class ProduktController extends Controller
             }
         }
         $request->session()->flash('status', 'Die Anforderung wurde erfolgreich  <strong>'.request('an_label').'</strong> verknüpft!'.$euipUdate);
+
         return redirect()->back();
     }
 
-    /**
-     * @return array
-     */
     public function validateProduktAnforderung(): array
     {
         return request()->validate([
-            'produkt_id'     => 'required',
-            'anforderung_id' => 'required|gt:0'
+            'produkt_id' => 'required',
+            'anforderung_id' => 'required|gt:0',
         ]);
     }
-
 
     public function addQualifiedUser(Request $request)
     {
         dd($request);
     }
-
-
 }

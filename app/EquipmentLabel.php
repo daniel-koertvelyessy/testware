@@ -5,24 +5,18 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-
 class EquipmentLabel extends Model
 {
-    protected $guarded=[];
+    protected $guarded = [];
 
-    protected $casts=[
+    protected $casts = [
         'show_labels' => 'boolean',
         'show_inventory' => 'boolean',
         'show_location' => 'boolean',
     ];
 
-    /**
-     * @param  Request  $request
-     *
-     * @return bool
-     */
-    public function add(Request $request)
-    : bool {
+    public function add(Request $request): bool
+    {
         $this->label = $request->label;
         $this->name = $request->name;
         $this->show_labels = $request->show_labels;
@@ -41,7 +35,7 @@ class EquipmentLabel extends Model
         $this->logo_w = $request->logo_w;
         $this->logo_svg = $request->logo_svg;
         $this->tld_string = $request->tld_string;
+
         return $this->save();
     }
-
 }

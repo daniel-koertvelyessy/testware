@@ -1,7 +1,8 @@
 <?php
-// database/factories/EquipmentQualifiedUserFactory.php
-namespace Database\Factories;
 
+// database/factories/EquipmentQualifiedUserFactory.php
+
+namespace Database\Factories;
 
 use App\Equipment;
 use App\EquipmentQualifiedUser;
@@ -21,5 +22,4 @@ class EquipmentQualifiedUserFactory extends Factory
             'updated_at' => now(),
         ];
     }
-
 }

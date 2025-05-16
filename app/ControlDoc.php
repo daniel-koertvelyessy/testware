@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ControlDoc extends Model
 {
-    Use SoftDeletes;
+    use SoftDeletes;
 
     public function ControlEvent()
     {
@@ -19,7 +19,7 @@ class ControlDoc extends Model
     {
         $request->validate([
             'controlDokumentFile' => 'required|file|mimes:pdf,tif,tiff,png,jpg,jpeg|max:20480',
-            'eqdoc_label'         => 'required|unique:equipment_docs,eqdoc_label'
+            'eqdoc_label' => 'required|unique:equipment_docs,eqdoc_label',
         ]);
 
         $file = $request->file('controlDokumentFile');

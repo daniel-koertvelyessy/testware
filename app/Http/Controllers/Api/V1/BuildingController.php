@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Storage;
-use Exception;
 use App\Building;
-use App\Location;
 use App\BuildingTypes;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\buildings\BuildingFull as BuildingFullResource;
 use App\Http\Resources\buildings\Building as BuildingResource;
+use App\Http\Resources\buildings\BuildingFull as BuildingFullResource;
 use App\Http\Resources\buildings\BuildingShow as BuildingShowResource;
+use App\Location;
+use App\Storage;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -18,7 +18,6 @@ use Illuminate\Support\Str;
 
 class BuildingController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -36,6 +35,7 @@ class BuildingController extends Controller
                 Building::with('BuildingType', 'location')->paginate($request->input('per_page'))
             );
         }
+
         return BuildingResource::collection(
             Building::with('BuildingType', 'location')->get()
         );
@@ -53,6 +53,7 @@ class BuildingController extends Controller
                 Building::with('BuildingType', 'location')->paginate($request->input('per_page'))
             );
         }
+
         return BuildingFullResource::collection(
             Building::all()
         );
@@ -61,24 +62,24 @@ class BuildingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      * @return BuildingResource
      */
     public function store(Request $request)
     {
         $this->validateBuilding($request);
 
-        if (!Location::find($request->location_id))
+        if (! Location::find($request->location_id)) {
             return response()->json([
-                'error' => 'no location with given id found'
+                'error' => 'no location with given id found',
             ], 422);
+        }
 
         $type_id = 1;
 
         if (isset($request->type_id)) {
-            if (!BuildingTypes::find($request->type_id)) {
+            if (! BuildingTypes::find($request->type_id)) {
                 return response()->json([
-                    'error' => 'no valid building type with given id found'
+                    'error' => 'no valid building type with given id found',
                 ], 422);
             } else {
                 $type_id = $request->type_id;
@@ -87,8 +88,8 @@ class BuildingController extends Controller
 
         if (isset($request->type['label'])) {
             $buildingType = BuildingTypes::where('btname', $request->type['label'])->first();
-            if (!$buildingType) {
-                $newBuildingType = new BuildingTypes();
+            if (! $buildingType) {
+                $newBuildingType = new BuildingTypes;
                 $newBuildingType->btname = $request->type['label'];
                 $newBuildingType->btbeschreibung = (isset($request->type['description'])) ? $request->type['description'] : null;
                 $newBuildingType->save();
@@ -99,7 +100,7 @@ class BuildingController extends Controller
             }
         }
 
-        $building = new Building();
+        $building = new Building;
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
         $building->b_label = $request->label;
         $building->b_we_has = $request->goods_income_has;
@@ -112,13 +113,13 @@ class BuildingController extends Controller
         $building->building_type_id = $type_id;
         $building->location_id = (isset($request->location_id)) ? $request->location_id : 1;
         $building->save();
+
         return new BuildingResource($building);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Building $building
      * @return BuildingShowResource
      */
     public function show(Building $building)
@@ -129,22 +130,21 @@ class BuildingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int     $id
+     * @param  int  $id
      * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'label'        => 'required',
-            'goods_income_has'  => 'required',
-            'uid'               => '',
-            'type_id'           => '',
-            'name'              => '',
-            'place'             => '',
-            'description'       => '',
+            'label' => 'required',
+            'goods_income_has' => 'required',
+            'uid' => '',
+            'type_id' => '',
+            'name' => '',
+            'place' => '',
+            'description' => '',
             'goods_income_name' => '',
-            'location_id'       => '',
+            'location_id' => '',
         ]);
 
         $building = Building::find($id);
@@ -164,10 +164,11 @@ class BuildingController extends Controller
             $building->building_type_id = (isset($request->type_id) && BuildingTypes::find($request->type_id)) ? $request->type_id : $building->building_type_id;
             $building->location_id = (isset($request->location_id) && Location::find($request->location_id)) ? $request->location_id : $building->location_id;
             $building->save();
+
             return new BuildingShowResource($building);
         } else {
             $this->validateBuilding($request);
-            $building = new Building();
+            $building = new Building;
             $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
             $building->b_label = $request->label;
             $building->b_we_has = $request->goods_income_has;
@@ -180,6 +181,7 @@ class BuildingController extends Controller
             $building->building_type_id = (isset($request->type_id)) ? $request->type_id : 1;
             $building->location_id = (isset($request->location_id)) ? $request->location_id : 1;
             $building->save();
+
             return new BuildingResource($building);
         }
     }
@@ -187,33 +189,31 @@ class BuildingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Building $building
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function destroy(Building $building)
     {
         $building->delete();
+
         return response()->json([
-            'status' => 'building deleted'
+            'status' => 'building deleted',
         ]);
     }
 
-    /**
-     * @param  Request $request
-     */
     public function validateBuilding(Request $request): void
     {
         $request->validate([
-            'label'        => 'required|unique:buildings,b_label',
-            'goods_income_has'  => 'required|boolean',
-            'uid'               => 'unique:buildings,storage_id',
-            'type_id'           => '',
-            'name'              => '',
-            'place'             => '',
-            'description'       => '',
+            'label' => 'required|unique:buildings,b_label',
+            'goods_income_has' => 'required|boolean',
+            'uid' => 'unique:buildings,storage_id',
+            'type_id' => '',
+            'name' => '',
+            'place' => '',
+            'description' => '',
             'goods_income_name' => '',
-            'location_id'       => '',
+            'location_id' => '',
         ]);
     }
 }

@@ -16,12 +16,12 @@ class AddEmailToProfileTable extends Migration
         Schema::table('profiles', function (Blueprint $table) {
             $table->string('ma_email')->nullable();
         });
-//        foreach(\App\Profile::all() as $profile){
-//            if ($profile->User() && !$profile->email){
-//                $profile->ma_email = $profile->user->email;
-//                $profile->save();
-//            }
-//        }
+        //        foreach(\App\Profile::all() as $profile){
+        //            if ($profile->User() && !$profile->email){
+        //                $profile->ma_email = $profile->user->email;
+        //                $profile->save();
+        //            }
+        //        }
     }
 
     /**

@@ -10,7 +10,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Produkt extends Model
 {
-    use SoftDeletes, Sortable, HasFactory;
+    use HasFactory, SoftDeletes, Sortable;
 
     public $sortable = [
         'id',
@@ -20,6 +20,7 @@ class Produkt extends Model
         'prod_active',
 
     ];
+
     protected $guarded = [];
 
     public static function boot()
@@ -113,15 +114,15 @@ class Produkt extends Model
     public function hasRequirement(Anforderung $requirement)
     {
         return ProduktAnforderung::where([
-                [
-                    'anforderung_id',
-                    $requirement->id
-                ],
-                [
-                    'produkt_id',
-                    $this->id
-                ],
-            ])->count() > 0;
+            [
+                'anforderung_id',
+                $requirement->id,
+            ],
+            [
+                'produkt_id',
+                $this->id,
+            ],
+        ])->count() > 0;
     }
 
     public function getEntry(array $data)
@@ -129,18 +130,19 @@ class Produkt extends Model
         $product = Produkt::where([
             [
                 'prod_label',
-                $data['product_label']
+                $data['product_label'],
             ],
             [
                 'prod_nummer',
-                $data['product_number']
+                $data['product_number'],
             ],
         ])->first();
+
         return $product->id;
     }
 
     public function EquipmentCount(): int
     {
-        return Equipment::where('produkt_id',$this->id)->get()->count();
+        return Equipment::where('produkt_id', $this->id)->get()->count();
     }
 }

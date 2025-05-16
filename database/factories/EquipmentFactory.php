@@ -15,15 +15,15 @@ class EquipmentFactory extends Factory
     public function definition()
     {
         return [
-            'eq_inventar_nr'     => 'inv20' . substr($this->faker->uuid(), 0, 50),
-            'eq_serien_nr'       => $this->faker->unique()->bankAccountNumber,
-            'installed_at'       => $this->faker->date('Y-m-d'),
-            'eq_text'            => $this->faker->text(100),
-            'eq_uid'             => $this->faker->uuid(),
+            'eq_inventar_nr' => 'inv20'.substr($this->faker->uuid(), 0, 50),
+            'eq_serien_nr' => $this->faker->unique()->bankAccountNumber,
+            'installed_at' => $this->faker->date('Y-m-d'),
+            'eq_text' => $this->faker->text(100),
+            'eq_uid' => $this->faker->uuid(),
             'equipment_state_id' => round(1 + (pow(rand(0, 4) / 4, 4) * (4 - 1))),
-            'produkt_id'         => Produkt::factory()->create(),
-            'storage_id'         => NULL,
-            'eq_price'           => random_int(20, 10000)
+            'produkt_id' => Produkt::factory()->create(),
+            'storage_id' => null,
+            'eq_price' => random_int(20, 10000),
         ];
     }
 }

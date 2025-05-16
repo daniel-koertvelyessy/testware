@@ -17,8 +17,8 @@ class Compartment extends JsonResource
     {
         return [
             'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
+            'created' => (string) $this->created_at,
+            'updated' => (string) $this->updated_at,
             'label' => $this->sp_label,
             'uid' => $this->storage_id,
             'name' => $this->sp_name,

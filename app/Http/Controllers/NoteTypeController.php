@@ -31,13 +31,8 @@ class NoteTypeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request $request
-     *
-     * @return RedirectResponse
      */
-    public function store(Request $request)
-    : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         NoteType::create($this->validateNewNoteType());
         $request->session()->flash('status', __('Notiztyp angelegt'));
@@ -47,13 +42,8 @@ class NoteTypeController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  NoteType $note_type
-     *
-     * @return NoteType
      */
-    public function show(NoteType $note_type)
-    : NoteType
+    public function show(NoteType $note_type): NoteType
     {
         return $note_type;
     }
@@ -61,7 +51,6 @@ class NoteTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  NoteType $note_type
      *
      * @return Response
      */
@@ -72,28 +61,22 @@ class NoteTypeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  NoteType $note_type
-     *
-     * @return RedirectResponse
      */
-    public function update(Request $request, NoteType $note_type)
-    : RedirectResponse
+    public function update(Request $request, NoteType $note_type): RedirectResponse
     {
         $note_type->update(request()->validate([
-            'label'       => 'required',
-            'name'        => '',
+            'label' => 'required',
+            'name' => '',
             'description' => '',
         ]));
         $request->session()->flash('status', __('Notiztyp aktualisiert!'));
+
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  NoteType $note_type
      *
      * @return Response
      */
@@ -103,15 +86,11 @@ class NoteTypeController extends Controller
 
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewNoteType()
-    : array
+    public function validateNewNoteType(): array
     {
         return request()->validate([
-            'label'       => 'bail|unique:note_types,label|required',
-            'name'        => '',
+            'label' => 'bail|unique:note_types,label|required',
+            'name' => '',
             'description' => '',
         ]);
     }

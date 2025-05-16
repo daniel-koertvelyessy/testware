@@ -14,22 +14,21 @@ class LocaleMiddleware
      * Handle an incoming request.
      *
      * @param  Request  $request
-     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if ( Auth::check() && !Session::has('locale')){
-            Session::put('locale',$request->user()->locale);
+        if (Auth::check() && ! Session::has('locale')) {
+            Session::put('locale', $request->user()->locale);
         }
 
-        if ($request->has('locale')){
-            Session::put('locale',$request->get('locale'));
+        if ($request->has('locale')) {
+            Session::put('locale', $request->get('locale'));
         }
 
         $locale = Session::get('locale');
 
-        if (null === $locale) {
+        if ($locale === null) {
             $locale = config('app.fallback_locale');
         }
 

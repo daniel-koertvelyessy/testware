@@ -17,7 +17,7 @@ class CreateEquipmentHistoriesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('eqh_eintrag_kurz',100);
+            $table->string('eqh_eintrag_kurz', 100);
             $table->text('eqh_eintrag_text')->nullable();
             $table->unsignedBigInteger('equipment_id')->nullable();
             $table->foreign('equipment_id')

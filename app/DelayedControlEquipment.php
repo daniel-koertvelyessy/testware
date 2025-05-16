@@ -18,16 +18,11 @@ class DelayedControlEquipment extends Model
 
     /**
      * A delayed control event was spotted and will be reported
-     *
-     * @param  Equipment $equipment
-     *
-     * @return bool
      */
-    public function reportEquipment(Equipment $equipment)
-    : bool
+    public function reportEquipment(Equipment $equipment): bool
     {
         $this->control_equipment_id = $equipment->id;
+
         return $this->save();
     }
 }
-

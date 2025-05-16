@@ -5,29 +5,20 @@ namespace App\Http\Controllers;
 use App\AddressType;
 use App\Adresse;
 use App\Anforderung;
-use App\AnforderungControlItem;
 use App\AnforderungType;
 use App\Building;
 use App\BuildingTypes;
-use App\ControlEquipment;
-use App\ControlProdukt;
 use App\DocumentType;
 use App\Equipment;
-use App\EquipmentFuntionControl;
-use App\EquipmentQualifiedUser;
-use App\Location;
-use App\ProductQualifiedUser;
 use App\Produkt;
 use App\ProduktKategorie;
 use App\Room;
 use App\RoomType;
-use App\Stellplatz;
 use App\StellplatzTyp;
 use App\Storage;
 use App\TestReportFormat;
 use App\User;
 use App\Verordnung;
-use Cache;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,11 +32,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-//use App\BuildingType;
+// use App\BuildingType;
 
 class AdminController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -58,28 +48,30 @@ class AdminController extends Controller
 
     public function index()
     {
-        $systemStatus = new SystemStatusController();
+        $systemStatus = new SystemStatusController;
         $objects = $systemStatus->getObjectStatus();
         $dbstatus = $systemStatus->getBrokenDBLinks();
-        $requirementList = Anforderung::select('id','an_name')->get();
-        $equipmentList = Equipment::select('id','eq_name','eq_inventar_nr')->get();
-        $productList = Produkt::select('id','prod_name','prod_nummer')->get();
-        $isSysAdmin=Auth::user()->isSysAdmin();
-        return view('admin.index', compact('objects','dbstatus','requirementList','equipmentList','isSysAdmin','productList'));
+        $requirementList = Anforderung::select('id', 'an_name')->get();
+        $equipmentList = Equipment::select('id', 'eq_name', 'eq_inventar_nr')->get();
+        $productList = Produkt::select('id', 'prod_name', 'prod_nummer')->get();
+        $isSysAdmin = Auth::user()->isSysAdmin();
+
+        return view('admin.index', compact('objects', 'dbstatus', 'requirementList', 'equipmentList', 'isSysAdmin', 'productList'));
     }
 
     public function systems()
     {
         if (TestReportFormat::count() === 0) {
             $test_report_formats = [
-                'id'      => '',
-                'digits'  => '',
-                'prefix'  => '',
+                'id' => '',
+                'digits' => '',
+                'prefix' => '',
                 'postfix' => '',
             ];
         } else {
             $test_report_formats = TestReportFormat::first();
         }
+
         return view('admin.systems', compact('test_report_formats'));
     }
 
@@ -106,11 +98,11 @@ class AdminController extends Controller
     public function checkStorageValid(Request $request)
     {
         //
-        $bul = DB::table('buildings')->select('id')->where('b_label', 'like', '%' . $request->name . '%')->orWhere('b_name_ort', 'like', '%' . $request->name . '%')->orWhere('b_name', 'like', '%' . $request->name . '%')->orWhere('b_description', 'like', '%' . $request->name . '%')->orWhere('b_we_name', 'like', '%' . $request->name . '%')->get();
+        $bul = DB::table('buildings')->select('id')->where('b_label', 'like', '%'.$request->name.'%')->orWhere('b_name_ort', 'like', '%'.$request->name.'%')->orWhere('b_name', 'like', '%'.$request->name.'%')->orWhere('b_description', 'like', '%'.$request->name.'%')->orWhere('b_we_name', 'like', '%'.$request->name.'%')->get();
 
-        $rom = DB::table('rooms')->select('id')->where('r_label', 'like', '%' . $request->name . '%')->orWhere('r_name', 'like', '%' . $request->name . '%')->orWhere('r_description', 'like', '%' . $request->name . '%')->get();
+        $rom = DB::table('rooms')->select('id')->where('r_label', 'like', '%'.$request->name.'%')->orWhere('r_name', 'like', '%'.$request->name.'%')->orWhere('r_description', 'like', '%'.$request->name.'%')->get();
 
-        $spl = DB::table('stellplatzs')->select('id')->where('sp_label', 'like', '%' . $request->name . '%')->orWhere('sp_name', 'like', '%' . $request->name . '%')->orWhere('sp_description', 'like', '%' . $request->name . '%')->get();
+        $spl = DB::table('stellplatzs')->select('id')->where('sp_label', 'like', '%'.$request->name.'%')->orWhere('sp_name', 'like', '%'.$request->name.'%')->orWhere('sp_description', 'like', '%'.$request->name.'%')->get();
 
         return ($bul->count() > 0 || $rom->count() > 0 || $spl->count() > 0) ? 1 : 0;
     }
@@ -118,8 +110,6 @@ class AdminController extends Controller
     /**
      *  Aktualisiert die CSS-Datei zur Darstellung von Farben und Schriften
      *
-     * @param Request $request
-     * @param User $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -131,17 +121,15 @@ class AdminController extends Controller
         // $data->update($request->systemTheme);
 
         $request->session()->flash('status', 'Das Theme wurde aktualisiert!');
+
         return back();
     }
 
-    public function addObjektAnforderung(Request $request)
-    {
-    }
+    public function addObjektAnforderung(Request $request) {}
 
     /**
      * Speichert einen neuen Adresstyp
      *
-     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -149,26 +137,22 @@ class AdminController extends Controller
     {
         AddressType::create($this->validateAdressTypes());
 
-        $request->session()->flash('status', 'Der Adresstyp <strong>' . request('adt_name') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Adresstyp <strong>'.request('adt_name').'</strong> wurde angelegt!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateAdressTypes(): array
     {
         return request()->validate([
-                                       'adt_name'      => 'bail|required|min:1|max:20',
-                                       'adt_text_lang' => ''
-                                   ]);
+            'adt_name' => 'bail|required|min:1|max:20',
+            'adt_text_lang' => '',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param AddressType $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -176,32 +160,29 @@ class AdminController extends Controller
     {
         $data = AddressType::find($request->id);
         $data->update($this->validateAdressTypes());
-        $request->session()->flash('status', 'Der Adresstyp <strong>' . $data->adt_name . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Adresstyp <strong>'.$data->adt_name.'</strong> wurde aktualisiert!');
+
         return back();
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $id
      *
      * @return Response
      */
     public function getAddressTypeData(Request $id)
     {
         $data = AddressType::find($id);
+
         return $data;
     }
-
 
     /**
      *   ENDE   A D R E S S   T Y P E S
      */
 
     /**
-     * @param Request $request
-     * @param AddressType $adt
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteTypeAdress(Request $request, AddressType $adt)
@@ -211,13 +192,13 @@ class AdminController extends Controller
 
         AddressType::destroy($request->id);
         $request->session()->flash('status', 'Der Adresstyp wurde gelöscht!');
+
         return back();
     }
 
     /**
      * Speichere einen neuen Gebäudetyp.
      *
-     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -225,26 +206,22 @@ class AdminController extends Controller
     {
         BuildingTypes::create($this->validateNewBuldingTypes());
 
-        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>'.request('btname').'</strong> wurde angelegt!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateNewBuldingTypes(): array
     {
         return request()->validate([
-                                       'btname'         => 'bail|unique:building_types,btname|required|min:1|max:20',
-                                       'btbeschreibung' => ''
-                                   ]);
+            'btname' => 'bail|unique:building_types,btname|required|min:1|max:20',
+            'btbeschreibung' => '',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param BuildingTypes $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -253,19 +230,17 @@ class AdminController extends Controller
         $data = BuildingTypes::find($request->id);
         $data->update($this->validateBuldingTypes());
 
-        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>'.request('btname').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateBuldingTypes(): array
     {
         return request()->validate([
-                                       'btname'         => 'bail|required|min:1|max:20',
-                                       'btbeschreibung' => ''
-                                   ]);
+            'btname' => 'bail|required|min:1|max:20',
+            'btbeschreibung' => '',
+        ]);
     }
 
     /**
@@ -275,15 +250,14 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param BuildingTypes $adt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function deleteBuildingType(Request $request, BuildingTypes $adt)
     {
         $data = BuildingTypes::destroy($request->id);
-        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('btname') . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>'.request('btname').'</strong> wurde gelöscht!');
+
         return back();
     }
 
@@ -291,13 +265,13 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param Request $id
      *
      * @return Response
      */
     public function getBuildingTypeData(Request $id)
     {
         $data = BuildingTypes::find($id);
+
         return $data;
         // return response()->json($data);
     }
@@ -307,7 +281,7 @@ class AdminController extends Controller
         $data['html'] = '';
         foreach (BuildingTypes::all() as $bt) {
             $data['html'] .= '
-           <option value="' . $bt->id . '">' . $bt->btname . '</option>
+           <option value="'.$bt->id.'">'.$bt->btname.'</option>
            ';
         }
 
@@ -318,7 +292,6 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -327,11 +300,10 @@ class AdminController extends Controller
 
         $rt = RoomType::create($this->validateRoomTypes());
 
-        $request->session()->flash('status', 'Der Gebäudetyp <strong>' . request('rt_label') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Gebäudetyp <strong>'.request('rt_label').'</strong> wurde angelegt!');
+
         return back();
     }
-
-
 
     /*
      *
@@ -351,29 +323,24 @@ class AdminController extends Controller
      *
      */
 
-    /**
-     * @return array
-     */
     public function validateRoomTypes(): array
     {
         return request()->validate([
-                                       'rt_label'       => [
-                                           'bail',
-                                           'required',
-                                           'min:1',
-                                           'max:20',
-                                           Rule::unique('room_types')->ignore(request('id'))
-                                       ],
-                                       'rt_name'        => 'max:100',
-                                       'rt_description' => ''
-                                   ]);
+            'rt_label' => [
+                'bail',
+                'required',
+                'min:1',
+                'max:20',
+                Rule::unique('room_types')->ignore(request('id')),
+            ],
+            'rt_name' => 'max:100',
+            'rt_description' => '',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param RoomType $rmt
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -381,7 +348,8 @@ class AdminController extends Controller
     {
         $data = RoomType::findOrFail($request->id);
         $data->update($this->validateRoomTypes());
-        $request->session()->flash('status', 'Der Raumtyp <strong>' . request('rt_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Raumtyp <strong>'.request('rt_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
@@ -389,18 +357,16 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param Request $id
      *
      * @return Response
      */
     public function getRoomTypeData(Request $id)
     {
         $data = RoomType::findOrFail($id->id);
+
         return $data;
         // return response()->json($data);
     }
-
-
 
     /*
      *
@@ -421,23 +387,18 @@ class AdminController extends Controller
      */
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteRoomType(Request $request)
     {
         RoomType::destroy($request->id);
         $request->session()->flash('status', __('Der Raumtyp wurde gelöscht!'));
+
         return back();
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function createStellPlatzType(Request $request): RedirectResponse
     {
@@ -448,29 +409,24 @@ class AdminController extends Controller
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateStellPlatzTypes(): array
     {
         return request()->validate([
-                                       'spt_label'       => [
-                                           'bail',
-                                           'required',
-                                           'min:1',
-                                           'max:20',
-                                           Rule::unique('stellplatz_typs')->ignore(\request('id'))
-                                       ],
-                                       'spt_name'        => 'max:100',
-                                       'spt_description' => ''
-                                   ]);
+            'spt_label' => [
+                'bail',
+                'required',
+                'min:1',
+                'max:20',
+                Rule::unique('stellplatz_typs')->ignore(\request('id')),
+            ],
+            'spt_name' => 'max:100',
+            'spt_description' => '',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param StellplatzTyp $StellPlatzTyp
      *
      * @return Response
      */
@@ -478,7 +434,8 @@ class AdminController extends Controller
     {
         $data = StellplatzTyp::findOrFail($request->id);
         $data->update($this->validateStellPlatzTypes());
-        $request->session()->flash('status', 'Der Stellplatztyp <strong>' . request('spt_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Stellplatztyp <strong>'.request('spt_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
@@ -500,7 +457,6 @@ class AdminController extends Controller
         *
         */
 
-
     /*
         *
         *
@@ -521,25 +477,25 @@ class AdminController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * * @param Request $request
      *
+     * * @param Request $request
      * @return Response
      */
     public function getStellPlatzTypeData(Request $id)
     {
         $data = StellplatzTyp::findOrFail($id->id);
+
         return $data;
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteStellPlatzType(Request $request)
     {
         StellplatzTyp::destroy($request->id);
         $request->session()->flash('status', 'Der Stellplatztyp wurde gelöscht!');
+
         return back();
     }
 
@@ -547,6 +503,7 @@ class AdminController extends Controller
      * Show the form for creating a new resource. control_interval_id
      * *
      * @* param Request $id
+     *
      * @* return string
      * public function getAnforderungByVerordnungListe(Request $request)
      * {
@@ -566,7 +523,6 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -574,27 +530,23 @@ class AdminController extends Controller
     {
         ProduktKategorie::create($this->validateProduktKategorie());
 
-        $request->session()->flash('status', __('Die Produktkategorie') . ' <strong>' . request('pk_label') . '</strong> ' . __('wurde angelegt!'));
+        $request->session()->flash('status', __('Die Produktkategorie').' <strong>'.request('pk_label').'</strong> '.__('wurde angelegt!'));
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateProduktKategorie(): array
     {
         return request()->validate([
-                                       'pk_label'       => ['bail', 'required', 'min:1', 'max:20', Rule::unique('produkt_kategories')->ignore(\request('id')),],
-                                       'pk_name'        => 'bail|min:1|max:100',
-                                       'pk_description' => ''
-                                   ]);
+            'pk_label' => ['bail', 'required', 'min:1', 'max:20', Rule::unique('produkt_kategories')->ignore(\request('id'))],
+            'pk_name' => 'bail|min:1|max:100',
+            'pk_description' => '',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param ProduktKategorie $produktKategorie
      *
      * @return RedirectResponse
      */
@@ -602,37 +554,34 @@ class AdminController extends Controller
     {
         $data = ProduktKategorie::findOrFail($request->id);
         $data->update($this->validateProduktKategorie());
-        $request->session()->flash('status', 'Die Produkt-Kategorie <strong>' . request('pk_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Produkt-Kategorie <strong>'.request('pk_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
     /**
      * Show the form for creating a new resource.
-     * * @param Request $request
      *
+     * * @param Request $request
      * @return Response
      */
     public function getProdKatData(Request $id)
     {
         $data = ProduktKategorie::findOrFail($id->id);
+
         return $data;
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteProdKat(Request $request)
     {
         ProduktKategorie::destroy($request->id);
         $request->session()->flash('status', 'Die Produkt-Kategorie wurde gelöscht!');
+
         return back();
     }
-
-
-
-
 
     /*
         *
@@ -656,7 +605,6 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param Request $id
      *
      * @return Response
      */
@@ -668,8 +616,6 @@ class AdminController extends Controller
     /**
      * Aktualisiere die gegebene Anforderung
      *
-     * @param Request $request
-     * @param Anforderung $anforderung
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -677,7 +623,8 @@ class AdminController extends Controller
     {
         $data = Anforderung::findOrFail($request->id);
         $data->update($this->validateAnforderung());
-        $request->session()->flash('status', 'Die Anforderung <strong>' . request('an_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Anforderung <strong>'.request('an_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
@@ -685,7 +632,6 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * *
      *
-     * @param Request $id
      *
      * @return Builder|Builder[]|Collection|Model|Response
      */
@@ -695,36 +641,32 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteAnforderung(Request $request)
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Die Die Anforderung wurde gelöscht!');
+
         return back();
     }
 
     public function addNewAnforderungType(Request $request)
     {
         AnforderungType::create($this->validateNewAnforderungType());
-        $request->session()->flash('status', 'Der Prüfungstyp <strong>' . request('at_label') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Prüfungstyp <strong>'.request('at_label').'</strong> wurde angelegt!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateNewAnforderungType(): array
     {
         return request()->validate([
-                                       'at_label'       => 'bail|required|unique:anforderung_types,at_label|max:20',
-                                       'at_name'        => 'bail|max:100',
-                                       'at_description' => '',
-                                   ]);
+            'at_label' => 'bail|required|unique:anforderung_types,at_label|max:20',
+            'at_name' => 'bail|max:100',
+            'at_description' => '',
+        ]);
     }
-
 
     /*
         *
@@ -748,20 +690,18 @@ class AdminController extends Controller
     {
         $data = AnforderungType::findOrFail($request->id);
         $data->update($this->validateAnforderungType());
-        $request->session()->flash('status', 'Der Anforderung-Typ <strong>' . request('at_name') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Anforderung-Typ <strong>'.request('at_name').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateAnforderungType(): array
     {
         return request()->validate([
-                                       'at_label'       => 'bail|required|max:20',
-                                       'at_name'        => 'bail|max:100',
-                                       'at_description' => '',
-                                   ]);
+            'at_label' => 'bail|required|max:20',
+            'at_name' => 'bail|max:100',
+            'at_description' => '',
+        ]);
     }
 
     public function getAnforderungTypData(Request $request)
@@ -770,50 +710,43 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteAnforderungType(Request $request)
     {
         Anforderung::destroy($request->id);
         $request->session()->flash('status', 'Der Anforderung-Typ wurde gelöscht!');
+
         return back();
     }
 
     /**
      *  Speichere neue Dokzemententyp
      *
-     * @param Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function createDokumentType(Request $request)
     {
         DocumentType::create($this->validateNewDokumentType());
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>'.request('doctyp_label').'</strong> wurde angelegt!');
 
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateNewDokumentType(): array
     {
         return request()->validate([
-                                       'doctyp_label'       => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
-                                       'doctyp_name'        => 'bail|min:1|max:100',
-                                       'doctyp_description' => '',
-                                       'doctyp_mandatory'   => 'required'
-                                   ]);
+            'doctyp_label' => 'bail|required|unique:document_types,doctyp_label|min:1|max:20',
+            'doctyp_name' => 'bail|min:1|max:100',
+            'doctyp_description' => '',
+            'doctyp_mandatory' => 'required',
+        ]);
     }
 
     /**
      * Aktualisiere die gegebene Dokzemententyp
      *
-     * @param Request $request
-     * @param DocumentType $documentype
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -821,28 +754,25 @@ class AdminController extends Controller
     {
         $data = DocumentType::findOrFail($request->id);
         $data->update($this->validateDokumentType());
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>'.request('doctyp_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateDokumentType(): array
     {
         return request()->validate([
-                                       'doctyp_label'       => 'bail|required|min:1|max:20',
-                                       'doctyp_name'        => 'bail|min:1|max:100',
-                                       'doctyp_description' => '',
-                                       'doctyp_mandatory'   => 'required'
-                                   ]);
+            'doctyp_label' => 'bail|required|min:1|max:20',
+            'doctyp_name' => 'bail|min:1|max:100',
+            'doctyp_description' => '',
+            'doctyp_mandatory' => 'required',
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      * *
      *
-     * @param Request $id
      *
      * @return Response
      */
@@ -852,30 +782,28 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|RedirectResponse|Redirector
      */
     public function deleteDokumentType(Request $request)
     {
         DocumentType::destroy($request->id);
-        $request->session()->flash('status', 'Der Dokumententyp <strong>' . request('doctyp_label') . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Der Dokumententyp <strong>'.request('doctyp_label').'</strong> wurde gelöscht!');
+
         return back();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      *
      * @return Response
      */
     public function createAjaxBuildingType(Request $request)
     {
         $bt = BuildingTypes::create($this->validateBuldingTypes());
+
         return $bt;
     }
-
 
     public function getUsedAdressesByAdressType(Adresse $adress, Request $adt_id)
     {
@@ -919,19 +847,19 @@ class AdminController extends Controller
 
     public function getStorageIdListAll(Request $request)
     {
-        $loc = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,l_name as name'))->distinct()->join('locations', 'storages.storage_uid', '=', 'locations.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(l_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(l_beschreibung) LIKE ?', '%' . strtolower($request->term) . '%')->get();
+        $loc = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,l_name as name'))->distinct()->join('locations', 'storages.storage_uid', '=', 'locations.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(l_name) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(l_beschreibung) LIKE ?', '%'.strtolower($request->term).'%')->get();
 
-        $bul = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,b_name as name'))->distinct()->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(b_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(b_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
+        $bul = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,b_name as name'))->distinct()->join('buildings', 'storages.storage_uid', '=', 'buildings.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(b_name) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(b_description) LIKE ?', '%'.strtolower($request->term).'%')->get();
 
-        $rom = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,r_name as name'))->distinct()->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(r_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(r_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
+        $rom = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,r_name as name'))->distinct()->join('rooms', 'storages.storage_uid', '=', 'rooms.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(r_name) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(r_description) LIKE ?', '%'.strtolower($request->term).'%')->get();
 
-        $stp = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,sp_name as name'))->distinct()->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(sp_name) LIKE ?', '%' . strtolower($request->term) . '%')->orWhereRaw('LOWER(sp_description) LIKE ?', '%' . strtolower($request->term) . '%')->get();
+        $stp = DB::table('storages')->select(DB::raw('storages.id,storage_label,storages.storage_uid,sp_name as name'))->distinct()->join('stellplatzs', 'storages.storage_uid', '=', 'stellplatzs.storage_id')->whereRaw('LOWER(storage_label) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(sp_name) LIKE ?', '%'.strtolower($request->term).'%')->orWhereRaw('LOWER(sp_description) LIKE ?', '%'.strtolower($request->term).'%')->get();
 
         return [
             'loc' => $loc,
             'bul' => $bul,
             'rom' => $rom,
-            'stp' => $stp
+            'stp' => $stp,
         ];
     }
 
@@ -939,7 +867,4 @@ class AdminController extends Controller
     {
         return Str::uuid();
     }
-
-
-
 }

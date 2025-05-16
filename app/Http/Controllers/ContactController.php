@@ -14,7 +14,6 @@ use Illuminate\View\View;
 
 class ContactController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -28,27 +27,26 @@ class ContactController extends Controller
     public function index()
     {
         return view('admin.organisation.contact.index', [
-            'contacts' => Contact::with('firma')->sortable()->paginate(10)
+            'contacts' => Contact::with('firma')->sortable()->paginate(10),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request $request
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
         $company_id = (isset($request->c)) ? $request->c : '';
+
         return view('admin.organisation.contact.create', ['company_id' => $company_id]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -56,46 +54,42 @@ class ContactController extends Controller
     {
         $contact = Contact::create($this->validateContact());
         $request->session()->flash('status', __('Kontakt wurde erstellt'));
+
         return redirect(route('contact.show', compact('contact')));
     }
 
-    /**
-     * @return array
-     */
-    public function validateContact()
-    : array
+    public function validateContact(): array
     {
         return request()->validate([
-            'con_label'    => [
+            'con_label' => [
                 'bail',
                 'max:100',
                 'required',
-                Rule::unique('contacts')->ignore(request('id'))
+                Rule::unique('contacts')->ignore(request('id')),
             ],
-            'con_name'     => [
+            'con_name' => [
                 'bail',
                 'max:100',
                 'required',
-                Rule::unique('contacts')->ignore(request('id'))
+                Rule::unique('contacts')->ignore(request('id')),
             ],
-            'con_name_2'   => '',
-            'con_vorname'  => '',
+            'con_name_2' => '',
+            'con_vorname' => '',
             'con_position' => '',
-            'con_email'    => 'email',
-            'con_telefon'  => '',
-            'con_mobil'    => '',
-            'con_fax'      => '',
-            'con_com_1'    => '',
-            'con_com_2'    => '',
-            'firma_id'     => 'required',
-            'anrede_id'    => 'required',
+            'con_email' => 'email',
+            'con_telefon' => '',
+            'con_mobil' => '',
+            'con_fax' => '',
+            'con_com_1' => '',
+            'con_com_2' => '',
+            'firma_id' => 'required',
+            'anrede_id' => 'required',
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Contact $contact
      *
      * @return Application|Factory|Response|View
      */
@@ -107,7 +101,6 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Contact $contact
      *
      * @return Response
      */
@@ -118,24 +111,18 @@ class ContactController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request $request
-     * @param  Contact $contact
-     *
-     * @return RedirectResponse
      */
-    public function update(Contact $contact, Request $request)
-    : RedirectResponse
+    public function update(Contact $contact, Request $request): RedirectResponse
     {
         $contact->update($this->validateContact());
         $request->session()->flash('status', __('Kontakt wurde aktualisiert'));
+
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Contact $contact
      *
      * @return RedirectResponse
      */
@@ -143,6 +130,7 @@ class ContactController extends Controller
     {
         request()->session()->flash('status', __('Der Kontakt <strong>:label</strong> wurde gelöscht!', ['label' => $contact->con_name]));
         $contact->delete();
+
         return redirect()->route('contact.index');
 
     }

@@ -19,34 +19,32 @@ class TestwareController extends Controller
         $this->middleware('auth');
     }
 
-    public function dashboard():View
+    public function dashboard(): View
     {
         $maxListItems = 15;
         $now = now();
 
         // Fetch everything once
         $equipmentTestList = ControlEquipment::join('anforderungs', 'anforderung_id', '=', 'anforderungs.id')
-                                             ->with(['Equipment', 'Anforderung'])
-                                             ->whereNull('control_equipment.archived_at')
-                                             ->where('anforderungs.is_initial_test', false)
-                                             ->where('qe_control_date_due', '<=', $now->copy()->endOfYear())
-                                             ->orderBy('qe_control_date_due')
-                                             ->get();
+            ->with(['Equipment', 'Anforderung'])
+            ->whereNull('control_equipment.archived_at')
+            ->where('anforderungs.is_initial_test', false)
+            ->where('qe_control_date_due', '<=', $now->copy()->endOfYear())
+            ->orderBy('qe_control_date_due')
+            ->get();
 
         // Filter in-memory (no new queries!)
         $equipmentTestWeekList = $equipmentTestList->filter(
-            fn($item) => $item->qe_control_date_due <= $now->copy()->addWeeks(4)
+            fn ($item) => $item->qe_control_date_due <= $now->copy()->addWeeks(4)
         );
 
         $equipmentTestMonthList = $equipmentTestList->filter(
-            fn($item) =>
-                $item->qe_control_date_due > $now->copy()->addWeeks(4) &&
+            fn ($item) => $item->qe_control_date_due > $now->copy()->addWeeks(4) &&
                 $item->qe_control_date_due <= $now->copy()->addMonths(4)
         );
 
         $equipmentTestYearList = $equipmentTestList->filter(
-            fn($item) =>
-                $item->qe_control_date_due > $now->copy()->addMonths(4) &&
+            fn ($item) => $item->qe_control_date_due > $now->copy()->addMonths(4) &&
                 $item->qe_control_date_due <= $now->copy()->endOfYear()
         );
 
@@ -69,8 +67,9 @@ class TestwareController extends Controller
      */
     public function index()
     {
-//        CheckEquipmentTestDueDates::dispatchSync();
+        //        CheckEquipmentTestDueDates::dispatchSync();
         $initialiseApp = (User::count() === 1 && Auth::user()->name === 'testware');
+
         return view('dashboard', compact('initialiseApp'));
     }
 
@@ -87,7 +86,6 @@ class TestwareController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return Response
      */
@@ -121,9 +119,7 @@ class TestwareController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int     $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function update(Request $request, $id)

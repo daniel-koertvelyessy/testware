@@ -5,27 +5,31 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-class Lizenz extends Model {
+class Lizenz extends Model
+{
+    protected $table = 'lizenz';
 
-    protected $table ='lizenz';
+    protected $guarded = [];
 
-    protected $guarded =[];
+    public static function getMaxObjects($id)
+    {
 
-    public static function getMaxObjects($id){
+        $liz = Lizenz::where('lizenz_id', $id)->first();
 
-        $liz = Lizenz::where('lizenz_id',$id)->first();
         return $liz->lizenz_max_objects;
     }
 
-
-    public function checkNumObjectsOverflow() {
+    public function checkNumObjectsOverflow()
+    {
         $maxObj = Lizenz::getMaxObjects(config('app.lizenzid'));
         session('allowNewObject', (Lizenz::getNumObjekte() <= $maxObj));
-        return Lizenz::getNumObjekte() . ' / ' . $maxObj;
+
+        return Lizenz::getNumObjekte().' / '.$maxObj;
 
     }
 
-    public static function getNumObjekte() {
+    public static function getNumObjekte()
+    {
 
         $numLocation = Cache::remember(
             'app-get-current-amount-Location',
@@ -70,5 +74,4 @@ class Lizenz extends Model {
         return $numLocation + $numBuilding + $numRoom + $numStellplatz + $numEquipment;
 
     }
-
 }

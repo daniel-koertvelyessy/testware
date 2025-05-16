@@ -10,18 +10,17 @@ class ProductState extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
-     *
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'label'          => $this->ps_label,
-            'name'           => $this->ps_name,
-            'description'    => $this->ps_description,
+            'label' => $this->ps_label,
+            'name' => $this->ps_name,
+            'description' => $this->ps_description,
             'bs_color_class' => $this->ps_color,
-            'bs_icon_class'  => $this->ps_icon,
+            'bs_icon_class' => $this->ps_icon,
         ];
     }
 }

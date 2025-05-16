@@ -4,21 +4,19 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Building;
 use App\Http\Controllers\Controller;
-use App\Room;
 use App\Http\Resources\rooms\Room as RoomResource;
 use App\Http\Resources\rooms\RoomFull as RoomFullResource;
+use App\Room;
 use App\RoomType;
 use App\Storage;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class RoomController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -27,7 +25,6 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
      *
      * @return AnonymousResourceCollection
      */
@@ -36,12 +33,13 @@ class RoomController extends Controller
         if ($request->input('per_page')) {
             return RoomResource::collection(Room::with('RoomType', 'building')->paginate($request->input('per_page')));
         }
+
         return RoomResource::collection(Room::with('RoomType', 'building')->get());
     }
 
     public function storemany(Request $request)
     {
-        $jsondata = (object)$request->json()->all();
+        $jsondata = (object) $request->json()->all();
         if (isset($jsondata->label)) {
             return $this->store($request);
         } else {
@@ -56,9 +54,10 @@ class RoomController extends Controller
                 /**
                  *    label is a required field. Skipp this dataset
                  */
-                if (!isset($data['label'])) {
+                if (! isset($data['label'])) {
                     $roomTypeList[] = ['error' => 'no required items found (missing item [label])'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -72,7 +71,7 @@ class RoomController extends Controller
                     } else {
                         $room_type_id = (new RoomType)->addNewType($data['type']);
                         $roomTypeList[] = [
-                            'id' => $room_type_id
+                            'id' => $room_type_id,
                         ];
                     }
                 } elseif (isset($data['room_type_id'])) {
@@ -82,11 +81,13 @@ class RoomController extends Controller
                     } else {
                         $roomTypeList[] = ['error' => 'skipp dataset due to invalid room type given'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
                     $roomTypeList[] = ['error' => 'skipp dataset due to invalid room type given'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -94,15 +95,16 @@ class RoomController extends Controller
                     $checkBuilding = Building::where('b_label', $data['building']['label'])->first();
                     if ($checkBuilding && $checkBuilding->storage_id === $data['building']['uid']) {
                         $building_id = $checkBuilding->id;
-                    } elseif (!$checkBuilding) {
+                    } elseif (! $checkBuilding) {
                         $building_id = (new Building)->add($data['building']);
                         $buildList[] = [
-                            'id'    => $building_id,
-                            'label' => $data['building']['label']
+                            'id' => $building_id,
+                            'label' => $data['building']['label'],
                         ];
                     } else {
                         $roomTypeList[] = ['error' => 'skipp dataset due to building data given'];
                         $countSkipped++;
+
                         continue;
                     }
                 } elseif (isset($data['building_id'])) {
@@ -112,11 +114,13 @@ class RoomController extends Controller
                     } else {
                         $roomTypeList[] = ['error' => 'skipp dataset due to building data given'];
                         $countSkipped++;
+
                         continue;
                     }
                 } else {
                     $roomTypeList[] = ['error' => 'skipp dataset due to building data given'];
                     $countSkipped++;
+
                     continue;
                 }
 
@@ -141,7 +145,7 @@ class RoomController extends Controller
                     /**
                      *   no matching found => create new one!
                      */
-                    $room = new Room();
+                    $room = new Room;
                     $countNew++;
                     $updateRoom = false;
                 }
@@ -158,7 +162,6 @@ class RoomController extends Controller
                     $r_description = (isset($data['description'])) ? $data['description'] : null;
                 }
 
-
                 $room->r_label = $r_label;
                 $room->r_name = $r_name;
                 $room->storage_id = $storage_uid;
@@ -168,20 +171,20 @@ class RoomController extends Controller
                 $room->save();
 
                 $idList[] = [
-                    'id'    => $room->id,
-                    'label' => $r_label
+                    'id' => $room->id,
+                    'label' => $r_label,
                 ];
             }
 
             return response()->json([
                 'updated_objects' => $countUpdate,
                 'skipped_objects' => $countSkipped,
-                'new_objects'     => [
-                    'room'      => $countNew,
-                    'building'  => $buildList,
-                    'room_type' => $roomTypeList
+                'new_objects' => [
+                    'room' => $countNew,
+                    'building' => $buildList,
+                    'room_type' => $roomTypeList,
                 ],
-                'id_list'         => $idList
+                'id_list' => $idList,
             ]);
         }
     }
@@ -189,30 +192,33 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return RoomResource
      */
     public function store(Request $request)
     {
         $request->validate([
-            'label'        => 'required|unique:rooms,r_label|max:20',
-            'uid'          => 'unique:rooms,storage_id',
-            'name'         => '',
-            'description'  => '',
-            'building_id'  => '',
+            'label' => 'required|unique:rooms,r_label|max:20',
+            'uid' => 'unique:rooms,storage_id',
+            'name' => '',
+            'description' => '',
+            'building_id' => '',
             'room_type_id' => '',
         ]);
 
-        if (!Building::find($request->building_id)) return response()->json([
-            'error' => 'no building with given id found'
-        ], 422);
+        if (! Building::find($request->building_id)) {
+            return response()->json([
+                'error' => 'no building with given id found',
+            ], 422);
+        }
 
-        if (!RoomType::find($request->room_type_id)) return response()->json([
-            'error' => 'no room type with given id found'
-        ], 422);
+        if (! RoomType::find($request->room_type_id)) {
+            return response()->json([
+                'error' => 'no room type with given id found',
+            ], 422);
+        }
 
-        $room = new Room();
+        $room = new Room;
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
         $room->r_label = $request->label;
         $room->storage_id = $uid;
@@ -228,7 +234,6 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
      *
      * @return AnonymousResourceCollection
      */
@@ -237,13 +242,13 @@ class RoomController extends Controller
         if ($request->input('per_page')) {
             return RoomFullResource::collection(Room::with('RoomType', 'building')->paginate($request->input('per_page')));
         }
+
         return RoomFullResource::collection(Room::with('RoomType', 'building')->get());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Room $room
      *
      * @return RoomResource
      */
@@ -255,21 +260,19 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int     $id
-     *
+     * @param  int  $id
      * @return RoomResource
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'label'        => 'required',
-            'uid'          => '',
-            'name'         => '',
-            'description'  => '',
-            'building_id'  => '',
+            'label' => 'required',
+            'uid' => '',
+            'name' => '',
+            'description' => '',
+            'building_id' => '',
             'room_type_id' => 'exclude_unless:type.label,true|required',
-            'type.label'   => 'exclude_unless:room_type_id,true|required',
+            'type.label' => 'exclude_unless:room_type_id,true|required',
         ]);
 
         $room = Room::find($id);
@@ -288,7 +291,7 @@ class RoomController extends Controller
             /**
              * Room was not found. Try to add as new room
              */
-            $room = new Room();
+            $room = new Room;
             $room->r_label = $request->label;
             $room->r_name = (isset($request->name)) ? $request->name : null;
             $room->r_description = (isset($request->description)) ? $request->description : null;
@@ -310,13 +313,12 @@ class RoomController extends Controller
                 $room->building_id = $request->building_id;
             } else {
                 return response()->json([
-                    'error' => 'referenced building could not be found'
+                    'error' => 'referenced building could not be found',
                 ], 422);
             }
         } else {
             $room->building_id = 1;
         }
-
 
         /**
          * Check if room-type-id or room-type-name is given and check if they exits
@@ -327,7 +329,7 @@ class RoomController extends Controller
                 $room->room_type_id = $request->room_type_id;
             } else {
                 return response()->json([
-                    'error' => 'referenced room type could not be found'
+                    'error' => 'referenced room type could not be found',
                 ], 422);
             }
         } elseif (isset($request->type['label'])) {
@@ -342,22 +344,24 @@ class RoomController extends Controller
             $room->room_type_id = 1;
         }
         $room->save();
+
         return new RoomResource($room);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Room $room
      *
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function destroy(Room $room)
     {
         $room->delete();
+
         return response()->json([
-            'status' => 'room deleted'
+            'status' => 'room deleted',
         ]);
     }
 }

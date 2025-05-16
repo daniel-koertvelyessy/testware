@@ -2,7 +2,6 @@
 
 use Database\Seeders\LocationsSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +17,7 @@ class DatabaseSeeder extends Seeder
             \UsersTableSeeder::class,
             \FirmaSeeder::class,
             LocationsSeeder::class,
-            \EquipmentSeeder::class
+            \EquipmentSeeder::class,
         ]);
     }
 }

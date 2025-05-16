@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AciDataSet;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class AciDataSetController extends Controller
 {
@@ -31,7 +30,6 @@ class AciDataSetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -48,7 +46,7 @@ class AciDataSetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\AciDataSet $aciDataSet
+     * @param  \App\AciDataSet  $aciDataSet
      * @return \Illuminate\Http\Response
      */
     public function show(AciDataSet $acidataset)
@@ -59,7 +57,6 @@ class AciDataSetController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\AciDataSet $aciDataSet
      * @return \Illuminate\Http\Response
      */
     public function edit(AciDataSet $aciDataSet)
@@ -70,16 +67,15 @@ class AciDataSetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\AciDataSet $acidataset
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(AciDataSet $acidataset)
     {
-      //  dd($request);
-       $msg = $acidataset->update($this->validateAciDataSet())
-           ? __('Datensatz wurde aktualisiert')
-           : __('Fehler beim Aktualisieren');
+        //  dd($request);
+        $msg = $acidataset->update($this->validateAciDataSet())
+            ? __('Datensatz wurde aktualisiert')
+            : __('Fehler beim Aktualisieren');
         session()->flash('status', $msg);
 
         return back();
@@ -88,7 +84,6 @@ class AciDataSetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\AciDataSet $acidataset
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(AciDataSet $acidataset)
@@ -102,17 +97,15 @@ class AciDataSetController extends Controller
 
     }
 
-
     public function validateAciDataSet(): array
     {
         return request()->validate([
-                                       'data_point_value'            => 'required',
-                                       'data_point_tol_target_mode'  => '',
-                                       'data_point_tol'              => 'numeric',
-                                       'data_point_tol_mod'          => '',
-                                       'data_point_sort'             => 'integer',
-                                       'anforderung_control_item_id' => 'required',
-                                   ]);
+            'data_point_value' => 'required',
+            'data_point_tol_target_mode' => '',
+            'data_point_tol' => 'numeric',
+            'data_point_tol_mod' => '',
+            'data_point_sort' => 'integer',
+            'anforderung_control_item_id' => 'required',
+        ]);
     }
-
 }

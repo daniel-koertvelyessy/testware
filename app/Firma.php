@@ -25,19 +25,18 @@ class Firma extends Model
         return view('admin.organisation.firma.show', $this);
     }
 
-    #TODO replace german method with en one below
+    // TODO replace german method with en one below
     public function Adresse()
     {
         return $this->belongsTo(Adresse::class);
     }
 
-    public static function getAddressLabel(Firma $firma):string
+    public static function getAddressLabel(Firma $firma): string
     {
 
-      $address =   Adresse::find($firma->adresse_id);
+        $address = Adresse::find($firma->adresse_id);
 
-      return $address->ad_anschrift_strasse . ' - ' . $address->ad_anschrift_ort;
-
+        return $address->ad_anschrift_strasse.' - '.$address->ad_anschrift_ort;
 
     }
 
@@ -48,7 +47,7 @@ class Firma extends Model
 
     public function equipmentInstructor()
     {
-        return $this->hasMany(EquipmentInstruction::class,'equipment_instruction_instructor_firma_id');
+        return $this->hasMany(EquipmentInstruction::class, 'equipment_instruction_instructor_firma_id');
     }
 
     public function contact()
@@ -97,7 +96,6 @@ class Firma extends Model
             'adresse_id' => '',
         ]);
 
-
         $this->fa_label = $request->fa_label;
         $this->fa_name = $request->fa_name;
         $this->fa_description = $request->fa_description;
@@ -106,20 +104,23 @@ class Firma extends Model
         $this->fa_vat = $request->fa_vat;
         $this->adresse_id = isset($request->adresse_id) ? $request->adresse_id : null;
         $this->save();
+
         return $this->id;
     }
 
-    public function addFromAPI(array $data, $addAddress = False)
+    public function addFromAPI(array $data, $addAddress = false)
     {
-        if (empty($data['label'])) return 0;
+        if (empty($data['label'])) {
+            return 0;
+        }
         $this->fa_label = $data['label'];
         $this->fa_name = $data['name'];
         $this->fa_description = $data['description'];
         $this->fa_kreditor_nr = $data['vendor_id'];
         $this->fa_debitor_nr = $data['custmer_id'];
         $this->fa_vat = $data['vat'];
-        if (isset($data['address']) && isset($data['address']['label']) && $addAddress){
-            $this->adresse_id =(new Adresse)->addFromAPI($data['address']);
+        if (isset($data['address']) && isset($data['address']['label']) && $addAddress) {
+            $this->adresse_id = (new Adresse)->addFromAPI($data['address']);
         } else {
             $this->adresse_id = $data['address_id'] ?? 1;
         }
@@ -131,19 +132,21 @@ class Firma extends Model
     {
         if (isset($data['id'])) {
             $company = Firma::find($data['id']);
+
             return $company->id;
         }
 
         $getCompany = Firma::where([
             [
                 'fa_label',
-                $data['label']
+                $data['label'],
             ],
             [
                 'fa_name',
-                $data['name']
+                $data['name'],
             ],
         ])->first();
+
         return $getCompany->id;
     }
 }

@@ -2,16 +2,15 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Kyslik\ColumnSortable\Sortable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Storage extends Model
 {
-    use SoftDeletes, Sortable, HasFactory;
+    use HasFactory, SoftDeletes, Sortable;
 
     public $sortable = [
         'id',
@@ -27,7 +26,7 @@ class Storage extends Model
                 'app-get-current-amount-Location',
                 'countTotalEquipmentInLocation',
                 'system-status-database',
-                'system-status-objects'
+                'system-status-objects',
             ];
 
             foreach ($cacheKeys as $key) {
@@ -44,19 +43,23 @@ class Storage extends Model
 
             case 'locations':
                 $loc = Location::where('storage_id', $this->storage_uid)->first();
-                return ($loc) ? $loc->l_label . ' - ' . $loc->l_name : 'loc - ' . $this->storage_label;
+
+                return ($loc) ? $loc->l_label.' - '.$loc->l_name : 'loc - '.$this->storage_label;
 
             case 'buildings':
                 $bul = Building::where('storage_id', $this->storage_uid)->first();
-                return ($bul) ? $bul->b_label . ' - ' . $bul->b_name : 'bul - ' . $this->storage_label;
+
+                return ($bul) ? $bul->b_label.' - '.$bul->b_name : 'bul - '.$this->storage_label;
 
             case 'rooms':
                 $room = Room::where('storage_id', $this->storage_uid)->first();
-                return ($room) ? $room->r_label . ' - ' . $room->r_name : 'rom - ' . $this->storage_label;
+
+                return ($room) ? $room->r_label.' - '.$room->r_name : 'rom - '.$this->storage_label;
 
             case 'stellplatzs':
                 $spl = Stellplatz::where('storage_id', $this->storage_uid)->first();
-                return ($spl) ? $spl->sp_label . ' - ' . $spl->sp_name : 'com - ' . $this->storage_label;
+
+                return ($spl) ? $spl->sp_label.' - '.$spl->sp_name : 'com - '.$this->storage_label;
 
             default:
                 return $this->storage_label;
@@ -76,7 +79,7 @@ class Storage extends Model
             case 'locations':
 
                 $loc = Location::where('storage_id', $stdid->storage_uid)->first();
-                $path = __('Standort') . ': ' . $loc->l_label;
+                $path = __('Standort').': '.$loc->l_label;
                 break;
 
             case 'buildings':
@@ -85,21 +88,18 @@ class Storage extends Model
 
                 $loc = Location::where('id', $bul->location_id)->first();
 
-                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ': ' . $bul->b_label;
+                $path = __('Standort').': '.$loc->l_label.' > '.__('Gebäude').': '.$bul->b_label;
                 break;
 
             case 'rooms':
 
                 $rom = Room::where('storage_id', $stdid->storage_uid)->first();
 
-
                 $bul = Building::find($rom->building_id);
-
 
                 $loc = Location::find($bul->location_id);
 
-
-                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label . ' > ' . __('Raum') . ':' . ' ' . $rom->r_label;
+                $path = __('Standort').': '.$loc->l_label.' > '.__('Gebäude').':'.' '.$bul->b_label.' > '.__('Raum').':'.' '.$rom->r_label;
 
                 break;
 
@@ -111,11 +111,9 @@ class Storage extends Model
 
                 $bul = Building::find($rom->building_id)->first();
 
-
                 $loc = Location::find($bul->location_id)->first();
 
-
-                $path = __('Standort') . ': ' . $loc->l_label . ' > ' . __('Gebäude') . ':' . ' ' . $bul->b_label . ' > ' . __('Raum') . ':' . ' ' . $rom->r_label . ' > ' . __('Stellplatz') . ':' . ' ' . $spl->sp_label;
+                $path = __('Standort').': '.$loc->l_label.' > '.__('Gebäude').':'.' '.$bul->b_label.' > '.__('Raum').':'.' '.$rom->r_label.' > '.__('Stellplatz').':'.' '.$spl->sp_label;
 
                 break;
         }
@@ -131,9 +129,9 @@ class Storage extends Model
     }
 
     /**
-     * @param $uid string 'UUID
-     * @param $label string 'Label'
-     * @param $type string 'Typ: locations, '
+     * @param  $uid  string 'UUID
+     * @param  $label  string 'Label'
+     * @param  $type  string 'Typ: locations, '
      * @return int|mixed
      */
     public function change($uid, $label, $type)
@@ -144,20 +142,22 @@ class Storage extends Model
     public function add($uid, $label, $type)
     {
         $storageByLabel = Storage::where('storage_label', $label)->first();
-        if (!$storageByLabel) {
+        if (! $storageByLabel) {
             $storageByUid = Storage::where('storage_uid', $uid)->first();
-            if (!$storageByUid) {
-                $storage = new Storage();
+            if (! $storageByUid) {
+                $storage = new Storage;
                 $storage->storage_object_type = $type;
                 $storage->storage_uid = $uid;
                 $storage->storage_label = $label;
                 $storage->save();
+
                 return $storage->id;
             } else {
                 $storageByUid->storage_object_type = $type;
                 $storageByUid->storage_uid = $uid;
                 $storageByUid->storage_label = $label;
                 $storageByUid->save();
+
                 return $storageByUid->id;
             }
         } else {
@@ -165,6 +165,7 @@ class Storage extends Model
             $storageByLabel->storage_uid = $uid;
             $storageByLabel->storage_label = $label;
             $storageByLabel->save();
+
             return $storageByLabel->id;
         }
     }
@@ -209,8 +210,8 @@ class Storage extends Model
         return Storage::where('storage_uid', $uid)->count() > 0;
     }
 
-    public static function countEquipment(Location $location){
-
+    public static function countEquipment(Location $location)
+    {
 
         return Equipment::where('storage_id', $location->id)->count();
     }

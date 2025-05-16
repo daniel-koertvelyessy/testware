@@ -3,19 +3,18 @@
 namespace App;
 
 use Carbon\Carbon;
-
-//use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Http\Request;
+use Kyslik\ColumnSortable\Sortable;
 
 class ControlEquipment extends Model
 {
     use SoftDeletes, Sortable;
 
-    protected $guarded= [];
+    protected $guarded = [];
 
     public $sortable = [
         'id',
@@ -24,17 +23,17 @@ class ControlEquipment extends Model
     ];
 
     protected $casts = [
-        'archived_at' =>'date',
+        'archived_at' => 'date',
         'qe_control_date_due' => 'date',
     ];
 
-//    protected $with = [
-//        'Equipment','Anforderung'
-//    ];
+    //    protected $with = [
+    //        'Equipment','Anforderung'
+    //    ];
 
     public function Equipment(): BelongsTo
     {
-        return $this->belongsTo(Equipment::class,'equipment_id');
+        return $this->belongsTo(Equipment::class, 'equipment_id');
     }
 
     public function DelayedControlEquipment(): BelongsTo
@@ -63,11 +62,11 @@ class ControlEquipment extends Model
     {
         $date = Carbon::parse($qeitem->qe_control_date_due)->DiffForHumans();
         if (now()->addWeeks($qeitem->qe_control_date_warn) < $qeitem->qe_control_date_due) {
-            return '<span class="fas fa-circle text-success mr-3"></span> ' . '<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">' . $date . '</span>';
+            return '<span class="fas fa-circle text-success mr-3"></span> '.'<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">'.$date.'</span>';
         } elseif (now()->addWeeks($qeitem->qe_control_date_warn) >= $qeitem->qe_control_date_due && now() < $qeitem->qe_control_date_due) {
-            return '<span class="fas fa-circle text-warning mr-3"></span> ' . '<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">' . $date . '</span>';
+            return '<span class="fas fa-circle text-warning mr-3"></span> '.'<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">'.$date.'</span>';
         } else {
-            return '<span class="fas fa-circle text-danger mr-3"></span> ' . '<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">' . $date . '</span>';
+            return '<span class="fas fa-circle text-danger mr-3"></span> '.'<span class="d-none d-md-inline" title="'.$qeitem->qe_control_date_due.'">'.$date.'</span>';
         }
 
     }
@@ -81,10 +80,10 @@ class ControlEquipment extends Model
 
         $Anforderung = Anforderung::find($this->anforderungs_id);
 
-        if (!$Anforderung){
+        if (! $Anforderung) {
             return [
                 'success' => false,
-                'html'    => $this->makeHtmlWarning(__('Keine Anforderung mit Gerät verknüpft'),'#')
+                'html' => $this->makeHtmlWarning(__('Keine Anforderung mit Gerät verknüpft'), '#'),
             ];
         }
 
@@ -108,7 +107,6 @@ class ControlEquipment extends Model
 
         $countControlEquipment = Equipment::getControlEquipmentList();
 
-
         foreach ($Anforderung->AnforderungControlItem as $aci) {
             $hasTestItem = true;
             if ($aci->aci_control_equipment_required) {
@@ -119,25 +117,24 @@ class ControlEquipment extends Model
             }
         }
 
-//        dump('countControlItems => ' . $this->countControlItems());
-//        dump('countQualifiedUser => ' . $this->countQualifiedUser());
-//        dump('$testProductsAvaliable => ', $testProductsAvaliable);
-//        dump('$hasTestItem => ', $hasTestItem);
-//        dump('$controlProductsAvaliable => ' . $controlProductsAvaliable);
-//        dump('$testProductsAvaliable => ', $testProductsAvaliable);
-//
-//        dd($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable));
-
+        //        dump('countControlItems => ' . $this->countControlItems());
+        //        dump('countQualifiedUser => ' . $this->countQualifiedUser());
+        //        dump('$testProductsAvaliable => ', $testProductsAvaliable);
+        //        dump('$hasTestItem => ', $hasTestItem);
+        //        dump('$controlProductsAvaliable => ' . $controlProductsAvaliable);
+        //        dump('$testProductsAvaliable => ', $testProductsAvaliable);
+        //
+        //        dd($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable));
 
         if ($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable)) {
             return [
                 'success' => true,
-                'html'    => null
+                'html' => null,
             ];
         } else {
             return [
                 'success' => false,
-                'html'    => $controlItemMsg . $hasQualifiedUsersMsg . $hasTestItemMsg
+                'html' => $controlItemMsg.$hasQualifiedUsersMsg.$hasTestItemMsg,
             ];
         }
 
@@ -151,13 +148,13 @@ class ControlEquipment extends Model
 
     public function makeHtmlWarning($msg, $link)
     {
-        return '<span class="bg-warning p-1">' . $msg . '</span><a href="' . $link . '" class="btn btn-sm btn-outline-primary ml-2">' . __('Beheben') . '</a>';
+        return '<span class="bg-warning p-1">'.$msg.'</span><a href="'.$link.'" class="btn btn-sm btn-outline-primary ml-2">'.__('Beheben').'</a>';
     }
 
     public function countQualifiedUser()
     {
 
-        $equipment = Equipment::where('id',$this->equipment_id)->first();
+        $equipment = Equipment::where('id', $this->equipment_id)->first();
         $qualifiedUser = 0;
         $qualifiedUser += $equipment->produkt->ProductQualifiedUser()->count();
         $qualifiedUser += $equipment->countQualifiedUser();
@@ -165,12 +162,11 @@ class ControlEquipment extends Model
         return $qualifiedUser;
     }
 
-    public function isInitialTest():bool
+    public function isInitialTest(): bool
     {
         return $this->Anforderung->is_initial_test;
 
     }
-
 
     public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, Request $request)
     {
@@ -178,7 +174,7 @@ class ControlEquipment extends Model
         $interval = $produktAnforderung->Anforderung->an_control_interval;
         $conInt = $produktAnforderung->Anforderung->control_interval_id;
         $zeit = ControlInterval::find($conInt);
-        $dueDate = date('Y-m-d', strtotime("+" . $interval . $zeit->ci_delta, strtotime($request->qe_control_date_last)));
+        $dueDate = date('Y-m-d', strtotime('+'.$interval.$zeit->ci_delta, strtotime($request->qe_control_date_last)));
         $this->qe_control_date_last = $request->qe_control_date_last;
         $this->qe_control_date_due = $dueDate;
         $this->qe_control_date_warn = $request->qe_control_date_warn;
@@ -190,13 +186,13 @@ class ControlEquipment extends Model
         return $dueDate;
     }
 
-    public function getIsOverdueAttribute() :bool
+    public function getIsOverdueAttribute(): bool
     {
         return $this->qe_control_date_due < now();
     }
-    public function getIsDueAttribute() :bool
-    {
-        return $this->qe_control_date_due <  now()->addWeeks($this->qe_control_date_warn);
-    }
 
+    public function getIsDueAttribute(): bool
+    {
+        return $this->qe_control_date_due < now()->addWeeks($this->qe_control_date_warn);
+    }
 }

@@ -14,12 +14,10 @@ use Illuminate\View\View;
 
 class VerordnungController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -30,15 +28,14 @@ class VerordnungController extends Controller
     {
         if (Verordnung::all()->count() > 10) {
             return view('admin.verordnung.index', [
-                'verordnungen' => Verordnung::with('anforderung')->sortable()->paginate(10)
+                'verordnungen' => Verordnung::with('anforderung')->sortable()->paginate(10),
             ]);
         } else {
             return view('admin.verordnung.index', [
-                'verordnungen' => Verordnung::with('anforderung')->sortable()->get()
+                'verordnungen' => Verordnung::with('anforderung')->sortable()->get(),
             ]);
         }
     }
-
 
     public function main()
     {
@@ -59,21 +56,20 @@ class VerordnungController extends Controller
      *  Speichere neue Anforderung
      *
      *
-     * @param Request $request
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function store(Request $request)
     {
         $verordnung = Verordnung::create($this->validateVerordnug());
 
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_label') . '</strong> wurde angelegt!');
+        $request->session()->flash('status', 'Die Verordnung <strong>'.request('vo_label').'</strong> wurde angelegt!');
+
         return view('admin.verordnung.show', ['verordnung' => $verordnung]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Verordnung $verordnung
      * @return Application|Factory|Response|View
      */
     public function show(Verordnung $verordnung)
@@ -84,7 +80,6 @@ class VerordnungController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Verordnung $verordnung
      * @return Response
      */
     public function edit(Verordnung $verordnung)
@@ -95,41 +90,38 @@ class VerordnungController extends Controller
     /**
      * Aktualisiere die gegebene Verordnung
      *
-     * @param Request $request
-     * @param Verordnung $anforderung
+     * @param  Verordnung  $anforderung
      * @return Application|RedirectResponse|Response|Redirector
      */
     public function update(Request $request, Verordnung $verordnung)
     {
         $data = Verordnung::findOrFail($request->id);
         $data->update($this->validateVerordnug());
-        $request->session()->flash('status', 'Die Verordnung <strong>' . request('vo_label') . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Verordnung <strong>'.request('vo_label').'</strong> wurde aktualisiert!');
+
         return back();
     }
 
     /**
-     * @param Request $request
      * @return Application|RedirectResponse|Redirector
      */
     public function destroy(Request $request, Verordnung $verordnung)
     {
         $verordnung->delete();
         $request->session()->flash('status', __('Die Verordnung wurde gelöscht!'));
+
         return back();
     }
 
-    /**
-     * @return array
-     */
     public function validateVerordnug(): array
     {
         return request()->validate([
-            'vo_label'                      => [
+            'vo_label' => [
                 'bail',
                 'alpha_dash',
                 'required',
                 'max:20',
-                Rule::unique('verordnungs')->ignore(\request('id'))
+                Rule::unique('verordnungs')->ignore(\request('id')),
             ],
             'vo_name' => 'nullable|max:100',
             'vo_nummer' => 'nullable|max:100',

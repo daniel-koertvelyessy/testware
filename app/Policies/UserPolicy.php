@@ -11,8 +11,7 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function isSysAdmin()
-    : Response
+    public function isSysAdmin(): Response
     {
         return Auth::user()->role_id === 1
             ? Response::allow()
@@ -21,21 +20,16 @@ class UserPolicy
 
     /**
      * Determine whether the user can view any models.
-     *
-     * @param  User $user
-     *
-     * @return Response
      */
-    public function isAdmin(User $user)
-    : Response
+    public function isAdmin(User $user): Response
     {
 
-        if ($user->role_id===1){
+        if ($user->role_id === 1) {
             return Response::allow();
         }
         $allow = false;
-        foreach($user->roles as $role){
-            if ($role->id === 1){
+        foreach ($user->roles as $role) {
+            if ($role->id === 1) {
                 $allow = true;
             }
         }
@@ -48,7 +42,6 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  User $user
      *
      * @return mixed
      */
@@ -60,8 +53,6 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  User  $user
-     * @param  User  $model
      *
      * @return mixed
      */
@@ -73,7 +64,6 @@ class UserPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  User  $user
      *
      * @return mixed
      */
@@ -85,8 +75,6 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  User $user
-     * @param  User $model
      *
      * @return mixed
      */
@@ -98,8 +86,6 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  User $user
-     * @param  User $model
      *
      * @return mixed
      */
@@ -111,8 +97,6 @@ class UserPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  User  $user
-     * @param  User  $model
      *
      * @return mixed
      */
@@ -124,8 +108,6 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  User  $user
-     * @param  User  $model
      *
      * @return mixed
      */

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class RoleUser extends Pivot
 {
-
     public function roles()
     {
         return $this->hasMany(Role::class);
@@ -16,5 +15,4 @@ class RoleUser extends Pivot
     {
         return $this->hasMany(User::class);
     }
-
 }

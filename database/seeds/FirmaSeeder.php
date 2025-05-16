@@ -1,57 +1,56 @@
 <?php
 
-    use App\Adresse;
-    use App\Firma;
-    use Illuminate\Database\Seeder;
+use App\Adresse;
+use App\Firma;
+use Illuminate\Database\Seeder;
 
-    class FirmaSeeder extends Seeder
+class FirmaSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
     {
-        /**
-         * Run the database seeds.
-         *
-         * @return void
-         */
-        public function run()
-        {
 
-            $adress = Adresse::factory()->create();
+        $adress = Adresse::factory()->create();
 
-            Firma::create([
-                'fa_label'       => 'dell-de',
-                'fa_name'        => 'Dell GmbH',
-                'fa_kreditor_nr' => 7419,
-                'fa_vat'         => 'DE49515708',
-                'adresse_id'     => $adress->id,
-            ]);
+        Firma::create([
+            'fa_label' => 'dell-de',
+            'fa_name' => 'Dell GmbH',
+            'fa_kreditor_nr' => 7419,
+            'fa_vat' => 'DE49515708',
+            'adresse_id' => $adress->id,
+        ]);
 
+        $adress = Adresse::factory()->create();
 
-            $adress = Adresse::factory()->create();
+        Firma::create([
+            'fa_label' => 'fluke-de',
+            'fa_name' => 'Fluke GmbH',
+            'fa_kreditor_nr' => 7420,
+            'adresse_id' => $adress->id,
+        ]);
 
-            Firma::create([
-                'fa_label'       => 'fluke-de',
-                'fa_name'        => 'Fluke GmbH',
-                'fa_kreditor_nr' => 7420,
-                'adresse_id'     => $adress->id,
-            ]);
-
-            \App\EquipmentLabel::create([
-                "label"          => 'stand',
-                "name"           => 'Standard Label',
-                "show_labels"    => 't',
-                "show_inventory" => 't',
-                "show_location"  => 'f',
-                "label_w"        => 35,
-                "Label_h"        => 57,
-                "label_ml"       => 1,
-                "label_mt"       => 1,
-                "label_mr"       => 1,
-                "qrcode_y"       => 12,
-                "qrcode_x"       => 1,
-                "logo_y"         => 1,
-                "logo_x"         => 1,
-                "logo_h"         => 10,
-                "logo_w"         => 33,
-                "logo_svg"       => '<svg width="100%" height="100%" viewBox="0 0 560 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+        \App\EquipmentLabel::create([
+            'label' => 'stand',
+            'name' => 'Standard Label',
+            'show_labels' => 't',
+            'show_inventory' => 't',
+            'show_location' => 'f',
+            'label_w' => 35,
+            'Label_h' => 57,
+            'label_ml' => 1,
+            'label_mt' => 1,
+            'label_mr' => 1,
+            'qrcode_y' => 12,
+            'qrcode_x' => 1,
+            'logo_y' => 1,
+            'logo_x' => 1,
+            'logo_h' => 10,
+            'logo_w' => 33,
+            'logo_svg' => '<svg width="100%" height="100%" viewBox="0 0 560 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g transform="matrix(9.79373,0,0,9.79373,-607.431,-596.419)">
         <path d="M73.469,72.07L70.547,72.07L70.547,67.867C70.547,67.544 70.513,67.32 70.446,67.195C70.378,67.07 70.256,67.007 70.078,67.007C69.75,67.007 69.586,67.296 69.586,67.874L69.586,72.07L66.664,72.07L66.664,67.867C66.664,67.544 66.629,67.32 66.559,67.195C66.489,67.07 66.365,67.007 66.188,67.007C65.865,67.007 65.703,67.296 65.703,67.874L65.703,72.07L62.782,72.07L62.782,67.273C62.782,66.398 63.076,65.654 63.664,65.042C64.253,64.43 64.966,64.124 65.805,64.124C66.67,64.124 67.446,64.489 68.133,65.218C68.899,64.489 69.664,64.124 70.43,64.124C71.404,64.124 72.185,64.478 72.774,65.187C73.237,65.739 73.469,66.544 73.469,67.601L73.469,72.07Z" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:0.27px;"/>
         <path d="M79.508,69.148L79.508,72.171C79.269,72.213 79.05,72.234 78.852,72.234C77.68,72.234 76.703,71.848 75.922,71.077C75.141,70.307 74.75,69.34 74.75,68.179C74.75,67.049 75.145,66.09 75.934,65.304C76.723,64.518 77.683,64.124 78.813,64.124C80.073,64.124 81.067,64.493 81.793,65.23C82.52,65.967 82.883,66.973 82.883,68.249L82.883,72.07L79.961,72.07L79.961,68.46C79.961,68.049 79.861,67.721 79.66,67.476C79.46,67.231 79.19,67.109 78.852,67.109C78.545,67.109 78.279,67.221 78.055,67.445C77.831,67.669 77.719,67.934 77.719,68.242C77.719,68.564 77.821,68.83 78.024,69.038C78.227,69.247 78.485,69.351 78.797,69.351C79.052,69.351 79.289,69.283 79.508,69.148Z" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:0.27px;"/>
@@ -61,11 +60,9 @@
         <path d="M118.102,72.07L115.18,72.07L115.18,67.867C115.18,67.544 115.146,67.32 115.078,67.195C115.011,67.07 114.888,67.007 114.711,67.007C114.383,67.007 114.219,67.296 114.219,67.874L114.219,72.07L111.297,72.07L111.297,67.867C111.297,67.544 111.262,67.32 111.192,67.195C111.121,67.07 110.998,67.007 110.821,67.007C110.498,67.007 110.336,67.296 110.336,67.874L110.336,72.07L107.414,72.07L107.414,67.273C107.414,66.398 107.709,65.654 108.297,65.042C108.886,64.43 109.599,64.124 110.438,64.124C111.302,64.124 112.078,64.489 112.766,65.218C113.532,64.489 114.297,64.124 115.063,64.124C116.037,64.124 116.818,64.478 117.407,65.187C117.87,65.739 118.102,66.544 118.102,67.601L118.102,72.07Z" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:0.27px;"/>
     </g>
 </svg>',
-                'tld_string'     => 'https://demo.testware.io'
+            'tld_string' => 'https://demo.testware.io',
 
+        ]);
 
-            ]);
-
-
-        }
     }
+}

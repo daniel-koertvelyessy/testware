@@ -2,22 +2,19 @@
 
 namespace App\Notifications;
 
-use App\EquipmentEvent;
 use App\EquipmentEventItem;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class EquipmentEventChanged extends Notification
 {
     use Queueable;
+
     protected $equipmentEventItem;
 
     /**
      * Create a new notification instance.
-     *
-     * @param  EquipmentEventItem $equipmentEventItem
      */
     public function __construct(EquipmentEventItem $equipmentEventItem)
     {
@@ -44,9 +41,9 @@ class EquipmentEventChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -59,11 +56,11 @@ class EquipmentEventChanged extends Notification
     {
 
         return [
-           'userid'=>$this->equipmentEventItem->equipment_event_user,
-           'message'=>$this->equipmentEventItem->equipment_event_item_text,
-           'header'=>__('Ereignis geändert'),
-           'eventid'=>$this->equipmentEventItem->equipment_event_id,
-           'detailLink'=>route('event.show',$this->equipmentEventItem->equipment_event_id)
+            'userid' => $this->equipmentEventItem->equipment_event_user,
+            'message' => $this->equipmentEventItem->equipment_event_item_text,
+            'header' => __('Ereignis geändert'),
+            'eventid' => $this->equipmentEventItem->equipment_event_id,
+            'detailLink' => route('event.show', $this->equipmentEventItem->equipment_event_id),
         ];
     }
 }

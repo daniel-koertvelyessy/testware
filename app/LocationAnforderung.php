@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class LocationAnforderung extends Model
 {
-    protected $fillable =[
+    protected $fillable = [
         'location_id',
         'anforderung_id',
     ];
+
     public function Location()
     {
         return $this->hasMany(Location::class);
@@ -20,9 +21,8 @@ class LocationAnforderung extends Model
         return $this->belongsTo(Anforderung::class);
     }
 
-    public function AnforderungControlItem() {
+    public function AnforderungControlItem()
+    {
         return $this->hasMany(AnforderungControlItem::class);
     }
-
-
 }

@@ -16,7 +16,7 @@ class CreateRolesTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('label',20);
+            $table->string('label', 20);
             $table->string('name')->nullable();
             $table->boolean('is_super_user')->default(false);
         });
@@ -24,7 +24,7 @@ class CreateRolesTable extends Migration
         Schema::create('role_user', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unique(['role_id','user_id']);
+            $table->unique(['role_id', 'user_id']);
             $table->foreignId('role_id')->constrained();
             $table->foreignId('user_id')->constrained();
         });

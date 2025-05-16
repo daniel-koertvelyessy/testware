@@ -17,6 +17,6 @@ return [
     'sent' => 'Eine E-Mail mit weitern Schritten wurde Ihnen zugesendet!',
     'throttled' => 'Bitte warten Sie einen Augenlick mit dem Tippen.',
     'token' => 'Dieser Token ist ungültig oder abgelaufen!',
-    'user' => "Ein Benutzer mit der angegebenen E-Mail Adressse konnte nicht gefunden werden.",
+    'user' => 'Ein Benutzer mit der angegebenen E-Mail Adressse konnte nicht gefunden werden.',
 
 ];

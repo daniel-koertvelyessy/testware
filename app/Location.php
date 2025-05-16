@@ -2,24 +2,23 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Kyslik\ColumnSortable\Sortable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
-
-    use SoftDeletes, Sortable, HasFactory;
+    use HasFactory, SoftDeletes, Sortable;
 
     public $sortable = [
         'l_label',
         'l_name',
         'l_beschreibung',
         'adresse_id',
-        'profile_id'
+        'profile_id',
     ];
 
     protected $guarded = [];
@@ -30,12 +29,14 @@ class Location extends Model
         static::saving(function (Location $location) {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function (Location $location) {
             Cache::forget('app-get-current-amount-Location');
             Cache::forget('countTotalEquipmentInLocation');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 
@@ -49,6 +50,7 @@ class Location extends Model
         $this->adresse_id = $adresse_id;
         $this->storage_id = $request->storage_id;
         $this->save();
+
         return $this->id;
     }
 
@@ -74,8 +76,6 @@ class Location extends Model
                     ';
         }
     }
-
-
 
     /**
      * Returns the path of the page
@@ -107,15 +107,15 @@ class Location extends Model
         return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
 
-    public function countTotalEquipmentInLocation()
-        : int
+    public function countTotalEquipmentInLocation(): int
     {
-        return Cache::remember('countTotalEquipmentInLocation' . $this->id, now()->addSeconds(30), function () {
+        return Cache::remember('countTotalEquipmentInLocation'.$this->id, now()->addSeconds(30), function () {
             $equipmenInLocationCounter = 0;
             $equipmenInLocationCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
             foreach ($this->Building as $building) {
                 $equipmenInLocationCounter += $building->countTotalEquipmentInBuilding();
             }
+
             return $equipmenInLocationCounter;
         });
     }

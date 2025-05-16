@@ -7,10 +7,7 @@ use App\ControlEquipment;
 use App\ControlInterval;
 use App\DocumentType;
 use App\Equipment;
-use App\EquipmentDoc;
 use App\EquipmentHistory;
-use App\EquipmentInstruction;
-use App\EquipmentParam;
 use App\EquipmentQualifiedUser;
 use App\EquipmentState;
 use App\EquipmentUid;
@@ -20,10 +17,7 @@ use App\Http\Actions\Equipment\EquipmentAction;
 use App\Http\Services\Equipment\EquipmentDocumentService;
 use App\Http\Services\Equipment\EquipmentEventService;
 use App\Http\Services\Equipment\EquipmentService;
-use App\ProductInstructedUser;
-use App\ProductQualifiedUser;
 use App\Produkt;
-use App\ProduktAnforderung;
 use App\ProduktDoc;
 use App\Storage;
 use App\User;
@@ -42,7 +36,6 @@ use Str;
 
 class EquipmentController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -57,16 +50,17 @@ class EquipmentController extends Controller
     {
         return view('testware.equipment.index', [
             'equipmentlist' => Equipment::with('ControlEquipment')->sortable()->paginate(10),
-            'header'        => __('Übersicht Geräte')
+            'header' => __('Übersicht Geräte'),
         ]);
     }
 
     public function controlequipment()
     {
-        $service = new EquipmentEventService();
+        $service = new EquipmentEventService;
+
         return view('testware.equipment.index', [
             'equipmentlist' => $service->makeEquipmentControlCollection(),
-            'header'        => __('Übersicht Prüfgeräte')
+            'header' => __('Übersicht Prüfgeräte'),
         ]);
     }
 
@@ -102,14 +96,14 @@ class EquipmentController extends Controller
             'eq_inventar_nr',
             'equipment_state_id',
             'eq_uid',
-            'storage_id'
+            'storage_id',
         ])->with([
-           'produkt.controlprodukt',
+            'produkt.controlprodukt',
             'storage',
             'EquipmentState',
             'EquipmentQualifiedUser',
             'ControlEquipment.Anforderung',
-        ])->withCount(['ControlEquipment as tested_count' => fn($q) => $q->onlyTrashed()])->sortable()->paginate(10);
+        ])->withCount(['ControlEquipment as tested_count' => fn ($q) => $q->onlyTrashed()])->sortable()->paginate(10);
 
         // Replace the internal collection with ViewModels, keep pagination
         $equipmentList->setCollection(EquipmentViewModel::collection($equipmentList->getCollection()));
@@ -119,7 +113,6 @@ class EquipmentController extends Controller
             // Now contains EquipmentViewModels
         ]);
 
-
     }
 
     public function statuslist(EquipmentState $equipmentState)
@@ -127,32 +120,32 @@ class EquipmentController extends Controller
 
         return view('testware.equipment.state_list', [
             'equipmentList' => Equipment::with('ControlEquipment', 'storage', 'EquipmentState')->where('equipment_state_id', $equipmentState->id)->get(),
-            'status_label'  => $equipmentState->estat_label
+            'status_label' => $equipmentState->estat_label,
         ]);
 
     }
-
 
     public function create(Request $request)
     {
 
         $companyList = FirmaProdukt::where('produkt_id', $request->produkt_id)->get();
+
         return view('testware.equipment.create', [
-            'pk'        => $request->pk,
-            'produkt'   => Produkt::with('ProduktAnforderung')->find(request('produkt_id')),
-            'companies' => $companyList
+            'pk' => $request->pk,
+            'produkt' => Produkt::with('ProduktAnforderung')->find(request('produkt_id')),
+            'companies' => $companyList,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $service = new EquipmentService();
+        $service = new EquipmentService;
 
         $service->vaidateEquipmnt($request);
 
         if (isset($request->warranty_expires_at)) {
             $request->validate([
-                'installed_at'        => 'date',
+                'installed_at' => 'date',
                 'warranty_expires_at' => 'after:installed_at|date_format:Y-m-d',
             ]);
         }
@@ -161,7 +154,7 @@ class EquipmentController extends Controller
             (new ProduktController)->addProduktAnforderung($request);
         }
 
-        $equipment = new Equipment();
+        $equipment = new Equipment;
         $equipment->eq_inventar_nr = $request->eq_inventar_nr;
         $equipment->eq_serien_nr = $request->eq_serien_nr;
         $equipment->eq_name = $request->eq_name;
@@ -179,7 +172,7 @@ class EquipmentController extends Controller
         $equipment_state_id = ($request->function_control_pass === '0')
             ? 4
             : 1;
-        if (!$request->hasFile('equipDokumentFile')) {
+        if (! $request->hasFile('equipDokumentFile')) {
             $equipment_state_id = 4;
         }
         $equipment->equipment_state_id = $equipment_state_id;
@@ -194,36 +187,32 @@ class EquipmentController extends Controller
             (new EquipmentWarranty)->addEquipment($request->warranty_expires_at, $equipment->id);
         }
 
-
         $service->transferProductQualifiedUser($request, $equipment);
 
         $service->transferProductInstructedUser($request, $equipment);
 
         $service->transferProductParameters($request, $equipment);
 
-
         $request->session()->flash('status', __('Das Gerät <strong>:eqname</strong> wurde angelegt!', ['eqname' => request('eq_name')]));
 
-
         return redirect()->route('control.manual', [
-            'equipment'   => $equipment,
-            'requirement' => Anforderung::find($request->anforderung_id)
+            'equipment' => $equipment,
+            'requirement' => Anforderung::find($request->anforderung_id),
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Equipment  $equipment
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function show(Equipment $equipment)
     {
 
-        $serviceDocument = new EquipmentDocumentService();
+        $serviceDocument = new EquipmentDocumentService;
 
-        $service = new EquipmentService();
+        $service = new EquipmentService;
 
         EquipmentAction::deleteLoseEquipmentDocumentEntries($equipment);
 
@@ -240,30 +229,30 @@ class EquipmentController extends Controller
         }
 
         return view('testware.equipment.show', [
-            'userList'                 => User::select('id', 'name')->get(),
-            'productDocuments'         => ProduktDoc::where('produkt_id', $equipment->produkt_id)->get(),
-            'controlIntervalList'      => ControlInterval::select('id', 'ci_label')->get(),
-            'qualifiedUserList'        => EquipmentQualifiedUser::with('firma', 'user')->where('equipment_id', $equipment->id)->get(),
-            'loggedInUserIsQualified'  => $service->checkUserQualified($equipment),
-            'upcomingControlList'      => $service->getUpcomingControlItems($equipment),
-            'onetimeControlList'       => $service->getOneTimeControlItems($equipment),
-            'controlList'              => $service->getAllControlItems($equipment),
-            'instructedPersonList'     => $service->getInstruectedPersonList($equipment),
+            'userList' => User::select('id', 'name')->get(),
+            'productDocuments' => ProduktDoc::where('produkt_id', $equipment->produkt_id)->get(),
+            'controlIntervalList' => ControlInterval::select('id', 'ci_label')->get(),
+            'qualifiedUserList' => EquipmentQualifiedUser::with('firma', 'user')->where('equipment_id', $equipment->id)->get(),
+            'loggedInUserIsQualified' => $service->checkUserQualified($equipment),
+            'upcomingControlList' => $service->getUpcomingControlItems($equipment),
+            'onetimeControlList' => $service->getOneTimeControlItems($equipment),
+            'controlList' => $service->getAllControlItems($equipment),
+            'instructedPersonList' => $service->getInstruectedPersonList($equipment),
             'equipmentRequirementList' => $service->getRequirementList($equipment),
-            'requirementList'          => Anforderung::select([
+            'requirementList' => Anforderung::select([
                 'id',
-                'an_label'
+                'an_label',
             ])->get(),
-            'recentControlList'        => $service->getRecentExecutedControls($equipment),
-            'euqipmentDocumentList'    => $serviceDocument->getDocumentList($equipment),
-            'functionDocumentList'     => $serviceDocument::getFunctionTestDocumentList($equipment),
-            'newFileList'              => $serviceDocument->checkStorageSyncDB($equipment),
-            'companyString'            => $service->makeCompanyString($equipment),
-            'equipment'                => $equipment,
-            'parameterListItems'       => $service->getParamList($equipment),
-            'locationpath'             => $value,
-            'isSysadmin'               => Auth::user()->isSysAdmin(),
-            'documentTypes'            => DocumentType::all(),
+            'recentControlList' => $service->getRecentExecutedControls($equipment),
+            'euqipmentDocumentList' => $serviceDocument->getDocumentList($equipment),
+            'functionDocumentList' => $serviceDocument::getFunctionTestDocumentList($equipment),
+            'newFileList' => $serviceDocument->checkStorageSyncDB($equipment),
+            'companyString' => $service->makeCompanyString($equipment),
+            'equipment' => $equipment,
+            'parameterListItems' => $service->getParamList($equipment),
+            'locationpath' => $value,
+            'isSysadmin' => Auth::user()->isSysAdmin(),
+            'documentTypes' => DocumentType::all(),
             //            'intervalTypeList'         => ControlInterval::select('id', 'ci_label')->get()
         ]);
     }
@@ -271,7 +260,6 @@ class EquipmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Equipment  $equipment
      *
      * @return Application|Factory|Response|View
      */
@@ -283,8 +271,6 @@ class EquipmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Equipment  $equipment
      *
      * @return Application|Factory|RedirectResponse|View
      */
@@ -302,45 +288,42 @@ class EquipmentController extends Controller
         }
 
         $request->session()->flash('status', $msg);
+
         return redirect()->route('equipment.show', $equipment);
     }
 
-
-    /**
-     * @return array
-     */
     public function validateEquipment(): array
     {
         return request()->validate([
-            'eq_inventar_nr'     => [
+            'eq_inventar_nr' => [
                 'bail',
                 'max:250',
                 'required',
-                Rule::unique('equipment')->ignore(request('id'))
+                Rule::unique('equipment')->ignore(request('id')),
             ],
-            'eq_serien_nr'       => [
+            'eq_serien_nr' => [
                 'bail',
                 'nullable',
                 'max:250',
-                Rule::unique('equipment')->ignore(request('id'))
+                Rule::unique('equipment')->ignore(request('id')),
             ],
-            'eq_uid'             => [
+            'eq_uid' => [
                 'bail',
                 'required',
-                Rule::unique('equipment')->ignore(request('id'))
+                Rule::unique('equipment')->ignore(request('id')),
             ],
-            'eq_name'            => '',
-            'eq_qrcode'          => '',
-            'eq_text'            => '',
-            'eq_price'           => 'nullable|numeric',
-            'installed_at'       => 'date',
-            'purchased_at'       => 'date',
-            'produkt_id'         => '',
-            'storage_id'         => 'required',
-            'equipment_state_id' => 'required'
+            'eq_name' => '',
+            'eq_qrcode' => '',
+            'eq_text' => '',
+            'eq_price' => 'nullable|numeric',
+            'installed_at' => 'date',
+            'purchased_at' => 'date',
+            'produkt_id' => '',
+            'storage_id' => 'required',
+            'equipment_state_id' => 'required',
         ], [
             'eq_inventar_nr.required' => __('Ein Geräte mit dieser Inventarnummer existiert bereits!'),
-            'eq_serien_nr.required'   => __('Ein Gerät mit dieser Seriennummer existiert bereits!'),
+            'eq_serien_nr.required' => __('Ein Gerät mit dieser Seriennummer existiert bereits!'),
             //               'eq_price.numberic' => __('Ein Gerät mit dieser Seirennummer existiert bereits!'),
         ]);
     }
@@ -348,9 +331,7 @@ class EquipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Equipment  $equipment
      *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function destroy(Equipment $equipment): RedirectResponse
@@ -362,16 +343,13 @@ class EquipmentController extends Controller
         $objects = EquipmentAction::deleteRelatedObjetcs($equipment);
 
         /**
-         *
          * Since the deletion of the equipment will set the deleted_at field with a timestamp
          * rather than deleting the database entry itself, the serial number and invertory id
          * recieve a postfix to prevent the unique violation of the fields.
-         *
          */
         $equipment->eq_serien_nr = substr($equipment->eq_serien_nr.'|'.Str::uuid(), 0, 250);
         $equipment->eq_inventar_nr = substr($equipment->eq_inventar_nr.'|'.Str::uuid(), 0, 250);
         $equipment->save();
-
 
         if ($equipment->delete()) {
             $msg = __('Geräte wurde mit
@@ -384,10 +362,10 @@ class EquipmentController extends Controller
                  erfolgreich gelöscht', [
                 'eCon' => $objects['eCon'],
                 'eDoc' => $objects['eDoc'],
-                'eEv'  => $objects['eEv'],
-                'eQu'  => $objects['eQu'],
-                'eIn'  => $objects['eIn'],
-                'ePa'  => $objects['ePa'],
+                'eEv' => $objects['eEv'],
+                'eQu' => $objects['eQu'],
+                'eIn' => $objects['eIn'],
+                'ePa' => $objects['ePa'],
             ]);
         } else {
             $msg = __('Geräte konnte nicht erfolgreich gelöscht werden');
@@ -449,7 +427,7 @@ class EquipmentController extends Controller
                     }
                 }
             } else {
-                $new_equipment_uid = new EquipmentUid();
+                $new_equipment_uid = new EquipmentUid;
                 $new_equipment_uid->equipment_id = $equipment->id;
                 $new_equipment_uid->equipment_uid = $equipment->eq_uid;
                 $newCounter += $new_equipment_uid->save()
@@ -472,7 +450,6 @@ class EquipmentController extends Controller
 
         request()->session()->flash('status', $msg);
 
-
         return back();
 
     }
@@ -480,10 +457,10 @@ class EquipmentController extends Controller
     public function syncRequirements(Request $request)
     {
 
-        //dd($request);
+        // dd($request);
         $countr = 0;
         foreach ($request->anforderung_id as $key => $id) {
-            $controlEquipment = new ControlEquipment();
+            $controlEquipment = new ControlEquipment;
             $controlEquipment->equipment_id = $request->equipment_id[$key];
             $controlEquipment->anforderung_id = $request->anforderung_id[$key];
             $controlEquipment->qe_control_date_last = $request->qe_control_date_last[$key];
@@ -511,6 +488,6 @@ class EquipmentController extends Controller
     {
         return DB::table('equipment')->select('eq_inventar_nr', 'equipment.id', 'equipment.eq_serien_nr', 'prod_name')->join('produkts', 'produkts.id', '=', 'equipment.produkt_id')->where('eq_serien_nr', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('eq_name', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('eq_inventar_nr', 'ILIKE', '%'.strtolower($request->term).'%')
             //  ->orWhere('eq_uid(?)',t, 'ILIKEolower($request->term) . '%')
-                 ->orWhere('prod_nummer', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_name', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_label', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_description', 'ILIKE', '%'.strtolower($request->term).'%')->get();
+            ->orWhere('prod_nummer', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_name', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_label', 'ILIKE', '%'.strtolower($request->term).'%')->orWhere('prod_description', 'ILIKE', '%'.strtolower($request->term).'%')->get();
     }
 }

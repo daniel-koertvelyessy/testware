@@ -2,7 +2,6 @@
 
 namespace App\Http\Actions\Equipment;
 
-use App\Anforderung;
 use App\ControlEquipment;
 use App\Equipment;
 use App\EquipmentDoc;
@@ -12,14 +11,11 @@ use App\EquipmentParam;
 use App\EquipmentQualifiedUser;
 use App\Http\Services\Equipment\EquipmentDocumentService;
 use App\ProduktDoc;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class EquipmentAction
 {
-
-
     public static function deleteLoseRequirementEntries(): void
     {
 
@@ -39,7 +35,7 @@ class EquipmentAction
         foreach (ProduktDoc::where('produkt_id', $equipment->produkt_id)->where('document_type_id', 1)->get() as $productDocFile) {
             if (Storage::disk('local')->missing($productDocFile->proddoc_name_pfad)) {
                 Log::warning('Dateireferenz ('.$productDocFile->proddoc_name_pfad.') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-//                dump('delete '. $productDocFile->eqdoc_name_pfad);
+                //                dump('delete '. $productDocFile->eqdoc_name_pfad);
                 $productDocFile->delete();
             }
 
@@ -51,13 +47,12 @@ class EquipmentAction
         foreach (EquipmentDocumentService::getFunctionTestDocumentList($equipment) as $equipmentDocFile) {
             if (Storage::disk('local')->missing($equipmentDocFile->eqdoc_name_pfad)) {
                 Log::warning('Dateireferenz für Funktionsprüfung ('.$equipmentDocFile->eqdoc_name_pfad.') aus DB EquipmentDoc existiert nicht auf dem Laufwerk. Datensatz wird gelöscht!');
-//                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);
+                //                dump('delete '. $equipmentDocFile->eqdoc_name_pfad);
                 $equipmentDocFile->delete();
             }
 
         }
     }
-
 
     public static function deleteRelatedObjetcs(Equipment $equipment): array
     {
@@ -112,12 +107,11 @@ class EquipmentAction
         return [
             'eCon' => $eCon,
             'eDoc' => $eDoc,
-            'eEv'  => $eEv,
-            'eQu'  => $eQu,
-            'eIn'  => $eIn,
-            'ePa'  => $ePa,
+            'eEv' => $eEv,
+            'eQu' => $eQu,
+            'eIn' => $eIn,
+            'ePa' => $ePa,
         ];
 
     }
-
 }

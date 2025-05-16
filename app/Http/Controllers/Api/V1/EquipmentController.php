@@ -4,21 +4,20 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Equipment;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\equipment\Equipment as EquipmentResource;
+use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
+use App\Http\Resources\equipment\EquipmentStats as EquipmentStatsResource;
+use App\Http\Resources\equipment\TestEquipment as TestEquipmentResource;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
-use App\Http\Resources\equipment\Equipment as EquipmentResource;
-use App\Http\Resources\equipment\TestEquipment as TestEquipmentResource;
-use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
-use App\Http\Resources\equipment\EquipmentStats as EquipmentStatsResource;
-
 class EquipmentController extends Controller
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
@@ -32,13 +31,13 @@ class EquipmentController extends Controller
         if ($request->input('per_page')) {
             return EquipmentResource::collection(Equipment::with('EquipmentState'))->paginate($request->input('per_page'));
         }
+
         return EquipmentResource::collection(Equipment::with('EquipmentState')->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      *
      * @return Response
      */
@@ -61,9 +60,7 @@ class EquipmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
      * @param  int  $id
-     *
      * @return Response
      */
     public function update(Request $request, Equipment $equipment)
@@ -74,15 +71,16 @@ class EquipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Equipment $equipment
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function destroy(Equipment $equipment)
     {
         $equipment->delete();
+
         return response()->json([
-            'status' => 'eqipment deleted'
+            'status' => 'eqipment deleted',
         ]);
     }
 
@@ -93,13 +91,12 @@ class EquipmentController extends Controller
 
     public function testEquipment()
     {
-       return TestEquipmentResource::collection(Equipment::with('EquipmentState')->get()->filter(function($equipment){
-            if($equipment->produkt->ControlProdukt) return $equipment;
+        return TestEquipmentResource::collection(Equipment::with('EquipmentState')->get()->filter(function ($equipment) {
+            if ($equipment->produkt->ControlProdukt) {
+                return $equipment;
+            }
         })
-       );
-
+        );
 
     }
-
-
 }

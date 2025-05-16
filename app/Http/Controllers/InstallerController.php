@@ -28,7 +28,6 @@ class InstallerController extends Controller
         $this->middleware('auth');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -53,15 +52,16 @@ class InstallerController extends Controller
                 'MAIL_PASSWORD' => env('MAIL_PASSWORD'),
                 'MAIL_ENCRYPTION' => env('MAIL_ENCRYPTION'),
                 'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS'),
-                'MAIL_FROM_NAME' => env('MAIL_FROM_NAME')
-            ]
+                'MAIL_FROM_NAME' => env('MAIL_FROM_NAME'),
+            ],
         ]);
     }
 
     public function checkUserCanUseInstaller(Request $request)
     {
-        if (!Auth::user()->can('use_installer')) {
+        if (! Auth::user()->can('use_installer')) {
             $request->session()->flash('error', __('Sie haben keine Berechtigung für diese Aktion!'));
+
             return redirect()->route('portal-main');
         }
     }
@@ -77,18 +77,16 @@ class InstallerController extends Controller
         $this->checkUserCanUseInstaller($request);
         $company = (Firma::count() > 0) ? Firma::first() : null;
         $address = (Adresse::count() > 0) ? Adresse::first() : null;
+
         return view('admin.installer.company_data', [
             'company' => $company,
-            'address' => $address
+            'address' => $address,
         ]);
 
     }
 
     /**
      * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function setCompany(Request $request): RedirectResponse
     {
@@ -99,12 +97,12 @@ class InstallerController extends Controller
             (new Firma)->addCompany($request);
 
         $address = (isset($request->address_id)) ?
-            (new Adresse)->updateAddress($request):
-            (new Adresse)->addNew($request, true) ;
+            (new Adresse)->updateAddress($request) :
+            (new Adresse)->addNew($request, true);
 
         return redirect()->route('installer.location', [
             'company' => $company,
-            'address' => $address
+            'address' => $address,
         ]);
 
     }
@@ -112,7 +110,6 @@ class InstallerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return RedirectResponse
      b*/
     public function setAddress(Request $request): RedirectResponse
@@ -126,9 +123,10 @@ class InstallerController extends Controller
 
         $request->session()->flash('status', __('Addressdaten wurden gespreichert'));
         $company = (isset($request->company_id)) ? Firma::find($request->company_id) : null;
+
         return redirect()->route('installer.company', [
             'company' => $company,
-            'address' => $address
+            'address' => $address,
         ]);
 
     }
@@ -141,10 +139,10 @@ class InstallerController extends Controller
     public function system(Request $request)
     {
         $this->checkUserCanUseInstaller($request);
+
         return view('admin.installer.system_data');
 
     }
-
 
     /**
      * Display the systems page to set system variables
@@ -180,7 +178,6 @@ class InstallerController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request
      *
      * @return Application|Factory|View
      */
@@ -208,7 +205,6 @@ class InstallerController extends Controller
             $request->session()->flash(__('Die Adresse wurde angeleget'));
         }
 
-
         if (isset($request->company_id)) {
             $company = Firma::find($request->company_id);
             $company->update($request->validate([
@@ -231,10 +227,6 @@ class InstallerController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -248,6 +240,7 @@ class InstallerController extends Controller
 
         $data['user'] = User::find($request->id);
         $data['profile'] = Profile::where('user_id', $request->id)->first();
+
         return $data;
     }
 
@@ -287,13 +280,12 @@ class InstallerController extends Controller
             $data['employee_id'] = (new Profile)->addNew($request);
         }
 
-
         /**
          * make new table row for userList
          */
         $data['html'] = '
-<tr id="userListItem' . $data['user_id'] . '">
-    <td>' . $request->username . '</td>
+<tr id="userListItem'.$data['user_id'].'">
+    <td>'.$request->username.'</td>
     <td>';
         foreach ($user->roles as $role) {
             $data['html'] .= $role->name;
@@ -308,11 +300,11 @@ class InstallerController extends Controller
     <td>
         <button type="button"
                 class="btn btn-sm btn-outline-secondary btnEditUser"
-                data-userid="' . $data['user_id'] . '"
+                data-userid="'.$data['user_id'].'"
         ><span class="fas fa-edit"></span></button>
         <button type="button"
                 class="btn btn-sm btn-outline-secondary btnRemoveUser"
-                data-userid="' . $data['user_id'] . '"
+                data-userid="'.$data['user_id'].'"
         ><span class="far fa-trash-alt"></span></button>
     </td>
 </tr>
@@ -325,12 +317,11 @@ class InstallerController extends Controller
     {
         $data['user'] = User::find($request->id)->delete();
         $data['employee'] = Profile::where('user_id', $request->id)->delete();
+
         return $data;
     }
 
     /**
-     * @param Request $request
-     *
      * @return false|string
      */
     public function checkEmail(Request $request)
@@ -339,8 +330,6 @@ class InstallerController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return false|string
      */
     public function checkUserName(Request $request)
@@ -349,8 +338,6 @@ class InstallerController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return false|string
      */
     public function checkName(Request $request)
@@ -367,5 +354,4 @@ class InstallerController extends Controller
 
         return back();
     }
-
 }

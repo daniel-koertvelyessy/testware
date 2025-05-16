@@ -2,7 +2,6 @@
 
 namespace App\ViewModel;
 
-
 use App\Equipment;
 use Illuminate\Support\Collection;
 
@@ -15,11 +14,11 @@ class EquipmentViewModel
         return $equipmentCollection->map(fn ($equipment) => new self($equipment));
     }
 
-
     public function link(): string
     {
         return route('equipment.show', $this->equipment);
     }
+
     public function name(): string
     {
         return $this->equipment->eq_name ?? '–';
@@ -63,11 +62,11 @@ class EquipmentViewModel
     public function controlDueDates(): array
     {
         return $this->equipment->ControlEquipment
-            ->filter(fn ($item) => !$item->isInitialTest() && is_null($item->archived_at))
+            ->filter(fn ($item) => ! $item->isInitialTest() && is_null($item->archived_at))
             ->map(function ($controlItem) {
                 $class = '';
-                $date='';
-                if($controlItem->qe_control_date_due) {
+                $date = '';
+                if ($controlItem->qe_control_date_due) {
                     if ($controlItem->qe_control_date_due < now()) {
                         $class = 'bg-danger text-white';
                     } elseif ($controlItem->qe_control_date_due < now()->addWeeks($controlItem->qe_control_date_warn)) {
@@ -78,7 +77,7 @@ class EquipmentViewModel
                 }
 
                 return [
-                    'date' => $date ,
+                    'date' => $date,
                     'class' => $class,
                 ];
             })->values()->toArray();

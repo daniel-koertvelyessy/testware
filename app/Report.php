@@ -8,12 +8,12 @@ use Kyslik\ColumnSortable\Sortable;
 
 class Report extends Model
 {
-    use Sortable, SoftDeletes;
+    use SoftDeletes, Sortable;
 
-    protected $guarded=[];
+    protected $guarded = [];
 
     public function types()
     {
-        return $this->hasOne(ReportType::class,'id','report_type_id');
+        return $this->hasOne(ReportType::class, 'id', 'report_type_id');
     }
 }

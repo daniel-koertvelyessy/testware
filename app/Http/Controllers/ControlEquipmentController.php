@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\AciDataSet;
 use App\Anforderung;
 use App\AnforderungControlItem;
 use App\ControlDoc;
@@ -19,7 +18,6 @@ use App\EquipmentQualifiedUser;
 use App\Http\Services\Control\ControlEventService;
 use App\Http\Services\Equipment\EquipmentEventService;
 use App\Http\Services\Equipment\EquipmentService;
-use App\ProductQualifiedUser;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -28,15 +26,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\View\View;
 use Kyslik\ColumnSortable\Sortable;
 
 class ControlEquipmentController extends Controller
 {
-
     use SoftDeletes, Sortable;
 
     public function __construct()
@@ -53,35 +48,35 @@ class ControlEquipmentController extends Controller
     {
         $controlItems = ControlEquipment::with([
             'Equipment:id,eq_name,eq_inventar_nr,eq_name,eq_uid',
-            'Anforderung:id,an_label,an_name'
+            'Anforderung:id,an_label,an_name',
         ])->sortable()->paginate(10);
         $archivedControlItems = ControlEquipment::with('Equipment', 'Anforderung')->whereNotNull('archived_at')->get();
         $isSysAdmin = \Auth::user()->isSysAdmin();
         $controlIntervalList = ControlInterval::select('id', 'ci_label')->get();
         $requirements = Anforderung::select([
             'id',
-            'an_label'
+            'an_label',
         ])->get();
         $countControlProducts = ControlProdukt::count();
+
         return view('testware.control.index', compact('controlItems', 'isSysAdmin', 'archivedControlItems', 'controlIntervalList', 'requirements', 'countControlProducts'));
 
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request  $request
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View|Redirector|RedirectResponse
      */
     public function create(Request $request)
     {
-        $service = new EquipmentEventService();
+        $service = new EquipmentEventService;
         $controlItem = ControlEquipment::find($request->test_id);
 
         if (is_null($controlItem)) {
             $request->session()->flash('status', __('Die gesuchte Prüfung wurde nicht gefunden!'));
+
             return redirect(route('control.index'));
         }
 
@@ -90,7 +85,6 @@ class ControlEquipmentController extends Controller
         $controlEquipmentIsComplete = true;
         $controlEquipmentIsCompleteMsg = __('<strong>Fehler</strong><p>Die Prüfung kann nicht gestartet werden, da folgende Probleme erkannt wurden:</p>');
         $controlEquipmentIsCompleteItem = '';
-
 
         if ($controlItem->countQualifiedUser() === 0) {
             $controlEquipmentIsComplete = false;
@@ -113,16 +107,16 @@ class ControlEquipmentController extends Controller
             $enabledUser = $service->getQuaifiedUserList($controlItem);
             $equipmentControlList = $service->makeEquipmentControlCollection();
 
-//                dd($service->findAvaliableEquipmentControlItems());
+            //                dd($service->findAvaliableEquipmentControlItems());
 
             return view('testware.control.create', [
-                'current_user'               => Auth::user(),
-                'controlEquipmentAvaliable'  => $service->findAvaliableEquipmentControlItems(),
-                'equipmentControlList'       => $equipmentControlList,
-                'equipment'                  => Equipment::find($controlItem->equipment_id),
-                'qualified_user_list'        => $enabledUser,
-                'test'                       => $controlItem,
-                'is_external'                => $controlItem->Anforderung->is_external,
+                'current_user' => Auth::user(),
+                'controlEquipmentAvaliable' => $service->findAvaliableEquipmentControlItems(),
+                'equipmentControlList' => $equipmentControlList,
+                'equipment' => Equipment::find($controlItem->equipment_id),
+                'qualified_user_list' => $enabledUser,
+                'test' => $controlItem,
+                'is_external' => $controlItem->Anforderung->is_external,
                 'control_equipment_required' => array_search(true, $check_aci_control_equipment_required),
             ]);
         } else {
@@ -158,13 +152,12 @@ class ControlEquipmentController extends Controller
         return back();
     }
 
-
     public function add(Request $request): RedirectResponse
     {
 
         $requirement = Anforderung::findOrFail($request->anforderung_id);
 
-        $controlEquipment = new ControlEquipment();
+        $controlEquipment = new ControlEquipment;
         $controlEquipment->qe_control_date_last = $request->qe_control_date_last;
         $controlEquipment->qe_control_date_due = $request->qe_control_date_due;
         $controlEquipment->qe_control_date_warn = $request->qe_control_date_warn;
@@ -178,7 +171,6 @@ class ControlEquipmentController extends Controller
 
         $request->session()->flash('status', $msg);
 
-
         return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
 
     }
@@ -186,7 +178,7 @@ class ControlEquipmentController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-//            dd($request);
+        //            dd($request);
 
         $controlEquipment = ControlEquipment::find($request->control_equipment_id);
 
@@ -203,16 +195,14 @@ class ControlEquipmentController extends Controller
             $equipment_id = $controlEquipment->equipment_id;
         } else {
             /**
-             *
              *   if $controlEquiment is not present it is
              *   assumed that equipment controlling was manually
              *   initiated.
              *
              *   Therefor a new instance of ControlEquipment is
              *   generated.
-             *
              */
-            $controlEquipment = new ControlEquipment();
+            $controlEquipment = new ControlEquipment;
             $controlEquipment->qe_control_date_last = $request->control_event_date;
             $controlEquipment->qe_control_date_due = $request->control_event_date;
             $controlEquipment->qe_control_date_warn = $request->qe_control_date_warn;
@@ -226,7 +216,7 @@ class ControlEquipmentController extends Controller
             $equipment_id = $request->equipment_id;
 
             if (isset($request->setQualifiedUser)) {
-                $setQualifiedUser = new EquipmentQualifiedUser();
+                $setQualifiedUser = new EquipmentQualifiedUser;
                 $setQualifiedUser->user_id = $request->user_id;
                 $setQualifiedUser->equipment_id = $request->equipment_id;
                 $setQualifiedUser->equipment_qualified_date = $request->control_event_date;
@@ -253,7 +243,7 @@ class ControlEquipmentController extends Controller
             }
         }
 
-        $setNextControlEquipment = new ControlEquipment();
+        $setNextControlEquipment = new ControlEquipment;
         $setNextControlEquipment->qe_control_date_last = $request->control_event_date;
         $setNextControlEquipment->qe_control_date_due = $request->control_event_next_due_date;
         $setNextControlEquipment->qe_control_date_warn = $qe_control_date_warn;
@@ -263,7 +253,7 @@ class ControlEquipmentController extends Controller
         $setNextControlEquipment->save();
 
         $this->validateControlEvent();
-        $controlevent = new ControlEvent(); // ControlEvent::create();
+        $controlevent = new ControlEvent; // ControlEvent::create();
         $controlevent->control_event_next_due_date = $request->control_event_next_due_date;
         $controlevent->control_event_pass = $request->control_event_pass;
         $controlevent->control_event_date = $request->control_event_date;
@@ -286,7 +276,7 @@ class ControlEquipmentController extends Controller
             if (isset($request->event_item)) {
                 for ($i = 0; $i < count($request->event_item); $i++) {
                     $itemId = $request->event_item[$i];
-                    $controlEventItem = new ControlEventItem();
+                    $controlEventItem = new ControlEventItem;
                     $controlEventItem->control_item_aci = $itemId;
                     $controlEventItem->control_item_read = $request->control_item_read[$itemId] ?? null;
 
@@ -312,7 +302,7 @@ class ControlEquipmentController extends Controller
 
                             foreach ($dataset as $aci_data_set_id => $datasetItem) {
 
-                                $setresult = new ControlEventDataset();
+                                $setresult = new ControlEventDataset;
                                 ($request->control_item_pass[$itemId][$aci_data_set_id] === '1')
                                     ? $itempassed++
                                     : $itemfailed++;
@@ -322,7 +312,6 @@ class ControlEquipmentController extends Controller
                                 $setresult->aci_dataset_id = $aci_data_set_id;
                                 $setresult->control_event_item_id = $controlEventItem->id;
                                 $setresult->save();
-
 
                             }
 
@@ -335,14 +324,13 @@ class ControlEquipmentController extends Controller
             if (isset($request->control_event_equipment)) {
                 for ($i = 0; $i < count($request->control_event_equipment); $i++) {
                     if ($request->control_event_equipment[$i] !== '00') {
-                        $setControlEventEquipment = new ControlEventEquipment();
+                        $setControlEventEquipment = new ControlEventEquipment;
                         $setControlEventEquipment->equipment_id = $request->control_event_equipment[$i];
                         $setControlEventEquipment->control_event_id = $control_event_id;
                         $setControlEventEquipment->save();
                     }
                 }
             }
-
 
         }
 
@@ -351,7 +339,6 @@ class ControlEquipmentController extends Controller
             $filename = (new ControlDoc)->addDocument($request);
             $request->session()->flash('status', __('Das Dokument <strong>:name</strong> wurde hochgeladen!', ['name' => $filename]));
         }
-
 
         /**
          * Add Data to History
@@ -365,7 +352,7 @@ class ControlEquipmentController extends Controller
         if (isset($request->event_item)) {
             $text .= __('<li>:passed von :total Prüfungen wurden bestanden</li>', [
                 'passed' => $itempassed,
-                'total'  => count($request->event_item)
+                'total' => count($request->event_item),
             ]);
         }
         $text .= ($request->control_event_pass === 1)
@@ -389,35 +376,31 @@ class ControlEquipmentController extends Controller
         return redirect(route('equipment.show', ['equipment' => Equipment::find($request->equipment_id)]));
     }
 
-    /**
-     * @return array
-     */
     public function validateControlEvent(): array
     {
         return request()->validate([
-            'control_event_next_due_date'        => 'date|required|after_or_equal::control_event_date',
-            'control_event_pass'                 => 'required',
-            'control_event_date'                 => 'date|required',
+            'control_event_next_due_date' => 'date|required|after_or_equal::control_event_date',
+            'control_event_pass' => 'required',
+            'control_event_date' => 'date|required',
             'control_event_controller_signature' => '',
-            'control_event_controller_name'      => 'required',
+            'control_event_controller_name' => 'required',
             'control_event_supervisor_signature' => '',
-            'control_event_supervisor_name'      => '',
-            'user_id'                            => '',
-            'control_event_text'                 => '',
-            'control_equipment_id'               => ''
+            'control_event_supervisor_name' => '',
+            'user_id' => '',
+            'control_event_text' => '',
+            'control_equipment_id' => '',
         ], [
-            'control_event_pass.required'            => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
+            'control_event_pass.required' => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
             'control_event_controller_name.required' => __('Der Name des Prüfers ist nicht gegeben!'),
-            'control_event_next_due_date.required'   => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
-            'control_event_next_due_date.after'      => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
-            'control_event_date.required'            => __('Bitte tragen Sie das Datum der Prüfung ein!'),
+            'control_event_next_due_date.required' => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
+            'control_event_next_due_date.after' => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
+            'control_event_date.required' => __('Bitte tragen Sie das Datum der Prüfung ein!'),
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  ControlEvent  $control
      *
      * @return Response
      */
@@ -440,49 +423,48 @@ class ControlEquipmentController extends Controller
     public function update(Request $request, ControlEquipment $control)
     {
         $control->update($this->validateEquipmentControl());
+
         return back();
     }
 
     public function validateEquipmentControl(): array
     {
         return request()->validate([
-            'archived_at'          => 'nullable|date',
+            'archived_at' => 'nullable|date',
             'qe_control_date_last' => 'date',
-            'qe_control_date_due'  => 'date',
+            'qe_control_date_due' => 'date',
             'qe_control_date_warn' => '',
-            'control_interval_id'  => '',
-            'anforderung_id'       => 'required',
-            'equipment_id'         => 'required',
+            'control_interval_id' => '',
+            'anforderung_id' => 'required',
+            'equipment_id' => 'required',
         ], [
-            'control_event_pass.required'                => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
-            'control_event_controller_name.required'     => __('Der Name des Prüfers ist nicht gegeben!'),
-            'control_event_next_due_date.required'       => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
+            'control_event_pass.required' => __('Die abschließende Bewertung der Prüfung ist nicht gesetzt!'),
+            'control_event_controller_name.required' => __('Der Name des Prüfers ist nicht gegeben!'),
+            'control_event_next_due_date.required' => __('Es wurde kein Datum für die nächste Prüfung vergeben!'),
             'control_event_next_due_date.after_or_equal' => __('Die nächste Prüfung kann nicht in der Vergangenheit liegen!'),
-            'control_event_date.required'                => __('Bitte tragen Sie das Datum der Prüfung ein!'),
+            'control_event_date.required' => __('Bitte tragen Sie das Datum der Prüfung ein!'),
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
      * @return RedirectResponse
      */
     public function destroy(Request $request, $control)
     {
 
-        if (!\Auth::user()->isSysAdmin()) {
+        if (! \Auth::user()->isSysAdmin()) {
             request()->session()->flash('status', 'Keine Berechtigung zum Löschen des Eintrages!');
+
             return redirect()->back();
         }
-
 
         $controlEquipment = ControlEquipment::withTrashed()->findOrFail($control);
 
         $equipment_id = $controlEquipment->equipment_id;
 
         $control_date = $controlEquipment->created_at;
-
 
         if ($controlEquipment->forceDelete()) {
             $msg = 'Die Prüfung vom '.$control_date.' wurde erfolgreich gelöscht';
@@ -495,13 +477,14 @@ class ControlEquipmentController extends Controller
         Cache::forget('system-status-database');
 
         request()->session()->flash('status', $msg);
+
         return redirect()->back();
 
     }
 
     public function sync(Request $request)
     {
-        $service = new ControlEventService();
+        $service = new ControlEventService;
         $res = [];
         if (isset($request->sycEquip) && count($request->sycEquip) > 0) {
 
@@ -511,26 +494,24 @@ class ControlEquipmentController extends Controller
         }
 
         $request->session()->flash('status', $service->makeSyncMessageText($res));
+
         return back();
     }
 
     public function manual()
     {
 
-
         $requirement = Anforderung::find(request('requirement'));
 
-
         $equipment = Equipment::where('eq_uid', request('equipment'))->first();
-        $service = new EquipmentEventService();
-        if (!$equipment) {
+        $service = new EquipmentEventService;
+        if (! $equipment) {
             $equipment = Equipment::find(request('equipment'));
-        };
+        }
         $enabledUser = [];
         $check_aci_execution_is_external = [];
         $check_aci_control_equipment_required = [];
         $equipmentControlList = $service->makeEquipmentControlCollection();
-
 
         $acidata = AnforderungControlItem::where('anforderung_id', $requirement->id)->get();
 
@@ -541,20 +522,21 @@ class ControlEquipmentController extends Controller
 
         if ($equipment) {
             return view('testware.control.manual', [
-                'controlEquipmentAvaliable'  => $service->findAvaliableEquipmentControlItems(),
-                'equipmentControlList'       => $equipmentControlList,
-                'qualifieduserList'          => (new EquipmentService)->getQualifiedPersonList($equipment),
-                'current_user'               => Auth::user(),
-                'userList'                   => User::select('id', 'name')->get(),
-                'equipment'                  => $equipment,
-                'requirement'                => $requirement,
-                'qualified_user_list'        => $enabledUser,
-                'is_external'                => $requirement->is_external,
+                'controlEquipmentAvaliable' => $service->findAvaliableEquipmentControlItems(),
+                'equipmentControlList' => $equipmentControlList,
+                'qualifieduserList' => (new EquipmentService)->getQualifiedPersonList($equipment),
+                'current_user' => Auth::user(),
+                'userList' => User::select('id', 'name')->get(),
+                'equipment' => $equipment,
+                'requirement' => $requirement,
+                'qualified_user_list' => $enabledUser,
+                'is_external' => $requirement->is_external,
                 'control_equipment_required' => array_search(true, $check_aci_control_equipment_required),
             ]);
         } else {
             \Log::error('fehler beim Erstellen der Prüfung -> request '.\request());
             request()->session()->flash('status', 'Fehler beim Erstellen der Prüfung');
+
             return redirect()->route('equipment.maker');
         }
 
@@ -609,7 +591,7 @@ class ControlEquipmentController extends Controller
             : 'Fehler beim Speichern';
         $request->session()->flash('status', $msg);
         Cache::forget('system-status-database');
+
         return back();
     }
-
 }

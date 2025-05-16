@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,30 +12,28 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 
 class User extends Authenticatable
 {
+    use HasFactory;
     use Notifiable;
     use SoftDeletes;
     use Sortable;
-    use HasFactory;
 
     public const LOCALES = [
         'de' => 'Deutsch',
         'en' => 'English',
         'nl' => 'Nederlands',
         'th' => 'Tailand',
-        'fr' => 'France'
+        'fr' => 'France',
     ];
 
     public const LANGS = [
-        'Deutsch'    => 'de',
-        'English'    => 'en',
+        'Deutsch' => 'de',
+        'English' => 'en',
         'Nederlands' => 'nl',
-        'Tailand'    => 'th',
-        'France'     => 'fr'
+        'Tailand' => 'th',
+        'France' => 'fr',
     ];
 
     /**
@@ -50,6 +49,7 @@ class User extends Authenticatable
         'locale',
         'signature',
     ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -60,8 +60,9 @@ class User extends Authenticatable
         'remember_token',
         'user_lock_pin',
         'role_id',
-        'api_token'
+        'api_token',
     ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -75,10 +76,12 @@ class User extends Authenticatable
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 
@@ -91,12 +94,13 @@ class User extends Authenticatable
         $user->signature = $request->signature;
         $user->username = $request->username;
         $user->email = $request->email;
+
         return $user->save();
     }
 
     public static function makePassword()
     {
-        return substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%|{}*_"), 0, 8);
+        return substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%|{}*_'), 0, 8);
 
     }
 
@@ -123,81 +127,76 @@ class User extends Authenticatable
 
     public function hasEquipment()
     {
-        return $this->hasManyThrough(Equipment::class, EquipmentQualifiedUser::class,'user_id','id','equipment_id');
+        return $this->hasManyThrough(Equipment::class, EquipmentQualifiedUser::class, 'user_id', 'id', 'equipment_id');
     }
 
     public function instructedOnEquipment()
     {
-        return $this->hasMany(EquipmentInstruction::class,'equipment_instruction_trainee_id');
+        return $this->hasMany(EquipmentInstruction::class, 'equipment_instruction_trainee_id');
     }
 
-    public function isInstructed($id)
-    : bool
+    public function isInstructed($id): bool
     {
         return EquipmentInstruction::where([
-                [
-                    'equipment_instruction_trainee_id',
-                    $this->id
-                ],
-                [
-                    'equipment_id',
-                    $id
-                ]
-            ])->count() > 0;
+            [
+                'equipment_instruction_trainee_id',
+                $this->id,
+            ],
+            [
+                'equipment_id',
+                $id,
+            ],
+        ])->count() > 0;
     }
 
-    public function isQualified($id)
-    : bool
+    public function isQualified($id): bool
     {
         return EquipmentQualifiedUser::where([
-                [
-                    'user_id',
-                    $this->id
-                ],
-                [
-                    'equipment_id',
-                    $id
-                ]
-            ])->count() > 0;
+            [
+                'user_id',
+                $this->id,
+            ],
+            [
+                'equipment_id',
+                $id,
+            ],
+        ])->count() > 0;
     }
 
-    public function isInstructedForProduct($id)
-    : bool
+    public function isInstructedForProduct($id): bool
     {
         return EquipmentInstruction::where([
-                [
-                    'equipment_instruction_trainee_id',
-                    $this->id
-                ],
-                [
-                    'equipment_id',
-                    $id
-                ]
-            ])->count() > 0;
+            [
+                'equipment_instruction_trainee_id',
+                $this->id,
+            ],
+            [
+                'equipment_id',
+                $id,
+            ],
+        ])->count() > 0;
     }
 
-    public function isQualifiedForProduct($id)
-    : bool
+    public function isQualifiedForProduct($id): bool
     {
         return ProductQualifiedUser::where([
-                [
-                    'user_id',
-                    $this->id
-                ],
-                [
-                    'produkt_id',
-                    $id
-                ]
-            ])->count() > 0;
+            [
+                'user_id',
+                $this->id,
+            ],
+            [
+                'produkt_id',
+                $id,
+            ],
+        ])->count() > 0;
     }
 
     /**
      * The roles that belong to the user.
      */
-    public function roleUser()
-    : BelongsToMany
+    public function roleUser(): BelongsToMany
     {
-        return $this->belongsToMany(RoleUser::class );
+        return $this->belongsToMany(RoleUser::class);
     }
 
     public function addNew(Request $request)
@@ -208,7 +207,7 @@ class User extends Authenticatable
         $this->username = $request->username;
         $this->role_id = 0;
         $this->user_theme = 'css/tbs.css';
-        $this->locale = $request->locales??'de';
+        $this->locale = $request->locales ?? 'de';
         $this->signature = $request->signature;
         $this->password = Hash::make($request->setpassword);
         $this->save();
@@ -218,59 +217,54 @@ class User extends Authenticatable
         return $this->id;
     }
 
-    private function validateUser()
-    : array
+    private function validateUser(): array
     {
         return request()->validate([
-            'username'          => [
+            'username' => [
                 'bail',
                 'required',
                 'max:100',
-                Rule::unique('users')->ignore(\request('id'))
+                Rule::unique('users')->ignore(\request('id')),
             ],
-            'email'             => [
+            'email' => [
                 'bail',
                 'required',
                 'email',
-                Rule::unique('users')->ignore(\request('id'))
+                Rule::unique('users')->ignore(\request('id')),
             ],
             'email_verified_at' => '',
-            'setpassword'          => 'required',
-            'api_token'         => 'nullable',
-            'name'              => 'nullable',
-            'role_id'           => ''
-        ],[
+            'setpassword' => 'required',
+            'api_token' => 'nullable',
+            'name' => 'nullable',
+            'role_id' => '',
+        ], [
             'username' => __('Der Name ist bereits vergeben'),
-            'email'    => __('Die E-Mail Adress ist bereits in Benutzung'),
+            'email' => __('Die E-Mail Adress ist bereits in Benutzung'),
         ]);
     }
 
-    /**
-     * @return array
-     */
-    private function validateUserData()
-    : array
+    private function validateUserData(): array
     {
         return request()->validate([
-            'username'          => [
+            'username' => [
                 'bail',
                 'required',
                 'max:100',
-                Rule::unique('users')->ignore(\request('id'))
+                Rule::unique('users')->ignore(\request('id')),
             ],
-            'email'             => [
+            'email' => [
                 'bail',
                 'required',
                 'email',
-                Rule::unique('users')->ignore(\request('id'))
+                Rule::unique('users')->ignore(\request('id')),
             ],
             'email_verified_at' => '',
-            'name'              => 'nullable',
+            'name' => 'nullable',
         ], [
             'username.required' => __('Ihr Anzeigename ist notwendig'),
-            'username.unique'   => __('Der Anzeigename ist bereits vergeben'),
-            'email.required'    => __('Die E-Mail Adress ist notwendig!'),
-            'email.unique'      => __('Die E-Mail Adress ist bereits in Benutzung'),
+            'username.unique' => __('Der Anzeigename ist bereits vergeben'),
+            'email.required' => __('Die E-Mail Adress ist notwendig!'),
+            'email.unique' => __('Die E-Mail Adress ist bereits in Benutzung'),
         ]);
     }
 
@@ -283,13 +277,14 @@ class User extends Authenticatable
     }
 
     /**
-     * @param  Request $request
-     *
+     * @param  Request  $request
      * @return mixed
      */
     public function addInstallerUser(array $details)
     {
-        if ($this->checkUserExists($details['username'], $details['email'])) return 0;
+        if ($this->checkUserExists($details['username'], $details['email'])) {
+            return 0;
+        }
         $this->name = $details['name'];
         $this->email = $details['email'];
         $this->username = $details['username'];
@@ -300,21 +295,19 @@ class User extends Authenticatable
         $this->save();
 
         $this->roles()->attach([1]);
-    //    $this->roles()->attach([4]);
+        //    $this->roles()->attach([4]);
 
         return $this->id;
     }
 
-    public function checkUserExists($username, $email)
-    : bool
+    public function checkUserExists($username, $email): bool
     {
 
         return User::where('username', $username)->count() > 0 || User::where('email', $email)->count() > 0;
 
     }
 
-    public function removeUser(Request $request)
-    : bool
+    public function removeUser(Request $request): bool
     {
         $this->authorize('isAdmin', Auth()->user());
 
@@ -326,12 +319,14 @@ class User extends Authenticatable
 
     }
 
-    public function isAdmin():bool
+    public function isAdmin(): bool
     {
         /**
          * check if user is a SysAdmin. If so skip further checks
          */
-        if ($this->role_id === 1) return true;
+        if ($this->role_id === 1) {
+            return true;
+        }
 
         /**
          * check if user has a role of Administrator
@@ -341,10 +336,11 @@ class User extends Authenticatable
                 return true;
             }
         }
+
         return false;
     }
 
-    public function isSysAdmin():bool
+    public function isSysAdmin(): bool
     {
         return $this->role_id === 1;
     }
@@ -355,10 +351,9 @@ class User extends Authenticatable
         $user->update();
     }
 
-    public function fullname():string
+    public function fullname(): string
     {
 
         return ($this->Profile) ? $this->Profile->fullName() : $this->name;
     }
-
 }

@@ -7,7 +7,6 @@ use App\Location;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,12 +16,10 @@ use Illuminate\View\View;
 
 class AdresseController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -32,6 +29,7 @@ class AdresseController extends Controller
     public function index()
     {
         $adresseList = Adresse::with('AddressType')->paginate(15);
+
         return view('admin.organisation.adresse.index', ['adresseList' => $adresseList]);
     }
 
@@ -48,7 +46,6 @@ class AdresseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -60,17 +57,17 @@ class AdresseController extends Controller
             $location = Location::find($request->setAdressAsNewMain);
             $location->adresse_id = $adresse->id;
             $location->save();
-            $text = ' und als neue Hauptadresse des Standort ' . $location->l_label . ' gesetzt';
+            $text = ' und als neue Hauptadresse des Standort '.$location->l_label.' gesetzt';
         }
 
         $request->session()->flash('status', "Die Adresse <strong>{$request->ad_name}</strong> wurde angelegt {$text}!");
+
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Adresse $adresse
      * @return Application|Factory|Response|View
      */
     public function show(Adresse $adresse)
@@ -81,7 +78,6 @@ class AdresseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Adresse $adresse
      * @return Response
      */
     public function edit(Adresse $adresse)
@@ -92,37 +88,36 @@ class AdresseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Adresse $adresse
      * @return RedirectResponse
      */
     public function update(Request $request, Adresse $adresse)
     {
         $adresse->update($this->validateAddress());
-        $request->session()->flash('status', 'Die Adresse <strong>' . $adresse->ad_label . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Die Adresse <strong>'.$adresse->ad_label.'</strong> wurde aktualisiert!');
+
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request $request
-     * @param  Adresse $adresse
      *
      * @return Application|Redirector|RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, Adresse $adresse)
     {
-        $request->session()->flash('status', 'Die Adresse <strong>' . $adresse->ad_label . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Die Adresse <strong>'.$adresse->ad_label.'</strong> wurde gelöscht!');
         $adresse->delete();
+
         return redirect(route('adresse.index'));
     }
 
     public function getAddressenAjaxListe(Request $request)
     {
 
-        return   DB::table('adresses')->select(
+        return DB::table('adresses')->select(
             'id',
             'ad_name_firma',
             'ad_anschrift_ort',
@@ -132,12 +127,12 @@ class AdresseController extends Controller
             'land_id',
             'ad_anschrift_plz'
         )
-            ->Where('ad_name_firma', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_label', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_name', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_ort', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_plz', 'like', '%' . $request->term . '%')
-            ->orWhere('ad_anschrift_strasse', 'like', '%' . $request->term . '%')
+            ->Where('ad_name_firma', 'like', '%'.$request->term.'%')
+            ->orWhere('ad_label', 'like', '%'.$request->term.'%')
+            ->orWhere('ad_name', 'like', '%'.$request->term.'%')
+            ->orWhere('ad_anschrift_ort', 'like', '%'.$request->term.'%')
+            ->orWhere('ad_anschrift_plz', 'like', '%'.$request->term.'%')
+            ->orWhere('ad_anschrift_strasse', 'like', '%'.$request->term.'%')
             ->get();
     }
 
@@ -147,13 +142,10 @@ class AdresseController extends Controller
         $adresses->find($request->id);
 
         return [
-            'adressListe' => $adresses
+            'adressListe' => $adresses,
         ];
     }
 
-    /**
-     * @return array
-     */
     public function validateNewAddress(): array
     {
         return request()->validate([
@@ -176,9 +168,7 @@ class AdresseController extends Controller
 
         ]);
     }
-    /**
-     * @return array
-     */
+
     public function validateAddress(): array
     {
 

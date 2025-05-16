@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources\compartments;
 
-use App\Stellplatz;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AddressShort as AdresseKurzResource;
 
 class CompartmentStats extends JsonResource
 {
@@ -19,7 +17,7 @@ class CompartmentStats extends JsonResource
     {
 
         return [
-            'equipment' => $this->Storage->countReferencedEquipment()
+            'equipment' => $this->Storage->countReferencedEquipment(),
         ];
     }
 }

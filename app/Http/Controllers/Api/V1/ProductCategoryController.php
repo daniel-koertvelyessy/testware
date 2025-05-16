@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 
 class ProductCategoryController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -27,7 +26,6 @@ class ProductCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      *
      * @return Response
      */
@@ -50,9 +48,7 @@ class ProductCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
      * @param  int  $id
-     *
      * @return Response
      */
     public function update(Request $request, $id)

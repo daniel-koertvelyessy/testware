@@ -17,9 +17,9 @@ class CreateEquipmentParamsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('ep_label',20);
-            $table->string('ep_name',150)->nullable();
-            $table->string('ep_value',150)->nullable();
+            $table->string('ep_label', 20);
+            $table->string('ep_name', 150)->nullable();
+            $table->string('ep_value', 150)->nullable();
             $table->foreignId('equipment_id')
                 ->nullable()
                 ->constrained()

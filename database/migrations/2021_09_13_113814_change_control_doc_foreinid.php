@@ -17,7 +17,6 @@ class ChangeControlDocForeinid extends Migration
             $table->dropForeign(['control_event_id']);
         });
 
-
     }
 
     /**

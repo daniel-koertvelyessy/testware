@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('label',100);
+            $table->string('label', 100);
             $table->string('name')->nullable();
         });
 
@@ -25,7 +25,7 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('label',100);
+            $table->string('label', 100);
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->string('view')->nullable();

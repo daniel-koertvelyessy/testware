@@ -11,15 +11,14 @@ class EquipmentShort extends JsonResource
      * Transform the resource into an array.
      *
      * @param  Request  $request
-     * @return array
      */
     public function toArray($request): array
     {
         return [
             'id' => $this->eq_uid,
             'name' => $this->eq_name,
-            'link_api' => route('api.v1.equipment.show',$this),
-            'link_web' => route('equipment.show',$this)
+            'link_api' => route('api.v1.equipment.show', $this),
+            'link_web' => route('equipment.show', $this),
         ];
     }
 }

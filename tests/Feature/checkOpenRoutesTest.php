@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class checkOpenRoutesTest extends TestCase
@@ -13,7 +11,7 @@ class checkOpenRoutesTest extends TestCase
      *
      * @return void
      */
-    public function test_Portal_isReachableAndRendersCorrectly()
+    public function test_portal_is_reachable_and_renders_correctly()
     {
         $response = $this->get('/');
 
@@ -22,7 +20,8 @@ class checkOpenRoutesTest extends TestCase
         $response->assertSeeText('Dashboard');
     }
 
-    public function test_Docs_isReachableAndRendersCorrectly() {
+    public function test_docs_is_reachable_and_renders_correctly()
+    {
         $response = $this->get('/docs');
 
         $response->assertStatus(200);
@@ -30,15 +29,12 @@ class checkOpenRoutesTest extends TestCase
         $response->assertSeeText('Dokumentation');
     }
 
-    public function test_Support_isReachableAndRendersCorrectly() {
+    public function test_support_is_reachable_and_renders_correctly()
+    {
         $response = $this->get('/support');
 
         $response->assertStatus(200);
 
         $response->assertSeeText('Senden Sie uns Ihr Anliegen');
     }
-
-
-
-
 }

@@ -61,5 +61,4 @@ class EquipmentInstruction extends Model
         $this->equipment_id = $equipment_id;
         $this->save();
     }
-
 }

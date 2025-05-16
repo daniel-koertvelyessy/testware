@@ -25,18 +25,17 @@ class AciDataSet extends Model
     public function makeTolString(): string
     {
 
-
         if ($this->data_point_tol_target_mode === 'eq') {
 
             $tol = ($this->data_point_tol_mod === 'abs')
                 ? $this->data_point_tol
                 : $this->data_point_value * $this->data_point_tol / 100;
 
-            return  " ± ". number_format($tol,2). $this->AnforderungControlItem->aci_value_si;
+            return ' ± '.number_format($tol, 2).$this->AnforderungControlItem->aci_value_si;
         } elseif ($this->aci_value_target_mode === 'lt') {
-            return __('Soll') . ' < ' . __('Ist');
+            return __('Soll').' < '.__('Ist');
         } elseif ($this->aci_value_target_mode === 'gt') {
-            return __('Soll') . ' > ' . __('Ist');
+            return __('Soll').' > '.__('Ist');
         } else {
             return '-';
         }
@@ -45,7 +44,7 @@ class AciDataSet extends Model
     public function valueString($value, $decimals = 2): string
     {
 
-        if(Auth::user()->locale === 'de'){
+        if (Auth::user()->locale === 'de') {
             $thousands = '.';
             $dec = ',';
         } else {
@@ -53,7 +52,6 @@ class AciDataSet extends Model
             $dec = '.';
         }
 
-        return number_format($value,$decimals,$dec,$thousands);
+        return number_format($value, $decimals, $dec, $thousands);
     }
-
 }

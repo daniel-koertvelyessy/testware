@@ -19,13 +19,13 @@ class Control extends JsonResource
 
         return [
             'uid' => $this->eq_uid,
-            'installed' => (string)$this->installed_at,
+            'installed' => (string) $this->installed_at,
             'name' => $this->eq_name,
             'inventory' => $this->eq_inventar_nr,
             'serial' => $this->eq_serien_nr,
             'status' => $this->EquipmentState->estat_label,
-            'link_api' => route('api.v1.equipment.show',$this),
-            'link_web' => route('equipment.show',$this)
+            'link_api' => route('api.v1.equipment.show', $this),
+            'link_web' => route('equipment.show', $this),
 
         ];
 

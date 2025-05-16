@@ -29,15 +29,16 @@ class Room extends Model
         static::saving(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function (Room $room) {
             Cache::forget('app-get-current-amount-Room');
             Cache::forget('countTotalEquipmentInRoom');
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
-
 
     public function path()
     {
@@ -61,7 +62,7 @@ class Room extends Model
 
     public function building()
     {
-        return $this->belongsTo(Building::class,'building_id');
+        return $this->belongsTo(Building::class, 'building_id');
     }
 
     public function Storage()
@@ -69,11 +70,10 @@ class Room extends Model
         return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
 
-    public function countTotalEquipmentInRoom()
-        :int
+    public function countTotalEquipmentInRoom(): int
     {
-       return Cache::remember(
-            'countTotalEquipmentInRoom' . $this->id,
+        return Cache::remember(
+            'countTotalEquipmentInRoom'.$this->id,
             now()->addSeconds(30),
             function () {
                 $equipCounter = 0;
@@ -81,6 +81,7 @@ class Room extends Model
                 foreach ($this->stellplatzs as $compartment) {
                     $equipCounter += ($compartment->Storage) ? $compartment->Storage->countReferencedEquipment() : 0;
                 }
+
                 return $equipCounter;
             }
         );

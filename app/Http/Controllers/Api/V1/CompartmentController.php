@@ -6,29 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\compartments\Compartment;
 use App\Http\Resources\compartments\CompartmentFull;
 use App\Room;
-use App\Storage;
 use App\Stellplatz;
 use App\StellplatzTyp;
+use App\Storage;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 class CompartmentController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
     }
 
-
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
      * @return AnonymousResourceCollection
      */
     public function index(Request $request)
@@ -36,14 +32,13 @@ class CompartmentController extends Controller
         if ($request->input('per_page')) {
             return Compartment::collection(Stellplatz::with('StellplatzTyp', 'Room')->paginate($request->input('per_page')));
         }
+
         return Compartment::collection(Stellplatz::with('StellplatzTyp', 'Room')->get());
     }
-
 
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
      * @return AnonymousResourceCollection
      */
     public function full(Request $request)
@@ -51,13 +46,13 @@ class CompartmentController extends Controller
         if ($request->input('per_page')) {
             return CompartmentFull::collection(Stellplatz::with('StellplatzTyp', 'Room')->paginate($request->input('per_page')));
         }
+
         return CompartmentFull::collection(Stellplatz::with('StellplatzTyp', 'Room')->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      * @return Compartment
      */
     public function store(Request $request)
@@ -71,15 +66,16 @@ class CompartmentController extends Controller
             'room_id' => '',
         ]);
 
-        if (!Room::find($request->room_id))
+        if (! Room::find($request->room_id)) {
             return response()->json([
-                'error' => 'no room with given id found'
+                'error' => 'no room with given id found',
             ], 422);
+        }
 
         $uid = (isset($request->uid)) ? $request->uid : Str::uuid();
         (new Storage)->add($uid, $request->label, 'stellplatzs');
 
-        $compartment = new Stellplatz();
+        $compartment = new Stellplatz;
         $compartment->sp_label = $request->label;
         $compartment->storage_id = $uid;
         $compartment->sp_name = (isset($request->name)) ? $request->name : null;
@@ -95,7 +91,6 @@ class CompartmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Stellplatz $compartment
      * @return Compartment
      */
     public function show(Stellplatz $compartment)
@@ -106,8 +101,7 @@ class CompartmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  int     $id
+     * @param  int  $id
      * @return Compartment
      */
     public function update(Request $request, $id)
@@ -135,14 +129,15 @@ class CompartmentController extends Controller
             $uid = (isset($request->uid)) ? $request->uid : $compartment->storage_id;
             $compartment->storage_id = $uid;
             (new Storage)->change($uid, $request->label, 'stellplatzs');
-            $compartment->stellplatz_typ_id  = (new StellplatzTyp)->checkApiCompartmentType($request);
-            if (!$compartment->stellplatz_typ_id)
+            $compartment->stellplatz_typ_id = (new StellplatzTyp)->checkApiCompartmentType($request);
+            if (! $compartment->stellplatz_typ_id) {
                 return response()->json([
-                    'error' => 'referenced storage type could not be found'
+                    'error' => 'referenced storage type could not be found',
                 ], 422);
+            }
             $compartment->save();
         } else {
-            return  $this->store($request);
+            return $this->store($request);
         }
 
         return new Compartment($compartment);
@@ -151,15 +146,16 @@ class CompartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Stellplatz $stellplatz
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function destroy(Stellplatz $stellplatz)
     {
         $stellplatz->delete();
+
         return response()->json([
-            'status' => 'storage deleted'
+            'status' => 'storage deleted',
         ]);
     }
 }

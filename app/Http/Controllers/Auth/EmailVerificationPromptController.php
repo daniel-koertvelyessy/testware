@@ -11,7 +11,6 @@ class EmailVerificationPromptController extends Controller
     /**
      * Display the email verification prompt.
      *
-     * @param  \Illuminate\Http\Request  $request
      *
      * @return mixed
      */

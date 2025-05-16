@@ -2,16 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 
 class Adresse extends Model
 {
-
     //    protected $fillable = [
     //        'ad_label' ,
     //        'ad_name' ,
@@ -31,7 +29,7 @@ class Adresse extends Model
     //        'land_id'
     //    ];
 
-    use SoftDeletes, HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
@@ -64,22 +62,22 @@ class Adresse extends Model
     {
         if (isset($request->address) && isset($request->address['label'])) {
             $request->validate([
-                'address.label'                   => 'bail|required|unique:adresses,ad_label|max:20',
-                'address.name'                    => 'max:100',
-                'address.company'                 => 'max:100',
-                'address.company_2'               => 'max:100',
-                'address.company_co'              => 'max:100',
+                'address.label' => 'bail|required|unique:adresses,ad_label|max:20',
+                'address.name' => 'max:100',
+                'address.company' => 'max:100',
+                'address.company_2' => 'max:100',
+                'address.company_co' => 'max:100',
                 'address.company_unloading_point' => 'max:100',
-                'address.company_goods_income'    => 'max:100',
-                'address.company_division'        => 'max:100',
-                'address.street'                  => 'max:100',
-                'address.no'                      => 'required|max:100',
-                'address.zip'                     => 'required|max:100',
-                'address.city'                    => 'required|max:100',
-                'address.floor'                   => 'max:100',
-                'address.enterance'               => 'max:100',
+                'address.company_goods_income' => 'max:100',
+                'address.company_division' => 'max:100',
+                'address.street' => 'max:100',
+                'address.no' => 'required|max:100',
+                'address.zip' => 'required|max:100',
+                'address.city' => 'required|max:100',
+                'address.floor' => 'max:100',
+                'address.enterance' => 'max:100',
             ]);
-            $adresse = new Adresse();
+            $adresse = new Adresse;
             $adresse->ad_label = $request->address['label'];
             $adresse->ad_anschrift_strasse = $request->address['street'];
             $adresse->ad_anschrift_hausnummer = $request->address['no'];
@@ -89,8 +87,8 @@ class Adresse extends Model
 
             if (isset($request->address['address_type']['name'])) {
                 $st = AddressType::where('adt_name', $request->address['address_type'])->first();
-                if (!$st) {
-                    $address_type = new AddressType();
+                if (! $st) {
+                    $address_type = new AddressType;
                     $address_type->adt_name = $request->address['address_type']['name'];
                     $address_type->adt_text_lang = (isset($request->address['address_type']['description'])) ? $request->address['address_type']['description'] : null;
                     $address_type->save();
@@ -104,6 +102,7 @@ class Adresse extends Model
                 $adresse->address_type_id = 1;
             }
             $adresse->save();
+
             return $model ? $adresse : $adresse->id;
         } elseif (isset($request->address_id)) {
             return (Adresse::find($request->address_id)) ? $request->address_id : null;
@@ -112,38 +111,38 @@ class Adresse extends Model
         }
     }
 
-    public function fullAddress(Adresse $adresse){
+    public function fullAddress(Adresse $adresse)
+    {
         return [
-            'street' => $adresse->ad_anschrift_strasse . ' ' . $adresse->ad_anschrift_hausnummer,
-            'city' => $adresse->ad_anschrift_plz . ' ' . $adresse->ad_anschrift_ort,
-            'country' => $adresse->country->land_lang
-            ];
+            'street' => $adresse->ad_anschrift_strasse.' '.$adresse->ad_anschrift_hausnummer,
+            'city' => $adresse->ad_anschrift_plz.' '.$adresse->ad_anschrift_ort,
+            'country' => $adresse->country->land_lang,
+        ];
     }
 
     /**
-     * @param  array $data
-     * @param  bool  $addCompanyData
-     *
      * @return mixed|null
      */
     public function addFromAPI(array $data, bool $addCompanyData = true)
     {
 
         $checkAddress = Adresse::where('ad_label', $data['label']);
-        if ($checkAddress->count() > 0) return $checkAddress->first()->id;
+        if ($checkAddress->count() > 0) {
+            return $checkAddress->first()->id;
+        }
 
         if (isset($data['label'])) {
-            $adresse = new Adresse();
+            $adresse = new Adresse;
             $adresse->ad_label = $data['label'];
             $adresse->ad_name = $data['name'];
             $adresse->ad_name_firma = $data['company'];
             $adresse->ad_name_firma_2 = $data['company_2'] ?? null;
             $adresse->ad_name_firma_co = $data['company_co'] ?? null;
             $adresse->ad_name_firma_abladestelle = $data['company_unloading_point'] ?? null;
-            $adresse->ad_anschrift_strasse = $data['street']??'-';
+            $adresse->ad_anschrift_strasse = $data['street'] ?? '-';
             $adresse->ad_anschrift_hausnummer = $data['no'];
-            $adresse->ad_anschrift_plz = $data['zip']??'-';
-            $adresse->ad_anschrift_ort = $data['city']??'-';
+            $adresse->ad_anschrift_plz = $data['zip'] ?? '-';
+            $adresse->ad_anschrift_ort = $data['city'] ?? '-';
             $adresse->land_id = (isset($data['country_id'])) ? $data['country_id'] : 1;
 
             /**
@@ -151,8 +150,8 @@ class Adresse extends Model
              */
             if (isset($data['address_type']['name'])) {
                 $existingAddress = AddressType::where('adt_name', $data['address_type'])->first();
-                if (!$existingAddress) {
-                    $address_type = new AddressType();
+                if (! $existingAddress) {
+                    $address_type = new AddressType;
                     $address_type->adt_name = $data['address_type']['name'];
                     $address_type->adt_text_lang = (isset($data['address_type']['description'])) ? $data['address_type']['description'] : null;
                     $address_type->save();
@@ -174,20 +173,20 @@ class Adresse extends Model
                 $existingCompany = Firma::where([
                     [
                         'fa_name',
-                        $data['company']
+                        $data['company'],
                     ],
                     [
                         'adresse_id',
-                        $adresse->id
+                        $adresse->id,
                     ],
                 ])->first();
-                if (!$existingCompany) {
-                    $company = new Firma();
-                    $label = mb_strtolower(substr( 'co_API_'.$adresse->id. '_' . preg_replace('/\s/', '_',$data['company']), 0, 20));
-//                    echo 'new label => '. $label . "\n";
+                if (! $existingCompany) {
+                    $company = new Firma;
+                    $label = mb_strtolower(substr('co_API_'.$adresse->id.'_'.preg_replace('/\s/', '_', $data['company']), 0, 20));
+                    //                    echo 'new label => '. $label . "\n";
                     $company->fa_label = $label;
                     $company->fa_name = $this->encUft($data['company']);
-                    $company->fa_description = "Generated by API during creation of address " . $this->encUft($data['label']);
+                    $company->fa_description = 'Generated by API during creation of address '.$this->encUft($data['label']);
                     $company->adresse_id = $adresse->id;
                     $company->save();
                 }
@@ -203,7 +202,7 @@ class Adresse extends Model
 
     public function postalAddress()
     {
-        return $this->ad_label . ': ' . $this->ad_anschrift_strasse . ' ' . $this->ad_anschrift_hausnummer . ' /  ' . $this->ad_anschrift_plz . ' ' . $this->ad_anschrift_ort;
+        return $this->ad_label.': '.$this->ad_anschrift_strasse.' '.$this->ad_anschrift_hausnummer.' /  '.$this->ad_anschrift_plz.' '.$this->ad_anschrift_ort;
     }
 
     public function addNew(Request $request, $returnModel = false)
@@ -218,9 +217,9 @@ class Adresse extends Model
         $this->land_id = $request->land_id;
         $this->ad_name_firma = $request->ad_name_firma;
         $checkStatus = $this->save();
+
         return ($returnModel) ? $checkStatus : $this->id;
     }
-
 
     public function updateAddress(Request $request): ?Adresse
     {
@@ -235,37 +234,31 @@ class Adresse extends Model
             $address->ad_anschrift_plz = $request->ad_anschrift_plz;
             $address->land_id = $request->land_id;
             $address->ad_name_firma = $request->ad_name_firma;
+
             return $address;
         } else {
             return null;
         }
 
-
     }
 
-
-
-    /**
-     * @return array
-     */
-    public function validateAdresse()
-    : array
+    public function validateAdresse(): array
     {
         return request()->validate([
-            'ad_label'             => [
+            'ad_label' => [
                 'bail',
                 'max:20',
                 'required',
-                Rule::unique('address')->ignore(\request('id'))
+                Rule::unique('address')->ignore(\request('id')),
             ],
             'ad_anschrift_strasse' => 'required',
-            'ad_anschrift_plz'     => 'required',
-            'ad_anschrift_ort'     => 'required'
+            'ad_anschrift_plz' => 'required',
+            'ad_anschrift_ort' => 'required',
         ]);
     }
 
     public function encUft($string)
     {
-       return (is_null($string)) ? NULL : mb_convert_encoding($string,'UTF-8',mb_detect_encoding($string, "UTF-8, ISO-8859-1, ISO-8859-15, ASCII"));
+        return (is_null($string)) ? null : mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string, 'UTF-8, ISO-8859-1, ISO-8859-15, ASCII'));
     }
 }

@@ -12,7 +12,7 @@ class GebaeudeSeeder extends Seeder
     public function run()
     {
         $location = App\Location::all();
-        $bul =  App\Building::factory()->make(5)->each(function ($geb) use ($location) {
+        $bul = App\Building::factory()->make(5)->each(function ($geb) use ($location) {
             $geb->location_id = $location->random()->id;
             $geb->save();
 

@@ -17,9 +17,9 @@ class CreateProduktKategorieParamsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('pkp_label',20);
-            $table->string('pkp_name',150)->nullable();
-            $table->string('pkp_value',150)->nullable();
+            $table->string('pkp_label', 20);
+            $table->string('pkp_name', 150)->nullable();
+            $table->string('pkp_value', 150)->nullable();
             $table->foreignId('produkt_kategorie_id');
         });
     }

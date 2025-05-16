@@ -22,8 +22,11 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/';
+
     public const LOCA = '/location/index';
+
     public const TESTWARE = '/testware';
+
     public const INSTALLER = '/installer';
 
     /**
@@ -37,9 +40,9 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-//        if($this->app->environment('production')) {
-//            \URL::forceScheme('https');
-//        }
+        //        if($this->app->environment('production')) {
+        //            \URL::forceScheme('https');
+        //        }
     }
 
     /**

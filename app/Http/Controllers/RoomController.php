@@ -6,8 +6,8 @@ use App\Building;
 use App\Location;
 use App\Room;
 use App\RoomType;
-use App\Storage;
 use App\Stellplatz;
+use App\Storage;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -22,7 +22,6 @@ use Illuminate\View\View;
 
 class RoomController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -34,18 +33,22 @@ class RoomController extends Controller
     public function index()
     {
         if (Location::all()->count() === 0 && Auth::user()->isAdmin()) {
-            session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Standorte!') . '</span> <br>' . __('Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!'));
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Standorte!').'</span> <br>'.__('Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!'));
+
             return redirect()->route('location.create');
         }
         if (Building::all()->count() === 0 && Auth::user()->isAdmin()) {
-            session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Gebäude!').'</span> <br>'.__('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
+
             return redirect()->route('building.create');
         }
         if (Room::all()->count() === 0 && Auth::user()->isAdmin()) {
             session()->flash('status', __('Es existieren noch keine Räume!'));
+
             return redirect()->route('room.create');
         } else {
             $roomList = Room::with('RoomType', 'location')->sortable()->paginate(10);
+
             return view('admin.standorte.room.index', ['roomList' => $roomList]);
         }
     }
@@ -56,20 +59,22 @@ class RoomController extends Controller
     public function create()
     {
         if (Location::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Standorte!') . '</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Standorte!').'</span> <br>Erstellen Sie erst einen Standort bevor Sie weitere Objekte anlegen können!');
+
             return redirect()->route('location.create');
         }
         if (Building::all()->count() === 0) {
-            session()->flash('status', '<span class="lead">' . __('Es existieren noch keine Gebäude!') . '</span> <br>' . __('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
+            session()->flash('status', '<span class="lead">'.__('Es existieren noch keine Gebäude!').'</span> <br>'.__('Erstellen Sie erst einen Gebäude bevor Sie Räume anlegen können!'));
+
             return redirect()->route('building.create');
         }
+
         return view('admin.standorte.room.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -77,23 +82,20 @@ class RoomController extends Controller
     {
         $room = Room::create($this->validateNewRoom());
         (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
-        $request->session()->flash('status', __('Der Raum') . ' <strong>' . request('r_label') . '</strong> ' . __('wurde angelegt!'));
+        $request->session()->flash('status', __('Der Raum').' <strong>'.request('r_label').'</strong> '.__('wurde angelegt!'));
+
         return redirect()->route('room.show', $room);
     }
 
-    /**
-     * @return array
-     */
-    public function validateNewRoom()
-    : array
+    public function validateNewRoom(): array
     {
         return request()->validate([
-            'r_label'       => 'bail|unique:rooms,r_label|max:20|required|',
-            'storage_id'    => 'unique:rooms,storage_id',
-            'r_name'        => 'max:100',
+            'r_label' => 'bail|unique:rooms,r_label|max:20|required|',
+            'storage_id' => 'unique:rooms,storage_id',
+            'r_name' => 'max:100',
             'r_description' => '',
-            'building_id'   => 'required',
-            'room_type_id'  => 'required'
+            'building_id' => 'required',
+            'room_type_id' => 'required',
         ]);
     }
 
@@ -106,15 +108,15 @@ class RoomController extends Controller
             $neuroom = '';
             switch (true) {
                 case strlen($bul->r_label) <= 20 && strlen($bul->r_label) > 14:
-                    $neuroom = substr($bul->r_label, 0, 13) . '_1';
+                    $neuroom = substr($bul->r_label, 0, 13).'_1';
                     break;
                 case strlen($bul->b_label) <= 14:
-                    $neuroom = $bul->r_label . '_1';
+                    $neuroom = $bul->r_label.'_1';
                     break;
             }
 
             $bul->r_label = $neuroom;
-            $copy = new Room();
+            $copy = new Room;
             $copy->r_label = $neuroom;
             $copy->r_description = $bul->r_description;
             $copy->r_name = $bul->r_name;
@@ -130,19 +132,20 @@ class RoomController extends Controller
                 $copy->room_type_id,
                 $copy->storage_id,
             ], [
-                'r_label'       => 'bail|required|unique:rooms,r_label|max:20',
+                'r_label' => 'bail|required|unique:rooms,r_label|max:20',
                 'r_description' => '',
-                'r_name'        => '',
-                'building_id'   => '',
-                'room_type_id'  => '',
-                'storage_id'    => '',
+                'r_name' => '',
+                'building_id' => '',
+                'room_type_id' => '',
+                'storage_id' => '',
 
             ]);
             $copy->save();
 
             $std = (new Storage)->add($copy->storage_id, $neuroom, 'rooms');
 
-            $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde kopiert!');
+            $request->session()->flash('status', 'Der Raum <strong>'.request('r_label').'</strong> wurde kopiert!');
+
             return redirect()->back();
         } else {
             return 0;
@@ -152,7 +155,6 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Room $room
      *
      * @return Application|Factory|Response|View
      */
@@ -164,7 +166,6 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Room $room
      *
      * @return Application|Factory|Response|View
      */
@@ -176,8 +177,6 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param  Room    $room
      *
      * @return Application|RedirectResponse|Response|Redirector
      */
@@ -191,38 +190,35 @@ class RoomController extends Controller
             $storage->storage_label = $request->r_label;
             $storage->save();
         }
-        $request->session()->flash('status', 'Der Raum <strong>' . $room->r_label . '</strong> wurde aktualisiert!');
+        $request->session()->flash('status', 'Der Raum <strong>'.$room->r_label.'</strong> wurde aktualisiert!');
+
         return redirect($room->path());
     }
 
-    /**
-     * @return array
-     */
-    public function validateRoom()
-    : array
+    public function validateRoom(): array
     {
         return request()->validate([
-            'r_label'       => 'bail|min:2|max:10|required|',
-            'r_name'        => 'bail|min:2|max:100',
+            'r_label' => 'bail|min:2|max:10|required|',
+            'r_name' => 'bail|min:2|max:100',
             'r_description' => '',
-            'building_id'   => 'required'
+            'building_id' => 'required',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Room    $room
-     * @param  Request $request
      *
      * @return Application|RedirectResponse|Response|Redirector
+     *
      * @throws Exception
      */
     public function destroy(Request $request, Room $room)
     {
         //        dd($request);
         Room::destroy($request->id);
-        $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Der Raum <strong>'.request('r_label').'</strong> wurde gelöscht!');
+
         return redirect()->back();
     }
 
@@ -230,7 +226,7 @@ class RoomController extends Controller
     {
         $room = Room::find($request->id);
         $data['html'] = '
-<p class="mt-3">' . __('Folgende Objekte werden von der Lösung betroffen sein.') . '</p>
+<p class="mt-3">'.__('Folgende Objekte werden von der Lösung betroffen sein.').'</p>
 <ul class="list-group">';
 
         $countEquipment = $room->countTotalEquipmentInRoom() ?? 0;
@@ -239,29 +235,24 @@ class RoomController extends Controller
         $bgEquipment = $countEquipment > 0 ? 'list-group-item-danger' : '';
         $bgCompartments = $countCompartment > 0 ? 'list-group-item-danger' : '';
 
-
-        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgCompartments . ' ">' . __('Stellplätze') . '<span class="badge badge-primary badge-pill">' . $countCompartment . '</span></li>';
-        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center ' . $bgEquipment . ' ">' . __('Geräte') . '<span class="badge badge-primary badge-pill">' . $countEquipment . '</span></li>';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center '.$bgCompartments.' ">'.__('Stellplätze').'<span class="badge badge-primary badge-pill">'.$countCompartment.'</span></li>';
+        $data['html'] .= '<li class="list-group-item d-flex justify-content-between align-items-center '.$bgEquipment.' ">'.__('Geräte').'<span class="badge badge-primary badge-pill">'.$countEquipment.'</span></li>';
 
         return $data;
     }
 
     /**
      * Lösche Raum aus GebäudeView über Ajax-Request.
-     *
-     * @param  Request $request
-     *
-     * @return RedirectResponse
      */
-    public function destroyRoomAjax(Request $request)
-    : RedirectResponse
+    public function destroyRoomAjax(Request $request): RedirectResponse
     {
         $room = Room::find($request->id);
         $room_label = $room->r_label;
         $stnd = Storage::where('storage_uid', $room->storage_id)->first();
         $stnd->delete();
         Room::destroy($request->id);
-        $request->session()->flash('status', 'Der Raum <strong>' . $room_label . '</strong> wurde gelöscht!');
+        $request->session()->flash('status', 'Der Raum <strong>'.$room_label.'</strong> wurde gelöscht!');
+
         return redirect()->back();
     }
 
@@ -271,50 +262,51 @@ class RoomController extends Controller
         $data['radio'] = '';
         if ($request->id !== 'void') {
             //            $data['select'] .= '
-            //<option value="void">Stellplatz auswählen oder anlegen</option>
-            //';
+            // <option value="void">Stellplatz auswählen oder anlegen</option>
+            // ';
             if (Stellplatz::where('room_id', $request->id)->count() > 0) {
                 $n = 0;
-                foreach (Stellplatz::with('rooms','StellplatzTyp')->where('room_id', $request->id)->get() as $stellplatz) {
+                foreach (Stellplatz::with('rooms', 'StellplatzTyp')->where('room_id', $request->id)->get() as $stellplatz) {
                     $data['select'] .= '
-<option value="' . $stellplatz->id . '">[' . $stellplatz->StellplatzTyp->spt_label . '] ' . $stellplatz->sp_label . ' / ' . $stellplatz->sp_name . '</option>
+<option value="'.$stellplatz->id.'">['.$stellplatz->StellplatzTyp->spt_label.'] '.$stellplatz->sp_label.' / '.$stellplatz->sp_name.'</option>
 ';
                     $data['radio'] .= '
                 <label class="btn btn-outline-primary"
                        style="border-radius: 0!important; margin-top: 5px !important;"
-                       id="label_compartment_list_item_' . $stellplatz->id . '"
+                       id="label_compartment_list_item_'.$stellplatz->id.'"
                 >
                     <input type="radio"
                            name="radio_set_compartment_id"
-                           id="compartment_list_item_' . $stellplatz->id . '"
+                           id="compartment_list_item_'.$stellplatz->id.'"
                            class="radio_set_compartment_id"
-                           value="' . $stellplatz->id . '"
+                           value="'.$stellplatz->id.'"
                     >
-                    [' . $stellplatz->StellplatzTyp->spt_label . ']
-                    ' . $stellplatz->sp_label . ' /
-                    ' . $stellplatz->sp_name . '
+                    ['.$stellplatz->StellplatzTyp->spt_label.']
+                    '.$stellplatz->sp_label.' /
+                    '.$stellplatz->sp_name.'
                 </label>
                 ';
                     $n++;
                 }
-                $data['msg'] = $n . ' ' . __('Stellplätze gefunden');
+                $data['msg'] = $n.' '.__('Stellplätze gefunden');
             } else {
                 $data['select'] .= '
-<option value="void">' . __('Keine Stellplätze im Raum vorhanden') . '</option>
+<option value="void">'.__('Keine Stellplätze im Raum vorhanden').'</option>
 ';
                 $data['radio'] .= '
                 <label class="btn btn-outline-primary">
-                    ' . __('Keine Stellplätze im Raum vorhanden') . '
+                    '.__('Keine Stellplätze im Raum vorhanden').'
                 </label>
                 ';
                 $data['msg'] = __('Keine Stellplätze im Raum vorhanden');
             }
         } else {
             $data['select'] .= '
-<option value="void">' . __('Bitte Stellplatz auswählen') . '</option>
+<option value="void">'.__('Bitte Stellplatz auswählen').'</option>
 ';
             $data['msg'] = __('Stellplätze gefunden');
         }
+
         return $data;
     }
 
@@ -323,7 +315,7 @@ class RoomController extends Controller
         $this->validateRoom();
 
         if ($request->room_type_id === 'new' && isset($request->newRoomType)) {
-            $bt = new RoomType();
+            $bt = new RoomType;
             $bt->rt_label = $request->newRoomType;
             $bt->save();
             $request->room_type_id = $bt->id;
@@ -338,10 +330,10 @@ class RoomController extends Controller
             }
             $request->session()->flash('status', __('Der Raum <strong>:label</strong> wurde aktualisiert!', ['label' => request('r_label')]));
         } else {
-            $room = new Room();
+            $room = new Room;
 
             (new Storage)->add($request->storage_id, $request->r_label, 'rooms');
-            $request->session()->flash('status', 'Der Raum <strong>' . request('r_label') . '</strong> wurde angelegt!');
+            $request->session()->flash('status', 'Der Raum <strong>'.request('r_label').'</strong> wurde angelegt!');
         }
         $room->r_label = $request->r_label;
         $room->r_name = $request->r_name;
@@ -353,7 +345,6 @@ class RoomController extends Controller
 
         return redirect()->back();
     }
-
 
     public function getRoomData(Request $request)
     {
@@ -377,17 +368,17 @@ class RoomController extends Controller
 <tbody>
         ';
 
-        foreach (Room::with('building')->get()  as $room) {
+        foreach (Room::with('building')->get() as $room) {
             $html .= '
             <tr>
-            <td><a href="/location/' . $room->building->location->id . '">' . $room->building->location->l_label . '</a></td>
-            <td><a href="/building/' . $room->building->id . '">' . $room->building->b_label . '</a></td>
-            <td>' . $room->r_label . '</td>
-            <td>' . $room->r_name . '</td>
+            <td><a href="/location/'.$room->building->location->id.'">'.$room->building->location->l_label.'</a></td>
+            <td><a href="/building/'.$room->building->id.'">'.$room->building->b_label.'</a></td>
+            <td>'.$room->r_label.'</td>
+            <td>'.$room->r_name.'</td>
             <td>
-                <a href="' . $room->path() . '">
+                <a href="'.$room->path().'">
                     <i class="fas fa-chalkboard"></i>
-                    <span class="d-none d-md-table-cell">' . __('Übersicht') . '</span>
+                    <span class="d-none d-md-table-cell">'.__('Übersicht').'</span>
                 </a>
             </td>
             </tr>';
@@ -401,22 +392,22 @@ class RoomController extends Controller
     {
         $html = '';
         foreach (Room::with('building')->get() as $room) {
-            $html .= '<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_' . $room->id . '">
+            $html .= '<div class="col-md-6 col-lg-4 col-xl-3 locationListItem mb-lg-4 mb-sm-2" id="room_id_'.$room->id.'">
                         <div class="card" style="height:20em;">
                             <div class="card-header">
                                  Befindet sich in <i class="fas fa-angle-right text-muted"></i>
-                                <a href="/location/' . $room->building->location->id . '">' . $room->building->location->l_label . '</a>
+                                <a href="/location/'.$room->building->location->id.'">'.$room->building->location->l_label.'</a>
                                 <i class="fas fa-angle-right"></i>
-                                <a href="/building/' . $room->building->id . '">' . $room->building->b_label . '</a>
+                                <a href="/building/'.$room->building->id.'">'.$room->building->b_label.'</a>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">' . $room->r_label . '</h5>
-                                <h6 class="card-subtitletext-muted">' . $room->r_name . '</h6>
+                                <h5 class="card-title">'.$room->r_label.'</h5>
+                                <h6 class="card-subtitletext-muted">'.$room->r_name.'</h6>
                                 <p class="card-text mt-1 mb-0"><small><strong>Beschreibung:</strong></small></p>
-                                <p class="mt-0" style="height:6em;">' . str_limit($room->r_description, 100) . '</p>
+                                <p class="mt-0" style="height:6em;">'.str_limit($room->r_description, 100).'</p>
                             </div>
                             <div class="card-footer">
-                                <a href="' . $room->path() . '" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>
+                                <a href="'.$room->path().'" class="card-link"><i class="fas fa-chalkboard"></i> Übersicht</a>
                             </div>
                         </div>
                     </div>';
@@ -430,15 +421,14 @@ class RoomController extends Controller
      *
      * @return bool[]
      */
-    public function checkDuplicateLabel(Request $request)
-    : array
+    public function checkDuplicateLabel(Request $request): array
     {
         $building = Room::where('r_label', $request->term)->first();
+
         return ($building) ? [
-            'exists' => true
+            'exists' => true,
         ] : [
-            'exists' => false
+            'exists' => false,
         ];
     }
-
 }

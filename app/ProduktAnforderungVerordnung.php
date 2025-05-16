@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Cache;
 
 class ProduktAnforderungVerordnung extends Model
 {
-
     public static function boot()
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 

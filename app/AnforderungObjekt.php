@@ -11,11 +11,11 @@ class AnforderungObjekt extends Model
 
     protected $guarded = [];
 
-
     public function Anforderung()
     {
         return $this->belongsTo(Anforderung::class);
     }
+
     public function Storage()
     {
         return $this->hasMany(Storage::class);

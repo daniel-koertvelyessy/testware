@@ -3,13 +3,11 @@
 namespace App\Jobs;
 
 use App\ControlEquipment;
-use App\ControlEvent;
 use App\DelayedControlEquipment;
 use App\Equipment;
 use App\EquipmentHistory;
 use App\Notifications\EquipmentTestIsOverdue;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -27,7 +25,7 @@ class CheckEquipmentTestDueDates implements ShouldQueue
      */
     public function __construct()
     {
-        Log::info(__('Prüfung für überfällige Geräteprüfungen wurde gestartet um ' . date('Y-m-d H:i')));
+        Log::info(__('Prüfung für überfällige Geräteprüfungen wurde gestartet um '.date('Y-m-d H:i')));
     }
 
     /**
@@ -47,7 +45,6 @@ class CheckEquipmentTestDueDates implements ShouldQueue
              * Check if the control-event is overdue
              *  report it to DelayedControlEvent
              */
-
             if ($controlEquipment->qe_control_date_due < now()) {
 
                 $equipment = Equipment::find($controlEquipment->equipment_id);
@@ -55,13 +52,13 @@ class CheckEquipmentTestDueDates implements ShouldQueue
                 (new DelayedControlEquipment)->reportEquipment($equipment);
                 $delayedControlEquipment[] = $controlEquipment;
 
-                if((new Equipment)->lockEquipment($equipment)){
+                if ((new Equipment)->lockEquipment($equipment)) {
                     (new EquipmentHistory)->add(
                         __('Prüfung überfällig'),
                         __('Die Prüfung :testname des Gerätes :eqname ist überfällig. Das Geräte wurde daher gesperrt!',
                             [
-                                'eqname'=>$controlEquipment->Equipment->eq_name,
-                                'testname'=>$controlEquipment->Anforderung->an_name,
+                                'eqname' => $controlEquipment->Equipment->eq_name,
+                                'testname' => $controlEquipment->Anforderung->an_name,
                             ]),
                         $controlEquipment->equipment_id
                     );
@@ -70,7 +67,7 @@ class CheckEquipmentTestDueDates implements ShouldQueue
 
         }
 
-        if(count($delayedControlEquipment)>0) {
+        if (count($delayedControlEquipment) > 0) {
             /**
              *  Fetch all qualified employess from equipment and send
              *  a notification that 'their' equipment should be tested
@@ -79,7 +76,7 @@ class CheckEquipmentTestDueDates implements ShouldQueue
             foreach ($delayedControlEquipment as $controlEquipment) {
                 foreach ($controlEquipment->Equipment->EquipmentQualifiedUser as $qualifiedUser) {
 
-                    $qualifiedUser->user->notify( new EquipmentTestIsOverdue($controlEquipment));
+                    $qualifiedUser->user->notify(new EquipmentTestIsOverdue($controlEquipment));
                 }
 
             }

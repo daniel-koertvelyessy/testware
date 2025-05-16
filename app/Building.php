@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -9,23 +10,22 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Kyslik\ColumnSortable\Sortable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Building extends Model
 {
-    use SoftDeletes, Sortable, HasFactory;
+    use HasFactory, SoftDeletes, Sortable;
 
     public $sortable = [
         'b_label',
         'b_name',
         'b_description',
     ];
+
     /**
      * Returns the path of the page
      *
      * @return string
      */
-
     protected $guarded = [];
 
     public static function boot()
@@ -67,6 +67,7 @@ class Building extends Model
         foreach ($building->room->pluck('id') as $rid) {
             $n += count(Stellplatz::where('room_id', $rid)->get());
         }
+
         return $n;
     }
 
@@ -77,12 +78,13 @@ class Building extends Model
 
     public function countTotalEquipmentInBuilding(): int
     {
-        return Cache::remember('countTotalEquipmentInBuilding' . $this->id, now()->addSeconds(30), function () {
+        return Cache::remember('countTotalEquipmentInBuilding'.$this->id, now()->addSeconds(30), function () {
             $equipCounter = 0;
             $equipCounter += ($this->Storage) ? $this->Storage->countReferencedEquipment() : 0;
             foreach ($this->room as $room) {
                 $equipCounter += $room->countTotalEquipmentInRoom();
             }
+
             return $equipCounter;
         });
     }
@@ -98,6 +100,7 @@ class Building extends Model
         $this->location_id = 1;
         $this->building_type_id = 1;
         $this->save();
+
         return $this->id;
     }
 
@@ -117,28 +120,26 @@ class Building extends Model
         $this->storage_id = $request->storage_id;
         $this->building_type_id = $request->building_type_id;
         $buildingId = $this->save();
+
         return $buildingId > 0;
     }
 
-    /**
-     * @return array
-     */
     public function validateBuilding(): array
     {
         return request()->validate([
-            'b_label'          => [
+            'b_label' => [
                 'bail',
                 'required',
                 'min:2',
                 'max:20',
-                Rule::unique('buildings')->ignore(\request('id'))
+                Rule::unique('buildings')->ignore(\request('id')),
             ],
-            'b_name_ort'       => '',
-            'b_name'           => '',
-            'b_description'    => '',
-            'b_we_has'         => '',
-            'b_we_name'        => 'required_if:b_we_has,1',
-            'location_id'      => 'required',
+            'b_name_ort' => '',
+            'b_name' => '',
+            'b_description' => '',
+            'b_we_has' => '',
+            'b_we_name' => 'required_if:b_we_has,1',
+            'location_id' => 'required',
             'building_type_id' => '',
         ]);
     }

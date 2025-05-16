@@ -20,13 +20,13 @@ class CreateControlEventDatasetsTable extends Migration
             $table->decimal('control_event_dataset_read')->nullable();
             $table->boolean('control_event_dataset_pass');
             $table->foreignId('aci_dataset_id')
-                  ->nullable()
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
+                ->nullable()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('control_event_item_id')
-                  ->nullable()
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
+                ->nullable()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
         });
     }

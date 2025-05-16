@@ -23,16 +23,16 @@ class CreateAciDataSetsTable extends Migration
             $table->string('data_point_tol_target_mode');
             $table->decimal('data_point_tol', 12, 3);
             $table->string('data_point_tol_mod', 3)
-                  ->default('abs');
+                ->default('abs');
 
             $table->integer('data_point_sort')
-                  ->nullable();
+                ->nullable();
 
             $table->foreignId('anforderung_control_item_id')
-                  ->nullable()
-                  ->constrained()
-                  ->nullOnDelete()
-                  ->cascadeOnUpdate();
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
 
         });
     }

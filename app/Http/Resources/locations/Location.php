@@ -4,7 +4,6 @@ namespace App\Http\Resources\locations;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\AddressShort as AdresseKurzResource;
 
 class Location extends JsonResource
 {
@@ -18,8 +17,8 @@ class Location extends JsonResource
     {
         return [
             'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
+            'created' => (string) $this->created_at,
+            'updated' => (string) $this->updated_at,
             'label' => $this->l_label,
             'uid' => $this->storage_id,
             'name' => $this->l_name,

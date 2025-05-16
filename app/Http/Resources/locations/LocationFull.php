@@ -19,15 +19,15 @@ class LocationFull extends JsonResource
     {
         return [
             'id' => $this->id,
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
+            'created' => (string) $this->created_at,
+            'updated' => (string) $this->updated_at,
             'label' => $this->l_label,
             'uid' => $this->storage_id,
             'name' => $this->l_name,
             'description' => $this->l_beschreibung,
             'address' => new AddressFull($this->Adresse),
             'manager' => new ProfileFull($this->Profile),
-            'location_objects' => new EquimentStats($this)
+            'location_objects' => new EquimentStats($this),
         ];
     }
 }

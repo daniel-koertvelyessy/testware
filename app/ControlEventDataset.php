@@ -15,11 +15,10 @@ class ControlEventDataset extends Model
         return $this->belongsTo(AciDataSet::class, 'aci_dataset_id');
     }
 
-
     public function valueString($value, $decimals = 2): string
     {
 
-        if(Auth::user()->locale === 'de'){
+        if (Auth::user()->locale === 'de') {
             $thousands = '.';
             $dec = ',';
         } else {
@@ -27,8 +26,6 @@ class ControlEventDataset extends Model
             $dec = '.';
         }
 
-        return number_format($value,$decimals,$dec,$thousands);
+        return number_format($value, $decimals, $dec, $thousands);
     }
-
-
 }

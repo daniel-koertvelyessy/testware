@@ -20,7 +20,7 @@ class CreateContactsTable extends Migration
             $table->unique([
                 'firma_id',
                 'con_vorname',
-                'con_name'
+                'con_name',
             ]);
             $table->string('con_label', 20)->nullable()->index();
             $table->string('con_name', 100)->index();

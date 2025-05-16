@@ -16,13 +16,16 @@ class ProduktAnforderung extends Model
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::deleting(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 
@@ -36,7 +39,8 @@ class ProduktAnforderung extends Model
         return $this->belongsTo(Anforderung::class);
     }
 
-    public function AnforderungControlItem() {
+    public function AnforderungControlItem()
+    {
         return $this->hasMany(AnforderungControlItem::class);
     }
 
@@ -44,7 +48,7 @@ class ProduktAnforderung extends Model
     {
         $this->produkt_id = $product_id;
         $this->anforderung_id = $requirement_id;
+
         return $this->save();
     }
-
 }

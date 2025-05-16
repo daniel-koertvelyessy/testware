@@ -12,6 +12,4 @@ class DocumentType extends Model
     {
         return $this->belongsTo(ProduktDoc::class);
     }
-
-
 }

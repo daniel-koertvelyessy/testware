@@ -19,15 +19,12 @@ class Verordnung extends Model
         'vo_nummer',
         'vo_stand',
         'vo_description',
-        ''
+        '',
 
     ];
-
 
     public function Anforderung()
     {
         return $this->hasMany(Anforderung::class);
     }
-
-
 }

@@ -16,8 +16,8 @@ class CreateEquipmentLabelsTable extends Migration
         Schema::create('equipment_labels', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('label',20);
-            $table->string('name',100)->nullable();
+            $table->string('label', 20);
+            $table->string('name', 100)->nullable();
             $table->boolean('show_labels')->default(true);
             $table->boolean('show_inventory')->default(true);
             $table->boolean('show_location')->default(true);
@@ -33,7 +33,6 @@ class CreateEquipmentLabelsTable extends Migration
             $table->integer('logo_h')->nullable();
             $table->integer('logo_w')->nullable();
             $table->text('logo_svg')->nullable();
-
 
         });
     }

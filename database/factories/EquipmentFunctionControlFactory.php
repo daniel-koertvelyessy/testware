@@ -19,7 +19,7 @@ class EquipmentFuntionControlFactory extends Factory
             'function_control_profil' => null,
             'function_control_pass' => $this->faker->boolean(),
             'function_control_text' => $this->faker->realText(),
-            'equipment_id' => $this->faker->randomElement(Equipment::all()->pluck('id')->toArray())
+            'equipment_id' => $this->faker->randomElement(Equipment::all()->pluck('id')->toArray()),
 
         ];
 

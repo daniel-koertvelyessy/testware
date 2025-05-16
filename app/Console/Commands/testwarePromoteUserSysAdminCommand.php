@@ -1,71 +1,69 @@
 <?php
 
-    namespace App\Console\Commands;
+namespace App\Console\Commands;
 
-    use App\User;
-    use Illuminate\Console\Command;
-    use Illuminate\Support\Facades\Hash;
+use App\User;
+use Illuminate\Console\Command;
 
+class testwarePromoteUserSysAdminCommand extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'testware:promotesysadmin {user : E-Mail address of a registered user who will be promoted to SysAdmin}';
 
-    class testwarePromoteUserSysAdminCommand extends Command
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Promotes a given user to become SysAdmin';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        /**
-         * The name and signature of the console command.
-         *
-         * @var string
-         */
-        protected $signature = 'testware:promotesysadmin {user : E-Mail address of a registered user who will be promoted to SysAdmin}';
+        parent::__construct();
+    }
 
-        /**
-         * The console command description.
-         *
-         * @var string
-         */
-        protected $description = 'Promotes a given user to become SysAdmin';
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $userEmail = $this->argument('user');
+        $fetchUser = User::where('email', $userEmail);
 
-        /**
-         * Create a new command instance.
-         *
-         * @return void
-         */
-        public function __construct()
-        {
-            parent::__construct();
-        }
+        if ($fetchUser->count() === 0) {
+            $this->newLine();
+            $this->error('                                               ');
+            $this->error('     User with given E-Mail not found!         ');
+            $this->error('                                               ');
+            $this->newLine();
 
-        /**
-         * Execute the console command.
-         *
-         * @return int
-         */
-        public function handle()
-        {
-            $userEmail = $this->argument('user');
-            $fetchUser = User::where('email', $userEmail);
+            return 1;
+        } else {
+            $this->info('Promoting user : '.$userEmail);
+            $user = $fetchUser->first();
+            $user->role_id = 1;
+            if ($user->save()) {
 
-            if ($fetchUser->count() === 0) {
+                $this->info('User is promoted to SysAdmin');
                 $this->newLine();
-                $this->error('                                               ');
-                $this->error('     User with given E-Mail not found!         ');
-                $this->error('                                               ');
-                $this->newLine();
-                return 1;
-            } else {
-                $this->info('Promoting user : ' . $userEmail);
-                $user = $fetchUser->first();
-                $user->role_id = 1;
-                if ($user->save()) {
 
-                    $this->info('User is promoted to SysAdmin');
-                    $this->newLine();
-                    return 0;
-
-                }
-
+                return 0;
 
             }
 
-            return 0;
         }
 
+        return 0;
     }
+}

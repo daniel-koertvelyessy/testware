@@ -15,5 +15,4 @@ class ProduktKategorieProdukt extends Model
     {
         return $this->hasMany(Produkt::class);
     }
-
 }

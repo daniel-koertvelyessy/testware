@@ -4,8 +4,6 @@ namespace App\Http\Resources\locations;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\locations\Location as LocationResource;
-use App\Http\Resources\locations\EquipmentShow as LocationShowResource;
 
 class LocationShow extends JsonResource
 {
@@ -18,8 +16,8 @@ class LocationShow extends JsonResource
     public function toArray($request)
     {
         return [
-            'created' => (string)$this->created_at,
-            'updated' => (string)$this->updated_at,
+            'created' => (string) $this->created_at,
+            'updated' => (string) $this->updated_at,
             'label' => $this->l_label,
             'uid' => $this->storage_id,
             'name' => $this->l_name,

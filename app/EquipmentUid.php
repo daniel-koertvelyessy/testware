@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class EquipmentUid extends Model
 {
@@ -12,14 +11,15 @@ class EquipmentUid extends Model
         'equipment_id',
     ];
 
-    public function Equipment() {
+    public function Equipment()
+    {
         return $this->belongsTo(Equipment::class);
     }
 
-    public function addNew($equipment_uid, $equipment_id){
+    public function addNew($equipment_uid, $equipment_id)
+    {
         $this->equipment_uid = $equipment_uid;
         $this->equipment_id = $equipment_id;
         $this->save();
     }
-
 }

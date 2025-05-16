@@ -11,26 +11,27 @@ use App\Location;
 use App\Room;
 use App\Stellplatz;
 
-
 class ExportController extends Controller
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function locationsToJson() {
+    public function locationsToJson()
+    {
         return response(LocationFull::collection(
-            Location::with('Adresse','Profile' )->get()
+            Location::with('Adresse', 'Profile')->get()
         ), 200)
             ->header('Cache-Control', 'public')
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_". __('Standorte').'_' . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_'.__('Standorte').'_'.time().'.json');
     }
 
-    public function buildingsToJson() {
+    public function buildingsToJson()
+    {
         return response(BuildingFull::collection(
             Building::all()
         ), 200)
@@ -38,10 +39,11 @@ class ExportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_". __('Gebäude').'_' . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_'.__('Gebäude').'_'.time().'.json');
     }
 
-    public function roomsToJson() {
+    public function roomsToJson()
+    {
         return response(RoomFull::collection(
             Room::all()
         ), 200)
@@ -49,10 +51,11 @@ class ExportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_". __('Räume').'_' . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_'.__('Räume').'_'.time().'.json');
     }
 
-    public function compartmentsToJson() {
+    public function compartmentsToJson()
+    {
         return response(CompartmentFull::collection(
             Stellplatz::all()
         ), 200)
@@ -60,7 +63,6 @@ class ExportController extends Controller
             ->header('Content-Description', 'File Transfer')
             ->header('Content-Type', ' application/json')
             ->header('Content-Transfer-Encoding', 'binary')
-            ->header('Content-disposition', "attachment; filename=" . "testware_". __('Stellplättze').'_' . time() . ".json");
+            ->header('Content-disposition', 'attachment; filename='.'testware_'.__('Stellplättze').'_'.time().'.json');
     }
-
 }

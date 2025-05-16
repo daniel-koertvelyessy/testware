@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
         Paginator::useBootstrap();
-        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
         Model::handleLazyLoadingViolationUsing(function (Model $model, $relation) {
             Log::debug('Lazy loading violation for model '.$model::class.' with relation '.$relation);
         });
@@ -55,11 +54,13 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
     }
 
-    private function configureRequests(): void{
+    private function configureRequests(): void
+    {
         URL::forceScheme('https');
     }
 
-    private function configureVite():void{
+    private function configureVite(): void
+    {
         // TODO
         // Vite::usePrefetchStrategie('aggressive');
     }

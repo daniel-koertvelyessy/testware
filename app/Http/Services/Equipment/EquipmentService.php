@@ -3,7 +3,6 @@
 namespace App\Http\Services\Equipment;
 
 use App\ControlEquipment;
-use App\ControlEvent;
 use App\Equipment;
 use App\EquipmentInstruction;
 use App\EquipmentParam;
@@ -12,15 +11,12 @@ use App\ProductInstructedUser;
 use App\ProductQualifiedUser;
 use App\ProduktAnforderung;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class EquipmentService
 {
-
     protected function query(string $term)
     {
         return Equipment::where('eq_serien_nr', 'ILIKE', '%'.strtolower($term).'%')->orWhere('eq_inventar_nr', 'ILIKE', '%'.strtolower($term).'%')->orWhere('eq_text', 'ILIKE', '%'.strtolower($term).'%')->orWhere('eq_uid', 'like', '%'.strtolower($term).'%')->orWhere('eq_name', 'ILIKE', '%'.strtolower($term).'%')->get();
@@ -33,8 +29,8 @@ class EquipmentService
 
         foreach ((new EquipmentService)->query($term) as $ret) {
             $data[] = [
-                'link'  => route('equipment.show', $ret),
-                'label' => '['.__('Gerät').'] Inv-#: '.$ret->eq_inventar_nr.' SN-#: '.$ret->eq_serien_nr
+                'link' => route('equipment.show', $ret),
+                'label' => '['.__('Gerät').'] Inv-#: '.$ret->eq_inventar_nr.' SN-#: '.$ret->eq_serien_nr,
             ];
         }
 
@@ -50,32 +46,32 @@ class EquipmentService
     public function vaidateEquipmnt(Request $request)
     {
         $request->validate([
-            'eq_inventar_nr'     => [
+            'eq_inventar_nr' => [
                 'bail',
                 'max:100',
                 'required',
-                Rule::unique('equipment')->ignore($request->id)
+                Rule::unique('equipment')->ignore($request->id),
             ],
-            'eq_serien_nr'       => [
+            'eq_serien_nr' => [
                 'bail',
                 'nullable',
                 'max:100',
-                Rule::unique('equipment')->ignore($request->id)
+                Rule::unique('equipment')->ignore($request->id),
             ],
-            'eq_uid'             => [
+            'eq_uid' => [
                 'bail',
                 'required',
-                Rule::unique('equipment')->ignore($request->id)
+                Rule::unique('equipment')->ignore($request->id),
             ],
-            'eq_name'            => '',
-            'eq_qrcode'          => '',
-            'eq_text'            => '',
-            'eq_price'           => 'nullable|numeric',
-            'installed_at'       => 'date',
-            'purchased_at'       => 'date',
-            'produkt_id'         => '',
-            'storage_id'         => 'required',
-            'equipment_state_id' => 'required'
+            'eq_name' => '',
+            'eq_qrcode' => '',
+            'eq_text' => '',
+            'eq_price' => 'nullable|numeric',
+            'installed_at' => 'date',
+            'purchased_at' => 'date',
+            'produkt_id' => '',
+            'storage_id' => 'required',
+            'equipment_state_id' => 'required',
         ]);
     }
 
@@ -116,100 +112,99 @@ class EquipmentService
         $feld .= __(':user führte folgende Änderungen durch', ['user' => Auth::user()->username]).': <ul>';
         if ($oldEquipment->eq_serien_nr != $request->eq_serien_nr) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Seriennummer'),
-                    'old' => $oldEquipment->eq_serien_nr,
-                    'new' => $request->eq_serien_nr,
-                ]).'</li>';
+                'fld' => __('Seriennummer'),
+                'old' => $oldEquipment->eq_serien_nr,
+                'new' => $request->eq_serien_nr,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_inventar_nr != $request->eq_inventar_nr) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Inventarnummer'),
-                    'old' => $oldEquipment->eq_inventar_nr,
-                    'new' => $request->eq_inventar_nr,
-                ]).'</li>';
+                'fld' => __('Inventarnummer'),
+                'old' => $oldEquipment->eq_inventar_nr,
+                'new' => $request->eq_inventar_nr,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_qrcode != $request->eq_qrcode) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('QR Code'),
-                    'old' => $oldEquipment->eq_qrcode,
-                    'new' => $request->eq_qrcode,
-                ]).'</li>';
+                'fld' => __('QR Code'),
+                'old' => $oldEquipment->eq_qrcode,
+                'new' => $request->eq_qrcode,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_name != $request->eq_name) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Name'),
-                    'old' => $oldEquipment->eq_name,
-                    'new' => $request->eq_name,
-                ]).'</li>';
+                'fld' => __('Name'),
+                'old' => $oldEquipment->eq_name,
+                'new' => $request->eq_name,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->purchased_at != $request->purchased_at) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Kaufdatum'),
-                    'old' => $oldEquipment->purchased_at,
-                    'new' => $request->purchased_at,
-                ]).'</li>';
+                'fld' => __('Kaufdatum'),
+                'old' => $oldEquipment->purchased_at,
+                'new' => $request->purchased_at,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->installed_at != $request->installed_at) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Inbetriebnahme am'),
-                    'old' => $oldEquipment->installed_at,
-                    'new' => $request->installed_at,
-                ]).'</li>';
+                'fld' => __('Inbetriebnahme am'),
+                'old' => $oldEquipment->installed_at,
+                'new' => $request->installed_at,
+            ]).'</li>';
             $flag = true;
         }
         if ($oldEquipment->eq_text != $request->eq_text) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Beschreibung'),
-                    'old' => $oldEquipment->eq_text,
-                    'new' => $request->eq_text,
-                ]).'</li>';
+                'fld' => __('Beschreibung'),
+                'old' => $oldEquipment->eq_text,
+                'new' => $request->eq_text,
+            ]).'</li>';
             $flag = true;
         }
         if ($oldEquipment->equipment_state_id != $request->equipment_state_id) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Geräte Status'),
-                    'old' => $oldEquipment->equipment_state_id,
-                    'new' => $request->equipment_state_id,
-                ]).'</li>';
+                'fld' => __('Geräte Status'),
+                'old' => $oldEquipment->equipment_state_id,
+                'new' => $request->equipment_state_id,
+            ]).'</li>';
             $flag = true;
         }
         if ($oldEquipment->storage_id != $request->storage_id) {
             $feld .= '<li>'.__('Feld :fld von [:old] in [:new] geändert', [
-                    'fld' => __('Aufstellplatz / Standort'),
-                    'old' => $oldEquipment->storage->storage_label ?? __('ohne Zuordnung'),
-                    'new' => \App\Storage::find($request->storage_id)->storage_label,
-                ]).'</li>';
+                'fld' => __('Aufstellplatz / Standort'),
+                'old' => $oldEquipment->storage->storage_label ?? __('ohne Zuordnung'),
+                'new' => \App\Storage::find($request->storage_id)->storage_label,
+            ]).'</li>';
             $flag = true;
         }
         if ($oldEquipment->produkt_id != $request->produkt_id) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Produkt'),
-                    'old' => $oldEquipment->produkt_id,
-                    'new' => $request->produkt_id,
-                ]).'</li>';
+                'fld' => __('Produkt'),
+                'old' => $oldEquipment->produkt_id,
+                'new' => $request->produkt_id,
+            ]).'</li>';
             $flag = true;
         }
 
         if ($oldEquipment->eq_price != $request->eq_price) {
             $feld .= '<li>'.__('Feld :fld von :old in :new geändert', [
-                    'fld' => __('Kaufpreis'),
-                    'old' => $oldEquipment->eq_price,
-                    'new' => $request->eq_price,
-                ]).'</li>';
+                'fld' => __('Kaufpreis'),
+                'old' => $oldEquipment->eq_price,
+                'new' => $request->eq_price,
+            ]).'</li>';
             $flag = true;
         }
         $changedPrameter = [];
-
 
         if (isset($request->eqp_id)) {
 
@@ -219,8 +214,8 @@ class EquipmentService
                 if ($parameter->save() && $parameter->ep_value !== $request->eqp_value[$parameter_id]) {
                     $changedPrameter[] = [$parameter_id => $request->eqp_value[$parameter_id]];
                     $feld .= __('<li>:num Parameter :name geändert</li>', [
-                        'num'  => count($changedPrameter),
-                        'name' => $parameter->ep_name
+                        'num' => count($changedPrameter),
+                        'name' => $parameter->ep_name,
                     ]);
                 }
             }
@@ -230,8 +225,8 @@ class EquipmentService
         $feld .= '</ul>';
 
         return [
-            'changedItems'    => $feld,
-            'changedStatus'   => $flag,
+            'changedItems' => $feld,
+            'changedStatus' => $flag,
             'changedPrameter' => $changedPrameter,
         ];
 
@@ -274,7 +269,7 @@ class EquipmentService
             'id',
             'equipment_instruction_trainee_id',
             'equipment_instruction_trainee_signature',
-            'equipment_instruction_date'
+            'equipment_instruction_date',
         ])->where('equipment_id', $equipment->id)->get();
     }
 
@@ -288,9 +283,9 @@ class EquipmentService
         foreach (ProductQualifiedUser::select('user_id')->where('produkt_id', $equipment->produkt->id)->get() as $user) {
             $userList[] = ['user_id' => $user->user_id];
         }
+
         return $userList;
     }
-
 
     public function makeCompanyString(Equipment $equipment, string $companyString = ''): string
     {
@@ -299,7 +294,6 @@ class EquipmentService
         if ($companies->count() === 1) {
             return $companies->first()->fa_name;
         }
-
 
         foreach ($companies as $company) {
             $companyString .= $company->fa_name.' ';
@@ -325,7 +319,6 @@ class EquipmentService
 
     public static function count(): int
     {
-        return Cache::remember('equipment.count', 60, fn() => Equipment::count());
+        return Cache::remember('equipment.count', 60, fn () => Equipment::count());
     }
-
 }

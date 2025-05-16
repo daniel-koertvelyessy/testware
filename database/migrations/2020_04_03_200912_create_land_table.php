@@ -17,8 +17,8 @@ class CreateLandTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('land_iso',2)->unique();
-            $table->string('land_lang',200)->nullable();
+            $table->string('land_iso', 2)->unique();
+            $table->string('land_lang', 200)->nullable();
         });
     }
 

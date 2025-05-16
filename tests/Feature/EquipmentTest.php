@@ -2,16 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\ControlProdukt;
 use App\Equipment;
 use App\EquipmentQualifiedUser;
-use App\EquipmentState;
 use App\Produkt;
-use App\ControlProdukt;
-use App\Storage;
-use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EquipmentTest extends TestCase
 {
@@ -22,7 +19,7 @@ class EquipmentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-            $this->seed(\Database\Seeders\InitialValueSeeder::class);
+        $this->seed(\Database\Seeders\InitialValueSeeder::class);
 
         $this->equipment = Equipment::factory()->create();
     }
@@ -52,7 +49,7 @@ class EquipmentTest extends TestCase
     public function test_is_control_produkt_returns_false_when_produkt_id_is_null(): void
     {
         $equipment = Equipment::factory()->create([
-            'produkt_id' => null
+            'produkt_id' => null,
         ]);
 
         $this->assertFalse($equipment->isControlProdukt());
@@ -61,7 +58,7 @@ class EquipmentTest extends TestCase
     public function test_price_tag_formats_price_correctly(): void
     {
         $equipment = Equipment::factory()->create([
-            'eq_price' => 1234.56
+            'eq_price' => 1234.56,
         ]);
 
         $this->assertEquals('1234.56', $equipment->priceTag());
@@ -80,7 +77,7 @@ class EquipmentTest extends TestCase
         $equipment->save();
 
         ControlProdukt::create([
-            'produkt_id' => $produkt->id
+            'produkt_id' => $produkt->id,
         ]);
 
         $this->assertEquals('<i class="fas fa-check text-success"></i>', $equipment->controlProductIcon());
@@ -114,11 +111,10 @@ class EquipmentTest extends TestCase
         $equipment = Equipment::factory()->create();
 
         EquipmentQualifiedUser::factory()
-                              ->count(3)
-                              ->create([
-                                  'equipment_id' => $equipment->id
-                              ]);
-
+            ->count(3)
+            ->create([
+                'equipment_id' => $equipment->id,
+            ]);
 
         $this->assertEquals(3, $equipment->countQualifiedUser());
     }
@@ -136,11 +132,11 @@ class EquipmentTest extends TestCase
 
         // Create multiple equipment with same produkt_id
         Equipment::factory()->count(3)->create([
-            'produkt_id' => $produkt->id
+            'produkt_id' => $produkt->id,
         ]);
 
         $equipment = Equipment::factory()->create([
-            'produkt_id' => $produkt->id
+            'produkt_id' => $produkt->id,
         ]);
 
         $this->assertEquals(4, Equipment::countInstances($equipment));

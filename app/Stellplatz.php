@@ -47,6 +47,7 @@ class Stellplatz extends Model
     {
         return $this->belongsTo(StellplatzTyp::class);
     }
+
     public function StellplatzTyp()
     {
         return $this->belongsTo(StellplatzTyp::class);
@@ -56,10 +57,11 @@ class Stellplatz extends Model
     {
         return $this->hasOne(Storage::class, 'storage_uid', 'storage_id');
     }
+
     public function countTotalEquipmentInCompartment()
     {
         Cache::remember(
-            'countTotalEquipmentInCompartment' . $this->id,
+            'countTotalEquipmentInCompartment'.$this->id,
             now()->addSeconds(30),
             function () {
                 return $this->Storage->countReferencedEquipment();

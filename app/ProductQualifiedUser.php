@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ProductQualifiedUser extends Model
 {
-    use SoftDeletes, Notifiable;
+    use Notifiable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -22,10 +22,12 @@ class ProductQualifiedUser extends Model
     {
         parent::boot();
         static::saving(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
         static::updating(function () {
-            Cache::forget('system-status-database');Cache::forget('system-status-objects');
+            Cache::forget('system-status-database');
+            Cache::forget('system-status-objects');
         });
     }
 
@@ -50,6 +52,7 @@ class ProductQualifiedUser extends Model
         $this->product_qualified_date = $data['product_qualified_date'];
         $this->user_id = $data['user_id'];
         $this->produkt_id = $data['produkt_id'];
+
         return $this->save();
     }
 
@@ -62,25 +65,24 @@ class ProductQualifiedUser extends Model
             'product_number' => $array['product_number'],
         ]);
 
-
         return ProductQualifiedUser::where([
-                [
-                    'produkt_id',
-                    $produkt_id
-                ],
-                [
-                    'product_qualified_date',
-                    $array['qualified_at']
-                ],
-                [
-                    'product_qualified_firma',
-                    $company_id
-                ],
-                [
-                    'user_id',
-                    $employee_id
-                ],
-            ])->count() > 0;
+            [
+                'produkt_id',
+                $produkt_id,
+            ],
+            [
+                'product_qualified_date',
+                $array['qualified_at'],
+            ],
+            [
+                'product_qualified_firma',
+                $company_id,
+            ],
+            [
+                'user_id',
+                $employee_id,
+            ],
+        ])->count() > 0;
 
     }
 }

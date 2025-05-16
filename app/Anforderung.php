@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\AnforderungControlItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
@@ -20,14 +19,13 @@ class Anforderung extends Model
         'an_label',
         'an_name',
         'an_description',
-        'is_external'
+        'is_external',
     ];
 
     protected $casts = [
         'is_initial_test' => 'boolean',
-        'is_external'     => 'boolean',
+        'is_external' => 'boolean',
     ];
-
 
     protected $fillable = [
         'an_label',
@@ -76,7 +74,6 @@ class Anforderung extends Model
         return $this->hasMany(ProduktAnforderung::class);
     }
 
-
     public function ControlEquipment()
     {
         return $this->hasMany(ControlEquipment::class);
@@ -91,7 +88,6 @@ class Anforderung extends Model
     {
         return $this->belongsTo(Verordnung::class);
     }
-
 
     public function AnforderungControlItem()
     {
@@ -113,44 +109,43 @@ class Anforderung extends Model
         $msg = '<ul class="list-unstyled text-warning">';
         $msgAci = '';
 
-
         $anforderungsControlItemList[] = Cache::remember('system-root-test-requirement', now()->addHours(12), function () use ($anforderung, $countControlProducts) {
             foreach (AnforderungControlItem::select('id')->where('anforderung_id', $anforderung->id)->get() as $aci) {
                 return $aci->isIncomplete($aci, $countControlProducts);
             }
         });
 
-
         $msg .= $msgAci.'</ul>';
 
         return (Arr::exists($anforderungsControlItemList, false))
             ? false
             : [
-                'msg'  => '
+                'msg' => '
 <span class="fas fa-exclamation-triangle text-warning" title="Mindestens eine Bedingung für die Prüfung in der Anforderung ist nicht erfüllt. Bitte kontrollieren!"></span>
 <span class="sr-only">Mindestens eine Bedingung für die Prüfung in der Anforderung ist nicht erfüllt. Bitte kontrollieren!</span>
 '.$msg,
-                'list' => $msg
+                'list' => $msg,
             ];
     }
 
     public function isInternal(): bool
     {
 
-        return !$this->is_external;
+        return ! $this->is_external;
     }
 
-    public function countControlItems():int
+    public function countControlItems(): int
     {
-        return AnforderungControlItem::where('anforderung_id',$this->id)->count();
+        return AnforderungControlItem::where('anforderung_id', $this->id)->count();
     }
 
-    public function getVerordnungLabel():string
+    public function getVerordnungLabel(): string
     {
-        return Verordnung::where('id',$this->verordnung_id)->first()->vo_label;
+        return Verordnung::where('id', $this->verordnung_id)->first()->vo_label;
     }
-    public function getControlIntervalLabel():string
+
+    public function getControlIntervalLabel(): string
     {
-        return ControlInterval::where('id',$this->control_interval_id)->first()->ci_label;
+        return ControlInterval::where('id', $this->control_interval_id)->first()->ci_label;
     }
 }
