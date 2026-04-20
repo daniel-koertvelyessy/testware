@@ -34,7 +34,6 @@ package-lock.json
 /composer.lock
 /.phpstorm.meta.php
 /phpunit.xml.bak
-/docker/
 /.run/
 /.phpunit.cache/
 /.env.testing
