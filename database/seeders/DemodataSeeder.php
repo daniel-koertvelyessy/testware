@@ -1,9 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace seeders;
 
 use Illuminate\Database\Seeder;
-use InitialValueSeeder;
 
 class DemodataSeeder extends Seeder
 {
@@ -16,10 +15,10 @@ class DemodataSeeder extends Seeder
     {
         $this->call([
             InitialValueSeeder::class,
-            \UsersTableSeeder::class,
-            \FirmaSeeder::class,
+            \seeders\UsersTableSeeder::class,
+            \seeders\FirmaSeeder::class,
             LocationsSeeder::class,
-            \EquipmentSeeder::class,
+            \seeders\EquipmentSeeder::class,
         ]);
     }
 }

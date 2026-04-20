@@ -1,7 +1,9 @@
 <?php
 
-use Database\Seeders\LocationsSeeder;
+namespace seeders;
+
 use Illuminate\Database\Seeder;
+use seeders;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,10 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             InitialValueSeeder::class,
-            \UsersTableSeeder::class,
-            \FirmaSeeder::class,
+            seeders\UsersTableSeeder::class,
+            seeders\FirmaSeeder::class,
             LocationsSeeder::class,
-            \EquipmentSeeder::class,
+            seeders\EquipmentSeeder::class,
         ]);
     }
 }

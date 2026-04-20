@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace seeders;
 
 use App\Adresse;
 use App\Building;

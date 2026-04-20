@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Equipment;
 use App\EquipmentFuntionControl;
-use App\EquipmentHistory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -20,7 +19,7 @@ class EquipmentFuntionControlTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(\Database\Seeders\InitialValueSeeder::class);
+        $this->seed(\seeders\InitialValueSeeder::class);
         Equipment::factory()->create();
         $this->equipmentFunctionControl = new EquipmentFuntionControl;
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace seeders;
+
 use Illuminate\Database\Seeder;
 
 class EquipmentWarrantySeeder extends Seeder

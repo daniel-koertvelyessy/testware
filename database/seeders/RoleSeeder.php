@@ -1,9 +1,10 @@
 <?php
 
-use App\Contact;
+namespace seeders;
+
 use Illuminate\Database\Seeder;
 
-class ContactSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +13,6 @@ class ContactSeeder extends Seeder
      */
     public function run()
     {
-        factory(Contact::class, 30)->create();
+        //
     }
 }

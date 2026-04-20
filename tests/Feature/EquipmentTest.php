@@ -19,7 +19,7 @@ class EquipmentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(\Database\Seeders\InitialValueSeeder::class);
+        $this->seed(\seeders\InitialValueSeeder::class);
 
         $this->equipment = Equipment::factory()->create();
     }

@@ -32,7 +32,7 @@ class EquipmentShowTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(\Database\Seeders\InitialValueSeeder::class);
+        $this->seed(\seeders\InitialValueSeeder::class);
 
         $this->user = User::factory()->create();
         $this->equipment = Equipment::factory()->create();

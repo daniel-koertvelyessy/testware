@@ -1,8 +1,11 @@
 <?php
 
+namespace seeders;
+
+use App\Contact;
 use Illuminate\Database\Seeder;
 
-class ObjectNoteSeeder extends Seeder
+class ContactSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +14,6 @@ class ObjectNoteSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(Contact::class, 30)->create();
     }
 }

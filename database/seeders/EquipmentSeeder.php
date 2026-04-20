@@ -1,5 +1,7 @@
 <?php
 
+namespace seeders;
+
 use App\ControlEquipment;
 use App\ControlEvent;
 use App\ControlEventItem;
@@ -9,8 +11,8 @@ use App\EquipmentHistory;
 use App\EquipmentQualifiedUser;
 use App\EquipmentUid;
 use App\Produkt;
-use App\ProduktDoc;
 use Illuminate\Database\Seeder;
+use Str;
 
 class EquipmentSeeder extends Seeder
 {
@@ -20,16 +22,16 @@ class EquipmentSeeder extends Seeder
     public function addEquipment(Produkt $produkt, string $name, string $invid, int $storageid = 4): Equipment
     {
         return Equipment::create([
-            'purchased_at' => now()->subDays(4),
-            'installed_at' => now(),
-            'eq_inventar_nr' => $invid,
-            'eq_serien_nr' => $this->makeSerial(),
-            'eq_uid' => \Illuminate\Support\Str::uuid(),
-            'eq_name' => $name ?? $produkt->prod_name,
-            'eq_price' => $produkt->prod_price,
+            'purchased_at'       => now()->subDays(4),
+            'installed_at'       => now(),
+            'eq_inventar_nr'     => $invid,
+            'eq_serien_nr'       => $this->makeSerial(),
+            'eq_uid'             => \Illuminate\Support\Str::uuid(),
+            'eq_name'            => $name ?? $produkt->prod_name,
+            'eq_price'           => $produkt->prod_price,
             'equipment_state_id' => 1,
-            'produkt_id' => $produkt->id,
-            'storage_id' => $storageid,
+            'produkt_id'         => $produkt->id,
+            'storage_id'         => $storageid,
 
         ]);
     }
@@ -42,7 +44,7 @@ class EquipmentSeeder extends Seeder
         EquipmentHistory::create([
             'eqh_eintrag_kurz' => $header,
             'eqh_eintrag_text' => $text,
-            'equipment_id' => $equipment->id,
+            'equipment_id'     => $equipment->id,
         ]);
     }
 
@@ -50,30 +52,30 @@ class EquipmentSeeder extends Seeder
     {
         return EquipmentUid::create([
             'equipment_uid' => $equipment->eq_uid,
-            'equipment_id' => $equipment->id,
+            'equipment_id'  => $equipment->id,
         ]);
     }
 
     public function addEquipmentFunktionControl(Equipment $equipment): EquipmentFuntionControl
     {
         return EquipmentFuntionControl::create([
-            'controlled_at' => now(),
-            'function_control_firma' => null,
+            'controlled_at'           => now(),
+            'function_control_firma'  => null,
             'function_control_profil' => $equipment->qualifiedUserList($equipment)[0]->id,
-            'function_control_pass' => true,
-            'function_control_text' => null,
-            'equipment_id' => $equipment->id,
+            'function_control_pass'   => true,
+            'function_control_text'   => null,
+            'equipment_id'            => $equipment->id,
         ]);
     }
 
     public function addControlEventItems(Equipment $equipment, ControlEvent $controlEvent, int $aci, $read = null): ControlEventItem
     {
         return ControlEventItem::create([
-            'control_item_aci' => $aci,
+            'control_item_aci'  => $aci,
             'control_item_read' => $read,
             'control_item_pass' => true,
-            'equipment_id' => $equipment->id,
-            'control_event_id' => $controlEvent->id,
+            'equipment_id'      => $equipment->id,
+            'control_event_id'  => $controlEvent->id,
         ]);
     }
 
@@ -81,10 +83,10 @@ class EquipmentSeeder extends Seeder
     {
         return ControlEquipment::create([
             'qe_control_date_last' => now(),
-            'qe_control_date_due' => now()->addYear(),
+            'qe_control_date_due'  => now()->addYear(),
             'qe_control_date_warn' => 3,
-            'anforderung_id' => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
-            'equipment_id' => $equipment->id,
+            'anforderung_id'       => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
+            'equipment_id'         => $equipment->id,
 
         ]);
     }
@@ -94,25 +96,25 @@ class EquipmentSeeder extends Seeder
         $user = $equipment->qualifiedUserList($equipment)[0];
 
         return ControlEvent::create([
-            'control_event_date' => now(),
-            'control_event_next_due_date' => now()->addYear(),
-            'control_event_pass' => true,
+            'control_event_date'                 => now(),
+            'control_event_next_due_date'        => now()->addYear(),
+            'control_event_pass'                 => true,
             'control_event_controller_signature' => $user->signature,
-            'control_event_controller_name' => $user->profile->fullname(),
-            'user_id' => $user->id,
-            'control_equipment_id' => $controlEquipment->id,
+            'control_event_controller_name'      => $user->profile->fullname(),
+            'user_id'                            => $user->id,
+            'control_equipment_id'               => $controlEquipment->id,
         ]);
     }
 
     public function addOldControl(Equipment $equipment): ControlEquipment
     {
         return ControlEquipment::create([
-            'deleted_at' => now()->subWeeks(2),
+            'deleted_at'           => now()->subWeeks(2),
             'qe_control_date_last' => now()->subWeeks(2),
-            'qe_control_date_due' => now()->addYear(),
+            'qe_control_date_due'  => now()->addYear(),
             'qe_control_date_warn' => 3,
-            'anforderung_id' => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
-            'equipment_id' => $equipment->id,
+            'anforderung_id'       => $equipment->produkt->ProduktAnforderung->first()->anforderung_id,
+            'equipment_id'         => $equipment->id,
 
         ]);
     }
@@ -126,9 +128,9 @@ class EquipmentSeeder extends Seeder
     {
         return EquipmentQualifiedUser::create([
             'equipment_qualified_firma' => $equipment->produkt->firma->first()->id,
-            'equipment_qualified_date' => now()->subDays(2),
-            'user_id' => 1,
-            'equipment_id' => $equipment->id,
+            'equipment_qualified_date'  => now()->subDays(2),
+            'user_id'                   => 1,
+            'equipment_id'              => $equipment->id,
         ]);
     }
 
@@ -144,47 +146,47 @@ class EquipmentSeeder extends Seeder
          *    Zuerst Produkte erstellen, aus denen Geräte abgeleitet werden
          */
         $workstation = Produkt::create([
-            'prod_label' => 'op-3000m',
-            'prod_name' => 'OptiPlex 3000 Micro',
-            'prod_nummer' => 's012o3000mff_vp',
-            'prod_active' => 1,
-            'prod_price' => 617.67,
+            'prod_label'           => 'op-3000m',
+            'prod_name'            => 'OptiPlex 3000 Micro',
+            'prod_nummer'          => 's012o3000mff_vp',
+            'prod_active'          => 1,
+            'prod_price'           => 617.67,
             'produkt_kategorie_id' => 3,
             // Bürogeräte 230 VAC
-            'produkt_state_id' => 1,
+            'produkt_state_id'     => 1,
             // freigegeben
-            'prod_uuid' => \Illuminate\Support\Str::uuid(),
+            'prod_uuid'            => \Illuminate\Support\Str::uuid(),
         ]);
 
         \App\ProduktAnforderung::create([
-            'produkt_id' => $workstation->id,
+            'produkt_id'     => $workstation->id,
             'anforderung_id' => 1,
         ]);
 
         \App\FirmaProdukt::create([
-            'firma_id' => 1,
+            'firma_id'   => 1,
             'produkt_id' => $workstation->id,
         ]);
 
         \App\ProductQualifiedUser::create([
-            'produkt_id' => $workstation->id,
-            'user_id' => 1,
-            'product_qualified_date' => now()->subMonth(),
+            'produkt_id'              => $workstation->id,
+            'user_id'                 => 1,
+            'product_qualified_date'  => now()->subMonth(),
             'product_qualified_firma' => 1,
         ]);
 
         $monitor_27 = Produkt::create([
-            'prod_label' => 'P2722HE',
-            'prod_name' => 'Dell 27-USB-C-Hub-Monitor',
-            'prod_nummer' => 'P2722he',
-            'prod_active' => 1,
-            'prod_price' => 312.67,
+            'prod_label'           => 'P2722HE',
+            'prod_name'            => 'Dell 27-USB-C-Hub-Monitor',
+            'prod_nummer'          => 'P2722he',
+            'prod_active'          => 1,
+            'prod_price'           => 312.67,
             'produkt_kategorie_id' => 3,
             // Bürogeräte 230 VAC
-            'produkt_state_id' => 1,
+            'produkt_state_id'     => 1,
             // freigegeben
-            'prod_uuid' => \Illuminate\Support\Str::uuid(),
-            'equipment_label_id' => 1,
+            'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+            'equipment_label_id'   => 1,
 
         ]);
 
@@ -197,116 +199,116 @@ class EquipmentSeeder extends Seeder
                   ]);*/
 
         \App\ProduktAnforderung::create([
-            'produkt_id' => $monitor_27->id,
+            'produkt_id'     => $monitor_27->id,
             'anforderung_id' => 1,
         ]);
 
         \App\FirmaProdukt::create([
-            'firma_id' => 1,
+            'firma_id'   => 1,
             'produkt_id' => $monitor_27->id,
         ]);
 
         \App\ProductQualifiedUser::create([
-            'produkt_id' => $monitor_27->id,
-            'user_id' => 1,
-            'product_qualified_date' => now()->subMonth(),
+            'produkt_id'              => $monitor_27->id,
+            'user_id'                 => 1,
+            'product_qualified_date'  => now()->subMonth(),
             'product_qualified_firma' => 1,
         ]);
 
         $mauskeyboard = Produkt::create([
-            'prod_label' => 'KM5221W',
-            'prod_name' => 'Dell Pro-Wireless-Tastatur und -Maus - KM5221W - deutsch',
-            'prod_nummer' => '580-Ajrd',
-            'prod_active' => 1,
-            'prod_price' => 51.40,
+            'prod_label'           => 'KM5221W',
+            'prod_name'            => 'Dell Pro-Wireless-Tastatur und -Maus - KM5221W - deutsch',
+            'prod_nummer'          => '580-Ajrd',
+            'prod_active'          => 1,
+            'prod_price'           => 51.40,
             'produkt_kategorie_id' => 1,
             // ohne
-            'produkt_state_id' => 1,
+            'produkt_state_id'     => 1,
             // freigegeben
-            'prod_uuid' => \Illuminate\Support\Str::uuid(),
-            'equipment_label_id' => 1,
+            'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+            'equipment_label_id'   => 1,
 
         ]);
 
         \App\ProduktAnforderung::create([
-            'produkt_id' => $mauskeyboard->id,
+            'produkt_id'     => $mauskeyboard->id,
             'anforderung_id' => 3,
         ]);
 
         \App\FirmaProdukt::create([
-            'firma_id' => 1,
+            'firma_id'   => 1,
             'produkt_id' => $mauskeyboard->id,
         ]);
 
         \App\ProductQualifiedUser::create([
-            'produkt_id' => $mauskeyboard->id,
-            'user_id' => 1,
-            'product_qualified_date' => now()->subMonth(),
+            'produkt_id'              => $mauskeyboard->id,
+            'user_id'                 => 1,
+            'product_qualified_date'  => now()->subMonth(),
             'product_qualified_firma' => 1,
         ]);
 
         $siptelefon = Produkt::create([
-            'prod_label' => 'YL-SIP-T42U',
-            'prod_name' => 'Yealink SIP-T42U',
-            'prod_nummer' => '5A24-01A',
-            'prod_active' => 1,
-            'prod_price' => 90.90,
+            'prod_label'           => 'YL-SIP-T42U',
+            'prod_name'            => 'Yealink SIP-T42U',
+            'prod_nummer'          => '5A24-01A',
+            'prod_active'          => 1,
+            'prod_price'           => 90.90,
             'produkt_kategorie_id' => 1,
             // ohne
-            'produkt_state_id' => 1,
+            'produkt_state_id'     => 1,
             // freigegeben
-            'prod_uuid' => \Illuminate\Support\Str::uuid(),
-            'equipment_label_id' => 1,
+            'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+            'equipment_label_id'   => 1,
 
         ]);
 
         \App\ProduktAnforderung::create([
-            'produkt_id' => $siptelefon->id,
+            'produkt_id'     => $siptelefon->id,
             'anforderung_id' => 3,
         ]);
 
         \App\FirmaProdukt::create([
-            'firma_id' => 1,
+            'firma_id'   => 1,
             'produkt_id' => $siptelefon->id,
         ]);
 
         \App\ProductQualifiedUser::create([
-            'produkt_id' => $siptelefon->id,
-            'user_id' => 1,
-            'product_qualified_date' => now()->subMonth(),
+            'produkt_id'              => $siptelefon->id,
+            'user_id'                 => 1,
+            'product_qualified_date'  => now()->subMonth(),
             'product_qualified_firma' => 1,
         ]);
 
         $flukeTester = Produkt::create([
-            'prod_label' => 'Fluke-6500-2',
-            'prod_name' => 'Gerätetester Fluke 6500-2',
-            'prod_nummer' => 'F6500-2',
-            'prod_active' => 1,
-            'prod_price' => 903.90,
+            'prod_label'           => 'Fluke-6500-2',
+            'prod_name'            => 'Gerätetester Fluke 6500-2',
+            'prod_nummer'          => 'F6500-2',
+            'prod_active'          => 1,
+            'prod_price'           => 903.90,
             'produkt_kategorie_id' => 1,
             // ohne
-            'produkt_state_id' => 1,
+            'produkt_state_id'     => 1,
             // freigegeben
-            'prod_uuid' => \Illuminate\Support\Str::uuid(),
-            'equipment_label_id' => 1,
+            'prod_uuid'            => \Illuminate\Support\Str::uuid(),
+            'equipment_label_id'   => 1,
         ]);
 
         \App\ControlProdukt::create(['produkt_id' => $flukeTester->id]);
 
         \App\ProduktAnforderung::create([
-            'produkt_id' => $flukeTester->id,
+            'produkt_id'     => $flukeTester->id,
             'anforderung_id' => 3,
         ]);
 
         \App\FirmaProdukt::create([
-            'firma_id' => 2,
+            'firma_id'   => 2,
             'produkt_id' => $flukeTester->id,
         ]);
 
         \App\ProductQualifiedUser::create([
-            'produkt_id' => $flukeTester->id,
-            'user_id' => 1,
-            'product_qualified_date' => now()->subMonth(),
+            'produkt_id'              => $flukeTester->id,
+            'user_id'                 => 1,
+            'product_qualified_date'  => now()->subMonth(),
             'product_qualified_firma' => 2,
         ]);
 

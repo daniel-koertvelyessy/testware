@@ -1,5 +1,7 @@
 <?php
 
+namespace seeders;
+
 use App\Location;
 use App\Storage;
 use Illuminate\Database\Seeder;
@@ -18,8 +20,8 @@ class StorageSeeder extends Seeder
 
         foreach ($location as $loc) {
             Storage::factory()->create([
-                'storage_uid' => $loc->storage_id,
-                'storage_label' => $loc->l_label,
+                'storage_uid'         => $loc->storage_id,
+                'storage_label'       => $loc->l_label,
                 'storage_object_type' => 'locations',
             ]);
         }

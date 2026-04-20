@@ -1,8 +1,10 @@
 <?php
 
+namespace seeders;
+
 use Illuminate\Database\Seeder;
 
-class ControlDocSeeder extends Seeder
+class ControlSeeder extends Seeder
 {
     /**
      * Run the database seeds.

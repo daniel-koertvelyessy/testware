@@ -1,8 +1,10 @@
 <?php
 
+namespace seeders;
+
 use Illuminate\Database\Seeder;
 
-class ControlSeeder extends Seeder
+class ObjectNoteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
