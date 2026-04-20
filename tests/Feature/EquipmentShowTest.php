@@ -7,7 +7,7 @@ use App\ControlInterval;
 use App\DocumentType;
 use App\Equipment;
 use App\EquipmentQualifiedUser;
-use App\Http\Actions\Equipment\EquipmentAction;
+use App\Firma;
 use App\Http\Services\Equipment\EquipmentDocumentService;
 use App\Http\Services\Equipment\EquipmentService;
 use App\Storage;
@@ -132,23 +132,23 @@ class EquipmentShowTest extends TestCase
 
     public function test_cleanup_actions_are_performed(): void
     {
-        // Test-Mock für statische EquipmentAction-Methoden
-        $actionMock = $this->mock(EquipmentAction::class, function ($mock) {
-            $mock->shouldReceive('deleteLoseEquipmentDocumentEntries')
-                ->once()
-                ->with(\Mockery::type(Equipment::class));
+        // Verwende Mockery's Alias-Feature für statische Methoden
+        $mock = \Mockery::mock('alias:App\Http\Actions\Equipment\EquipmentAction');
 
-            $mock->shouldReceive('deleteLoseProductDocumentEntries')
-                ->once()
-                ->with(\Mockery::type(Equipment::class));
+        // Erwartungen für statische Methoden setzen
+        $mock->shouldReceive('deleteLoseEquipmentDocumentEntries')
+            ->once()
+            ->with(\Mockery::type(Equipment::class));
 
-            $mock->shouldReceive('deleteLoseRequirementEntries')
-                ->once()
-                ->with(\Mockery::type(Equipment::class));
-        });
+        $mock->shouldReceive('deleteLoseProductDocumentEntries')
+            ->once()
+            ->with(\Mockery::type(Equipment::class));
 
-        app()->instance(EquipmentAction::class, $actionMock);
+        $mock->shouldReceive('deleteLoseRequirementEntries')
+            ->once()
+            ->with();
 
+        // Test durchführen
         $this->actingAs($this->user)
             ->get(route('equipment.show', $this->equipment));
     }
@@ -156,16 +156,19 @@ class EquipmentShowTest extends TestCase
     public function test_equipment_service_methods_are_called_correctly(): void
     {
         // Erstelle Testdaten in der Datenbank
-        $controlInterval = ControlInterval::create(['ci_label' => 'Test Interval']);
+        $controlInterval = ControlInterval::create(['ci_label' => 'TestInter', 'ci_si' => 'test3', 'id' => 999]);
         $requirement = Anforderung::create([
             'an_label' => 'Test Requirement',
             'an_name' => 'Test Requirement Name',
             'control_interval_id' => $controlInterval->id,
+            'id' => 999,
         ]);
+
+        $firma = Firma::first();
 
         // Füge Benutzerberechtigungen hinzu
         $qualifiedUser = new EquipmentQualifiedUser;
-        $qualifiedUser->equipment_qualified_firma = 'Test Firma';
+        $qualifiedUser->equipment_qualified_firma = $firma->id ?? null;
         $qualifiedUser->equipment_qualified_date = now();
         $qualifiedUser->user_id = $this->user->id;
         $qualifiedUser->equipment_id = $this->equipment->id;
@@ -189,9 +192,9 @@ class EquipmentShowTest extends TestCase
         $this->assertNotNull($response->viewData('documentTypes'));
     }
 
-    //    protected function tearDown(): void
-    //    {
-    //      //  Mockery::close();
-    //        parent::tearDown();
-    //    }
+    protected function tearDown(): void
+    {
+        \Mockery::close();
+        parent::tearDown();
+    }
 }

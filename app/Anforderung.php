@@ -28,6 +28,7 @@ class Anforderung extends Model
     ];
 
     protected $fillable = [
+        'id',
         'an_label',
         'an_name',
         'an_control_interval',

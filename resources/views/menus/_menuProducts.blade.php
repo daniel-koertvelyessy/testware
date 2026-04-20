@@ -22,7 +22,7 @@
     <ul class="dropdown-menu"
         aria-labelledby="navbarDropdownAddProduktCategory"
     >
-        @forelse (\App\ProduktKategorie::select(['id','pk_label']) as $produktKategorie)
+        @forelse (\App\ProduktKategorie::select(['id','pk_label'])->get() as $produktKategorie)
             <li>
                 <a class="dropdown-item"
                    href="/produkt/kategorie/{{ $produktKategorie->id }}"
