@@ -24,14 +24,10 @@ db.env
 .DS_Store
 app.env
 docker-compose.yml
-*.env
-*.yml
-package-lock.json
 .styleci.yml
 /typocorrection.md
 /README-setup.txt
 .editorconfig
-/composer.lock
 /.phpstorm.meta.php
 /phpunit.xml.bak
 /.run/
