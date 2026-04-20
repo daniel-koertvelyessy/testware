@@ -25,6 +25,7 @@ WORKDIR /var/www/html
 
 # composer.json/lock liegen im Repo-Root
 COPY composer.json composer.lock ./
+COPY database/ database/ 
 
 RUN composer install --no-interaction --no-dev --optimize-autoloader --no-scripts
 
