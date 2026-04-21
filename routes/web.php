@@ -14,34 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/update', function () {
 
     return redirect()->route('dashboard');
-    /*   if (Auth::user()->isSysAdmin()) {
-          $result_git = exec('git pull https://github.com/daniel-koertvelyessy/testware.git', $res_git_pull);
-           $result_migrate = Artisan::call('migrate',[]);
-           $output = Artisan::output();
 
-           $database = env('DB_DATABASE');
-           $path     =  storage_path().'/dbbk/';
-           $ip       = env('DB_HOST');
-           $port     = env('DB_PORT');
-           $user    = env('DB_USERNAME');
-           $passw    = env('DB_PASSWORD');
-
-           $cmd = "docker-compose exec db pg_dump -U $user -P $passw  -h db $database > $path/dump.sql";
-
-           $dumpSQL = exec($cmd,$result_sql_dump);
-
-           return view('admin.update', [
-               'result_sql_dump' => $result_sql_dump,
-               'dumpSQL' => $dumpSQL,
-               'result_git' => $result_git,
-               'res_git_pull' => $res_git_pull,
-               'response_migrate' => $output,
-               'result_migrate' => $result_migrate,
-           ]);
-
-       } else {
-           return back();
-       }*/
 })->middleware('auth');
 
 Route::view('/', 'portal-main')->name('portal-main');
@@ -78,29 +51,6 @@ Route::get('edata/{ident}', function ($ident, Request $request) {
 
         return redirect()->route('app');
     }
-
-    /*     $str = str_split($ident, strlen(env('APP_HSKEY')));
-         if ($str[0] === env('APP_HSKEY')) {
-             $e = explode(env('APP_HSKEY'), $ident);
-             $uid = $e[1];
-
-             $equipment = EquipmentUid::where('equipment_uid', $uid)->first();
-             if ($equipment) {
-                 $edata = Equipment::findOrFail($equipment->equipment_id);
-                 return view('testware.app.equipmentdata', [
-                     'edata' => $edata,
-                     'ident' => $ident
-                 ]);
-             } else {
-                 $request->session()->flash('status',
-                     __('Das Gerät konnte nicht gefunden werden!'));
-                 return redirect()->route('app');
-             }
-         } else {
-             $request->session()->flash('status',
-                 __('Das Gerät konnte nicht gefunden werden!'));
-             return redirect()->route('app');
-         }*/
 })->name('edata');
 
 Route::get('edmg/{ident}', function ($ident, Request $request) {
@@ -149,22 +99,6 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
        }*/
 })->name('edmg');
 
-/**
- * Documentation-Routes
- */
-Route::view('docs', 'docs.index')->name('docs.start');
-Route::view('docs/modules', 'docs.modules')->name('docs.modules');
-Route::view('docs/testware', 'docs.testware.index')->name('docs.testware.index');
-Route::view('docs/backend', 'docs.backend.index')->name('docs.backend.index');
-Route::view('docs/backend/locations', 'docs.backend.locations')->name('docs.backend.locations');
-Route::view('docs/api', 'docs.api.index')->name('docs.api.index');
-Route::view('docs/api/endpoints', 'docs.api.endpoints.index')->name('docs.api.endpoints');
-Route::view('docs/api/endpoints/backend', 'docs.api.endpoints.backend')->name('docs.api.backend');
-Route::view('docs/api/endpoints/products', 'docs.api.endpoints.products')->name('docs.api.products');
-Route::view('docs/api/endpoints/equipment', 'docs.api.endpoints.equipment')->name('docs.api.equipment');
-Route::view('docs/api/endpoints/control', 'docs.api.endpoints.control')->name('docs.api.control');
-Route::view('docs/api/endpoints/requirements', 'docs.api.endpoints.requirements')->name('docs.api.requirements');
-Route::view('docs/api/endpoints/events', 'docs.api.endpoints.events')->name('docs.api.events');
 
 Route::get('/dashboard', 'TestwareController@dashboard')->name('dashboard')->middleware('auth');
 

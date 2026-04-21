@@ -23,9 +23,9 @@
     <meta name="msapplication-TileImage"
           content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
-    <link rel="stylesheet"
-          href="{{ asset(mix('css/app.css')) }}"
-    >
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/main.js'])
+
     <link id="themeId"
           rel="stylesheet"
           href="{{ asset('css/tbs.css') }}"
@@ -102,12 +102,6 @@
     @yield('content')
 </main>
 <x-section-footer/>
-<script type="text/javascript"
-        src="{{ asset(mix('js/app.js')) }}"
-></script>
-<script type="text/javascript"
-        src="{{ asset('js/main.js') }}"
-></script>
 @yield('scripts')
 </body>
 </html>

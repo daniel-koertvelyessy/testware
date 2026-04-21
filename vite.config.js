@@ -1,21 +1,22 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
 
 export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss',
-                'resources/js/app.js',
+                "resources/sass/app.scss",
+                "resources/js/app.js",
+                "resources/js/main.js",
             ],
             refresh: true,
-            publicDirectory: 'public',
+            publicDirectory: "public",
         }),
     ],
     server: {
         proxy: {
-            '/fonts': {
-                target: 'http://127.0.0.1:8000',
+            "/fonts": {
+                target: "http://127.0.0.1:8000",
                 changeOrigin: true,
             }
         }
@@ -23,7 +24,7 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             scss: {
-                silenceDeprecations: ['import', 'global-builtin', 'if-function']
+                silenceDeprecations: ["import", "global-builtin", "if-function"]
             }
         }
     }

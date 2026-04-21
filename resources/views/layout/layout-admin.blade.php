@@ -24,7 +24,7 @@
           content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/main.js'])
 
 
     <link id="themeId"
@@ -298,33 +298,37 @@
 @endif
 <x-section-footer/>
 @yield('autoloadscripts')
-
 @if (session()->has('status'))
     <script>
-        jQuery('.toast').toast('show');
+        $(document).ready(function() {
+            jQuery('.toast').toast('show');
+        });
     </script>
 @endif
 
 @yield('scripts')
 <script>
-    $(document).on('submit', "#frmUnlockUserScreen", function (e) {
-        e.preventDefault();
-        const pin = $("#userScreenLockPIN");
-        $.ajax({
-            type: "get",
-            dataType: 'json',
-            url: "{{ route('unlockScreen') }}",
-            data: {pin:pin.val()},
-            success: (checkpin) => {
-                if (checkpin.status) {
-                    pin.val("");
-                    $("#lockUserView").modal("hide");
-                    $(".modal-backdrop").remove();
-                    $('#lockscreen').hide();
-                    localStorage.removeItem('testware-lockscreen');
+    $(document).ready(function() {
+        $(document).on('submit', "#frmUnlockUserScreen", function (e) {
+            e.preventDefault();
+            const pin = $("#userScreenLockPIN");
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('unlockScreen') }}",
+                data: {pin: pin.val()},
+                success: (checkpin) => {
+                    if (checkpin.status) {
+                        pin.val("");
+                        $("#lockUserView").modal("hide");
+                        $(".modal-backdrop").remove();
+                        $('#lockscreen').hide();
+                        localStorage.removeItem('testware-lockscreen');
+                    }
                 }
-            }
+            });
         });
+
     });
 </script>
 </body>
