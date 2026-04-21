@@ -9,13 +9,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.1|^8.2",
-        "elibyy/tcpdf-laravel": "^11.1.0",
-        "guzzlehttp/guzzle": "^7.7.0",
+        "elibyy/tcpdf-laravel": "^11.5.0",
+        "guzzlehttp/guzzle": "^7.10.0",
         "kyslik/column-sortable": "^6.6.0",
-        "laravel/framework": "^v11.44.7",
-        "laravel/helpers": "^v1.7.0",
-        "laravel/tinker": "^v2.9.0",
-        "laravel/ui": "^v4.5.1",
+        "laravel/framework": "^v11.51.0",
+        "laravel/helpers": "^v1.8.3",
+        "laravel/tinker": "^v2.11.1",
+        "laravel/ui": "^v4.6.3",
         "simplesoftwareio/simple-qrcode": "^4.2.0"
     },
     "require-dev": {
