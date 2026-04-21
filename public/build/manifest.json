@@ -1,0 +1,25 @@
+{
+  "resources/fonts/lato/S6u9w4BMUTPHh6UVSwiPGQ.woff2": {
+    "file": "assets/S6u9w4BMUTPHh6UVSwiPGQ-Dj654xud.woff2",
+    "src": "resources/fonts/lato/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
+  },
+  "resources/fonts/lato/S6uyw4BMUTPHjx4wXg.woff2": {
+    "file": "assets/S6uyw4BMUTPHjx4wXg-CNtt3gFW.woff2",
+    "src": "resources/fonts/lato/S6uyw4BMUTPHjx4wXg.woff2"
+  },
+  "resources/fonts/nunito/XRXV3I6Li01BKofINeaB.woff2": {
+    "file": "assets/XRXV3I6Li01BKofINeaB-CSmEcOMa.woff2",
+    "src": "resources/fonts/nunito/XRXV3I6Li01BKofINeaB.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Cz75ku4r.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-D6UXL1y0.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}

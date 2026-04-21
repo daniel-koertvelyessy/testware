@@ -23,19 +23,21 @@
     <meta name="msapplication-TileImage"
           content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
-    <link rel="stylesheet"
-          href="{{ asset(mix('css/app.css')) }}"
-    >
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+
     <link id="themeId"
           rel="stylesheet"
           href="{{ asset(Auth::user()->user_theme) }}"
     >
-{{--    <link rel="stylesheet"--}}
-{{--          href="{{ asset('css/styles.min.css') }}"--}}
-{{--    >--}}
+
     <script type="text/javascript"
             src="{{ asset('js/jquery_3.5.min.js') }}"
     ></script>
+
+
+
     <title>@yield('pagetitle')</title>
 </head>
 <body>
@@ -296,13 +298,6 @@
 @endif
 <x-section-footer/>
 @yield('autoloadscripts')
-
-<script type="text/javascript"
-        src="{{ asset(mix('js/app.js')) }}"
-></script>
-<script type="text/javascript"
-        src="{{ asset('js/main.js') }}"
-></script>
 
 @if (session()->has('status'))
     <script>

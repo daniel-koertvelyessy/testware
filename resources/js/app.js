@@ -1,5 +1,3 @@
-require("./bootstrap");
-require("bootstrap-datepicker");
-require("bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js");
-
-
+import "./bootstrap";
+import "bootstrap-datepicker";
+import "bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js";
