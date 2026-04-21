@@ -1712,130 +1712,135 @@
 @section('scripts')
     @error('doctyp_label')
     <script>
-        $('#modalAddDokumentType').modal('show');
+        $(document).ready(function () {
+            $('#modalAddDokumentType').modal('show');
+        });
     </script>
     @enderror
 
     @error('pp_label')
     <script>
-        $('#modalAddParameter').modal('show');
+        $(document).ready(function () {
+            $('#modalAddParameter').modal('show');
+        });
     </script>
     @enderror
 
     <script src="{{ asset('js/signatures.js') }}"></script>
     <script>
-        $('.tooltips').tooltip();
+        $(document).ready(function () {
+            $('.tooltips').tooltip();
 
 
-        function resizeCanvas() {
-            // When zoomed out to less than 100%, for some very strange reason,
-            // some browsers report devicePixelRatio as less than 1
-            // and only part of the canvas is cleared then.
-            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            function resizeCanvas() {
+                // When zoomed out to less than 100%, for some very strange reason,
+                // some browsers report devicePixelRatio as less than 1
+                // and only part of the canvas is cleared then.
+                var ratio = Math.max(window.devicePixelRatio || 1, 1);
 
-            // This part causes the canvas to be cleared
-            trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
-            trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
-            trainee_pad_id.getContext("2d").scale(ratio, ratio);
+                // This part causes the canvas to be cleared
+                trainee_pad_id.width = trainee_pad_id.offsetWidth * ratio;
+                trainee_pad_id.height = trainee_pad_id.offsetHeight * ratio;
+                trainee_pad_id.getContext("2d").scale(ratio, ratio);
 
-            // This part causes the canvas to be cleared
-            instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
-            instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
-            instructor_pad_id.getContext("2d").scale(ratio, ratio);
+                // This part causes the canvas to be cleared
+                instructor_pad_id.width = instructor_pad_id.offsetWidth * ratio;
+                instructor_pad_id.height = instructor_pad_id.offsetHeight * ratio;
+                instructor_pad_id.getContext("2d").scale(ratio, ratio);
 
-            // This library does not listen for canvas changes, so after the canvas is automatically
-            // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
-            // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
-            // that the state of this library is consistent with visual state of the canvas, you
-            // have to clear it manually.
-            signaturePadTrainee.clear();
-            signaturePadInstructor.clear();
-        }
-
-        signatureField_product_instruction_trainee_signature
-        signatureField_product_instruction_instructor_signature
-
-        let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
-            signaturePadTrainee = new SignaturePad(trainee_pad_id, {
-                velocityFilterWeight: 0.5,
-                minWidth: 0.8,
-                maxWidth: 1.2,
-                backgroundColor: 'rgba(255, 255, 255)',
-                penColor: 'rgb(8, 139, 216)',
-                onEnd: function () {
-                    $('#product_instruction_trainee_signature').val(this.toDataURL());
-                }
-            }),
-            instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
-            signaturePadInstructor = new SignaturePad(instructor_pad_id, {
-                velocityFilterWeight: 0.5,
-                minWidth: 0.8,
-                maxWidth: 1.2,
-                backgroundColor: 'rgba(255, 255, 255)',
-                penColor: 'rgb(8, 139, 216)',
-                onEnd: function () {
-                    $('#product_instruction_instructor_signature').val(this.toDataURL());
-                }
-            });
-
-        $('#addInstructedUser').on('shown.bs.modal', function () {
-            resizeCanvas();
-        });
-
-        // On mobile devices it might make more sense to listen to orientation change,
-        // rather than window resize events.
-        window.onresize = resizeCanvas;
-
-        $('.btnClearCanvas').click(function () {
-            ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
-        });
-        $('.btnSignZuruck').click(function () {
-            let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
-            if (data) {
-                data.pop(); // remove the last dot or line\n'+
-                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
+                // This library does not listen for canvas changes, so after the canvas is automatically
+                // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
+                // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
+                // that the state of this library is consistent with visual state of the canvas, you
+                // have to clear it manually.
+                signaturePadTrainee.clear();
+                signaturePadInstructor.clear();
             }
-        });
 
-        $('#btnGetAnforderungsListe').click(() => {
-            $.ajax({
-                type: "get",
-                dataType: 'json',
-                url: "{{ route('getAnforderungByVerordnungListe') }}",
-                data: {id: $('#setAnforderung :selected').val()},
-                success: function (res) {
-                    $('#anforderung_id').html(res.html);
+            signatureField_product_instruction_trainee_signature
+            signatureField_product_instruction_instructor_signature
+
+            let trainee_pad_id = document.getElementById('signatureField_product_instruction_trainee_signature'),
+                signaturePadTrainee = new SignaturePad(trainee_pad_id, {
+                    velocityFilterWeight: 0.5,
+                    minWidth: 0.8,
+                    maxWidth: 1.2,
+                    backgroundColor: 'rgba(255, 255, 255)',
+                    penColor: 'rgb(8, 139, 216)',
+                    onEnd: function () {
+                        $('#product_instruction_trainee_signature').val(this.toDataURL());
+                    }
+                }),
+                instructor_pad_id = document.getElementById('signatureField_product_instruction_instructor_signature'),
+                signaturePadInstructor = new SignaturePad(instructor_pad_id, {
+                    velocityFilterWeight: 0.5,
+                    minWidth: 0.8,
+                    maxWidth: 1.2,
+                    backgroundColor: 'rgba(255, 255, 255)',
+                    penColor: 'rgb(8, 139, 216)',
+                    onEnd: function () {
+                        $('#product_instruction_instructor_signature').val(this.toDataURL());
+                    }
+                });
+
+            $('#addInstructedUser').on('shown.bs.modal', function () {
+                resizeCanvas();
+            });
+
+            // On mobile devices it might make more sense to listen to orientation change,
+            // rather than window resize events.
+            window.onresize = resizeCanvas;
+
+            $('.btnClearCanvas').click(function () {
+                ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.clear() : signaturePadInstructor.clear();
+            });
+            $('.btnSignZuruck').click(function () {
+                let data = ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.toData() : signaturePadInstructor.toData();
+                if (data) {
+                    data.pop(); // remove the last dot or line\n'+
+                    ($(this).data('targetpad') === 'trainee') ? signaturePadTrainee.fromData(data) : signaturePadInstructor.fromData(data);
                 }
             });
-        });
 
-        $('#proddoc_label').val(
-            $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
-        );
+            $('#btnGetAnforderungsListe').click(() => {
+                $.ajax({
+                    type: "get",
+                    dataType: 'json',
+                    url: "{{ route('getAnforderungByVerordnungListe') }}",
+                    data: {id: $('#setAnforderung :selected').val()},
+                    success: function (res) {
+                        $('#anforderung_id').html(res.html);
+                    }
+                });
+            });
 
-        $('#document_type_id').change(() => {
             $('#proddoc_label').val(
                 $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
             );
-        });
 
-        $('#btnSectionFirmaDetails').click(function () {
-            $('#ckAddNewFirma, #ckAddNewAddress, #ckAddNewContact').prop('checked', true);
+            $('#document_type_id').change(() => {
+                $('#proddoc_label').val(
+                    $('#document_type_id :selected').text() + ' ' + $('#prod_name').val()
+                );
+            });
+
+            $('#btnSectionFirmaDetails').click(function () {
+                $('#ckAddNewFirma, #ckAddNewAddress, #ckAddNewContact').prop('checked', true);
 
 
-        });
+            });
 
 
-        $('#anforderung_id').change(() => {
+            $('#anforderung_id').change(() => {
 
-            $.ajax({
-                type: "get",
-                dataType: 'json',
-                url: "{{ route('getAnforderungData') }}",
-                data: {id: $('#anforderung_id :selected').val()},
-                success: (res) => {
-                    const text = (res.an_description === null) ? '-' : res.an_description;
-                    $('#produktAnforderungText').html(`
+                $.ajax({
+                    type: "get",
+                    dataType: 'json',
+                    url: "{{ route('getAnforderungData') }}",
+                    data: {id: $('#anforderung_id :selected').val()},
+                    success: (res) => {
+                        const text = (res.an_description === null) ? '-' : res.an_description;
+                        $('#produktAnforderungText').html(`
                          <dl class="row">
                             <dt class="col-sm-4">{{__('Gehört zu Verordnung')}}</dt>
                             <dd class="col-sm-8">${res.verordnung.vo_label}</dd>
@@ -1857,163 +1862,165 @@
                             <dd class="col-sm-8">${text}</dd>
                         </dl>
             `);
-                }
+                    }
+                });
             });
         });
     </script>
 
     <script>
+        $(document).ready(function () {
+            $('#selectAllSyncItems').click(function () {
+                $('.syncItem').prop('checked', $(this).prop('checked'));
+            })
 
-        $('#selectAllSyncItems').click(function () {
-            $('.syncItem').prop('checked', $(this).prop('checked'));
-        })
+            $('#btnStoreInstructedUser').click(function () {
+                let checkInstructorIsSelected = false;
+                let checkTraneeHasSignature = false;
+                let checkInstructorHasSignature = false;
 
-        $('#btnStoreInstructedUser').click(function () {
-            let checkInstructorIsSelected = false;
-            let checkTraneeHasSignature = false;
-            let checkInstructorHasSignature = false;
+                let msg = '';
 
-            let msg = '';
-
-            const selectedErrorMsg = $('#selectedErrorMsg');
-            const product_instruction_instructor_profile_id = $('#product_instruction_instructor_profile_id');
-            const product_instruction_instructor_firma_id = $('#product_instruction_instructor_firma_id');
-            const product_instruction_trainee_signature = $('#product_instruction_trainee_signature');
-            const signatureField_product_instruction_trainee_signature = $('#signatureField_product_instruction_trainee_signature');
-            const signatureField_product_instruction_instructor_signature = $('#signatureField_product_instruction_instructor_signature');
-            const product_instruction_instructor_signature = $('#product_instruction_instructor_signature');
+                const selectedErrorMsg = $('#selectedErrorMsg');
+                const product_instruction_instructor_profile_id = $('#product_instruction_instructor_profile_id');
+                const product_instruction_instructor_firma_id = $('#product_instruction_instructor_firma_id');
+                const product_instruction_trainee_signature = $('#product_instruction_trainee_signature');
+                const signatureField_product_instruction_trainee_signature = $('#signatureField_product_instruction_trainee_signature');
+                const signatureField_product_instruction_instructor_signature = $('#signatureField_product_instruction_instructor_signature');
+                const product_instruction_instructor_signature = $('#product_instruction_instructor_signature');
 
 
-            if (
-                product_instruction_instructor_profile_id.val() === '0' &&
-                product_instruction_instructor_firma_id.val() === '0'
-            ) {
-                msg = msg + '<span class="mr-2">{{__('Bitte entweder eine befähigte Person oder Firma auswählen.')
+                if (
+                    product_instruction_instructor_profile_id.val() === '0' &&
+                    product_instruction_instructor_firma_id.val() === '0'
+                ) {
+                    msg = msg + '<span class="mr-2">{{__('Bitte entweder eine befähigte Person oder Firma auswählen.')
                 }}</span>';
-                product_instruction_instructor_profile_id.addClass('is-invalid');
-                product_instruction_instructor_firma_id.addClass('is-invalid');
-                product_instruction_instructor_profile_id.removeClass('is-valid');
-                product_instruction_instructor_firma_id.removeClass('is-valid');
-                checkInstructorIsSelected = false;
-            } else {
-                product_instruction_instructor_profile_id.addClass('is-valid');
-                product_instruction_instructor_firma_id.addClass('is-valid');
-                product_instruction_instructor_profile_id.removeClass('is-invalid');
-                product_instruction_instructor_firma_id.removeClass('is-invalid');
-                checkInstructorIsSelected = true;
-            }
+                    product_instruction_instructor_profile_id.addClass('is-invalid');
+                    product_instruction_instructor_firma_id.addClass('is-invalid');
+                    product_instruction_instructor_profile_id.removeClass('is-valid');
+                    product_instruction_instructor_firma_id.removeClass('is-valid');
+                    checkInstructorIsSelected = false;
+                } else {
+                    product_instruction_instructor_profile_id.addClass('is-valid');
+                    product_instruction_instructor_firma_id.addClass('is-valid');
+                    product_instruction_instructor_profile_id.removeClass('is-invalid');
+                    product_instruction_instructor_firma_id.removeClass('is-invalid');
+                    checkInstructorIsSelected = true;
+                }
 
 
-            if (product_instruction_trainee_signature.val() === '') {
-                msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
-                signatureField_product_instruction_trainee_signature.addClass('is-invalid');
-                signatureField_product_instruction_trainee_signature.removeClass('is-valid');
-                checkTraneeHasSignature = false;
-            } else {
-                signatureField_product_instruction_trainee_signature.addClass('is-valid');
-                signatureField_product_instruction_trainee_signature.removeClass('is-invalid');
-                checkTraneeHasSignature = true;
-            }
+                if (product_instruction_trainee_signature.val() === '') {
+                    msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
+                    signatureField_product_instruction_trainee_signature.addClass('is-invalid');
+                    signatureField_product_instruction_trainee_signature.removeClass('is-valid');
+                    checkTraneeHasSignature = false;
+                } else {
+                    signatureField_product_instruction_trainee_signature.addClass('is-valid');
+                    signatureField_product_instruction_trainee_signature.removeClass('is-invalid');
+                    checkTraneeHasSignature = true;
+                }
 
-            if (product_instruction_instructor_signature.val() === '') {
-                msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
-                signatureField_product_instruction_instructor_signature.addClass('is-invalid');
-                signatureField_product_instruction_instructor_signature.removeClass('is-valid');
-                checkInstructorHasSignature = false;
-            } else {
-                signatureField_product_instruction_instructor_signature.addClass('is-valid');
-                signatureField_product_instruction_instructor_signature.removeClass('is-invalid');
-                checkInstructorHasSignature = true;
-            }
+                if (product_instruction_instructor_signature.val() === '') {
+                    msg = msg + '<span class="mr-2">{{__('Es fehlt die Unterschrift der eingewiesenen Person.')}}</span>';
+                    signatureField_product_instruction_instructor_signature.addClass('is-invalid');
+                    signatureField_product_instruction_instructor_signature.removeClass('is-valid');
+                    checkInstructorHasSignature = false;
+                } else {
+                    signatureField_product_instruction_instructor_signature.addClass('is-valid');
+                    signatureField_product_instruction_instructor_signature.removeClass('is-invalid');
+                    checkInstructorHasSignature = true;
+                }
 
-            if (
-                checkInstructorIsSelected &&
-                checkTraneeHasSignature &&
-                checkInstructorHasSignature
-            ) {
-                console.log(msg);
-                selectedErrorMsg.html('');
-                $('#frmAddEquipmentInstruction').submit();
-            } else {
-                console.log(msg);
-                selectedErrorMsg.html(msg);
-            }
+                if (
+                    checkInstructorIsSelected &&
+                    checkTraneeHasSignature &&
+                    checkInstructorHasSignature
+                ) {
+                    console.log(msg);
+                    selectedErrorMsg.html('');
+                    $('#frmAddEquipmentInstruction').submit();
+                } else {
+                    console.log(msg);
+                    selectedErrorMsg.html(msg);
+                }
 
 
+            });
         });
     </script>
 @endsection
 
 @section('autocomplete')
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        $(".getFirma").autocomplete({
-            // position: { my : "right top", at: "right bottom" },
-            source: function (request, response) {
-                $.ajax({
-                    url: "{{ route('getFirmenAjaxListe') }}",
-                    type: 'GET',
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function (data) {
+        $(document).ready(function () {
+            $(".getFirma").autocomplete({
+                // position: { my : "right top", at: "right bottom" },
+                source: function (request, response) {
+                    $.ajax({
+                        url: "{{ route('getFirmenAjaxListe') }}",
+                        type: 'GET',
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
 
-                        let resp = $.map(data, function (obj) {
-                            return {
-                                label: `(${obj.fa_label}) ${obj.fa_name} `,
-                                id: obj.id
-                            };
-                        });
-                        response(resp);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                $('#btnMakeNewFirma').text('bearbeiten');
-                $.ajax({
-                    type: "get",
-                    dataType: 'json',
-                    url: "{{ route('getFirmenDaten') }}",
-                    data: {id: ui.item.id},
-                    success: function (res) {
-
-                        $('#ckAddNewFirma').prop('checked', false)
-                        $('#ckAddNewAddress').prop('checked', false)
-                        $('#ckAddNewContact').prop('checked', false)
-
-                        $('#adress_id').val(res.adresse.id);
-                        $('#ad_labels').val(res.adresse.ad_label);
-                        $('#address_type_id').val(res.adresse.address_type_id);
-                        $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
-                        $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
-                        $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
-                        $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
-                        $('#land_id').val(res.adresse.land_id);
-
-                        $('#firma_id').val(res.firma.id);
-                        $('#firma_id_tabfp').val(res.firma.id);
-                        $('#fa_label').val(res.firma.fa_label);
-                        $('#fa_name').val(res.firma.fa_name);
-                        $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
-                        $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
-                        $('#fa_vat').val(res.firma.fa_vat);
-
-                        if (res.contact) {
-                            $('#anrede_id').val(res.contact.anrede_id);
-                            $('#con_label').val(res.contact.con_label);
-                            $('#con_vorname').val(res.contact.con_vorname);
-                            $('#con_name').val(res.contact.con_name);
-                            $('#con_telefon').val(res.contact.con_telefon);
-                            $('#con_email').val(res.contact.con_email);
+                            let resp = $.map(data, function (obj) {
+                                return {
+                                    label: `(${obj.fa_label}) ${obj.fa_name} `,
+                                    id: obj.id
+                                };
+                            });
+                            response(resp);
                         }
+                    });
+                },
+                select: function (event, ui) {
+                    $('#btnMakeNewFirma').text('bearbeiten');
+                    $.ajax({
+                        type: "get",
+                        dataType: 'json',
+                        url: "{{ route('getFirmenDaten') }}",
+                        data: {id: ui.item.id},
+                        success: function (res) {
+
+                            $('#ckAddNewFirma').prop('checked', false)
+                            $('#ckAddNewAddress').prop('checked', false)
+                            $('#ckAddNewContact').prop('checked', false)
+
+                            $('#adress_id').val(res.adresse.id);
+                            $('#ad_labels').val(res.adresse.ad_label);
+                            $('#address_type_id').val(res.adresse.address_type_id);
+                            $('#ad_anschrift_strasse').val(res.adresse.ad_anschrift_strasse);
+                            $('#ad_anschrift_hausnummer').val(res.adresse.ad_anschrift_hausnummer);
+                            $('#ad_anschrift_plz').val(res.adresse.ad_anschrift_plz);
+                            $('#ad_anschrift_ort').val(res.adresse.ad_anschrift_ort);
+                            $('#land_id').val(res.adresse.land_id);
+
+                            $('#firma_id').val(res.firma.id);
+                            $('#firma_id_tabfp').val(res.firma.id);
+                            $('#fa_label').val(res.firma.fa_label);
+                            $('#fa_name').val(res.firma.fa_name);
+                            $('#fa_kreditor_nr').val(res.firma.fa_kreditor_nr);
+                            $('#fa_debitor_nr').val(res.firma.fa_debitor_nr);
+                            $('#fa_vat').val(res.firma.fa_vat);
+
+                            if (res.contact) {
+                                $('#anrede_id').val(res.contact.anrede_id);
+                                $('#con_label').val(res.contact.con_label);
+                                $('#con_vorname').val(res.contact.con_vorname);
+                                $('#con_name').val(res.contact.con_name);
+                                $('#con_telefon').val(res.contact.con_telefon);
+                                $('#con_email').val(res.contact.con_email);
+                            }
 
 
-                    }
-                });
+                        }
+                    });
 
-            }
+                }
+            });
         });
     </script>
 

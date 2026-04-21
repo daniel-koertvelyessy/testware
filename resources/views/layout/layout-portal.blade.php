@@ -23,6 +23,12 @@
     <meta name="msapplication-TileImage"
           content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
+    <script src="{{ asset('js/jquery_3.5.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1-12-1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.de.min.js') }}"></script>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/main.js'])
 
@@ -37,9 +43,6 @@
         >
     @endauth
 
-    <script type="text/javascript"
-            src="{{ asset('js/jquery_3.5.min.js') }}"
-    ></script>
     <title>@yield('pagetitle')</title>
 </head>
 <body>
@@ -110,7 +113,9 @@
 <x-section-footer/>
 @if (session()->has('status'))
     <script>
-        jQuery('.toast').toast('show');
+        $(document).ready(function () {
+            jQuery('.toast').toast('show');
+        });
     </script>
 @endif
 

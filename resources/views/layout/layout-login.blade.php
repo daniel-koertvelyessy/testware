@@ -8,6 +8,12 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/icon/testWare_Logo.svg') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('img/icon/testWare_Logo.svg') }}">
+
+    <script src="{{ asset('js/jquery_3.5.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1-12-1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/main.js'])
     <link id="themeId" rel="stylesheet" href="{{ asset('css/tbs.css') }}">
     <title>@yield('pagetitle')</title>

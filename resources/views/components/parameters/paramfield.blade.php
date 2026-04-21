@@ -124,31 +124,33 @@
 </x-modals.form_modal>
 
 <script>
-    $(document).on('click', '.btnEditParam', function () {
-        const id = $(this).data('id');
-        $.ajax({
-            type: "get",
-            dataType: 'json',
-            url: "{{ route('getParamData') }}",
-            data: {id},
-            success: (paramData) => {
-                $('#frmmodalEditParams').attr('action', $('#param_route_' + id).val() + '#Parameter');
-                $('#pp_id_edit').val(paramData.id);
-                $('#pp_label_edit').val(paramData.pp_label);
-                $('#pp_name_edit').val(paramData.pp_name);
-                $('#pp_value_edit').val(paramData.pp_value);
-                $('#produkt_id_param_edit').val(paramData.produkt_id);
-                $('#modalEditParams').modal('show');
+    $(document).ready(function() {
+        $(document).on('click', '.btnEditParam', function () {
+            const id = $(this).data('id');
+            $.ajax({
+                type: "get",
+                dataType: 'json',
+                url: "{{ route('getParamData') }}",
+                data: {id},
+                success: (paramData) => {
+                    $('#frmmodalEditParams').attr('action', $('#param_route_' + id).val() + '#Parameter');
+                    $('#pp_id_edit').val(paramData.id);
+                    $('#pp_label_edit').val(paramData.pp_label);
+                    $('#pp_name_edit').val(paramData.pp_name);
+                    $('#pp_value_edit').val(paramData.pp_value);
+                    $('#produkt_id_param_edit').val(paramData.produkt_id);
+                    $('#modalEditParams').modal('show');
 
-            }
+                }
+            });
+
         });
 
+        $(document).on('click', '.btnDeleteParam', function () {
+            $('#frmmodalDeleteParameter').attr('action', $(this).data('route'));
+            $('#pp_id_delete').val($(this).data('id'));
+            $('#produkt_id_pp_delete').val($(this).data('id'));
+
+        });
     });
-
-    $(document).on('click','.btnDeleteParam',function(){
-        $('#frmmodalDeleteParameter').attr('action', $(this).data('route'));
-        $('#pp_id_delete').val($(this).data('id'));
-        $('#produkt_id_pp_delete').val($(this).data('id'));
-
-    })
 </script>

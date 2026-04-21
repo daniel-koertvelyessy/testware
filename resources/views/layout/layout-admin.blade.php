@@ -24,6 +24,13 @@
           content="{{ asset('img/icon/testWare_Logo.svg') }}"
     >
 
+    <script src="{{ asset('js/jquery_3.5.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1-12-1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.de.min.js') }}"></script>
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/main.js'])
 
 
@@ -31,12 +38,6 @@
           rel="stylesheet"
           href="{{ asset(Auth::user()->user_theme) }}"
     >
-
-    <script type="text/javascript"
-            src="{{ asset('js/jquery_3.5.min.js') }}"
-    ></script>
-
-
 
     <title>@yield('pagetitle')</title>
 </head>
@@ -196,34 +197,34 @@
         @yield('content')
     </main>
 </div>
-
-<script src="{{ asset('js/jquery-ui-1-12-1.min.js') }}"></script>
 @yield('autocomplete')
 <script>
-    $("#srchTopMenuTerm").autocomplete({
-        position: {my: "right top", at: "right bottom"},
-        source: function (request, response) {
-            $.ajax({
-                url: "{{ route('searchInModules') }}",
-                type: 'GET',
-                dataType: "json",
-                data: {
-                    term: request.term
-                },
-                success: function (data) {
-                    let resp = $.map(data, function (obj) {
-                        return {
-                            label: obj.label,
-                            link: obj.link
-                        };
-                    });
-                    response(resp);
-                }
-            });
-        },
-        select: function (event, ui) {
-            location.href = ui.item.link;
-        }
+    $(document).ready(function () {
+        $("#srchTopMenuTerm").autocomplete({
+            position: {my: "right top", at: "right bottom"},
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('searchInModules') }}",
+                    type: 'GET',
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        let resp = $.map(data, function (obj) {
+                            return {
+                                label: obj.label,
+                                link: obj.link
+                            };
+                        });
+                        response(resp);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                location.href = ui.item.link;
+            }
+        });
     });
 </script>
 <!-- MODALS   -->
@@ -305,7 +306,6 @@
         });
     </script>
 @endif
-
 @yield('scripts')
 <script>
     $(document).ready(function() {

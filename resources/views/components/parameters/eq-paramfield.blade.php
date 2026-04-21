@@ -85,27 +85,29 @@
     </x-modals.form_modal>
 
     <script>
-        $(document).on('click', '.btnEditParam', function () {
-            const id = $(this).data('id');
-            $.ajax({
-                type: "get",
-                dataType: 'json',
-                url: "{{ route('getCategogryParam') }}",
-                data: {id},
-                success: (paramData) => {
-                    $('#frmmodalEditEquipmentParams').attr('action', $(this).data('route'));
-                    $('#eq_id_edit').val(paramData.id);
-                    $('#ep_label_edit').val(paramData.ep_label);
-                    $('#pkp_name_edit').val(paramData.pkp_name);
-                    $('#produkt_id_param_category_edit').val(paramData.produkt_kategorie_id);
-                    $('#modalEditEquipmentParams').modal('show');
-                }
+        $(document).ready(function () {
+            $(document).on('click', '.btnEditParam', function () {
+                const id = $(this).data('id');
+                $.ajax({
+                    type: "get",
+                    dataType: 'json',
+                    url: "{{ route('getCategogryParam') }}",
+                    data: {id},
+                    success: (paramData) => {
+                        $('#frmmodalEditEquipmentParams').attr('action', $(this).data('route'));
+                        $('#eq_id_edit').val(paramData.id);
+                        $('#ep_label_edit').val(paramData.ep_label);
+                        $('#pkp_name_edit').val(paramData.pkp_name);
+                        $('#produkt_id_param_category_edit').val(paramData.produkt_kategorie_id);
+                        $('#modalEditEquipmentParams').modal('show');
+                    }
+                });
+
             });
 
+            $(document).on('click', '.btnDeleteParam', function () {
+                $('#frmmodalDeleteCategoryParameter').attr('action', $(this).data('route'));
+            })
         });
-
-        $(document).on('click', '.btnDeleteParam', function () {
-            $('#frmmodalDeleteCategoryParameter').attr('action', $(this).data('route'));
-        })
     </script>
 @endif

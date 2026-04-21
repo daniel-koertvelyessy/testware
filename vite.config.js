@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
     plugins: [
@@ -10,15 +11,33 @@ export default defineConfig({
                 "resources/js/main.js",
             ],
             refresh: true,
-            publicDirectory: "public",
         }),
+        viteStaticCopy({
+            targets: [
+                {
+                    src: "node_modules/@fortawesome/fontawesome-free/webfonts/*",
+                    dest: "webfonts"
+                }
+            ]
+        })
     ],
+    optimizeDeps: {
+        include: ["jquery"]
+    },
+    define: {
+        global: "window"
+    },
     server: {
         proxy: {
             "/fonts": {
                 target: "http://127.0.0.1:8000",
                 changeOrigin: true,
             }
+        }
+    },
+    build: {
+        rollupOptions: {
+            external: ["jquery", "bootstrap", "popper.js"],
         }
     },
     css: {
@@ -29,3 +48,4 @@ export default defineConfig({
         }
     }
 });
+
