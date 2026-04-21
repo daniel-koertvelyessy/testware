@@ -1,13 +1,14 @@
 {
     "private": true,
     "scripts": {
-        "dev": "vite",
+        "dev": "concurrently \"php artisan serve\" \"vite\"",
         "build": "vite build",
         "preview": "vite preview"
     },
     "devDependencies": {
-        "bootstrap": "5.3.8",
+        "bootstrap": "4.6.2",
         "bootstrap-datepicker": "1.10.0",
+        "concurrently": "^9.2.1",
         "jquery": "^3.2",
         "laravel-vite-plugin": "^1.3.0",
         "resolve-url-loader": "^5.0.0",
@@ -17,7 +18,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.5.2",
-        "@popperjs/core": "^2.11.8",
+        "@popperjs/core": "^1.16.1",
         "bs-custom-file-input": "^1.3.4",
         "font-awesome": "^4.7.0"
     }
