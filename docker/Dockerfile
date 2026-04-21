@@ -46,6 +46,9 @@ FROM base AS final
 WORKDIR /var/www/html
 
 COPY --from=composer /var/www/html .
+# copy SSL certificates from the base stage
+COPY --from=base /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/private/
+COPY --from=base /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/ssl/certs/
 
 RUN chown -R www-data:www-data /var/www/html && \
     find /var/www/html/ -type f -exec chmod 664 {} \; && \
