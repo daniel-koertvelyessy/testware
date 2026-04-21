@@ -16,6 +16,17 @@ RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 COPY docker/configs/testware.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/configs/custom.ini /usr/local/etc/php/conf.d/custom.ini
 
+# --- Node Stage ---
+FROM node:20-alpine AS node
+
+WORKDIR /var/www/html
+
+COPY package.json package-lock.json ./
+COPY vite.config.js ./
+COPY resources/ resources/
+COPY public/ public/
+
+RUN npm ci && npm run build
 
 # --- Composer Stage ---
 FROM base AS composer
@@ -36,6 +47,9 @@ COPY --exclude=docker \
      --exclude=vendor \
      --exclude=.git \
      . .
+
+# Vite Build aus Node Stage übernehmen
+COPY --from=node /var/www/html/public/build public/build/
 
 RUN composer run-script post-autoload-dump --no-interaction || true
 
