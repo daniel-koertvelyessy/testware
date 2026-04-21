@@ -16,18 +16,6 @@ RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 COPY docker/configs/testware.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/configs/custom.ini /usr/local/etc/php/conf.d/custom.ini
 
-# --- Node Stage ---
-FROM node:20-alpine AS node
-
-WORKDIR /var/www/html
-
-COPY package.json package-lock.json ./
-COPY vite.config.js ./
-COPY resources/ resources/
-COPY public/ public/
-
-RUN npm ci && npm run build
-
 # --- Composer Stage ---
 FROM base AS composer
 
@@ -35,24 +23,18 @@ RUN install-php-extensions @composer
 
 WORKDIR /var/www/html
 
-# composer.json/lock liegen im Repo-Root
 COPY composer.json composer.lock ./
 COPY database/ database/
 
 RUN composer install --no-interaction --no-dev --optimize-autoloader --no-scripts
 
-# Rest der App kopieren, aber nicht vendor/, node_modules/ etc.
 COPY --exclude=docker \
-     --exclude=node_modules \
-     --exclude=vendor \
-     --exclude=.git \
-     . .
-
-# Vite Build aus Node Stage übernehmen
-COPY --from=node /var/www/html/public/build public/build/
+    --exclude=node_modules \
+    --exclude=vendor \
+    --exclude=.git \
+    . .
 
 RUN composer run-script post-autoload-dump --no-interaction || true
-
 
 # --- Final Stage ---
 FROM base AS final
@@ -62,7 +44,6 @@ RUN usermod -aG ssl-cert www-data
 WORKDIR /var/www/html
 
 COPY --from=composer /var/www/html .
-# copy SSL certificates from the base stage
 COPY --from=base /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/private/
 COPY --from=base /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/ssl/certs/
 
