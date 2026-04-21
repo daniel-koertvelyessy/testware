@@ -6,6 +6,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends postgresql-client ssl-cert && \
+    make-ssl-cert generate-default-snakeoil --force-overwrite && \
     rm -rf /var/lib/apt/lists/*
 
 RUN install-php-extensions pdo_pgsql gd zip bcmath
