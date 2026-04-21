@@ -43,6 +43,8 @@ RUN composer run-script post-autoload-dump --no-interaction || true
 # --- Final Stage ---
 FROM base AS final
 
+RUN usermod -aG ssl-cert www-data
+
 WORKDIR /var/www/html
 
 COPY --from=composer /var/www/html .
