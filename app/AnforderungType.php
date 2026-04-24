@@ -8,7 +8,7 @@ class AnforderungType extends Model
 {
     protected $guarded = [];
 
-    public function anforderung()
+    public function anforderung(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Anforderung::class);
     }
