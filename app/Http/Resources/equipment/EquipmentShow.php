@@ -36,8 +36,8 @@ class EquipmentShow extends JsonResource
             $testingList[$listItem->id] =
                 [
                     'requirement' => $listItem->Anforderung->an_label,
-                    'last_at' => (string) $listItem->qe_control_date_due,
-                    'due_at' => (string) $listItem->qe_control_date_last,
+                    'last_at' => (string) $listItem->qe_control_date_last,
+                    'due_at'  => (string) $listItem->qe_control_date_due,
                     'status' => $status,
                 ];
         }

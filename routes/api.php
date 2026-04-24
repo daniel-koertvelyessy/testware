@@ -25,6 +25,9 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
         ]);
     })->name('status');
 
+    Route::get('/equipment/summary', 'EquipmentController@summary')->name('equipment.summary');
+
+
     Route::apiResources([
         'location' => 'LocationController',
         'building' => 'BuildingController',

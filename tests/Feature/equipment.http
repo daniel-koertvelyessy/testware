@@ -1,0 +1,7 @@
+### GET request to lokal server
+GET http://127.0.0.1:8000/api/v1/equipment/summary
+Authorization: Bearer iRC3iv5ISwpmaZUSg6DTKj21q95sRsG2JQAtDIImvnckUQVbuNOEuQPLOZPvVom9lbUmk2b90UYCzgfb
+Accept: application/json
+###
+
+# iRC3iv5ISwpmaZUSg6DTKj21q95sRsG2JQAtDIImvnckUQVbuNOEuQPLOZPvVom9lbUmk2b90UYCzgfb

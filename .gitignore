@@ -34,3 +34,4 @@ docker-compose.yml
 /.phpunit.cache/
 /.env.testing
 /public/build/
+tests/Feature/equipment.http

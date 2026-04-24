@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\ControlEquipment;
 use App\Equipment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\equipment\Equipment as EquipmentResource;
@@ -86,7 +87,9 @@ class EquipmentController extends Controller
 
     public function status()
     {
-        return EquipmentStatsResource::collection(Equipment::with('EquipmentState')->get());
+        return EquipmentStatsResource::collection(
+            Equipment::with(['EquipmentState', 'ControlEquipment'])->get()
+        );
     }
 
     public function testEquipment()
@@ -98,5 +101,52 @@ class EquipmentController extends Controller
         })
         );
 
+
+    }
+
+    public function summary(): JsonResponse
+    {
+        $all = Equipment::with(['EquipmentState', 'ControlEquipment'])
+                        ->whereNull('deleted_at')
+                        ->get();
+
+        $total = $all->count();
+
+        // Noch nie geprüft: keine einzige abgeschlossene (soft-deleted) ControlEquipment-Zeile
+        $unchecked = $all->filter(function ($e) {
+            $completed = ControlEquipment::withTrashed()
+                                         ->where('equipment_id', $e->id)
+                                         ->whereNotNull('deleted_at')
+                                         ->count();
+            return $completed === 0;
+        })->count();
+
+        // Offene (nicht abgeschlossene) Prüfungen mit überschrittenem Fälligkeitsdatum
+        $overdue = $all->filter(function ($e) {
+            return $e->ControlEquipment // nur aktive, nicht soft-deleted
+            ->contains(fn($ce) =>
+            \Carbon\Carbon::parse($ce->qe_control_date_due)->isPast()
+            );
+        })->count();
+
+        // Kalibrierungspflichtig: hat mind. eine aktive ControlEquipment-Zeile
+        $calibTotal = $all->filter(fn($e) =>
+        $e->ControlEquipment->isNotEmpty()
+        )->count();
+
+        // Kalibrierung überfällig
+        $calibDue = $all->filter(fn($e) =>
+        $e->ControlEquipment->contains(fn($ce) =>
+        \Carbon\Carbon::parse($ce->qe_control_date_due)->isPast()
+        )
+        )->count();
+
+        return response()->json([
+            'total'       => $total,
+            'overdue'     => $overdue,
+            'unchecked'   => $unchecked,
+            'calib_total' => $calibTotal,
+            'calib_due'   => $calibDue,
+        ]);
     }
 }
