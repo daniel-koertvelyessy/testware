@@ -13,7 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class EquipmentController extends Controller
 {
@@ -25,7 +25,7 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return ResourceCollection
      */
     public function index(Request $request)
     {
@@ -40,17 +40,17 @@ class EquipmentController extends Controller
      * Store a newly created resource in storage.
      *
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        return response()->json(['message' => 'Not implemented']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Equipment  $equipment
      * @return EquipmentShowResource
      */
     public function show(Equipment $equipment)
@@ -61,12 +61,13 @@ class EquipmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param  Request  $request
+     * @param  Equipment  $equipment
+     * @return JsonResponse
      */
     public function update(Request $request, Equipment $equipment)
     {
-        //
+        return response()->json(['message' => 'Not implemented']);
     }
 
     /**
@@ -98,6 +99,7 @@ class EquipmentController extends Controller
             if ($equipment->produkt->ControlProdukt) {
                 return $equipment;
             }
+            return '';
         })
         );
 
