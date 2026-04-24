@@ -16,7 +16,7 @@ class ControlEquipment extends Model
 
     protected $guarded = [];
 
-    public $sortable = [
+    public array $sortable = [
         'id',
         'qe_control_date_due',
         'archived_at',
@@ -71,12 +71,13 @@ class ControlEquipment extends Model
 
     }
 
-    public function checkControlRequirementsMet()
+    public function checkControlRequirementsMet(): array
     {
         $controlItemMsg = '';
         $hasQualifiedUsersMsg = '';
         $hasTestItemMsg = '';
         $hasControlItems = 0;
+        $hasQualifiedUsers = 0;
 
         $Anforderung = Anforderung::find($this->anforderungs_id);
 
@@ -117,15 +118,6 @@ class ControlEquipment extends Model
             }
         }
 
-        //        dump('countControlItems => ' . $this->countControlItems());
-        //        dump('countQualifiedUser => ' . $this->countQualifiedUser());
-        //        dump('$testProductsAvaliable => ', $testProductsAvaliable);
-        //        dump('$hasTestItem => ', $hasTestItem);
-        //        dump('$controlProductsAvaliable => ' . $controlProductsAvaliable);
-        //        dump('$testProductsAvaliable => ', $testProductsAvaliable);
-        //
-        //        dd($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable));
-
         if ($hasControlItems > 0 && $hasQualifiedUsers > 0 && ($hasTestItem && $testProductsAvaliable)) {
             return [
                 'success' => true,
@@ -140,18 +132,18 @@ class ControlEquipment extends Model
 
     }
 
-    public function countControlItems(Anforderung $anforderung)
+    public function countControlItems(Anforderung $anforderung): int
     {
 
-        return ($anforderung) ? $anforderung->AnforderungControlItem->count() : -1;
+        return  $anforderung->AnforderungControlItem->count();
     }
 
-    public function makeHtmlWarning($msg, $link)
+    public function makeHtmlWarning($msg, $link): string
     {
         return '<span class="bg-warning p-1">'.$msg.'</span><a href="'.$link.'" class="btn btn-sm btn-outline-primary ml-2">'.__('Beheben').'</a>';
     }
 
-    public function countQualifiedUser()
+    public function countQualifiedUser(): int
     {
 
         $equipment = Equipment::where('id', $this->equipment_id)->first();
@@ -168,7 +160,7 @@ class ControlEquipment extends Model
 
     }
 
-    public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, Request $request)
+    public function addEquipment(ProduktAnforderung $produktAnforderung, $equipmemt_id, Request $request): string
     {
 
         $interval = $produktAnforderung->Anforderung->an_control_interval;
