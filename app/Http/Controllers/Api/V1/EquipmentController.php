@@ -6,6 +6,7 @@ use App\ControlEquipment;
 use App\Equipment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\equipment\Equipment as EquipmentResource;
+use App\Http\Resources\equipment\EquipmentPortalList;
 use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
 use App\Http\Resources\equipment\EquipmentStats as EquipmentStatsResource;
 use App\Http\Resources\equipment\TestEquipment as TestEquipmentResource;
@@ -161,6 +162,26 @@ class EquipmentController extends Controller
             'overdue'          => $overdue,
             'calib_total'      => $calibTotal,
             'calib_due'        => $calibDue,
+        ]);
+    }
+
+    public function portalList(): JsonResponse
+    {
+        $equipment = Equipment::with([
+            'EquipmentState',
+            'ControlEquipment',
+            'produkt.ControlProdukt',
+            'storage'
+        ])
+                              ->whereNull('deleted_at')
+                              ->get()
+                              ->sortBy('eq_inventar_nr')
+                              ->values();
+
+        return response()->json([
+            'generated_at' => now()->toDateTimeString(),
+            'total'        => $equipment->count(),
+            'data'         => EquipmentPortalList::collection($equipment),
         ]);
     }
 }
