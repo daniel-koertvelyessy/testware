@@ -129,7 +129,6 @@ class AnforderungsController extends Controller
 
     public function restore(Request $request)
     {
-
         $msg = (Anforderung::withTrashed()->find($request->id)->restore())
             ? __('Anforderung wurde wiederhergestellt')
             : __('Anforderung konnte nicht wiederhergestellt werden!');
@@ -142,8 +141,6 @@ class AnforderungsController extends Controller
 
     public function validateAnforderung(): array
     {
-
-        // dd($request);
         return request()->validate([
             'an_label' => 'bail|required|max:20',
             'an_name' => 'bail|max:100',

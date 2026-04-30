@@ -1,3 +1,7 @@
+@php
+$datasetList = \App\AciDataSet::where('anforderung_control_item_id',$aci->id)->orderBy('data_point_sort')->get();
+@endphp
+
 <table class="table">
     <thead>
     <tr>
@@ -7,8 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\AciDataSet::where('anforderung_control_item_id',$aci->id)->orderBy('data_point_sort')->get() as
-    $setItem)
+    @foreach($datasetList as $setItem)
         <tr>
         <td class="px-0">
             <span class="form-control">{{ $setItem->data_point_value }}

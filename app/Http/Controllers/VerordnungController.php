@@ -45,7 +45,7 @@ class VerordnungController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|object|View
      */
     public function create()
     {
@@ -60,7 +60,18 @@ class VerordnungController extends Controller
      */
     public function store(Request $request)
     {
-        $verordnung = Verordnung::create($this->validateVerordnug());
+        $verordnung = Verordnung::create($this->validate($request, [
+            'vo_label' => [
+                'bail',
+                'alpha_dash',
+                'required',
+                'max:20'
+            ],
+            'vo_name' => 'nullable|max:100',
+            'vo_nummer' => 'nullable|max:100',
+            'vo_stand' => 'nullable|max:100',
+            'vo_description' => '',
+        ]));
 
         $request->session()->flash('status', 'Die Verordnung <strong>'.request('vo_label').'</strong> wurde angelegt!');
 
@@ -96,7 +107,19 @@ class VerordnungController extends Controller
     public function update(Request $request, Verordnung $verordnung)
     {
         $data = Verordnung::findOrFail($request->id);
-        $data->update($this->validateVerordnug());
+        $data->update($this->validate($request, [
+            'vo_label' => [
+                'bail',
+                'alpha_dash',
+                'required',
+                'max:20',
+                Rule::unique('verordnungs','vo_label')->ignore(\request('id')),
+            ],
+            'vo_name' => 'nullable|max:100',
+            'vo_nummer' => 'nullable|max:100',
+            'vo_stand' => 'nullable|max:100',
+            'vo_description' => '',
+        ]));
         $request->session()->flash('status', 'Die Verordnung <strong>'.request('vo_label').'</strong> wurde aktualisiert!');
 
         return back();
@@ -121,7 +144,7 @@ class VerordnungController extends Controller
                 'alpha_dash',
                 'required',
                 'max:20',
-                Rule::unique('verordnungs')->ignore(\request('id')),
+//                Rule::unique('verordnungs','vo_label')->ignore(\request('id')),
             ],
             'vo_name' => 'nullable|max:100',
             'vo_nummer' => 'nullable|max:100',

@@ -13,7 +13,6 @@ class Verordnung extends Model
     protected $guarded = [];
 
     public $sortable = [
-        'id',
         'vo_label',
         'vo_name',
         'vo_nummer',

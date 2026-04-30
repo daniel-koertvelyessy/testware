@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AciDataSet extends Model
 {
-    use HasFactory;
 
     protected $guarded = [];
 

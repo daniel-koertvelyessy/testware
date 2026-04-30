@@ -13,7 +13,6 @@ class Anforderung extends Model
     use SoftDeletes, Sortable;
 
     public $sortable = [
-        'id',
         'created_at',
         'updated_at',
         'an_label',
@@ -28,7 +27,6 @@ class Anforderung extends Model
     ];
 
     protected $fillable = [
-        'id',
         'an_label',
         'an_name',
         'an_control_interval',
