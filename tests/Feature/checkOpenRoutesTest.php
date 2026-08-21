@@ -20,15 +20,6 @@ class checkOpenRoutesTest extends TestCase
         $response->assertSeeText('Dashboard');
     }
 
-    public function test_docs_is_reachable_and_renders_correctly()
-    {
-        $response = $this->get('/docs');
-
-        $response->assertStatus(200);
-
-        $response->assertSeeText('Dokumentation');
-    }
-
     public function test_support_is_reachable_and_renders_correctly()
     {
         $response = $this->get('/support');

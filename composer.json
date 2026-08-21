@@ -9,18 +9,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.1|^8.2",
-        "elibyy/tcpdf-laravel": "^11.5.0",
+        "elibyy/tcpdf-laravel": "^13.0",
         "guzzlehttp/guzzle": "^7.10.0",
         "kyslik/column-sortable": "^8.0",
-        "laravel/framework": "^12.61.1",
+        "laravel/framework": "^13.0",
         "laravel/helpers": "^v1.8.3",
-        "laravel/tinker": "^v2.11.1",
+        "laravel/tinker": "^3.0",
         "laravel/ui": "^v4.6.3",
         "simplesoftwareio/simple-qrcode": "^4.2.0"
     },
     "require-dev": {
         "laravel/pint": "^1.22",
-        "barryvdh/laravel-debugbar": "^v3.13.5",
+        "barryvdh/laravel-debugbar": "^4.4",
         "barryvdh/laravel-ide-helper": "^v3.0.0",
         "fakerphp/faker": "^1.16.1",
         "mockery/mockery": "^1.4.31",

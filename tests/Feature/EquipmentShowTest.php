@@ -14,6 +14,7 @@ use App\Storage;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
+use seeders\InitialValueSeeder;
 use Tests\TestCase;
 
 class EquipmentShowTest extends TestCase
@@ -32,7 +33,7 @@ class EquipmentShowTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(\seeders\InitialValueSeeder::class);
+        $this->seed(InitialValueSeeder::class);
 
         $this->user = User::factory()->create();
         $this->equipment = Equipment::factory()->create();
@@ -130,39 +131,44 @@ class EquipmentShowTest extends TestCase
         $this->assertEquals('nicht zugeordnet', $response->viewData('locationpath'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function test_cleanup_actions_are_performed(): void
     {
         // Verwende Mockery's Alias-Feature für statische Methoden
-        $mock = \Mockery::mock('alias:App\Http\Actions\Equipment\EquipmentAction');
+        $mock = Mockery::mock('alias:App\Http\Actions\Equipment\EquipmentAction');
 
         // Erwartungen für statische Methoden setzen
         $mock->shouldReceive('deleteLoseEquipmentDocumentEntries')
             ->once()
-            ->with(\Mockery::type(Equipment::class));
+            ->with(Mockery::type(Equipment::class));
 
         $mock->shouldReceive('deleteLoseProductDocumentEntries')
             ->once()
-            ->with(\Mockery::type(Equipment::class));
+            ->with(Mockery::type(Equipment::class));
 
         $mock->shouldReceive('deleteLoseRequirementEntries')
             ->once()
-            ->with();
+            ->with(Mockery::type(Equipment::class));
 
         // Test durchführen
-        $this->actingAs($this->user)
+        $response = $this->actingAs($this->user)
             ->get(route('equipment.show', $this->equipment));
+
+        $response->assertStatus(200);
     }
 
     public function test_equipment_service_methods_are_called_correctly(): void
     {
         // Erstelle Testdaten in der Datenbank
         $controlInterval = ControlInterval::create(['ci_label' => 'TestInter', 'ci_si' => 'test3', 'id' => 999]);
-        $requirement = Anforderung::create([
-            'an_label' => 'Test Requirement',
-            'an_name' => 'Test Requirement Name',
-            'control_interval_id' => $controlInterval->id,
-            'id' => 999,
-        ]);
+        $requirement = new Anforderung;
+        $requirement->an_label = 'Test Requirement';
+        $requirement->an_name = 'Test Requirement Name';
+        $requirement->control_interval_id = $controlInterval->id;
+        $requirement->id = 999;
+        $requirement->save();
 
         $firma = Firma::first();
 
@@ -194,7 +200,7 @@ class EquipmentShowTest extends TestCase
 
     protected function tearDown(): void
     {
-        \Mockery::close();
+        Mockery::close();
         parent::tearDown();
     }
 }
