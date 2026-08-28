@@ -15,6 +15,7 @@ class EquipmentPortalList extends JsonResource
             ->first();
 
         return [
+            'uid'            => $this->eq_uid,
             'inventory'      => $this->eq_inventar_nr,
             'name'           => $this->eq_name,
             'status'         => $this->EquipmentState->estat_label,

@@ -7,6 +7,7 @@ use App\Equipment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\equipment\Equipment as EquipmentResource;
 use App\Http\Resources\equipment\EquipmentPortalList;
+use App\Http\Resources\equipment\EquipmentPortalShow;
 use App\Http\Resources\equipment\EquipmentShow as EquipmentShowResource;
 use App\Http\Resources\equipment\EquipmentStats as EquipmentStatsResource;
 use App\Http\Resources\equipment\TestEquipment as TestEquipmentResource;
@@ -183,5 +184,14 @@ class EquipmentController extends Controller
             'total'        => $equipment->count(),
             'data'         => EquipmentPortalList::collection($equipment),
         ]);
+    }
+
+    /**
+     * Single equipment record (master data + inspection history) for the
+     * auditor portal, keyed by the equipment route uid.
+     */
+    public function portalShow(Equipment $equipment): EquipmentPortalShow
+    {
+        return new EquipmentPortalShow($equipment);
     }
 }

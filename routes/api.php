@@ -27,6 +27,7 @@ Route::prefix('v1')->name('api.v1.')->namespace('Api\V1')->group(function () {
 
     Route::get('/equipment/summary', 'EquipmentController@summary')->name('equipment.summary');
     Route::get('/equipment/portal_list', 'EquipmentController@portalList')->name('equipment.portal_list');
+    Route::get('/equipment/portal_show/{equipment}', 'EquipmentController@portalShow')->name('equipment.portal_show');
 
     Route::apiResources([
         'location' => 'LocationController',
