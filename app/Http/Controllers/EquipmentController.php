@@ -404,6 +404,7 @@ class EquipmentController extends Controller
 
         $syncCounter = 0;
         $newCounter = 0;
+        $msg = '';
 
         foreach (Equipment::select('id', 'eq_uid')->get() as $equipment) {
 
