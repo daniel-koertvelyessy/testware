@@ -25,6 +25,7 @@ use App\ViewModel\EquipmentViewModel;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -178,8 +179,6 @@ class EquipmentController extends Controller
         $equipment->equipment_state_id = $equipment_state_id;
 
         $equipment->save();
-
-        (new EquipmentUid)->addNew($request->eq_uid, $equipment->id);
 
         (new EquipmentHistory)->add(__('Gerät angelegt'), __('Das Gerät mit der Inventar-Nr :invno wurde angelegt', ['invno' => request('eq_inventar_nr')]), $equipment->id);
 
@@ -404,39 +403,41 @@ class EquipmentController extends Controller
 
         $syncCounter = 0;
         $newCounter = 0;
-        $msg = '';
+        $dupCounter = 0;
+        $failedIds = [];
 
         foreach (Equipment::select('id', 'eq_uid')->get() as $equipment) {
+            try {
+                DB::transaction(function () use ($equipment, &$syncCounter, &$newCounter, &$dupCounter) {
+                    $uidRows = EquipmentUid::where('equipment_id', $equipment->id)->orderBy('id')->get();
+                    $keep = $uidRows->first();
 
-            $equipmentUid = EquipmentUid::where('equipment_id', $equipment->id)->where('equipment_uid', $equipment->eq_uid)->first();
-
-            if ($equipmentUid) {
-                if ($equipmentUid->equipment_uid !== $equipment->eq_uid) {
-                    $equipmentUid->equipment_uid = $equipment->eq_uid;
-                    $syncCounter += $equipmentUid->save()
-                        ? 1
-                        : 0;
-                }
-            } elseif (EquipmentUid::where('equipment_id', $equipment->id)->count() > 0) {
-                $checkIdOnly = EquipmentUid::where('equipment_id', $equipment->id)->first();
-                if ($checkIdOnly) {
-                    if ($checkIdOnly->equipment_uid !== $equipment->eq_uid) {
-                        $checkIdOnly->equipment_uid = $equipment->eq_uid;
-                        $syncCounter += $checkIdOnly->save()
+                    if (! $keep) {
+                        $keep = new EquipmentUid;
+                        $keep->equipment_id = $equipment->id;
+                        $keep->equipment_uid = $equipment->eq_uid;
+                        $newCounter += $keep->save()
+                            ? 1
+                            : 0;
+                    } elseif ($keep->equipment_uid !== $equipment->eq_uid) {
+                        $keep->equipment_uid = $equipment->eq_uid;
+                        $syncCounter += $keep->save()
                             ? 1
                             : 0;
                     }
-                }
-            } else {
-                $new_equipment_uid = new EquipmentUid;
-                $new_equipment_uid->equipment_id = $equipment->id;
-                $new_equipment_uid->equipment_uid = $equipment->eq_uid;
-                $newCounter += $new_equipment_uid->save()
-                    ? 1
-                    : 0;
-            }
 
+                    $dupIds = $uidRows->splice(1)->pluck('id');
+                    if ($dupIds->isNotEmpty()) {
+                        $dupCounter += EquipmentUid::whereIn('id', $dupIds)->delete();
+                    }
+                });
+            } catch (QueryException $e) {
+                $failedIds[] = $equipment->id;
+            }
         }
+
+        $msg = '';
+
         if ($syncCounter > 0) {
             $msg = $syncCounter > 1
                 ? __('Es wurden :numSync Einträge synchronisiert!', ['numSync' => $syncCounter])
@@ -447,6 +448,21 @@ class EquipmentController extends Controller
             $msg .= $newCounter > 1
                 ? __('Es wurden :numNew Einträger vorgenommen!', ['numNew' => $newCounter])
                 : __('Es wurde ein neuer Eintrag erstellt.');
+        }
+
+        if ($dupCounter > 0) {
+            $msg .= ' '.__('Es wurden :numDup doppelte Einträge bereinigt!', ['numDup' => $dupCounter]);
+        }
+
+        if (count($failedIds) > 0) {
+            $msg .= ' '.__('Bei :num Geräten konnte die UID nicht synchronisiert werden! (Equipment-IDs: :ids)', [
+                'num' => count($failedIds),
+                'ids' => implode(', ', $failedIds),
+            ]);
+        }
+
+        if ($msg === '') {
+            $msg = __('Es war keine Synchronisierung nötig.');
         }
 
         request()->session()->flash('status', $msg);

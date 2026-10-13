@@ -23,22 +23,29 @@ class AppController extends Controller
 
         $userid = (isset($request->equipment_event_user)) ? $request->equipment_event_user : 1;
         $equipment = EquipmentUid::where('equipment_uid', $request->equipment_id)->first();
+        $edata = $equipment ? Equipment::find($equipment->equipment_id) : null;
         $this->validateNewEquipmentEvent();
+
+        if (! $edata) {
+            $request->session()->flash('status', __('Das Gerät konnte nicht gefunden werden!'));
+
+            return redirect()->route('app');
+        }
 
         $eevent = new EquipmentEvent;
         $eevent->equipment_event_text = $request->equipment_event_text;
         $eevent->equipment_event_user = $userid;
-        $eevent->equipment_id = $equipment->equipment_id;
+        $eevent->equipment_id = $edata->id;
         $eevent->save();
 
         $eh = new EquipmentHistory;
 
         $eh->eqh_eintrag_kurz = __('Schadensmeldung');
         $eh->eqh_eintrag_text = __('Gerät wurde über die App als beschädigt gemeldet. Das Event wurde ausgelöst und wird nachverfolgt.');
-        $eh->equipment_id = $equipment->equipment_id;
+        $eh->equipment_id = $edata->id;
         $eh->save();
 
-        foreach ((new Equipment)->qualifiedUserList(Equipment::where('id', $equipment->equipment_id)->first()) as $qualifiedUser) {
+        foreach ((new Equipment)->qualifiedUserList($edata) as $qualifiedUser) {
             Notification::send($qualifiedUser, new EquipmentEventCreated($eevent));
         }
 

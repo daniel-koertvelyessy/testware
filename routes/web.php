@@ -1,12 +1,21 @@
 <?php
 
+use App\Adresse;
+use App\Building;
+use App\Contact;
+use App\ControlEvent;
 use App\Equipment;
 use App\EquipmentDoc;
 use App\EquipmentFuntionControl;
 use App\EquipmentLabel;
 use App\EquipmentUid;
+use App\Firma;
+use App\Http\Controllers\PdfGenerator;
+use App\Location;
 use App\Produkt;
-use App\User;
+use App\Profile;
+use App\Room;
+use App\Stellplatz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +31,7 @@ Route::view('/', 'portal-main')->name('portal-main');
 Route::view('support', 'support')->name('support');
 
 Route::get('imprint', function () {
-    $firma = \App\Location::with('Adresse', 'Profile')->first();
+    $firma = Location::with('Adresse', 'Profile')->first();
 
     return view('imprint', [
         'company_name' => $firma->ad_name_firma ?? '',
@@ -38,8 +47,8 @@ Route::view('app', 'testware.app.index')->name('app');
 Route::get('edata/{ident}', function ($ident, Request $request) {
 
     $equipment = EquipmentUid::where('equipment_uid', $ident)->first();
-    if ($equipment) {
-        $edata = Equipment::findOrFail($equipment->equipment_id);
+    $edata = $equipment ? Equipment::find($equipment->equipment_id) : null;
+    if ($edata) {
 
         return view('testware.app.equipmentdata', [
             'edata' => $edata,
@@ -57,8 +66,8 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
 
     $equipment = EquipmentUid::where('equipment_uid', $ident)->first();
 
-    if ($equipment) {
-        $edata = Equipment::findOrFail($equipment->equipment_id);
+    $edata = $equipment ? Equipment::find($equipment->equipment_id) : null;
+    if ($edata) {
 
         //            dd($edata);
         return view('testware.app.reportdamage', [
@@ -98,7 +107,6 @@ Route::get('edmg/{ident}', function ($ident, Request $request) {
            return redirect()->route('app');
        }*/
 })->name('edmg');
-
 
 Route::get('/dashboard', 'TestwareController@dashboard')->name('dashboard')->middleware('auth');
 
@@ -219,36 +227,36 @@ Route::get('pdf.storageListe',
     'PdfGenerator@storageListe')->name('pdf.storageListe');
 
 Route::get('/makePDF/{view}/{title}', function ($view, $title) {
-    App\Http\Controllers\PdfGenerator::makePDF($view, $title);
+    PdfGenerator::makePDF($view, $title);
 })->name('makePDF');
 
 Route::get('/report.print/{id}', function ($id) {
-    App\Http\Controllers\PdfGenerator::printReport($id);
+    PdfGenerator::printReport($id);
 })->name('printReport')->middleware('auth');
 
 Route::get('makePDFEquipmentLabel/{equipment}', function ($equipment) {
     $equip = Equipment::find($equipment);
     if ($equip->produkt->equipment_label_id) {
-        App\Http\Controllers\PdfGenerator::makePDFLabel($equip->produkt->equipment_label_id, $equipment);
+        PdfGenerator::makePDFLabel($equip->produkt->equipment_label_id, $equipment);
     } elseif (EquipmentLabel::count() > 0) {
         $latestEquipmentlabelId = EquipmentLabel::first()->id;
-        App\Http\Controllers\PdfGenerator::makePDFLabel($latestEquipmentlabelId, $equipment);
+        PdfGenerator::makePDFLabel($latestEquipmentlabelId, $equipment);
     } else {
         return back();
     }
 })->name('makePDFEquipmentLabel');
 
 Route::get('makePDFEquipmentDataSheet/{equipment}', function ($equipment) {
-    App\Http\Controllers\PdfGenerator::makePDFEquipmentDataSheet($equipment);
+    PdfGenerator::makePDFEquipmentDataSheet($equipment);
 })->name('makePDFEquipmentDataSheet');
 
 Route::get('test_equipment_label/{label}', function ($label) {
-    App\Http\Controllers\PdfGenerator::makePDFLabel($label);
+    PdfGenerator::makePDFLabel($label);
 })->name('test_equipment_label');
 
 Route::get('makePDFEquipmentControlReport/{controlEvent}',
     function ($controlEvent) {
-        App\Http\Controllers\PdfGenerator::makePDFEquipmentControlReport(App\ControlEvent::find($controlEvent));
+        PdfGenerator::makePDFEquipmentControlReport(ControlEvent::find($controlEvent));
     })->name('makePDFEquipmentControlReport')->middleware('auth');
 
 // Auth::routes();
@@ -266,10 +274,10 @@ Route::get('/auth/register', 'HomeController@index')->name('auth.register');
 
 Route::get('organisationMain', function () {
     return view('admin.organisation.index', [
-        'firmas' => App\Firma::take(5)->latest()->get(),
-        'adresses' => App\Adresse::take(5)->latest()->get(),
-        'profiles' => App\Profile::take(5)->latest()->get(),
-        'contacts' => App\Contact::take(5)->latest()->get(),
+        'firmas' => Firma::take(5)->latest()->get(),
+        'adresses' => Adresse::take(5)->latest()->get(),
+        'profiles' => Profile::take(5)->latest()->get(),
+        'contacts' => Contact::take(5)->latest()->get(),
     ]);
 })->name('organisationMain')->middleware('auth');
 
@@ -296,10 +304,10 @@ Route::post('equipmentlabel/copy/{id}', function ($id) {
 
 Route::get('storageMain', function () {
     return view('admin.standorte.index', [
-        'locations' => App\Location::take(5)->latest()->get(),
-        'buildings' => App\Building::take(5)->latest()->get(),
-        'rooms' => App\Room::take(5)->latest()->get(),
-        'compartments' => App\Stellplatz::take(5)->latest()->get(),
+        'locations' => Location::take(5)->latest()->get(),
+        'buildings' => Building::take(5)->latest()->get(),
+        'rooms' => Room::take(5)->latest()->get(),
+        'compartments' => Stellplatz::take(5)->latest()->get(),
     ]);
 })->name('storageMain')->middleware('auth');
 
@@ -333,7 +341,7 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
             $msg = __(' ohne Fehler ');
         } else {
             $msg = __(' mit Fehler ');
-            \Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: '.$file);
+            Illuminate\Support\Facades\Log::warning('Fehler beim Erfassen einer Funktionsprüfung: '.$file);
         }
         $equipment->equipment_state_id = 1;
         $equipment->save();
@@ -351,7 +359,7 @@ Route::post('addEquipmentFunctionControl', function (Request $request) {
 
 Route::get('produktMain', function () {
     return view('admin.produkt.main',
-        ['produkts' => App\Produkt::all()->sortDesc()->take(10)]);
+        ['produkts' => Produkt::all()->sortDesc()->take(10)]);
 })->name('produktMain')->middleware('auth');
 
 Route::get('equipMain', 'EquipmentController@main')->name('equipMain')->middleware('auth');

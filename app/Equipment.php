@@ -48,6 +48,21 @@ class Equipment extends Model
         static::updating(function () {
             Equipment::clearCache();
         });
+        static::saved(function (Equipment $equipment) {
+            if (! $equipment->wasRecentlyCreated && ! $equipment->wasChanged('eq_uid')) {
+                return;
+            }
+            $equipmentUid = EquipmentUid::where('equipment_id', $equipment->id)->orderBy('id')->first();
+            if (! $equipmentUid) {
+                $equipmentUid = new EquipmentUid;
+                $equipmentUid->equipment_id = $equipment->id;
+            }
+            $equipmentUid->equipment_uid = $equipment->eq_uid;
+            $equipmentUid->save();
+            EquipmentUid::where('equipment_id', $equipment->id)
+                ->where('id', '!=', $equipmentUid->id)
+                ->delete();
+        });
     }
 
     public static function getControlEquipmentList(): Collection
